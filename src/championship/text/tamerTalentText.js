@@ -107,7 +107,12 @@ const ROWS = {
   'key.resonanceRiftPercent': ['{value}% 裂隙共鳴', '{value}% Rift resonance', 'リフト共鳴 {value}%', 'เรโซแนนซ์ริฟต์ {value}%', 'Cộng hưởng Khe Nứt {value}%'],
   'key.lowHpDefensePercent': ['HP 30% 以下防禦 {value}%', '{value}% defence under 30% HP', 'HP 30% 以下で防御 {value}%', 'ป้องกัน {value}% เมื่อ HP ต่ำกว่า 30%', 'Thủ {value}% khi HP dưới 30%'],
   'key.ultimatePercent': ['{value}% 必殺技傷害', '{value}% signature damage', '必殺技ダメージ {value}%', 'ดาเมจท่าไม้ตาย {value}%', 'Sát thương tuyệt chiêu {value}%'],
-  'key.elitePercent': ['{value}% 菁英出現率', '{value}% elite chance', 'エリート出現率 {value}%', 'โอกาสพบอีลิต {value}%', 'Tỉ lệ tinh anh {value}%']
+  'key.elitePercent': ['{value}% 菁英出現率', '{value}% elite chance', 'エリート出現率 {value}%', 'โอกาสพบอีลิต {value}%', 'Tỉ lệ tinh anh {value}%'],
+  // T4 (TAMER_TALENTS_T4_20261118)
+  'key.shopBitsPercent': ['{value}% 商店金幣價格', '{value}% shop Bits prices', 'ショップ価格 {value}%', 'ราคาร้าน {value}%', 'Giá cửa hàng {value}%'],
+  'key.scavengePercent': ['狩獵後 {amount}% 撿到補品', '{amount}% tonic after a hunt', '狩りの後 {amount}% でサプリ', '{amount}% ได้ของบำรุงหลังล่า', '{amount}% nhặt thuốc bổ sau săn'],
+  'key.strollBitsPercent': ['{value}% 散步金幣', '{value}% stroll Bits', '散歩コイン {value}%', 'เหรียญเดินเล่น {value}%', 'Xu đi dạo {value}%'],
+  'key.strollExtraPercent': ['散步 {amount}% 多帶 1 個', '{amount}% one more from a stroll', '散歩で {amount}% もう 1 個', '{amount}% ได้เพิ่ม 1 จากเดินเล่น', '{amount}% thêm 1 khi đi dạo']
 };
 
 export const TAMER_TALENT_COPY = deepFreeze(Object.fromEntries(LOCALES.map((locale, i) =>

@@ -14,6 +14,19 @@ Done in the first batch:
   - The MIT notices of 00GameDevs and three.js ride in every group module.
 
 Not done yet: the icons (U2, generating), the Data Arena moves in the auto battle (U1-2/3), and a piece of its own for every ultimate and skill (U3 continues).
+<!-- record-id: TAMER_TALENTS_T4_20261118 -->
+## 2026-11-18 — Tamer talents T4: the rest of the trader line and the breeder's stroll luck
+
+Under the standing goal and `LINE_FUSION_TAMER_TALENTS_DESIGN_20261117` (talent plan sections 4.2 and 4.4).
+
+`OWNER_APPROVED_ADAPTATION`, as designed:
+
+- Trader: 殺價 (shop Bits prices −3 % a rank; not diamonds, not the gachapon), 拾荒 (10 % a rank that a hunt turns up one basic supplement), 鑑價 (stroll Bits +10 % a rank).
+- Breeder: 散步好運 (10 % a rank that a solo stroll find brings one more).
+- The whole trader line is open. 30 of the 36 nodes are open; six nodes and the 8 keystones are not.
+- Decided while wiring: the three basic supplements are the ones that cost 400 Bits or less; 殺價 rounds a price up and never below 1 Bit; the supplement shelf keeps its own talent (熟客) and is not discounted twice.
+
+Contract: `docs/contracts/championship/TAMER_TALENTS_20261117.json` (`wiredT4`).
 
 <!-- record-id: TAMER_TALENTS_T3_20261118 -->
 ## 2026-11-18 — Tamer talents T3: the commander line in the auto battle, and the hunter's elite sense

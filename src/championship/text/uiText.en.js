@@ -237,6 +237,7 @@ export const UI_COPY_EN = Object.freeze({
   "SUPPLY_UNEQUIP": "Take off",
   "SUPPLY_CARRIED_BATTLES": "On {name} · {n} left",
   "SUPPLY_PARTLY_USED": "Used once: stays until spent",
+  "拾荒：{item} ×1": "Scavenged: {item} ×1",
   "賞金天賦 +{bits} 位元幣": "Bounty talent +{bits} Bits",
   "SUPPLY_NOT_BATTLE": "Cannot be carried",
   "WILD_INSTINCT_ANCESTOR_NOTE": "Born with +40% first awakening progress and a natural bloodline.",

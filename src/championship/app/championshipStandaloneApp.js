@@ -45,7 +45,7 @@ import {normalizeTamerTalents,createTamerTalentState,tamerTalentPoints,talentVal
   from '../contracts/productTamerTalents.js';
 import {normalizeTamerSupplies,createTamerSupplies,SUPPLEMENTS,getSupplement,supplyOwned,supplyPurchase,spendSupply,applyRecoverySupply,
   startRanchSupply,ranchSupplyActive,ranchSupplyGrowthPercent,ranchSupplyNightCalm,armSupply,disarmSupply,armedSupplies,supplyBattleProfile,
-  supplySyncExpPercent,settleArmedSupplies,armedSupplyItems,supplyDiscount,supplyValue,SUPPLY_BATTLE_SLOTS} from '../contracts/productSupplements.js';
+  supplySyncExpPercent,settleArmedSupplies,armedSupplyItems,supplyDiscount,supplyValue,scavengeSupply,SUPPLY_BATTLE_SLOTS} from '../contracts/productSupplements.js';
 import {normalizeJourney,createJourneyState,TOWER_FLOORS,towerBand,towerOpponents,towerOpponentSpecies,towerRewards,towerNextFloor,
   clearTowerFloor,patrolStatus,claimPatrol,quickPatrol} from '../contracts/productJourney.js';
 import {TACTIC_PRACTICE_CRYSTALS,TACTIC_PRACTICE_CLEAR_CRYSTALS,tacticPracticeBoutCrystals,tacticPracticeCleared,createTacticPracticeSeries,tacticPracticeNextBout,recordTacticPracticeBout} from '../contracts/productTacticPractice.js';
@@ -459,6 +459,8 @@ export function createChampionshipStandaloneApp({
   let tamerTalents=null,lastTamerGain=null;
   // SUPPLEMENTS_20261118: the supplement bag (progression.tamerSupplies).
   let tamerSupplies=null;
+  // 拾荒: what the last hunt's end turned up, for the hunt end gate and the Hunt Result (not saved; the bag is).
+  let lastHuntScavenge=null;
   // OWNER_APPROVED_ADAPTATION 2026-11-10: Journey (tower and patrol pod).
   let journey=null,pendingTower=null,lastTowerResult=null,pendingCampaign=null;
   // Journey practice series (TACTIC_PRACTICE_LOOP_20261116): session memory only, never saved.
@@ -535,7 +537,9 @@ export function createChampionshipStandaloneApp({
   }
 
   function progressionContext() {
-    return { tamerRank: tamerRankValue, battleBadges: [...battleBadgesValue],feeWaiver:nativeTitles.feeWaiver, playtestUnlocks: playtestPolicy?.enabled === true && playtestPolicy.huntOpen };
+    // 殺價 (TAMER_TALENTS_T4_20261118): the shop charges and shows its Bits prices at this share (-3 % a rank).
+    return { tamerRank: tamerRankValue, battleBadges: [...battleBadgesValue],feeWaiver:nativeTitles.feeWaiver, playtestUnlocks: playtestPolicy?.enabled === true && playtestPolicy.huntOpen,
+      bitsPricePercent: 100 + talent('shopBitsPercent') };
   }
 
   function applyProgression() {
@@ -905,7 +909,9 @@ export function createChampionshipStandaloneApp({
       const reading=partnerReading(id,actor);
       if(!reading||partnerLifeRandom()>=strollFindChance(reading.habitat,reading.mood,{raceHabitat:Boolean(reading.raceHabitat)}))continue;
       const find=rollStrollFind(partnerLifeRandom(),actor.cageDefinitionIndex);
-      grantStrollDiscoveryReward({partnerId:id,reward:find.kind,quantity:find.quantity,cage:actor.cageDefinitionIndex,calendar});
+      // 散步好運 (TAMER_TALENTS_T4_20261118): 10 % a rank that a solo find brings one more (a find is at most two).
+      const luck=talent('strollExtraPercent'),extra=luck>0&&find.quantity<2&&partnerLifeRandom()*100<luck?1:0;
+      grantStrollDiscoveryReward({partnerId:id,reward:find.kind,quantity:find.quantity+extra,cage:actor.cageDefinitionIndex,calendar});
       break;
     }
   }
@@ -3057,7 +3063,7 @@ export function createChampionshipStandaloneApp({
       for(const entry of waiting){
         const spec=STROLL_REWARDS[entry.reward];
         if(spec.bits){
-          const amount=spec.bits*entry.quantity;
+          const amount=Math.round(spec.bits*entry.quantity*(100+talent('strollBitsPercent'))/100); // 鑑價: +10 % a rank
           if(candidate.getBits()+amount>BITS_WALLET_CAP)continue;
           candidate.creditBits(amount);claimed.push(entry.id);gain('bits',amount);
         }else{
@@ -4606,6 +4612,8 @@ export function createChampionshipStandaloneApp({
 
     /** Tickets (and beacon bonus) the last won match dropped, for the result podium. */
     getLastBattleGachaDrop(){return lastBattleGachaDrop;},
+    /** What the last hunt's end turned up through the talent 拾荒 ({id}), or null. */
+    getLastHuntScavenge(){return lastHuntScavenge;},
     /**
      * The commander talent line for one auto battle (TAMER_TALENTS_T3_20261118), by the battle mode: tournaments (0)
      * and title matches (1) count the first 6 + 3 x rank points, Free Battle (2) and Practice (5) all of them, and
@@ -4935,7 +4943,7 @@ export function createChampionshipStandaloneApp({
       const next=learnTalent(state,id,points)??chooseKeystone(state,id,points);
       const status=savePort.save({...liveSaveRequest(revision+1),tamerTalents:next});
       if(status.phase!=='SAVED'){savePort.discardPendingWrite();return Object.freeze({ok:false,reason:'SAVE_FAILED'});}
-      tamerTalents=next;revision+=1;publishRaising();publishScreens();
+      tamerTalents=next;revision+=1;applyProgression();publishRaising();publishScreens(); // 殺價 reaches the shop at once
       return Object.freeze({ok:true,id});
     },
     /** Every point back, keystones included: the first is free, then 500 crystals. */
@@ -4948,7 +4956,7 @@ export function createChampionshipStandaloneApp({
       const candidateSync={...sync,crystals:sync.crystals-cost};
       const status=savePort.save({...liveSaveRequest(revision+1),tamerTalents:next,syncLevels:candidateSync});
       if(status.phase!=='SAVED'){savePort.discardPendingWrite();return Object.freeze({ok:false,reason:'SAVE_FAILED'});}
-      tamerTalents=next;syncLevels=candidateSync;revision+=1;publishRaising();publishScreens();
+      tamerTalents=next;syncLevels=candidateSync;revision+=1;applyProgression();publishRaising();publishScreens();
       return Object.freeze({ok:true,cost});
     },
     // ---- Same-line fusion from the ranch (LINE_FUSION_20261117 P2) ----
@@ -6079,12 +6087,19 @@ export function createChampionshipStandaloneApp({
             expectedClockRevision: active.getRaisingHomeSnapshot().clockRevision });
         }
         huntDeadlineMinute = null; huntRealtime = null;
+        // 拾荒 (TAMER_TALENTS_T4_20261118): 10 % a rank that the hunt turned up one basic supplement, with a catch or without.
+        // It goes into the bag here and is saved with whatever the hunt's end saves; the tutorial and capture replays find none.
+        lastHuntScavenge = null;
+        if (huntCaptureReplay === null && talent('scavengePercent') > 0) {
+          const found = scavengeSupply(suppliesState(), { percent: talent('scavengePercent'), chanceRoll: productRoll(0x62), pickRoll: productRoll(0x63) });
+          if (found) { tamerSupplies = found.state; lastHuntScavenge = Object.freeze({ id: found.id }); savePort.markDirty(); }
+        }
         const entries = huntRuntime?.getOnCardEntries() ?? [];
         if (entries.length > 0) {
           const entry = entries[0];
           huntResult = Object.freeze({ ...entry, displayName: entry.displayName ?? speciesDisplayName(entry.speciesId),
             title: "HUNT RESULT", outcomeLabel: "ON MEMORY CARD", speciesLabel: speciesDisplayName(entry.speciesId),
-            outcome: "ON_CARD", originGateId: confirmedGateId, pendingHomeCommit: true });
+            outcome: "ON_CARD", originGateId: confirmedGateId, pendingHomeCommit: true, scavenged: lastHuntScavenge?.id ?? null });
           screens.enter(CHAMPIONSHIP_SCREENS.HUNT_RESULT);
           if (returnContext) savePort.markDirty();
           return screens.current();

@@ -225,6 +225,7 @@ export const UI_COPY_JA = Object.freeze({
   "SUPPLY_UNEQUIP": "外す",
   "SUPPLY_CARRIED_BATTLES": "{name} が装備・残り {n} 戦",
   "SUPPLY_PARTLY_USED": "使用中：使い切るまで外せない",
+  "拾荒：{item} ×1": "拾い物：{item} ×1",
   "賞金天賦 +{bits} 位元幣": "賞金の天賦 +{bits} コイン",
   "SUPPLY_NOT_BATTLE": "装備できない",
   "WILD_INSTINCT_ANCESTOR_NOTE": "生まれつき第1段階の覚醒進度+40%と天然の血統を持つ。",

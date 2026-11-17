@@ -54,7 +54,14 @@
     "elitePercent": "hunter 野性嗅覺: the elite share of a hunt's instinct roll +30 % of itself a rank; the hunt's limit of one elite is not raised",
     "notYet": "the Data Arena does not read the commander line yet; 蓄能 (opening awakening energy) is not wired"
   },
-  "notYetOpen": "10 nodes and all 8 keystones: hunter 繩索保養, 疾步, 穩手, 省彈 (they touch the native hunt's rope, movement, status and ammunition), breeder 安撫 and 散步好運, commander 蓄能, trader 殺價 (the shop's price paths), 拾荒 and 鑑價",
+  "wiredT4": {
+    "batch": "TAMER_TALENTS_T4_20261118",
+    "shopBitsPercent": "trader 殺價: the shop runtime charges and shows every Bits price (rows, hunt tool tiers, refills, the emergency rope refill) at 100 - 3 x rank percent of the catalog price, rounded up and never below 1; the catalog price stays readable as listPriceBits. Diamond prices, the gachapon and the supplement shelf do not pass through it. A share outside 50..100 is ignored, so a save, a parity test and the tutorial read the catalog",
+    "scavengePercent": "trader 拾荒: at a hunt's end, 10 % a rank that one basic supplement (元氣飲, 親密零食 or 安眠香) goes into the bag, with a catch or without; the hunt end gate and the Hunt Result name it; capture replays and the tutorial find none; a full stack finds nothing",
+    "strollBitsPercent": "trader 鑑價: Bits a stroll find pays +10 % a rank, when the find is collected",
+    "strollExtraPercent": "breeder 散步好運: 10 % a rank that a solo stroll find brings one more (a find is at most two; no extra draw without the talent)"
+  },
+  "notYetOpen": "6 nodes and all 8 keystones: hunter 繩索保養, 疾步, 穩手, 省彈 (they touch the native hunt's rope, movement, status and ammunition), breeder 安撫, commander 蓄能 (the plan does not say which meter it fills)",
   "notChanged": [
     "the native individual fields, battle codes and match tables",
     "the gachapon rates, diamond prices and diamond or ticket rewards",
@@ -102,7 +109,8 @@
     "tests/championship-lion-display-correction-cases.mjs",
     "tests/championship-tamer-talents-cases.mjs",
     "tests/championship-tamer-talents-t2-cases.mjs",
-    "tests/championship-tamer-talents-t3-cases.mjs"
+    "tests/championship-tamer-talents-t3-cases.mjs",
+    "tests/championship-tamer-talents-t4-cases.mjs"
   ],
   "physicalDeviceAccepted": false
 }
