@@ -195,3 +195,25 @@ test('a lost GPU context that never comes back saves and reloads once instead of
   assert.match(main, /pixiStage\.onContextLost\(\(\) => \{[^\n]*armContextLossReload\(\);\}\);/);
   assert.match(between(main, 'pixiStage.onContextRestored(() => {', '});'), /disarmContextLossReload\(\);/);
 });
+
+test('the idle ranch HUD writes only what changed (it repainted everything ~17 times a second)', () => {
+  // Measured 2026-11-17 on an idle ranch: ~1,000 replaced text nodes and ~2,700 attribute
+  // writes in 10 s before; 2 and ~170 (the 3D canvas frame counter) after.
+  const view = source('src/championship/app/raisingHomeP1RView.js');
+  for (const helper of ['writeText', 'writeHidden', 'writeData', 'writeVar'])
+    assert.ok(view.includes(`const ${helper} = (el, `), helper);
+  const render = between(view, '  function render(frame) {', '\n    field.render(frame);');
+  assert.match(render, /writeText\(companionLocation, /);
+  assert.match(render, /if \(nameKey !== lastNameKey\) \{/, 'the name and bloodline badge are rebuilt only on a change');
+  assert.match(render, /writeHidden\(mailIcon,/);
+  assert.doesNotMatch(render, /companionName\.textContent = resident\?\.displayName/);
+  const meters = between(view, '  function paintMeters(set, resident) {', '\n  }');
+  assert.doesNotMatch(meters, /\.textContent = /);
+  const mood = between(view, '  function paintPartnerMood(partner) {', '\n  function paintDetail(');
+  assert.match(mood, /if \(heartsChanged\) moodHearts\.replaceChildren\(/);
+  // The always-hidden story badge and the journal no longer force a layout every frame.
+  const badge = source('src/championship/app/ranchStoryBadge.js');
+  assert.match(between(badge, '  function update(frame) {', '\n  }'), /if \(!button\.hidden\) place\(\);/);
+  const journal = source('src/championship/app/ranchDiscoveryJournal.js');
+  assert.match(between(journal, '  function update(frame){', '\n  }'), /if\(changed\|\|placedOnce!==true\)\{placedOnce=true;place\(\);\}/);
+});
