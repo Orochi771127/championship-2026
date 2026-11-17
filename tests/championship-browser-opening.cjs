@@ -433,6 +433,15 @@ async function leaveHuntField(page, { attempts = 30 } = {}) {
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     await page.locator(".cm-vs2-hud__exit").click();
     await page.waitForTimeout(500);
+    // The hunt end gate (2026-11-17) closes over the field before the screen
+    // changes and blocks input while it does; an empty hunt ends on its
+    // 返回牧場 result plate.
+    if (await page.locator(".cm-hunt-gate").count()) {
+      await page.waitForFunction(() => document.getElementById("cm-root")?.dataset.screen !== "HUNT_FIELD", null, { timeout: 15000 });
+      const proceed = page.locator(".cm-hunt-gate__continue");
+      await proceed.waitFor({ state: "visible", timeout: 1500 }).then(() => proceed.click()).catch(() => {});
+      await page.waitForFunction(() => !document.querySelector(".cm-hunt-gate"), null, { timeout: 5000 });
+    }
     const screen = await page.locator("#cm-root").getAttribute("data-screen");
     if (screen !== "HUNT_FIELD") return screen;
   }
