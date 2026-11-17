@@ -150,11 +150,16 @@ import { MOVE_VFX_SET_PIECES, createMoveVfxSetPieces, recolourPiecePalette, load
 import { MOVE_VFX_PIECE_SPRITES } from "../src/championship/presentation/vfx/moveVfxPieceSprites.js";
 import battleMoves from "../src/data/championship/catalogs/battle-moves.r1.json" with { type: "json" };
 
-test("every choreographed move exists and names only known set pieces", () => {
-  const records = new Set(battleMoves.records.map(m => m.recordIndex));
+test("every choreographed move exists and names only known set pieces", async () => {
+  // UNIFIED_MOVES_20261118: the originals' records and the Data Arena's own moves are choreographed too,
+  // and a contact may be a three.js piece (baked into a group module).
+  const { listProductOriginalMoveRecords } = await import("../src/championship/contracts/productOriginalSpecies.js");
+  const { RELAY_POOL_MOVE_ELEMENT } = await import("../src/championship/modes/dataArena/dataArenaRelayKits.js");
+  const { MOVE_VFX_3D_PIECE_GROUP } = await import("../src/championship/presentation/vfx/moveVfxPieceSprites3dIndex.js");
+  const records = new Set([...battleMoves.records, ...listProductOriginalMoveRecords()].map(m => String(m.recordIndex)));
   for (const [key, c] of Object.entries(MOVE_VFX_CHOREOGRAPHY)) {
-    assert.ok(records.has(Number(key)), `record ${key}`);
-    for (const phase of ["release", "contact"]) if (c[phase]) assert.ok(MOVE_VFX_SET_PIECES.includes(c[phase].piece), `${key} ${phase}`);
+    assert.ok(records.has(key) || RELAY_POOL_MOVE_ELEMENT[key], `record ${key}`);
+    for (const phase of ["release", "contact"]) if (c[phase]) assert.ok(MOVE_VFX_SET_PIECES.includes(c[phase].piece) || MOVE_VFX_3D_PIECE_GROUP[c[phase].piece], `${key} ${phase}`);
     if (c.hitStopMs !== undefined) assert.ok(c.hitStopMs >= 0 && c.hitStopMs <= 120, `${key} hit-stop stays short`);
     if (c.shake) assert.ok(["light", "medium", "heavy"].includes(c.shake));
   }
@@ -274,7 +279,10 @@ test("refinement pass 5: more baked heads, and the Dex preview lands each move's
   const { showcasePieceLook } = await import("../src/championship/presentation/juicy/codexShowcaseTheater.js");
   assert.equal(showcasePieceLook({ piece: "flurry", sprite: "feather_sm" }), "flurry-feather");
   assert.equal(showcasePieceLook({ piece: "jaws-horn" }), "jaws");
+  const { MOVE_VFX_3D_PIECE_GROUP, MOVE_VFX_3D_FALLBACK } = await import("../src/championship/presentation/vfx/moveVfxPieceSprites3dIndex.js");
   for (const c of Object.values((await import("../src/championship/presentation/vfx/moveVfxChoreography.js")).MOVE_VFX_CHOREOGRAPHY)) {
+    // a three.js piece loads its group in the Dex and plays its shared fallback until then
+    if (c.contact?.piece.startsWith("3d-")) { assert.ok(MOVE_VFX_3D_PIECE_GROUP[c.contact.piece] && MOVE_VFX_PIECE_SPRITES[MOVE_VFX_3D_FALLBACK[c.contact.piece]], c.contact.piece); continue; }
     if (c.contact) assert.ok(MOVE_VFX_PIECE_SPRITES[showcasePieceLook(c.contact)], `${c.contact.piece} has a baked look for the Dex`);
   }
 });

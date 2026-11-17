@@ -27,7 +27,7 @@ import {battleEffectCellIsOriginal} from '../battleEffectSprites.js';
 import {createPixelHitBursts} from '../vfx/pixelHitBursts.js';
 import {createPixelMotes} from '../vfx/pixelMotes.js';
 import {moveVfxChoreography, moveVfxSupportChoreography} from '../vfx/moveVfxChoreography.js';
-import {createMoveVfxSetPieces, bakedPieceLook, paintBakedPieceFrames} from '../vfx/moveVfxSetPieces.js';
+import {createMoveVfxSetPieces, bakedPieceLook, paintBakedPieceFrames, loadMoveVfx3dPieces} from '../vfx/moveVfxSetPieces.js';
 /** Palette key -> the element its motes wear (as unifiedMoveVfxResolver reads a bank's family colour). */
 const PALETTE_ELEMENT = Object.freeze({fire: 'FIRE', water: 'WATER', ice: 'ICE', thunder: 'THUNDER', metal: 'METAL', nature: 'WOOD',
   earth: 'EARTH', wind: 'WIND', light: 'SUN', dark: 'MOON'});
@@ -525,9 +525,16 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   }
 
   // --------------------------------------------------- live effect actors (moves)
+  const preloaded = new Set();
   function observe(view, ctx, dtMs) {
     const live = new Set();
     const launches = (view.nativeLifecycle?.active ?? []).filter(l => Number.isInteger(l.ownerSlot));
+    // a move whose piece is a three.js one starts loading its group as it launches, ahead of the contact
+    for (const l of launches) if (!preloaded.has(l.moveId)) {
+      preloaded.add(l.moveId);
+      const c = moveVfxChoreography(l.moveId);
+      if (c && typeof loadMoveVfx3dPieces === 'function') loadMoveVfx3dPieces([c.contact?.piece, c.release?.piece]);
+    }
     for (const actor of view.nativeLifecycle?.effectActors ?? []) {
       const family = String(actor.name ?? '').replace(/^e003_/, '');
       const form = battleFxFamilyForm(family);

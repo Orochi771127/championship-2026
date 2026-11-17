@@ -97,18 +97,23 @@ export function buildDataArenaRelayKits() {
   const rows = nextRoster.map(entry => {
     const owned = movesBySpecies.get(moveOwner(entry.speciesIndex)) ?? [];
     const basic = owned.find(m => m.actionCost === 0) ?? null;
-    // Up to three specials: highest tier, then power; one per style+colour.
-    const seen = new Set(), specials = [];
-    for (const move of [...owned].filter(m => m.actionCost > 0)
+    // The partner's own ultimate (UNIFIED_MOVES_20261118): its strongest kind-1
+    // move, the same pick the battle look calls its signature. It always
+    // comes along and fills the arena's ultimate slot.
+    const ultimate = [...owned].filter(m => m.kind === 1)
+      .sort((a, b) => (b.power ?? 0) - (a.power ?? 0) || (b.actionCost ?? 0) - (a.actionCost ?? 0) || a.recordIndex - b.recordIndex)[0] ?? null;
+    // Up to three specials besides it: highest tier, then power; one per style+colour.
+    const seen = new Set(), specials = ultimate ? [ultimate] : [];
+    for (const move of [...owned].filter(m => m.actionCost > 0 && m !== ultimate)
       .sort((a, b) => theme.get(b.recordIndex).tier - theme.get(a.recordIndex).tier || b.power - a.power || a.recordIndex - b.recordIndex)) {
       const t = theme.get(move.recordIndex), key = `${t.style}:${t.palette}`;
-      if (seen.has(key) || specials.length >= 3) continue;
+      if (seen.has(key) || specials.length >= (ultimate ? 4 : 3)) continue;
       seen.add(key); specials.push(move);
     }
     specials.sort((a, b) => a.recordIndex - b.recordIndex);
     return [entry.speciesIndex, basic?.recordIndex ?? null, specials.map(m => {
       const t = theme.get(m.recordIndex);
-      return [m.recordIndex, t.style, t.palette, t.tier];
+      return [m.recordIndex, t.style, t.palette, t.tier, m === ultimate ? 1 : 0];
     })];
   });
   const kits = {
@@ -116,7 +121,7 @@ export function buildDataArenaRelayKits() {
     kind: 'ORIGINAL_RELAY_KITS',
     authority: 'OWNER_APPROVED_ADAPTATION_20261028',
     generator: 'scripts/build-data-arena-relay-kits.mjs',
-    note: 'Row = [species index, basic move record or null, own special moves [record, VFX style, element palette, tier 1..4]]. Moves are records the partner already owns; the arena mechanic comes from the style.',
+    note: 'Row = [species index, basic move record or null, own special moves [record, VFX style, element palette, tier 1..4, 1 = the partner own ultimate]]. Moves are records the partner already owns; the arena mechanic comes from the style (the ultimate keeps its element pool ultimate numbers).',
     species: rows
   };
   return {roster: {...roster, entries: nextRoster}, themes, kits};

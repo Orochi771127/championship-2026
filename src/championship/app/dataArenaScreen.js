@@ -33,7 +33,7 @@ import { juicyPresentationEnabled } from "../presentation/juicy/juicyArt.js";
 import { RELAY_ROSTER, relayPartner } from '../modes/dataArena/dataArenaRelayRoster.js';
 import { RELAY_MAP_IDS } from '../modes/dataArena/dataArenaRelayMaps.js';
 import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, RELAY_LOADOUTS, relayKit, relayMove, relayEffectStyle, relayMoveElement } from '../modes/dataArena/dataArenaRelay.js';
-import { relayOwnMoveInfo, relayBasicRecord } from '../modes/dataArena/dataArenaRelayKits.js';
+import { relayOwnMoveInfo, relayBasicRecord, relayOwnUltimateStandIn } from '../modes/dataArena/dataArenaRelayKits.js';
 import { battleMoveName } from '../text/battleMoveNames.js';
 import { speciesTaxonomyForId, elementMatchup, elementMultiplierPercent, factionResonance } from '../contracts/speciesTaxonomy.js';
 import { burstBasesFor, burstFormsFor, isBurstForm } from '../contracts/productBurstEvolution.js';
@@ -80,7 +80,9 @@ function glyph(path, className = "da-glyph") {
   return svg;
 }
 // A partner's own move keeps its approved battle name; the arena line says what it does here.
-const ownMoveText = (id) => { const own = relayOwnMoveInfo(id); return own && `${battleMoveName(own.record) ?? id}｜${t(`relay.style.${own.style}`)}${t(`relay.palette.${own.palette}`)}`; };
+// An own ultimate says what its lent pool ultimate does (UNIFIED_MOVES_20261118).
+const ownMoveText = (id) => { const own = relayOwnMoveInfo(id); if (!own) return null; const lent = relayOwnUltimateStandIn(id);
+  return `${battleMoveName(own.record) ?? id}｜${lent ? (t(`move.${lent}`).split(/\s*[｜|]\s*/)[1] ?? '') : `${t(`relay.style.${own.style}`)}${t(`relay.palette.${own.palette}`)}`}`; };
 const moveText = (id) => ownMoveText(id) ?? t(`move.${id}`);
 const moveName = (id) => moveText(id).split(/\s*[｜|]\s*/)[0];
 const moveEffect = (id) => moveText(id).split(/\s*[｜|]\s*/)[1] ?? "";
