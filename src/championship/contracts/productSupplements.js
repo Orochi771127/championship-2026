@@ -25,8 +25,19 @@ export const SUPPLEMENTS = deepFreeze([
   { id: "supply:vigor", kind: "RECOVERY", bits: 150, effect: { fillVitals: true } },
   { id: "supply:snack", kind: "RECOVERY", bits: 400, effect: { affection: 5 } },
   { id: "supply:growth", kind: "RANCH", bits: 800, effect: { growthPercent: 15, hours: 2 } },
-  { id: "supply:sleep", kind: "RANCH", bits: 300, effect: { nightCalm: true } }
+  { id: "supply:sleep", kind: "RANCH", bits: 300, effect: { nightCalm: true } },
+  // S2 (2026-11-18): pre-battle supplements. One is put on a partner and is used up by its next settled
+  // owned-party battle. It only changes the battle copy (the native curve words 084 attack, 088 defense, 090 speed,
+  // at most step 26, as a Sync breakthrough does) and is taken back when the battle writes its result. Password,
+  // link and online battles never read it and never use it up.
+  { id: "supply:power", kind: "BATTLE", bits: 600, effect: { steps: { "084": 1 } } },
+  { id: "supply:guard", kind: "BATTLE", bits: 600, effect: { steps: { "088": 1 } } },
+  { id: "supply:gale", kind: "BATTLE", bits: 600, effect: { steps: { "090": 1 } } },
+  { id: "supply:sync", kind: "BATTLE", bits: 1000, effect: { syncExpPercent: 50 } }
 ]);
+/** Pre-battle supplements one partner carries into a battle. */
+export const SUPPLY_BATTLE_SLOTS = 1;
+const CURVE_MAX_STEP = 26;
 export const SUPPLEMENT_IDS = Object.freeze(SUPPLEMENTS.map((entry) => entry.id));
 const byId = new Map(SUPPLEMENTS.map((entry) => [entry.id, entry]));
 export function getSupplement(id) { return byId.get(id) ?? null; }
@@ -45,7 +56,77 @@ export function normalizeTamerSupplies(value) {
     const until = value.ranch?.[id];
     if (byId.get(id).kind === "RANCH" && Number.isSafeInteger(until) && until > 0) state.ranch[id] = until;
   }
+  for (const [instanceId, list] of Object.entries(value.armed ?? {})) {
+    if (typeof instanceId !== "string" || !instanceId || instanceId.length > 120 || !Array.isArray(list)) continue;
+    const kept = [];
+    for (const item of list) {
+      if (kept.length >= SUPPLY_BATTLE_SLOTS) break;
+      if (byId.get(item?.id)?.kind === "BATTLE" && !kept.some((entry) => entry.id === item.id)) kept.push({ id: item.id, battlesLeft: 1 });
+    }
+    if (kept.length) state.armed[instanceId] = kept;
+  }
   return state;
+}
+
+/** The pre-battle supplements a partner carries, as ids. */
+export function armedSupplies(state, instanceId) {
+  return (normalizeTamerSupplies(state).armed[instanceId] ?? []).map((item) => item.id);
+}
+
+/**
+ * Put one pre-battle supplement from the bag on a partner. With its slot taken, the one it carried goes back to
+ * the bag (refused when the bag already holds 99 of it).
+ */
+export function armSupply(state, instanceId, id) {
+  const entry = byId.get(id), current = normalizeTamerSupplies(state);
+  if (!entry || entry.kind !== "BATTLE") return { ok: false, reason: "SUPPLY_NOT_BATTLE" };
+  if (typeof instanceId !== "string" || !instanceId) return { ok: false, reason: "UNKNOWN_INDIVIDUAL" };
+  const carried = current.armed[instanceId] ?? [];
+  if (carried.some((item) => item.id === id)) return { ok: false, reason: "SUPPLY_ALREADY_ACTIVE" };
+  let next = spendSupply(current, id);
+  if (!next) return { ok: false, reason: "SUPPLY_NONE_OWNED" };
+  let kept = carried;
+  if (carried.length >= SUPPLY_BATTLE_SLOTS) {
+    const back = carried[0], returned = addSupply(next, back.id, 1);
+    if (returned.added !== 1) return { ok: false, reason: "SUPPLY_STACK_FULL" };
+    next = returned.state; kept = carried.slice(1);
+  }
+  return { ok: true, state: { ...next, armed: { ...next.armed, [instanceId]: [...kept, { id, battlesLeft: 1 }] } } };
+}
+
+/** Take a pre-battle supplement off a partner, back into the bag. */
+export function disarmSupply(state, instanceId, id) {
+  const current = normalizeTamerSupplies(state), carried = current.armed[instanceId] ?? [];
+  if (!carried.some((item) => item.id === id)) return { ok: false, reason: "SUPPLY_NONE_OWNED" };
+  const returned = addSupply(current, id, 1);
+  if (returned.added !== 1) return { ok: false, reason: "SUPPLY_STACK_FULL" };
+  const armed = { ...returned.state.armed }, left = carried.filter((item) => item.id !== id);
+  if (left.length) armed[instanceId] = left; else delete armed[instanceId];
+  return { ok: true, state: { ...returned.state, armed } };
+}
+
+/** The battle copy with the carried supplements' curve steps (never past step 26). The profile is not changed. */
+export function supplyBattleProfile(profile, ids = []) {
+  const steps = {};
+  for (const id of ids) for (const [key, value] of Object.entries(byId.get(id)?.effect?.steps ?? {})) steps[key] = (steps[key] ?? 0) + value;
+  if (!Object.keys(steps).length) return profile;
+  const next = structuredClone(profile);
+  for (const [key, value] of Object.entries(steps)) next.fields[key] = Math.min(CURVE_MAX_STEP, Math.max(next.fields[key] | 0, (next.fields[key] | 0) + value));
+  return next;
+}
+
+/** Sync EXP the carried supplements add, in percent. */
+export function supplySyncExpPercent(ids = []) {
+  return ids.reduce((sum, id) => sum + (byId.get(id)?.effect?.syncExpPercent ?? 0), 0);
+}
+
+/** After a settled battle: what each of these partners carried is used up. */
+export function settleArmedSupplies(state, instanceIds = []) {
+  const current = normalizeTamerSupplies(state);
+  if (!instanceIds.some((id) => current.armed[id])) return current;
+  const armed = { ...current.armed };
+  for (const id of instanceIds) delete armed[id];
+  return { ...current, armed };
 }
 
 export function supplyOwned(state, id) { return normalizeTamerSupplies(state).owned[id] ?? 0; }

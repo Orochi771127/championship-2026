@@ -2803,6 +2803,7 @@ function openBackpack({ tab = 'supplies', partnerId = null } = {}) {
     intents: {
       buySupply: (id, quantity) => app.buySupply(id, quantity),
       useSupply: (id, instanceId) => app.useSupply(id, instanceId),
+      unequipSupply: (id, instanceId) => app.unequipSupply(id, instanceId),
       useItem: (itemId, instanceId, options) => app.gachaUseItem(itemId, instanceId, options),
       reshape: (instanceId, personality) => app.gachaReshapePersonality(instanceId, personality),
       imprintScroll: (instanceId, grade, slot) => app.gachaImprintScroll(instanceId, grade, slot),

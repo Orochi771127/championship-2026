@@ -6,14 +6,15 @@
     "sourceLock": "src/championship/app/championshipStandaloneSave.js"
   },
   "saveField": {
-    "path": "progression.tamerSupplies = { version: 1, owned: { [supplyId]: 1..99 }, armed: {}, ranch: { [supplyId]: end time in ms } }",
+    "path": "progression.tamerSupplies = { version: 1, owned: { [supplyId]: 1..99 }, armed: { [instanceId]: [{ id, battlesLeft: 1 }] }, ranch: { [supplyId]: end time in ms } }",
     "migration": "none: a save without it has an empty bag; an unknown shape is an empty bag (productSupplements.normalizeTamerSupplies)"
   },
   "rules": {
     "s1": "supply:vigor 150 Bits fills current HP/TP (050/054) to their maximum (058/05c); supply:snack 400 Bits adds 5 affection (020), at most 100; supply:growth 800 Bits +15 % training growth for two real hours (a second one extends the first); supply:sleep 300 Bits no night disturbance until the next 07:00",
     "refusals": "a recovery supplement that would change nothing is refused and kept; a ranch supplement already running until the morning is refused",
     "saves": "buying writes the wallet and the bag in one save; using writes the partner (or the ranch clock) and the bag in one save; a failed save changes nothing",
-    "s2": "pre-battle supplements (armed) are not in this batch; the armed record is reserved and stays empty"
+    "s2": "pre-battle supplements, one carried per partner: supply:power 600 (curve word 084 attack +1 step), supply:guard 600 (088 defense +1), supply:gale 600 (090 speed +1), supply:sync 1000 (Sync EXP +50 %). Putting one on spends it from the bag; a second swaps the first back; it can be taken off again. It acts only on the battle copy of a battle where Sync applies (never password, link or online), never past curve step 26, is taken back when the battle writes its result (restoreSyncNativeProfile restores the curve words) and is used up by that settled battle, in the battle's own save.",
+    "notYet": "覺醒精華 and 共鳴香 are not sold until their effects are wired; the higher grade and the battle-screen slot follow."
   },
   "notChanged": [
     "the original 118-row shop table and the four original care items",

@@ -164,8 +164,8 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
   function paint() {
     const shopFrame = getShopFrame?.() ?? null, gacha = getGachaFrame?.() ?? null;
     const supplies = getSuppliesFrame?.() ?? null;
-    // The 補品 tab counts what is owned; its shelf lists every supplement (paintTonics).
-    const tabs = { ...backpackTabs(shopFrame, gacha), tonics: (supplies?.items ?? []).filter((item) => item.owned > 0) };
+    // The 補品 tab counts what is owned or carried; its shelf lists every supplement (paintTonics).
+    const tabs = { ...backpackTabs(shopFrame, gacha), tonics: (supplies?.items ?? []).filter((item) => item.owned > 0 || (item.carriedBy ?? []).length > 0) };
     body.replaceChildren();
     body.dataset.tab = state.tab;
     const wallet = el(doc, 'p', 'cm-backpack__wallet', `${uiText('金幣')} ${formatNumber(shopFrame?.bits ?? 0)}`);
@@ -229,6 +229,15 @@ export function createBackpackPanel({ doc = globalThis.document, getShopFrame, g
         state.tonic = state.tonic === item.id ? null : item.id; state.receipt = null; paint();
       });
       line.append(buy, use);
+      // A pre-battle supplement says who carries it, with a key to take it back.
+      for (const instanceId of item.carriedBy ?? []) {
+        const partner = (gacha?.partners ?? []).find((entry) => entry.instanceId === instanceId);
+        const carried = el(doc, 'span', 'cm-backpack__carried', uiText('SUPPLY_CARRIED', { name: partner ? partnerLabel(partner) : '' }));
+        const off = el(doc, 'button', 'cm-backpack__use', uiText('SUPPLY_UNEQUIP'));
+        off.type = 'button'; off.dataset.unequipSupply = item.id; off.dataset.partner = instanceId;
+        off.addEventListener('click', () => say(intents.unequipSupply?.(item.id, instanceId), `${uiText(item.id)} ${uiText('SUPPLY_UNEQUIP')}`));
+        line.append(carried, off);
+      }
       if (state.tonic === item.id) {
         const picker = el(doc, 'div', 'cm-backpack__partners');
         for (const partner of gacha?.partners ?? []) {
