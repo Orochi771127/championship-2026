@@ -201,7 +201,9 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   const crowdedChip = node('span', 'int-rh2-companion__crowded', uiText('籠舍太擠，暫時無法進化')); crowdedChip.hidden = true;
   crowdedChip.title = uiText('這個籠舍的夥伴總量超過目前馴獸師階級的容量。把一些夥伴移到別的籠舍，或提升階級後就能進化。');
   const placeRow = node('span', 'int-rh2-companion__place-row');
-  placeRow.append(placeChip, moodChip, habitatChip, crowdedChip);
+  // ROADMAP_R2_20261118: ready to evolve, but its Sync Level is under the stage's gate.
+  const levelChip = node('span', 'int-rh2-companion__crowded int-rh2-companion__evolve-level'); levelChip.hidden = true;
+  placeRow.append(placeChip, moodChip, habitatChip, levelChip, crowdedChip);
   const more = node("span", "int-rh2-companion__more", "詳細");
   more.setAttribute("aria-hidden", "true");
 
@@ -557,6 +559,12 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     writeHidden(moodChip, !partner);
     writeHidden(habitatChip, !partner?.raceHabitat);
     writeHidden(crowdedChip, !partner?.crowded);
+    writeHidden(levelChip, !partner?.evolveLevel);
+    if (partner?.evolveLevel && levelChip.dataset.need !== `${partner.evolveLevel.need}:${partner.evolveLevel.level}`) {
+      levelChip.dataset.need = `${partner.evolveLevel.need}:${partner.evolveLevel.level}`;
+      levelChip.textContent = uiText('進化需 Lv.{need}', { need: partner.evolveLevel.need });
+      levelChip.title = uiText('條件已達成。同步 Lv.{level}，Lv.{need} 進化；出戰或融合同種可升級。', partner.evolveLevel);
+    }
     if (partner?.raceHabitat && habitatChip.dataset.race !== partner.raceHabitat) {
       habitatChip.dataset.race = partner.raceHabitat;
       const glyph = taxonomyGlyph(`race.${partner.raceHabitat}`, 16); glyph.style.setProperty('--tax-color', TAXONOMY_COLORS[`race.${partner.raceHabitat}`]);

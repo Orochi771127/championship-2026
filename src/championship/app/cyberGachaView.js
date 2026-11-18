@@ -51,6 +51,7 @@ const REFUSALS = Object.freeze({
   EVOLUTION_RUNNING: "牧場裡正有拍檔在進化，請稍候。",
   NO_EVOLUTION_ROUTE: "這隻拍檔目前沒有可以催化的進化路線。",
   METAL_TOO_WEAK: "這塊金屬的等級不足以催化這個世代的進化。",
+  EVOLUTION_LEVEL_TOO_LOW: "同步等級不足，金屬不能代替等級。",
   TOO_MANY_UNMET: "碎片最多免除 2 項未達成的條件；這條路線差太多了，換一條或改用完整金屬。",
   UNKNOWN_TIER: "這個稀有度不能升階熔煉。",
   ALREADY_ARMED: "已經裝填同類晶片，請先使用。",
@@ -1104,6 +1105,12 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
         const near = partner.routes?.[0];
         if (near) pick.append(element("span", "cm-gacha__partner-gap", near.unmetCount
           ? uiText("距離進化：差 {n} 項", { n: near.unmetCount }) : uiText("已達進化條件")));
+        // R2: the level is a condition a catalyst never waives.
+        if (near && partner.levelGate) {
+          const gate = element("span", "cm-gacha__partner-gap cm-gacha__partner-level", uiText("進化需 Lv.{need}（現在 Lv.{level}）", partner.levelGate));
+          gate.dataset.need = String(partner.levelGate.need);
+          pick.append(gate);
+        }
         pick.addEventListener("click", () => { partnerSelection = partner.instanceId; personalitySelection = null; routeSelection = null; fx(pick, "toggle"); paint(lastFrame); });
         roster.append(pick);
       }

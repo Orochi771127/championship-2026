@@ -9,6 +9,7 @@ import {PRODUCT_FINAL_NATURAL_GENERATION,PRODUCT_GROWTH_RULES,PRODUCT_HATCH_POOL
 import {normalizeNativeIndividualProfile} from './nativeIndividualProfile.js';
 import {selectNativeHatchSpecies} from './nativeIndividualEvolution.js';
 import {evaluateNativeEvolution,evaluateNativeRebirth} from './nativeRaisingLifecycle.js';
+import {evolutionLevelShort,EVOLUTION_LEVEL_RECHECK_MINUTES} from '../contracts/productSyncLevel.js';
 
 export {PRODUCT_FINAL_NATURAL_GENERATION,PRODUCT_GROWTH_RULES};
 export const PRODUCT_NO_LIFE_LIMIT = 0xffffffff;
@@ -41,8 +42,22 @@ function growthTableWithBonus(bonus) {
     ranks: Object.freeze(PRODUCT_GROWTH_RULES.ranks.map(rank => Object.freeze({...rank, capacity: rank.capacity + bonus})))}));
   return bonusTables.get(bonus);
 }
-export function evaluateProductEvolution(profile, {capacityBonusG = 0, ...context}, rng) {
-  return evaluateNativeEvolution(profile, {...context, table: growthTableWithBonus(capacityBonusG)}, rng);
+// ROADMAP_R2_20261118: with `syncLevel` given, a partner the native rules would evolve (code 1) waits while
+// its level is under its stage's gate. The native result is thrown away whole, so nothing of the profile moves:
+// in the day's check it reads as "not yet" (code 0); at the end of its life it reads as "life goes on" (code 2)
+// and is asked again an hour later, so waiting for a level never costs the partner its life. Every other native
+// result -- no route, a full cage, a licence too low, a rebirth -- passes through untouched. Without
+// `syncLevel` (the tutorial, the friends playtest) the gate is off.
+export function evaluateProductEvolution(profile, {capacityBonusG = 0, syncLevel = null, ...context}, rng) {
+  const result = evaluateNativeEvolution(profile, {...context, table: growthTableWithBonus(capacityBonusG)}, rng);
+  if (syncLevel === null || result.code !== 1) return result;
+  const waiting = normalizeNativeIndividualProfile(profile);
+  const short = evolutionLevelShort(productGeneration(waiting.fields['000']), syncLevel);
+  if (!short) return result;
+  const lifetime = context.lifetime === true;
+  return {profile: waiting, code: lifetime ? 2 : 0, target: null, levelBlocked: short,
+    actor: {...result.actor, '1e8': 0, '1f0': 0, '1f4': 0,
+      '428': lifetime ? (waiting.fields['18c'] + EVOLUTION_LEVEL_RECHECK_MINUTES) >>> 0 : context.lifeThreshold ?? result.actor['428']}};
 }
 
 /**
