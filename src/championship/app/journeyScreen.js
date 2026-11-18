@@ -184,29 +184,32 @@ export function createJourneyScreen(host) {
     body.replaceChildren(panel);
   }
 
+  // ROADMAP_R1_20261118 (Owner 2026-11-18): the crystals raise the tamer. One row: the tamer's level, the bar to
+  // the next level and one key that pours what the next level still needs (or all that is held, when that is less).
   function paintFeed() {
-    const frame = host.frame();
+    const frame = host.frame(), tamer = host.tamer?.() ?? null;
     const panel = el("div", "cm-journey__feed");
     panel.append(el("p", "cm-journey__hint", t("feed.hint")));
-    for (const entry of candidates) {
-      const look = host.describe(entry), sync = host.syncOf(entry.instanceId);
+    if (tamer) {
       const row = el("div", "cm-journey__feed-row");
-      row.dataset.instanceId = entry.instanceId;
+      row.dataset.feedTarget = "tamer";
+      const top = tamer.next === 0, need = top ? 0 : tamer.next - tamer.exp, pour = Math.min(need, frame.crystals);
       const bar = el("span", "cm-journey__feed-bar");
       const fill = el("i");
-      fill.style.transform = `scaleX(${sync.next > 0 ? sync.exp / sync.next : 1})`;
+      fill.style.transform = `scaleX(${top ? 1 : tamer.exp / tamer.next})`;
       bar.append(fill);
       const text = el("span", "cm-journey__feed-text");
-      text.append(el("strong", "", look.name), el("span", "cm-journey__member-lv", sync.next > 0 ? syncText("level", { level: sync.level }) : syncText("level.max")), bar);
-      const need = sync.next > 0 ? sync.next - sync.exp : 0;
-      const key = button("cm-journey__key cm-arcade-key", sync.next === 0 ? t("feed.max") : frame.crystals >= need ? `${t("feed.next")}・${need.toLocaleString()}` : t("feed.none"), () => {
-        const result = host.feed(entry.instanceId, need);
-        if (result?.ok) say(syncText("levelUp.range", { before: result.gain.before.level, after: result.gain.after.level }));
+      text.append(el("strong", "", t("feed.tamer")), el("span", "cm-journey__member-lv", top ? syncText("level.max") : syncText("level", { level: tamer.level })), bar);
+      const label = top ? t("feed.max") : pour <= 0 ? t("feed.none") : pour >= need ? `${t("feed.next")}・${need.toLocaleString()}` : `${t("feed.some")}・${pour.toLocaleString()}`;
+      const key = button("cm-journey__key cm-arcade-key", label, () => {
+        const result = host.feedTamer?.(pour);
+        if (result?.ok) say(t("feed.done", { before: result.gain.before.level, after: result.gain.after.level, spent: result.spent.toLocaleString() }));
         paint();
       });
-      key.disabled = sync.next === 0 || frame.crystals < need;
+      key.disabled = top || pour <= 0;
       key.dataset.journeyAction = "feed";
-      row.append(portrait(look.portrait), text, key);
+      key.dataset.feedAmount = String(pour);
+      row.append(text, key);
       panel.append(row);
     }
     body.replaceChildren(panel);

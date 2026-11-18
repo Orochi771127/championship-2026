@@ -91,6 +91,8 @@
 .cm-journey__feed { display: grid; gap: 6px; }
 .cm-journey__hint { margin: 0; color: #c9c3ff; font-size: calc(13px * var(--text-scale, 1)); text-align: center; }
 .cm-journey__feed-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 4px; border-bottom: 1px dashed rgba(255, 255, 255, 0.14); }
+/* ROADMAP_R1_20261118: the tamer's row has no portrait, so the text takes the room and the key keeps its own. */
+.cm-journey__feed-row[data-feed-target="tamer"] { grid-template-columns: minmax(0, 1fr) auto; }
 .cm-journey__feed-text { display: grid; grid-template-columns: minmax(0, auto) auto; align-items: center; gap: 4px 8px; min-width: 0; }
 .cm-journey__feed-text > strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cm-journey__feed-text > .cm-journey__member-lv { justify-self: start; }

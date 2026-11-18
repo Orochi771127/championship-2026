@@ -38,7 +38,7 @@ export const JOURNEY_COPY = deepFreeze({
     'tower.chest': '寶箱', 'tower.guardian': '守關首領', 'tower.rewards': '首次攻略獎勵', 'tower.crystals': '經驗結晶 {value}', 'tower.tickets': '轉蛋券 {value}', 'tower.diamonds': '鑽石 {value}',
     'tower.team': '出戰隊伍（最多 3 隻）', 'tower.pick': '請先選擇出戰拍檔。', 'tower.top': '已登上塔頂！',
     'stage.BABY': '幼年期', 'stage.ROOKIE': '成長期', 'stage.CHAMPION': '成熟期',
-    'feed.hint': '把經驗結晶灌注給拍檔，直接提升同步等級。', 'feed.next': '升到下一級', 'feed.none': '經驗結晶不足', 'feed.max': '已滿級',
+    'feed.hint': '結晶灌給馴獸師，1 結晶 = 1 經驗。', 'feed.tamer': '馴獸師', 'feed.some': '灌注', 'feed.done': 'Lv.{before} → Lv.{after}・−{spent} 結晶', 'feed.next': '升到下一級', 'feed.none': '經驗結晶不足', 'feed.max': '已滿級',
     'result.clear': '第 {floor} 層攻略成功', 'result.fail': '第 {floor} 層挑戰失敗', 'result.next': '乘勝追擊：第 {floor} 層', 'result.retry': '再次挑戰第 {floor} 層'
   },
   en: {
@@ -74,7 +74,7 @@ export const JOURNEY_COPY = deepFreeze({
     'tower.chest': 'Chest', 'tower.guardian': 'Guardian', 'tower.rewards': 'First clear', 'tower.crystals': 'EXP crystals {value}', 'tower.tickets': 'Tickets {value}', 'tower.diamonds': 'Diamonds {value}',
     'tower.team': 'Team (up to 3)', 'tower.pick': 'Choose your partners first.', 'tower.top': 'You reached the top!',
     'stage.BABY': 'Baby', 'stage.ROOKIE': 'Rookie', 'stage.CHAMPION': 'Champion',
-    'feed.hint': 'Infuse EXP crystals into a partner to raise its Sync Level.', 'feed.next': 'To next level', 'feed.none': 'Not enough crystals', 'feed.max': 'Max level',
+    'feed.hint': 'Crystals feed the tamer: 1 crystal = 1 EXP.', 'feed.tamer': 'Tamer', 'feed.some': 'Pour', 'feed.done': 'Lv.{before} → Lv.{after} · −{spent} crystals', 'feed.next': 'To next level', 'feed.none': 'Not enough crystals', 'feed.max': 'Max level',
     'result.clear': 'Floor {floor} cleared', 'result.fail': 'Floor {floor} not cleared', 'result.next': 'Press on: floor {floor}', 'result.retry': 'Retry floor {floor}'
   },
   ja: {
@@ -110,7 +110,7 @@ export const JOURNEY_COPY = deepFreeze({
     'tower.chest': '宝箱', 'tower.guardian': '階層ボス', 'tower.rewards': '初回攻略報酬', 'tower.crystals': '経験結晶 {value}', 'tower.tickets': 'ガチャ券 {value}', 'tower.diamonds': 'ダイヤ {value}',
     'tower.team': '出撃チーム（最大 3 体）', 'tower.pick': '先にパートナーを選んでください。', 'tower.top': '塔の頂上に到達！',
     'stage.BABY': '幼年期', 'stage.ROOKIE': '成長期', 'stage.CHAMPION': '成熟期',
-    'feed.hint': '経験結晶をパートナーに注入してシンクロレベルを上げます。', 'feed.next': '次のレベルへ', 'feed.none': '経験結晶が足りません', 'feed.max': 'レベル最大',
+    'feed.hint': '結晶はテイマーへ。結晶 1 = 経験 1。', 'feed.tamer': 'テイマー', 'feed.some': '注入', 'feed.done': 'Lv.{before} → Lv.{after}・結晶 −{spent}', 'feed.next': '次のレベルへ', 'feed.none': '経験結晶が足りません', 'feed.max': 'レベル最大',
     'result.clear': '{floor} 階攻略成功', 'result.fail': '{floor} 階の挑戦失敗', 'result.next': '勢いのまま：{floor} 階へ', 'result.retry': '{floor} 階に再挑戦'
   },
   th: {
@@ -146,7 +146,7 @@ export const JOURNEY_COPY = deepFreeze({
     'tower.chest': 'หีบ', 'tower.guardian': 'ผู้พิทักษ์ชั้น', 'tower.rewards': 'รางวัลผ่านครั้งแรก', 'tower.crystals': 'คริสตัล EXP {value}', 'tower.tickets': 'ตั๋วกาชา {value}', 'tower.diamonds': 'เพชร {value}',
     'tower.team': 'ทีม (สูงสุด 3 ตัว)', 'tower.pick': 'เลือกคู่หูก่อน', 'tower.top': 'ถึงยอดหอแล้ว!',
     'stage.BABY': 'วัยทารก', 'stage.ROOKIE': 'วัยเติบโต', 'stage.CHAMPION': 'วัยโตเต็มที่',
-    'feed.hint': 'เติมคริสตัล EXP ให้คู่หูเพื่อเพิ่มเลเวลซิงก์', 'feed.next': 'ไปเลเวลถัดไป', 'feed.none': 'คริสตัลไม่พอ', 'feed.max': 'เลเวลสูงสุด',
+    'feed.hint': 'คริสตัลเติมให้เทมเมอร์: 1 คริสตัล = 1 EXP', 'feed.tamer': 'เทมเมอร์', 'feed.some': 'เติม', 'feed.done': 'Lv.{before} → Lv.{after} · −{spent} คริสตัล', 'feed.next': 'ไปเลเวลถัดไป', 'feed.none': 'คริสตัลไม่พอ', 'feed.max': 'เลเวลสูงสุด',
     'result.clear': 'ผ่านชั้นที่ {floor}', 'result.fail': 'ชั้นที่ {floor} ไม่ผ่าน', 'result.next': 'บุกต่อ: ชั้น {floor}', 'result.retry': 'ท้าชั้น {floor} อีกครั้ง'
   },
   vi: {
@@ -182,7 +182,7 @@ export const JOURNEY_COPY = deepFreeze({
     'tower.chest': 'Rương', 'tower.guardian': 'Hộ vệ tầng', 'tower.rewards': 'Thưởng lần đầu', 'tower.crystals': 'Tinh thể EXP {value}', 'tower.tickets': 'Vé gacha {value}', 'tower.diamonds': 'Kim cương {value}',
     'tower.team': 'Đội (tối đa 3)', 'tower.pick': 'Hãy chọn cộng sự trước.', 'tower.top': 'Bạn đã lên đỉnh tháp!',
     'stage.BABY': 'Ấu niên', 'stage.ROOKIE': 'Trưởng thành', 'stage.CHAMPION': 'Thành thục',
-    'feed.hint': 'Truyền tinh thể EXP cho cộng sự để tăng cấp đồng bộ.', 'feed.next': 'Lên cấp tiếp', 'feed.none': 'Không đủ tinh thể', 'feed.max': 'Cấp tối đa',
+    'feed.hint': 'Tinh thể dành cho Tamer: 1 tinh thể = 1 EXP.', 'feed.tamer': 'Tamer', 'feed.some': 'Truyền', 'feed.done': 'Lv.{before} → Lv.{after} · −{spent} tinh thể', 'feed.next': 'Lên cấp tiếp', 'feed.none': 'Không đủ tinh thể', 'feed.max': 'Cấp tối đa',
     'result.clear': 'Đã qua tầng {floor}', 'result.fail': 'Chưa qua tầng {floor}', 'result.next': 'Thừa thắng: tầng {floor}', 'result.retry': 'Thử lại tầng {floor}'
   }
 });
