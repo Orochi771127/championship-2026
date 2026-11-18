@@ -66,7 +66,7 @@ export function createSkillCutInLayer({ host, doc = host?.ownerDocument ?? globa
   }
 
   /** The 650 ms special strip. A newer special replaces one still showing. */
-  function play({ team = "ally", portrait = null, species = null, silhouette = false, moveName = "", casterName = "", palette = "neutral", focus = null } = {}) {
+  function play({ team = "ally", portrait = null, species = null, silhouette = false, moveName = "", moveIcon = null, casterName = "", palette = "neutral", focus = null } = {}) {
     if (disposed) return false;
     if (strip) { clear(strip); strip = null; }
     const env = ceremonyEnvironment(doc);
@@ -124,6 +124,14 @@ export function createSkillCutInLayer({ host, doc = host?.ownerDocument ?? globa
     const name = juicyNode(doc, "strong", "cm-cutin__name", title);
     // The title fits the strip: wide glyphs count 1, spaces and Latin less.
     name.style.setProperty("--glyphs", String(Math.max(4, [...title].reduce((sum, ch) => sum + (/\s/.test(ch) ? 0.3 : /[\x20-\x7e]/.test(ch) ? 0.6 : 1), 0))));
+    // UNIFIED_MOVES_20261118: the move's own icon beside its name (removed if it fails to load)
+    if (moveIcon) {
+      const icon = juicyNode(doc, "img", "cm-cutin__icon");
+      icon.alt = ""; icon.setAttribute("aria-hidden", "true"); icon.decoding = "async";
+      icon.addEventListener?.("error", () => icon.remove(), { once: true });
+      icon.src = moveIcon;
+      name.prepend(icon);
+    }
     words.append(juicyNode(doc, "span", "cm-cutin__kicker", casterName ? `${casterName} · ${juicyText("cutin.special")}` : juicyText("cutin.special")), name);
     band.append(lines, face, words);
     node.append(band);

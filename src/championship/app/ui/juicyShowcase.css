@@ -333,6 +333,9 @@
   paint-order: stroke fill;
   filter: drop-shadow(0 3px 0 #000) drop-shadow(0 0 10px color-mix(in srgb, var(--jc-main, #ffd23f) 70%, transparent));
 }
+/* UNIFIED_MOVES_20261118: the move's icon before its name in the cut-in */
+.cm-cutin__icon { display: inline-block; width: 1.15em; height: 1.15em; object-fit: contain; vertical-align: -0.18em; margin-right: 0.18em; filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.55)); }
+
 .cm-cutin-capsule {
   position: absolute;
   z-index: 1;
