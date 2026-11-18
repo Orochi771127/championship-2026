@@ -35,6 +35,7 @@ import { createSkillCutInLayer } from "./skillCutIn.js";
 import { createShowcaseBankCells } from "./showcaseBankCells.js";
 import { playShowcaseBakedPiece, preloadShowcaseBakedPieces } from "./showcaseBakedPiece.js";
 import { moveVfxChoreography } from "../vfx/moveVfxChoreography.js";
+import { loadMoveVfx3dPieces } from "../vfx/moveVfxSetPieces.js";
 import { SHOWCASE_CARRIER_STYLES, SHOWCASE_STREAM_STYLES, playShowcaseStyle, showcaseStyleIsMelee } from "./showcaseMoveVfx.js";
 import { SHOWCASE_ACTIONS, SHOWCASE_ATTACK_SEQUENCE, createSpriteMotion, loadShowcaseMotionShared, showcaseFitScale,
   showcaseMotionAvailable } from "./spriteMotionPlayer.js";
@@ -293,6 +294,9 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     clearStage();
     view.kind = kind;
     view.payload = payload;
+    // a move with a three.js contact piece starts loading it as the preview opens (UNIFIED_MOVES_20261118)
+    const contact = typeof moveVfxChoreography === "function" ? moveVfxChoreography(payload?.move?.recordIndex)?.contact : null;
+    if (contact && typeof loadMoveVfx3dPieces === "function") loadMoveVfx3dPieces([contact.piece]);
     view.runId = (view.runId ?? 0) + 1; // a replay is a new run, even with the same payload
     view.root.hidden = false;
     view.root.dataset.kind = kind;

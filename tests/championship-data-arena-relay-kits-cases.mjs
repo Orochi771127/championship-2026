@@ -43,7 +43,9 @@ test('each roster partner opens with its own moves and fills only from its eleme
     assert.equal(options.length, 5, partner.id);
     assert.ok(row[2].length >= 1, `${partner.id} has no own move`);
     const own = options.filter(id => relayOwnMoveInfo(id));
-    assert.deepEqual(own, row[2].map(([record]) => `own-${record}`));
+    // UNIFIED_MOVES_20261118: the partner's own ultimate takes the R slot, the rest open the five choices.
+    assert.deepEqual(own, row[2].filter(r => r[4] !== 1).map(([record]) => `own-${record}`));
+    assert.equal(row[2].filter(r => r[4] === 1).length, 1, `${partner.id} has one own ultimate`);
     assert.deepEqual(options.slice(0, own.length), own, `${partner.id} own moves first`);
     for (const id of own) {
       const info = relayOwnMoveInfo(id), base = partner.speciesIndex >= 224 ? null : partner.speciesIndex;
@@ -52,7 +54,11 @@ test('each roster partner opens with its own moves and fills only from its eleme
     }
     for (const id of options.filter(id => !relayOwnMoveInfo(id)))
       assert.ok([partner.element, 'neutral'].includes(RELAY_POOL_MOVE_ELEMENT[id]), `${partner.id} (${partner.element}) gets ${id}`);
-    assert.equal(relayKit(partner.id).ultimate, RELAY_ELEMENT_KITS[partner.element].ultimate);
+    const ownUltimate = `own-${row[2].find(r => r[4] === 1)[0]}`;
+    assert.equal(relayKit(partner.id).ultimate, ownUltimate, `${partner.id} uses its own ultimate`);
+    // it fights with the numbers its element pool's ultimate had (balance unchanged)
+    const lent = relayMove(RELAY_ELEMENT_KITS[partner.element].ultimate, true), mine = relayMove(ownUltimate, true);
+    for (const key of ['type', 'damage', 'radius', 'range', 'windup', 'energy', 'cooldown']) assert.equal(mine[key], lent[key], `${ownUltimate} ${key}`);
     assert.deepEqual(relayKit(partner.id).moves, options.slice(0, 3));
   }
 });
@@ -74,7 +80,8 @@ test('element follows the partner\'s own coloured moves; Tournament partners kee
 
 test('own moves take their mechanic from the style and side effects from the colour, never from stage', () => {
   const byStyle = new Map();
-  for (const row of kits.species) for (const [record, style, palette] of row[2]) {
+  for (const row of kits.species) for (const [record, style, palette, , ultimate] of row[2]) {
+    if (ultimate === 1) continue; // an own ultimate fights with its pool ultimate's numbers (tested above)
     const rule = relayMove(`own-${record}`), plain = RELAY_STYLE_RULES[style];
     assert.equal(rule.type, plain.type, `own-${record}`);
     assert.equal(rule.damage, plain.damage, `own-${record} damage must not scale with stage`);
