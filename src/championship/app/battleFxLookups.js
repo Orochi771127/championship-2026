@@ -92,7 +92,7 @@ export function createBattleFxLookups({getView, localTeam = () => 0, onFeed = nu
         if (ultimate && typeof onCutIn === 'function') {
           const combatant = getView()?.combatants?.[event.slot];
           onCutIn({slot: event.slot, team: combatant?.team ?? null, speciesId: combatant?.speciesId ?? null,
-            casterName: nameOfSlot(event.slot), moveName: move, palette: look.palette});
+            casterName: nameOfSlot(event.slot), moveName: move, moveId: event.moveId, palette: look.palette});
         }
       } else if (event.type === 'KO') {
         onFeed(uiText('{name}倒下了！', {name: feedName(event.slot)}));

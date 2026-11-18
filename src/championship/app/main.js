@@ -118,6 +118,7 @@ import { configureCeremonyAudio, playCeremony, playCeremonySound } from '../pres
 import { bindOverLimitPress } from './ui/overLimitPress.js';
 import { OVER_LIMIT_RULES } from '../contracts/productAwakeningOverdrive.js';
 import { createSkillCutInLayer } from '../presentation/juicy/skillCutIn.js';
+import { moveIconSrc } from './moveIcons.js';
 import { juicyPresentationEnabled, juicySpeciesIndex } from '../presentation/juicy/juicyArt.js';
 import { createActionPortrait, setActionPortrait, clearActionPortrait, warmActionPortraits, releaseDetachedActionPortraits } from '../presentation/juicy/actionPortrait.js';
 // Owner 2026-11-12: partners outside the Database are drawn as their own animated bodies.
@@ -2176,7 +2177,7 @@ async function mountBattleField() {
           const fxLookups = fxLookupsModule
             ? fxLookupsModule.createBattleFxLookups({getView:()=>source.getView(),localTeam:()=>activeRuntime.localTeamIndex(),onFeed:(line,cue)=>view.feed?.(line,cue),onTally:tallyBattleEvent,
               onCutIn:juicy?cue=>cutIn?.play({team:cue.team===activeRuntime.localTeamIndex()?'ally':'enemy',species:cue.speciesId,
-                moveName:cue.moveName,casterName:cue.casterName,palette:cue.palette}):null,
+                moveName:cue.moveName,moveIcon:moveIconSrc(cue.moveId),casterName:cue.casterName,palette:cue.palette}):null,
               // Local acceptance shows stable skill IDs; players see approved names only.
               showIds:String(location.search??'').includes('battleFxDebug')&&['localhost','127.0.0.1','[::1]'].includes(location.hostname)}) : null;
           progress?.start('scene');

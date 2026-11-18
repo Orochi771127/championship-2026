@@ -93,3 +93,15 @@ test('every species basic move lands a three.js piece no other basic of its elem
     seen.set(look, key);
   }
 });
+
+test('every move has its own icon, shipped as a 64 px WebP with a manifest (U2)', async () => {
+  const manifest = JSON.parse(fs.readFileSync(new URL('../assets/production/ui/move-icons-r1/manifest.json', import.meta.url), 'utf8'));
+  const {moveIconSrc, moveIconKey} = await import('../src/championship/app/moveIcons.js');
+  assert.equal(manifest.rightsStatus, 'ORIGINAL_GENERATED');
+  const files = new Set(manifest.files.map(f => f.path));
+  for (const [key] of sig.moves) assert.ok(files.has(moveIconSrc(key)), `${key} has no icon`);
+  assert.equal(moveIconKey('own-195'), 195);
+  assert.equal(moveIconSrc('own-195'), moveIconSrc(195));
+  assert.equal(moveIconSrc('whiteout'), 'assets/production/ui/move-icons-r1/move_whiteout_64.webp');
+  for (const f of manifest.files) assert.ok(fs.existsSync(new URL(`../${f.path}`, import.meta.url)), f.path);
+});

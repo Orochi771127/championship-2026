@@ -93,6 +93,8 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 }
 .da-slot__key { position: absolute; top: 2px; left: 4px; font-size: calc(9px * var(--text-scale-hud, 1)); color: var(--da-dim); font-weight: 800; }
 .da-slot__name { font-size: calc(11px * var(--text-scale-hud, 1)); font-weight: 800; margin-top: 8px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* UNIFIED_MOVES_20261118: a HUD slot's move icon sits in the top-right corner, out of the name's way */
+.da-slot > .da-move-icon { position: absolute; top: 2px; right: 3px; width: 16px; height: 16px; margin: 0; z-index: 1; }
 .da-slot__cool { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.6); transform-origin: bottom; transform: scaleY(var(--cool, 0)); pointer-events: none; }
 .da-slot:not(.is-cooling) .da-slot__cool { transform: scaleY(0); }
 .da-slot.is-noenergy { border-color: rgba(120, 140, 170, 0.35); color: var(--da-dim); }
