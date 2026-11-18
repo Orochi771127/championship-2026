@@ -38,7 +38,7 @@ import {inscribeGachaBloodline,grantGachaMetal} from '../gacha/cyberGacha.js';
 import {REALTIME_TRAINING_POLICY,recommendedCages,TRAINING_KIND_OF_CONDITION} from '../raising/productTrainingPolicy.js';
 import {normalizeSyncLevels,createSyncLevelState,syncOf,syncCapForRank,syncBattleExp,grantSyncExp,feedSyncCrystals,reconcileSyncRebirth,
   boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX,partnerGradeOf,recordPartnerGrade,fuseSyncPartners} from '../contracts/productSyncLevel.js';
-import {rollPartnerGrade,applyGradeHeadStart,fusionLineMultiplier,FUSION_MAX_FODDER,FUSION_WARN_LEVEL} from '../contracts/productLineFusion.js';
+import {rollPartnerGrade,applyGradeHeadStart,fusionLineMultiplier,FUSION_MAX_FODDER,FUSION_WARN_LEVEL,fusionInheritance} from '../contracts/productLineFusion.js';
 import {normalizeTamerTalents,createTamerTalentState,tamerTalentPoints,talentValue,grantTamerExp,tamerCaptureExp,tamerBattleExp,tamerDailyExp,TAMER_EXP,
   learnTalent,talentRefusal,chooseKeystone,keystoneRefusal,hasKeystone,KEYSTONE_RULES,respecTalents,talentRespecCost,talentSpent,talentSpentInLine,talentOpen,commanderCappedTalents,
   TALENT_NODES,TALENT_KEYSTONES,TALENT_LINES,TALENT_TREE_POINTS,TALENT_TIER_GATE,TALENT_KEYSTONE_GATE,TALENT_KEYSTONE_COST,tamerExpRequired,TAMER_LEVEL_MAX}
@@ -2029,6 +2029,15 @@ export function createChampionshipStandaloneApp({
     }
     return {state,gains};
   }
+  /**
+   * 傳承 (the breeder keystone, TAMER_TALENTS_T6_20261118): what `profile`, the base of a fusion, takes from fodder of
+   * these grades. Null without the keystone or when nothing would rise.
+   */
+  function fusionInheritOf(baseId,profile,fodderGrades){
+    if(!profile||!hasKeystone(talentState(),'breeder.inherit'))return null;
+    const inherited=fusionInheritance(profile,partnerGradeOf(syncLevels,baseId),fodderGrades);
+    return inherited.gains.length?Object.freeze({profile:normalizeNativeIndividualProfile(inherited.profile),gains:Object.freeze(inherited.gains.map(gain=>Object.freeze({...gain})))}):null;
+  }
   /** Validate a ranch fusion and work out what it pays. */
   function partnerFusionPlan(baseId,fodderIds){
     if(!syncProfileOf(baseId))return {ok:false,reason:'UNKNOWN_INDIVIDUAL'};
@@ -2042,7 +2051,7 @@ export function createChampionshipStandaloneApp({
     }
     syncLevelOf(baseId);
     const fused=fuseSyncPartners(syncState(),baseId,fodders,{bonusPercent:talent('fusionExpPercent')});
-    return fused?{ok:true,ids,fused}:{ok:false,reason:'FUSION_INVALID_SELECTION'};
+    return fused?{ok:true,ids,fused,inherit:fusionInheritOf(baseId,syncProfileOf(baseId),fodders.map(fodder=>fodder.grade))}:{ok:false,reason:'FUSION_INVALID_SELECTION'};
   }
   function partnerBurstView(instanceId){
     const profile=partnerProfile(instanceId);if(!profile)return null;
@@ -3768,8 +3777,10 @@ export function createChampionshipStandaloneApp({
           bases: Object.freeze(basesFor(species, fusionRow.kind === "HOME" ? fusionRow.id : null).map((home) => {
             const line = fusionLineOf(home.instanceId, species);
             const preview = fuseSyncPartners(staged.state, home.instanceId, [{ instanceId: fusionRow.kind === "HOME" ? fusionRow.id : null, grade, line }], { bonusPercent: talent('fusionExpPercent') });
+            // `inherit`: how many stats 傳承 would raise on this base ([] without the keystone).
+            const inherit = fusionInheritOf(home.instanceId, syncProfileOf(home.instanceId), [grade])?.gains ?? Object.freeze([]);
             return Object.freeze({ instanceId: home.instanceId, speciesId: home.speciesId, line,
-              displayName: home.displayName ?? speciesDisplayName(home.speciesId), preview: preview?.summary ?? null });
+              displayName: home.displayName ?? speciesDisplayName(home.speciesId), preview: preview?.summary ? Object.freeze({ ...preview.summary, inherit }) : null });
           })) });
       }
       return Object.freeze({ ...huntResult, rows: Object.freeze(rows), pendingFusion,
@@ -4978,7 +4989,8 @@ export function createChampionshipStandaloneApp({
     /** What fusing `fodderIds` (in order, at most five) into `baseId` would pay; null when the choice is not valid. */
     previewPartnerFusion(baseId,fodderIds){
       const plan=partnerFusionPlan(baseId,fodderIds);
-      return plan.ok?plan.fused.summary:null;
+      // `inherit` lists the stats 傳承 would raise ([] without the keystone).
+      return plan.ok?Object.freeze({...plan.fused.summary,inherit:plan.inherit?.gains??Object.freeze([])}):null;
     },
     /**
      * Fuse saved partners into `baseId` in one save: the fodder leave the ranch (not through the native release
@@ -4996,13 +5008,17 @@ export function createChampionshipStandaloneApp({
       const before=requireSession().getRaisingHomeSnapshot();
       const residents=plan.ids.filter(id=>before.residents.some(entry=>entry.residentId===id));
       const candidateSnapshot=residents.length?stageRaisingResidentRelease(before,residents):before;
+      // 傳承: the base's raised stats are written with the fusion, in this one save (put back if it fails).
+      const beforeInherit={creature,raising,registered:registeredSpeciesValue};
+      if(plan.inherit)writeRaisingNativeProfile(baseId,plan.inherit.profile,{markDirty:false});
       let candidateRaising=raising;
       for(const id of plan.ids)candidateRaising=releaseRaisingMembership(candidateRaising,id);
       const candidateBook=retainOwnedBookSpecies(registeredSpeciesValue,creature,candidateRaising.collection);
       const tamerPaid=withTamerExp(talentState(),plan.ids.length*TAMER_EXP.FUSION);
       const status=savePort.save({...liveSaveRequest(revision+1),snapshot:candidateSnapshot,raising:candidateRaising,
         syncLevels:plan.fused.state,tamerTalents:tamerPaid.state,registeredSpecies:candidateBook});
-      if(status.phase!=='SAVED'){savePort.discardPendingWrite();return Object.freeze({ok:false,reason:'SAVE_FAILED'});}
+      if(status.phase!=='SAVED'){savePort.discardPendingWrite();creature=beforeInherit.creature;raising=beforeInherit.raising;registeredSpeciesValue=beforeInherit.registered;
+        return Object.freeze({ok:false,reason:'SAVE_FAILED'});}
       raising=candidateRaising;syncLevels=plan.fused.state;registeredSpeciesValue=candidateBook;revision+=1;
       tamerTalents=tamerPaid.state;lastTamerGain=tamerPaid.gain;
       if(residents.length)requireSession().commitRaisingResidentRelease(residents,before.revision);
@@ -5013,7 +5029,9 @@ export function createChampionshipStandaloneApp({
       }
       storeNativeRaisingHome();savePort.markDirty();
       publishRaising();publishScreens();
-      return Object.freeze({ok:true,gain:plan.fused.summary,fused:Object.freeze([...plan.ids])});
+      // `gain` has the preview's own shape, so what a fusion pays can be compared with what its preview showed.
+      const inherit=plan.inherit?.gains??Object.freeze([]);
+      return Object.freeze({ok:true,gain:Object.freeze({...plan.fused.summary,inherit}),fused:Object.freeze([...plan.ids]),inherit});
     },
     getGachaTickets(){return session?gachaState().tickets:0;},
     /** Cartridges this hunt started with (the field readout names them). */
@@ -6222,10 +6240,22 @@ export function createChampionshipStandaloneApp({
         const bonusShop = comboBits > 0 && shop ? createShopRuntime({ snapshot: shop.toSave(), allowRepeatedCages: playtestPolicy?.enabled === true,
           allItemsVisible: playtestPolicy?.shopOpen === true, progression: progressionContext() }) : null;
         bonusShop?.creditBits(comboBits, { evidence: 'OWNER_APPROVED_ADAPTATION' }); // capped at the wallet limit
+        // 傳承 (TAMER_TALENTS_T6_20261118): each staged fusion hands its base what the fodder was better at. The bases
+        // are written on the candidates only, so every refusal above and a failed save leave the partners as they were.
+        let candidateCreature = creature;
+        for (const fusion of stagedFusions) {
+          const own = fusion.baseId === candidateCreature?.creatureId;
+          const profile = own ? candidateCreature.nativeProfile ?? null : candidateRaising.collection.find((entry) => entry.instanceId === fusion.baseId)?.nativeProfile ?? null;
+          const inherited = fusionInheritOf(fusion.baseId, profile, [fusion.grade]);
+          if (!inherited) continue;
+          if (own) candidateCreature = Object.freeze({ ...candidateCreature, nativeProfile: inherited.profile });
+          else candidateRaising = Object.freeze({ ...candidateRaising, collection: Object.freeze(candidateRaising.collection.map((entry) => entry.instanceId === fusion.baseId
+            ? Object.freeze({ ...entry, nativeProfile: inherited.profile }) : entry)) });
+        }
         huntCommitActive = true;
         let status;
         try {
-          status = savePort.save({ snapshot: candidateSnapshot, creature, sessionId,
+          status = savePort.save({ snapshot: candidateSnapshot, creature: candidateCreature, sessionId,
             revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, saveId, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha: candidateGacha, burstEvolution: candidateBurst, syncLevels: candidateSync, tamerTalents: tamerPaid.state, journey, raising: candidateRaising,
             registeredSpecies: candidateBook,
             shop: (bonusShop ?? shop) ? (bonusShop ?? shop).toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
@@ -6237,7 +6267,7 @@ export function createChampionshipStandaloneApp({
                 allItemsVisible: playtestPolicy?.shopOpen === true, progression: progressionContext() });
               applyMappedHuntInventoryFromShop(shop, huntInventory); bindShopRuntime();
             }
-            raising = candidateRaising; instanceIdentity = candidateIdentity; revision += 1;
+            raising = candidateRaising; creature = candidateCreature; instanceIdentity = candidateIdentity; revision += 1;
             burstEvolution = candidateBurst; cyberGacha = candidateGacha; syncLevels = candidateSync; huntInstincts = new Map(); huntGrades = new Map();
             tamerTalents = tamerPaid.state; lastTamerGain = tamerPaid.gain;
             registeredSpeciesValue = candidateBook;

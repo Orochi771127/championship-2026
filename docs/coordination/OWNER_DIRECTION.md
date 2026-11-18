@@ -1,5 +1,20 @@
 # Championship Owner Direction
 
+<!-- record-id: TAMER_TALENTS_T6_20261118 -->
+## 2026-11-18 — Tamer talents T6: the breeder keystone 傳承 (fusion P4)
+
+Under the standing goal, `LINE_FUSION_TAMER_TALENTS_DESIGN_20261117` and the fusion plan's decided P4 (「由育成師頂點天賦『傳承』解鎖」).
+
+`OWNER_APPROVED_ADAPTATION`, as designed:
+
+- With 傳承, a fusion also gives the base one unit of each stat where the fodder's quality is higher, never past the individual's own upper bound. Without the keystone a fusion is unchanged.
+- Decided while wiring, inside the plan: it counts per fodder (five fodders can give five units of a stat, if the bound allows); a base without a grade counts as quality 50; a fodder without a grade hands over nothing; HP and TP raise their current value by what the maximum gained.
+- Both fusion places do it: the ranch fusion in its own save, the Hunt Result's fusions in the Home commit.
+- 31 of the 36 nodes and 4 of the 8 keystones are open.
+
+Contract: `docs/contracts/championship/TAMER_TALENTS_20261117.json` (`wiredT6`).
+
+
 <!-- record-id: UNIFIED_MOVES_20261118 -->
 ## 2026-11-18 — One move list for both battle modes, move icons, and three.js move effects
 

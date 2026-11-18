@@ -507,10 +507,10 @@
       "ROM-derived art is research only"
     ],
     "git": {
-      "main": "2982c597 (Merge PR #278)",
+      "main": "d6bcd3d0 (Merge PR #280)",
       "openPullRequests": [],
       "branchesInFlight": [
-        "feat/talent-nodes-t5-20261118"
+        "feat/fusion-inherit-t6-20261118"
       ],
       "worktree": ".claude/worktrees/skill-scroll-20261117 (clean worktree cut from origin/main; the shared checkout holds other agents' uncommitted work and is not touched)"
     },
@@ -528,8 +528,8 @@
         "CHAMPIONSHIP_QA_ORIGIN=<isolated origin> node tests/championship-data-arena-browser.cjs",
         "CHAMPIONSHIP_QA_ORIGIN=<isolated origin> FAILS=1|3 node tests/championship-asset-503-recovery-browser.cjs"
       ],
-      "lastFullSuite": "3,909 / 3,909 on feat/talent-nodes-t5-20261118 (local, Windows, Node 24.18)",
-      "ci": "PR #266 to #278: every one merged with all checks green",
+      "lastFullSuite": "3,914 of 3,915 on feat/fusion-inherit-t6-20261118; the one failure compared a fusion result with its preview, which had gained a field the result lacked (the result now carries it; rerun with the fusion tests: 50 pass)",
+      "ci": "PR #266 to #280: every one merged with all checks green",
       "report": "docs/reports/ci-browser-checks-2026-11-17/REPORT_ZH_TW.md"
     },
     "checklist": [
@@ -622,7 +622,7 @@
         "id": "TALENTS_T3",
         "source": "talent plan sections 4.1 and 4.3 (TAMER_TALENTS_T3_20261118)",
         "state": "VERIFIED_LIVE",
-        "acceptance": "PR, CI green, live commit",
+        "acceptance": "done",
         "dependsOn": [
           "TALENTS_T1"
         ],
@@ -674,12 +674,12 @@
         "id": "TALENT_NODES_REMAINING",
         "source": "talent plan section 4",
         "state": "PARTLY_DONE",
-        "acceptance": "5 nodes and 5 keystones left: hunter 繩索保養, 疾步, 穩手, 省彈 and the keystones 慧眼, 連獵 (native hunt); commander 蓄能 (needs the Owner: which meter); breeder 傳承, 萃取; trader 行商 (needs the higher supplement grade). The Data Arena does not read the commander line yet",
+        "acceptance": "5 nodes and 4 keystones left: hunter 繩索保養, 疾步, 穩手, 省彈 and the keystones 慧眼, 連獵 (native hunt); commander 蓄能 (needs the Owner: which meter); breeder 萃取; trader 行商 (needs the higher supplement grade). The Data Arena does not read the commander line yet",
         "dependsOn": [
           "TALENTS_T1"
         ],
         "owner": "Claude",
-        "evidence": "T4 merged by PR #277 ec93aeb7 (all eight checks green; the webkit evolution baseline control needed two reruns): 殺價, 拾荒, 鑑價, 散步好運 wired (30 of 36 nodes open); tests/championship-tamer-talents-t4-cases.mjs; full suite 3,898 / 3,898, build and validate exit 0; headless Chromium from the normal entry with 殺價 at three ranks: the shop rows read 273 / 19 / 182 Bits, buying 蛋白質 paid 273 and the count went 90 -> 91, no page error. 拾荒, 鑑價 and 散步好運 have rule and source tests only. T5 on branch feat/talent-nodes-t5-20261118: 安撫 and the keystones 純色陣營, 三色指揮, 賞金獵人 (31 of 36 nodes, 3 of 8 keystones open); tests/championship-tamer-talents-t5-cases.mjs; full suite 3,909 / 3,909, build and validate exit 0; headless Chromium from the normal entry: the tree prints what each open keystone does, a real click took 三色指揮 (1 / 1, saved), the line's other keystone then refuses; owned-battle gate passes"
+        "evidence": "T1 to T5 merged and live (PR #269, #274, #275, #277, #280; live pages-build commit d6bcd3d0, build 7dda21e5, checked in the bundle). T6 on branch feat/fusion-inherit-t6-20261118: the breeder keystone 傳承 in the ranch fusion and the Hunt Result fusions (31 of 36 nodes, 4 of 8 keystones open); tests/championship-fusion-inherit-cases.mjs; build and validate exit 0; headless Chromium from the normal entry with 傳承 taken and an A-grade fodder of the same species: the preview read 「傳承 6 項 +1」, the fusion raised the base (HP 1560 -> 1570, TP 49 -> 50, the four others +1) and removed the fodder, no page error. The Hunt Result fusion path has source and app-rule tests only"
       },
       {
         "id": "EXTERNAL_ASSET_503_CLIENT",
@@ -763,8 +763,9 @@
       "the commander talents inside a running battle in a browser (rule and app tests only)",
       "a whole tournament run by hand in a browser",
       "拾荒, 鑑價 and 散步好運 seen in a browser (they need a lucky roll or a 15-30 minute stroll)",
-      "the 503 run on the hunt and battle scenes (the ranch was run; they share the asset scope)"
+      "the 503 run on the hunt and battle scenes (the ranch was run; they share the asset scope)",
+      "傳承 through the Hunt Result fusion panel in a browser (the ranch fusion was run)"
     ],
-    "nextAction": "PR and merge talents T5; then the Data Arena reading the commander line, the hunter nodes and keystones on the native hunt, 傳承 and 萃取; decisions D1, D5 and what 蓄能 fills are open."
+    "nextAction": "PR and merge 傳承; then the Data Arena reading the commander line, the hunter nodes and keystones on the native hunt, 萃取; decisions D1, D5 and what 蓄能 fills are open."
   }
 }

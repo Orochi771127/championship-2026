@@ -193,6 +193,7 @@ export const UI_COPY_JA = Object.freeze({
   "FUSION_PICK": "素材 {count}/{max}",
   "FUSION_LEFT": "あと {exp} EXP",
   "FUSION_CRYSTALS": "+{count} 結晶",
+  "FUSION_INHERIT": "継承 {n} 項目 +1",
   "FUSION_SAVE_FAILED": "保存失敗、融合なし",
   "補品": "サプリ",
   "supply:vigor": "元気ドリンク",
