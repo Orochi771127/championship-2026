@@ -120,7 +120,7 @@ function actionButton(label, { primary = false } = {}) {
 
 function gateAdmissionMessage(admission) {
   if (admission?.reason === "GATE_LOCKED") return admission.unlockKind === 1
-    ? uiText("階級 {rank} 或馴獸師 Lv.{level} 開放。", { rank: admission.unlockParameter, level: admission.unlockLevel })
+    ? uiText("階級 {rank}／Lv.{level}", { rank: admission.unlockParameter, level: admission.unlockLevel }) // short: it sits beside the padlock sticker
     : "取得對應比賽勝利後開放。";
   if (admission?.reason === "INSUFFICIENT_FUNDS") {
     return uiText("持有金額不足，入場需要 {bits} 位元幣。", { bits: admission.chargeBits });
@@ -419,6 +419,7 @@ export async function createGateSelectView({ root, source, mountWorld }) {
     confirm.disabled = !block.canConfirm;
     admissionStatus.textContent = uiText(gateAdmissionMessage(block.admission));
     admissionStatus.hidden = !admissionStatus.textContent;
+    admissionStatus.setAttribute("data-reason", block.admission?.reason ?? ""); // the padlock sticker rides on GATE_LOCKED (vs2Styles.css)
     admissionStatus.title = admissionStatus.textContent;
     admissionStatus.setAttribute("aria-label", admissionStatus.textContent);
     previewName.title = previewName.textContent;

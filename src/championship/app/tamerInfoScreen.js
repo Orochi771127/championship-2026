@@ -3,6 +3,7 @@ import {generationName,tamerRankName,gateName,shopItemName} from '../text/zhHant
 import {PRODUCT_RAISING_LIFECYCLE_RULES} from '../contracts/productSpeciesData.js';
 import {PRODUCT_FINAL_NATURAL_GENERATION} from '../contracts/productGrowthRules.js';
 import {RANK_UNLOCKS,TAMER_RANK_COUNT} from './rankUnlocks.js';
+import {tamerEmblem} from '../presentation/tamerEmblemArt.js';
 import {NATIVE_RAISING_LIFECYCLE_RULES} from '../raising/nativeRaisingLifecycle.js';
 import {slotCountForTamerRank} from '../cage/cageCatalog.js';
 import {nativeBattleWinPercent} from '../battle/nativeTitleProgression.js';
@@ -129,7 +130,10 @@ function rankUnlockPanel(current) {
   summary.append(preview);
   panel.append(summary);
   // R1b: the shop and the hunt gates also open by the tamer's level.
-  panel.append(element("p", "cm-rank-unlocks__note", uiText("狩獵場、商店：馴獸師每 5 級也算 1 階")));
+  const levelNote = element("p", "cm-rank-unlocks__note", uiText("狩獵場、商店：馴獸師每 5 級也算 1 階"));
+  const levelNoteArt = tamerEmblem("lock-level", { size: 16 });
+  if (levelNoteArt) levelNote.prepend(levelNoteArt);
+  panel.append(levelNote);
   const list = element("ol", "cm-rank-unlocks__list");
   for (const row of RANK_UNLOCKS) {
     const item = element("li", "cm-rank-unlocks__row");

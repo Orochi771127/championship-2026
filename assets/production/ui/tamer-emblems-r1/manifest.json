@@ -2,7 +2,7 @@
  "id": "art:ui:tamer-emblems:r1",
  "rightsStatus": "ORIGINAL_GENERATED",
  "provenance": "Generated 2026-11-18 by Codex (codex.exe 0.167 exec, gpt-6.1-sol, built-in image tool) from the written brief in briefs/b001.md, at the Owner's direction (2026-11-18: new mechanics are shown as game art and motion; art is requested from Codex by CLI). Inputs: the brief text and three screenshots of this product's own arcade HUD (taken on the isolated QA origin) as style context only; no ROM frame, research-library file or third-party character was an input. Masters are 256 x 256 RGBA PNG kept outside the repository; each runtime file is the master trimmed to its drawn bounds on a square canvas and reduced to 96 px (Lanczos), lossless WebP.",
- "scope": "Partner star emblems for ROADMAP_R3_20261118 (lit star, empty socket, star with a burst for the star-up moment); presentation only, no gameplay or commercial-rights claim",
+ "scope": "Tamer roadmap emblems: partner stars for ROADMAP_R3_20261118 (lit star, empty socket, star with a burst), and for the presentation of R1, R1b and R2 the EXP crystal, the tamer level badge, the rank and level padlocks and the evolve-ready emblem; presentation only, no gameplay or commercial-rights claim",
  "files": [
   {
    "path": "assets/production/ui/tamer-emblems-r1/star-on_96.webp",
@@ -35,6 +35,61 @@
    ],
    "sha256": "2a011e98ceee0dec8df3e50a5d043cbd2509e03ec8b63ee53f2fc438741c5dd0",
    "masterSha256": "f159e45c30679ed026fc3f8740a8b033f35b13a59f49ac9fa14884e3dd62f7b2",
+   "brief": "briefs/b001.md"
+  },
+  {
+   "path": "assets/production/ui/tamer-emblems-r1/exp-crystal_96.webp",
+   "key": "exp-crystal",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "05730a3baef00fbf6b2aab40f8b93d01a74da36b6e6be58f38ac958fd7de47ce",
+   "masterSha256": "4e4d1cca92087f84a8ac1cf0d5063e20f495b1dfa6f665cdf30c88aef00b2b59",
+   "brief": "briefs/b001.md"
+  },
+  {
+   "path": "assets/production/ui/tamer-emblems-r1/tamer-level-badge_96.webp",
+   "key": "tamer-level-badge",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "db0b6a18f774f7b0de1cbe7d0278aff2a56f053ef4ec7ab029e4b61c7b772286",
+   "masterSha256": "32e3260c7bbe7c9078f9d676eec023097074c9c01e92f9946e5bfa5b9318d49a",
+   "brief": "briefs/b001.md"
+  },
+  {
+   "path": "assets/production/ui/tamer-emblems-r1/lock-rank_96.webp",
+   "key": "lock-rank",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "8a39724098fcf761703cd9a811276171d75c5a9ced65ac7c8a2f8e4f2a828d87",
+   "masterSha256": "e5613aa9dad8465050a7e75dfbe8e3cc3048638a5f02ec0c21b577e23b0ebb07",
+   "brief": "briefs/b001.md"
+  },
+  {
+   "path": "assets/production/ui/tamer-emblems-r1/lock-level_96.webp",
+   "key": "lock-level",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "63c3c38103314b57d1bd789810870abac2e2668d36ca6bc5b0a97df823129a51",
+   "masterSha256": "d1b4e8f0cb1daff3274eb1fb10249fcbf5a74063ac168a2234ee2c9f2774a65a",
+   "brief": "briefs/b001.md"
+  },
+  {
+   "path": "assets/production/ui/tamer-emblems-r1/evolve-ready_96.webp",
+   "key": "evolve-ready",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "78a08141e77f5637cceb900e0a1ba612cf309ebfb193df24403ba59efe9daa40",
+   "masterSha256": "b88693130481800b98bd4f986d73326190d08f7701387bdac4294f95567d07ed",
    "brief": "briefs/b001.md"
   }
  ]

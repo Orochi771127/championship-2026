@@ -15,7 +15,8 @@ import { prefersReducedMotion } from '../presentation/presentationPreferences.js
 import { playCeremony } from '../presentation/ceremony/ceremonyRunner.js';
 import { buildEvolve } from '../presentation/ceremony/ceremonyScenes.js';
 import { taxonomyGlyph, TAXONOMY_COLORS } from '../presentation/taxonomyBadgeArt.js';
-import { starEmblem } from '../presentation/starEmblemArt.js';
+import { starEmblem, starLevelGauge } from '../presentation/starEmblemArt.js';
+import { tamerEmblem } from '../presentation/tamerEmblemArt.js';
 import { taxonomyText } from '../text/taxonomyText.js';
 // INT-RH2 — Codex-owned P1R DOM presentation.
 //
@@ -205,7 +206,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   // ROADMAP_R3_20261118: the partner's stars as a small emblem and a count beside its place.
   const starsChip = node('span', 'int-rh2-companion__stars'); starsChip.hidden = true;
   // ROADMAP_R2_20261118: ready to evolve, but its Sync Level is under the stage's gate.
-  const levelChip = node('span', 'int-rh2-companion__crowded int-rh2-companion__evolve-level'); levelChip.hidden = true;
+  const levelChip = node('span', 'int-rh2-companion__evolve-level'); levelChip.hidden = true;
   placeRow.append(placeChip, starsChip, moodChip, habitatChip, levelChip, crowdedChip);
   const more = node("span", "int-rh2-companion__more", "詳細");
   more.setAttribute("aria-hidden", "true");
@@ -572,7 +573,10 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     writeHidden(levelChip, !partner?.evolveLevel);
     if (partner?.evolveLevel && levelChip.dataset.need !== `${partner.evolveLevel.need}:${partner.evolveLevel.level}`) {
       levelChip.dataset.need = `${partner.evolveLevel.need}:${partner.evolveLevel.level}`;
-      levelChip.textContent = uiText('進化需 Lv.{need}', { need: partner.evolveLevel.need });
+      // Drawn, not written: the evolve-ready emblem and the level against the gate; the words are the label.
+      const ready = tamerEmblem('evolve-ready', { size: 18 });
+      levelChip.replaceChildren(...(ready ? [ready] : []), starLevelGauge({ level: partner.evolveLevel.level, cap: partner.evolveLevel.need }));
+      levelChip.setAttribute('aria-label', uiText('進化需 Lv.{need}', { need: partner.evolveLevel.need }));
       levelChip.title = uiText('條件已達成。同步 Lv.{level}，Lv.{need} 進化；出戰或融合同種可升級。', partner.evolveLevel);
     }
     if (partner?.raceHabitat && habitatChip.dataset.race !== partner.raceHabitat) {

@@ -1324,6 +1324,7 @@ export const TEXT_EN = Object.freeze({
 
   // ---- Gate, loadout and hunt ------------------------------------------------------------------------
   "階級 {rank} 或馴獸師 Lv.{level} 開放。": "Opens at rank {rank} or tamer Lv.{level}.",
+  "階級 {rank}／Lv.{level}": "Rank {rank} / Lv.{level}",
   "{rank}／Lv.{level} 開放": "{rank} / Lv.{level}",
   "狩獵場、商店：馴獸師每 5 級也算 1 階": "Hunt gates and shop: every 5 tamer levels count as 1 rank",
   "取得對應比賽勝利後開放。": "Opens after you win the matching match.",
