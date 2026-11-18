@@ -647,6 +647,11 @@
         "id": "FLOATING_HUD_GATE_CHROME_158",
         "state": "VERIFIED_MERGED",
         "evidence": "tests/championship-battle-full-map-browser.cjs compared a computed keyword (flex-end) that Chrome 158 reports as flow-end; it now measures where the roster cards sit; passes on Chrome 157 locally and 158 in CI (PR #276)"
+      },
+      {
+        "id": "ROADMAP_R0_JOYSTICK",
+        "state": "VERIFIED_LIVE",
+        "evidence": "the Data Arena sticks are one thin ring and one flat thumb; relay touch gate 32 / 32 at 320x568, 390x844, 430x932 and 844x390; the 390x844 screenshot was read; PR #287 98f087e1, all checks green; live pages-build commit 98f087e1 (build f3f40dd9) and the new rule in the live stylesheet"
       }
     ],
     "openForClaude": [
@@ -659,12 +664,8 @@
         "state": "PARTLY_DONE"
       },
       {
-        "id": "ROADMAP_R0_JOYSTICK",
-        "state": "IMPLEMENTED_LOCAL"
-      },
-      {
         "id": "ROADMAP_R1_CRYSTALS_TO_TAMER",
-        "state": "NOT_STARTED"
+        "state": "IMPLEMENTED_LOCAL"
       },
       {
         "id": "ROADMAP_R1B_LEVEL_UNLOCKS",

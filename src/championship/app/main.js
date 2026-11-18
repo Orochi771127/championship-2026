@@ -1960,7 +1960,9 @@ async function openJourney(prefill = null) {
       speciesPortrait: (index) => Number.isSafeInteger(index) ? { species: index } : null,
       syncOf: (id) => app.getSyncLevel(id),
       claimPatrol: () => app.claimPatrol(), quickPatrol: () => app.quickPatrol(),
-      feed: (id, amount) => app.feedSyncCrystals(id, amount),
+      // ROADMAP_R1_20261118: the crystals feed the tamer, not a partner.
+      tamer: () => app.getTamerTalentFrame?.() ?? null,
+      feedTamer: (amount) => app.feedTamerCrystals(amount),
       challenge: (floor, ids) => startTowerFloor(floor, ids),
       campaign: () => app.getCampaignFrame(),
       sweep: (zone, stage) => app.sweepCampaignStage(zone, stage),

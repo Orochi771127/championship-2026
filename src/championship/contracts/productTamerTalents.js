@@ -258,6 +258,31 @@ export function grantTamerExp(state, amount) {
       next: lv >= TAMER_LEVEL_MAX ? 0 : tamerExpRequired(lv) }, levels: lv - current.level }) };
 }
 
+// ---- Crystals feed the tamer (ROADMAP_R1_20261118, Owner 2026-11-18) ----
+//
+// The EXP crystals of the six zones, the tower and the patrol pod used to be poured into a partner's Sync level.
+// They now raise the TAMER: one crystal is one tamer EXP. A partner grows by fusing its own kind and by the little
+// Sync EXP a battle pays; it no longer takes crystals.
+export const TAMER_CRYSTAL_EXP = 1;
+/** EXP still missing from `state` to Lv.50 (0 at the top). */
+export function tamerExpToMax(state) {
+  const current = normalizeTamerTalents(state);
+  let left = 0;
+  for (let lv = current.level; lv < TAMER_LEVEL_MAX; lv++) left += tamerExpRequired(lv) - (lv === current.level ? current.exp : 0);
+  return left;
+}
+/**
+ * Pour up to `amount` of the `crystals` held into the tamer. Nothing more than the tamer can still use is spent.
+ * Returns the new tamer state, the crystals spent and the level gain, or null when nothing can be poured.
+ */
+export function feedTamerCrystals(state, crystals, amount) {
+  const room = Math.ceil(tamerExpToMax(state) / TAMER_CRYSTAL_EXP);
+  const spend = Math.min(count(Math.round(amount)), count(crystals), room);
+  if (spend <= 0) return null;
+  const fed = grantTamerExp(state, spend * TAMER_CRYSTAL_EXP);
+  return { state: fed.state, spent: spend, gain: fed.gain };
+}
+
 /** A talent that is a chance: true when `roll` (in [0, 1)) falls under `percent`. No chance without the talent or a roll. */
 export function talentChance(percent, roll) {
   return Number.isFinite(percent) && percent > 0 && Number.isFinite(roll) && roll >= 0 && roll * 100 < Math.min(100, percent);

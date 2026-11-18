@@ -81,6 +81,13 @@
     "batch": "TAMER_TALENTS_T7_20261118",
     "ammoSavePercent": "hunter 省彈: 10 % a rank that a shot costs no ammunition. It is decided in the ordinary hunt's own consume callback (the application's, not the native field code): only an item of class SHOT, only when one round is held, never in a capture replay; the tutorial hunt has its own callback and never reads it. The shot itself is fired as usual"
   },
+  "crystalsFeedTamerR1": {
+    "batch": "ROADMAP_R1_20261118",
+    "rule": "the EXP crystals (six zones, tower, patrol pod, fusion overflow) raise the tamer: 1 crystal = 1 tamer EXP, poured from the Journey's feed page in one save; nothing is spent past Lv.50 (137,370 EXP from Lv.1)",
+    "partners": "a partner no longer takes crystals (the application refuses with CRYSTALS_FEED_TAMER); its Sync level comes from fusing its own kind and from the Sync EXP a battle pays, which is unchanged",
+    "save": "no new field and no migration: the crystals stay at progression.syncLevels.crystals, the tamer at progression.tamerTalents; crystals held in an older save are kept as they are",
+    "otherUses": "a talent reset after the first still costs 500 crystals"
+  },
   "notYetOpen": "4 nodes and 4 keystones: hunter 繩索保養, 疾步, 穩手 and the keystones 慧眼, 連獵 (they change the native hunt's rope durability, movement and status timing); commander 蓄能 (the plan does not say which meter it fills); breeder 萃取; trader 行商 (it needs the higher supplement grade, which is not built)",
   "notChanged": [
     "the native individual fields, battle codes and match tables",
@@ -133,7 +140,8 @@
     "tests/championship-tamer-talents-t4-cases.mjs",
     "tests/championship-tamer-talents-t5-cases.mjs",
     "tests/championship-fusion-inherit-cases.mjs",
-    "tests/championship-tamer-talents-t7-cases.mjs"
+    "tests/championship-tamer-talents-t7-cases.mjs",
+    "tests/championship-crystals-feed-tamer-cases.mjs"
   ],
   "physicalDeviceAccepted": false
 }

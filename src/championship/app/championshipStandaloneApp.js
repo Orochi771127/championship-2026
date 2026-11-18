@@ -36,14 +36,14 @@ import {spreadHuntActors} from '../hunt/capture/productHuntSpawnSpread.js';
 import {applyProductTrainingGains} from '../raising/nativeRaisingTraining.js';
 import {inscribeGachaBloodline,grantGachaMetal} from '../gacha/cyberGacha.js';
 import {REALTIME_TRAINING_POLICY,recommendedCages,TRAINING_KIND_OF_CONDITION} from '../raising/productTrainingPolicy.js';
-import {normalizeSyncLevels,createSyncLevelState,syncOf,syncCapForRank,syncBattleExp,grantSyncExp,feedSyncCrystals,reconcileSyncRebirth,
+import {normalizeSyncLevels,createSyncLevelState,syncOf,syncCapForRank,syncBattleExp,grantSyncExp,reconcileSyncRebirth,
   boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX,partnerGradeOf,recordPartnerGrade,fuseSyncPartners,learnedArenaMoveOf,recordLearnedArenaMove} from '../contracts/productSyncLevel.js';
 import {arenaMoveRecordIndex} from '../contracts/productArenaMoves.js';
 import {RELAY_ROSTER} from '../modes/dataArena/dataArenaRelayRoster.js';
 import {RELAY_ELEMENT_KITS} from '../modes/dataArena/dataArenaRelayKits.js';
 import {rollPartnerGrade,applyGradeHeadStart,fusionLineMultiplier,FUSION_MAX_FODDER,FUSION_WARN_LEVEL,fusionInheritance} from '../contracts/productLineFusion.js';
 import {normalizeTamerTalents,createTamerTalentState,tamerTalentPoints,talentValue,grantTamerExp,tamerCaptureExp,tamerBattleExp,tamerDailyExp,TAMER_EXP,
-  learnTalent,talentRefusal,chooseKeystone,keystoneRefusal,hasKeystone,KEYSTONE_RULES,talentChance,respecTalents,talentRespecCost,talentSpent,talentSpentInLine,talentOpen,commanderCappedTalents,
+  learnTalent,talentRefusal,chooseKeystone,keystoneRefusal,hasKeystone,KEYSTONE_RULES,talentChance,feedTamerCrystals,tamerExpToMax,respecTalents,talentRespecCost,talentSpent,talentSpentInLine,talentOpen,commanderCappedTalents,
   TALENT_NODES,TALENT_KEYSTONES,TALENT_LINES,TALENT_TREE_POINTS,TALENT_TIER_GATE,TALENT_KEYSTONE_GATE,TALENT_KEYSTONE_COST,tamerExpRequired,TAMER_LEVEL_MAX}
   from '../contracts/productTamerTalents.js';
 import {normalizeTamerSupplies,createTamerSupplies,SUPPLEMENTS,getSupplement,supplyOwned,supplyPurchase,spendSupply,applyRecoverySupply,
@@ -4874,12 +4874,25 @@ export function createChampionshipStandaloneApp({
       syncLevels={...state,crystals:Math.min(1e9,state.crystals+value)};savePort.markDirty();return {ok:true,crystals:syncLevels.crystals};
     },
     /** Spend crystal points on one partner. */
-    feedSyncCrystals(instanceId,amount){
-      if(!syncProfileOf(instanceId))return {ok:false,reason:'UNKNOWN_INDIVIDUAL'};
-      syncLevelOf(instanceId);
-      const fed=feedSyncCrystals(syncState(),instanceId,amount);
-      if(!fed)return {ok:false,reason:'NO_CRYSTALS'};
-      syncLevels=fed.state;savePort.markDirty();publishRaising();return {ok:true,gain:fed.gain};
+    /**
+     * ROADMAP_R1_20261118 (Owner 2026-11-18): crystals are no longer poured into a partner. A partner's Sync level
+     * comes from fusing its own kind and from battles; the crystals raise the tamer (feedTamerCrystals).
+     */
+    feedSyncCrystals(){return Object.freeze({ok:false,reason:'CRYSTALS_FEED_TAMER'});},
+    /** Pour crystals into the tamer: one crystal, one tamer EXP, in one save; nothing is spent past Lv.50. */
+    feedTamerCrystals(amount){
+      requireSession();
+      if(tutorialBaseline)return Object.freeze({ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'});
+      const sync=normalizeSyncLevels(syncState());
+      if(tamerExpToMax(talentState())<=0)return Object.freeze({ok:false,reason:'TAMER_LEVEL_MAX'});
+      const fed=feedTamerCrystals(talentState(),sync.crystals,amount);
+      if(!fed)return Object.freeze({ok:false,reason:'NO_CRYSTALS'});
+      const candidateSync={...sync,crystals:sync.crystals-fed.spent};
+      const status=savePort.save({...liveSaveRequest(revision+1),tamerTalents:fed.state,syncLevels:candidateSync});
+      if(status.phase!=='SAVED'){savePort.discardPendingWrite();return Object.freeze({ok:false,reason:'SAVE_FAILED'});}
+      tamerTalents=fed.state;syncLevels=candidateSync;lastTamerGain=fed.gain;revision+=1;
+      applyProgression();publishRaising();publishScreens();
+      return Object.freeze({ok:true,spent:fed.spent,gain:fed.gain,crystals:candidateSync.crystals});
     },
     // ---- Supplements (SUPPLEMENTS_20261118) ----
     /** The supplement shelf and bag: price, how many are owned and which ranch supplements are running. */

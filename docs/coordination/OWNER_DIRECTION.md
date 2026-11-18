@@ -1,5 +1,19 @@
 # Championship Owner Direction
 
+<!-- record-id: ROADMAP_R1_CRYSTALS_FEED_TAMER_20261118 -->
+## 2026-11-18 — Roadmap R1: the crystals raise the tamer
+
+Under `TAMER_PROGRESSION_ROADMAP_20261118` (Owner: 「灌那個經驗結晶原本是給夥伴，我想說變成訓練師的經驗…但是不用灌給夥伴」).
+
+`OWNER_APPROVED_ADAPTATION`, as directed:
+
+- The Journey's 灌注結晶 page pours into the tamer: 1 crystal = 1 tamer EXP, one save. Nothing is spent past Lv.50.
+- A partner no longer takes crystals. It grows by fusing its own kind, and a battle still pays its Sync EXP.
+- Crystals already held are kept. No save field is added.
+- Decided while wiring: the rate is 1 to 1. The climb to Lv.50 is 137,370 EXP, about a month of the Journey's crystal income beside the EXP that captures, battles and care already pay.
+
+Contract: `docs/contracts/championship/TAMER_TALENTS_20261117.json` (`crystalsFeedTamerR1`).
+
 <!-- record-id: TAMER_PROGRESSION_ROADMAP_20261118 -->
 ## 2026-11-18 — Owner hands over a roadmap: tamer growth, skill-card hand, stars, a side-scrolling mode, a plain joystick
 
