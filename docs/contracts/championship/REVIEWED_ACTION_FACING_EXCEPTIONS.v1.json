@@ -53,14 +53,6 @@
   },
   {
    "displayCode": "GR21",
-   "usage": "arena",
-   "clip": "Arena/SW/move",
-   "frame": "REFLECTED/SW/opposite_contact",
-   "verdict": "ART_ISSUE_REPORTED",
-   "note": "DR/DL walk: keys 08/09 and the opposite_contact key differ in head turn on a near-front 3/4 pose. Not a confirmed error; reported to the art owner (dot) and drawn as delivered."
-  },
-  {
-   "displayCode": "GR21",
    "usage": "general",
    "clip": "Main/bound_down",
    "frame": "MAIN_BOUND_16/12",
@@ -128,14 +120,6 @@
    "usage": "arena",
    "clip": "gr36.arena.DL.attack",
    "frame": "arena-attack-west__13",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "Front three-quarter lunge; the body turns, the face stays to camera."
-  },
-  {
-   "displayCode": "GR36",
-   "usage": "arena",
-   "clip": "gr36.arena.DR.attack",
-   "frame": "arena-attack-east-authored-mirror__05",
    "verdict": "NOT_A_FACING_ERROR",
    "note": "Front three-quarter lunge; the body turns, the face stays to camera."
   },
@@ -2226,6 +2210,36 @@
    "frame": "aw51-ts-A-master_027",
    "verdict": "NOT_A_FACING_ERROR",
    "note": "Reviewed 2026-11-16: AW51 asymmetric patchwork bear: every L frame shows the face on the left, every R frame on the right, matching its walk."
+  },
+  {
+   "displayCode": "GR28",
+   "usage": "arena",
+   "clip": "gr28-af:arena:DL:faint",
+   "frame": "gr28-af-faint-L-00",
+   "action": "faint",
+   "direction": "DL",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "2026-11-18 Growth Data Arena fill: first faint frame is the standing start of a fall to the left; next to the lying frames the mask reads as turned, but the drawing faces left like its clip (checked by eye)."
+  },
+  {
+   "displayCode": "GR28",
+   "usage": "arena",
+   "clip": "gr28-af:arena:L:faint",
+   "frame": "gr28-af-faint-L-00",
+   "action": "faint",
+   "direction": "L",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "2026-11-18 Growth Data Arena fill: first faint frame is the standing start of a fall to the left; next to the lying frames the mask reads as turned, but the drawing faces left like its clip (checked by eye)."
+  },
+  {
+   "displayCode": "GR28",
+   "usage": "arena",
+   "clip": "gr28-af:arena:UL:faint",
+   "frame": "gr28-af-faint-L-00",
+   "action": "faint",
+   "direction": "UL",
+   "verdict": "NOT_A_FACING_ERROR",
+   "note": "2026-11-18 Growth Data Arena fill: first faint frame is the standing start of a fall to the left; next to the lying frames the mask reads as turned, but the drawing faces left like its clip (checked by eye)."
   }
  ]
 }

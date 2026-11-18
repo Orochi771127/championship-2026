@@ -662,6 +662,11 @@
         "id": "ROADMAP_R1B_LEVEL_UNLOCKS",
         "state": "VERIFIED_LIVE",
         "evidence": "branch feat/roadmap-r1b-level-unlocks-20261118: a rank lock of the shop, the hunt tools and the gates also opens at 5 tamer levels a rank; tests/championship-tamer-level-unlocks-cases.mjs; full suite 3,943 / 3,943, build and validate exit 0; headless Chromium from the normal entry with the friends playtest off, title rank 0 and tamer Lv.10: rank 1-2 gates enterable, rank 3 gate reads the two-road lock line, shop locks start at rank 3, talent panel names Lv.15, no page error; PR #289 63beaf0f, all checks green after one rerun of hud (webkit); live pages-build commit 63beaf0f (build 8032327b)"
+      },
+      {
+        "id": "ROADMAP_R2_EVOLUTION_LEVEL",
+        "state": "VERIFIED_LIVE",
+        "evidence": "branch feat/roadmap-r2-evolution-level-20261118: gates 幼年期 II Lv.3 / 成長期 Lv.10 applied only where the native rules would evolve; the form is still chosen by the existing conditions; a waiting partner keeps its life; catalyst refuses EVOLUTION_LEVEL_TOO_LOW; tests/championship-evolution-level-gate-cases.mjs; full suite 3,949 / 3,949, build and validate exit 0; headless Chromium from the normal entry with the friends playtest off: a ready 成長期 partner at Lv.9 did not evolve in 45 s and its card read 進化需 Lv.10, at Lv.10 it became the form the conditions chose within 5 s, no page error; PR #291 4b7169ca, all checks green after one rerun of the webkit evolution baseline control; live pages-build commit ed863632 (build d5ba60bb) with EVOLUTION_LEVEL_TOO_LOW and levelBlocked in the live bundle"
       }
     ],
     "openForClaude": [
@@ -672,10 +677,6 @@
       {
         "id": "TALENT_NODES_REMAINING",
         "state": "PARTLY_DONE"
-      },
-      {
-        "id": "ROADMAP_R2_EVOLUTION_LEVEL",
-        "state": "MERGED"
       },
       {
         "id": "ROADMAP_R3_STARS",

@@ -507,7 +507,7 @@
       "ROM-derived art is research only"
     ],
     "git": {
-      "main": "4b7169ca (Merge PR #291)",
+      "main": "ed863632 (Merge PR #290, another session; contains #291)",
       "openPullRequests": [],
       "branchesInFlight": [
         "feat/roadmap-r3-stars-20261118"
@@ -528,7 +528,7 @@
         "CHAMPIONSHIP_QA_ORIGIN=<isolated origin> node tests/championship-data-arena-browser.cjs",
         "CHAMPIONSHIP_QA_ORIGIN=<isolated origin> FAILS=1|3 node tests/championship-asset-503-recovery-browser.cjs"
       ],
-      "lastFullSuite": "3,954 of 3,955 on feat/roadmap-r3-stars-20261118 (local, Windows, Node 24.18); the one failure was the pinned hash of ART_PRODUCTION_INDEX.json in tests/championship-public-map-projection-cases.mjs, updated and that file rerun alone: 6 / 6",
+      "lastFullSuite": "3,955 / 3,955 on feat/roadmap-r3-stars-20261118 after merging main ed863632 (local, Windows, Node 24.18)",
       "ci": "PR #266 to #291: every one of Claude's merged with all checks green (reruns: the webkit evolution baseline control on #288 and #291, the hud (webkit) opening letter on #289); another session merges into main in parallel",
       "report": "docs/reports/normal-entry-run-2026-11-18/REPORT_ZH_TW.md (the normal-entry run on main 806a49fb); docs/reports/ci-browser-checks-2026-11-17/REPORT_ZH_TW.md"
     },
@@ -739,10 +739,10 @@
       {
         "id": "ROADMAP_R2_EVOLUTION_LEVEL",
         "source": "docs/planning/TAMER_PROGRESSION_ROADMAP_2026-11-18_ZH_TW.md (Owner 2026-11-18)",
-        "state": "MERGED",
+        "state": "VERIFIED_LIVE",
         "acceptance": "each growth stage has a level threshold; the ranch and partner page say how many levels are missing; the branch taken still follows the existing conditions",
         "owner": "Claude",
-        "evidence": "branch feat/roadmap-r2-evolution-level-20261118: gates 幼年期 II Lv.3 / 成長期 Lv.10 applied only where the native rules would evolve; the form is still chosen by the existing conditions; a waiting partner keeps its life; catalyst refuses EVOLUTION_LEVEL_TOO_LOW; tests/championship-evolution-level-gate-cases.mjs; full suite 3,949 / 3,949, build and validate exit 0; headless Chromium from the normal entry with the friends playtest off: a ready 成長期 partner at Lv.9 did not evolve in 45 s and its card read 進化需 Lv.10, at Lv.10 it became the form the conditions chose within 5 s, no page error; PR #291 4b7169ca, all checks green after one rerun of the webkit evolution baseline control"
+        "evidence": "branch feat/roadmap-r2-evolution-level-20261118: gates 幼年期 II Lv.3 / 成長期 Lv.10 applied only where the native rules would evolve; the form is still chosen by the existing conditions; a waiting partner keeps its life; catalyst refuses EVOLUTION_LEVEL_TOO_LOW; tests/championship-evolution-level-gate-cases.mjs; full suite 3,949 / 3,949, build and validate exit 0; headless Chromium from the normal entry with the friends playtest off: a ready 成長期 partner at Lv.9 did not evolve in 45 s and its card read 進化需 Lv.10, at Lv.10 it became the form the conditions chose within 5 s, no page error; PR #291 4b7169ca, all checks green after one rerun of the webkit evolution baseline control; live pages-build commit ed863632 (build d5ba60bb) with EVOLUTION_LEVEL_TOO_LOW and levelBlocked in the live bundle"
       },
       {
         "id": "ROADMAP_R3_STARS",

@@ -51,7 +51,17 @@ test('the gate catches a single General frame left facing the wrong way (the GR3
 });
 
 test('the gate reads Arena frames with their delivered mirrorX', () => {
-  const gr21 = selection.find((e) => e.displayCode === 'GR21');
-  const arena = outliers(gr21).filter((f) => f.usage === 'arena');
-  assert.ok(arena.length > 0 && arena.every((f) => ['L', 'R', 'UL', 'UR', 'DL', 'DR'].includes(f.direction)));
+  // GR18's DL/UL walk is the renderer flip of DR/UR (mirrorX). Read with that flip it is clean; one frame read
+  // without its delivered mirrorX turns against its clip. (GR21's reflected SW cell served here until the 11-18
+  // Growth Data Arena fill re-scaled its masks.)
+  const gr18 = selection.find((e) => e.displayCode === 'GR18');
+  const manifest = read(gr18.path);
+  const dl = manifest.clips.find((c) => c.mode === 'arena' && c.action === 'move' && c.direction === 'UL');
+  const id = dl.frames[0].assetId;
+  assert.equal(manifest.frames.find((f) => f.id === id).mirrorX, true);
+  const clean = facingOutliers({ entry: gr18, manifest, roleMasks: masks.GR18, grid: maskDoc.grid, headings: maskDoc.arenaHeadings });
+  assert.deepEqual(clean.filter((f) => f.usage === 'arena' && f.clip === dl.id), []);
+  delete manifest.frames.find((f) => f.id === id).mirrorX;
+  const broken = facingOutliers({ entry: gr18, manifest, roleMasks: masks.GR18, grid: maskDoc.grid, headings: maskDoc.arenaHeadings });
+  assert.deepEqual(broken.filter((f) => f.usage === 'arena').map((f) => f.frame), [id]);
 });
