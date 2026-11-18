@@ -71,7 +71,13 @@
     },
     "rule": "a keystone costs 4 points at 22 points in its line's nodes and a line takes one of its two; the commander's keystone is dropped with the rest of the line by the 6 + 3 x rank cap in title matches and tournaments"
   },
-  "notYetOpen": "5 nodes and 5 keystones: hunter 繩索保養, 疾步, 穩手, 省彈 and the keystones 慧眼, 連獵 (they touch the native hunt); commander 蓄能 (the plan does not say which meter it fills); breeder 傳承 and 萃取; trader 行商 (it needs the higher supplement grade, which is not built)",
+  "wiredT6": {
+    "batch": "TAMER_TALENTS_T6_20261118",
+    "breeder.inherit": "傳承 (fusion plan P4): only with this keystone, a fusion also gives the base one unit (10 HP, 1 of the others) of each of the six stats where a fodder's quality is above the base's, per fodder, never past the individual's own upper bound; HP and TP raise their current value by the same amount. A base without a grade counts as quality 50; a fodder without a grade hands over nothing. It is the one talent that writes native individual fields, as the plan says, and it stays inside their bounds",
+    "saves": "a ranch fusion writes the base in the fusion's own save and puts it back if the save fails; the Hunt Result's staged fusions write the bases on the save candidates only, so a refused or failed Home commit changes no partner",
+    "preview": "both fusion previews carry `inherit` (the stats that would rise) and print how many"
+  },
+  "notYetOpen": "5 nodes and 4 keystones: hunter 繩索保養, 疾步, 穩手, 省彈 and the keystones 慧眼, 連獵 (they touch the native hunt); commander 蓄能 (the plan does not say which meter it fills); breeder 萃取; trader 行商 (it needs the higher supplement grade, which is not built)",
   "notChanged": [
     "the native individual fields, battle codes and match tables",
     "the gachapon rates, diamond prices and diamond or ticket rewards",
@@ -121,7 +127,8 @@
     "tests/championship-tamer-talents-t2-cases.mjs",
     "tests/championship-tamer-talents-t3-cases.mjs",
     "tests/championship-tamer-talents-t4-cases.mjs",
-    "tests/championship-tamer-talents-t5-cases.mjs"
+    "tests/championship-tamer-talents-t5-cases.mjs",
+    "tests/championship-fusion-inherit-cases.mjs"
   ],
   "physicalDeviceAccepted": false
 }

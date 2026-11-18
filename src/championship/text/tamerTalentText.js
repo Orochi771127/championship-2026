@@ -117,7 +117,9 @@ const ROWS = {
   'key.moodDecayPercent': ['{value}% 心情扣分', '{value}% mood penalties', '気分の減点 {value}%', 'ตัวหักอารมณ์ {value}%', 'Điểm trừ tâm trạng {value}%'],
   'ks.commander.pureFaction': ['三隻同陣營：該共鳴 +50%', 'Three of one faction: its resonance +50%', '同陣営 3 体：その共鳴 +50%', '3 ตัวฝ่ายเดียว: เรโซแนนซ์ +50%', '3 con cùng phe: cộng hưởng +50%'],
   'ks.commander.triColor': ['三色共鳴：攻防 114%・獎勵 125%', 'Tri-core: attack and defence 114%, rewards 125%', 'トライ共鳴：攻防 114%・報酬 125%', 'ไตรคอร์: โจมตี/ป้องกัน 114% รางวัล 125%', 'Tam sắc: công thủ 114%, thưởng 125%'],
-  'ks.trader.bountyHunter': ['賞金信標加成 +50%', 'Bounty beacon bonus +50%', '賞金ビーコン効果 +50%', 'โบนัสบีคอนเงินรางวัล +50%', 'Thưởng đèn hiệu +50%']
+  'ks.trader.bountyHunter': ['賞金信標加成 +50%', 'Bounty beacon bonus +50%', '賞金ビーコン効果 +50%', 'โบนัสบีคอนเงินรางวัล +50%', 'Thưởng đèn hiệu +50%'],
+  // T6 (TAMER_TALENTS_T6_20261118)
+  'ks.breeder.inherit': ['融合：素材較強的能力 +1', 'Fusion: +1 where the fodder is better', '融合：素材が上の能力 +1', 'หลอมรวม: +1 ในค่าที่วัตถุดิบดีกว่า', 'Dung hợp: +1 chỉ số nguyên liệu hơn']
 };
 
 export const TAMER_TALENT_COPY = deepFreeze(Object.fromEntries(LOCALES.map((locale, i) =>

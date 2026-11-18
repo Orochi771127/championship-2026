@@ -113,6 +113,32 @@ export function applyGradeHeadStart(profile, grade) {
   return { profile: next, gains };
 }
 
+// ---- Inheritance (plan P4, the breeder keystone 傳承, TAMER_TALENTS_T6_20261118) ----
+//
+// Only a tamer who took 傳承 has this: a fusion then also hands the base a little of what the fodder was better at.
+// For each fodder that has a grade, each of the six stats whose quality is above the base's gives the base one
+// unit of that stat (10 HP, 1 of the others), never past the individual's own upper bound. HP and TP raise their
+// current value by the same amount. A base without a grade is counted as quality 50 in every stat; a fodder
+// without a grade hands over nothing.
+export const FUSION_INHERIT_DEFAULT_Q = 50;
+export function fusionInheritance(profile, baseGrade, fodderGrades = []) {
+  const next = structuredClone(profile), gains = [];
+  if (!next?.fields) return { profile: next, gains };
+  const f = next.fields, base = normalizePartnerGrade(baseGrade)?.q ?? GRADE_STATS.map(() => FUSION_INHERIT_DEFAULT_Q);
+  const better = (Array.isArray(fodderGrades) ? fodderGrades : []).map((grade) => normalizePartnerGrade(grade)?.q).filter(Boolean);
+  GRADE_STATS.forEach((stat, i) => {
+    const upper = f[hex(0xa8 + stat.bound * 8)] | 0, value = f[stat.key] | 0;
+    const units = better.filter((q) => q[i] > base[i]).length;
+    const after = Math.max(value, Math.min(upper, value + units * stat.unit));
+    if (after > value) {
+      f[stat.key] = after >>> 0;
+      if (stat.current) f[stat.current] = Math.min(after, (f[stat.current] | 0) + (after - value)) >>> 0;
+      gains.push({ key: stat.key, before: value, after });
+    }
+  });
+  return { profile: next, gains };
+}
+
 // ---- Same-line fusion (plan section 4, P2) ----
 //
 // A caught or raised partner of the base's own line is spent to feed the base's Sync EXP. Fusion only

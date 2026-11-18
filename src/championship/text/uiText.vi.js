@@ -193,6 +193,7 @@ export const UI_COPY_VI = Object.freeze({
   "FUSION_PICK": "Nguyên liệu {count}/{max}",
   "FUSION_LEFT": "Còn {exp} EXP",
   "FUSION_CRYSTALS": "+{count} tinh thể",
+  "FUSION_INHERIT": "Kế thừa {n} chỉ số +1",
   "FUSION_SAVE_FAILED": "Lưu lỗi, chưa dung hợp",
   "補品": "Thuốc bổ",
   "supply:vigor": "Nước tăng lực",

@@ -288,7 +288,7 @@ export function createHuntResultView({ root, source, hudArt = null }) {
         name.textContent = base.displayName;
         const preview = base.preview;
         gain.textContent = preview
-          ? `Lv.${preview.before.level} → Lv.${preview.after.level} · +${preview.amount.toLocaleString("en-US")} EXP${base.line < 1 ? " · ×0.6" : ""}`
+          ? `Lv.${preview.before.level} → Lv.${preview.after.level} · +${preview.amount.toLocaleString("en-US")} EXP${base.line < 1 ? " · ×0.6" : ""}${preview.inherit?.length ? " · " + uiText("FUSION_INHERIT", { n: preview.inherit.length }) : ""}`
           : "";
         pick.append(name, gain);
         pick.disabled = !preview;
