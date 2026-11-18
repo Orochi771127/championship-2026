@@ -2,7 +2,7 @@
  "id": "art:ui:talent-icons:r1",
  "rightsStatus": "ORIGINAL_GENERATED",
  "provenance": "Generated 2026-11-18 by Codex (codex.exe 0.167 exec, gpt-6.1-sol, built-in image tool) from the written briefs in briefs/ (one per talent line), at the Owner's direction (2026-11-18: the talent screen is a tree of icons). Inputs: the brief text, five of Codex's own emblems from art:ui:tamer-emblems:r1 and one screenshot of this product's own arcade HUD (isolated QA origin) as style context only; no ROM frame, research-library file or third-party character was an input. Masters are 256 x 256 RGBA PNG kept outside the repository; each runtime file is the master trimmed to its drawn bounds on a square canvas and reduced to 96 px (Lanczos), lossless WebP.",
- "scope": "One icon per tamer talent node and keystone (44) and one emblem per talent line (4), TALENT_TREE_20261118; presentation only, no gameplay or commercial-rights claim",
+ "scope": "One icon per tamer talent node and keystone (45, the magnet added 2026-11-18 for WAVE_RUN_20261118) and one emblem per talent line (4), TALENT_TREE_20261118; presentation only, no gameplay or commercial-rights claim",
  "files": [
   {
    "path": "assets/production/ui/talent-icons-r1/line-hunter_96.webp",
@@ -254,7 +254,7 @@
     96
    ],
    "sha256": "18e7c71c824743d46cf1b477c1a3e3774816206636d929beec10e358867fc3e0",
-   "masterSha256": "9b534a18bb94eadde147eaecf197b40be8b65b14ce75d00416cfd4a5df406a72",
+   "masterSha256": "560c9487aeb67d59dd2a098185b01ab765e076cba403b008780fe30f00b36364",
    "brief": "briefs/breeder.md"
   },
   {
@@ -276,7 +276,7 @@
     96
    ],
    "sha256": "a39a81213ce5c4d879c0bdaeb7c399dd2066afbf0e50419025416d5eef416f59",
-   "masterSha256": "878d6724c2bd8e88962216870f8305d06ce6f462290dc953ec8c0df32ea78554",
+   "masterSha256": "0fd2f0fb2871b6d215abaa64b4194bcada7b97ee95d8aac20b869ce7bf985db0",
    "brief": "briefs/commander.md"
   },
   {
@@ -287,7 +287,7 @@
     96
    ],
    "sha256": "e7dba08585a9f520db200f041a1682eedda3f86ff27f6f39a6b7083f72b60419",
-   "masterSha256": "e3bf731edfbdaf38ecdd05d2529f15a5a91e7e2612bbbea8b1a8dfb8da7ee6ee",
+   "masterSha256": "9f6515b72b3c0b90f77242f4c668cf476e6bc972452f8bd756dbb5c6437a6f1c",
    "brief": "briefs/commander.md"
   },
   {
@@ -298,7 +298,7 @@
     96
    ],
    "sha256": "e5da612530f6e73f462d5ec2059da164cfd06d9e9abcb7503cbad4440276caf5",
-   "masterSha256": "f3fbcfdb576990c915593f4c98006902e685cbd79b67777b5cbb5a7d616c5ed7",
+   "masterSha256": "67d34e6809c4a4326852233efbf552235a22ab5c364f5264a26e5275ae02010e",
    "brief": "briefs/commander.md"
   },
   {
@@ -309,7 +309,7 @@
     96
    ],
    "sha256": "a7911d0fb5435f88d962a1a222a123b845e2d7bffd7559cae4a3905fd29b9199",
-   "masterSha256": "d0625d6fc31af9f1e903d51ab6f03325db3a3b1891cfd3c071c9143fc38ecc76",
+   "masterSha256": "2b2cec4c02630f1628e70ba2f3efb9c3881a84b805137789c0a0b99c3d03a4b7",
    "brief": "briefs/commander.md"
   },
   {
@@ -320,7 +320,7 @@
     96
    ],
    "sha256": "41cfe10e36991507aae9de9c2e9fab49f9c84213bcbf34a9c99ef14b075be30f",
-   "masterSha256": "959d0160979e0748df1a48b235277f352e0ac060479f2baf8e52f2457be48a98",
+   "masterSha256": "982c63a42d7ece08bab7fdc64616b450e98144652fdb935014f282b2ffd7b29e",
    "brief": "briefs/commander.md"
   },
   {
@@ -331,7 +331,7 @@
     96
    ],
    "sha256": "03a575981708db23a13fe25ba3116dd1614a94c84032089cb5a5e267f53b0acb",
-   "masterSha256": "47f10893dd510224759b00e719723134a60702fd32ab055f87fbd13fd030281d",
+   "masterSha256": "4a013a663baf50460a967a5ae9f3640d6e3fdd5869f585d9fd3e80ce3dac900f",
    "brief": "briefs/commander.md"
   },
   {
@@ -342,7 +342,7 @@
     96
    ],
    "sha256": "091ca608881a98ce0eafd6c883e071b26a01d38be6dcb6e8f18068ac15c37fd7",
-   "masterSha256": "c9ccfd8399660b88943a19b0d8c383eb2f8961470221b9f3c85aabdb27a4a67f",
+   "masterSha256": "f5991dd57be5ed62490f1e2d6c68c13d6da5ac9760d531f8155365ffc3e45424",
    "brief": "briefs/commander.md"
   },
   {
@@ -353,7 +353,7 @@
     96
    ],
    "sha256": "1a54f81782628069a168b08c612184ef932cbcefc279e17552205b02e32904d7",
-   "masterSha256": "df696ec1c91133a433ed9c49169b37a4695038dc8b57194defe82540736db0b8",
+   "masterSha256": "96017754645ebb00e69eb729a25ddfe2890ba5cca80a9f122503c85f29a6036c",
    "brief": "briefs/commander.md"
   },
   {
@@ -364,7 +364,7 @@
     96
    ],
    "sha256": "3929018ef034b6ceba703897704678eb40fe0e32d79aa6e11687042c27336530",
-   "masterSha256": "8c05e43011813fe612c112601fff6ef58f3bbde3daf406dc5049cc3619b80a7b",
+   "masterSha256": "dc7159285ed1175032a420bd68d3c40c57044346c566e0ee2e6feb7a6be5ec4b",
    "brief": "briefs/commander.md"
   },
   {
@@ -375,7 +375,7 @@
     96
    ],
    "sha256": "043b01fef3488c393a94909ff76bbf35b4af76f8b874999193f519082128f9fd",
-   "masterSha256": "33e55da3c9c091e7819636a186c7cdc8abb26e9199585e2efd558af441a160a0",
+   "masterSha256": "e190dc39bacb24c787c6e3eeb14e328ba216726f8dacd2f8ab55652132462dfb",
    "brief": "briefs/commander.md"
   },
   {
@@ -386,7 +386,7 @@
     96
    ],
    "sha256": "869f485ab4f109542385a1f694e0429f6aa8104737a3eafa016f33b7c6b07ea9",
-   "masterSha256": "45ce506f6492312e15d38c53d60168d64659f45c1e1d494367c78ca4dddece4d",
+   "masterSha256": "973b68d53530d33517e639bfc3e1d419c2c148aa34efd99bff683e77604c3694",
    "brief": "briefs/commander.md"
   },
   {
@@ -397,7 +397,7 @@
     96
    ],
    "sha256": "237c481c7aab250b5e57a2b99459082e5ed5d41aa65ab750efd0959d08abada4",
-   "masterSha256": "91853d99056cbc1bc63dd02617bf050e1f1fc4a3d2bbf08f357699d79769c190",
+   "masterSha256": "d6c0bb0e868dfbb4d4ba16668e7b51361ffcd07a5d7b57596643ae96fc1bbec4",
    "brief": "briefs/commander.md"
   },
   {
@@ -442,6 +442,17 @@
    ],
    "sha256": "539d600c2866fa3e72cf680a34237514c3984a3bca24b70d9669a91bae42b68c",
    "masterSha256": "dc5f7e8a156aeebe7149f1e347c15063e02b46cdc3dd75b70d5c21ab2e050644",
+   "brief": "briefs/trader.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/trader.magnet_96.webp",
+   "key": "trader.magnet",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "b405e8a692efa2a77fdaf61cc15d91278e931a0a885589c6a94fedbe5506b696",
+   "masterSha256": "9f0debf1953f34141777b9245b9e0f9fd7549ab960beb7eec9dfadad823ed7c7",
    "brief": "briefs/trader.md"
   },
   {

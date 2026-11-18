@@ -16,15 +16,16 @@ import {syncExpRequired, syncBattleExp} from '../src/championship/contracts/prod
 
 const read = path => JSON.parse(readFileSync(new URL(`../${path}`, import.meta.url), 'utf8'));
 
-test('the tree costs 124 points: four lines of three tiers, nine points a tier, and a four-point keystone', () => {
-  assert.equal(TALENT_NODES.length, 36); assert.equal(TALENT_KEYSTONES.length, 8);
+test('the tree costs 125 points: four lines of three tiers, nine points a tier (the trader first tier ten with the magnet), and a four-point keystone', () => {
+  assert.equal(TALENT_NODES.length, 37); assert.equal(TALENT_KEYSTONES.length, 8);
   for (const line of TALENT_LINES) {
     const nodes = TALENT_NODES.filter(node => node.line === line);
-    for (const tier of [1, 2, 3]) assert.equal(nodes.filter(node => node.tier === tier).reduce((sum, node) => sum + node.max * node.cost, 0), 9, `${line} tier ${tier}`);
+    // WAVE_RUN_20261118: the magnet (one rank, one point) joins the trader's first tier.
+    for (const tier of [1, 2, 3]) assert.equal(nodes.filter(node => node.tier === tier).reduce((sum, node) => sum + node.max * node.cost, 0), line === 'trader' && tier === 1 ? 10 : 9, `${line} tier ${tier}`);
     assert.equal(TALENT_KEYSTONES.filter(key => key.line === line).length, 2);
   }
   assert.equal(TALENT_NODES.reduce((sum, node) => sum + node.max * node.cost, 0) + 4 * 4, TALENT_TREE_POINTS);
-  assert.equal(new Set(TALENT_NODES.map(node => node.key)).size, 36, 'one effect key a node');
+  assert.equal(new Set(TALENT_NODES.map(node => node.key)).size, 37, 'one effect key a node');
 });
 
 test('points are worked out from the level, the title rank and the Dex, about 76 at the top', () => {

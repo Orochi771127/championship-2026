@@ -66,6 +66,8 @@ import { createChampionshipStatusBar } from "./championshipStatusBar.js";
 import { createDigimonListView, appendCreatureDetail } from "./digimonListScreen.js";
 import { createTamerTalentPanel } from "./tamerTalentPanel.js";
 import { mountBattleSkillHand } from "./battleSkillHand.js";
+import { mountWaveRunField, showWaveBanner, WAVE_RUN_ART_BASE } from './waveRunField.js';
+import { waveRunText } from '../text/waveRunText.js';
 import { talentText } from "../text/tamerTalentText.js";
 import { createScheduleView } from "./scheduleScreen.js";
 import { createChampionshipView } from "./championshipScreen.js";
@@ -1971,6 +1973,14 @@ async function openJourney(prefill = null) {
       sweep: (zone, stage) => app.sweepCampaignStage(zone, stage),
       challengeZone: (zone, stage) => void startZoneStage(zone, stage),
       openStory: () => openStoryFromJourney(),
+      // WAVE_RUN_20261118: the challenge's waves start here and come back here.
+      wave: {
+        frame: () => app.getWaveRun(),
+        start: (ids) => { closeJourney(); return runWaveRun({ mode: 'CHALLENGE', encounterId: 'challenge', partyIds: ids }); },
+        leave: () => { const done = app.finishWaveRun('LEAVE'); if (done?.ok) autosave?.request('wave-run'); return done; },
+        best: () => app.getWaveRunBest?.() ?? 0,
+        text: waveRunText, artBase: WAVE_RUN_ART_BASE
+      },
       practice: {
         frame: () => app.getTacticPractice(),
         start: (id) => app.startTacticPractice(id),
@@ -2208,6 +2218,8 @@ async function mountBattleField() {
             return;
           }
           if (juicy) cutIn = createSkillCutInLayer({ host });
+          // WAVE_RUN_20261118: the drop layer asks the scene where a foe stood under this frame's camera.
+          battleStandProjector = stand => (disposed ? null : scene?.projectStand?.(stand) ?? null);
           stopFirstRender=observeBattleFirstRender({renderer:stage.app.renderer,
             record:recoveryDiagnostics.record,isActive:()=>!disposed});
           progress?.done('scene');
@@ -2282,8 +2294,17 @@ async function mountBattleField() {
   const showPersonality = new URLSearchParams(location.search).get('presentation') === 'developer';
   // The session advances itself; this repaints the DOM beside the scene and
   // moves on to the result once the battle has judged itself.
+  // WAVE_RUN_20261118: a wave of a story or challenge run gets the wave chip, the drops and the rest over the field.
+  const waveField = tutorial || waveDriver?.attemptId !== activeAttemptId ? null : mountWaveRunField({ host: root, frame: () => app.getWaveRun(),
+    collect: id => { const got = app.collectWaveDrop(id); if (got?.ok) autosave?.request('wave-drop'); return got; },
+    project: stand => battleStandProjector?.(stand) ?? null, canvasRect: () => pixiStage?.app?.canvas?.getBoundingClientRect?.() ?? null,
+    partners: () => app.getWaveRun()?.team ?? [], localTeam: activeRuntime.localTeamIndex(),
+    choose: choice => waveDriver?.attemptId === activeAttemptId && waveDriver.resolve(choice) });
+  let waveSettled = false;
   activeRuntime.observe((observed) => {
     if (viewDisposed || battleRuntime !== activeRuntime || battleAttemptId !== activeAttemptId) return;
+    if (waveSettled) return;
+    waveField?.update(observed);
     if (typeof recordSessionScreenMounted === "function" && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
       recordSessionScreenMounted(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);
     }
@@ -2294,7 +2315,9 @@ async function mountBattleField() {
         displayName: c.displayName, team: c.team, down: c.down})), localTeam: activeRuntime.localTeamIndex()};
     if (observed.outcome.ended && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
       if(tutorial){app.finishInteractiveTutorialBattle(app.getInteractiveTutorial().checkpoint);return;}
-      app.finishMatch({ ...activeRuntime.getSettlementResult(), attemptId: activeAttemptId });
+      const settledMatch = app.finishMatch({ ...activeRuntime.getSettlementResult(), attemptId: activeAttemptId });
+      // A wave stays on its field: the drops fall where the foes stood (the run itself is already saved).
+      if (waveField && settledMatch?.ok && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) { waveSettled = true; waveField.settled(observed); }
       // The settlement (prize, rank, titles) is committed in the session; the
       // result screen is a safe place to write it.
       autosave?.request('settlement');
@@ -2304,7 +2327,10 @@ async function mountBattleField() {
   const skillHand = tutorial ? null : mountBattleSkillHand({ host: root, snapshot: () => activeRuntime.getSkillCards?.() ?? null,
     play: id => activeRuntime.requestSkillCard?.(id) ?? { ok: false, reason: 'NO_HAND' },
     subscribe: listener => activeRuntime.observe(() => { if (!viewDisposed) listener(); }) });
-  return {...view,dispose(){if(viewDisposed)return;viewDisposed=true;skillHand?.dispose();hudLoad.cancel();hudArt=null;view.dispose();}};
+  return {...view,dispose(){if(viewDisposed)return;viewDisposed=true;skillHand?.dispose();
+    // The field went away under a wave: left mid-fight (no result), or from the rest by the screen's own back.
+    waveField?.dispose();if(waveField&&waveDriver?.attemptId===activeAttemptId)waveDriver.resolve(waveSettled?'BACK':'LEFT_FIELD');
+    hudLoad.cancel();hudArt=null;view.dispose();}};
 }
 
 /** Developer readout: per slot, the wiring a battle received and its tallies. */
@@ -3375,7 +3401,9 @@ async function playVnChapter(chapterId, { source = 'map', from = null } = {}) {
     motionPlates: currentQualityTier() !== 'saver',
     // Ai-chan speaks in the form the player chose for her (preference guideAppearance).
     guideForm: resolveGuideAppearance(settings.store.get().guideAppearance),
-    runBattle: request => runStoryBattle({ ...request, partnerInstanceId: partner.resident.creatureId }),
+    // WAVE_RUN_20261118: every story battle node is a run of waves (about three, the authored foes last).
+    runBattle: request => runWaveRun({ mode: 'STORY', encounterId: request.encounterId ?? null, bossPresets: request.presetIndices,
+      partnerInstanceId: partner.resident.creatureId, signal: request.signal }),
     cue: name => playStoryVnCue(name, settings.audio.output('sfx')),
     boardItems: unionBoardItems,
     // Every main chapter ends with a bond moment, so the bond total is the main chapters cleared (no new save key).
@@ -3481,6 +3509,106 @@ function followStoryBattle() {
   } else if (storyBattle.seenResult && screen !== CHAMPIONSHIP_SCREENS.BATTLE_RESULT && screen !== CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
     const outcome = storyBattle.outcome;
     storyBattle.resolve({ ok: true, won: outcome?.winningTeam === 0, outcome });
+  }
+}
+// ---- WAVE_RUN_20261118: story and challenge waves (Owner 2026-11-18) ----
+// One run of waves over the existing auto battle: each wave is a fresh battle session through BATTLE_SELECT under a
+// short banner; between waves the field stays with its drops (the run is saved there). Story waves go on by
+// themselves; a challenge waits for 「帶著戰利品離場」 or 「繼續挑戰」. Resolves {ok, won} for the story director, or
+// {ok:false, reason, abandon} when a wave could not be fought (the director offers retry or back).
+let waveDriver = null, battleStandProjector = null;
+async function fightWaveRunWave(choose) {
+  if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started) return { ok: false, reason: 'BATTLE_NOT_READY' };
+  if (app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD || app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_RESULT) app.exitBattle();
+  if (app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) { if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen(); app.openBattle(); }
+  if (!(await waitForScreen(CHAMPIONSHIP_SCREENS.BATTLE_SELECT))) return { ok: false, reason: 'BATTLE_SELECT_NOT_READY' };
+  const party = await app.prepareWaveBattle();
+  if (!party.ok) return party;
+  const prepared = (await loadBattleRuntime())({ mode: 2, battleType: 0, playerIndividuals: party.individuals, rng: party.rngPreparation.rng,
+    personalityPolicy: FREE_PRACTICE_PERSONALITY_POLICY, arenaHazards: await loadArenaHazards() });
+  try { prepared.chooseFreeBattle({ presetIndices: party.presetIndices, arenaIndex: party.arenaIndex }); prepared.setFoeBoostPercent?.(party.foeBoostPercent); prepared.startMatch(); }
+  catch (error) { prepared.dispose(); return { ok: false, reason: error?.message ?? 'BATTLE_NOT_READY' }; }
+  const attemptId = `battle:${app.getBattleEconomyState().nextSequence}`;
+  // The field reads this to mount its wave layer; the decision it sends resolves `choose`.
+  waveDriver = { attemptId, resolve: choose };
+  const entered = await enterPreparedBattle(prepared, attemptId, () => app.enterWaveBattle({ attemptId, playerInstanceIds: party.playerInstanceIds, rngPreparation: party.rngPreparation }));
+  if (!entered?.ok) { waveDriver = null; return { ok: false, reason: entered?.reason ?? 'BATTLE_NOT_READY' }; }
+  return { ok: true, attemptId, wave: party.wave, boss: party.boss };
+}
+async function runWaveRun({ mode, encounterId = null, bossPresets = [], waves = null, partnerInstanceId = null, partyIds = null, signal = null }) {
+  if (waveDriver || storyBattle) return { ok: false, reason: 'BATTLE_BUSY' };
+  const previousStage = document.body.dataset.storyStage;
+  delete document.body.dataset.storyStage;
+  const abandon = () => { const live = app.getWaveRun()?.run; if (live) { app.finishWaveRun('FAILED'); autosave?.request('wave-run'); } };
+  try {
+    let frame = app.getWaveRun();
+    if (frame?.run && (frame.run.mode !== mode || (encounterId && frame.run.encounterId !== encounterId))) {
+      // Another node's run was left open (a reload in the middle of it): close it as abandoned, paying its picks.
+      if (mode === 'STORY') app.finishWaveRun('ABANDONED'); else return { ok: false, reason: 'WAVE_RUN_ACTIVE' };
+      frame = app.getWaveRun();
+    }
+    if (!frame?.run) {
+      const candidates = (await app.getBattlePartyCandidates(null)).filter(c => !c.admission || c.admission.ok);
+      const lead = candidates.find(c => c.instanceId === partnerInstanceId) ?? candidates[0];
+      const ids = partyIds ?? (mode === 'STORY' ? (lead ? [lead.instanceId] : []) : candidates.slice(0, 3).map(c => c.instanceId));
+      if (!ids.length) return { ok: false, reason: 'TEAM_REQUIRED', abandon };
+      const started = app.startWaveRun({ mode, encounterId, party: ids, bossPresets, waves });
+      if (!started.ok) return { ...started, abandon };
+    }
+    for (;;) {
+      if (signal?.aborted) { app.finishWaveRun('ABANDONED'); return { ok: false, reason: 'STORY_ABORTED' }; }
+      frame = app.getWaveRun();
+      if (frame?.run?.status === 'REST') { const going = app.continueWaveRun(); if (!going.ok) return { ok: false, reason: going.reason, abandon }; frame = app.getWaveRun(); }
+      const run = frame?.run;
+      if (!run || run.status !== 'FIGHTING') return { ok: false, reason: 'NO_WAVE_TO_FIGHT', abandon };
+      const foes = frame.foes;
+      showWaveBanner(run.mode === 'STORY' && run.waves ? waveRunText('waveOf', { n: run.wave + 1, total: run.waves }) : waveRunText('wave', { n: run.wave + 1 }), { boss: Boolean(foes?.boss) });
+      let choose = null;
+      const decided = new Promise(resolve => { choose = resolve; });
+      const onAbort = () => choose('ABORT');
+      signal?.addEventListener?.('abort', onAbort, { once: true });
+      const fought = await fightWaveRunWave(choose);
+      if (!fought.ok) { signal?.removeEventListener?.('abort', onAbort); return { ok: false, reason: fought.reason, abandon }; }
+      const choice = await decided;
+      signal?.removeEventListener?.('abort', onAbort);
+      waveDriver = null;
+      frame = app.getWaveRun();
+      if (choice === 'ABORT') { if (frame?.run) app.finishWaveRun('ABANDONED'); return { ok: false, reason: 'STORY_ABORTED' }; }
+      // Left the battle before it was judged: the wave is not lost, the run is abandoned (picks kept by the rule).
+      if (choice === 'LEFT_FIELD') { if (frame?.run) app.finishWaveRun('ABANDONED'); autosave?.request('wave-run');
+        return mode === 'STORY' ? { ok: false, reason: 'WAVE_LEFT' } : { ok: true, won: false, finished: app.getWaveRun()?.finished ?? null }; }
+      // The run ended under the field (a lost wave): a story takes its lose branch.
+      if (!frame?.run) return { ok: true, won: false, finished: frame?.finished ?? null };
+      // Back from the rest: the run waits, saved (a challenge resumes from the Journey; the story asks retry or back).
+      // (A story whose last wave was already won is finished as cleared: leaving the field then is not a failure.)
+      if (choice === 'BACK' && !(frame.run.mode === 'STORY' && frame.run.status === 'CLEARED'))
+        return mode === 'STORY' ? { ok: false, reason: 'WAVE_PAUSED', abandon } : { ok: true, paused: true };
+      if (choice === 'LEAVE' || choice === 'FINISH') {
+        const done = app.finishWaveRun(choice === 'LEAVE' ? 'LEAVE' : 'CLEARED');
+        autosave?.request('wave-run');
+        if (!done.ok) return { ok: false, reason: done.reason, abandon };
+        const over = done.finished;
+        showWaveBanner(`${waveRunText(`over.${over.status}`)}${over.bits ? ` +${over.bits}` : ''}`, { ms: 1800 });
+        return { ok: true, won: true, finished: over };
+      }
+      if ((choice === 'NEXT' || choice === 'BACK') && frame.run.mode === 'STORY' && frame.run.status === 'CLEARED') {
+        const done = app.finishWaveRun('CLEARED'); autosave?.request('wave-run');
+        return done.ok ? { ok: true, won: true, finished: done.finished } : { ok: false, reason: done.reason, abandon };
+      }
+      // NEXT: the loop continues the run and fights the next wave.
+    }
+  } finally {
+    waveDriver = null;
+    if (app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD || app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_RESULT) app.exitBattle();
+    if (mode === 'CHALLENGE') {
+      // The challenge comes back to its own entry (the Journey's 挑戰模式), never the lobby.
+      if (app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) { if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen(); app.openBattle(); }
+      if (await waitForScreen(CHAMPIONSHIP_SCREENS.BATTLE_SELECT, 8000)) void openJourney({ tab: 'CHALLENGE' });
+    } else {
+      if (app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_SELECT) app.leaveScreen();
+      await waitForScreen(CHAMPIONSHIP_SCREENS.RAISING_HOME, 8000);
+    }
+    if (previousStage) document.body.dataset.storyStage = previousStage;
   }
 }
 // Loopback review only (?storyVnQa): play a chapter (optionally from a beat label), read its

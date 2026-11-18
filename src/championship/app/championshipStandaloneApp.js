@@ -47,6 +47,8 @@ import {normalizeTamerTalents,createTamerTalentState,tamerTalentPoints,talentVal
   TALENT_NODES,TALENT_KEYSTONES,TALENT_LINES,TALENT_TREE_POINTS,TALENT_TIER_GATE,TALENT_KEYSTONE_GATE,TALENT_KEYSTONE_COST,tamerExpRequired,TAMER_LEVEL_MAX}
   from '../contracts/productTamerTalents.js';
 import {ownedSkillCards,skillCardHandSize,drawSkillHand} from '../contracts/productTamerSkillCards.js';
+import {createWaveRun,normalizeWaveRun,waveFoes,recordWaveResult,continueWaveRun as continueWaveRunRule,collectWaveDrop as collectWaveDropRule,
+  waveLoot,markWaveDropsSettled,finishWaveRun,WAVE_RUN_RULES,WAVE_RUN_FINAL} from '../contracts/productWaveRun.js';
 import {normalizeTamerSupplies,createTamerSupplies,SUPPLEMENTS,getSupplement,supplyOwned,supplyPurchase,spendSupply,applyRecoverySupply,
   startRanchSupply,ranchSupplyActive,ranchSupplyGrowthPercent,ranchSupplyNightCalm,armSupply,disarmSupply,armedSupplies,supplyBattleProfile,
   supplySyncExpPercent,settleArmedSupplies,armedSupplyItems,supplyDiscount,supplyValue,scavengeSupply,SUPPLY_BATTLE_SLOTS} from '../contracts/productSupplements.js';
@@ -463,6 +465,9 @@ export function createChampionshipStandaloneApp({
   let tamerTalents=null,lastTamerGain=null;
   // SUPPLEMENTS_20261118: the supplement bag (progression.tamerSupplies).
   let tamerSupplies=null;
+  // WAVE_RUN_20261118: the story or challenge run between waves (progression.waveRun), the wave battle being fought,
+  // and the last finished run for the screen that reports it.
+  let waveRun=null,pendingWave=null,lastWaveFinish=null,waveRunSerial=0;
   // 拾荒: what the last hunt's end turned up, for the hunt end gate and the Hunt Result (not saved; the bag is).
   let lastHuntScavenge=null;
   // OWNER_APPROVED_ADAPTATION 2026-11-10: Journey (tower and patrol pod).
@@ -1284,7 +1289,7 @@ export function createChampionshipStandaloneApp({
     const result=applyBattleTransaction(beginBattleAttempt(battleEconomy,{attemptId,matchIndex:-1,mode,battleType:0,
       entryFee:0,payout:mode===2?prepared.freeMatch.payout:0,expectedRounds:1},requireShop().getBits()),[],prepared.rng,[],
       // A practice-series bout pays only its fixed crystals: no sponsor stake rides it.
-      mode===2&&prepared.freeMatch.kind!=='SPAR'?{begin:attemptId,kind:'FREE'}:null);
+      mode===2&&prepared.freeMatch.kind!=='SPAR'&&prepared.freeMatch.kind!=='WAVE'?{begin:attemptId,kind:'FREE'}:null);
     if(!result.ok||result.duplicate)return result;
     battleRngPreparations.delete(rngPreparation);battlePartyIds=transientMode?null:[...playerInstanceIds];
     screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);publishScreens();return result;
@@ -1476,6 +1481,79 @@ export function createChampionshipStandaloneApp({
     const next=structuredClone(profile);next.fields['050']=next.fields['058'];return next;
   }
   /** A finished practice-series bout: its fixed crystals, win or loss, whatever the plan; winning the last bout adds the clear bonus. */
+  // ---- WAVE_RUN_20261118: story and challenge waves ----
+  function waveRunFrame(){
+    if(!waveRun)return lastWaveFinish?Object.freeze({run:null,finished:lastWaveFinish}):null;
+    const foes=waveFoes(waveRun);
+    return Object.freeze({run:waveRun,foes,next:waveRun.status==='REST'?foes:null,picked:waveLoot(waveRun,'PICKED'),settled:waveLoot(waveRun,'SETTLED'),
+      ground:waveLoot(waveRun,'GROUND'),rules:WAVE_RUN_RULES,magnet:talent('dropMagnet')>0,finished:lastWaveFinish,
+      // who fights on, with the HP the last wave left them
+      team:waveRun.party.map(id=>{const f=raisingNativeProfile(id)?.fields??{},max=Number(f['058'])||0,hp=Number(f['050'])||0;
+        return Object.freeze({instanceId:id,name:partnerName(id),ratio:max>0?hp/max:0,down:hp<=0});})});
+  }
+  function saveWaveRun(next,extra={}){
+    const status=savePort.save({...liveSaveRequest(revision+1),waveRun:next&&!WAVE_RUN_FINAL.includes(next.status)?next:null,...extra});
+    if(status.phase!=='SAVED'){savePort.discardPendingWrite();return false;}
+    waveRun=next;revision+=1;return true;
+  }
+  /**
+   * Credit picked drops through a speculative shop (the wallet cap and each item's cap hold); returns the shop to
+   * commit and the drop ids that fit. What does not fit stays picked and unpaid, never silently lost.
+   */
+  function waveLootCandidate(run){
+    const candidate=createShopRuntime({snapshot:requireShop().toSave(),allowRepeatedCages:playtestPolicy?.enabled===true,
+      allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
+    const paid=[];let bits=0;const items={};
+    for(const drop of run.drops){
+      if(drop.state!=='PICKED')continue;
+      if(drop.kind==='BITS'){if(candidate.getBits()+drop.amount>BITS_WALLET_CAP)continue;candidate.creditBits(drop.amount);bits+=drop.amount;}
+      else{const record=getShopRecord(drop.record);if(candidate.toSave().quantities[drop.record]+drop.amount>record.maxOwned)continue;
+        candidate.receiveNativeGift(drop.record,drop.amount);items[drop.record]=(items[drop.record]??0)+drop.amount;}
+      paid.push(drop.id);
+    }
+    return {candidate,paid,bits,items};
+  }
+  function commitWaveShop(candidate){
+    shop=createShopRuntime({snapshot:candidate.toSave(),huntInventory,allowRepeatedCages:playtestPolicy?.enabled===true,
+      allItemsVisible:playtestPolicy?.shopOpen===true,progression:progressionContext()});
+    applyMappedHuntInventoryFromShop(shop,huntInventory);bindShopRuntime();
+    const frame=shop.getFrame();for(const listener of [...shopListeners])try{listener(frame);}catch{/* observers never break the shop */}
+  }
+  /** A finished wave battle: once per attempt. Returns true when the attempt was a wave (the field stays). */
+  function settleWaveBout(attemptId,won){
+    const wave=pendingWave;
+    if(!wave||wave.attemptId!==attemptId||!waveRun)return false;
+    pendingWave=null;
+    const {run,changed}=recordWaveResult(waveRun,{attemptId,won,presets:wave.presets});
+    if(!changed)return true;
+    if(run.status==='DEFEATED'){endWaveRun(run,'DEFEATED');return true;}
+    // The checkpoint between waves (its drops on the ground). If this save fails the run reloads before the same wave:
+    // the drops were never credited, so fighting it again pays nothing twice.
+    if(!saveWaveRun(run)){waveRun=run;savePort.markDirty();}
+    return true;
+  }
+  /** End a run: pay what it may still pay (the picked drops), the run's EXP once, and forget it. */
+  function endWaveRun(run,reason){
+    const {run:finished,pay,refused}=finishWaveRun(run,reason);
+    if(refused)return Object.freeze({ok:false,reason:refused});
+    const {candidate,paid,bits,items}=waveLootCandidate({...finished,drops:finished.drops.filter(drop=>pay.ids.includes(drop.id))});
+    const settled=markWaveDropsSettled(finished,paid);
+    // The partners that fought earn one battle's Sync EXP for the whole run, and the tamer once (never each wave).
+    const before={syncLevels,lastSyncGains,tamerTalents,lastTamerGain,tamerSupplies};
+    const wavesWon=settled.attempts.length-(reason==='DEFEATED'?1:0);
+    if(wavesWon>0&&reason!=='FAILED')grantBattleSync(settled.party.filter(id=>syncProfileOf(id)),{kind:'FREE',won:reason!=='DEFEATED'&&reason!=='ABANDONED'});
+    const unpaid=pay.ids.filter(id=>!paid.includes(id));
+    lastWaveFinish=Object.freeze({runId:settled.runId,mode:settled.mode,encounterId:settled.encounterId,reason,status:settled.status,waves:wavesWon,
+      bits,items:Object.freeze({...items}),unpaid:Object.freeze(unpaid),
+      earned:waveLoot(settled,'SETTLED')});
+    if(!saveWaveRun(settled,{shop:candidate.toSave()})){
+      ({syncLevels,lastSyncGains,tamerTalents,lastTamerGain,tamerSupplies}=before);lastWaveFinish=null;
+      return Object.freeze({ok:false,reason:'SAVE_FAILED'});
+    }
+    commitWaveShop(candidate);waveRun=null;publishRaising();
+    return Object.freeze({ok:true,finished:lastWaveFinish});
+  }
+
   function settleSparBout(attemptId,won){
     const spar=pendingSpar;
     if(!spar||spar.attemptId!==attemptId)return null;
@@ -2113,7 +2191,7 @@ export function createChampionshipStandaloneApp({
     return {
       snapshot:requireSession().getRaisingHomeSnapshot(),creature,sessionId,revision:nextRevision,
       interactionCount,friendsPlaytest,onlineBindReward,saveId,tamerRank:tamerRankValue,battleBadges:battleBadgesValue,nativeTitles,
-      championshipRun,freeBattleMenu,battleTactics,cyberGacha,burstEvolution,syncLevels,tamerTalents,tamerSupplies,journey,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
+      championshipRun,freeBattleMenu,battleTactics,cyberGacha,burstEvolution,syncLevels,tamerTalents,tamerSupplies,waveRun:waveRun&&!WAVE_RUN_FINAL.includes(waveRun.status)?waveRun:null,journey,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
       raising,shop:shop?shop.toSave():null,cageEdit:cageEdit?cageEdit.toSave():null,battleEconomy,
       instanceIdentity,gameplayRng:gameplayRngSnapshot(),huntHistory:projectNativeHuntPersistentSave(huntPersistentState)
     };
@@ -2389,6 +2467,10 @@ export function createChampionshipStandaloneApp({
     syncLevels = saved.progression.syncLevels===undefined?null:normalizeSyncLevels(saved.progression.syncLevels);lastSyncGains=null;
     tamerTalents = saved.progression.tamerTalents===undefined?null:normalizeTamerTalents(saved.progression.tamerTalents);lastTamerGain=null;
     tamerSupplies = saved.progression.tamerSupplies===undefined?null:normalizeTamerSupplies(saved.progression.tamerSupplies);
+    // WAVE_RUN_20261118: a run saved mid-wave resumes before that wave (the fight is fought again; its drops were
+    // never dropped, so nothing is paid twice); a run saved between waves resumes there.
+    {const saved_=normalizeWaveRun(saved.progression.waveRun);
+      waveRun=saved_&&saved_.status==='FIGHTING'&&saved_.wave>0?normalizeWaveRun({...saved_,status:'REST'}):saved_;pendingWave=null;lastWaveFinish=null;}
     journey = saved.progression.journey===undefined?null:normalizeJourney(saved.progression.journey);pendingTower=null;lastTowerResult=null;tacticPractice=null;pendingSpar=null;lastSparResult=null;
     migrateLegacyBurstPartners();
     if (realtime) {
@@ -2503,7 +2585,9 @@ export function createChampionshipStandaloneApp({
       for(const entry of individualResults)writeRaisingNativeProfile(entry.instanceId,entry.nativeProfile,{markDirty:false});
       // Sync EXP for the partners that fought a settled owned-party match (never password or link battles).
       const syncKind=SYNC_KIND_BY_MODE[result.receipt?.mode];
-      const sparBout=pendingSpar?.attemptId!=null&&pendingSpar.attemptId===result.receipt?.attemptId;
+      // A wave of a story or challenge run pays nothing here: its drops and its EXP are settled by the run (WAVE_RUN_20261118).
+      const sparBout=(pendingSpar?.attemptId!=null&&pendingSpar.attemptId===result.receipt?.attemptId)
+        ||(pendingWave?.attemptId!=null&&pendingWave.attemptId===result.receipt?.attemptId);
       if(result.receipt?.status==="SETTLED"&&syncKind&&individualResults.length&&!sparBout)
         grantBattleSync(individualResults.map(entry=>entry.instanceId),{kind:syncKind,won:result.receipt.won===true,attemptId:result.receipt.attemptId??null,
           cardPercent:result.skillCards?.syncPercent??0});
@@ -2665,7 +2749,7 @@ export function createChampionshipStandaloneApp({
       nativeOpening=opening;
       cyberGacha=grantGachaWelcome(null).state;
       burstEvolution=withBurstMigrated(createBurstEvolutionState());
-      syncLevels=null;lastSyncGains=null;tamerTalents=null;lastTamerGain=null;tamerSupplies=null;journey=null;pendingTower=null;lastTowerResult=null;tacticPractice=null;pendingSpar=null;lastSparResult=null;
+      syncLevels=null;lastSyncGains=null;tamerTalents=null;lastTamerGain=null;tamerSupplies=null;waveRun=null;pendingWave=null;lastWaveFinish=null;journey=null;pendingTower=null;lastTowerResult=null;tacticPractice=null;pendingSpar=null;lastSparResult=null;
       tutorialBaseline=null;tutorialPendingOpening=null;tutorialOfferEligible=opening!==null;
       registeredSpeciesValue = Object.freeze([]);
       battleEconomy = createBattleEconomyState();
@@ -4849,6 +4933,86 @@ export function createChampionshipStandaloneApp({
       const arenaIndex=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
       return {ok:true,presetIndices:[...presetIndices],arenaIndex,individuals:party.individuals,rngPreparation};
     },
+    // ---- WAVE_RUN_20261118: story and challenge wave runs ----
+    /** The run in progress (or the last one finished), with its next wave, its loot and its rules. */
+    getWaveRun(){return session?waveRunFrame():null;},
+    /** Start a run: STORY needs the node's boss presets; CHALLENGE draws its own waves. Saved before it is shown. */
+    startWaveRun({mode,encounterId=null,party,bossPresets=[],waves=null}={}){
+      requireSession();
+      if(tutorialBaseline)return Object.freeze({ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'});
+      if(waveRun&&!WAVE_RUN_FINAL.includes(waveRun.status))return Object.freeze({ok:false,reason:'WAVE_RUN_ACTIVE'});
+      const ids=(party??[]).filter(id=>syncProfileOf(id));
+      if(!ids.length)return Object.freeze({ok:false,reason:'TEAM_REQUIRED'});
+      let run;
+      try{run=createWaveRun({mode,encounterId,party:ids,bossPresets,waves,seed:Math.floor(gachaRandom()*0x7fffffff),
+        runId:`wave:${saveId??'local'}:${Date.now().toString(36)}:${++waveRunSerial}`});}
+      catch(error){return Object.freeze({ok:false,reason:error?.message??'WAVE_RUN_INVALID'});}
+      lastWaveFinish=null;
+      if(!saveWaveRun(run))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
+      publishRaising();return Object.freeze({ok:true,run});
+    },
+    /** The party and foes of the run's current wave, as a free battle (no purse, no sponsor stake, no result screen). */
+    async prepareWaveBattle(){
+      requireSession();
+      if(!waveRun||waveRun.status!=='FIGHTING')return {ok:false,reason:'NO_WAVE_TO_FIGHT'};
+      const foes=waveFoes(waveRun);if(!foes)return {ok:false,reason:'NO_MORE_WAVES'};
+      // Partners that fell in an earlier wave stay out; the rest carry the HP and TP the last wave left them.
+      const standing=waveRun.party.filter(id=>(raisingNativeProfile(id)?.fields?.['050']??0)>0);
+      if(!standing.length)return {ok:false,reason:'TEAM_DOWN'};
+      const party=withBattleTactics(await this.prepareBattleParty(null,standing,{sync:{capped:false}}));
+      if(!party.ok)return party;
+      if(!freeBattleMenu)rebuildFreeBattleMenu();
+      const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
+      prepared.localMode=2;prepared.freeMenu=freeBattleMenu;prepared.individuals=party.individuals;
+      prepared.freeMatch=Object.freeze({id:`${waveRun.runId}:${waveRun.wave}`,kind:'WAVE',presetIndices:[...foes.presets],slots:3,entryFee:0,payout:0});
+      prepared.wave=Object.freeze({wave:waveRun.wave,presets:[...foes.presets]});
+      // One field for the whole run, so every wave fights on the same ground.
+      const arenaIndex=FREE_BATTLE_ARENAS[waveRun.seed%FREE_BATTLE_ARENAS.length];
+      return {ok:true,presetIndices:[...foes.presets],arenaIndex,foeBoostPercent:foes.foeBoostPercent,boss:foes.boss,wave:waveRun.wave,
+        individuals:party.individuals,rngPreparation,playerInstanceIds:standing};
+    },
+    enterWaveBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation}={}){
+      const prepared=battleRngPreparations.get(rngPreparation),wave=prepared?.wave;
+      if(!wave||!waveRun||waveRun.status!=='FIGHTING')return {ok:false,reason:'NO_WAVE_TO_FIGHT'};
+      const result=enterPreparedLocalBattle({mode:2,attemptId,playerInstanceIds,rngPreparation});
+      if(result.ok&&!result.duplicate)pendingWave=Object.freeze({attemptId,wave:wave.wave,presets:wave.presets});
+      return result;
+    },
+    /** Pick a drop up (a tap and the magnet both call this). Story drops are paid at once; challenge drops join the run's loot. */
+    collectWaveDrop(dropId){
+      requireSession();
+      if(!waveRun)return Object.freeze({ok:false,reason:'NO_WAVE_RUN'});
+      const picked=collectWaveDropRule(waveRun,dropId);
+      if(!picked.ok)return Object.freeze({ok:false,reason:picked.reason});
+      if(waveRun.mode==='STORY'){
+        const {candidate,paid,bits,items}=waveLootCandidate({...picked.run,drops:picked.run.drops.filter(drop=>drop.id===dropId)});
+        const next=markWaveDropsSettled(picked.run,paid);
+        if(!saveWaveRun(next,{shop:candidate.toSave()}))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
+        commitWaveShop(candidate);publishRaising();
+        return Object.freeze({ok:true,drop:picked.drop,paid:paid.length>0,bits,items:Object.freeze({...items}),full:paid.length===0});
+      }
+      if(!saveWaveRun(picked.run))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
+      publishRaising();
+      return Object.freeze({ok:true,drop:picked.drop,paid:false});
+    },
+    /** Challenge: go on to the next wave (only after a won wave; never on a timer). */
+    continueWaveRun(){
+      requireSession();
+      if(!waveRun)return Object.freeze({ok:false,reason:'NO_WAVE_RUN'});
+      if(waveRun.mode==='STORY'&&waveRun.status!=='REST')return Object.freeze({ok:false,reason:'NOT_RESTING'});
+      const next=continueWaveRunRule(waveRun);
+      if(!next.ok)return Object.freeze({ok:false,reason:next.reason});
+      if(!saveWaveRun(next.run))return Object.freeze({ok:false,reason:'SAVE_FAILED'});
+      return Object.freeze({ok:true,run:next.run});
+    },
+    /** Challenge: leave with the picked loot (once). Story: finish a cleared encounter. Anything else: abandon. */
+    finishWaveRun(reason){
+      requireSession();
+      if(!waveRun)return lastWaveFinish?Object.freeze({ok:true,finished:lastWaveFinish,duplicate:true}):Object.freeze({ok:false,reason:'NO_WAVE_RUN'});
+      if(!['LEAVE','CLEARED','ABANDONED','FAILED'].includes(reason))return Object.freeze({ok:false,reason:'WAVE_FINISH_REASON'});
+      if(reason==='CLEARED'&&waveRun.status!=='CLEARED')return Object.freeze({ok:false,reason:'NOT_CLEARED'});
+      return endWaveRun(waveRun,reason);
+    },
     /** Journey practice series (TACTIC_PRACTICE_LOOP_20261116): the current series, or null. */
     getTacticPractice(){
       requireSession();
@@ -5901,6 +6065,8 @@ export function createChampionshipStandaloneApp({
       battlePartyIds=null;
       settleTowerFloor(attemptId,result.receipt?.won===true);
       settleSparBout(attemptId,result.receipt?.won===true);
+      // A wave of a run: the run records it and the field stays (no result screen between waves).
+      if(settleWaveBout(attemptId,result.receipt?.won===true)){publishScreens();return result;}
       // A round fought under a run writes its flag here, from the same verdict
       // the economy just settled on, so nothing judges the round twice.
       if(championshipAttemptId===attemptId){

@@ -1,0 +1,85 @@
+{
+ "id": "art:ui:wave-run:r1",
+ "rightsStatus": "ORIGINAL_GENERATED",
+ "provenance": "Generated 2026-11-18 by Codex (codex.exe 0.167 exec, gpt-6.1-sol, built-in image tool) from the written brief in briefs/, at the Owner's direction (2026-11-18: story and challenge become runs of waves with drops to pick up; mechanics shown as a game, not text). Inputs: the brief text, Codex's own emblems from art:ui:tamer-emblems:r1 and art:ui:talent-icons:r1, this product's own Bits coin (public-media-clean currency-hud-r1 bits-48.png) and one screenshot of this product's own arcade HUD (isolated QA origin) as style context only; no ROM frame, research-library file or third-party character was an input. Masters are 256 x 256 RGBA PNG kept outside the repository; each runtime file is the master trimmed to its drawn bounds on a square canvas and reduced to 128 px (Lanczos), lossless WebP.",
+ "scope": "Wave run field pieces (drops, loot bag, threat mark, leave/continue keys, wave flag), WAVE_RUN_20261118; presentation only, no gameplay or commercial-rights claim",
+ "files": [
+  {
+   "path": "assets/production/ui/wave-run-r1/drop-coins.webp",
+   "key": "drop-coins",
+   "size": [
+    128,
+    128
+   ],
+   "sha256": "b7911f74945e0813eaf5bb4141cfb165cbde0fb1b47a447f34a555d07640578e",
+   "masterSha256": "eca3824ea77441e7947937042281076b20326b97ecb0522ac1af0babd2b324ec",
+   "brief": "briefs/wave-run.md"
+  },
+  {
+   "path": "assets/production/ui/wave-run-r1/drop-coin-heap.webp",
+   "key": "drop-coin-heap",
+   "size": [
+    128,
+    128
+   ],
+   "sha256": "9478d9050fc0c7c4020264629238a136ebabab07a51492b0e7b8509f8dbbe676",
+   "masterSha256": "ca135475eb6317587d6c81d6de7f86b79def5fe1d164ed105d791eba4f3e1b83",
+   "brief": "briefs/wave-run.md"
+  },
+  {
+   "path": "assets/production/ui/wave-run-r1/loot-bag.webp",
+   "key": "loot-bag",
+   "size": [
+    128,
+    128
+   ],
+   "sha256": "457be7cf2e46c0dc78c300cfc21904dd38988cfb586976ead3421faa848939b8",
+   "masterSha256": "abe8b861bca30bbc2d4f6976591f12396787b3eb238e332f15a2e51b7cd7fc86",
+   "brief": "briefs/wave-run.md"
+  },
+  {
+   "path": "assets/production/ui/wave-run-r1/threat.webp",
+   "key": "threat",
+   "size": [
+    128,
+    128
+   ],
+   "sha256": "9220d13196a1e8cfad481ef5abd3bbfe29cad1b05a8333a176338198c77c5bc7",
+   "masterSha256": "2e2acf4d407339b21d4f97eaec9e04bce7c29390548b5148cf067448e684f923",
+   "brief": "briefs/wave-run.md"
+  },
+  {
+   "path": "assets/production/ui/wave-run-r1/key-leave.webp",
+   "key": "key-leave",
+   "size": [
+    128,
+    128
+   ],
+   "sha256": "954d159630ef7a874e6a9db5a9217b0b96d7a789032856e4386103f44f093df7",
+   "masterSha256": "661192a141d1a8828900cacfa88bcdd7a163bc7179f458be73f9ad8f7a16392e",
+   "brief": "briefs/wave-run.md"
+  },
+  {
+   "path": "assets/production/ui/wave-run-r1/key-continue.webp",
+   "key": "key-continue",
+   "size": [
+    128,
+    128
+   ],
+   "sha256": "24e098531f06f585fbb06c6c2119dc572c03dbb1b9460e15e67e9100e86eb871",
+   "masterSha256": "668a0acf137d9b684377be61fae8a24609f2367db8254f98491f0bba468debf0",
+   "brief": "briefs/wave-run.md"
+  },
+  {
+   "path": "assets/production/ui/wave-run-r1/wave-flag.webp",
+   "key": "wave-flag",
+   "size": [
+    128,
+    128
+   ],
+   "sha256": "c8c064c372facfee8c10baedf21377ea3cb27fdabb822aff6e5b405e03ccaa4f",
+   "masterSha256": "22a83ff8063da87146a5d63031d30de0918412f11890984abca7f68254165d2c",
+   "brief": "briefs/wave-run.md"
+  }
+ ]
+}

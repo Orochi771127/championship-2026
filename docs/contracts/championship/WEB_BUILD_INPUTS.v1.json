@@ -129,6 +129,7 @@
     "src/championship/app/vs3Screens.js",
     "src/championship/app/vs4Screens.js",
     "src/championship/app/vs5Screens.js",
+    "src/championship/app/waveRunField.js",
     "src/championship/app/webAppInstall.js",
     "src/championship/battle/battleActionApplication.js",
     "src/championship/battle/battleActionSelection.js",
@@ -223,6 +224,7 @@
     "src/championship/contracts/productTacticPractice.js",
     "src/championship/contracts/productTamerSkillCards.js",
     "src/championship/contracts/productTamerTalents.js",
+    "src/championship/contracts/productWaveRun.js",
     "src/championship/contracts/speciesTaxonomy.js",
     "src/championship/data/monsterVisualAnchors218.js",
     "src/championship/data/storyRiftChapters.js",
@@ -1205,6 +1207,7 @@
     "src/championship/text/uiText.js",
     "src/championship/text/uiText.th.js",
     "src/championship/text/uiText.vi.js",
+    "src/championship/text/waveRunText.js",
     "src/championship/text/weeklyScheduleText.js",
     "src/championship/text/zhHant.js",
     "src/championship/time/championshipWorldClock.js",
@@ -9594,6 +9597,7 @@
     "assets/production/ui/talent-icons-r1/trader.bountyHunter_96.webp",
     "assets/production/ui/talent-icons-r1/trader.crystal_96.webp",
     "assets/production/ui/talent-icons-r1/trader.haggle_96.webp",
+    "assets/production/ui/talent-icons-r1/trader.magnet_96.webp",
     "assets/production/ui/talent-icons-r1/trader.patrol_96.webp",
     "assets/production/ui/talent-icons-r1/trader.peddler_96.webp",
     "assets/production/ui/talent-icons-r1/trader.regular_96.webp",
@@ -9609,6 +9613,13 @@
     "assets/production/ui/tamer-emblems-r1/tamer-level-badge_96.webp",
     "assets/production/ui/tooling-pilot-r1/raising-header-material.webp",
     "assets/production/ui/tooling-pilot-r1/tool-icons.webp",
+    "assets/production/ui/wave-run-r1/drop-coin-heap.webp",
+    "assets/production/ui/wave-run-r1/drop-coins.webp",
+    "assets/production/ui/wave-run-r1/key-continue.webp",
+    "assets/production/ui/wave-run-r1/key-leave.webp",
+    "assets/production/ui/wave-run-r1/loot-bag.webp",
+    "assets/production/ui/wave-run-r1/threat.webp",
+    "assets/production/ui/wave-run-r1/wave-flag.webp",
     "assets/production/vfx/licensed-runtime-v1/battle/atkup/atkup.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/atkup/atkup.png",
     "assets/production/vfx/licensed-runtime-v1/battle/circle_my/circle_my.glb",
@@ -9834,6 +9845,7 @@
     "src/championship/app/vs4Screens.js",
     "src/championship/app/vs5Screens.js",
     "src/championship/app/vs5Styles.css",
+    "src/championship/app/waveRunField.js",
     "src/championship/app/webAppInstall.js",
     "src/championship/battle/battleActionApplication.js",
     "src/championship/battle/battleActionSelection.js",
@@ -9928,6 +9940,7 @@
     "src/championship/contracts/productTacticPractice.js",
     "src/championship/contracts/productTamerSkillCards.js",
     "src/championship/contracts/productTamerTalents.js",
+    "src/championship/contracts/productWaveRun.js",
     "src/championship/contracts/speciesTaxonomy.js",
     "src/championship/data/monsterVisualAnchors218.js",
     "src/championship/data/storyRiftChapters.js",
@@ -10910,6 +10923,7 @@
     "src/championship/text/uiText.js",
     "src/championship/text/uiText.th.js",
     "src/championship/text/uiText.vi.js",
+    "src/championship/text/waveRunText.js",
     "src/championship/text/weeklyScheduleText.js",
     "src/championship/text/zhHant.js",
     "src/championship/time/championshipWorldClock.js",
@@ -44941,6 +44955,10 @@
         "sha256": "5c89b2e9225d05f0c22c98f961d9c1b955b6550f242c1e2e195a95c0c5fb21d5"
       },
       {
+        "path": "assets/production/ui/talent-icons-r1/trader.magnet_96.webp",
+        "sha256": "b405e8a692efa2a77fdaf61cc15d91278e931a0a885589c6a94fedbe5506b696"
+      },
+      {
         "path": "assets/production/ui/talent-icons-r1/trader.patrol_96.webp",
         "sha256": "52bbfc3757e005b82cea022561c7f182d67631019f8dcff307637b21c7f83840"
       },
@@ -44999,6 +45017,34 @@
       {
         "path": "assets/production/ui/tooling-pilot-r1/tool-icons.webp",
         "sha256": "afae22b2826eb4c85009a2a04dc0c2545bda7a8e9b8412075f37a541780595ab"
+      },
+      {
+        "path": "assets/production/ui/wave-run-r1/drop-coin-heap.webp",
+        "sha256": "9478d9050fc0c7c4020264629238a136ebabab07a51492b0e7b8509f8dbbe676"
+      },
+      {
+        "path": "assets/production/ui/wave-run-r1/drop-coins.webp",
+        "sha256": "b7911f74945e0813eaf5bb4141cfb165cbde0fb1b47a447f34a555d07640578e"
+      },
+      {
+        "path": "assets/production/ui/wave-run-r1/key-continue.webp",
+        "sha256": "24e098531f06f585fbb06c6c2119dc572c03dbb1b9460e15e67e9100e86eb871"
+      },
+      {
+        "path": "assets/production/ui/wave-run-r1/key-leave.webp",
+        "sha256": "954d159630ef7a874e6a9db5a9217b0b96d7a789032856e4386103f44f093df7"
+      },
+      {
+        "path": "assets/production/ui/wave-run-r1/loot-bag.webp",
+        "sha256": "457be7cf2e46c0dc78c300cfc21904dd38988cfb586976ead3421faa848939b8"
+      },
+      {
+        "path": "assets/production/ui/wave-run-r1/threat.webp",
+        "sha256": "9220d13196a1e8cfad481ef5abd3bbfe29cad1b05a8333a176338198c77c5bc7"
+      },
+      {
+        "path": "assets/production/ui/wave-run-r1/wave-flag.webp",
+        "sha256": "c8c064c372facfee8c10baedf21377ea3cb27fdabb822aff6e5b405e03ccaa4f"
       },
       {
         "path": "assets/production/vfx/licensed-runtime-v1/battle/atkup/atkup.glb",
@@ -45374,7 +45420,7 @@
       },
       {
         "path": "src/championship/app/ChampionshipPersistentSavePort.js",
-        "sha256": "fe5bf2b8b512e2cf3756100a3ef6ce7c77843157b200ac705db7cd09af409fe5"
+        "sha256": "19f4089f1ca80dc172fccf2442995ca6ed8b91153ecdd55d9f045549ee488ffe"
       },
       {
         "path": "src/championship/app/championshipRaisingProduction.js",
@@ -45390,7 +45436,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "4bc66ac429f849e02c8cda6d5bebbe9047941be7b287917631fc9b41f41b3745"
+        "sha256": "e69ea137038d3e2a1fb892ff60bb38b5400004626a8fc59d413c5bcfb38fa2ee"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -45398,7 +45444,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneSave.js",
-        "sha256": "ea910abfe33957649bad345806b22a452df968c9fcee005f91a126648211469f"
+        "sha256": "a732ddb063bd0f77dd87324416d0aca637621f809c7b95e989e6c692c07bde9d"
       },
       {
         "path": "src/championship/app/championshipStatusBar.js",
@@ -45534,7 +45580,7 @@
       },
       {
         "path": "src/championship/app/journeyScreen.js",
-        "sha256": "d025d15b81d3c94278f745a502439c545129cdc8c2cd102282f191bc3b454e8b"
+        "sha256": "884fb6162f13d58e61a363c0992da7ba61411899d6235ce9d0197dc2181f1cbe"
       },
       {
         "path": "src/championship/app/loadProgress.js",
@@ -45550,7 +45596,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "cae1341b7845756dbc4b9efd58c78873a2c20f546378bd9e8c19721972a387a3"
+        "sha256": "b0b3d7189ef40bd0a9c80b4a1abf13d54e3b7f227861012054d2f8381e6bfbd8"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -45742,7 +45788,7 @@
       },
       {
         "path": "src/championship/app/styles.css",
-        "sha256": "d95ddfcd1b11766632286236e819f205e123f26d6909a7f45b0e046d0d78a842"
+        "sha256": "f95b89ea069bacc46356c91569b08ca1af431144e1815311e514c96650901bbe"
       },
       {
         "path": "src/championship/app/tamerInfoScreen.js",
@@ -45806,7 +45852,7 @@
       },
       {
         "path": "src/championship/app/ui/journey.css",
-        "sha256": "e228a2b2bbb47375b40326189d95a69efce7d5e45b77d1918b530585baee6966"
+        "sha256": "f3f74059c53e61351eac2d619af4df7887b88cdcb418a63a15d9ab4cba8d2553"
       },
       {
         "path": "src/championship/app/ui/juicyShowcase.css",
@@ -45899,6 +45945,10 @@
       {
         "path": "src/championship/app/vs5Styles.css",
         "sha256": "29f5d3b4d9f7e64dda0ad1639b3607becd29392622b25f27379c9cabafd067b7"
+      },
+      {
+        "path": "src/championship/app/waveRunField.js",
+        "sha256": "3c88b706dde2d514523d99e86cbe1bd3dc9d511608f91f64f75fd3b8dc19ef90"
       },
       {
         "path": "src/championship/app/webAppInstall.js",
@@ -46274,7 +46324,11 @@
       },
       {
         "path": "src/championship/contracts/productTamerTalents.js",
-        "sha256": "4d9c552aae5c43d7d462e88cf364bb92ed63fdc8cd2f4cb829f19387d9f2bec2"
+        "sha256": "90e577eb44589f44c2ca1e771259f14dd8a7ac56f21d8a0c047a132a6d1d48ea"
+      },
+      {
+        "path": "src/championship/contracts/productWaveRun.js",
+        "sha256": "35e0fcb46a9180bf074a29f09e1c6b645a63f2f4c5733204344b56c0e27fa873"
       },
       {
         "path": "src/championship/contracts/speciesTaxonomy.js",
@@ -47246,7 +47300,7 @@
       },
       {
         "path": "src/championship/presentation/story/storyVnDirector.js",
-        "sha256": "15d78373bc1b1243c2f407235af639ea14a535464dad025bf1ee97105fd13a16"
+        "sha256": "d4b4a83bf8413d1279ec7a9626227ee4e70a1a59f95e5b76822d09d1be710c41"
       },
       {
         "path": "src/championship/presentation/story/storyVnField.js",
@@ -49806,7 +49860,7 @@
       },
       {
         "path": "src/championship/presentation/vs5/createBattleFieldPixiPresentation.js",
-        "sha256": "9722fdd01b381590adbd59d46b08401577515caef899b8b3adad19331d5d2d21"
+        "sha256": "34e45289690477843903aff9858b4acd23410d57f8168d6ad8281008965445e4"
       },
       {
         "path": "src/championship/presentation/vs5/createBattleSelectThreePresentation.js",
@@ -50146,7 +50200,7 @@
       },
       {
         "path": "src/championship/text/storyVnText.js",
-        "sha256": "224596806c140b559cc89a67dfe8a3665409aef90f833550016b3e2cecfd31f9"
+        "sha256": "51392e553cb6524fa42b7415cd93622c471ca1dfc7c45625e88d22a8369908e4"
       },
       {
         "path": "src/championship/text/syncLevelText.js",
@@ -50158,7 +50212,7 @@
       },
       {
         "path": "src/championship/text/tamerTalentText.js",
-        "sha256": "4bb51ddcc62ffda0cfd14c6615090d35a30d6701a2acd74d06fb295da2c12825"
+        "sha256": "45c971ced593d4888420a2bf3b716e61c0c52b42a4c392a715aba8e5c8f7ffd7"
       },
       {
         "path": "src/championship/text/taxonomyText.js",
@@ -50203,6 +50257,10 @@
       {
         "path": "src/championship/text/uiText.vi.js",
         "sha256": "8d21a16b3fd779788e8dde17a55e2f290aa8c06f2fcd9f9dc042af74bd61233d"
+      },
+      {
+        "path": "src/championship/text/waveRunText.js",
+        "sha256": "a662f53b82fb855ae8116b895e070972ce185496c845fc427b192c1fd1ddbf8d"
       },
       {
         "path": "src/championship/text/weeklyScheduleText.js",

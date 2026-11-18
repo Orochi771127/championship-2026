@@ -801,6 +801,13 @@
         "state": "VERIFIED_LIVE",
         "acceptance": "the Journey's purse, patrol pod, star rules and sparring rules read at a glance; sentences become accessible names or sit behind a ? key",
         "evidence": "branch feat/journey-glance-20261118: crystal emblem purse, patrol pod as icon + crystal gauge + rate tag, three star chips, sparring rules behind a ? key; tests/championship-journey-glance-cases.mjs; headless Chromium from the normal entry: visible text on the sparring tab 113 to 73 characters, feed tab 102 to 84, tower 156 to 138; no page error; full suite 3,966 / 3,966, build and validate exit 0; PR #295 c1513197, 5 of 6 checks green, the red one the external character delivery 404 (see tests.ci); live pages-build commit c1513197 (build 82ee0dc1)"
+      },
+      {
+        "id": "WAVE_RUN",
+        "source": "Owner 2026-11-18 wave run spec (WAVE_RUN_20261118); leave/continue only in the challenge",
+        "state": "VERIFIED_LOCAL",
+        "acceptance": "story and challenge are runs of waves over the existing auto battle; drops on the field picked by a tap or the magnet talent through one authority; the challenge rests after each won wave with 帶著戰利品離場 / 繼續挑戰; story nodes never take the win branch on a technical failure",
+        "evidence": "branch feat/wave-run-20261118: productWaveRun.js (rules, stable drop ids, settle once), app controller (startWaveRun/prepareWaveBattle/enterWaveBattle/collectWaveDrop/continueWaveRun/finishWaveRun, progression.waveRun checkpoint, contract WAVE_RUN_20261118 supersedes the save pin), waveRunField.js (chip, drops at the beaten foe, rest panel, banner), Journey 故事模式/挑戰模式 tabs, magnet node trader.magnet, story director retry/back; Codex art art:ui:wave-run:r1 (7) + trader.magnet icon; tests wave-run (6), wave-run-app (5), wave-run-field (5), story-vn; full suite 3,994 / 3,994; build and validate exit 0; headless Chrome from the normal entry at 390x844 and 360x640: challenge wave 1 -> drag never picks, tap picks -> 繼續挑戰 -> 第 2 波 banner -> wave 2 -> leave warns then leaves -> Journey 挑戰模式, wallet +12 / +20 exactly, no run left in the save; story Journey 故事模式 -> map chapter 2 (vn1-c1) -> three waves (third 頭目), only a forward key, picks paid at once, back on the ranch, chapter clear with its first-clear reward; no page error"
       }
     ],
     "decisionsForOwner": [

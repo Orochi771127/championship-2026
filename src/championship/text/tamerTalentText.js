@@ -82,6 +82,7 @@ const ROWS = {
   'trader.belt': ['補給帶', 'Supply Belt', '補給ベルト', 'เข็มขัดเสบียง', 'Đai tiếp tế'],
   'trader.scavenge': ['拾荒', 'Scavenge', '拾い物', 'เก็บของ', 'Nhặt nhạnh'],
   'trader.appraisal': ['鑑價', 'Appraisal', '鑑定', 'ตีราคา', 'Định giá'],
+  'trader.magnet': ['磁吸', 'Magnet', 'マグネット', 'แม่เหล็ก', 'Nam châm'],
   'trader.bountyHunter': ['賞金獵人', 'Bounty Hunter', '賞金稼ぎ', 'นักล่าเงินรางวัล', 'Thợ săn tiền thưởng'],
   'trader.peddler': ['行商', 'Peddler', '行商', 'พ่อค้าเร่', 'Hàng rong'],
   // What an effect key counts, for "+8 G 記憶卡".
@@ -116,6 +117,7 @@ const ROWS = {
   // T4 (TAMER_TALENTS_T4_20261118)
   'key.shopBitsPercent': ['{value}% 商店金幣價格', '{value}% shop Bits prices', 'ショップ価格 {value}%', 'ราคาร้าน {value}%', 'Giá cửa hàng {value}%'],
   'key.scavengePercent': ['狩獵後 {amount}% 撿到補品', '{amount}% tonic after a hunt', '狩りの後 {amount}% でサプリ', '{amount}% ได้ของบำรุงหลังล่า', '{amount}% nhặt thuốc bổ sau săn'],
+  'key.dropMagnet': ['掉落物自動飛進袋子', 'Drops fly to your bag', 'ドロップが袋へ飛ぶ', 'ของดรอปบินเข้ากระเป๋า', 'Đồ rơi tự bay vào túi'],
   'key.strollBitsPercent': ['{value}% 散步金幣', '{value}% stroll Bits', '散歩コイン {value}%', 'เหรียญเดินเล่น {value}%', 'Xu đi dạo {value}%'],
   'key.strollExtraPercent': ['散步 {amount}% 多帶 1 個', '{amount}% one more from a stroll', '散歩で {amount}% もう 1 個', '{amount}% ได้เพิ่ม 1 จากเดินเล่น', '{amount}% thêm 1 khi đi dạo'],
   // T5 (TAMER_TALENTS_T5_20261118)

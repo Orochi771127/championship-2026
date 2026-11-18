@@ -135,7 +135,11 @@ export function createJourneyScreen(host) {
   }
 
   function paintTabs() {
-    const entries = [["TOWER", t("tower")], ["FEED", t("feed")], ["ZONES", t("zones")]];
+    // WAVE_RUN_20261118: the two wave modes lead the row; the tower, crystals, zones and sparring stay as they were.
+    const entries = [];
+    if (host.wave && typeof host.openStory === "function") entries.push(["STORY", host.wave.text("mode.story")]);
+    if (host.wave) entries.push(["CHALLENGE", host.wave.text("mode.challenge")]);
+    entries.push(["TOWER", t("tower")], ["FEED", t("feed")], ["ZONES", t("zones")]);
     if (host.practice) entries.push(["PRACTICE", host.practice.text("practice.tab")]);
     tabs.replaceChildren(...entries.map(([id, label]) => {
       const key = button("cm-journey__tab", label, () => { tab = id; paint(); });
@@ -478,6 +482,74 @@ export function createJourneyScreen(host) {
     body.replaceChildren(panel);
   }
 
+  // ---- WAVE_RUN_20261118: 故事模式 and 挑戰模式 ----
+  const waveArt = (name, className) => { const node = el("img", className); node.src = `${host.wave.artBase}${name}.webp`; node.alt = ""; node.draggable = false; return node; };
+  function paintStoryMode() {
+    const w = host.wave, panel = el("div", "cm-journey__wave cm-journey__wave--story");
+    const card = el("div", "cm-journey__wave-card");
+    card.append(waveArt("wave-flag", "cm-journey__wave-art"), el("strong", "cm-journey__wave-title", w.text("mode.story")),
+      el("span", "cm-journey__wave-chip", w.text("waveOf", { n: 1, total: 3 })));
+    const open = button("cm-journey__go cm-arcade-key", t("story.open"), () => host.openStory());
+    open.dataset.journeyAction = "story-mode";
+    panel.append(card, open);
+    body.replaceChildren(panel);
+  }
+  function paintChallenge() {
+    const w = host.wave, frame = w.frame(), run = frame?.run?.mode === "CHALLENGE" ? frame.run : null;
+    const panel = el("div", "cm-journey__wave cm-journey__wave--challenge");
+    const card = el("div", "cm-journey__wave-card");
+    card.append(waveArt("threat", "cm-journey__wave-art"), el("strong", "cm-journey__wave-title", w.text("mode.challenge")));
+    if (w.best?.() > 0) card.append(el("span", "cm-journey__wave-chip", w.text("best", { n: w.best() })));
+    panel.append(card);
+    if (run) {
+      // A run saved between waves (a reload or the field's back): its loot, and the same two keys as the rest.
+      const loot = el("div", "cm-journey__wave-loot");
+      loot.append(waveArt("wave-flag", "cm-journey__wave-icon"), el("b", "", w.text("cleared", { n: run.wave })),
+        waveArt("loot-bag", "cm-journey__wave-icon"), el("b", "", String(frame.picked?.bits ?? 0)));
+      const keys = el("div", "cm-journey__wave-keys");
+      const leave = button("cm-journey__key cm-arcade-key", w.text("leave"), () => {
+        const done = w.leave();
+        if (done?.ok) say(`${w.text("over.LEFT")} +${done.finished?.bits ?? 0}`);
+        paint();
+      });
+      leave.dataset.journeyAction = "wave-leave";
+      leave.disabled = busy || run.status !== "REST";
+      const resume = button("cm-journey__go cm-arcade-key", w.text("resume", { n: run.wave + 1 }), () => void startChallenge(null));
+      resume.dataset.journeyAction = "wave-resume";
+      resume.disabled = busy;
+      keys.append(leave, resume);
+      panel.append(loot, keys);
+      body.replaceChildren(panel);
+      return;
+    }
+    panel.append(el("p", "cm-journey__team-title", w.text("team", { n: `${team.length}/3` })));
+    const roster = el("div", "cm-journey__team");
+    for (const entry of candidates.filter((c) => c.admission?.ok)) {
+      const look = host.describe(entry);
+      const chip = button("cm-journey__member", "", () => {
+        team = team.includes(entry.instanceId) ? team.filter((id) => id !== entry.instanceId) : team.length < 3 ? [...team, entry.instanceId] : team;
+        paint();
+      });
+      chip.dataset.instanceId = entry.instanceId;
+      chip.setAttribute("aria-pressed", String(team.includes(entry.instanceId)));
+      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name));
+      roster.append(chip);
+    }
+    const go = button("cm-journey__go cm-arcade-key", w.text("start"), () => void startChallenge([...team]));
+    go.dataset.journeyAction = "wave-start";
+    go.disabled = busy || team.length === 0;
+    panel.append(roster, go);
+    body.replaceChildren(panel);
+  }
+  async function startChallenge(ids) {
+    if (busy) return;
+    busy = true; paint();
+    try {
+      const result = await host.wave.start(ids);
+      if (result?.ok === false && !disposed) say(result.message ?? result.reason ?? "");
+    } finally { busy = false; if (!disposed) paint(); }
+  }
+
   async function startPractice(partnerId) {
     if (busy) return;
     const p = host.practice;
@@ -497,6 +569,8 @@ export function createJourneyScreen(host) {
     if (tab === "TOWER") paintTower();
     else if (tab === "FEED") paintFeed();
     else if (tab === "PRACTICE" && host.practice) paintPractice();
+    else if (tab === "STORY" && host.wave) paintStoryMode();
+    else if (tab === "CHALLENGE" && host.wave) paintChallenge();
     else paintZones();
   }
 

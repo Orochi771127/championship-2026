@@ -240,15 +240,28 @@ test("a chapter plays to its clear card, claims once, and shows the partner sign
   assert.ok(f.calls.some(c => c[0] === "stage-dispose") && f.calls.some(c => c[0] === "theater-dispose"));
 });
 
-test("a lost battle takes the lose branch; a battle that cannot start carries on as a win", async () => {
+test("a lost battle takes the lose branch; a battle that cannot start is retried or left, never a win", async () => {
   const lost = fakes();
   await createStoryVnDirector({ doc: {}, host: {}, ...lost, runBattle: async () => ({ ok: true, won: false }) }).play("vn1-c1", { partner: "小紅", partnerSpecies: 21 });
   assert.ok(lost.calls.some(c => c[0] === "say" && c[2] === "沒關係！輸掉的是這一場，不是我們。"));
-  const refused = fakes();
-  const result = await createStoryVnDirector({ doc: {}, host: {}, ...refused, runBattle: async () => ({ ok: false, reason: "TEAM_REQUIRED" }) }).play("vn1-c1", { partner: "小紅", partnerSpecies: 21 });
-  assert.ok(refused.calls.some(c => c[0] === "toast" && c[1] === "現在無法開始對戰，劇情直接往下走。"));
+  // WAVE_RUN_20261118: a technical failure asks retry / back; a retry that wins takes the win branch.
+  let asked = 0; const retried = fakes({ choose: options => { if (options.join() === "重試,返回") asked++; return 0; } });
+  let tries = 0; const requests = [];
+  const again = await createStoryVnDirector({ doc: {}, host: {}, ...retried, claim: async () => ({ granted: 6 }),
+    runBattle: async request => { requests.push(request.encounterId); return ++tries === 1 ? { ok: false, reason: "BATTLE_NOT_READY" } : { ok: true, won: true }; } }).play("vn1-c1", { partner: "小紅", partnerSpecies: 21 });
+  assert.equal(again.outcome, "completed");
+  assert.deepEqual(requests, ["vn1-c1:491", "vn1-c1:491"], "the retry asks for the same encounter");
+  assert.equal(asked, 1, "retry / back was asked once");
+  assert.deepEqual(again.battles, [{ presets: [491], played: true, won: true }]);
+  // Back: the chapter ends with no clear and no first-clear claim, and the win line is never said.
+  const refused = fakes({ choose: options => options.join() === "重試,返回" ? 1 : 0 }); let claims = 0, abandoned = 0;
+  const result = await createStoryVnDirector({ doc: {}, host: {}, ...refused, claim: async () => { claims++; return { granted: 6 }; },
+    runBattle: async () => ({ ok: false, reason: "TEAM_REQUIRED", abandon: () => { abandoned++; } }) }).play("vn1-c1", { partner: "小紅", partnerSpecies: 21 });
+  assert.equal(result.outcome, "aborted");
+  assert.equal(claims, 0);
+  assert.equal(abandoned, 1, "the host closes the run");
   assert.deepEqual(result.battles, [{ presets: [491], played: false, won: null }]);
-  assert.ok(refused.calls.some(c => c[0] === "say" && c[2] === "……不錯嘛。下次我可不會讓。"));
+  assert.ok(!refused.calls.some(c => c[0] === "say" && c[2] === "……不錯嘛。下次我可不會讓。"), "never the win branch");
 });
 
 test("overwritten name plates speak as 【參賽者】 until restored, and choices take their branch", async () => {

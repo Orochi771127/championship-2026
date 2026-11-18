@@ -88,14 +88,27 @@ export function createStoryVnDirector({
       await until(theater.battleBanner({ title: t(beat.titleKey), go: t("VN_BATTLE_GO") }));
       guard();
       let result = null;
-      if (typeof runBattle === "function") {
+      // A host with no battle at all (a preview) reads the beat as before; the game always has one.
+      if (typeof runBattle !== "function") { battles.push({ presets: [...beat.presets], played: false, won: null }); return beat.win; }
+      // WAVE_RUN_20261118: the node is a run of waves (encounterId names it so a retry resumes the same run). A battle
+      // that could not start or was left is never a win: retry it, or go back (the chapter ends with no clear and no
+      // first-clear reward). Only a fought win or loss takes its authored branch.
+      for (;;) {
         theater.setHidden(true);
-        try { result = await until(runBattle({ presetIndices: beat.presets, signal: life.signal })); }
+        try { result = await until(runBattle({ presetIndices: beat.presets, encounterId: `${chapterId}:${beat.presets.join("-")}`, signal: life.signal })); }
         catch (error) { if (error?.name === "AbortError") throw error; result = null; }
         finally { if (!life.signal.aborted) theater.setHidden(false); }
+        guard();
+        if (result?.ok) break;
+        const option = await until(theater.choose({ prompt: t("VN_BATTLE_FAILED"), options: [t("VN_BATTLE_RETRY"), t("VN_BATTLE_BACK")] }));
+        guard();
+        if (option !== 0) {
+          battles.push({ presets: [...beat.presets], played: false, won: null });
+          try { result?.abandon?.(); } catch { /* the run is closed by the host either way */ }
+          life.abort();
+          guard();
+        }
       }
-      guard();
-      if (!result?.ok) { await until(theater.toast(t("VN_BATTLE_REFUSED"))); battles.push({ presets: [...beat.presets], played: false, won: null }); return beat.win; }
       battles.push({ presets: [...beat.presets], played: true, won: Boolean(result.won) });
       await until(theater.toast(t(result.won ? "VN_BATTLE_WON" : "VN_BATTLE_LOST"), 1200));
       return result.won ? beat.win : beat.lose;

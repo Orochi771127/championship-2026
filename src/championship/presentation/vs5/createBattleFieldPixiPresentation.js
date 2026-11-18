@@ -333,6 +333,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   let pendingDtMs = 0;
   let layoutDtMs = 0;
   const motionEvents = [];
+  let lastStandProjection = null;
   let lastCamera = null;
   // HUD-aware camera (Owner 2026-11-03): the screen pixels the floating HUD
   // rows cover, read from the DOM view on each draw. Fighters stay between them.
@@ -723,6 +724,9 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       anchor:{x:anchorLocalX,y:anchorLocalY},box:camera.clampBox??(focus ? camera.focusBox ?? camera.framingBox : camera.framingBox)??null,insets,canvas:canvasRect}) : composed;
     world.scale.set(transform.zoom);
     world.position.set(transform.x,transform.y);
+    // WAVE_RUN_20261118: where a stand point sits on screen this frame (the drop layer lays its coins there).
+    lastStandProjection = {art:{x:artRect.x,y:artRect.y,width:artRect.width,height:artRect.height},zoom:transform.zoom,x:transform.x,y:transform.y,
+      viewport:{width:rect.width,height:rect.height}};
     // The hit-feel filter covers the screen through this frame's camera.
     hitFeel?.frame({zoom:transform.zoom,x:transform.x,y:transform.y});
     lastCamera = fxLayer ? {...camera, total:transform.zoom} : null;
@@ -820,6 +824,12 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     consumeVfxCues:()=>fxLayer?.consumeCues?.() ?? [],
     /** True while the dynamic layer draws a pixel hit burst at every contact (SPECIAL_HEX_DECLUTTER_20261111). */
     pixelHitsOwnSparks:()=>Boolean(fxLayer?.ownsHitSparks?.()),
+    /** WAVE_RUN_20261118: a combatant's stand point ({x,y} in 0..1 of the arena) in canvas pixels this frame, or null. */
+    projectStand(stand){
+      const p=lastStandProjection;
+      if(!p||!Number.isFinite(stand?.x)||!Number.isFinite(stand?.y))return null;
+      return {x:p.zoom*(p.art.x+stand.x*p.art.width)+p.x,y:p.zoom*(p.art.y+stand.y*p.art.height)+p.y,viewport:p.viewport};
+    },
 
     getDiagnostics() {
       return Object.freeze({
