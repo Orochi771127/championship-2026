@@ -113,7 +113,9 @@ test('default selection: GR16 seated sleep and GR18 Bound8 ship in the public ma
   assert.equal(sha(entry.path),entry.sha256);assert.equal(sha(entry.authoringPath),entry.authoringSha256);
   assert.ok(entry.authoringPath.endsWith(`animation.web-v${code==='GR16'?4:3}-20261101.json`));
   const pub=readJson(entry.path),aut=readJson(entry.authoringPath),frames=Object.fromEntries(pub.frames.map(f=>[f.id,f]));
-  assert.equal(pub.frames.length,Object.keys(aut.frames).length);assert.equal(pub.clips.length,aut.clips.length);
+  // 2026-11-18 Growth Data Arena fill: its frames/clips (ids with -af-/-af:) live only in the public manifest.
+  const af=x=>/-af[-:]/.test(String(x.id));
+  assert.equal(pub.frames.filter(f=>!af(f)).length,Object.keys(aut.frames).length);assert.equal(pub.clips.filter(c=>!af(c)).length,aut.clips.length);
   const clips=pub.clips.filter(c=>String(c.id).startsWith('handoff:')||c.id==='main:13');
   // the added clips/frames carry no source metadata in the public payload (it stays in the authoring web-v3)
   assert.ok(!('handoff'in pub)&&!('handoff20261101'in pub)&&clips.every(c=>!('source'in c)),code);
