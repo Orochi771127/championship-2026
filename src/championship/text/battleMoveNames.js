@@ -15,10 +15,8 @@ const LOCALE_COLUMN = Object.freeze({ "zh-Hant": 0, en: 1, ja: 2, th: 3, vi: 4 }
 
 // Playable original characters' moves (records 596+) carry their own five names in
 // product-species-originals.r1.json.
-// The Data Arena's moves (records 623+, UNIFIED_MOVES_20261118) keep the arena's own names.
 export const BATTLE_MOVE_NAMES = Object.freeze({
   ...productOriginalMoveNames(),
-  ...productArenaMoveNames(),
   31: ["鈴芽頭槌", "Chime Headbutt", "鈴芽ずつき", "โขกหัวกระดิ่ง", "Húc Đầu Chuông"],
   32: ["清鈴波動", "Chime Wave", "清鈴ウェーブ", "คลื่นกระดิ่งใส", "Sóng Chuông Trong"],
   33: ["焰角頂", "Ember Butt", "焔角ツキ", "ขวิดเขาไฟ", "Húc Sừng Lửa"],
@@ -588,8 +586,11 @@ export const BATTLE_MOVE_NAMES = Object.freeze({
 for (const entry of Object.values(BATTLE_MOVE_NAMES)) Object.freeze(entry);
 
 /** The approved name of a species move in the current locale, or null. */
+// productArenaMoveNames: the Data Arena's moves learned for the auto battle (records 623+, UNIFIED_MOVES_20261118).
+const ARENA_MOVE_NAMES = productArenaMoveNames();
 export function battleMoveName(moveId) {
   const entry = BATTLE_MOVE_NAMES[moveId];
+  if (!entry && ARENA_MOVE_NAMES[moveId]) return ARENA_MOVE_NAMES[moveId][LOCALE_COLUMN[getLocale()] ?? 0] ?? ARENA_MOVE_NAMES[moveId][0];
   if (!entry) return null;
   return entry[LOCALE_COLUMN[getLocale()] ?? 0] ?? entry[0];
 }

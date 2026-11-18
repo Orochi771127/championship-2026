@@ -1251,6 +1251,8 @@ export const TEXT_VI = Object.freeze({
   "智力": "Tình báo",
   "速度": "tốc độ",
   "勝率": "Tỷ lệ thắng",
+  "競技招式": "Chiêu đấu trường",
+  "不帶": "Không",
   "特殊技能Ⅰ": "Kỹ năng đặc biệt Ⅰ",
   "特殊技能Ⅱ": "Kỹ năng đặc biệt Ⅱ",
   "戰鬥次數": "Số trận chiến",

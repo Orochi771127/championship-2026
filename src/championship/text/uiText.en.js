@@ -1083,6 +1083,8 @@ export const TEXT_EN = Object.freeze({
   "防禦": "Defense",
   "智力": "Wisdom",
   "速度": "Speed",
+  "競技招式": "Arena move",
+  "不帶": "None",
   "特殊技能Ⅰ": "Special skill I",
   "特殊技能Ⅱ": "Special skill II",
   "戰鬥次數": "Battles",

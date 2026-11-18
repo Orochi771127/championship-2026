@@ -9,6 +9,7 @@
 // native fields, so a learned arena move never travels there.
 import battleMoves from "../../data/championship/catalogs/battle-moves.r1.json" with { type: "json" };
 import table from "../../data/championship/product-arena-moves.v1.json" with { type: "json" };
+import nameTable from "../../data/championship/product-arena-move-names.v1.json" with { type: "json" };
 import { deepFreeze } from "./championshipContracts.js";
 
 // The arena element a record wears in the battle's look (its donor's banks would give the donor's colour).
@@ -22,8 +23,8 @@ for (const e of table.entries) {
     productDonorRecord: e.donorMoveRecord, productArenaMove: e.id, productLookElement: LOOK_ELEMENT[e.element] ?? "NEUTRAL" }));
   recordOfMove.set(e.id, e.recordIndex);
   moveOfRecord.set(e.recordIndex, e.id);
-  // [zh-Hant, en, ja, th, vi]: the arena names its moves in Chinese and English; the other columns read the English
-  namesById.set(e.recordIndex, Object.freeze([e.names[0], e.names[1], e.names[1], e.names[1], e.names[1]]));
+  // [zh-Hant, en, ja, th, vi] (product-arena-move-names.v1.json)
+  namesById.set(e.recordIndex, Object.freeze([...(nameTable.names[e.id] ?? [e.names[0], e.names[1], e.names[1], e.names[1], e.names[1]])]));
 }
 
 export const PRODUCT_ARENA_MOVE_FIRST_RECORD = table.firstRecordIndex;

@@ -277,7 +277,7 @@ export function appendArenaMoveLearning(detail, entry, arenaMoves, rerender) {
   const group = element("div", "cm-digimon-stat cm-arena-learn");
   group.dataset.row = "arena-move";
   group.dataset.group = "skill";
-  const term = element("dt", "cm-digimon-detail__label", "競技招式");
+  const term = element("dt", "cm-digimon-detail__label", uiText("競技招式"));
   term.setAttribute("data-row", "arena-move");
   const cell = element("dd", "cm-digimon-detail__value cm-arena-learn__choices");
   const choice = (moveId) => {
@@ -287,7 +287,7 @@ export function appendArenaMoveLearning(detail, entry, arenaMoves, rerender) {
     button.setAttribute("aria-pressed", String((info.learned ?? null) === moveId));
     const icon = moveId ? moveIcon(arenaMoveRecordIndex(moveId), "cm-move-icon") : null;
     if (icon) button.append(icon);
-    button.append(element("span", "cm-arena-learn__name", moveId ? battleMoveName(arenaMoveRecordIndex(moveId)) ?? moveId : "不帶", false));
+    button.append(element("span", "cm-arena-learn__name", moveId ? battleMoveName(arenaMoveRecordIndex(moveId)) ?? moveId : uiText("不帶"), false));
     button.addEventListener("click", () => { const result = arenaMoves.learn(entry.instanceId, moveId); if (result?.ok) rerender(); });
     return button;
   };
