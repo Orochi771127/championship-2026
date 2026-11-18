@@ -10,6 +10,10 @@ import {taxonomyBadgeRow} from '../presentation/taxonomyBadgeArt.js';
 import {elementChartButton} from './elementChartModal.js';
 import {isKnownSpeciesIndex,productPartnerG} from '../contracts/productSpeciesData.js';
 import { createActionPortrait } from "../presentation/juicy/actionPortrait.js";
+import { starEmblem, starPips, starMeter, starLevelGauge } from "../presentation/starEmblemArt.js";
+import { playCeremony } from "../presentation/ceremony/ceremonyRunner.js";
+import { buildStarUp } from "../presentation/ceremony/ceremonyScenes.js";
+import { requestArcadeFx } from "./ui/arcadeFx.js";
 import {battleStyleOf,isSpecialSkillId,SPECIAL_SKILL_GLYPHS} from '../contracts/productBattleStyle.js';
 import {battleStyleText,specialSkillEffect} from '../text/battleStyleText.js';
 import {battleGlyph,STYLE_GLYPHS} from './battleGlyphs.js';
@@ -521,6 +525,34 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
   fuse.type = "button";
   fuse.dataset.control = "fusion_button";
   controls.append(fuse);
+  // ROADMAP_R3_20261118: the partner's stars, its level against the cap they give, and the star meter -- drawn
+  // (presentation/starEmblemArt.js), not written. The words stay as the strip's accessible name.
+  const starLine = element("div", "cm-digimon-star", "", false);
+  starLine.hidden = true;
+  starLine.setAttribute("role", "img");
+  controls.append(starLine); // a row of its own under the keys; the shell's wide grid has no cell to spare
+  const starText = (sync) => [uiText("STAR_LINE", { star: sync.star, level: sync.level, cap: sync.cap }),
+    sync.starNeed > 0 ? uiText("STAR_METER", { points: sync.starPoints, need: sync.starNeed }) : uiText("STAR_FULL")].join(" · ");
+  const fusionStarText = (stars) => !stars ? null : stars.gained > 0 ? uiText("FUSION_STAR_UP", { before: stars.before.star, after: stars.after.star })
+    : stars.points > 0 && stars.after.need > 0 ? uiText("STAR_METER", { points: stars.after.points, need: stars.after.need }) : null;
+  const meterGroup = (points, need, preview = 0) => {
+    const group = element("span", "cm-digimon-star__next", "", false);
+    group.append(starEmblem({ on: !(need > 0), size: 14 }), starMeter({ points, need, preview }),
+      element("b", "", need > 0 ? `${Math.min(need, points + preview)}/${need}` : uiText("STAR_FULL"), false));
+    return group;
+  };
+  /** Draw the strip for `sync`; `gained` stars stamp in (after a fusion that raised them). */
+  function paintStarStrip(sync, { gained = 0 } = {}) {
+    const key = [sync.star, sync.level, sync.cap, sync.starPoints, sync.starNeed, sync.capped].join(":");
+    if (starLine.dataset.key === key && !gained) return;
+    starLine.dataset.key = key;
+    starLine.dataset.star = String(sync.star);
+    starLine.dataset.capped = String(Boolean(sync.capped));
+    starLine.setAttribute("aria-label", starText(sync));
+    starLine.title = sync.capped ? uiText("FUSION_CAPPED") : "";
+    starLine.replaceChildren(starPips({ star: sync.star, gained, size: 20 }),
+      starLevelGauge({ level: sync.level, cap: sync.cap, capped: sync.capped }), meterGroup(sync.starPoints, sync.starNeed));
+  }
   // Say why two of the three stay grey instead of leaving a silent row.
   const controlsNote = element("p", "cm-digimon-controls-note", "移除與報名尚未開放。");
 
@@ -568,6 +600,10 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
   fusionPanel.hidden = true;
   const fusionTitle = element("p", "cm-digimon-rename__label", "", false);
   const fusionList = element("div", "cm-digimon-fusion__list");
+  // R3: what the fusion would give, drawn: stars to be gained blink, the meter shows the striped part ahead.
+  const fusionViz = element("div", "cm-digimon-fusion__viz", "", false);
+  fusionViz.hidden = true;
+  fusionViz.setAttribute("aria-hidden", "true");
   const fusionPreview = element("p", "cm-digimon-fusion__preview", "", false);
   fusionPreview.setAttribute("role", "status");
   const fusionActions = element("div", "cm-digimon-rename__actions");
@@ -576,10 +612,11 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
   const fusionConfirm = element("button", "cm-screen-primary", "CONFIRM FUSE");
   fusionConfirm.type = "button";
   fusionActions.append(fusionCancel, fusionConfirm);
-  fusionPanel.append(fusionTitle, fusionList, fusionPreview, fusionActions);
+  fusionPanel.append(fusionTitle, fusionList, fusionViz, fusionPreview, fusionActions);
   const fusionMessage = element("p", "cm-digimon-rename__message");
   fusionMessage.setAttribute("role", "status");
   let fusionPicked = [];
+  let starCeremony = null, starUpGained = 0;
   const number = (value) => Number(value).toLocaleString("en-US");
   function closeFusion() { fusionPanel.hidden = true; fusionPicked = []; }
   function renderFusion() {
@@ -608,6 +645,7 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
       if (box.checked) for (const warning of fodder.warnings ?? []) {
         const note = element("span", "cm-digimon-fusion__warning", "", false);
         note.textContent = warning.kind === "LEVEL" ? uiText("FUSION_LOSE_LEVEL", { level: warning.level })
+          : warning.kind === "STAR" ? uiText("FUSION_LOSE_STAR", { star: warning.star })
           : uiText(warning.kind === "BURST" ? "FUSION_LOSE_BURST" : "FUSION_LOSE_BLOODLINE");
         row.append(note);
       }
@@ -616,9 +654,19 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     if (!(frame?.fodders ?? []).length) fusionList.append(element("p", "cm-digimon-fusion__empty", "FUSION_NO_FODDER"));
     const preview = entry && fusionPicked.length ? fusion?.preview?.(entry.instanceId, fusionPicked) : null;
     fusionConfirm.disabled = !preview;
+    fusionViz.hidden = !preview?.stars;
+    if (preview?.stars) {
+      const { stars, after } = preview, gained = stars.gained > 0;
+      fusionViz.replaceChildren(starPips({ star: stars.before.star, ghost: stars.gained, size: 20 }),
+        element("span", "cm-digimon-fusion__arrow", "▶", false),
+        starLevelGauge({ level: after.level, cap: after.cap, capped: after.capped }),
+        gained ? meterGroup(0, stars.after.need, stars.after.points) : meterGroup(stars.before.points, stars.before.need, stars.after.points - stars.before.points));
+      fusionViz.dataset.gained = String(stars.gained);
+    }
     fusionPreview.textContent = !preview ? ""
       : [`Lv.${preview.before.level} → Lv.${preview.after.level}`, `+${number(preview.amount)} EXP`,
-        preview.after.next > 0 ? uiText("FUSION_LEFT", { exp: number(preview.after.next - preview.after.exp) }) : null,
+        fusionStarText(preview.stars),
+        preview.after.capped ? uiText("FUSION_CAPPED") : preview.after.next > 0 ? uiText("FUSION_LEFT", { exp: number(preview.after.next - preview.after.exp) }) : null,
         preview.overflow > 0 ? uiText("FUSION_CRYSTALS", { count: number(preview.overflow) }) : null,
         preview.inherit?.length ? uiText("FUSION_INHERIT", { n: number(preview.inherit.length) }) : null].filter(Boolean).join(" · ");
   }
@@ -636,6 +684,9 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     rebirth.dataset.state = onRebirth ? "READY" : "NOT_IMPLEMENTED";
     rebirth.title = onRebirth && !mature ? uiText("只有成熟期的拍檔可以轉生。") : "";
     const fodders = entry && fusion ? fusion.candidates?.(entry.instanceId)?.fodders ?? [] : [];
+    const sync = entry && fusion?.sync ? fusion.sync(entry.instanceId) : null;
+    starLine.hidden = !sync;
+    if (sync) { paintStarStrip(sync, { gained: starUpGained }); starUpGained = 0; }
     fuse.hidden = !fusion;
     fuse.disabled = !fodders.some((fodder) => !fodder.refusal);
     fuse.title = fusion && fuse.disabled ? uiText("FUSION_NO_FODDER") : "";
@@ -658,7 +709,29 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     if (!result?.ok) { fusionMessage.textContent = uiText(result?.reason === "SAVE_FAILED" ? "FUSION_SAVE_FAILED" : result?.reason ?? "FUSION_NO_FODDER"); return; }
     // 傳承: the receipt names what the base took, as the preview did.
     fusionMessage.textContent = `${entry.displayName ?? ""} Lv.${result.gain.before.level} → Lv.${result.gain.after.level} · +${number(result.gain.amount)} EXP`
+      + (fusionStarText(result.gain.stars) ? ` · ${fusionStarText(result.gain.stars)}` : "")
       + (result.inherit?.length ? ` · ${uiText("FUSION_INHERIT", { n: number(result.inherit.length) })}` : "");
+    // R3: the moment it pays off. A star gained is a ceremony (the fusion is already saved); otherwise the strip
+    // flashes with the level-up or sparkle cue.
+    const stars = result.gain.stars, leveled = result.gain.after.level > result.gain.before.level;
+    starUpGained = stars?.gained > 0 ? stars.gained : 0;
+    if (starUpGained > 0) {
+      starCeremony?.dispose();
+      const label = `${entry.displayName ?? ""} ${uiText("FUSION_STAR_UP", { before: stars.before.star, after: stars.after.star })}`;
+      // The roster scrolls, so the moment plays on a layer pinned to the screen, removed when it ends.
+      const stage = element("div", "cm-digimon-starstage", "", false);
+      root.append(stage);
+      starCeremony = playCeremony({ host: stage, kind: "star-up", cue: "medal", label,
+        build: (stage, env) => buildStarUp(stage, env, { kicker: uiText("STAR_UP_KICKER"), title: entry.displayName ?? "",
+          meta: uiText("STAR_UP_META", { star: stars.after.star, cap: result.gain.after.cap }),
+          species: Number.isSafeInteger(entry.identity?.recordIndex) ? entry.identity.recordIndex : null,
+          star: stars.after.star, gained: stars.gained, hint: uiText("輕觸繼續") }),
+        onDone: () => { starCeremony = null; stage.remove(); } });
+    } else {
+      requestArcadeFx(starLine, leveled ? "levelup" : "sparkle");
+      starLine.dataset.flash = "true";
+      setTimeout(() => { delete starLine.dataset.flash; }, 700);
+    }
     if (Array.isArray(result.entries)) {
       entries = result.entries;
       selectedIndex = Math.max(0, entries.findIndex((row) => row.instanceId === entry.instanceId));
@@ -744,6 +817,7 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
       });
     },
     dispose() {
+      starCeremony?.dispose(); starCeremony = null;
       root.replaceChildren();
       root.className = "";
     }

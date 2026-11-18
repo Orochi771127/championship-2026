@@ -41,6 +41,8 @@ export const CEREMONY_TIMING = Object.freeze({
   "hunt-reward": Object.freeze({ tier: "reveal", full: 1400, saver: 700 }),
   medal: Object.freeze({ tier: "moment", full: 2600, saver: 1600 }),
   evolve: Object.freeze({ tier: "moment", full: 2800, saver: 2000 }),
+  // ROADMAP_R3_20261118: a star gained by fusion (the fusion is already saved when this plays).
+  "star-up": Object.freeze({ tier: "moment", full: 2600, saver: 1700 }),
   versus: Object.freeze({ tier: "toast", full: 1300, saver: 900 })
 });
 const REDUCED_MS = 160;

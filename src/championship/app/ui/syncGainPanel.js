@@ -77,6 +77,8 @@ export function buildSyncGainPanel({ gains = [], nameOf = (id) => id, portraitOf
     }
     main.append(head, bar, numbers, up, cards);
     if (gain.overflow > 0) main.append(element("p", "cm-sync-row__overflow", syncText("overflow", { value: gain.overflow.toLocaleString() })));
+    // ROADMAP_R3_20261118: at the cap its stars give, more stars are the way on.
+    if (gain.capped) main.append(element("p", "cm-sync-row__overflow cm-sync-row__capped", syncText("capped", { level: gain.cap })));
     row.append(main);
     node.append(row);
     return { gain, row, lv, fill, numbers, up, cards };

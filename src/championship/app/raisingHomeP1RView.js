@@ -15,6 +15,7 @@ import { prefersReducedMotion } from '../presentation/presentationPreferences.js
 import { playCeremony } from '../presentation/ceremony/ceremonyRunner.js';
 import { buildEvolve } from '../presentation/ceremony/ceremonyScenes.js';
 import { taxonomyGlyph, TAXONOMY_COLORS } from '../presentation/taxonomyBadgeArt.js';
+import { starEmblem } from '../presentation/starEmblemArt.js';
 import { taxonomyText } from '../text/taxonomyText.js';
 // INT-RH2 — Codex-owned P1R DOM presentation.
 //
@@ -201,9 +202,11 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   const crowdedChip = node('span', 'int-rh2-companion__crowded', uiText('籠舍太擠，暫時無法進化')); crowdedChip.hidden = true;
   crowdedChip.title = uiText('這個籠舍的夥伴總量超過目前馴獸師階級的容量。把一些夥伴移到別的籠舍，或提升階級後就能進化。');
   const placeRow = node('span', 'int-rh2-companion__place-row');
+  // ROADMAP_R3_20261118: the partner's stars as a small emblem and a count beside its place.
+  const starsChip = node('span', 'int-rh2-companion__stars'); starsChip.hidden = true;
   // ROADMAP_R2_20261118: ready to evolve, but its Sync Level is under the stage's gate.
   const levelChip = node('span', 'int-rh2-companion__crowded int-rh2-companion__evolve-level'); levelChip.hidden = true;
-  placeRow.append(placeChip, moodChip, habitatChip, levelChip, crowdedChip);
+  placeRow.append(placeChip, starsChip, moodChip, habitatChip, levelChip, crowdedChip);
   const more = node("span", "int-rh2-companion__more", "詳細");
   more.setAttribute("aria-hidden", "true");
 
@@ -559,6 +562,13 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     writeHidden(moodChip, !partner);
     writeHidden(habitatChip, !partner?.raceHabitat);
     writeHidden(crowdedChip, !partner?.crowded);
+    writeHidden(starsChip, !partner?.star);
+    if (partner?.star && starsChip.dataset.star !== String(partner.star)) {
+      starsChip.dataset.star = String(partner.star);
+      const count = node('b', 'int-rh2-companion__stars-count', String(partner.star));
+      starsChip.replaceChildren(starEmblem({ on: true, size: 16 }), count);
+      starsChip.setAttribute('aria-label', `★${partner.star}`);
+    }
     writeHidden(levelChip, !partner?.evolveLevel);
     if (partner?.evolveLevel && levelChip.dataset.need !== `${partner.evolveLevel.need}:${partner.evolveLevel.level}`) {
       levelChip.dataset.need = `${partner.evolveLevel.need}:${partner.evolveLevel.level}`;

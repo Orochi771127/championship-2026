@@ -3,6 +3,7 @@
 // and every image is an existing registered asset handed in by the caller.
 import { createActionPortrait, ACTION_PORTRAIT_SEQUENCES } from "../juicy/actionPortrait.js";
 import { appendCeremonySparks, ceremonyNode } from "./ceremonyRunner.js";
+import { starPips } from "../starEmblemArt.js";
 
 const sparkCount = (env, full) => (env.motion === "full" ? full : 0);
 
@@ -96,6 +97,24 @@ export function buildEvolve(stage, env, { kicker, title, meta, portrait = null, 
     art.append(image);
   }
   root.append(art, plate(doc, { kicker, title, meta }));
+  stage.append(root);
+  if (hint) stage.append(ceremonyNode(doc, "span", "cm-cer-hint", hint));
+}
+
+/** 升星: the partner cheers on the rays while each star it gained is stamped into the row of five. */
+export function buildStarUp(stage, env, { kicker, title, meta, species = null, star = 1, gained = 1, hint }) {
+  const doc = stage.ownerDocument;
+  const root = ceremonyNode(doc, "div", "cm-cer-evolve cm-cer-starup");
+  const art = ceremonyNode(doc, "div", "cm-cer-evolve__stage");
+  art.append(ceremonyNode(doc, "span", "cm-cer-rays"));
+  rings(doc, art, 2);
+  appendCeremonySparks(doc, art, sparkCount(env, 16));
+  const body = species !== null && species !== undefined ? createActionPortrait({ doc, species, width: 168, height: 152, sequence: ACTION_PORTRAIT_SEQUENCES.cheer,
+    reducedMotion: Boolean(env?.reducedMotion), className: "cm-cer-evolve__art cm-cer-evolve__body", lazy: false }) : null;
+  if (body) art.append(body.element);
+  const row = ceremonyNode(doc, "div", "cm-cer-starup__stars");
+  row.append(starPips({ doc, star, gained, size: 34, burst: true }));
+  root.append(art, row, plate(doc, { kicker, title, meta }));
   stage.append(root);
   if (hint) stage.append(ceremonyNode(doc, "span", "cm-cer-hint", hint));
 }

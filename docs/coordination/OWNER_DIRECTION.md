@@ -1,5 +1,33 @@
 # Championship Owner Direction
 
+<!-- record-id: MECHANICS_AS_GAME_NOT_TEXT_20261118 -->
+## 2026-11-18 — New mechanics are shown as game art and motion, never as text
+
+Owner: 「你能不能直接把它做成遊戲的樣子啊？就是有美術的美術圖可以cli跟Codex講，然後要有遊戲的那種動態效果，而不是把這些機制變成一個好像文字遊戲或者是Word檔，都是一些字而已，我要的是把這些機制融入現在的遊戲變成一款完成度高的網頁遊戲，交由你自由發揮，但是風格畫風要一致」
+
+Standing direction for the roadmap and after:
+
+- Every new mechanic ships with an emblem or icon, a meter or pips that move, and a moment when it pays off (ceremony, flash, cue), in the screens players already use. A sentence is at most a label or an accessible name.
+- Art beyond what code draws is requested from Codex by CLI, in the game's own arcade sticker style, and enters through the art production record like any other bundle.
+- Applies to R3 as first shipped this way, and R1, R1b and R2 are to be brought up to it.
+
+First use: partner stars (`art:ui:tamer-emblems:r1`, the star-up ceremony).
+
+<!-- record-id: ROADMAP_R3_PARTNER_STARS_20261118 -->
+## 2026-11-18 — Roadmap R3: partner stars
+
+Owner: 「你覺得現在這個遊戲要不要再加上星級的系統，同一隻合成的時候有機會提升一顆星的等級，最高是五星，加入這個會好玩嗎？」, with the whole roadmap handed to Claude.
+
+`OWNER_APPROVED_ADAPTATION`, decided by Claude under that hand-over:
+
+- Built as a meter, not a chance. Fusing a partner of the base's own species fills the base's star meter (a better grade fills more); a full meter is one more star, up to five.
+- Every star lifts the Sync Level cap by ten: one star Lv.10, five stars Lv.50. What a partner cannot take at its cap becomes crystals, which now feed the tamer.
+- A lower stage of the base's own line fills a little, because some 成熟期 forms are in no hunt gate.
+- Stars are never in the gachapon.
+- A save from before stars loses no level: it reads with the stars that level needs.
+
+Contract: `docs/contracts/championship/SYNC_LEVEL_20261109.json` (`rules.stars`).
+
 <!-- record-id: ROADMAP_R2_EVOLUTION_LEVEL_GATE_20261118 -->
 ## 2026-11-18 — Roadmap R2: evolution also asks for a level
 

@@ -24,18 +24,19 @@ test('the level curve is the brief\'s 80 x lv^1.35', () => {
 test('a missing or broken record reads as Lv.1 with no EXP', () => {
   assert.deepEqual(normalizeSyncLevels(null), { version: 1, partners: {}, crystals: 0 });
   const odd = normalizeSyncLevels({ version: 1, partners: { a: { level: 99, exp: 5 }, b: { level: 3, exp: 1e12 }, '': { level: 4 } }, crystals: -4 });
-  assert.deepEqual(odd.partners.a, { level: 50, exp: 0, rebirths: 0 });
+  assert.deepEqual(odd.partners.a, { level: 50, exp: 0, rebirths: 0, star: 5 }); // R3: a record from before stars gets the stars its level needs
   assert.equal(odd.partners.b.exp, syncExpRequired(3) - 1);
   assert.equal(odd.partners[''], undefined);
   assert.equal(odd.crystals, 0);
-  assert.deepEqual(syncOf(null, 'x'), { level: 1, exp: 0, next: 80 });
+  assert.deepEqual(syncOf(null, 'x'), { level: 1, exp: 0, next: 80, star: 1, starPoints: 0, starNeed: 6, cap: 10, capped: false });
 });
 
 test('EXP levels a partner up through several levels and names the breakthroughs it crossed', () => {
   let need = 0;
   for (let lv = 1; lv < 11; lv++) need += syncExpRequired(lv);
-  const { state, gain } = grantSyncExp(null, 'p1', need + 7);
-  assert.deepEqual(state.partners.p1, { level: 11, exp: 7, rebirths: 0 });
+  // R3: two stars, so the cap (Lv.20) is above this climb
+  const { state, gain } = grantSyncExp({ version: 1, partners: { p1: { level: 1, exp: 0, star: 2 } }, crystals: 0 }, 'p1', need + 7);
+  assert.deepEqual(state.partners.p1, { level: 11, exp: 7, rebirths: 0, star: 2 });
   assert.equal(gain.before.level, 1);
   assert.equal(gain.after.level, 11);
   assert.deepEqual(gain.breakthroughs, ['STRIKE']);
@@ -59,8 +60,8 @@ test('a rebirth keeps 30 % of the level once; evolution (no rebirth) keeps all o
   const base = normalizeSyncLevels({ version: 1, partners: { p: { level: 40, exp: 900 } } });
   assert.equal(reconcileSyncRebirth(base, 'p', 0).partners.p.level, 40);
   const reborn = reconcileSyncRebirth(base, 'p', 1);
-  assert.deepEqual(reborn.partners.p, { level: 12, exp: 0, rebirths: 1 });
-  assert.deepEqual(reconcileSyncRebirth(reborn, 'p', 1).partners.p, { level: 12, exp: 0, rebirths: 1 });
+  assert.deepEqual(reborn.partners.p, { level: 12, exp: 0, rebirths: 1, star: 4 });
+  assert.deepEqual(reconcileSyncRebirth(reborn, 'p', 1).partners.p, { level: 12, exp: 0, rebirths: 1, star: 4 });
   assert.deepEqual(reconcileSyncRebirth(normalizeSyncLevels(null), 'new', 2).partners.new, { level: 1, exp: 0, rebirths: 2 });
 });
 
