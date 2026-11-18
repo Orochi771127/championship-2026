@@ -677,6 +677,16 @@
         "id": "PRESENTATION_RETROFIT_R1_R2",
         "state": "VERIFIED_LIVE",
         "evidence": "branch feat/presentation-retrofit-20261118: Journey pour station (badge, gauge, purse, flying crystals, level-up cue, unlock toast), padlock stickers on shop, gate, talent and rank locks, evolve-ready emblem and level gauge on the ranch card and the gachapon picker; bundle art:ui:tamer-emblems:r1 now 8 files; tests/championship-tamer-emblems-cases.mjs; full suite 3,960 / 3,960, build and validate exit 0; headless Chromium from the normal entry with the friends playtest off: one pour at Lv.4 flew 8 crystals, showed the toast for rank 1 and left Lv.5 with 4,757 crystals saved; the locked gate line and the shop chips carried the padlock image; the ranch chip showed the evolve-ready image and Lv.9/10; no page error; PR #293 873734ab, 11 of 12 checks green, the red one external (see tests.ci); live pages-build commit 873734ab (build 28a89b8b), exp-crystal_96.webp answers 200 on the live site"
+      },
+      {
+        "id": "TALENT_TREE",
+        "state": "VERIFIED_LIVE",
+        "evidence": "branch feat/talent-tree-20261118: tamerTalentPanel.js redrawn as a tree, 48 Codex icons art:ui:talent-icons:r1, tests/championship-talent-tree-cases.mjs; headless Chromium from the normal entry at 390x844 and 1366x768: 11 icons loaded per line, a 520 ms press wrote 「長息 +5 秒狩獵」 without learning, a tap lit the node and saved rank 1, a locked node refused with its reason, the commander tab showed its tree, no overflow, no touch target under 44 px, no page error; full suite 3,964 / 3,964, build and validate exit 0; PR #294 dd87250f, 9 of 10 checks green, the red one the external character delivery 404 (see tests.ci); live pages-build commit dd87250f (build e4cc314b), hunter.breath_96.webp answers 200 on the live site"
+      },
+      {
+        "id": "JOURNEY_GLANCE",
+        "state": "VERIFIED_LIVE",
+        "evidence": "branch feat/journey-glance-20261118: crystal emblem purse, patrol pod as icon + crystal gauge + rate tag, three star chips, sparring rules behind a ? key; tests/championship-journey-glance-cases.mjs; headless Chromium from the normal entry: visible text on the sparring tab 113 to 73 characters, feed tab 102 to 84, tower 156 to 138; no page error; full suite 3,966 / 3,966, build and validate exit 0; PR #295 c1513197, 5 of 6 checks green, the red one the external character delivery 404 (see tests.ci); live pages-build commit c1513197 (build 82ee0dc1)"
       }
     ],
     "openForClaude": [
@@ -690,7 +700,7 @@
       },
       {
         "id": "ROADMAP_R4_SKILL_CARDS",
-        "state": "NOT_STARTED"
+        "state": "IMPLEMENTED_LOCAL"
       },
       {
         "id": "ROADMAP_R5_PUSH_MODE",
@@ -703,14 +713,6 @@
       {
         "id": "EXTERNAL_CHARACTER_DELIVERY_RED",
         "state": "WAITING_ON_CHARACTER_ANIMATION_OWNER"
-      },
-      {
-        "id": "TALENT_TREE",
-        "state": "MERGED"
-      },
-      {
-        "id": "JOURNEY_GLANCE",
-        "state": "IMPLEMENTED_LOCAL"
       }
     ],
     "forCodex": [

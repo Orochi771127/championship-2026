@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 141,
+    "registeredRuntimeBundles": 142,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -1905,6 +1905,20 @@
       "shippingReady": false,
       "scope": "48 talent tree icons (44 nodes and keystones, 4 line emblems), TALENT_TREE_20261118; presentation only, no gameplay or commercial-rights claim",
       "count": 48
+    },
+    {
+      "assetId": "art:ui:skill-cards:r1",
+      "manifestPath": "assets/production/ui/skill-cards-r1/manifest.json",
+      "manifestSha256": "e0cd88a5f489ef3c43970dfe9a019f1c92f3d72b8d1fc3e3e7002af7204f00d5",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "ORIGINAL_GENERATED_ART_ASSISTANT_REVIEWED",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "assistantReviewed": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "scope": "20 tamer skill card faces, ROADMAP_R4_20261118; presentation only, no gameplay or commercial-rights claim",
+      "count": 20
     }
   ]
 }

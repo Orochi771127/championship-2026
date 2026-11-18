@@ -46,6 +46,7 @@ import {normalizeTamerTalents,createTamerTalentState,tamerTalentPoints,talentVal
   learnTalent,talentRefusal,chooseKeystone,keystoneRefusal,hasKeystone,KEYSTONE_RULES,talentChance,feedTamerCrystals,tamerExpToMax,tamerLevelRank,tamerLevelForRank,TAMER_LEVEL_RANK_MAX,respecTalents,talentRespecCost,talentSpent,talentSpentInLine,talentOpen,commanderCappedTalents,
   TALENT_NODES,TALENT_KEYSTONES,TALENT_LINES,TALENT_TREE_POINTS,TALENT_TIER_GATE,TALENT_KEYSTONE_GATE,TALENT_KEYSTONE_COST,tamerExpRequired,TAMER_LEVEL_MAX}
   from '../contracts/productTamerTalents.js';
+import {ownedSkillCards,skillCardHandSize,drawSkillHand} from '../contracts/productTamerSkillCards.js';
 import {normalizeTamerSupplies,createTamerSupplies,SUPPLEMENTS,getSupplement,supplyOwned,supplyPurchase,spendSupply,applyRecoverySupply,
   startRanchSupply,ranchSupplyActive,ranchSupplyGrowthPercent,ranchSupplyNightCalm,armSupply,disarmSupply,armedSupplies,supplyBattleProfile,
   supplySyncExpPercent,settleArmedSupplies,armedSupplyItems,supplyDiscount,supplyValue,scavengeSupply,SUPPLY_BATTLE_SLOTS} from '../contracts/productSupplements.js';
@@ -1402,14 +1403,15 @@ export function createChampionshipStandaloneApp({
     tamerTalents=paid.state;lastTamerGain=paid.gain;savePort.markDirty();
   }
   /** Pay one settled battle's Sync EXP to the partners that fought it. */
-  function grantBattleSync(instanceIds,{kind,won,attemptId=null}){
+  function grantBattleSync(instanceIds,{kind,won,attemptId=null,cardPercent=0}){
     const gains=[];
     // One settled owned-party battle also pays the tamer (never password, link or online battles); the day's first pays 100 more.
     if(instanceIds.length){
       const day=tamerDailyExp(talentState(),journeyLocalDay(),'BATTLE');
       const paid=withTamerExp(day.state,tamerBattleExp(kind,won)+day.amount);tamerTalents=paid.state;lastTamerGain=paid.gain;
     }
-    const syncBonus=talent('syncExpPercent',battleTalents(kind));
+    // + the skill card 同步增幅 thrown in a won match (ROADMAP_R4_20261118)
+    const syncBonus=talent('syncExpPercent',battleTalents(kind))+(won?Math.max(0,cardPercent|0):0);
     for(const instanceId of instanceIds){
       const base=syncBattleExp(syncLevelOf(instanceId).level,{kind,won});
       // The commander talent 同步訓練: +5 % Sync EXP a rank; 同步飲 carried into this battle: +50 %.
@@ -2503,7 +2505,8 @@ export function createChampionshipStandaloneApp({
       const syncKind=SYNC_KIND_BY_MODE[result.receipt?.mode];
       const sparBout=pendingSpar?.attemptId!=null&&pendingSpar.attemptId===result.receipt?.attemptId;
       if(result.receipt?.status==="SETTLED"&&syncKind&&individualResults.length&&!sparBout)
-        grantBattleSync(individualResults.map(entry=>entry.instanceId),{kind:syncKind,won:result.receipt.won===true,attemptId:result.receipt.attemptId??null});
+        grantBattleSync(individualResults.map(entry=>entry.instanceId),{kind:syncKind,won:result.receipt.won===true,attemptId:result.receipt.attemptId??null,
+          cardPercent:result.skillCards?.syncPercent??0});
       // Battles and wins are awakening conditions; the ranch partners also train once after the match.
       queueRanchTraining();refreshAwakeningSigns(individualResults.map(entry=>entry.instanceId),{publish:false});
       // A form the player's partner burst into this match is registered in the encyclopedia.
@@ -2534,6 +2537,11 @@ export function createChampionshipStandaloneApp({
         // The trader talent 賞金: +5 % a rank on a won owned-party match's purse (never password or link battles).
         const beaconWallet=wallet,talentBits=syncKind?Math.floor(purse*talent('battleBitsPercent')/100):0;
         wallet=Math.min(BITS_WALLET_CAP,wallet+talentBits);
+        // The trader's skill cards thrown in this won match (ROADMAP_R4_20261118): Bits on the purse, crystals, a ticket.
+        const cards=syncKind?result.skillCards:null,cardBits=cards?.bitsPercent>0?Math.floor(purse*cards.bitsPercent/100):0;
+        wallet=Math.min(BITS_WALLET_CAP,wallet+cardBits);
+        if(cards?.crystals>0)addSyncCrystals(cards.crystals);
+        if(cards?.ticketPercent>0&&gachaRandom()*100<cards.ticketPercent){const grant=grantGachaTickets(cyberGacha,1);cyberGacha=grant.state;}
         // GACHA_FULL_EFFECTS_20261109: the beacon's extra battles/wins and race/faction points land on every
         // partner who fought, in this same transaction (the rollback restores them with the rest).
         if(drop.battles||drop.exp)for(const entry of individualResults){
@@ -4677,6 +4685,20 @@ export function createChampionshipStandaloneApp({
       const pureFaction=hasKeystone(state,'commander.pureFaction'),triColor=hasKeystone(state,'commander.triColor');
       return Object.values(commander).some(value=>value>0)||pureFaction||triColor?Object.freeze({...commander,pureFaction,triColor}):null;
     },
+    /**
+     * The tamer's skill-card hand for one auto battle (ROADMAP_R4_20261118): drawn from the cards the tamer owns (four
+     * basic, the rest by talent line). Free Battle and Practice take three; title matches and tournaments one to three by
+     * title rank; password, link and anything else none. Null when there is no hand.
+     */
+    getBattleSkillHand(mode){
+      if(!session||tutorialBaseline)return null;
+      const size=skillCardHandSize(mode,tamerRankValue);
+      if(size<=0)return null;
+      const hand=drawSkillHand(ownedSkillCards(talentState()),size,gachaRandom);
+      return hand.length?hand:null;
+    },
+    /** The cards the tamer owns, for the talent tree and the hand. */
+    getOwnedSkillCards(){return session?ownedSkillCards(talentState()):Object.freeze([]);},
     /** Sync Level of one partner: { level, exp, next } (OWNER_APPROVED_ADAPTATION 2026-11-09). */
     getSyncLevel(instanceId){return syncLevelOf(instanceId);},
     /** LINE_FUSION_20261117: the saved grade and its six q values, or null. */

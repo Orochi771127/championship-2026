@@ -169,7 +169,7 @@ test('app: without commander talents a battle gets no commander at all', async (
 
 test('the battle runtime is handed the commander line for the local team, and the hit knows the defender\'s HP share', () => {
   const main = source('src/championship/app/main.js'), runtime = source('src/championship/app/battleRuntime.js'), app = source('src/championship/app/championshipStandaloneApp.js');
-  assert.match(main, /commander: app\?\.getBattleCommander\?\.\(options\.mode\) \?\? null, \.\.\.options \}\);/);
+  assert.match(main, /commander: app\?\.getBattleCommander\?\.\(options\.mode\) \?\? null,[\s\S]{0,200}?\.\.\.options \}\);/);
   assert.match(runtime, /commander:options\.commander\?\{\.\.\.options\.commander,team:localTeamIndex\}:null\}\);/);
   assert.match(runtime, /defenderHpPercent: defender\?\.maxHp > 0 \? defender\.currentHp \* 100 \/ defender\.maxHp : 100/);
   assert.match(app, /elitePercent: talent\('elitePercent'\)/);

@@ -507,10 +507,10 @@
       "ROM-derived art is research only"
     ],
     "git": {
-      "main": "dd87250f (Merge PR #294)",
+      "main": "c1513197 (Merge PR #295)",
       "openPullRequests": [],
       "branchesInFlight": [
-        "feat/journey-glance-20261118"
+        "feat/skill-cards-20261118"
       ],
       "worktree": ".claude/worktrees/skill-scroll-20261117 (clean worktree cut from origin/main; the shared checkout holds other agents' uncommitted work and is not touched)"
     },
@@ -528,7 +528,7 @@
         "CHAMPIONSHIP_QA_ORIGIN=<isolated origin> node tests/championship-data-arena-browser.cjs",
         "CHAMPIONSHIP_QA_ORIGIN=<isolated origin> FAILS=1|3 node tests/championship-asset-503-recovery-browser.cjs"
       ],
-      "lastFullSuite": "3,966 / 3,966 on feat/journey-glance-20261118 (local, Windows, Node 24.18)",
+      "lastFullSuite": "3,978 / 3,978 on feat/skill-cards-20261118 (local, Windows, Node 24.18)",
       "ci": "PR #266 to #292: Claude's merged with all checks green, except #292 where 'Verify external character delivery / browser' was red for a reason outside the change: it has been red on main since PR #290 (another session), because 35 requests for the new Growth arena-fill atlases (GR01, GR17, GR27 ...) answer 404 on the live host; rerun, same result. Other reruns: the webkit evolution baseline control on #288 and #291, the hud (webkit) opening letter on #289",
       "report": "docs/reports/normal-entry-run-2026-11-18/REPORT_ZH_TW.md (the normal-entry run on main 806a49fb); docs/reports/ci-browser-checks-2026-11-17/REPORT_ZH_TW.md"
     },
@@ -755,9 +755,10 @@
       {
         "id": "ROADMAP_R4_SKILL_CARDS",
         "source": "docs/planning/TAMER_PROGRESSION_ROADMAP_2026-11-18_ZH_TW.md (Owner 2026-11-18)",
-        "state": "NOT_STARTED",
+        "state": "IMPLEMENTED_LOCAL",
         "acceptance": "R4a rules, four basic cards and the hand (lift and throw) in the auto battle; R4b sixteen cards through the talent lines; R4c Codex card art",
-        "owner": "Claude"
+        "owner": "Claude",
+        "evidence": "branch feat/skill-cards-20261118: productTamerSkillCards.js (20 cards, talent unlocks, hand per mode, 3 s / 6 s pacing), battle/battleSkillCards.js (effects after the native step, damage and crit in the scaling chain), the hand on the battle screen (battleSkillHand.js: fan, tap to lift, drag up to throw, refusal shake), trader rewards in the settlement; tests/championship-tamer-skill-cards-cases.mjs and championship-skill-hand-cases.mjs; headless Chromium from the normal entry in a Free Battle: three cards counting down 3 s, a tap lifted one with its effect, a drag up threw it (toast 急救噴霧！, HP 615 to 630), the other two counted 5 s, a tap on a waiting card shook with 還沒好, no page error; 20 Codex card faces art:ui:skill-cards:r1 in the hand; full suite 3,978 / 3,978, build and validate exit 0"
       },
       {
         "id": "ROADMAP_R5_PUSH_MODE",
@@ -790,16 +791,16 @@
       {
         "id": "TALENT_TREE",
         "source": "Owner 2026-11-18 (TALENT_TREE_20261118)",
-        "state": "MERGED",
+        "state": "VERIFIED_LIVE",
         "acceptance": "the talent screen is a tree of icons: a tap lights a node, a press-and-hold shows what it does, and the first layer has no sentence",
-        "evidence": "branch feat/talent-tree-20261118: tamerTalentPanel.js redrawn as a tree, 48 Codex icons art:ui:talent-icons:r1, tests/championship-talent-tree-cases.mjs; headless Chromium from the normal entry at 390x844 and 1366x768: 11 icons loaded per line, a 520 ms press wrote 「長息 +5 秒狩獵」 without learning, a tap lit the node and saved rank 1, a locked node refused with its reason, the commander tab showed its tree, no overflow, no touch target under 44 px, no page error; full suite 3,964 / 3,964, build and validate exit 0; PR #294 dd87250f, 9 of 10 checks green, the red one the external character delivery 404 (see tests.ci)"
+        "evidence": "branch feat/talent-tree-20261118: tamerTalentPanel.js redrawn as a tree, 48 Codex icons art:ui:talent-icons:r1, tests/championship-talent-tree-cases.mjs; headless Chromium from the normal entry at 390x844 and 1366x768: 11 icons loaded per line, a 520 ms press wrote 「長息 +5 秒狩獵」 without learning, a tap lit the node and saved rank 1, a locked node refused with its reason, the commander tab showed its tree, no overflow, no touch target under 44 px, no page error; full suite 3,964 / 3,964, build and validate exit 0; PR #294 dd87250f, 9 of 10 checks green, the red one the external character delivery 404 (see tests.ci); live pages-build commit dd87250f (build e4cc314b), hunter.breath_96.webp answers 200 on the live site"
       },
       {
         "id": "JOURNEY_GLANCE",
         "source": "Owner 2026-11-18 (TALENT_TREE_20261118: systems read at a glance)",
-        "state": "IMPLEMENTED_LOCAL",
+        "state": "VERIFIED_LIVE",
         "acceptance": "the Journey's purse, patrol pod, star rules and sparring rules read at a glance; sentences become accessible names or sit behind a ? key",
-        "evidence": "branch feat/journey-glance-20261118: crystal emblem purse, patrol pod as icon + crystal gauge + rate tag, three star chips, sparring rules behind a ? key; tests/championship-journey-glance-cases.mjs; headless Chromium from the normal entry: visible text on the sparring tab 113 to 73 characters, feed tab 102 to 84, tower 156 to 138; no page error; full suite 3,966 / 3,966, build and validate exit 0"
+        "evidence": "branch feat/journey-glance-20261118: crystal emblem purse, patrol pod as icon + crystal gauge + rate tag, three star chips, sparring rules behind a ? key; tests/championship-journey-glance-cases.mjs; headless Chromium from the normal entry: visible text on the sparring tab 113 to 73 characters, feed tab 102 to 84, tower 156 to 138; no page error; full suite 3,966 / 3,966, build and validate exit 0; PR #295 c1513197, 5 of 6 checks green, the red one the external character delivery 404 (see tests.ci); live pages-build commit c1513197 (build 82ee0dc1)"
       }
     ],
     "decisionsForOwner": [
@@ -868,6 +869,6 @@
       "傳承 through the Hunt Result fusion panel in a browser (the ranch fusion was run)",
       "省彈 seen in a browser hunt (rule and source tests only)"
     ],
-    "nextAction": "Merge the talent tree; then give the other text-heavy screens the same three layers (supplies, fusion panel, Journey lists), R4 skill-card hand, R5 push mode, R6 leftover talent nodes; fetch main before every merge."
+    "nextAction": "Merge the skill cards; bring in the Codex card faces; then the gachapon and shop glance pass, R5 push mode, R6 leftover talent nodes; fetch main before every merge."
   }
 }
