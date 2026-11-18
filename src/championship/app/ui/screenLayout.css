@@ -119,6 +119,12 @@
   border-radius: 2px;
 }
 .cm-vs2-shop__lock[data-unlock-kind="BATTLE_BADGE_ID_0_BASED"] { background: #5b3fd1; }
+/* MECHANICS_AS_GAME_NOT_TEXT_20261118: a rank lock (which the tamer's level also opens) wears the padlock sticker
+   (art:ui:tamer-emblems:r1) instead of the gradient padlock. */
+.cm-vs2-shop__lock[data-unlock-kind="TAMER_RANK_THRESHOLD"]::before {
+  flex: 0 0 18px; width: 18px; height: 18px; border-radius: 0;
+  background: url("../../../../assets/production/ui/tamer-emblems-r1/lock-level_96.webp") center / contain no-repeat;
+}
 .cm-vs2-shop__effect > span { display: inline-block; white-space: normal; overflow-wrap: anywhere; margin-inline-end: .35em; }
 :root[data-theme="arcade"] .cm-vs2-shop__row[data-cage-card="true"] { border-width: 3px; background-image: linear-gradient(180deg, #fffaf0 0%, #fff3d6 100%); }
 :root[data-theme="arcade"] .cm-vs2-shop__row[data-cage-card="true"] .cm-vs2-shop__series { border: 2px solid var(--ax-ink, #14141f); }

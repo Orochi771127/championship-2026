@@ -9,6 +9,12 @@
 import { journeyText as t } from "../text/journeyText.js";
 import { syncText } from "../text/syncLevelText.js";
 import { createActionPortrait } from "../presentation/juicy/actionPortrait.js";
+import { tamerEmblem, tamerLevelBadge, flyEmblems } from "../presentation/tamerEmblemArt.js";
+import { playCeremony } from "../presentation/ceremony/ceremonyRunner.js";
+import { buildCapture } from "../presentation/ceremony/ceremonyScenes.js";
+import { requestArcadeFx } from "./ui/arcadeFx.js";
+import { tamerRankName } from "../text/zhHant.js";
+import { RANK_UNLOCKS } from "./rankUnlocks.js";
 
 const el = (tag, className, text) => {
   const node = document.createElement(tag);
@@ -184,35 +190,88 @@ export function createJourneyScreen(host) {
     body.replaceChildren(panel);
   }
 
-  // ROADMAP_R1_20261118 (Owner 2026-11-18): the crystals raise the tamer. One row: the tamer's level, the bar to
-  // the next level and one key that pours what the next level still needs (or all that is held, when that is less).
+  // ROADMAP_R1_20261118 (Owner 2026-11-18): the crystals raise the tamer. Shown as a pour station, not a line
+  // of text (MECHANICS_AS_GAME_NOT_TEXT_20261118): the tamer's level badge, a wide EXP gauge, the crystal purse
+  // and one key that pours what the next level still needs. A pour sends crystals flying into the gauge, the
+  // gauge fills, a level gained pops the badge with the level-up cue, and a rank it opens is announced.
+  let lastPour = null;
   function paintFeed() {
     const frame = host.frame(), tamer = host.tamer?.() ?? null;
     const panel = el("div", "cm-journey__feed");
     panel.append(el("p", "cm-journey__hint", t("feed.hint")));
     if (tamer) {
-      const row = el("div", "cm-journey__feed-row");
+      const row = el("div", "cm-journey__feed-row cm-journey__pour");
       row.dataset.feedTarget = "tamer";
       const top = tamer.next === 0, need = top ? 0 : tamer.next - tamer.exp, pour = Math.min(need, frame.crystals);
-      const bar = el("span", "cm-journey__feed-bar");
-      const fill = el("i");
-      fill.style.transform = `scaleX(${top ? 1 : tamer.exp / tamer.next})`;
-      bar.append(fill);
+      const ratio = top ? 1 : tamer.exp / tamer.next;
+      const badge = tamerLevelBadge({ level: tamer.level, size: 56 });
+      const gauge = el("span", "cm-journey__pour-gauge");
+      gauge.dataset.top = String(top);
+      const fill = el("i", "cm-journey__pour-fill");
+      fill.style.transform = `scaleX(${ratio})`;
+      gauge.append(fill, el("b", "cm-journey__pour-exp", top ? syncText("level.max") : `${tamer.exp.toLocaleString()} / ${tamer.next.toLocaleString()}`));
       const text = el("span", "cm-journey__feed-text");
-      text.append(el("strong", "", t("feed.tamer")), el("span", "cm-journey__member-lv", top ? syncText("level.max") : syncText("level", { level: tamer.level })), bar);
+      text.append(el("strong", "", t("feed.tamer")), gauge);
+      // The next level that opens a shop and gate rank, drawn as a padlock, the level and the rank's name.
+      if (tamer.unlock?.nextLevel) {
+        const lock = el("span", "cm-journey__pour-unlock");
+        const icon = tamerEmblem("lock-level", { size: 18 });
+        if (icon) lock.append(icon);
+        lock.append(el("b", "", `Lv.${tamer.unlock.nextLevel}`), el("span", "", tamerRankName(tamer.unlock.nextRank) ?? ""));
+        text.append(lock);
+      }
+      const purse = el("span", "cm-journey__pour-purse");
+      const crystal = tamerEmblem("exp-crystal", { size: 22 });
+      if (crystal) purse.append(crystal);
+      purse.append(el("b", "", frame.crystals.toLocaleString()));
       const label = top ? t("feed.max") : pour <= 0 ? t("feed.none") : pour >= need ? `${t("feed.next")}・${need.toLocaleString()}` : `${t("feed.some")}・${pour.toLocaleString()}`;
       const key = button("cm-journey__key cm-arcade-key", label, () => {
+        const before = { ratio, level: tamer.level, unlockRank: tamer.unlock?.rank ?? null };
         const result = host.feedTamer?.(pour);
-        if (result?.ok) say(t("feed.done", { before: result.gain.before.level, after: result.gain.after.level, spent: result.spent.toLocaleString() }));
+        if (result?.ok) {
+          say(t("feed.done", { before: result.gain.before.level, after: result.gain.after.level, spent: result.spent.toLocaleString() }));
+          lastPour = { ...before, leveled: result.gain.after.level > result.gain.before.level };
+        }
         paint();
       });
       key.disabled = top || pour <= 0;
       key.dataset.journeyAction = "feed";
       key.dataset.feedAmount = String(pour);
-      row.append(text, key);
+      const side = el("span", "cm-journey__pour-side");
+      side.append(purse, key);
+      row.append(badge, text, side);
       panel.append(row);
+      if (lastPour) {
+        // The pay-off, on the freshly painted station: crystals fly, the gauge fills from where it stood.
+        const pourNow = lastPour; lastPour = null;
+        fill.style.transition = "none";
+        fill.style.transform = `scaleX(${pourNow.leveled ? 0 : pourNow.ratio})`;
+        requestFrame(() => { fill.style.transition = ""; fill.style.transform = `scaleX(${ratio})`; });
+        requestFrame(() => flyEmblems({ from: purse, to: gauge, kind: "exp-crystal", count: 8 }));
+        if (pourNow.leveled) badge.dataset.pop = "true";
+        requestArcadeFx(row, pourNow.leveled ? "levelup" : "sparkle");
+        const opened = tamer.unlock?.rank ?? null;
+        if (opened !== null && pourNow.unlockRank !== null && opened > pourNow.unlockRank) announceUnlock(opened);
+      }
     }
     body.replaceChildren(panel);
+  }
+
+  // After the station is painted: a short timer, not a frame callback (the app has one ticker and this is not it).
+  const requestFrame = (run) => globalThis.setTimeout(run, 34);
+  /** A rank the tamer's level just opened at the shop and the gates: a toast over the page, never a blocker. */
+  let unlockToast = null;
+  function announceUnlock(rank) {
+    const opened = RANK_UNLOCKS[rank];
+    if (!opened) return;
+    unlockToast?.dispose();
+    const stage = el("div", "cm-fixed-stage");
+    root.append(stage);
+    const goods = opened.shop.cages.length + opened.shop.tools + opened.shop.plugins;
+    unlockToast = playCeremony({ host: stage, kind: "capture", cue: "capture", label: t("feed.opened", { rank: tamerRankName(rank) ?? "" }),
+      build: (ceremonyStage, env) => buildCapture(ceremonyStage, env, { kicker: t("feed.opened.kicker"), name: tamerRankName(rank) ?? "",
+        chip: t("feed.opened.chip", { gates: opened.gates.length, goods }) }),
+      onDone: () => { unlockToast = null; stage.remove(); } });
   }
 
   function stars(n) { return "★".repeat(n) + "☆".repeat(3 - n); }

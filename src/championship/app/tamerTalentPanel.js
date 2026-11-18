@@ -5,6 +5,7 @@
 
 import { talentText, talentEffectText, talentKeystoneText } from "../text/tamerTalentText.js";
 import { tamerRankName } from "../text/zhHant.js";
+import { tamerEmblem } from "../presentation/tamerEmblemArt.js";
 
 function el(doc, tag, className, text) {
   const node = doc.createElement(tag);
@@ -44,6 +45,8 @@ export function createTamerTalentPanel({ frame, learn, respec, doc = globalThis.
     if (view.unlock?.nextLevel) {
       const unlock = el(doc, "p", "cm-talents__unlock", talentText("unlock", { level: view.unlock.nextLevel, rank: tamerRankName(view.unlock.nextRank) }));
       unlock.dataset.nextLevel = String(view.unlock.nextLevel);
+      const lockArt = tamerEmblem("lock-level", { size: 16, doc });
+      if (lockArt) unlock.prepend(lockArt);
       head.append(unlock);
     }
     root.append(head);

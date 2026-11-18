@@ -175,6 +175,9 @@
 .cm-vs2-preview__heading .cm-vs2-preview__name { flex: 1 1 0; min-width: 0; }
 .cm-vs2-preview__heading .cm-vs2-gate-admission { flex: 0 1 auto; min-width: 0; max-width: 58%; margin: 0; padding: 1px 4px; border-radius: var(--r-tag); font-size: var(--fs-label); line-height: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .cm-vs2-preview__heading .cm-vs2-gate-admission[hidden] { display: none; }
+/* MECHANICS_AS_GAME_NOT_TEXT_20261118: a locked gate shows the padlock sticker before what opens it. */
+.cm-vs2-gate-admission[data-reason="GATE_LOCKED"]::before { content: ""; display: inline-block; width: 16px; height: 16px; margin-right: 4px; vertical-align: -3px;
+  background: url("../../../assets/production/ui/tamer-emblems-r1/lock-level_96.webp") center / contain no-repeat; }
 .cm-vs2-body--gate .cm-vs2-preview { padding: 8px 10px; gap: 4px 10px; }
 .cm-vs2-body--gate .cm-vs2-preview__image { width: 56px; height: 56px; }
 .cm-vs2-body--gate .cm-vs2-preview__name { font-size: var(--fs-body); line-height: 1.35; }

@@ -12,6 +12,7 @@
 // currency art, the one gacha ticket picture and the inline SVG icons.
 
 import { uiText } from "../text/uiText.js";
+import { tamerEmblem } from "../presentation/tamerEmblemArt.js";
 import { prefersReducedMotion } from "../presentation/presentationPreferences.js";
 import { shopGoodsPresentation } from "../presentation/shopGoodsUiArt.js";
 import { GACHA_TICKET_ART, gachaCurrencyImage, gachaIcon, gachaKindIconName, gachaTicketImage } from "./cyberGachaIcons.js";
@@ -1109,6 +1110,8 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
         if (near && partner.levelGate) {
           const gate = element("span", "cm-gacha__partner-gap cm-gacha__partner-level", uiText("進化需 Lv.{need}（現在 Lv.{level}）", partner.levelGate));
           gate.dataset.need = String(partner.levelGate.need);
+          const ready = tamerEmblem("evolve-ready", { size: 16 });
+          if (ready) gate.prepend(ready);
           pick.append(gate);
         }
         pick.addEventListener("click", () => { partnerSelection = partner.instanceId; personalitySelection = null; routeSelection = null; fx(pick, "toggle"); paint(lastFrame); });

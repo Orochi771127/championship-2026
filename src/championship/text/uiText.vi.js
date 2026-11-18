@@ -1479,6 +1479,7 @@ export const TEXT_VI = Object.freeze({
   "參賽數碼獸": "Đối tác tham gia",
   "輕觸畫面略過": "Chạm vào màn hình để bỏ qua",
   "階級 {rank} 或馴獸師 Lv.{level} 開放。": "Mở ở hạng {rank} hoặc Tamer Lv.{level}.",
+  "階級 {rank}／Lv.{level}": "Hạng {rank} / Lv.{level}",
   "{rank}／Lv.{level} 開放": "{rank} / Lv.{level}",
   "狩獵場、商店：馴獸師每 5 級也算 1 階": "Cổng săn và cửa hàng: mỗi 5 cấp Tamer tính 1 hạng",
   "取得對應比賽勝利後開放。": "Nó sẽ được mở sau khi giành chiến thắng trong cuộc thi tương ứng.",

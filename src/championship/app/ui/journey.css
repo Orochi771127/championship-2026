@@ -92,7 +92,23 @@
 .cm-journey__hint { margin: 0; color: #c9c3ff; font-size: calc(13px * var(--text-scale, 1)); text-align: center; }
 .cm-journey__feed-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 4px; border-bottom: 1px dashed rgba(255, 255, 255, 0.14); }
 /* ROADMAP_R1_20261118: the tamer's row has no portrait, so the text takes the room and the key keeps its own. */
-.cm-journey__feed-row[data-feed-target="tamer"] { grid-template-columns: minmax(0, 1fr) auto; }
+/* The pour station (MECHANICS_AS_GAME_NOT_TEXT_20261118): badge, gauge, purse and key. */
+.cm-journey__feed-row[data-feed-target="tamer"] { grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; padding: 12px; border: 2px solid #0e101a; border-radius: 16px;
+  background: linear-gradient(180deg, rgba(122, 240, 214, 0.16), rgba(14, 16, 26, 0.5)); }
+.cm-journey__pour .cm-journey__feed-text { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+.cm-journey__pour-gauge { position: relative; display: block; height: 22px; overflow: hidden; box-sizing: border-box; border: 2px solid #0e101a; border-radius: 999px; background: rgba(14, 16, 26, 0.65); }
+.cm-journey__pour-fill { position: absolute; inset: 0; transform-origin: left center; background: linear-gradient(#b8fff0, #56e3c2 55%, #1fb89a); transition: transform 620ms cubic-bezier(0.2, 0.9, 0.3, 1); }
+.cm-journey__pour-gauge[data-top="true"] .cm-journey__pour-fill { background: linear-gradient(#ffe98a, #ffc531 60%, #f08a1c); }
+.cm-journey__pour-exp { position: relative; display: block; text-align: center; line-height: 18px; color: #fff; font-size: var(--fs-label, 12px); font-variant-numeric: tabular-nums; text-shadow: 0 1px 0 #0e101a, 0 0 3px rgba(14, 16, 26, 0.9); }
+.cm-journey__pour-unlock { display: inline-flex; align-items: center; gap: 5px; justify-self: start; padding: 1px 9px 1px 4px; border: 2px solid #0e101a; border-radius: 999px; background: rgba(14, 16, 26, 0.7);
+  color: #ffe98a; font-size: var(--fs-label, 12px); font-weight: 900; }
+.cm-journey__pour-unlock > span { color: #fff; }
+.cm-journey__pour-side { display: grid; justify-items: end; gap: 6px; }
+.cm-journey__pour-purse { display: inline-flex; align-items: center; gap: 4px; color: #b8fff0; font-weight: 900; font-variant-numeric: tabular-nums; }
+@media (max-width: 420px) {
+  .cm-journey__feed-row[data-feed-target="tamer"] { grid-template-columns: auto minmax(0, 1fr); }
+  .cm-journey__pour-side { grid-column: 1 / -1; grid-auto-flow: column; justify-content: space-between; align-items: center; justify-items: stretch; }
+}
 .cm-journey__feed-text { display: grid; grid-template-columns: minmax(0, auto) auto; align-items: center; gap: 4px 8px; min-width: 0; }
 .cm-journey__feed-text > strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cm-journey__feed-text > .cm-journey__member-lv { justify-self: start; }

@@ -94,7 +94,14 @@ test('the Journey page pours into the tamer and says so in five languages', () =
   assert.match(screen, /const result = host\.feedTamer\?\.\(pour\);/);
   assert.doesNotMatch(screen, /host\.feed\(entry\.instanceId/, 'no partner rows any more');
   assert.match(main, /feedTamer: \(amount\) => app\.feedTamerCrystals\(amount\),/);
-  assert.match(source('src/championship/app/ui/journey.css'), /\.cm-journey__feed-row\[data-feed-target="tamer"\] \{ grid-template-columns: minmax\(0, 1fr\) auto; \}/);
+  // MECHANICS_AS_GAME_NOT_TEXT_20261118: a pour station (badge, gauge, purse, key), crystals that fly, a level-up cue.
+  assert.match(source('src/championship/app/ui/journey.css'), /\.cm-journey__feed-row\[data-feed-target="tamer"\] \{ grid-template-columns: auto minmax\(0, 1fr\) auto;/);
+  assert.match(screen, /const badge = tamerLevelBadge\(\{ level: tamer\.level, size: 56 \}\);/);
+  assert.match(screen, /requestFrame\(\(\) => flyEmblems\(\{ from: purse, to: gauge, kind: "exp-crystal", count: 8 \}\)\);/);
+  assert.match(screen, /requestArcadeFx\(row, pourNow\.leveled \? "levelup" : "sparkle"\);/);
+  assert.match(screen, /if \(opened !== null && pourNow\.unlockRank !== null && opened > pourNow\.unlockRank\) announceUnlock\(opened\);/);
+  for (const locale of ['zh-Hant', 'en', 'ja', 'th', 'vi']) for (const key of ['feed.opened', 'feed.opened.kicker', 'feed.opened.chip'])
+    assert.ok(journeyText(key, {rank: 'R', gates: 2, goods: 9}, locale).length > 0, `${locale} ${key}`);
   for (const locale of ['zh-Hant', 'en', 'ja', 'th', 'vi']) {
     for (const key of ['feed.hint', 'feed.tamer', 'feed.some', 'feed.next', 'feed.none', 'feed.max']) assert.ok(journeyText(key, {}, locale).length > 0, `${locale} ${key}`);
     assert.match(journeyText('feed.done', {before: 3, after: 5, spent: '120'}, locale), /Lv\.3 → Lv\.5.*120/, locale);
