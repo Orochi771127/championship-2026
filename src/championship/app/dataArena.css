@@ -513,16 +513,13 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
   .da-root[data-mode="RELAY"] .da-tbtn--ult { bottom:calc(var(--da-control-bottom) + 176px); }
 }
 /* the resting movement dial: eight tactical ticks around a puck well */
-.da-root[data-mode="RELAY"] .da-move-hint { border:2px solid rgba(181,237,255,.34);
-  background:radial-gradient(circle, rgba(10,26,40,.5) 0 22px, rgba(181,237,255,.22) 22px 24px, rgba(10,26,40,.42) 24px 41px, transparent 41.5px),
-             repeating-conic-gradient(from -3deg, rgba(181,237,255,.42) 0 6deg, transparent 6deg 45deg),
-             rgba(10,26,40,.3); }
-.da-stick { border:2px solid rgba(111,247,255,.55);
-  background:radial-gradient(circle, rgba(8,20,34,.42) 0 45px, transparent 45.5px),
-             repeating-conic-gradient(from -3deg, rgba(111,247,255,.6) 0 6deg, transparent 6deg 45deg),
-             rgba(8,20,34,.3); }
-.da-stick__knob { background:radial-gradient(circle at 40% 32%, #e6fdff, #6ff7ff 45%, #1b8fd1 100%); border:3px solid #062033;
-  box-shadow:0 4px 0 #031420, 0 0 14px rgba(111,247,255,.55); }
+/* Owner 2026-11-18 (「搖桿可以做得比較時尚直接一點不要那麼多花紋」): one thin ring and one flat thumb. No spokes,
+   no inner rings, no gradients; the aim stick keeps its own tint so the two hands still read apart. */
+.da-root[data-mode="RELAY"] .da-move-hint { border:1.5px solid rgba(255,255,255,.36); background:rgba(8,20,34,.2); }
+.da-stick { border:1.5px solid rgba(255,255,255,.52); background:rgba(8,20,34,.24); }
+.da-stick--aim { border-color:rgba(255,211,77,.6); }
+.da-stick__knob { background:rgba(255,255,255,.94); border:0; box-shadow:0 2px 10px rgba(0,0,0,.3); }
+.da-stick--aim .da-stick__knob { background:rgba(255,224,130,.96); }
 
 /* ---- vitals: slanted armour frames and a white ghost under each fill ----- */
 .da-bar__ghost { position:absolute; inset:0; transform-origin:left center; background:#f4fbff; opacity:.85; }
