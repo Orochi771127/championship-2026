@@ -1,0 +1,25 @@
+{
+  "id": "TAMER_SKILL_CARDS_20261118",
+  "classification": "OWNER_APPROVED_ADAPTATION: tamer skill cards in auto battles (ROADMAP_R4_20261118); not original behaviour",
+  "owner": [
+    "2026-11-18: 「馴獸師可以有20個技能，然後自動對戰的時候會從20個技能中隨機選三個技能卡來施放…如果要美術圖的話可以跟Codex要 包含這20個技能，也可以加入到天賦技能樹」",
+    "2026-11-18: 「玩家點擊釋放，做成一個技能卡片三張手牌在手中的樣子，然後玩家可以把它往上提以後丟出去的樣子」 (who casts: the player)",
+    "2026-11-18: the whole roadmap, including numbers and modes, is Claude's to decide (TAMER_PROGRESSION_ROADMAP_20261118)"
+  ],
+  "rules": {
+    "cards": "20: four basic (cheer, first aid, focus, cover) and four for each talent line (hunter: stun shot, weak mark, smoke, snare; breeder: nutrient, calm, vitality, guts; commander: charge, crit drill, link, awaken; trader: bounty, sync, probe, lucky)",
+    "owned": "the four basic cards always; each talent line gives its four at 3, 9, 15 and 22 points spent in it; nothing is saved (worked out from the talent state)",
+    "hand": "drawn at the start of each battle from the owned cards, no repeats, with the product random function: Free Battle and Practice 3; title matches and tournaments 1 at title rank 0-2, 2 at 3-5, 3 from 6; password, link, online and the tutorial none",
+    "pacing": "the first card can be played 3 s into the fight, one more every 6 s (3, 9, 15 s): a free battle measured from the normal entry ended in about 13 s, so the plan's 10 s / 15 s would leave cards unplayable",
+    "cast": "the player throws a card (drag up past 56 px, or tap to lift and tap again); each card once per battle",
+    "effects": "applied after the native battle step, where the taxonomy's regeneration and the burst already write HP: HP, TP (metricLimit), the decision cooldown (field28) and the status code; damage and critical bonuses ride the runtime's scaling chain after the taxonomy and the burst; the critical bonus is never negative (the original resolver refuses one), so the plan's 干擾煙幕 (foes' crit -10) became foes' TP -30%",
+    "rewards": "the trader's four pay only in a won settled owned-party match: Bits +20% of the purse, Sync EXP +25%, crystals +30, a 30% chance of one gachapon ticket",
+    "notChanged": "native individual fields, the gachapon odds, password and link battles, every parity fixture and replay (no hand, no effect)"
+  },
+  "art": "art:ui:skill-cards:r1: 20 card faces drawn by Codex from a CLI brief (ORIGINAL_GENERATED, assets/production/ui/skill-cards-r1, 128 px WebP); a face that cannot load falls back to a drawn gem",
+  "tests": [
+    "tests/championship-tamer-skill-cards-cases.mjs",
+    "tests/championship-skill-hand-cases.mjs"
+  ],
+  "physicalDeviceAccepted": false
+}

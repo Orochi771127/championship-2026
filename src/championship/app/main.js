@@ -65,6 +65,7 @@ import { listChampionshipGates } from "../gate/gateCatalog.js";
 import { createChampionshipStatusBar } from "./championshipStatusBar.js";
 import { createDigimonListView, appendCreatureDetail } from "./digimonListScreen.js";
 import { createTamerTalentPanel } from "./tamerTalentPanel.js";
+import { mountBattleSkillHand } from "./battleSkillHand.js";
 import { talentText } from "../text/tamerTalentText.js";
 import { createScheduleView } from "./scheduleScreen.js";
 import { createChampionshipView } from "./championshipScreen.js";
@@ -256,7 +257,9 @@ const loadBattleRuntime = async () => {
     burstManual: true,
     burstPlans: [...team(options.playerIndividuals), ...team(options.opponentIndividuals)],
     // The commander talent line for this battle's mode; null for password and link battles.
-    commander: app?.getBattleCommander?.(options.mode) ?? null, ...options });
+    commander: app?.getBattleCommander?.(options.mode) ?? null,
+    // The tamer's skill-card hand (ROADMAP_R4_20261118); none for password and link battles.
+    skillCards: app?.getBattleSkillHand?.(options.mode) ?? null, ...options });
 };
 
 // Screen modules and art load through their existing foreground owners.
@@ -2297,7 +2300,11 @@ async function mountBattleField() {
       autosave?.request('settlement');
     }
   });
-  return {...view,dispose(){if(viewDisposed)return;viewDisposed=true;hudLoad.cancel();hudArt=null;view.dispose();}};
+  // The tamer's skill-card hand (ROADMAP_R4_20261118): over the field, gone with the battle screen.
+  const skillHand = tutorial ? null : mountBattleSkillHand({ host: root, snapshot: () => activeRuntime.getSkillCards?.() ?? null,
+    play: id => activeRuntime.requestSkillCard?.(id) ?? { ok: false, reason: 'NO_HAND' },
+    subscribe: listener => activeRuntime.observe(() => { if (!viewDisposed) listener(); }) });
+  return {...view,dispose(){if(viewDisposed)return;viewDisposed=true;skillHand?.dispose();hudLoad.cancel();hudArt=null;view.dispose();}};
 }
 
 /** Developer readout: per slot, the wiring a battle received and its tallies. */

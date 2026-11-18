@@ -65,6 +65,7 @@ import {createBattleSoundEvents} from '../battle/battleSoundEvents.js';
 import {beginBattlePresentationEngagement,endBattlePresentationEngagement,writeBattleHitTiming,advanceBattlePresentationTiming} from '../battle/battlePresentationHost.js';
 import { createBattleHitRuntime } from '../battle/battleHitRuntime.js';
 import {createBattleBurst,BATTLE_BURST_OFF} from '../battle/battleBurst.js';
+import {createBattleSkillCards} from '../battle/battleSkillCards.js';
 import {burstBasesFor,burstFormTier,burstHpRatio,burstMultiplier} from '../contracts/productBurstEvolution.js';
 import {createBattleNormalRuntime} from '../battle/battleNormalRuntime.js';
 import {normalBattleStands,normalBattleLaunchGuard} from '../battle/battleNormalFlow.js';
@@ -133,6 +134,8 @@ export function createBattleRuntime(options = {}) {
   // player's call (requestBurst); headless runs and replays burst at once as before.
   const burstManual=options.burstManual===true;
   let burst=createBattleBurst({policy:BATTLE_BURST_OFF});
+  // Tamer skill cards (ROADMAP_R4_20261118): opt-in per battle; no hand, no effect.
+  let skillCards=createBattleSkillCards();
   // Sponsor stake contract (AWAKENING_OVERDRIVE_20261109): the rift gambit fights a foe 20 % stronger -- its damage
   // dealt is multiplied and its damage taken divided by the same factor, after every other rule.
   let foeBoostPercent=0;
@@ -417,11 +420,12 @@ export function createBattleRuntime(options = {}) {
         action: { power: move.power ?? 0, elementSelector: move.elementSelect ?? 0 }
       });
       if (!inputs) continue;
-      const resolvedNative = resolveBattleDamage({ ...inputs, rng, critBonus: taxonomy.critBonus(slot) });
-      const resolved = {...resolvedNative, damage: foeScaled(slot, targetSlot, burst.scaleDamage({attackerSlot: slot, defenderSlot: targetSlot,
+      const resolvedNative = resolveBattleDamage({ ...inputs, rng, critBonus: taxonomy.critBonus(slot) + skillCards.critBonus(slot) });
+      const resolved = {...resolvedNative, damage: foeScaled(slot, targetSlot, skillCards.scaleDamage({attackerSlot: slot, defenderSlot: targetSlot,
+        signature: signatureMoves[slot] === move.recordIndex, defenderHp: defender.currentHp, damage: burst.scaleDamage({attackerSlot: slot, defenderSlot: targetSlot,
         damage: taxonomy.scaleDamage({attackerSlot: slot, defenderSlot: targetSlot,
           elementSelector: move.elementSelect ?? 0, damage: resolvedNative.damage, signature: signatureMoves[slot] === move.recordIndex,
-          defenderHpPercent: defender?.maxHp > 0 ? defender.currentHp * 100 / defender.maxHp : 100})}))};
+          defenderHpPercent: defender?.maxHp > 0 ? defender.currentHp * 100 / defender.maxHp : 100})})}))};
       const result=hitRuntime.apply(targetSlot,{move,damage:resolved.damage,critical:resolved.critical,nativeKind,
         sourcePoint:parameters?effectActors.position(parameters):nativeActors.position(slot),statusInputs:{attackerIndex:inputs.statusAttackerIndex,
           selectedDefenseIndex:inputs.statusDefenderIndex,
@@ -551,6 +555,12 @@ export function createBattleRuntime(options = {}) {
     nativeActors?.advance();
     effectActors?.advance();
     if(!liveSession.ended&&taxonomy.regen(liveSession.frame,liveSession.slots).length)nativeActors?.syncCombatants();
+    if(!liveSession.ended&&skillCards.on){
+      // A thrown card lands here, after the native step, where regeneration and the burst already write HP and TP.
+      const cardStep=skillCards.step(liveSession.frame,liveSession.slots);
+      if(cardStep.burstGaugePercent)burst.boostTeam(localTeamIndex,cardStep.burstGaugePercent);
+      if(cardStep.changed)nativeActors?.syncCombatants();
+    }
     if(!liveSession.ended){burst.step(liveSession.frame,liveSession.slots);settleBurstSpecies(liveSession);}
     if(arenaHazards&&!liveSession.ended){
       // After the native step, outside AI dispatch: read positions, write HP only.
@@ -598,6 +608,13 @@ export function createBattleRuntime(options = {}) {
     /** A sponsor contract's foe boost for the match about to start (percent; 0 clears it). */
     setFoeBoostPercent(percent){foeBoostPercent=Number.isSafeInteger(percent)&&percent>0&&percent<=100?percent:0;return foeBoostPercent;},
     /** The player calls a local partner's READY burst (awakening raising, Owner 2026-11-02); overLimit: the long press. */
+    /** The player throws a tamer skill card from the hand (ROADMAP_R4_20261118). */
+    requestSkillCard(id) {
+      if(!session||session.ended)return Object.freeze({ok:false,reason:'NO_MATCH'});
+      return skillCards.request(id,session.frame);
+    },
+    /** The hand on screen: each card's state and the frame the next one becomes playable. */
+    getSkillCards() { return session&&!session.ended?skillCards.snapshot(session.frame):null; },
     requestBurst(slot,{overLimit=false}={}) {
       if(!session||battleTeamOfSlot(slot)!==localTeamIndex)return false;
       return burst.request(slot,{overLimit});
@@ -714,6 +731,7 @@ export function createBattleRuntime(options = {}) {
         reason: session.endReason,
         battleType, mode, matchIndex: chosen.recordIndex,
         roundCursor: completedRound?.cursor ?? 0,
+        ...(skillCards.on?{skillCards:skillCards.rewards()}:{}),
         outcomeEntries: completedRound ? [...(mode===3?recordRoundOutcome({verdict:localVerdict(session.verdict),battleType,flags:[],cursor:0}).flags:completedRound.flags)] : [],
         ...(playerIndividuals&&session.ended&&![3,4].includes(mode)?{individualResults:roster.slice(0,chosen.practice?6:3).flatMap((creature,i)=>creature?[{
           instanceId:creature.instanceId,nativeProfile:settleOwnedBattleIndividual(creature.nativeProfile,{
@@ -843,6 +861,7 @@ export function createBattleRuntime(options = {}) {
         commander:options.commander?{...options.commander,team:localTeamIndex}:null});
       signatureMoves=session.slots.map(c=>c?signatureMoveOf(c.speciesId):null);
       taxonomy.applyStart(session.slots);
+      skillCards=createBattleSkillCards({hand:Array.isArray(options.skillCards)?options.skillCards:[],team:localTeamIndex,teamOf:battleTeamOfSlot});
       nativeActors=createBattleNativeActors({slots:session.slots,creatures:roster,stands:normalBattleStands(session.slots)});
       soundEvents.attach(nativeActors.memory);
       // Use the same species move list as current normal selection. Appended

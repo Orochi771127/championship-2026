@@ -1,5 +1,19 @@
 # Championship Owner Direction
 
+<!-- record-id: ROADMAP_R4_TAMER_SKILL_CARDS_20261118 -->
+## 2026-11-18 — Roadmap R4: the tamer's skill-card hand
+
+Owner: 「馴獸師可以有20個技能，然後自動對戰的時候會從20個技能中隨機選三個技能卡來施放…也可以加入到天賦技能樹」 and 「玩家點擊釋放，做成一個技能卡片三張手牌在手中的樣子，然後玩家可以把它往上提以後丟出去的樣子」.
+
+`OWNER_APPROVED_ADAPTATION`. This settles `D5_TAMER_SKILL_CARDS` (the player casts):
+
+- 20 cards: four basic, four per talent line given at 3 / 9 / 15 / 22 points spent.
+- Each auto battle draws a hand: three in Free Battle and Practice, one to three by title rank in title matches and tournaments, none in password, link and online battles.
+- The player drags a card up to throw it (or taps to lift, taps again). The first is playable at 3 s, then one more every 6 s.
+- Decided while wiring: the pacing was shortened from the draft's 10 s / 15 s because a free battle can end in about 13 s; 干擾煙幕 became foes' TP −30% because the original resolver takes no negative critical bonus.
+
+Contract: `docs/contracts/championship/TAMER_SKILL_CARDS_20261118.json`.
+
 <!-- record-id: TALENT_TREE_20261118 -->
 ## 2026-11-18 — The talent screen is a tree of icons; systems read at a glance
 

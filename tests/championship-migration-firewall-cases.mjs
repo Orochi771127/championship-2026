@@ -207,6 +207,9 @@ test("only the authorized source families are present", () => {
       "battleScriptNatives.js",
       "battleScriptVm.js",
       "battleSession.js",
+      // ROADMAP_R4_20261118: opt-in tamer skill cards (no hand, no effect); writes HP, TP, the decision cooldown and
+      // the status code after the native step, as the taxonomy and the burst do, and owns no screen or RNG.
+      "battleSkillCards.js",
       "battleSoundEvents.js",
       "battleSpecialPrelude.js", // Owner 2026-09-07: CPU-checked special prelude slice
       "battleSpriteCellBox.js",

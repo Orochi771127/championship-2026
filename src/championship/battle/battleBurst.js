@@ -136,6 +136,11 @@ export function createBattleBurst({policy = BATTLE_BURST_OFF, plans = []} = {}) 
       }
       void attackerMaxHp;
     },
+    /** A tamer skill card (ROADMAP_R4_20261118): every charging gauge of `team` gains `percent` of its maximum. */
+    boostTeam(team, percent) {
+      if (!on || !(percent > 0)) return;
+      states.forEach((s, slot) => { if (s && teamOf(slot) === team && s.phase === 'CHARGING') s.gauge = Math.min(BATTLE_BURST_GAUGE_MAX, s.gauge + Math.round(BATTLE_BURST_GAUGE_MAX * percent / 100)); });
+    },
     /** Advance phases after a battle frame. Returns events. */
     step(frame, slots) {
       if (!on) return [];
