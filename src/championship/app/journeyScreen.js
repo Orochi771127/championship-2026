@@ -10,6 +10,7 @@ import { journeyText as t } from "../text/journeyText.js";
 import { syncText } from "../text/syncLevelText.js";
 import { createActionPortrait } from "../presentation/juicy/actionPortrait.js";
 import { tamerEmblem, tamerLevelBadge, flyEmblems } from "../presentation/tamerEmblemArt.js";
+import { talentIcon } from "../presentation/talentIconArt.js";
 import { playCeremony } from "../presentation/ceremony/ceremonyRunner.js";
 import { buildCapture } from "../presentation/ceremony/ceremonyScenes.js";
 import { requestArcadeFx } from "./ui/arcadeFx.js";
@@ -91,15 +92,30 @@ export function createJourneyScreen(host) {
 
   function paintPod() {
     const frame = host.frame(), patrol = frame.patrol;
-    crystals.textContent = t("crystals", { value: frame.crystals.toLocaleString() });
+    // JOURNEY_GLANCE_20261118: the purse is a crystal and a number; the words are its accessible name.
+    crystals.replaceChildren(...[tamerEmblem("exp-crystal", { size: 18 })].filter(Boolean), el("b", "", frame.crystals.toLocaleString()));
+    crystals.setAttribute("aria-label", t("crystals", { value: frame.crystals.toLocaleString() }));
     pod.replaceChildren();
+    // JOURNEY_GLANCE_20261118: the pod at a glance is its icon, a gauge that carries the crystals it holds and the
+    // hourly rate as a tag; the long title and sentences stay as the accessible name and the hover title.
+    pod.setAttribute("aria-label", `${t("patrol.title")}・${t("patrol.rate", { rate: patrol.rate.toLocaleString() })}`);
+    pod.title = pod.getAttribute("aria-label");
     const top = el("div", "cm-journey__pod-top");
-    top.append(el("strong", "cm-journey__pod-title", t("patrol.title")), el("span", "cm-journey__pod-rate", t("patrol.rate", { rate: patrol.rate.toLocaleString() })));
+    const icon = talentIcon("trader.patrol", { size: 40 });
+    if (icon) top.append(icon);
     const gauge = el("div", "cm-journey__gauge");
+    gauge.dataset.full = String(Boolean(patrol.full));
     const fill = el("i", "cm-journey__gauge-fill");
     fill.style.transform = `scaleX(${Math.min(1, patrol.hours / 12)})`;
-    gauge.append(fill);
-    const held = el("span", "cm-journey__pod-held", patrol.full ? t("patrol.full", { hours: 12 }) : t("patrol.held", { value: patrol.crystals.toLocaleString() }));
+    const inGauge = el("span", "cm-journey__gauge-label");
+    const gem = tamerEmblem("exp-crystal", { size: 16 });
+    if (gem) inGauge.append(gem);
+    inGauge.append(el("b", "", patrol.crystals.toLocaleString()));
+    gauge.append(fill, inGauge);
+    gauge.setAttribute("aria-label", patrol.full ? t("patrol.full", { hours: 12 }) : t("patrol.held", { value: patrol.crystals.toLocaleString() }));
+    top.append(gauge, el("span", "cm-journey__pod-rate", `+${patrol.rate.toLocaleString()}/h`));
+    const held = el("span", "cm-journey__pod-held", patrol.full ? t("patrol.full", { hours: 12 }) : "");
+    held.hidden = !patrol.full;
     const actions = el("div", "cm-journey__pod-actions");
     const claim = button("cm-journey__key cm-journey__key--primary cm-arcade-key", patrol.started ? t("patrol.claim") : t("patrol.start"), () => {
       const result = host.claimPatrol();
@@ -115,7 +131,7 @@ export function createJourneyScreen(host) {
     quick.disabled = !patrol.quickAvailable;
     quick.dataset.journeyAction = "quick";
     actions.append(claim, quick);
-    pod.append(top, gauge, held, actions);
+    pod.append(top, held, actions);
   }
 
   function paintTabs() {
@@ -293,7 +309,15 @@ export function createJourneyScreen(host) {
         el("span", "cm-journey__zone-stars", t("zone.stars", { stars: z.stars, total: frame.chestStars })));
       strip.append(chip);
     }
-    panel.append(strip, el("p", "cm-journey__hint", t("zone.rule")));
+    // JOURNEY_GLANCE_20261118: what earns each star, as three short chips (the sentence is their accessible name).
+    const legend = el("p", "cm-journey__stars-legend");
+    legend.setAttribute("aria-label", t("zone.rule"));
+    for (const [count, key] of [[1, "zone.star1"], [2, "zone.star2"], [3, "zone.star3"]]) {
+      const chip = el("span", "cm-journey__star-chip");
+      chip.append(el("b", "", "★".repeat(count)), el("span", "", t(key)));
+      legend.append(chip);
+    }
+    panel.append(strip, legend);
     // Story chapters ride along the zones instead of a menu mode of their own.
     if (typeof host.openStory === "function") {
       const story = el("div", "cm-journey__story");
@@ -343,11 +367,19 @@ export function createJourneyScreen(host) {
   }
 
   // Practice series: one partner, three rivals, the battle plan chosen (or kept) between bouts.
-  let practicePick = null;
+  let practicePick = null, practiceRulesOpen = false;
   function paintPractice() {
     const p = host.practice, pt = p.text, current = p.frame();
     const panel = el("div", "cm-journey__practice");
-    panel.append(el("p", "cm-journey__hint", pt("practice.hint")), el("p", "cm-journey__practice-rule", pt("practice.rule")));
+    // JOURNEY_GLANCE_20261118: the rules sit behind a ? key (tap to show, tap again to hide), not as two sentences.
+    const rules = el("p", "cm-journey__practice-rule", `${pt("practice.hint")} ${pt("practice.rule")}`);
+    rules.hidden = !practiceRulesOpen;
+    const ask = button("cm-journey__ask cm-arcade-key", "?", () => { practiceRulesOpen = !practiceRulesOpen; paint(); });
+    ask.setAttribute("aria-label", pt("practice.hint"));
+    ask.setAttribute("aria-expanded", String(practiceRulesOpen));
+    const askRow = el("div", "cm-journey__ask-row");
+    askRow.append(el("strong", "cm-journey__team-title", pt("practice.title")), ask);
+    panel.append(askRow, rules);
     const series = current?.series ?? null;
     const partnerId = series?.instanceId ?? practicePick;
     panel.append(el("p", "cm-journey__team-title", pt("practice.partner")));
