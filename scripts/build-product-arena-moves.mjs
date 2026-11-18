@@ -47,7 +47,7 @@ const entries = ids.map((id, i) => {
   const ultimate = ultimates.has(id), donor = donorFor(id), element = RELAY_POOL_MOVE_ELEMENT[id];
   const damage = rule.damage ?? 0;
   return {
-    id, recordIndex: firstId + i, donorMoveRecord: donor.recordIndex, ultimate,
+    id, recordIndex: firstId + i, element, donorMoveRecord: donor.recordIndex, ultimate,
     field0C: donor.field0C, power: ultimate ? 420 : Math.max(150, Math.min(360, Math.round((120 + 8 * damage) / 10) * 10)),
     actionCost: ultimate ? 40 : Math.max(8, Math.min(30, Math.round(rule.energy ?? 20))),
     elementSelect: SELECTOR[element] ?? 0, statusCode: element === 'frost' && (rule.effect === 'ROOT' || rule.freezeWater) ? 3 : 0,

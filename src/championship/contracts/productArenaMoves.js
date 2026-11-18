@@ -11,11 +11,15 @@ import battleMoves from "../../data/championship/catalogs/battle-moves.r1.json" 
 import table from "../../data/championship/product-arena-moves.v1.json" with { type: "json" };
 import { deepFreeze } from "./championshipContracts.js";
 
+// The arena element a record wears in the battle's look (its donor's banks would give the donor's colour).
+const LOOK_ELEMENT = Object.freeze({ fire: "FIRE", frost: "ICE", light: "SUN", water: "WATER", earth: "EARTH", storm: "THUNDER",
+  nature: "WOOD", shadow: "MOON", neutral: "NEUTRAL", physical: "NEUTRAL" });
+
 const recordsById = new Map(), recordOfMove = new Map(), moveOfRecord = new Map(), namesById = new Map();
 for (const e of table.entries) {
   recordsById.set(e.recordIndex, deepFreeze({ ...battleMoves.records[e.donorMoveRecord], recordIndex: e.recordIndex, speciesId: null,
     kind: 1, field0C: e.field0C, power: e.power, actionCost: e.actionCost, elementSelect: e.elementSelect, statusCode: e.statusCode,
-    productDonorRecord: e.donorMoveRecord, productArenaMove: e.id }));
+    productDonorRecord: e.donorMoveRecord, productArenaMove: e.id, productLookElement: LOOK_ELEMENT[e.element] ?? "NEUTRAL" }));
   recordOfMove.set(e.id, e.recordIndex);
   moveOfRecord.set(e.recordIndex, e.id);
   // [zh-Hant, en, ja, th, vi]: the arena names its moves in Chinese and English; the other columns read the English

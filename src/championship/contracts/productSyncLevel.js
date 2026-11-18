@@ -15,6 +15,7 @@
 //
 // Pure: numbers in, numbers out. The saved record lives at progression.syncLevels.
 
+import { arenaMoveRecordIndex } from "./productArenaMoves.js";
 import { deepFreeze } from "./championshipContracts.js";
 import { normalizePartnerGrade, fusionExp, FUSION_MAX_FODDER } from "./productLineFusion.js";
 
@@ -66,7 +67,9 @@ export function normalizeSyncLevels(value) {
     const lv = level(entry.level);
     const exp = lv >= SYNC_LEVEL_MAX ? 0 : Math.min(count(entry.exp), syncExpRequired(lv) - 1);
     const grade = normalizePartnerGrade(entry.grade);
-    partners[id] = { level: lv, exp, rebirths: count(entry.rebirths), ...(grade ? { grade } : {}) };
+    // UNIFIED_MOVES_20261118: the Data Arena move this partner learned for the auto battle (an arena move id)
+    const arenaMove = typeof entry.arenaMove === "string" && arenaMoveRecordIndex(entry.arenaMove) !== null ? entry.arenaMove : null;
+    partners[id] = { level: lv, exp, rebirths: count(entry.rebirths), ...(grade ? { grade } : {}), ...(arenaMove ? { arenaMove } : {}) };
   }
   return { version: 1, partners, crystals: count(value.crystals) };
 }
@@ -87,6 +90,20 @@ export function recordPartnerGrade(state, instanceId, grade) {
   if (!normalized || typeof instanceId !== "string" || !instanceId || current.partners[instanceId]?.grade) return current;
   const entry = current.partners[instanceId] ?? { level: 1, exp: 0, rebirths: 0 };
   return { ...current, partners: { ...current.partners, [instanceId]: { ...entry, grade: normalized } } };
+}
+
+/** The Data Arena move a partner learned for the auto battle (an arena move id), or null. */
+export function learnedArenaMoveOf(state, instanceId) {
+  return normalizeSyncLevels(state).partners[instanceId]?.arenaMove ?? null;
+}
+
+/** Learn `moveId` (an arena move id) for the auto battle, or forget it with null; one per partner. */
+export function recordLearnedArenaMove(state, instanceId, moveId) {
+  const current = normalizeSyncLevels(state);
+  if (typeof instanceId !== "string" || !instanceId) return current;
+  if (moveId !== null && arenaMoveRecordIndex(moveId) === null) return current;
+  const { arenaMove: _old, ...entry } = current.partners[instanceId] ?? { level: 1, exp: 0, rebirths: 0 };
+  return { ...current, partners: { ...current.partners, [instanceId]: { ...entry, ...(moveId ? { arenaMove: moveId } : {}) } } };
 }
 
 export function syncBreakthroughsAt(lv) {

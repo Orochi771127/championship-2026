@@ -1,4 +1,7 @@
 import { uiText } from "../text/uiText.js";
+import { battleMoveName } from '../text/battleMoveNames.js';
+import { moveIcon } from './moveIcons.js';
+import { arenaMoveRecordIndex } from '../contracts/productArenaMoves.js';
 import { formatList } from "../text/locale.js";
 import {generationName,personalityName,specialSkillName,speciesName,cageName} from '../text/zhHant.js';
 import {speciesTaxonomy,TAXONOMY_RESISTANCE_AXES} from '../contracts/speciesTaxonomy.js';
@@ -264,6 +267,36 @@ function specialSkillCell(skillId) {
   return cell;
 }
 
+/**
+ * UNIFIED_MOVES_20261118: the 競技招式 row. A partner learns one of its Data Arena element pool's moves for the
+ * auto battle (local battles only), or none. Each choice shows the move's icon and name.
+ */
+export function appendArenaMoveLearning(detail, entry, arenaMoves, rerender) {
+  const info = entry?.instanceId ? arenaMoves.get(entry.instanceId) : null;
+  if (!info?.options?.length) return;
+  const group = element("div", "cm-digimon-stat cm-arena-learn");
+  group.dataset.row = "arena-move";
+  group.dataset.group = "skill";
+  const term = element("dt", "cm-digimon-detail__label", "競技招式");
+  term.setAttribute("data-row", "arena-move");
+  const cell = element("dd", "cm-digimon-detail__value cm-arena-learn__choices");
+  const choice = (moveId) => {
+    const button = element("button", "cm-arena-learn__choice");
+    button.type = "button";
+    button.dataset.move = moveId ?? "";
+    button.setAttribute("aria-pressed", String((info.learned ?? null) === moveId));
+    const icon = moveId ? moveIcon(arenaMoveRecordIndex(moveId), "cm-move-icon") : null;
+    if (icon) button.append(icon);
+    button.append(element("span", "cm-arena-learn__name", moveId ? battleMoveName(arenaMoveRecordIndex(moveId)) ?? moveId : "不帶", false));
+    button.addEventListener("click", () => { const result = arenaMoves.learn(entry.instanceId, moveId); if (result?.ok) rerender(); });
+    return button;
+  };
+  for (const moveId of info.options) cell.append(choice(moveId));
+  cell.append(choice(null));
+  group.append(term, cell);
+  detail.append(group);
+}
+
 export function appendCreatureDetail(detail, entry, { onBurstForm = null, onAwakening = null } = {}) {
   const style = entryBattleStyle(entry);
   for (const row of TRACED_DETAIL_ROWS) {
@@ -388,7 +421,7 @@ export function appendCreatureDetail(detail, entry, { onBurstForm = null, onAwak
  * @param {(instanceId: string, name: string) => ({ok: boolean, entries?: Array<object>})} [options.onRename]
  * @param {(instanceId: string) => ({ok: boolean, reason?: string, entries?: Array<object>})} [options.onRebirth]
  */
-export function createDigimonListView({ root, entries = [], onExit, onRename = null, onRebirth = null, onBurstForm = null, onAwakening = null, fusion = null, initialInstanceId = null } = {}) {
+export function createDigimonListView({ root, entries = [], onExit, onRename = null, onRebirth = null, onBurstForm = null, onAwakening = null, fusion = null, initialInstanceId = null, arenaMoves = null } = {}) {
   if (!root) throw new TypeError("The Digimon list requires a root element");
 
   root.replaceChildren();
@@ -421,6 +454,7 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
       if (Array.isArray(result?.entries)) { entries = result.entries; renderDetail(); }
       return result;
     } : null });
+    if (arenaMoves) appendArenaMoveLearning(detail, entry, arenaMoves, renderDetail);
     // Say what is missing rather than leaving the panel silently short.
     const note = element("p", "cm-digimon-untraced",
       `${UNTRACED_DETAIL_ROWS.length} further rows the original shows are not traced yet.`);

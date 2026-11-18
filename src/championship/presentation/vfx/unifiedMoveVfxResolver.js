@@ -125,7 +125,9 @@ export function resolveMoveVfx(move, {speciesIndex = move?.speciesId ?? null, sp
   const selector = SELECTOR_ELEMENT[move.elementSelect] ?? null;
   const partner = partnerVfxElement(speciesIndex);
   let element = 'NEUTRAL', source = 'NONE';
-  if (named) { element = named; source = 'NAME'; }
+  // a Data Arena move learned for the auto battle (UNIFIED_MOVES_20261118) wears its arena element, not its donor's
+  if (move.productLookElement && ELEMENT_VFX[move.productLookElement]) { element = move.productLookElement; source = 'NAME'; }
+  else if (named) { element = named; source = 'NAME'; }
   else if (selector && bankPalette !== 'ice') { element = selector; source = 'MOVE'; }
   else if (PALETTE_ELEMENT[bankPalette]) { element = PALETTE_ELEMENT[bankPalette]; source = 'BANK'; }
   else if (partner) { element = partner; source = 'PARTNER'; }
