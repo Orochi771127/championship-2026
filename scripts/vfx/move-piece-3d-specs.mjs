@@ -1,6 +1,7 @@
 // Three.js move pieces to bake (UNIFIED_MOVES_20261118, U3): see bake-3d-move-vfx.mjs.
 import ultimates from './move-piece-3d-ultimates.json' with {type: 'json'};
 import skills from './move-piece-3d-skills.json' with {type: 'json'};
+import basics from './move-piece-3d-basics.json' with {type: 'json'};
 import {MOVE_VFX_CHOREOGRAPHY} from '../../src/championship/presentation/vfx/moveVfxChoreography.js';
 // Names start with `3d-`; `group` picks the module the game loads on demand; `base`
 // is the shared piece it replaces (played until the group is in).
@@ -145,7 +146,11 @@ const VARIANTS = Object.freeze([
   // 6..11: the skills' variants (a little smaller and quicker; never an ultimate's look)
   {o: {size: 0.9}, cam: {el: 0.3, az: 0.3}}, {o: {size: 0.8, speed: 1.3}, cam: {el: 0.45, az: -0.3}},
   {o: {size: 1.0, density: 0.7}, cam: {el: 0.2, az: 0.7}}, {o: {size: 0.95, detail: 1.3, speed: 1.1}, cam: {el: 0.5, az: -0.7}},
-  {o: {size: 0.85, density: 0.4}, cam: {el: 0.35, az: 1.1}}, {o: {size: 1.05, speed: 0.9}, cam: {el: 0.25, az: -1.1}}
+  {o: {size: 0.85, density: 0.4}, cam: {el: 0.35, az: 1.1}}, {o: {size: 1.05, speed: 0.9}, cam: {el: 0.25, az: -1.1}},
+  // 12..17: the basic moves' variants (the smallest and quickest; never a skill's or an ultimate's look)
+  {o: {size: 0.75, speed: 1.35}, cam: {el: 0.3, az: 0.15}}, {o: {size: 0.7, speed: 1.2, density: 0.6}, cam: {el: 0.4, az: -0.6}},
+  {o: {size: 0.8, speed: 1.45}, cam: {el: 0.2, az: 0.9}}, {o: {size: 0.72, detail: 0.8, speed: 1.3}, cam: {el: 0.55, az: -0.2}},
+  {o: {size: 0.78, density: 0.5, speed: 1.25}, cam: {el: 0.3, az: 1.3}}, {o: {size: 0.82, speed: 1.4}, cam: {el: 0.45, az: -1.3}}
 ]);
 /** The three.js piece name of a species ultimate. */
 export const ultimatePieceName = record => `3d-u-${record}`;
@@ -160,5 +165,8 @@ const generated = (table, nameOf, prefix, fitScale) => Object.fromEntries(Object
 }));
 const ULTIMATE = generated(ultimates, ultimatePieceName, 'u', 1);
 const SKILL = generated(skills, skillPieceName, 's', 0.9);
+/** The three.js piece name of a species basic move (unique within its element). */
+export const basicPieceName = record => `3d-b-${record}`;
+const BASIC = generated(basics, basicPieceName, 'b', 0.8);
 
-export const MOVE_PIECE_3D = Object.freeze({...HAND, ...ULTIMATE, ...SKILL});
+export const MOVE_PIECE_3D = Object.freeze({...HAND, ...ULTIMATE, ...SKILL, ...BASIC});

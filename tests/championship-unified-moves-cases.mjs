@@ -78,3 +78,18 @@ test('every species skill lands a three.js piece no other skill of its element p
     seen.set(look, key);
   }
 });
+
+test('every species basic move lands a three.js piece no other basic of its element plays, from the basics\' own variants', async () => {
+  const {MOVE_PIECE_3D} = await import('../scripts/vfx/move-piece-3d-specs.mjs');
+  const basics = sig.moves.filter(([key, tier]) => tier === 0 && Number.isSafeInteger(key) && key < 596);
+  assert.ok(basics.length >= 200, `${basics.length} basics`);
+  const seen = new Map();
+  for (const [key, , , palette] of basics) {
+    const piece = moveVfxChoreography(key)?.contact?.piece;
+    assert.equal(piece, `3d-b-${key}`, `${key} plays ${piece}`);
+    const spec = MOVE_PIECE_3D[piece], look = `${palette}|${spec.fx}#${spec.variant}`;
+    assert.ok(spec.variant >= 12, `${piece} uses a basic variant`);
+    assert.ok(!seen.has(look), `${key} and ${seen.get(look)} look alike`);
+    seen.set(look, key);
+  }
+});
