@@ -1,0 +1,536 @@
+{
+ "id": "art:ui:talent-icons:r1",
+ "rightsStatus": "ORIGINAL_GENERATED",
+ "provenance": "Generated 2026-11-18 by Codex (codex.exe 0.167 exec, gpt-6.1-sol, built-in image tool) from the written briefs in briefs/ (one per talent line), at the Owner's direction (2026-11-18: the talent screen is a tree of icons). Inputs: the brief text, five of Codex's own emblems from art:ui:tamer-emblems:r1 and one screenshot of this product's own arcade HUD (isolated QA origin) as style context only; no ROM frame, research-library file or third-party character was an input. Masters are 256 x 256 RGBA PNG kept outside the repository; each runtime file is the master trimmed to its drawn bounds on a square canvas and reduced to 96 px (Lanczos), lossless WebP.",
+ "scope": "One icon per tamer talent node and keystone (44) and one emblem per talent line (4), TALENT_TREE_20261118; presentation only, no gameplay or commercial-rights claim",
+ "files": [
+  {
+   "path": "assets/production/ui/talent-icons-r1/line-hunter_96.webp",
+   "key": "line-hunter",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "aa746da848d2c643e3057e217d7f48c59a66bdba06421a4568de8cb0f2eb868f",
+   "masterSha256": "81b12067811178c713a885a65b7a7676c187ce82600dbf47d5b74577396b693b",
+   "brief": "briefs/hunter.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/hunter.breath_96.webp",
+   "key": "hunter.breath",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "3390e8a3130ffb123c6556b96d6e67fe01e85ab685cbc89fa062683d818fb9f8",
+   "masterSha256": "c47a53f09f53091748d4d18041be43b7957a88872f4155d55259fd335b329f3b",
+   "brief": "briefs/hunter.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/hunter.ropeCare_96.webp",
+   "key": "hunter.ropeCare",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "a4a079bdbc86c728b20de26b219eedad3faf93096105636faedf458975e9b75a",
+   "masterSha256": "763989f47a26ffb1c7f0d5b97fab6a0a3fb472183a692dc38e4fce02eb08b202",
+   "brief": "briefs/hunter.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/hunter.memory_96.webp",
+   "key": "hunter.memory",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "2597bab59277f0fc9e538115a1766bc0bb3b7ed88e647c65ac0c3fdbb9304726",
+   "masterSha256": "98dfb6a1fd1fef48e062fbf63bc54ef7e8b92e5d810ee541a406aa4ae12c7c69",
+   "brief": "briefs/hunter.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/hunter.herdSense_96.webp",
+   "key": "hunter.herdSense",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "f9fd91e4a4e85eef941ae37bc97409e853fc64470327a37cabb2b61e974c6e70",
+   "masterSha256": "b665a9a913195b235d4399470425231b8618d123ce9c7a101aae8bb722dd2b3d",
+   "brief": "briefs/hunter.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/hunter.appraise_96.webp",
+   "key": "hunter.appraise",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "f42366abd4c9f9d1f7e9a305e2a03ec9f27a3cd84122e57b2eab966474572ea9",
+   "masterSha256": "8f7da434c69d7d3d2e1771f68328b1783a00e5e5b152ca29e7425839777971a6",
+   "brief": "briefs/hunter.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/hunter.wildSense_96.webp",
+   "key": "hunter.wildSense",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "083e75b72a47d89372659658094e67297ec7113cd9b38cf1b789d64d842a75d0",
+   "masterSha256": "6ea0bc5d32d4a0e61519d32adfce1b3d5b76aa9e22efdb0dad8d54a555246bec",
+   "brief": "briefs/hunter.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/hunter.swift_96.webp",
+   "key": "hunter.swift",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "2d81c278cf464a5dcfefac58f778a86a71b1b99316e4d62c34d3bf2a2f84aeca",
+   "masterSha256": "0c44fcc55c1dfa5c3911dd768a3ebdc956f045be985bfd3a68ac2d4c813d117c",
+   "brief": "briefs/hunter.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/hunter.steady_96.webp",
+   "key": "hunter.steady",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "15ae2a64eb758741711072e69a8d6f76df919db906a1750597f6952ca0362ffa",
+   "masterSha256": "b98933f081b7f28e88b8ec035731563f6b0db5c113f7d0043a389703b37d1257",
+   "brief": "briefs/hunter.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/hunter.thrift_96.webp",
+   "key": "hunter.thrift",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "db0d142617e33cac4ee5b9de8ca7076c4966db93be7dac8a37eac16650421743",
+   "masterSha256": "f732c15c92fd8c518088c53aafd45db0bc2752aae55f3203f5dc83706d9bbf9e",
+   "brief": "briefs/hunter.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/hunter.keenEye_96.webp",
+   "key": "hunter.keenEye",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "140284c0060027989467b472d1b26a6768e6cefab379f662c2f59da791ad09e3",
+   "masterSha256": "86ee4833aaf06e9e7506df28bbc9a220db1ea97c8e2720f5808b3224fe94cbec",
+   "brief": "briefs/hunter.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/hunter.chainHunt_96.webp",
+   "key": "hunter.chainHunt",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "8448143b5b596a7a7671355cb6542aef1bb0e75a7d636f295d5d5970c37a205f",
+   "masterSha256": "267dced3811ab9f378bfbf4a70ce4a5a4df99dd67cdf9cb90b43764311e6523f",
+   "brief": "briefs/hunter.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/line-breeder_96.webp",
+   "key": "line-breeder",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "25a3ef97c75286b6fe076fe703b8fc3116676ca7f95c2f9c87c8fa5fdbb32ccc",
+   "masterSha256": "ac2776e804320ce08ef0050ad818d04749aee9f007a8cc4772a419e0284d435b",
+   "brief": "briefs/breeder.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/breeder.care_96.webp",
+   "key": "breeder.care",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "75621cea8f9d7ff20161202ced0be777d2d1e6be8c10d56105fa65d14489810e",
+   "masterSha256": "45a35d3c7e16d7a6041a108d6fc14d68cbe29c07cc6156164b4b4137bb3a11b9",
+   "brief": "briefs/breeder.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/breeder.soothe_96.webp",
+   "key": "breeder.soothe",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "3f23911b290597a7f9e3deb432fe422ce81a08cd6ce8cdd2887aa3d5875fae7e",
+   "masterSha256": "a13a6cf4f63604b6f1d8944668bc5f95c58219ef5a653bd52cc1b1ea0112d69c",
+   "brief": "briefs/breeder.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/breeder.nightWatch_96.webp",
+   "key": "breeder.nightWatch",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "bde09a1c3b9d52e0edebc5672151040ce05f9220daf26b2dfe7cd5e53ce9435d",
+   "masterSha256": "31b402acefc68f49474cbba5762bd85e7378e26c7d3cb0da92d4e9ab1db8ccf6",
+   "brief": "briefs/breeder.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/breeder.syncFusion_96.webp",
+   "key": "breeder.syncFusion",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "b130246356ff1e99f03328b9be3b2386c9e412ad425f85dabecb7c1ef3d9dbec",
+   "masterSha256": "c99d9a5bb77eee5ed41f1737dea6b1028fd897b6e50f997363622e088b82754b",
+   "brief": "briefs/breeder.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/breeder.lineAffinity_96.webp",
+   "key": "breeder.lineAffinity",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "69b6e6731608a5206946b14cf9cb9ea59a0b12dbe132cb5012f09a22b8f55fc5",
+   "masterSha256": "a11e60dd2acefdb5d32a95f53868bcabea3bfa79cfd095252b89bae78b602348",
+   "brief": "briefs/breeder.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/breeder.automation_96.webp",
+   "key": "breeder.automation",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "5b2a5767975718a064fbd24653a3e299725d34b0bb105ef1ee3621ac7c862323",
+   "masterSha256": "f82fda2da944fd1767fa2406c74c7fe336856e35f9aa39e9b581efa119c341a1",
+   "brief": "briefs/breeder.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/breeder.strollLuck_96.webp",
+   "key": "breeder.strollLuck",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "f8e4d479b20dc47577e165f5317b8fd37bb03d785320f47ef6ccda138b550805",
+   "masterSha256": "067960d410efc669958b2651481d4b600a5abe3b8660453514df480ca7fa5c52",
+   "brief": "briefs/breeder.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/breeder.herbal_96.webp",
+   "key": "breeder.herbal",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "6024260ffa189bf14ed56f776f8f15e9418b43ff71a77edc0c69d7a3587593da",
+   "masterSha256": "871b42e42737c5e23083c38e41ca330e5301d9fd427a8f2ee68f4e84a5ede0dc",
+   "brief": "briefs/breeder.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/breeder.lasting_96.webp",
+   "key": "breeder.lasting",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "898c142c998509b0e1294b64a773ae5c8ebcb09cb0254185531ec335e32b7922",
+   "masterSha256": "40bbfd805f15c24a572302142498a83eef28b0c80bbaf1c3c4ecc567121fd61c",
+   "brief": "briefs/breeder.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/breeder.inherit_96.webp",
+   "key": "breeder.inherit",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "18e7c71c824743d46cf1b477c1a3e3774816206636d929beec10e358867fc3e0",
+   "masterSha256": "9b534a18bb94eadde147eaecf197b40be8b65b14ce75d00416cfd4a5df406a72",
+   "brief": "briefs/breeder.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/breeder.extract_96.webp",
+   "key": "breeder.extract",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "fdee80b4156b5064b0a92d68ea055bdd0aad2b2bc4fdb5fd4af0a2f21e6a5b87",
+   "masterSha256": "7a88856add8768b2540d7ff5bba5f2f66e116ebf55bf6c1cec94cc67761e0b57",
+   "brief": "briefs/breeder.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/line-commander_96.webp",
+   "key": "line-commander",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "a39a81213ce5c4d879c0bdaeb7c399dd2066afbf0e50419025416d5eef416f59",
+   "masterSha256": "878d6724c2bd8e88962216870f8305d06ce6f462290dc953ec8c0df32ea78554",
+   "brief": "briefs/commander.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/commander.syncTraining_96.webp",
+   "key": "commander.syncTraining",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "e7dba08585a9f520db200f041a1682eedda3f86ff27f6f39a6b7083f72b60419",
+   "masterSha256": "e3bf731edfbdaf38ecdd05d2529f15a5a91e7e2612bbbea8b1a8dfb8da7ee6ee",
+   "brief": "briefs/commander.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/commander.opening_96.webp",
+   "key": "commander.opening",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "e5da612530f6e73f462d5ec2059da164cfd06d9e9abcb7503cbad4440276caf5",
+   "masterSha256": "f3fbcfdb576990c915593f4c98006902e685cbd79b67777b5cbb5a7d616c5ed7",
+   "brief": "briefs/commander.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/commander.goodMood_96.webp",
+   "key": "commander.goodMood",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "a7911d0fb5435f88d962a1a222a123b845e2d7bffd7559cae4a3905fd29b9199",
+   "masterSha256": "d0625d6fc31af9f1e903d51ab6f03325db3a3b1891cfd3c071c9143fc38ecc76",
+   "brief": "briefs/commander.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/commander.lumen_96.webp",
+   "key": "commander.lumen",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "41cfe10e36991507aae9de9c2e9fab49f9c84213bcbf34a9c99ef14b075be30f",
+   "masterSha256": "959d0160979e0748df1a48b235277f352e0ac060479f2baf8e52f2457be48a98",
+   "brief": "briefs/commander.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/commander.iron_96.webp",
+   "key": "commander.iron",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "03a575981708db23a13fe25ba3116dd1614a94c84032089cb5a5e267f53b0acb",
+   "masterSha256": "47f10893dd510224759b00e719723134a60702fd32ab055f87fbd13fd030281d",
+   "brief": "briefs/commander.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/commander.rift_96.webp",
+   "key": "commander.rift",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "091ca608881a98ce0eafd6c883e071b26a01d38be6dcb6e8f18068ac15c37fd7",
+   "masterSha256": "c9ccfd8399660b88943a19b0d8c383eb2f8961470221b9f3c85aabdb27a4a67f",
+   "brief": "briefs/commander.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/commander.charge_96.webp",
+   "key": "commander.charge",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "1a54f81782628069a168b08c612184ef932cbcefc279e17552205b02e32904d7",
+   "masterSha256": "df696ec1c91133a433ed9c49169b37a4695038dc8b57194defe82540736db0b8",
+   "brief": "briefs/commander.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/commander.adversity_96.webp",
+   "key": "commander.adversity",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "3929018ef034b6ceba703897704678eb40fe0e32d79aa6e11687042c27336530",
+   "masterSha256": "8c05e43011813fe612c112601fff6ef58f3bbde3daf406dc5049cc3619b80a7b",
+   "brief": "briefs/commander.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/commander.finisher_96.webp",
+   "key": "commander.finisher",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "043b01fef3488c393a94909ff76bbf35b4af76f8b874999193f519082128f9fd",
+   "masterSha256": "33e55da3c9c091e7819636a186c7cdc8abb26e9199585e2efd558af441a160a0",
+   "brief": "briefs/commander.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/commander.pureFaction_96.webp",
+   "key": "commander.pureFaction",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "869f485ab4f109542385a1f694e0429f6aa8104737a3eafa016f33b7c6b07ea9",
+   "masterSha256": "45ce506f6492312e15d38c53d60168d64659f45c1e1d494367c78ca4dddece4d",
+   "brief": "briefs/commander.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/commander.triColor_96.webp",
+   "key": "commander.triColor",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "237c481c7aab250b5e57a2b99459082e5ed5d41aa65ab750efd0959d08abada4",
+   "masterSha256": "91853d99056cbc1bc63dd02617bf050e1f1fc4a3d2bbf08f357699d79769c190",
+   "brief": "briefs/commander.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/line-trader_96.webp",
+   "key": "line-trader",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "46f8b0912aa0f74f48773f6afc5570e52da80596a99e3f25d51fac48a61ee3d3",
+   "masterSha256": "7bdddb8d154d8956d88f560c7967f3ff4e82194d7a8e3b9254344c617d7af570",
+   "brief": "briefs/trader.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/trader.haggle_96.webp",
+   "key": "trader.haggle",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "5c89b2e9225d05f0c22c98f961d9c1b955b6550f242c1e2e195a95c0c5fb21d5",
+   "masterSha256": "ad21079574ccaf815ed1f54e854e08a4e3b733962efb11b87001dd9f14a0da82",
+   "brief": "briefs/trader.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/trader.bounty_96.webp",
+   "key": "trader.bounty",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "532a4252e049cfefded3e1624bb0349bd34afbac09d4e5b2c225f159c6dcc009",
+   "masterSha256": "32ab68200c8fca554f64b82af63ee5df3eecf0833637e442cd3d7275f8166da6",
+   "brief": "briefs/trader.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/trader.crystal_96.webp",
+   "key": "trader.crystal",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "539d600c2866fa3e72cf680a34237514c3984a3bca24b70d9669a91bae42b68c",
+   "masterSha256": "dc5f7e8a156aeebe7149f1e347c15063e02b46cdc3dd75b70d5c21ab2e050644",
+   "brief": "briefs/trader.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/trader.patrol_96.webp",
+   "key": "trader.patrol",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "52bbfc3757e005b82cea022561c7f182d67631019f8dcff307637b21c7f83840",
+   "masterSha256": "417e1cc2fb3dabaa425b8b705bf110c73720900b67ab2d6812d64c66b93541f4",
+   "brief": "briefs/trader.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/trader.tower_96.webp",
+   "key": "trader.tower",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "9953b071d2e67b6031fadb72636e434a51dcd9772ad2b4097391b092d5417e46",
+   "masterSha256": "933d39d6401b1ef479a4c8cd481bebb3b525ce68d393a7c322566ee6b950393b",
+   "brief": "briefs/trader.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/trader.regular_96.webp",
+   "key": "trader.regular",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "d0239ff289114b00305095f7cd1e57c92ec6ad3a6167ea644cfead6d86fedcde",
+   "masterSha256": "38d4eae7e6e3a115ad759a2202ee892384149b8de071db59828244bd71fa6214",
+   "brief": "briefs/trader.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/trader.belt_96.webp",
+   "key": "trader.belt",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "f51009e661f483b04fad9fe89c6702547c3bfc8413f4b472dd7d24f9be3042e4",
+   "masterSha256": "64052859c9b0ed6cd1dd417314b251feaca894f887d8aebf7369d70c97727dbd",
+   "brief": "briefs/trader.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/trader.scavenge_96.webp",
+   "key": "trader.scavenge",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "746560f82e1ac11022ba1352070c77cf548139ad00750eb7bbea80c394b6f1dd",
+   "masterSha256": "5294743fb09a92362350f2fe0b2760788467fa6e6fa209d9fd355b84c1ba4bc3",
+   "brief": "briefs/trader.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/trader.appraisal_96.webp",
+   "key": "trader.appraisal",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "9b4f3a5598dd055c9118b3056f81f3a13bd660b926ac85d3643cfba43e49d55d",
+   "masterSha256": "a96de19af4e9a746a6548c762797a588dc7219d0d35ab0b909ba7ce8d1019931",
+   "brief": "briefs/trader.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/trader.bountyHunter_96.webp",
+   "key": "trader.bountyHunter",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "39f08bc6a53ccd91ba347d8ae7b8297c39e6fe6a4976e97f58da458f4852f17c",
+   "masterSha256": "d0219819e82101ac9d546f3423bc0d9a89e5f9fe0ea22f161cb3a5577e7a3974",
+   "brief": "briefs/trader.md"
+  },
+  {
+   "path": "assets/production/ui/talent-icons-r1/trader.peddler_96.webp",
+   "key": "trader.peddler",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "97270a863d2cf57b35bbc48de6ccffb2538429bd7ac6f5e19f6a02e227c2979f",
+   "masterSha256": "00830b534917fa70b3062455454d60a75a04f0bd5ad75db6ec1b2ecbf7e7cae4",
+   "brief": "briefs/trader.md"
+  }
+ ]
+}

@@ -507,10 +507,10 @@
       "ROM-derived art is research only"
     ],
     "git": {
-      "main": "9e7800d0 (Merge PR #292)",
+      "main": "873734ab (Merge PR #293)",
       "openPullRequests": [],
       "branchesInFlight": [
-        "feat/presentation-retrofit-20261118"
+        "feat/talent-tree-20261118"
       ],
       "worktree": ".claude/worktrees/skill-scroll-20261117 (clean worktree cut from origin/main; the shared checkout holds other agents' uncommitted work and is not touched)"
     },
@@ -528,7 +528,7 @@
         "CHAMPIONSHIP_QA_ORIGIN=<isolated origin> node tests/championship-data-arena-browser.cjs",
         "CHAMPIONSHIP_QA_ORIGIN=<isolated origin> FAILS=1|3 node tests/championship-asset-503-recovery-browser.cjs"
       ],
-      "lastFullSuite": "3,960 / 3,960 on feat/presentation-retrofit-20261118 (local, Windows, Node 24.18)",
+      "lastFullSuite": "3,964 / 3,964 on feat/talent-tree-20261118 (local, Windows, Node 24.18)",
       "ci": "PR #266 to #292: Claude's merged with all checks green, except #292 where 'Verify external character delivery / browser' was red for a reason outside the change: it has been red on main since PR #290 (another session), because 35 requests for the new Growth arena-fill atlases (GR01, GR17, GR27 ...) answer 404 on the live host; rerun, same result. Other reruns: the webkit evolution baseline control on #288 and #291, the hud (webkit) opening letter on #289",
       "report": "docs/reports/normal-entry-run-2026-11-18/REPORT_ZH_TW.md (the normal-entry run on main 806a49fb); docs/reports/ci-browser-checks-2026-11-17/REPORT_ZH_TW.md"
     },
@@ -747,10 +747,10 @@
       {
         "id": "ROADMAP_R3_STARS",
         "source": "docs/planning/TAMER_PROGRESSION_ROADMAP_2026-11-18_ZH_TW.md (Owner 2026-11-18)",
-        "state": "MERGED",
+        "state": "VERIFIED_LIVE",
         "acceptance": "stars 1-5 from a same-species fusion meter, raising the level cap; never from the gachapon",
         "owner": "Claude",
-        "evidence": "branch feat/roadmap-r3-stars-20261118: stars 1-5 as a meter (same species S 4 / A 3 / others 2, lower stage of the line 1; 6, 10, 16, 24 points), cap 10 levels a star, old saves read with the stars their level needs, never in the gachapon; shown as art and motion (Owner 2026-11-18): Codex sticker emblems art:ui:tamer-emblems:r1, roster strip with level gauge and meter, fusion preview, star-up ceremony; tests/championship-partner-stars-cases.mjs; build and validate exit 0; headless Chromium from the normal entry: a 1-star Lv.10 partner fused two of its species, the star-up ceremony played with the partner body and two stars, the strip then showed 2 stars and Lv.10/20, the save held star 2 with all 1,164 EXP, no page error; full suite 3,955 / 3,955 after merging main ed863632; PR #292 9e7800d0, 11 of 12 checks green, the red one external (see tests.ci)"
+        "evidence": "branch feat/roadmap-r3-stars-20261118: stars 1-5 as a meter (same species S 4 / A 3 / others 2, lower stage of the line 1; 6, 10, 16, 24 points), cap 10 levels a star, old saves read with the stars their level needs, never in the gachapon; shown as art and motion (Owner 2026-11-18): Codex sticker emblems art:ui:tamer-emblems:r1, roster strip with level gauge and meter, fusion preview, star-up ceremony; tests/championship-partner-stars-cases.mjs; build and validate exit 0; headless Chromium from the normal entry: a 1-star Lv.10 partner fused two of its species, the star-up ceremony played with the partner body and two stars, the strip then showed 2 stars and Lv.10/20, the save held star 2 with all 1,164 EXP, no page error; full suite 3,955 / 3,955 after merging main ed863632; PR #292 9e7800d0, 11 of 12 checks green, the red one external (see tests.ci); live pages-build commit 9e7800d0 (build c06ad34a), star-on_96.webp answers 200 on the live site"
       },
       {
         "id": "ROADMAP_R4_SKILL_CARDS",
@@ -776,9 +776,9 @@
       {
         "id": "PRESENTATION_RETROFIT_R1_R2",
         "source": "Owner 2026-11-18 (MECHANICS_AS_GAME_NOT_TEXT_20261118)",
-        "state": "IMPLEMENTED_LOCAL",
+        "state": "VERIFIED_LIVE",
         "acceptance": "the crystal feed, the level unlocks and the evolution level gate are shown with emblems, moving meters and a pay-off moment instead of sentences; Codex masters for the crystal, tamer badge, locks and evolve-ready emblem are waiting in codex-art-requests/2026-11-18-tamer-roadmap-ui/out",
-        "evidence": "branch feat/presentation-retrofit-20261118: Journey pour station (badge, gauge, purse, flying crystals, level-up cue, unlock toast), padlock stickers on shop, gate, talent and rank locks, evolve-ready emblem and level gauge on the ranch card and the gachapon picker; bundle art:ui:tamer-emblems:r1 now 8 files; tests/championship-tamer-emblems-cases.mjs; full suite 3,960 / 3,960, build and validate exit 0; headless Chromium from the normal entry with the friends playtest off: one pour at Lv.4 flew 8 crystals, showed the toast for rank 1 and left Lv.5 with 4,757 crystals saved; the locked gate line and the shop chips carried the padlock image; the ranch chip showed the evolve-ready image and Lv.9/10; no page error"
+        "evidence": "branch feat/presentation-retrofit-20261118: Journey pour station (badge, gauge, purse, flying crystals, level-up cue, unlock toast), padlock stickers on shop, gate, talent and rank locks, evolve-ready emblem and level gauge on the ranch card and the gachapon picker; bundle art:ui:tamer-emblems:r1 now 8 files; tests/championship-tamer-emblems-cases.mjs; full suite 3,960 / 3,960, build and validate exit 0; headless Chromium from the normal entry with the friends playtest off: one pour at Lv.4 flew 8 crystals, showed the toast for rank 1 and left Lv.5 with 4,757 crystals saved; the locked gate line and the shop chips carried the padlock image; the ranch chip showed the evolve-ready image and Lv.9/10; no page error; PR #293 873734ab, 11 of 12 checks green, the red one external (see tests.ci); live pages-build commit 873734ab (build 28a89b8b), exp-crystal_96.webp answers 200 on the live site"
       },
       {
         "id": "EXTERNAL_CHARACTER_DELIVERY_RED",
@@ -786,6 +786,13 @@
         "state": "WAITING_ON_CHARACTER_ANIMATION_OWNER",
         "acceptance": "'Verify external character delivery / browser' is green on main: the atlases PR #290 added for the GR roles answer 200 on the live character host",
         "evidence": "red on #290 and on #292 (rerun) with the same 404s; e.g. assets/production/characters/reviewed107-20261026/GR01/web-atlas-v2/bc6db1ac...webp answered 404 on the live site at commit ed863632; not Claude's area (character action animation), reported to the Owner"
+      },
+      {
+        "id": "TALENT_TREE",
+        "source": "Owner 2026-11-18 (TALENT_TREE_20261118)",
+        "state": "IMPLEMENTED_LOCAL",
+        "acceptance": "the talent screen is a tree of icons: a tap lights a node, a press-and-hold shows what it does, and the first layer has no sentence",
+        "evidence": "branch feat/talent-tree-20261118: tamerTalentPanel.js redrawn as a tree, 48 Codex icons art:ui:talent-icons:r1, tests/championship-talent-tree-cases.mjs; headless Chromium from the normal entry at 390x844 and 1366x768: 11 icons loaded per line, a 520 ms press wrote 「長息 +5 秒狩獵」 without learning, a tap lit the node and saved rank 1, a locked node refused with its reason, the commander tab showed its tree, no overflow, no touch target under 44 px, no page error; full suite 3,964 / 3,964, build and validate exit 0"
       }
     ],
     "decisionsForOwner": [
@@ -854,6 +861,6 @@
       "傳承 through the Hunt Result fusion panel in a browser (the ranch fusion was run)",
       "省彈 seen in a browser hunt (rule and source tests only)"
     ],
-    "nextAction": "Merge the presentation retrofit; then R4 (skill-card hand: lift and throw; card back art is drawn, 20 card faces to request from Codex), R5 (push mode), R6 (leftover talent nodes); every batch ships with art and motion; fetch main before every merge."
+    "nextAction": "Merge the talent tree; then give the other text-heavy screens the same three layers (supplies, fusion panel, Journey lists), R4 skill-card hand, R5 push mode, R6 leftover talent nodes; fetch main before every merge."
   }
 }

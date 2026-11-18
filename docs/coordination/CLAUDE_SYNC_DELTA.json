@@ -667,6 +667,16 @@
         "id": "ROADMAP_R2_EVOLUTION_LEVEL",
         "state": "VERIFIED_LIVE",
         "evidence": "branch feat/roadmap-r2-evolution-level-20261118: gates 幼年期 II Lv.3 / 成長期 Lv.10 applied only where the native rules would evolve; the form is still chosen by the existing conditions; a waiting partner keeps its life; catalyst refuses EVOLUTION_LEVEL_TOO_LOW; tests/championship-evolution-level-gate-cases.mjs; full suite 3,949 / 3,949, build and validate exit 0; headless Chromium from the normal entry with the friends playtest off: a ready 成長期 partner at Lv.9 did not evolve in 45 s and its card read 進化需 Lv.10, at Lv.10 it became the form the conditions chose within 5 s, no page error; PR #291 4b7169ca, all checks green after one rerun of the webkit evolution baseline control; live pages-build commit ed863632 (build d5ba60bb) with EVOLUTION_LEVEL_TOO_LOW and levelBlocked in the live bundle"
+      },
+      {
+        "id": "ROADMAP_R3_STARS",
+        "state": "VERIFIED_LIVE",
+        "evidence": "branch feat/roadmap-r3-stars-20261118: stars 1-5 as a meter (same species S 4 / A 3 / others 2, lower stage of the line 1; 6, 10, 16, 24 points), cap 10 levels a star, old saves read with the stars their level needs, never in the gachapon; shown as art and motion (Owner 2026-11-18): Codex sticker emblems art:ui:tamer-emblems:r1, roster strip with level gauge and meter, fusion preview, star-up ceremony; tests/championship-partner-stars-cases.mjs; build and validate exit 0; headless Chromium from the normal entry: a 1-star Lv.10 partner fused two of its species, the star-up ceremony played with the partner body and two stars, the strip then showed 2 stars and Lv.10/20, the save held star 2 with all 1,164 EXP, no page error; full suite 3,955 / 3,955 after merging main ed863632; PR #292 9e7800d0, 11 of 12 checks green, the red one external (see tests.ci); live pages-build commit 9e7800d0 (build c06ad34a), star-on_96.webp answers 200 on the live site"
+      },
+      {
+        "id": "PRESENTATION_RETROFIT_R1_R2",
+        "state": "VERIFIED_LIVE",
+        "evidence": "branch feat/presentation-retrofit-20261118: Journey pour station (badge, gauge, purse, flying crystals, level-up cue, unlock toast), padlock stickers on shop, gate, talent and rank locks, evolve-ready emblem and level gauge on the ranch card and the gachapon picker; bundle art:ui:tamer-emblems:r1 now 8 files; tests/championship-tamer-emblems-cases.mjs; full suite 3,960 / 3,960, build and validate exit 0; headless Chromium from the normal entry with the friends playtest off: one pour at Lv.4 flew 8 crystals, showed the toast for rank 1 and left Lv.5 with 4,757 crystals saved; the locked gate line and the shop chips carried the padlock image; the ranch chip showed the evolve-ready image and Lv.9/10; no page error; PR #293 873734ab, 11 of 12 checks green, the red one external (see tests.ci); live pages-build commit 873734ab (build 28a89b8b), exp-crystal_96.webp answers 200 on the live site"
       }
     ],
     "openForClaude": [
@@ -677,10 +687,6 @@
       {
         "id": "TALENT_NODES_REMAINING",
         "state": "PARTLY_DONE"
-      },
-      {
-        "id": "ROADMAP_R3_STARS",
-        "state": "MERGED"
       },
       {
         "id": "ROADMAP_R4_SKILL_CARDS",
@@ -695,12 +701,12 @@
         "state": "NOT_STARTED"
       },
       {
-        "id": "PRESENTATION_RETROFIT_R1_R2",
-        "state": "IMPLEMENTED_LOCAL"
-      },
-      {
         "id": "EXTERNAL_CHARACTER_DELIVERY_RED",
         "state": "WAITING_ON_CHARACTER_ANIMATION_OWNER"
+      },
+      {
+        "id": "TALENT_TREE",
+        "state": "IMPLEMENTED_LOCAL"
       }
     ],
     "forCodex": [

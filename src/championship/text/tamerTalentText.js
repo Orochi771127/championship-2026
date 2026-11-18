@@ -18,6 +18,10 @@ const ROWS = {
   'tier': ['第 {tier} 層・{gate} 點開放', 'Tier {tier} · opens at {gate}', '第{tier}層・{gate}で開放', 'ชั้น {tier} · เปิดที่ {gate}', 'Tầng {tier} · mở ở {gate}'],
   'keystone': ['頂點・{gate} 點・二選一', 'Keystone · {gate} · 1 of 2', '頂点・{gate}・二択', 'ยอด · {gate} · 1 จาก 2', 'Đỉnh · {gate} · 1 trong 2'],
   'learn': ['+1', '+1', '+1', '+1', '+1'],
+  // TALENT_TREE_20261118: the tree's only words beside names.
+  'hint': ['點一下點亮・按住看作用', 'Tap to light · hold to read', 'タップで点灯・長押しで効果', 'แตะเพื่อเปิด · กดค้างเพื่ออ่าน', 'Chạm để thắp · giữ để xem'],
+  'either': ['二選一', '1 of 2', '二択', '1 จาก 2', '1 trong 2'],
+  'tier.gate': ['本線已投入 {spent} / {gate}', 'Spent in this line {spent} / {gate}', 'このライン投入 {spent} / {gate}', 'ใช้ในสายนี้ {spent} / {gate}', 'Đã dùng ở nhánh này {spent} / {gate}'],
   'rank': ['{rank} / {max}', '{rank} / {max}', '{rank} / {max}', '{rank} / {max}', '{rank} / {max}'],
   'respec': ['重置天賦', 'Reset talents', '天賦リセット', 'รีเซ็ตพรสวรรค์', 'Đặt lại thiên phú'],
   'respec.free': ['首次免費', 'First reset free', '初回無料', 'ครั้งแรกฟรี', 'Lần đầu miễn phí'],
