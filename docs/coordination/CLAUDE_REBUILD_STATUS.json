@@ -510,7 +510,8 @@
       "main": "806a49fb (Merge PR #282 by another session; contains PR #281 04efe4bf)",
       "openPullRequests": [],
       "branchesInFlight": [
-        "feat/thrift-and-entry-run-20261118"
+        "feat/thrift-and-entry-run-20261118 (PR #286)",
+        "feat/roadmap-r0-joystick-20261118 (stacked on it)"
       ],
       "worktree": ".claude/worktrees/skill-scroll-20261117 (clean worktree cut from origin/main; the shared checkout holds other agents' uncommitted work and is not touched)"
     },
@@ -711,6 +712,63 @@
         "state": "VERIFIED_MERGED",
         "owner": "Claude",
         "evidence": "tests/championship-battle-full-map-browser.cjs compared a computed keyword (flex-end) that Chrome 158 reports as flow-end; it now measures where the roster cards sit; passes on Chrome 157 locally and 158 in CI (PR #276)"
+      },
+      {
+        "id": "ROADMAP_R0_JOYSTICK",
+        "source": "docs/planning/TAMER_PROGRESSION_ROADMAP_2026-11-18_ZH_TW.md (Owner 2026-11-18)",
+        "state": "IMPLEMENTED_LOCAL",
+        "acceptance": "PR, CI green, live commit",
+        "owner": "Claude",
+        "evidence": "the Data Arena sticks are one thin ring and one flat thumb; relay touch gate 32 / 32 at 320x568, 390x844, 430x932 and 844x390; the 390x844 screenshot was read"
+      },
+      {
+        "id": "ROADMAP_R1_CRYSTALS_TO_TAMER",
+        "source": "docs/planning/TAMER_PROGRESSION_ROADMAP_2026-11-18_ZH_TW.md (Owner 2026-11-18)",
+        "state": "NOT_STARTED",
+        "acceptance": "the Journey feed tab feeds the tamer; partners no longer take crystals; saved crystals untouched; battle Sync EXP stays; the crystal-to-EXP rate is sized against the tamer curve (137,370 EXP to Lv.50) and written in the contract",
+        "owner": "Claude"
+      },
+      {
+        "id": "ROADMAP_R1B_LEVEL_UNLOCKS",
+        "source": "docs/planning/TAMER_PROGRESSION_ROADMAP_2026-11-18_ZH_TW.md (Owner 2026-11-18)",
+        "state": "NOT_STARTED",
+        "acceptance": "shop and hunt gates read the higher of the title rank and a rank worked out from the tamer level; native title rules unchanged",
+        "owner": "Claude"
+      },
+      {
+        "id": "ROADMAP_R2_EVOLUTION_LEVEL",
+        "source": "docs/planning/TAMER_PROGRESSION_ROADMAP_2026-11-18_ZH_TW.md (Owner 2026-11-18)",
+        "state": "NOT_STARTED",
+        "acceptance": "each growth stage has a level threshold; the ranch and partner page say how many levels are missing; the branch taken still follows the existing conditions",
+        "owner": "Claude"
+      },
+      {
+        "id": "ROADMAP_R3_STARS",
+        "source": "docs/planning/TAMER_PROGRESSION_ROADMAP_2026-11-18_ZH_TW.md (Owner 2026-11-18)",
+        "state": "NOT_STARTED",
+        "acceptance": "stars 1-5 from a same-species fusion meter, raising the level cap; never from the gachapon",
+        "owner": "Claude"
+      },
+      {
+        "id": "ROADMAP_R4_SKILL_CARDS",
+        "source": "docs/planning/TAMER_PROGRESSION_ROADMAP_2026-11-18_ZH_TW.md (Owner 2026-11-18)",
+        "state": "NOT_STARTED",
+        "acceptance": "R4a rules, four basic cards and the hand (lift and throw) in the auto battle; R4b sixteen cards through the talent lines; R4c Codex card art",
+        "owner": "Claude"
+      },
+      {
+        "id": "ROADMAP_R5_PUSH_MODE",
+        "source": "docs/planning/TAMER_PROGRESSION_ROADMAP_2026-11-18_ZH_TW.md (Owner 2026-11-18)",
+        "state": "NOT_STARTED",
+        "acceptance": "R5a a side-scrolling stage prototype on the auto battle from the Journey; R5b three-pick upgrades between waves, cards, crystal rewards",
+        "owner": "Claude"
+      },
+      {
+        "id": "ROADMAP_R6_LEFTOVERS",
+        "source": "docs/planning/TAMER_PROGRESSION_ROADMAP_2026-11-18_ZH_TW.md (Owner 2026-11-18)",
+        "state": "NOT_STARTED",
+        "acceptance": "native-hunt talent nodes, 萃取, 行商, the Data Arena reading the commander line",
+        "owner": "Claude"
       }
     ],
     "decisionsForOwner": [
@@ -722,7 +780,7 @@
           "B: drop the slots, all day",
           "C: A plus opening rank-locked shop goods one rank earlier"
         ],
-        "state": "ASKED_2026-11-17"
+        "state": "DECIDED_2026-11-18 by another route: crystals become tamer EXP and the tamer level also opens product unlocks (roadmap R1, R1b); the native title slots are left as they are"
       },
       {
         "id": "D2_SERVER_AUTHORITY",
@@ -746,13 +804,26 @@
           "build it as a product battle layer for owned-party auto battles, unlocked through the talent tree (recommended)",
           "leave it until the commander line is wired"
         ],
-        "state": "DESIGN_DRAFTED_2026-11-18 in docs/planning/TAMER_SKILL_CARDS_PLAN_2026-11-18_ZH_TW.md (20 cards, unlocks through the talent lines, art brief for Codex); waiting for the Owner on who casts the cards"
+        "state": "DECIDED_2026-11-18: the player casts from a hand of three, lifting a card and throwing it (roadmap R4a-c)"
+      },
+      {
+        "id": "D6_CHARGE_TALENT_METER",
+        "question": "The commander talent 蓄能 says 開場覺醒能量 +2 (cap 40), but the 40-cap awakening energy is a raising item meter; a battle has no such meter.",
+        "options": [
+          "name the meter",
+          "drop the node"
+        ],
+        "state": "ASKED_2026-11-18"
       }
     ],
     "waitingOnOthers": [
       {
         "id": "CODEX_ANIMATION_GAPS",
         "detail": "character action animation intake (six held originals and two partial roles per the 2026-11-12 gap brief); Claude does not touch these"
+      },
+      {
+        "id": "CODEX_CARD_ART",
+        "detail": "20 tamer skill card pictures (roadmap R4c): requested when R4a lands; placeholders until then"
       }
     ],
     "notVerified": [
@@ -766,6 +837,6 @@
       "傳承 through the Hunt Result fusion panel in a browser (the ranch fusion was run)",
       "省彈 seen in a browser hunt (rule and source tests only)"
     ],
-    "nextAction": "PR and merge T7 with the normal-entry report; then the Data Arena reading the commander line and 萃取; the native-hunt nodes need a study of the rope, movement and status code first; decisions D1, D5 and what 蓄能 fills are open. Fetch main before every merge: another session merges there too."
+    "nextAction": "Merge T7 (PR #286), then R0, then R1 (crystals feed the tamer) and on through the roadmap; fetch main before every merge."
   }
 }

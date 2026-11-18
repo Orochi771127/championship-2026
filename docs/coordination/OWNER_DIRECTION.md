@@ -1,5 +1,27 @@
 # Championship Owner Direction
 
+<!-- record-id: TAMER_PROGRESSION_ROADMAP_20261118 -->
+## 2026-11-18 — Owner hands over a roadmap: tamer growth, skill-card hand, stars, a side-scrolling mode, a plain joystick
+
+Owner, in one set of messages, with a screenshot of the Data Arena relay controls and a reference shot of a side-scrolling squad battler:
+
+- 「我希望這個搖桿可以做得比較時尚直接一點不要那麼多花紋」
+- 「全部都交給你自主去開發包含玩法模式啊，那些，我都不介入」
+- Skill cards: 「玩家點擊釋放，做成一個技能卡片三張手牌在手中的樣子，然後玩家可以把它往上提以後丟出去的樣子」
+- Tamer growth: 「現在的那個六大巡航區域，然後灌那個經驗結晶原本是給夥伴，我想說變成訓練師的經驗，戰鬥結束夥伴當然也會提升一點經驗，但是不用灌給夥伴。因為現在經驗值的獲取變成是抓同樣的怪物，然後互相合成」
+- Evolution: 「進化的條件也再多一個就是幾等的時候可以進化。但是會依照就是現有的那個進化條件就是他們的種族族群的素質，然後影響有那個分歧進化」
+- Stars: 「同一隻合成的時候有機會提升一顆星的等級，最高是五星，加入這個會好玩嗎？」 (asked as a question; left to Claude with the rest)
+- A new mode: 「加入那種橫向的推進遊戲的玩法…只是用我們的自動對戰模式去改」
+
+What this settles:
+
+- Decision D5 (who casts the tamer skill cards): the player, from a hand of three, by lifting a card and throwing it.
+- Decision D1 (the tamer rank is slow and locks the shop): the tamer grows by playing stages (crystals become tamer EXP), and the tamer level also opens product unlocks. The native title rules are not changed.
+- The plan and its batches R0–R6: `docs/planning/TAMER_PROGRESSION_ROADMAP_2026-11-18_ZH_TW.md`. Stars are built with a progress meter instead of a bare chance, and raise the level cap; the reasons are in section 4 of the plan.
+- The side-scrolling mode is built as an original mode of this game in that genre, with this game's own partners, arenas and auto battle; no other game's name, art, characters or stages are used.
+
+R0 (the batch of this record): the Data Arena movement and aim sticks are one thin ring and one flat thumb; the spokes, inner rings and gradients are gone.
+
 <!-- record-id: TAMER_TALENTS_T7_20261118 -->
 ## 2026-11-18 — Tamer talents T7: 省彈, and one normal-entry run of the whole game on main
 
