@@ -15,7 +15,8 @@ import * as THREE from '../node_modules/three/build/three.module.js';
 import {disposeThreeRenderer, releaseThreeSharedTextures, threeSharedTextureListeners}
   from '../src/championship/presentation/threeRendererRelease.js';
 import {buildSyncGainPanel} from '../src/championship/app/ui/syncGainPanel.js';
-import {releaseDetachedActionPortraits} from '../src/championship/presentation/juicy/actionPortrait.js';
+import {releaseDetachedActionPortraits, setActionPortraitsSuspended} from '../src/championship/presentation/juicy/actionPortrait.js';
+import {createSpriteMotion} from '../src/championship/presentation/juicy/spriteMotionPlayer.js';
 
 const source = file => fs.readFileSync(new URL('../' + file, import.meta.url), 'utf8');
 const between = (text, from, to) => { const a = text.indexOf(from); assert.ok(a >= 0, `missing ${from}`); const b = text.indexOf(to, a + from.length); return text.slice(a, b < 0 ? undefined : b); };
@@ -216,4 +217,56 @@ test('the idle ranch HUD writes only what changed (it repainted everything ~17 t
   assert.match(between(badge, '  function update(frame) {', '\n  }'), /if \(!button\.hidden\) place\(\);/);
   const journal = source('src/championship/app/ranchDiscoveryJournal.js');
   assert.match(between(journal, '  function update(frame){', '\n  }'), /if\(changed\|\|placedOnce!==true\)\{placedOnce=true;place\(\);\}/);
+});
+
+test('iOS polish: hidden portraits suspend, background 3D stops under Story, wide battle canvas bitmaps close, and auto-resume avoids title flash', () => {
+  assert.equal(typeof setActionPortraitsSuspended, 'function');
+  // Unit-check spriteMotionPlayer suspend/resume releases backgroundImage & animation and restores on resume.
+  const doc = fakeDocument();
+  let canceled = 0, animated = 0;
+  const origMake = doc.createElement;
+  doc.createElement = tag => {
+    const node = origMake(tag);
+    node.animate = () => { animated += 1; return { playState: 'running', pause() { this.playState = 'paused'; }, play() { this.playState = 'running'; }, cancel() { canceled += 1; }, finished: Promise.resolve() }; };
+    return node;
+  };
+  const motion = {
+    bounds: { left: -20, right: 20, top: -40, bottom: 0 },
+    density: 4,
+    sequences: new Map([[0, [
+      { x: 0, y: 0, w: 40, h: 40, ox: -20, oy: -40, ticks: 6, url: 'https://example.test/a.webp', pageWidth: 256, pageHeight: 256 },
+      { x: 40, y: 0, w: 40, h: 40, ox: -20, oy: -40, ticks: 6, url: 'https://example.test/a.webp', pageWidth: 256, pageHeight: 256 }
+    ]]])
+  };
+  const sprite = createSpriteMotion({ doc, motion, scale: 1 });
+  sprite.play(0);
+  const body = sprite.element.children[0];
+  assert.equal(animated, 1);
+  assert.match(body.style.backgroundImage, /a\.webp/);
+  sprite.suspend();
+  assert.equal(canceled, 1);
+  assert.equal(body.style.backgroundImage, 'none');
+  sprite.resume();
+  assert.equal(animated, 2);
+  assert.match(body.style.backgroundImage, /a\.webp/);
+  sprite.dispose();
+
+  const ranch = source('src/championship/presentation/ranchThreeScene.js');
+  assert.match(ranch, /\.cm-vn:not\(\[hidden\]\), \.cm-story-map:not\(\[hidden\]\)/);
+  assert.match(ranch, /if\(document\.hidden\|\|storyCovering\)\{wasHidden=true;return true;\}/);
+
+  const battleSelectThree = source('src/championship/presentation/vs5/createBattleSelectThreePresentation.js');
+  assert.match(battleSelectThree, /!host\.isConnected \|\| host\.closest\?\.\("\[hidden\]"\)/);
+
+  const ambient = source('src/championship/presentation/battleFieldAmbient.js');
+  assert.match(ambient, /canvasSources\.map\(src => unloadClosingBitmap\(PIXI\.Assets, src\)\)/);
+
+  const main = source('src/championship/app/main.js');
+  assert.match(main, /setActionPortraitsSuspended\(root, true\)/);
+  assert.match(main, /setActionPortraitsSuspended\(root, false\)/);
+  assert.match(main, /preBootCheckpoint[\s\S]*titleScreen\.hidden = true;/);
+  assert.doesNotMatch(main, /openingFilm\?\.stop\?\.\(\)/);
+  assert.match(main, /openingFilm\?\.sync\?\.\(\)/);
+  assert.match(main, /resumeOverlay === "story"/);
+  assert.match(main, /resumeOverlay === "journey"/);
 });

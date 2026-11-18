@@ -78,7 +78,7 @@ export function createActionPortrait({ doc = globalThis.document, species, width
   element.dataset.species = speciesId ?? "";
   if (Number.isFinite(width)) element.style.width = `${width}px`;
   if (Number.isFinite(height)) element.style.height = `${height}px`;
-  let sprite = null, disposed = false, observer = null, started = false, current = sequence;
+  let sprite = null, disposed = false, observer = null, started = false, current = sequence, suspended = false;
   let resolveReady;
   const ready = new Promise(resolve => { resolveReady = resolve; });
   const available = Boolean(speciesId) && showcaseMotionAvailable(speciesId, baseUrl);
@@ -108,6 +108,7 @@ export function createActionPortrait({ doc = globalThis.document, species, width
       sprite.element.style.setProperty("--foot-x", `calc(50% + ${Math.round(fit.centerX * (facing > 0 ? -1 : 1) * 100) / 100}px)`);
       sprite.setFacing(facing);
       sprite.play(current);
+      if (suspended) sprite.suspend?.();
       element.replaceChildren(sprite.element);
       // A box inserted after the load began is on the page now: remember it, so leaving
       // the page later retires it (and its looping animation) instead of keeping it.
@@ -123,6 +124,13 @@ export function createActionPortrait({ doc = globalThis.document, species, width
   const record = {
     element,
     wasConnected: element.isConnected === true,
+    setSuspended(next) {
+      if (disposed) return;
+      suspended = Boolean(next);
+      if (!sprite) return;
+      if (suspended) sprite.suspend?.();
+      else sprite.resume?.();
+    },
     dispose() {
       if (disposed) return;
       disposed = true;
@@ -195,4 +203,17 @@ export function clearActionPortrait(slot) {
   const previous = slot ? slotPortraits.get(slot) : null;
   previous?.dispose();
   if (slot) slotPortraits.delete(slot);
+}
+
+/**
+ * Suspend or resume every live action portrait inside `container` (e.g. while
+ * a full-screen overlay such as Data Arena or Story Theater covers `#cm-root`).
+ */
+export function setActionPortraitsSuspended(container, suspended) {
+  sweepDisconnectedActionPortraits();
+  for (const record of livePortraits) {
+    if (!container || container.contains?.(record.element)) {
+      record.setSuspended?.(suspended);
+    }
+  }
 }

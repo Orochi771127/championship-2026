@@ -123,7 +123,7 @@ import { OVER_LIMIT_RULES } from '../contracts/productAwakeningOverdrive.js';
 import { createSkillCutInLayer } from '../presentation/juicy/skillCutIn.js';
 import { moveIconSrc } from './moveIcons.js';
 import { juicyPresentationEnabled, juicySpeciesIndex } from '../presentation/juicy/juicyArt.js';
-import { createActionPortrait, setActionPortrait, clearActionPortrait, warmActionPortraits, releaseDetachedActionPortraits } from '../presentation/juicy/actionPortrait.js';
+import { createActionPortrait, setActionPortrait, clearActionPortrait, warmActionPortraits, releaseDetachedActionPortraits, setActionPortraitsSuspended } from '../presentation/juicy/actionPortrait.js';
 // Owner 2026-11-12: partners outside the Database are drawn as their own animated bodies.
 const ACTION_PORTRAITS = Object.freeze({ set: setActionPortrait, clear: clearActionPortrait });
 const speciesBody = options => createActionPortrait(options).element;
@@ -380,6 +380,20 @@ function readRaisingLayoutSample() {
 }
 
 const titleScreen = document.getElementById("cm-title");
+let sessionCheckpoint = null;
+try {
+  sessionCheckpoint = createChampionshipSessionCheckpointPort({
+    storage: window.localStorage,
+    sessionStorage: window.sessionStorage
+  });
+} catch { sessionCheckpoint = null; }
+// Hide #cm-title before title image/parade hooks or async map-polish imports run
+// when an iOS/mobile auto-resume checkpoint is live, preventing a title flash.
+const preBootCheckpoint = isMobileOrInstalledWebApp(window) ? sessionCheckpoint?.read() : null;
+if (preBootCheckpoint && Number.isFinite(preBootCheckpoint.updatedAtMs)
+  && Date.now() - preBootCheckpoint.updatedAtMs <= CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS && titleScreen) {
+  titleScreen.hidden = true;
+}
 let openingFilm = null;
 const titleBackgroundFeedback=document.getElementById('cm-title-background-feedback');
 const titleBackgroundStatus=document.getElementById('cm-title-background-status');
@@ -1996,11 +2010,13 @@ async function openJourney(prefill = null) {
       },
       onClose: closeJourney
     });
+    if (app) recordSessionScreenMounted(app.getScreen());
   } catch (error) { console.warn('Journey unavailable', error); closeJourney(); }
 }
 function closeJourney() {
   if (journeyView && journeyView !== 'OPENING') journeyView.dispose();
   journeyView = null; root.inert = false;
+  if (app) recordSessionScreenMounted(app.getScreen());
 }
 /** The story map plays on the ranch: leave the battle menu, then open it once the ranch stage is up. */
 function openStoryFromJourney() {
@@ -3370,11 +3386,21 @@ async function openStoryMap({ chapterId = null, source = 'menu' } = {}) {
     partner: { name: partner?.name ?? '', portrait: partner?.portrait ?? null },
     guideForm: resolveGuideAppearance(settings.store.get().guideAppearance),
     onPlay: (next, node) => node?.vnChapterId === 'vn3-hub' ? openUnionHub({ source: 'map' }) : node?.vnChapterId ? playVnChapter(node.vnChapterId, { source: 'map' }) : playStoryChapter(next, { source: 'map' }),
-    onClose: () => { recoveryDiagnostics.record('STORY', { source, stage: 'map-closed' }); } });
+    onClose: () => {
+      recoveryDiagnostics.record('STORY', { source, stage: 'map-closed' });
+      if (app) recordSessionScreenMounted(app.getScreen());
+    } });
   recoveryDiagnostics.record('STORY', { source, stage: 'map' });
-  return storyMap.open({ chapterId });
+  const opened = storyMap.open({ chapterId });
+  if (opened && app) recordSessionScreenMounted(app.getScreen());
+  return opened;
 }
-function closeStoryMap() { storyMap?.dispose(); storyMap = null; }
+function closeStoryMap() {
+  const wasOpen = Boolean(storyMap?.isOpen);
+  storyMap?.dispose();
+  storyMap = null;
+  if (wasOpen && app) recordSessionScreenMounted(app.getScreen());
+}
 
 // Story mode part one (OWNER_APPROVED_ADAPTATION 2026-11-11): the half-body story theater.
 // Chapters open in order once the rift chapter one was watched; progress is the
@@ -3423,6 +3449,8 @@ async function playVnChapter(chapterId, { source = 'map', from = null } = {}) {
   document.body.dataset.storyStage = 'playing';
   root.dataset.storyPlaying = chapterId;
   vnRun = director;
+  if (typeof setActionPortraitsSuspended === 'function') setActionPortraitsSuspended(root, true);
+  if (app) recordSessionScreenMounted(app.getScreen());
   try {
     const result = await director.play(chapterId, { tamer: app.getOpeningState()?.trainerName ?? '', partner: partner.name, partnerSpecies, from });
     recoveryDiagnostics.record('STORY', { chapterId, source, stage: `vn-${result.outcome}` });
@@ -3432,7 +3460,9 @@ async function playVnChapter(chapterId, { source = 'map', from = null } = {}) {
     vnRun = null;
     delete root.dataset.storyPlaying;
     delete document.body.dataset.storyStage;
+    if (!root.hidden && typeof setActionPortraitsSuspended === 'function') setActionPortraitsSuspended(root, false);
     clockDriver?.setActive(!root.hidden);
+    if (app) recordSessionScreenMounted(app.getScreen());
     refreshStatusBar();
   }
 }
@@ -4092,6 +4122,7 @@ async function enterDataArena(dataArenaButton, { campaign = null, onCampaignResu
     dataArenaSession = null;
     root.hidden = false;
     root.inert = false;
+    if (typeof setActionPortraitsSuspended === "function") setActionPortraitsSuspended(root, false);
     clockDriver?.setActive(true);
     dataArenaButton.disabled = false;
     if (app) recordSessionScreenMounted(app.getScreen());
@@ -4136,6 +4167,7 @@ async function enterDataArena(dataArenaButton, { campaign = null, onCampaignResu
     });
     dataArenaSession = session;
     root.hidden = true;
+    if (typeof setActionPortraitsSuspended === "function") setActionPortraitsSuspended(root, true);
     sessionCheckpoint?.write({ screen: "DATA_ARENA", substate: null }, { force: true });
   } catch (error) {
     console.warn("DATA_ARENA_OPEN_FAILED", error);
@@ -4144,14 +4176,6 @@ async function enterDataArena(dataArenaButton, { campaign = null, onCampaignResu
       actions: [{ id: 'close', label: uiText('返回') }], cancelId: 'close' });
   }
 }
-
-let sessionCheckpoint = null;
-try {
-  sessionCheckpoint = createChampionshipSessionCheckpointPort({
-    storage: window.localStorage,
-    sessionStorage: window.sessionStorage
-  });
-} catch { sessionCheckpoint = null; }
 
 function ensureSessionHistoryGuard() {
   if (!titleScreen || !titleScreen.hidden) return;
@@ -4174,9 +4198,15 @@ function recordSessionScreenMounted(target) {
       ?? app?.getSelectedGateId?.()
       ?? null)
     : null;
+  const overlay = (vnRun || storyRun || storyMap?.isOpen) ? "story"
+    : (journeyView && journeyView !== "OPENING") ? "journey"
+    : null;
+  const substate = (gateId || overlay)
+    ? { ...(gateId ? { gateId } : {}), ...(overlay ? { overlay } : {}) }
+    : null;
   sessionCheckpoint?.write({
     screen: activeScreen,
-    substate: gateId ? { gateId } : null
+    substate
   });
   ensureSessionHistoryGuard();
 }
@@ -4291,6 +4321,7 @@ function boot() {
     && Date.now() - activeCheckpoint.updatedAtMs <= CHAMPIONSHIP_SESSION_CHECKPOINT_TTL_MS
     && app.canContinue().loadable);
   if (!shouldAutoResume) {
+    if (titleScreen) titleScreen.hidden = false;
     openingFilm.start();
     syncTitleArt();
   }
@@ -4332,9 +4363,10 @@ function boot() {
     recoveryDiagnostics.record("AUTO_RESUME", { target: activeCheckpoint.screen });
     void (async () => {
       try {
-        openingFilm?.stop?.();
         titleScreen.hidden = true;
+        openingFilm?.sync?.();
         const resumeScreen = activeCheckpoint.screen;
+        const resumeOverlay = activeCheckpoint.substate?.overlay ?? null;
         const huntResume = (resumeScreen === CHAMPIONSHIP_SCREENS.HUNT_LOADOUT || resumeScreen === CHAMPIONSHIP_SCREENS.HUNT_FIELD)
           && activeCheckpoint.substate?.gateId;
         // Route before the first mount (2026-11-16): a reload after an iOS memory kill
@@ -4373,6 +4405,10 @@ function boot() {
         if (huntResume) {
           expeditionSource?.intents?.selectGate?.(activeCheckpoint.substate.gateId);
           await expeditionSource?.intents?.confirmGate?.();
+        } else if (resumeOverlay === "story" && app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) {
+          void openStoryMap({ source: "resume" });
+        } else if (resumeOverlay === "journey" && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_SELECT) {
+          void openJourney();
         }
         // Any other screen (including RAISING_HOME and HUNT_RESULT) safely remains
         // on RAISING_HOME (opened by continueGame() above), never dropping to Title.

@@ -18,7 +18,9 @@ export function isMobileOrInstalledWebApp(view = globalThis.window) {
   const nav = view?.navigator;
   if (!nav) return false;
   const ua = String(nav.userAgent ?? '');
-  return /iPhone|iPad|iPod|Android|Mobile/i.test(ua) || (nav.platform === 'MacIntel' && Number(nav.maxTouchPoints ?? 0) > 1);
+  return /iPhone|iPad|iPod|Android|Mobile/i.test(ua)
+    || (nav.platform === 'MacIntel' && Number(nav.maxTouchPoints ?? 0) > 1)
+    || Boolean(view?.matchMedia?.('(pointer: coarse)').matches);
 }
 
 // A title-only help control, not a second install/save or navigation authority.

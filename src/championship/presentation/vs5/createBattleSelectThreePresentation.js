@@ -546,7 +546,7 @@ export function mountBattleSelectThreePresentation({ host, onSelect, available =
 
   // Drawn ON DEMAND, never on a loop of its own.
   function draw() {
-    if (disposed || globalThis.document?.hidden) return;
+    if (disposed || globalThis.document?.hidden || !host.isConnected || host.closest?.("[hidden]")) return;
     renderer.render(scene, camera);
   }
 

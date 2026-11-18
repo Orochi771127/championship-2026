@@ -956,7 +956,7 @@ export async function withBattleFieldAmbient({ PIXI, art, quality = "high", redu
       for (const layer of [flowLayer, waveLayer, canvasWaveLayer, gust, scan, ...causticLayers.map(c => c.t)]) layer?.destroy();
       for (const layer of canvasTwins) layer.destroy();
       await art.dispose();
-      await Promise.allSettled(canvasSources.map(src => PIXI.Assets.unload(src)));
+      await Promise.allSettled(canvasSources.map(src => unloadClosingBitmap(PIXI.Assets, src)));
       for (const t of textures.values()) t?.source?.removeAllListeners?.("change");
       await Promise.allSettled(sources.map(src => unloadClosingBitmap(PIXI.Assets, src)));
     }

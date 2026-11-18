@@ -921,7 +921,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   let wasHidden=false;
   function render({bounds,actors,food,waste,covered=false,deltaMS=0,autoCare=null}) {
     if(disposed||lost){groundShadows.reset();selectionRing.reset();for(const item of sprites.values())if(!item.sprite.destroyed)item.sprite.renderable=true;canvas.style.visibility='hidden';return false;}
-    if(document.hidden){wasHidden=true;return true;}
+    const storyCovering=frames>0&&Boolean(globalThis.document?.querySelector?.('.cm-vn:not([hidden]), .cm-story-map:not([hidden])'));
+    if(document.hidden||storyCovering){wasHidden=true;return true;}
     const effectiveDeltaMS=wasHidden?0:deltaMS;
     wasHidden=false;
     canvas.style.visibility='';

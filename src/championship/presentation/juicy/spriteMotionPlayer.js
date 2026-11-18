@@ -249,7 +249,7 @@ export function createSpriteMotion({ doc = globalThis.document, motion, scale = 
   element.style.setProperty("--cm-sprite-ax", px(-b.left));
   element.style.setProperty("--cm-sprite-below", px(b.bottom));
   element.style.transformOrigin = `${px(-b.left)} ${px(-b.top)}`;
-  let animation = null, flip = null, facing = -1, current = null, once = null;
+  let animation = null, flip = null, facing = -1, current = null, once = null, suspended = false;
   // A cell's drawn bottom is its packed rectangle's bottom (cells are trimmed to their pixels).
   const lift = frame => (grounded ? Math.max(0, -(frame.oy + frame.h)) : 0);
   // Atlas cells (known page size) are drawn at scale; reviewed crops (page size
@@ -280,6 +280,7 @@ export function createSpriteMotion({ doc = globalThis.document, motion, scale = 
     const frames = framesOf(sequenceId);
     if (!frames) return false;
     current = sequenceId;
+    suspended = false;
     animation?.cancel();
     animation = null;
     once = null;
@@ -336,7 +337,21 @@ export function createSpriteMotion({ doc = globalThis.document, motion, scale = 
     bodyHeight: () => -b.top * scale,
     /** Hold the loop while the viewer is hidden; resume() picks it up again. */
     pause() { animation?.pause(); },
-    resume() { if (animation?.playState === "paused") animation.play(); },
+    /** Cancel the loop and release its background image while an ancestor screen is hidden. */
+    suspend() {
+      suspended = true;
+      animation?.cancel();
+      animation = null;
+      body.style.backgroundImage = "none";
+    },
+    resume() {
+      if (suspended) {
+        suspended = false;
+        if (current !== null) play(current);
+        return;
+      }
+      if (animation?.playState === "paused") animation.play();
+    },
     getFacing: () => facing,
     getSequence: () => current,
     /** A still copy of the current frame (dash afterimages). */
@@ -354,6 +369,7 @@ export function createSpriteMotion({ doc = globalThis.document, motion, scale = 
       return copy;
     },
     dispose() {
+      suspended = false;
       animation?.cancel(); flip?.cancel();
       animation = flip = once = null;
       body.style.backgroundImage = "none";
