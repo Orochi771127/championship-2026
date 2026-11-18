@@ -447,6 +447,7 @@
     "src/championship/presentation/ranchThreeCoordinates.js",
     "src/championship/presentation/ranchThreeScene.js",
     "src/championship/presentation/starEmblemArt.js",
+    "src/championship/presentation/talentIconArt.js",
     "src/championship/presentation/tamerEmblemArt.js",
     "src/championship/presentation/threeRendererRelease.js",
     "src/championship/presentation/ranchWaterfalls.js",
@@ -9526,6 +9527,54 @@
     "assets/production/ui/cyber-gacha-r1/gacha_ticket.webp",
     "assets/production/ui/cyber-gacha-r1/machine_body.webp",
     "assets/production/ui/cyber-gacha-r1/synth_furnace.webp",
+    "assets/production/ui/talent-icons-r1/breeder.automation_96.webp",
+    "assets/production/ui/talent-icons-r1/breeder.care_96.webp",
+    "assets/production/ui/talent-icons-r1/breeder.extract_96.webp",
+    "assets/production/ui/talent-icons-r1/breeder.herbal_96.webp",
+    "assets/production/ui/talent-icons-r1/breeder.inherit_96.webp",
+    "assets/production/ui/talent-icons-r1/breeder.lasting_96.webp",
+    "assets/production/ui/talent-icons-r1/breeder.lineAffinity_96.webp",
+    "assets/production/ui/talent-icons-r1/breeder.nightWatch_96.webp",
+    "assets/production/ui/talent-icons-r1/breeder.soothe_96.webp",
+    "assets/production/ui/talent-icons-r1/breeder.strollLuck_96.webp",
+    "assets/production/ui/talent-icons-r1/breeder.syncFusion_96.webp",
+    "assets/production/ui/talent-icons-r1/commander.adversity_96.webp",
+    "assets/production/ui/talent-icons-r1/commander.charge_96.webp",
+    "assets/production/ui/talent-icons-r1/commander.finisher_96.webp",
+    "assets/production/ui/talent-icons-r1/commander.goodMood_96.webp",
+    "assets/production/ui/talent-icons-r1/commander.iron_96.webp",
+    "assets/production/ui/talent-icons-r1/commander.lumen_96.webp",
+    "assets/production/ui/talent-icons-r1/commander.opening_96.webp",
+    "assets/production/ui/talent-icons-r1/commander.pureFaction_96.webp",
+    "assets/production/ui/talent-icons-r1/commander.rift_96.webp",
+    "assets/production/ui/talent-icons-r1/commander.syncTraining_96.webp",
+    "assets/production/ui/talent-icons-r1/commander.triColor_96.webp",
+    "assets/production/ui/talent-icons-r1/hunter.appraise_96.webp",
+    "assets/production/ui/talent-icons-r1/hunter.breath_96.webp",
+    "assets/production/ui/talent-icons-r1/hunter.chainHunt_96.webp",
+    "assets/production/ui/talent-icons-r1/hunter.herdSense_96.webp",
+    "assets/production/ui/talent-icons-r1/hunter.keenEye_96.webp",
+    "assets/production/ui/talent-icons-r1/hunter.memory_96.webp",
+    "assets/production/ui/talent-icons-r1/hunter.ropeCare_96.webp",
+    "assets/production/ui/talent-icons-r1/hunter.steady_96.webp",
+    "assets/production/ui/talent-icons-r1/hunter.swift_96.webp",
+    "assets/production/ui/talent-icons-r1/hunter.thrift_96.webp",
+    "assets/production/ui/talent-icons-r1/hunter.wildSense_96.webp",
+    "assets/production/ui/talent-icons-r1/line-breeder_96.webp",
+    "assets/production/ui/talent-icons-r1/line-commander_96.webp",
+    "assets/production/ui/talent-icons-r1/line-hunter_96.webp",
+    "assets/production/ui/talent-icons-r1/line-trader_96.webp",
+    "assets/production/ui/talent-icons-r1/trader.appraisal_96.webp",
+    "assets/production/ui/talent-icons-r1/trader.belt_96.webp",
+    "assets/production/ui/talent-icons-r1/trader.bounty_96.webp",
+    "assets/production/ui/talent-icons-r1/trader.bountyHunter_96.webp",
+    "assets/production/ui/talent-icons-r1/trader.crystal_96.webp",
+    "assets/production/ui/talent-icons-r1/trader.haggle_96.webp",
+    "assets/production/ui/talent-icons-r1/trader.patrol_96.webp",
+    "assets/production/ui/talent-icons-r1/trader.peddler_96.webp",
+    "assets/production/ui/talent-icons-r1/trader.regular_96.webp",
+    "assets/production/ui/talent-icons-r1/trader.scavenge_96.webp",
+    "assets/production/ui/talent-icons-r1/trader.tower_96.webp",
     "assets/production/ui/tamer-emblems-r1/evolve-ready_96.webp",
     "assets/production/ui/tamer-emblems-r1/exp-crystal_96.webp",
     "assets/production/ui/tamer-emblems-r1/lock-level_96.webp",
@@ -10079,6 +10128,7 @@
     "src/championship/presentation/ranchThreeCoordinates.js",
     "src/championship/presentation/ranchThreeScene.js",
     "src/championship/presentation/starEmblemArt.js",
+    "src/championship/presentation/talentIconArt.js",
     "src/championship/presentation/tamerEmblemArt.js",
     "src/championship/presentation/threeRendererRelease.js",
     "src/championship/presentation/ranchWaterfalls.js",
@@ -44611,6 +44661,198 @@
         "sha256": "637a91bfb59df00cf78dd5092101aee69196a42aeceffbc1b93744d0bddca737"
       },
       {
+        "path": "assets/production/ui/talent-icons-r1/breeder.automation_96.webp",
+        "sha256": "5b2a5767975718a064fbd24653a3e299725d34b0bb105ef1ee3621ac7c862323"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/breeder.care_96.webp",
+        "sha256": "75621cea8f9d7ff20161202ced0be777d2d1e6be8c10d56105fa65d14489810e"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/breeder.extract_96.webp",
+        "sha256": "fdee80b4156b5064b0a92d68ea055bdd0aad2b2bc4fdb5fd4af0a2f21e6a5b87"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/breeder.herbal_96.webp",
+        "sha256": "6024260ffa189bf14ed56f776f8f15e9418b43ff71a77edc0c69d7a3587593da"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/breeder.inherit_96.webp",
+        "sha256": "18e7c71c824743d46cf1b477c1a3e3774816206636d929beec10e358867fc3e0"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/breeder.lasting_96.webp",
+        "sha256": "898c142c998509b0e1294b64a773ae5c8ebcb09cb0254185531ec335e32b7922"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/breeder.lineAffinity_96.webp",
+        "sha256": "69b6e6731608a5206946b14cf9cb9ea59a0b12dbe132cb5012f09a22b8f55fc5"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/breeder.nightWatch_96.webp",
+        "sha256": "bde09a1c3b9d52e0edebc5672151040ce05f9220daf26b2dfe7cd5e53ce9435d"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/breeder.soothe_96.webp",
+        "sha256": "3f23911b290597a7f9e3deb432fe422ce81a08cd6ce8cdd2887aa3d5875fae7e"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/breeder.strollLuck_96.webp",
+        "sha256": "f8e4d479b20dc47577e165f5317b8fd37bb03d785320f47ef6ccda138b550805"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/breeder.syncFusion_96.webp",
+        "sha256": "b130246356ff1e99f03328b9be3b2386c9e412ad425f85dabecb7c1ef3d9dbec"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/commander.adversity_96.webp",
+        "sha256": "3929018ef034b6ceba703897704678eb40fe0e32d79aa6e11687042c27336530"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/commander.charge_96.webp",
+        "sha256": "1a54f81782628069a168b08c612184ef932cbcefc279e17552205b02e32904d7"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/commander.finisher_96.webp",
+        "sha256": "043b01fef3488c393a94909ff76bbf35b4af76f8b874999193f519082128f9fd"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/commander.goodMood_96.webp",
+        "sha256": "a7911d0fb5435f88d962a1a222a123b845e2d7bffd7559cae4a3905fd29b9199"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/commander.iron_96.webp",
+        "sha256": "03a575981708db23a13fe25ba3116dd1614a94c84032089cb5a5e267f53b0acb"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/commander.lumen_96.webp",
+        "sha256": "41cfe10e36991507aae9de9c2e9fab49f9c84213bcbf34a9c99ef14b075be30f"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/commander.opening_96.webp",
+        "sha256": "e5da612530f6e73f462d5ec2059da164cfd06d9e9abcb7503cbad4440276caf5"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/commander.pureFaction_96.webp",
+        "sha256": "869f485ab4f109542385a1f694e0429f6aa8104737a3eafa016f33b7c6b07ea9"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/commander.rift_96.webp",
+        "sha256": "091ca608881a98ce0eafd6c883e071b26a01d38be6dcb6e8f18068ac15c37fd7"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/commander.syncTraining_96.webp",
+        "sha256": "e7dba08585a9f520db200f041a1682eedda3f86ff27f6f39a6b7083f72b60419"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/commander.triColor_96.webp",
+        "sha256": "237c481c7aab250b5e57a2b99459082e5ed5d41aa65ab750efd0959d08abada4"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/hunter.appraise_96.webp",
+        "sha256": "f42366abd4c9f9d1f7e9a305e2a03ec9f27a3cd84122e57b2eab966474572ea9"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/hunter.breath_96.webp",
+        "sha256": "3390e8a3130ffb123c6556b96d6e67fe01e85ab685cbc89fa062683d818fb9f8"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/hunter.chainHunt_96.webp",
+        "sha256": "8448143b5b596a7a7671355cb6542aef1bb0e75a7d636f295d5d5970c37a205f"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/hunter.herdSense_96.webp",
+        "sha256": "f9fd91e4a4e85eef941ae37bc97409e853fc64470327a37cabb2b61e974c6e70"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/hunter.keenEye_96.webp",
+        "sha256": "140284c0060027989467b472d1b26a6768e6cefab379f662c2f59da791ad09e3"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/hunter.memory_96.webp",
+        "sha256": "2597bab59277f0fc9e538115a1766bc0bb3b7ed88e647c65ac0c3fdbb9304726"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/hunter.ropeCare_96.webp",
+        "sha256": "a4a079bdbc86c728b20de26b219eedad3faf93096105636faedf458975e9b75a"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/hunter.steady_96.webp",
+        "sha256": "15ae2a64eb758741711072e69a8d6f76df919db906a1750597f6952ca0362ffa"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/hunter.swift_96.webp",
+        "sha256": "2d81c278cf464a5dcfefac58f778a86a71b1b99316e4d62c34d3bf2a2f84aeca"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/hunter.thrift_96.webp",
+        "sha256": "db0d142617e33cac4ee5b9de8ca7076c4966db93be7dac8a37eac16650421743"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/hunter.wildSense_96.webp",
+        "sha256": "083e75b72a47d89372659658094e67297ec7113cd9b38cf1b789d64d842a75d0"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/line-breeder_96.webp",
+        "sha256": "25a3ef97c75286b6fe076fe703b8fc3116676ca7f95c2f9c87c8fa5fdbb32ccc"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/line-commander_96.webp",
+        "sha256": "a39a81213ce5c4d879c0bdaeb7c399dd2066afbf0e50419025416d5eef416f59"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/line-hunter_96.webp",
+        "sha256": "aa746da848d2c643e3057e217d7f48c59a66bdba06421a4568de8cb0f2eb868f"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/line-trader_96.webp",
+        "sha256": "46f8b0912aa0f74f48773f6afc5570e52da80596a99e3f25d51fac48a61ee3d3"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/trader.appraisal_96.webp",
+        "sha256": "9b4f3a5598dd055c9118b3056f81f3a13bd660b926ac85d3643cfba43e49d55d"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/trader.belt_96.webp",
+        "sha256": "f51009e661f483b04fad9fe89c6702547c3bfc8413f4b472dd7d24f9be3042e4"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/trader.bounty_96.webp",
+        "sha256": "532a4252e049cfefded3e1624bb0349bd34afbac09d4e5b2c225f159c6dcc009"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/trader.bountyHunter_96.webp",
+        "sha256": "39f08bc6a53ccd91ba347d8ae7b8297c39e6fe6a4976e97f58da458f4852f17c"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/trader.crystal_96.webp",
+        "sha256": "539d600c2866fa3e72cf680a34237514c3984a3bca24b70d9669a91bae42b68c"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/trader.haggle_96.webp",
+        "sha256": "5c89b2e9225d05f0c22c98f961d9c1b955b6550f242c1e2e195a95c0c5fb21d5"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/trader.patrol_96.webp",
+        "sha256": "52bbfc3757e005b82cea022561c7f182d67631019f8dcff307637b21c7f83840"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/trader.peddler_96.webp",
+        "sha256": "97270a863d2cf57b35bbc48de6ccffb2538429bd7ac6f5e19f6a02e227c2979f"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/trader.regular_96.webp",
+        "sha256": "d0239ff289114b00305095f7cd1e57c92ec6ad3a6167ea644cfead6d86fedcde"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/trader.scavenge_96.webp",
+        "sha256": "746560f82e1ac11022ba1352070c77cf548139ad00750eb7bbea80c394b6f1dd"
+      },
+      {
+        "path": "assets/production/ui/talent-icons-r1/trader.tower_96.webp",
+        "sha256": "9953b071d2e67b6031fadb72636e434a51dcd9772ad2b4097391b092d5417e46"
+      },
+      {
         "path": "assets/production/ui/tamer-emblems-r1/evolve-ready_96.webp",
         "sha256": "78a08141e77f5637cceb900e0a1ba612cf309ebfb193df24403ba59efe9daa40"
       },
@@ -45388,7 +45630,7 @@
       },
       {
         "path": "src/championship/app/styles.css",
-        "sha256": "4205339174b64ffeb9ab63397f2e3fd1c4d633ddbe3b460fbd99b7abfe42d75b"
+        "sha256": "91acd2d70e022c2bc8e13ad203d769a3224b2246c896054ba5bb3a7806a70081"
       },
       {
         "path": "src/championship/app/tamerInfoScreen.js",
@@ -45396,7 +45638,7 @@
       },
       {
         "path": "src/championship/app/tamerTalentPanel.js",
-        "sha256": "0e4c179bc06ebc7e01c7f4381e82193802ea2a3d1b525dde73131c4d0d6cbf23"
+        "sha256": "61bd15ee480d1d7f9472fde9575d691122dc44930436e5b38212cfd387ec90bf"
       },
       {
         "path": "src/championship/app/titleParade.js",
@@ -46821,6 +47063,10 @@
       {
         "path": "src/championship/presentation/starEmblemArt.js",
         "sha256": "2f6aeae52e6f086f8aa4bb4d486d0e70ed811ce6e6aab867de33329b20926a1b"
+      },
+      {
+        "path": "src/championship/presentation/talentIconArt.js",
+        "sha256": "71bf927dac373fa81de46e0599f87231a92641dc6283348c00d0cee822c981a8"
       },
       {
         "path": "src/championship/presentation/tamerEmblemArt.js",
@@ -49788,7 +50034,7 @@
       },
       {
         "path": "src/championship/text/tamerTalentText.js",
-        "sha256": "10efa86dbfabf6537fd6be0b2075243bddf88e69774b6b0482c900879020555a"
+        "sha256": "4bb51ddcc62ffda0cfd14c6615090d35a30d6701a2acd74d06fb295da2c12825"
       },
       {
         "path": "src/championship/text/taxonomyText.js",

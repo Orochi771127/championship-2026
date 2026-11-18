@@ -96,6 +96,19 @@
     "save": "no new field: the rank is read from progression.tamerRank and progression.tamerTalents.level every time",
     "copy": "gate: 階級 {rank} 或馴獸師 Lv.{level} 開放。; shop: 尚未開放：階級「{rank}」或馴獸師 Lv.{level}。; rank overview: 狩獵場、商店：馴獸師每 5 級也算 1 階; talent panel: Lv.{level}：開{rank}商店・狩獵場"
   },
+  "treePresentation": {
+    "batch": "TALENT_TREE_20261118",
+    "owner": "2026-11-18: the talent screen was a list of text; it is to be a tree of icons where a tap lights a node and a press-and-hold shows what it does, and the systems are to read at a glance without long explanations",
+    "rules": "unchanged: the same nodes, tiers, gates, costs, keystones and reset",
+    "layers": {
+      "glance": "the tamer's level badge and EXP gauge, the free points as an orb with a number, four line emblems, and the chosen line's tree: keystones on top, tiers 3, 2, 1 below, each node an icon with rank pips, each tier gate a padlock strip with spent / needed",
+      "tap": "a node that can be learned takes one rank and lights up (stamp, ring, sparkle cue; level-up cue at its last rank); a node that cannot be learned shakes with the denied cue and the reading bar says why",
+      "hold": "a press of 320 ms or more (or a mouse hover, or keyboard focus) writes the node's name and effect into the reading bar; its release does not learn"
+    },
+    "states": "soon (effect not built, hatched, never takes a point), locked (grey), ready (colour, pulsing gold glow), lit, max (gold ring)",
+    "art": "art:ui:talent-icons:r1 (48 Codex stickers: 44 nodes and keystones, 4 line emblems; ORIGINAL_GENERATED); an icon that cannot load is a drawn gem in the line's colour",
+    "words": "only names in the reading bar and accessible names, plus three short strings (hint, 二選一, the gate label)"
+  },
   "notYetOpen": "4 nodes and 4 keystones: hunter 繩索保養, 疾步, 穩手 and the keystones 慧眼, 連獵 (they change the native hunt's rope durability, movement and status timing); commander 蓄能 (the plan does not say which meter it fills); breeder 萃取; trader 行商 (it needs the higher supplement grade, which is not built)",
   "notChanged": [
     "the native individual fields, battle codes and match tables",
@@ -150,7 +163,8 @@
     "tests/championship-fusion-inherit-cases.mjs",
     "tests/championship-tamer-talents-t7-cases.mjs",
     "tests/championship-crystals-feed-tamer-cases.mjs",
-    "tests/championship-tamer-level-unlocks-cases.mjs"
+    "tests/championship-tamer-level-unlocks-cases.mjs",
+    "tests/championship-talent-tree-cases.mjs"
   ],
   "physicalDeviceAccepted": false
 }

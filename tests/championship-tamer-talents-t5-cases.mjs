@@ -128,5 +128,8 @@ test('賞金獵人 is read where the beacon share of a won match is worked out, 
   assert.match(app, /const hunterBits=drop\.bonusBits>0&&hasKeystone\(talentState\(\),'trader\.bountyHunter'\)\?Math\.floor\(drop\.bonusBits\*KEYSTONE_RULES\.bountyHunterPercent\/100\):0;/);
   assert.match(app, /wallet=Math\.min\(BITS_WALLET_CAP,result\.wallet\+drop\.bonusBits\+hunterBits\);/);
   assert.match(app, /bonusBits:beaconWallet-result\.wallet,talentBits:wallet-beaconWallet/, 'the result page counts it in the beacon share');
-  assert.match(source('src/championship/app/tamerTalentPanel.js'), /key\.open \? talentKeystoneText\(key\.id\) : talentText\("TALENT_NOT_OPEN"\)/);
+  // TALENT_TREE_20261118: the tree shows a keystone's effect in its reading bar (hold) and its accessible name; one not built yet reads 未開放.
+  const panel = source('src/championship/app/tamerTalentPanel.js');
+  assert.match(panel, /if \(!node\.open\) return \{ name, effect: talentText\("TALENT_NOT_OPEN"\), note: "" \};/);
+  assert.match(panel, /if \(node\.keystone\) return \{ name, effect: talentKeystoneText\(node\.id\), note \};/);
 });

@@ -1,5 +1,19 @@
 # Championship Owner Direction
 
+<!-- record-id: TALENT_TREE_20261118 -->
+## 2026-11-18 — The talent screen is a tree of icons; systems read at a glance
+
+Owner: 「還有你可以多用一下你的Skill啊…我沒有辦法給你很詳細的數值或是指令…我只能給你一個大概的感覺，然後請你自主開發，像現在我就覺得這些系統都太多字了太複雜了，玩家要的是一個直覺的玩法直覺的系統不需要這麼多說明，然後很詳細的這些數值，能不能用深入淺出的方式？」 and 「為什麼你連天賦都做成好像文字版啊？而不是那種樹狀圖…有圖片人家點一下會發亮這樣，然後按著才會顯示那個天賦的功能作用」
+
+Standing direction, on top of `MECHANICS_AS_GAME_NOT_TEXT_20261118`:
+
+- Three layers for every system screen: a glance of icons, pips and gauges; a tap that acts; a press-and-hold that explains. Explanations and exact numbers live in the third layer or go.
+- Claude decides layout, numbers and feel from the design skills and the Owner's sense of it; the Owner does not supply values.
+
+First use: the tamer talent tree (`art:ui:talent-icons:r1`, 48 Codex icons). The talent rules are unchanged.
+
+Contract: `docs/contracts/championship/TAMER_TALENTS_20261117.json` (`treePresentation`).
+
 <!-- record-id: MECHANICS_AS_GAME_NOT_TEXT_20261118 -->
 ## 2026-11-18 — New mechanics are shown as game art and motion, never as text
 
