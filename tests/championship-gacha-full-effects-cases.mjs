@@ -188,11 +188,14 @@ test('the app catalyst takes the route the player picks, waives what it lacks an
     // A fresh partner: no evolution points, no battles, low stats.
     for (const field of [...GACHA_COUNTER_FIELDS, '024', '028']) entry.nativeProfile.fields[field] = 0;
     for (const field of ['060', '064', '068', '06c']) entry.nativeProfile.fields[field] = 5;
+    // ROADMAP_R2_20261118: 成長期 evolves at Sync Lv.10, and a catalyst never waives the level.
+    save.progression.syncLevels = {version: 1, partners: {[entry.instanceId]: {level: 10, exp: 0}}, crystals: 0};
   });
   try {
     const frame = app.getCyberGachaFrame();
     const partner = frame.partners.find(p => p.inRanch && p.routes.length);
     assert.ok(partner, 'the QA ranch holds a partner below 成熟期 with an evolution route');
+    assert.equal(partner.levelGate, null);
     // Product routes ask for one or two conditions, so a shard (waiver 2) reaches every one of them.
     assert.ok(partner.routes.every(r => r.unmetCount >= 1 && r.unmetCount <= SHARD_CATALYST_WAIVER));
     assert.equal(app.gachaUseItem('metal:chrono-ore-shard', partner.instanceId, {mode: 'CATALYST', form: 9999}).reason, 'NO_EVOLUTION_ROUTE');
@@ -215,6 +218,24 @@ test('the app catalyst takes the route the player picks, waives what it lacks an
     app.save();
     assert.equal(saved().progression.cyberGacha.bloodlines[partner.instanceId], 'chronoOre');
     assert.equal(saved().progression.cyberGacha.metals['metal:chrono-ore-shard'], 1);
+  } finally { await app.dispose(); }
+});
+
+test('a catalyst never waives the level: under Lv.10 a 成長期 partner is refused and nothing is spent', async () => {
+  const {app, saved} = await qaApp({metals: {'metal:chrono-ore': 1}, tickets: 0}, Math.random, save => {
+    const entry = save.raising.collection[0];
+    entry.speciesId = 'species-034';
+    entry.nativeProfile.fields['000'] = 34;
+    save.progression.syncLevels = {version: 1, partners: {[entry.instanceId]: {level: 9, exp: 0}}, crystals: 0};
+  });
+  try {
+    const partner = app.getCyberGachaFrame().partners.find(p => p.inRanch && p.routes.length);
+    assert.deepEqual(partner.levelGate, {need: 10, level: 9});
+    const used = app.gachaUseItem('metal:chrono-ore', partner.instanceId, {mode: 'CATALYST', form: partner.routes[0].target});
+    assert.deepEqual([used.ok, used.reason], [false, 'EVOLUTION_LEVEL_TOO_LOW']);
+    assert.equal(app.getRaisingLifecycleFrame().evolution, null);
+    app.save();
+    assert.equal(saved().progression.cyberGacha.metals['metal:chrono-ore'], 1);
   } finally { await app.dispose(); }
 });
 

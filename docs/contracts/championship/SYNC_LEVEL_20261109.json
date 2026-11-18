@@ -14,7 +14,24 @@
     "battle": "auto battle: max HP / TP +0.6 % a level and one native curve step per breakthrough (Lv.10/20/30/40/50) on a copy; finishMatch restores the saved vitals and steps",
     "caps": "title matches and championships cap the level at 10 + 5 x tamer rank (at most 50); password, link and online battles ignore it and pay no EXP",
     "arena": "Data Arena partner power x (1 + 0.004 per level + 0.02 per breakthrough)",
-    "rebirth": "a rebirth keeps 30 % of the level; evolution keeps all of it"
+    "rebirth": "a rebirth keeps 30 % of the level; evolution keeps all of it",
+    "evolutionLevelGate": {
+      "batch": "ROADMAP_R2_20261118",
+      "owner": "2026-11-18: 「進化的條件也再多一個就是幾等的時候可以進化。但是會依照…現有的那個進化條件…影響有那個分歧進化」",
+      "gates": {
+        "幼年期 II -> 成長期": 3,
+        "成長期 -> 成熟期": 10,
+        "egg and 幼年期 I": "none"
+      },
+      "rule": "a partner the native rules would evolve waits while its Sync Level is under the gate of the stage it evolves from; the native result is discarded whole, so its profile does not move",
+      "branch": "the level never picks a form: at the gate the same native evaluation decides it from the race and faction counters, stats, battles, wins, rebirths and care",
+      "endOfLife": "a partner that is ready at the end of its life but under its level lives on (the one native life extension is not used) and is asked again after 60 ranch minutes; a partner the rules would not evolve ends its life as before",
+      "recheck": "a battle, a ranch fusion and a hunt result ask the ranch again at the partner's next idle step; the ranch also asks every ranch hour as before",
+      "catalyst": "a metal or shard catalyst waives conditions, never the level: under the gate it is refused with EVOLUTION_LEVEL_TOO_LOW before anything is spent",
+      "notApplied": "the interactive tutorial (its own native actor) and the friends playtest (lifted like the rank licence)",
+      "shown": "ranch partner card chip 進化需 Lv.{need} while a ready partner waits; the gachapon partner picker 進化需 Lv.{need}（現在 Lv.{level}）",
+      "save": "no new field"
+    }
   },
   "notChanged": [
     "the native individual fields, battle codes and match tables",
@@ -53,7 +70,8 @@
   "tests": [
     "tests/championship-sync-level-cases.mjs",
     "tests/championship-battle-owned-party-cases.mjs",
-    "tests/championship-lion-display-correction-cases.mjs"
+    "tests/championship-lion-display-correction-cases.mjs",
+    "tests/championship-evolution-level-gate-cases.mjs"
   ],
   "physicalDeviceAccepted": false
 }

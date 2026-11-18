@@ -1,5 +1,18 @@
 # Championship Owner Direction
 
+<!-- record-id: ROADMAP_R2_EVOLUTION_LEVEL_GATE_20261118 -->
+## 2026-11-18 — Roadmap R2: evolution also asks for a level
+
+Owner: 「然後進化的條件也再多一個就是幾等的時候可以進化。但是會依照就是現有的那個進化條件就是他們的種族族群的素質，然後影響有那個分歧進化。」
+
+`OWNER_APPROVED_ADAPTATION`, as directed:
+
+- A partner whose conditions already choose a next form evolves only at its stage's Sync Level: 幼年期 II at Lv.3, 成長期 at Lv.10. The egg and 幼年期 I have no gate.
+- The form it becomes is still decided by the existing conditions. The level never picks a branch.
+- Decided while wiring: a ready partner under its level never loses its life to the wait; a catalyst does not waive the level; the tutorial and the friends playtest do not apply the gate; the numbers (3 and 10) are Claude's, sized on six won free battles for the first gate.
+
+Contract: `docs/contracts/championship/SYNC_LEVEL_20261109.json` (`rules.evolutionLevelGate`).
+
 <!-- record-id: ROADMAP_R1B_LEVEL_UNLOCKS_20261118 -->
 ## 2026-11-18 — Roadmap R1b: the tamer's level also opens the shop and the gates
 

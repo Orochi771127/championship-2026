@@ -128,6 +128,25 @@ export function syncCurveSteps(lv) {
   return steps;
 }
 
+// ---- Evolution asks for a level (ROADMAP_R2_20261118, Owner 2026-11-18) ----
+//
+// 「進化的條件也再多一個就是幾等的時候可以進化」: a partner whose own conditions already choose a next form
+// evolves only at this Sync Level, keyed by the stage it evolves FROM (the generation index: 2 = 幼年期 II,
+// 3 = 成長期). Which form it becomes is still decided by the existing conditions (race and faction counters,
+// stats, battles, care); the level never picks a branch. 幼年期 I has no gate, so an egg always gets going.
+export const EVOLUTION_LEVEL_GATES = deepFreeze({ 2: 3, 3: 10 });
+/** A partner waiting for its level at the end of its life is asked again after this many ranch minutes. */
+export const EVOLUTION_LEVEL_RECHECK_MINUTES = 60;
+/** The Sync Level a partner of `generation` needs to evolve (1 = no gate). */
+export function evolutionLevelGate(generation) {
+  return EVOLUTION_LEVEL_GATES[generation] ?? 1;
+}
+/** `{need, level}` when a partner of `generation` at Sync Level `lv` is too low to evolve, else null. */
+export function evolutionLevelShort(generation, lv) {
+  const need = evolutionLevelGate(generation), have = level(lv);
+  return have >= need ? null : Object.freeze({ need, level: have });
+}
+
 /** EXP one battle pays a partner of `lv`. */
 export function syncBattleExp(lv, { kind, won }) {
   const share = SYNC_BATTLE_SHARE[kind];

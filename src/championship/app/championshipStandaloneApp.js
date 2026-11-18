@@ -37,7 +37,7 @@ import {applyProductTrainingGains} from '../raising/nativeRaisingTraining.js';
 import {inscribeGachaBloodline,grantGachaMetal} from '../gacha/cyberGacha.js';
 import {REALTIME_TRAINING_POLICY,recommendedCages,TRAINING_KIND_OF_CONDITION} from '../raising/productTrainingPolicy.js';
 import {normalizeSyncLevels,createSyncLevelState,syncOf,syncCapForRank,syncBattleExp,grantSyncExp,reconcileSyncRebirth,
-  boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX,partnerGradeOf,recordPartnerGrade,fuseSyncPartners,learnedArenaMoveOf,recordLearnedArenaMove} from '../contracts/productSyncLevel.js';
+  boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX,partnerGradeOf,recordPartnerGrade,fuseSyncPartners,learnedArenaMoveOf,recordLearnedArenaMove,evolutionLevelShort} from '../contracts/productSyncLevel.js';
 import {arenaMoveRecordIndex} from '../contracts/productArenaMoves.js';
 import {RELAY_ROSTER} from '../modes/dataArena/dataArenaRelayRoster.js';
 import {RELAY_ELEMENT_KITS} from '../modes/dataArena/dataArenaRelayKits.js';
@@ -822,7 +822,14 @@ export function createChampionshipStandaloneApp({
       moodScore:moodScore.score,moodTier:moodScore.tier,moodReasons:moodScore.reasons,
       affection:Math.max(0,Math.min(100,Number(fields['020'])||0)),greeting:partnerLifeState.greetings.some(g=>g.a===id||g.b===id),
       // Owner 2026-11-04: its next form would overfill the cage for this tamer rank.
-      crowded:Boolean(actor.capacityBlocked)});
+      crowded:Boolean(actor.capacityBlocked),
+      // R2: its conditions already choose a next form, but its Sync Level is under the stage's gate.
+      evolveLevel:actor.levelBlocked?evolutionLevelNeed(id,fields['000']):null});
+  }
+  /** R2: `{need, level}` while this partner is too low to evolve out of its stage (null in the playtest and above the gate). */
+  function evolutionLevelNeed(instanceId,speciesIndex){
+    if(playtestPolicy?.enabled===true||!Number.isInteger(speciesIndex))return null;
+    return evolutionLevelShort(nativeHuntSpeciesByIndex(speciesIndex).generation,syncLevelOf(instanceId).level);
   }
   function partnerRegion(actor){
     const nav=raisingGround?.navigation,home=`cage:${actor.cageInstanceId??actor.cageDefinitionIndex}`;
@@ -1084,6 +1091,9 @@ export function createChampionshipStandaloneApp({
           // The playtest lifts the rank's evolution ceiling and cage capacity (Owner 2026-11-04).
           lifecycle:raisingGround?{rank:playtestPolicy?.enabled===true?9:Math.min(9,tamerRankValue),minute:before.clockMinutes+minutes,season:before.season,
             training:realtime?REALTIME_TRAINING_POLICY:null,trainingBonus:royalTrainingBonus(actor),capacityBonusG:ranchLandBonusG(),
+            // ROADMAP_R2_20261118: evolution also asks for the partner's Sync Level; the playtest lifts it like the licence.
+            // Read only when an evolution is really asked (a function, not a value: this context is built every step).
+            syncLevel:playtestPolicy?.enabled===true?null:()=>syncLevelOf(id).level,
             overdrive:realtime?training=>overdriveTraining(id,training):null,
             cageEffects:realtime&&REALTIME_RECOVERY_CAGES.includes(actor.cageDefinitionIndex)?[]:undefined,
             // The breeder talent 精心照料: +4 % training growth a rank.
@@ -1406,6 +1416,8 @@ export function createChampionshipStandaloneApp({
       if(amount<=0)continue;
       const granted=grantSyncExp(syncState(),instanceId,amount);
       syncLevels=granted.state;gains.push(granted.gain);
+      // R2: a level gained may be the one its evolution waited for; the ranch asks again at its next idle step.
+      {const waiting=raisingActors.get(instanceId);if(waiting)waiting.evolutionChecked=false;}
     }
     // What these partners carried has one settled battle less (長效 gives it more than one) and is used up at none.
     if(tamerSupplies)tamerSupplies=settleArmedSupplies(tamerSupplies,instanceIds);
@@ -4359,6 +4371,7 @@ export function createChampionshipStandaloneApp({
           displayName:entry.displayName??null,speciesId:entry.speciesId??null,source:entry.source??null,
           generation:species?.generation??null,inRanch:raisingActors.has(entry.instanceId),
           stats:profile?projectNativeIndividualStats(profile):null,bloodline:gachaBloodlineOf(state,entry.instanceId),
+          levelGate:evolutionLevelNeed(entry.instanceId,index),
           // GACHA_FULL_EFFECTS_20261109: each evolution route with what it still lacks (the catalyst picks one).
           routes:profile&&species&&species.generation>=1&&species.generation<=3?evolutionRouteGaps(profile,PRODUCT_GROWTH_RULES)
             .map(route=>({ruleIndex:route.ruleIndex,target:route.target,unmetCount:route.unmetCount,
@@ -5072,6 +5085,7 @@ export function createChampionshipStandaloneApp({
       if(status.phase!=='SAVED'){savePort.discardPendingWrite();creature=beforeInherit.creature;raising=beforeInherit.raising;registeredSpeciesValue=beforeInherit.registered;
         return Object.freeze({ok:false,reason:'SAVE_FAILED'});}
       raising=candidateRaising;syncLevels=plan.fused.state;registeredSpeciesValue=candidateBook;revision+=1;
+      for(const waiting of raisingActors.values())waiting.evolutionChecked=false; // R2: the fused level may open an evolution
       tamerTalents=tamerPaid.state;lastTamerGain=tamerPaid.gain;
       if(residents.length)requireSession().commitRaisingResidentRelease(residents,before.revision);
       for(const id of plan.ids){
@@ -5193,6 +5207,8 @@ export function createChampionshipStandaloneApp({
         // at most two unmet conditions, a whole metal any number (GACHA_FULL_EFFECTS_20261109).
         const route=Number.isInteger(form)?routes.find(r=>r.target===form):routes[0];
         if(!route)return gachaRefusal('NO_EVOLUTION_ROUTE');
+        // R2: a catalyst waives conditions, never the level -- that is only played for.
+        if(evolutionLevelNeed(instanceId,index))return gachaRefusal('EVOLUTION_LEVEL_TOO_LOW');
         if(metal.id.endsWith('-shard')&&route.unmetCount>SHARD_CATALYST_WAIVER)return gachaRefusal('TOO_MANY_UNMET');
         // Held, not spent (system sweep S1, 2026-11-08): a refresh during the evolution used to leave the metal
         // spent and the form unchanged. The metal leaves the bag in the save that writes the new form.
@@ -6330,6 +6346,7 @@ export function createChampionshipStandaloneApp({
             }
             raising = candidateRaising; creature = candidateCreature; instanceIdentity = candidateIdentity; revision += 1;
             burstEvolution = candidateBurst; cyberGacha = candidateGacha; syncLevels = candidateSync; huntInstincts = new Map(); huntGrades = new Map();
+            for (const waiting of raisingActors.values()) waiting.evolutionChecked = false; // R2: a capture fused into a partner may open its evolution
             tamerTalents = tamerPaid.state; lastTamerGain = tamerPaid.gain;
             registeredSpeciesValue = candidateBook;
             if (releasedHomeIds.includes(selectedCreatureId)) selectedCreatureId = null;
