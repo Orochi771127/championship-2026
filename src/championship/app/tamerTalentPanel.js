@@ -4,6 +4,7 @@
 // "not open" and has no key to press, so a point is never spent on something that does nothing.
 
 import { talentText, talentEffectText, talentKeystoneText } from "../text/tamerTalentText.js";
+import { tamerRankName } from "../text/zhHant.js";
 
 function el(doc, tag, className, text) {
   const node = doc.createElement(tag);
@@ -39,6 +40,12 @@ export function createTamerTalentPanel({ frame, learn, respec, doc = globalThis.
     const points = el(doc, "p", "cm-talents__points", talentText("points", { free: view.free, points: view.points }));
     points.dataset.free = String(view.free);
     head.append(bar, points);
+    // R1b: the next tamer level that opens a shop and gate rank.
+    if (view.unlock?.nextLevel) {
+      const unlock = el(doc, "p", "cm-talents__unlock", talentText("unlock", { level: view.unlock.nextLevel, rank: tamerRankName(view.unlock.nextRank) }));
+      unlock.dataset.nextLevel = String(view.unlock.nextLevel);
+      head.append(unlock);
+    }
     root.append(head);
 
     for (const line of view.lines) {

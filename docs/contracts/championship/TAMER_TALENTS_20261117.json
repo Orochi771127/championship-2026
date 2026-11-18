@@ -88,6 +88,14 @@
     "save": "no new field and no migration: the crystals stay at progression.syncLevels.crystals, the tamer at progression.tamerTalents; crystals held in an older save are kept as they are",
     "otherUses": "a talent reset after the first still costs 500 crystals"
   },
+  "levelUnlocksR1b": {
+    "batch": "ROADMAP_R1B_20261118",
+    "rule": "a shop row, a hunt tool or a hunt gate that asks for a tamer rank opens at that rank OR at the tamer level that stands for it: 5 levels a rank, Lv.5 = rank 1 ... Lv.45 = rank 9 (EXP from Lv.1: 548, 3,078, 8,149, 16,114, 27,245, 41,767, 59,875, 81,743, 107,528)",
+    "reads": "only the shop, the hunt tools and the gates (the application's progression context); the tutorial reads the title rank alone",
+    "unchanged": "the title rank itself, the title matches and championships, the ranch land, the generation licence and capacity, the Sync cap, the burst tier, the capped commander points, the rank diamond rewards; a row or gate that asks for a title badge still asks for the badge",
+    "save": "no new field: the rank is read from progression.tamerRank and progression.tamerTalents.level every time",
+    "copy": "gate: 階級 {rank} 或馴獸師 Lv.{level} 開放。; shop: 尚未開放：階級「{rank}」或馴獸師 Lv.{level}。; rank overview: 狩獵場、商店：馴獸師每 5 級也算 1 階; talent panel: Lv.{level}：開{rank}商店・狩獵場"
+  },
   "notYetOpen": "4 nodes and 4 keystones: hunter 繩索保養, 疾步, 穩手 and the keystones 慧眼, 連獵 (they change the native hunt's rope durability, movement and status timing); commander 蓄能 (the plan does not say which meter it fills); breeder 萃取; trader 行商 (it needs the higher supplement grade, which is not built)",
   "notChanged": [
     "the native individual fields, battle codes and match tables",
@@ -141,7 +149,8 @@
     "tests/championship-tamer-talents-t5-cases.mjs",
     "tests/championship-fusion-inherit-cases.mjs",
     "tests/championship-tamer-talents-t7-cases.mjs",
-    "tests/championship-crystals-feed-tamer-cases.mjs"
+    "tests/championship-crystals-feed-tamer-cases.mjs",
+    "tests/championship-tamer-level-unlocks-cases.mjs"
   ],
   "physicalDeviceAccepted": false
 }

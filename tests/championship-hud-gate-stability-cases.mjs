@@ -19,7 +19,7 @@ test('real preview construction puts condition beside name, never in a new card 
 });
 test('real render publishes full translated accessible labels in all five locales',()=>{
  const start=source.indexOf('    admissionStatus.textContent ='),end=source.indexOf('    worldPresentation?.render',start);
- for(const locale of LOCALES){setLocale(locale);for(const message of ['',uiText('取得對應比賽勝利後開放。'),uiText('馴獸師階級達到 {rank} 後開放。',{rank:9})]){
+ for(const locale of LOCALES){setLocale(locale);for(const message of ['',uiText('取得對應比賽勝利後開放。'),uiText('階級 {rank} 或馴獸師 Lv.{level} 開放。',{rank:9,level:45})]){
  const context={uiText,gateAdmissionMessage:()=>message,block:{admission:{}},admissionStatus:element('span'),previewName:element('strong','',uiText('請選擇目的地'))};
  vm.runInNewContext(source.slice(start,end),context);
  const s=context.admissionStatus;assert.equal(s.hidden,!message);assert.equal(s.title,message);assert.equal(s.attributes['aria-label'],message);

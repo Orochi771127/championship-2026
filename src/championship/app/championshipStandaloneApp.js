@@ -43,7 +43,7 @@ import {RELAY_ROSTER} from '../modes/dataArena/dataArenaRelayRoster.js';
 import {RELAY_ELEMENT_KITS} from '../modes/dataArena/dataArenaRelayKits.js';
 import {rollPartnerGrade,applyGradeHeadStart,fusionLineMultiplier,FUSION_MAX_FODDER,FUSION_WARN_LEVEL,fusionInheritance} from '../contracts/productLineFusion.js';
 import {normalizeTamerTalents,createTamerTalentState,tamerTalentPoints,talentValue,grantTamerExp,tamerCaptureExp,tamerBattleExp,tamerDailyExp,TAMER_EXP,
-  learnTalent,talentRefusal,chooseKeystone,keystoneRefusal,hasKeystone,KEYSTONE_RULES,talentChance,feedTamerCrystals,tamerExpToMax,respecTalents,talentRespecCost,talentSpent,talentSpentInLine,talentOpen,commanderCappedTalents,
+  learnTalent,talentRefusal,chooseKeystone,keystoneRefusal,hasKeystone,KEYSTONE_RULES,talentChance,feedTamerCrystals,tamerExpToMax,tamerLevelRank,tamerLevelForRank,TAMER_LEVEL_RANK_MAX,respecTalents,talentRespecCost,talentSpent,talentSpentInLine,talentOpen,commanderCappedTalents,
   TALENT_NODES,TALENT_KEYSTONES,TALENT_LINES,TALENT_TREE_POINTS,TALENT_TIER_GATE,TALENT_KEYSTONE_GATE,TALENT_KEYSTONE_COST,tamerExpRequired,TAMER_LEVEL_MAX}
   from '../contracts/productTamerTalents.js';
 import {normalizeTamerSupplies,createTamerSupplies,SUPPLEMENTS,getSupplement,supplyOwned,supplyPurchase,spendSupply,applyRecoverySupply,
@@ -492,6 +492,7 @@ export function createChampionshipStandaloneApp({
   }
 
   function publishScreens() {
+    syncUnlockRank();
     if(screens.current()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)cancelRaisingHand();
     for (const listener of [...screenListeners]) {
       try { listener(screens.current()); } catch { /* observers never break navigation */ }
@@ -539,9 +540,22 @@ export function createChampionshipStandaloneApp({
     return tamerRankValue;
   }
 
+  /**
+   * ROADMAP_R1B_20261118: the rank the shop, the hunt tools and the gates open at -- the rank the titles gave or
+   * the one the tamer's level stands for (5 levels a rank), whichever is higher. Nothing else reads it.
+   */
+  function unlockRank() {
+    // Reads the tamer's level without creating the talent record: a save from before talents stays as it was.
+    return tutorialBaseline ? tamerRankValue : Math.max(tamerRankValue, tamerLevelRank(tamerTalents?.level ?? 1));
+  }
+  /** Tamer EXP is paid in many places; before anything is shown the shop and the hunt bag learn a rank it opened. */
+  function syncUnlockRank() {
+    if (shop && huntInventory && huntInventory.getProgressionContext().tamerRank !== unlockRank()) applyProgression();
+  }
+
   function progressionContext() {
     // 殺價 (TAMER_TALENTS_T4_20261118): the shop charges and shows its Bits prices at this share (-3 % a rank).
-    return { tamerRank: tamerRankValue, battleBadges: [...battleBadgesValue],feeWaiver:nativeTitles.feeWaiver, playtestUnlocks: playtestPolicy?.enabled === true && playtestPolicy.huntOpen,
+    return { tamerRank: unlockRank(), battleBadges: [...battleBadgesValue],feeWaiver:nativeTitles.feeWaiver, playtestUnlocks: playtestPolicy?.enabled === true && playtestPolicy.huntOpen,
       bitsPricePercent: 100 + talent('shopBitsPercent') };
   }
 
@@ -703,6 +717,7 @@ export function createChampionshipStandaloneApp({
   }
 
   function publishRaising() {
+    syncUnlockRank();
     for(const listener of [...raisingListeners])try {listener();} catch { /* observers cannot change native state */ }
   }
 
@@ -3686,7 +3701,9 @@ export function createChampionshipStandaloneApp({
     getGateAdmission(gateId = confirmedGateId ?? selectedGateId) {
       if(tutorialBaseline)return Object.freeze({canConfigure:gateId===TUTORIAL_GATE.gateId&&!tutorialPendingOpening&&!tutorialTransitionActive&&nativeOpening.checkpoint.stage==='gate-select',
         canEnter:false,chargeBits:0,walletBits:requireShop().getBits(),reason:gateId===TUTORIAL_GATE.gateId?'AVAILABLE':'NO_GATE_SELECTED'});
-      return gateAdmission(getChampionshipGate(gateId), requireShop().getBits(), progressionContext());
+      // R1b: a rank lock also says which tamer level opens it.
+      const gate=getChampionshipGate(gateId),admission=gateAdmission(gate, requireShop().getBits(), progressionContext());
+      return gate?.unlockKind===1?Object.freeze({...admission,unlockLevel:tamerLevelForRank(gate.unlockParameter)}):admission;
     },
 
     getSelectedGateId() {
@@ -4973,6 +4990,9 @@ export function createChampionshipStandaloneApp({
       return Object.freeze({level:state.level,exp:state.exp,next:state.level>=TAMER_LEVEL_MAX?0:tamerExpRequired(state.level),levelMax:TAMER_LEVEL_MAX,
         points,spent,free:Math.max(0,points-spent),respecCost:talentRespecCost(state),crystals:normalizeSyncLevels(syncLevels).crystals,
         lastGain:lastTamerGain,
+        // R1b: the rank the shop and the gates open at, and the next level that opens one more (null at the top).
+        unlock:(()=>{const rank=unlockRank(),next=rank<TAMER_LEVEL_RANK_MAX?rank+1:null;
+          return Object.freeze({rank,titleRank:tamerRankValue,levelRank:tamerLevelRank(state.level),nextRank:next,nextLevel:next===null?null:tamerLevelForRank(next)});})(),
         lines:Object.freeze(TALENT_LINES.map(line=>Object.freeze({line,spent:talentSpentInLine(state,line),keystoneGate:TALENT_KEYSTONE_GATE,
           nodes:Object.freeze(TALENT_NODES.filter(node=>node.line===line).map(node=>Object.freeze({id:node.id,tier:node.tier,key:node.key,per:node.per,
             max:node.max,cost:node.cost,rank:state.nodes[node.id]??0,gate:TALENT_TIER_GATE[node.tier],open:talentOpen(node.id),

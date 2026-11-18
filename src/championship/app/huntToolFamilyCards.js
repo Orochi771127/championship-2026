@@ -7,6 +7,7 @@
 // the presentation source's intents; nothing here owns stock or money.
 
 import { uiText } from "../text/uiText.js";
+import { tamerLevelForRank } from "../contracts/productTamerTalents.js";
 import { shopItemName, tamerRankName, titleEventText } from "../text/zhHant.js";
 import { getHuntCatalogItem } from "../hunt/loadout/huntEquipmentCatalog.js";
 
@@ -81,7 +82,8 @@ export function shopUnlockText(unlock, { short = false } = {}) {
   if (!unlock) return null;
   if (unlock.kind === "TAMER_RANK_THRESHOLD") {
     const rank = tamerRankName(unlock.parameter) ?? String(unlock.parameter);
-    return short ? uiText("{rank}開放", { rank }) : uiText("尚未開放：馴獸師階級達到「{rank}」後即可購買。", { rank });
+    const level = tamerLevelForRank(unlock.parameter); // R1b: the tamer's level opens it too
+    return short ? uiText("{rank}／Lv.{level} 開放", { rank, level }) : uiText("尚未開放：階級「{rank}」或馴獸師 Lv.{level}。", { rank, level });
   }
   if (unlock.kind === "BATTLE_BADGE_ID_0_BASED") {
     const title = titleEventText(unlock.parameter, "name", uiText("徽章 {number}", { number: unlock.parameter + 1 }));

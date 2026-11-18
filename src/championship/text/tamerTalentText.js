@@ -12,6 +12,7 @@ const ROWS = {
   'level': ['馴獸師 Lv.{level}', 'Tamer Lv.{level}', 'テイマー Lv.{level}', 'เทมเมอร์ Lv.{level}', 'Tamer Lv.{level}'],
   'exp': ['{exp} / {next} EXP', '{exp} / {next} EXP', '{exp} / {next} EXP', '{exp} / {next} EXP', '{exp} / {next} EXP'],
   'exp.max': ['Lv.MAX', 'Lv.MAX', 'Lv.MAX', 'Lv.MAX', 'Lv.MAX'],
+  'unlock': ['Lv.{level}：開{rank}商店・狩獵場', 'Lv.{level}: opens {rank} shop & gates', 'Lv.{level}：{rank}のショップ・ゲート解放', 'Lv.{level}: เปิดร้านและเกต {rank}', 'Lv.{level}: mở cửa hàng & cổng {rank}'],
   'points': ['點數 {free} / {points}', 'Points {free} / {points}', 'ポイント {free} / {points}', 'แต้ม {free} / {points}', 'Điểm {free} / {points}'],
   'line.spent': ['已投入 {spent}', 'Spent {spent}', '投入 {spent}', 'ใช้ไป {spent}', 'Đã dùng {spent}'],
   'tier': ['第 {tier} 層・{gate} 點開放', 'Tier {tier} · opens at {gate}', '第{tier}層・{gate}で開放', 'ชั้น {tier} · เปิดที่ {gate}', 'Tầng {tier} · mở ở {gate}'],
