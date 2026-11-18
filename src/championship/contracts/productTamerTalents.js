@@ -24,7 +24,7 @@ export const TALENT_TIER_GATE = deepFreeze({ 1: 0, 2: 6, 3: 14 });
 export const TALENT_KEYSTONE_GATE = 22;
 export const TALENT_KEYSTONE_COST = 4;
 export const TALENT_RESPEC_CRYSTALS = 500;
-export const TALENT_TREE_POINTS = 124;
+export const TALENT_TREE_POINTS = 125;
 const COUNT_MAX = 1e9;
 
 /** EXP needed to go from `level` to `level + 1`. */
@@ -77,6 +77,8 @@ export const TALENT_NODES = deepFreeze([
   node("trader.haggle", 1, "shopBitsPercent", -3),
   node("trader.bounty", 1, "battleBitsPercent", 5),
   node("trader.crystal", 1, "crystalPercent", 10),
+  // WAVE_RUN_20261118: drops on a story or challenge field fly to the bag by themselves (one rank).
+  node("trader.magnet", 1, "dropMagnet", 1, { max: 1 }),
   node("trader.patrol", 2, "patrolPercent", 10),
   node("trader.tower", 2, "towerRewardPercent", 10),
   node("trader.regular", 2, "firstSupplyDiscountPercent", 15),
@@ -116,7 +118,9 @@ export const TALENT_WIRED_KEYS = new Set([
   // T5 (TAMER_TALENTS_T5_20261118)
   "moodDecayPercent",
   // T7 (TAMER_TALENTS_T7_20261118)
-  "ammoSavePercent"
+  "ammoSavePercent",
+  // WAVE_RUN_20261118: the wave field's magnet
+  "dropMagnet"
 ]);
 // T5 (TAMER_TALENTS_T5_20261118): the first keystones. A line takes one of its two.
 // T6 (TAMER_TALENTS_T6_20261118) adds the breeder's 傳承.

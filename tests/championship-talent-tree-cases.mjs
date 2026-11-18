@@ -16,7 +16,7 @@ const sha = path => createHash('sha256').update(readFileSync(new URL(`../${path}
 test('every talent, every keystone and every line has its icon, recorded with its hash, its rights and its inputs', () => {
   const manifest = JSON.parse(source('assets/production/ui/talent-icons-r1/manifest.json'));
   const wanted = [...TALENT_LINES.map(line => `line-${line}`), ...TALENT_NODES.map(node => node.id), ...TALENT_KEYSTONES.map(key => key.id)];
-  assert.equal(wanted.length, 48);
+  assert.equal(wanted.length, 49, '48, and the magnet (WAVE_RUN_20261118)');
   assert.deepEqual(manifest.files.map(file => file.key).sort(), [...wanted].sort());
   assert.equal(manifest.rightsStatus, 'ORIGINAL_GENERATED');
   assert.match(manifest.provenance, /no ROM frame, research-library file or third-party character was an input/);
@@ -29,7 +29,7 @@ test('every talent, every keystone and every line has its icon, recorded with it
   assert.ok(bytes < 520 * 1024, `the whole bundle is ${bytes} bytes`);
   const index = JSON.parse(source('assets/production/ART_PRODUCTION_INDEX.json'));
   const entry = index.entries.find(row => row.assetId === 'art:ui:talent-icons:r1');
-  assert.deepEqual([entry.count, entry.rightsStatus, entry.runtimeEligible, entry.shippingReady, entry.humanApproved], [48, 'ORIGINAL_GENERATED', true, false, false]);
+  assert.deepEqual([entry.count, entry.rightsStatus, entry.runtimeEligible, entry.shippingReady, entry.humanApproved], [49, 'ORIGINAL_GENERATED', true, false, false]);
   assert.equal(entry.manifestSha256, sha('assets/production/ui/talent-icons-r1/manifest.json'));
   assert.equal(index.summary.registeredRuntimeBundles, index.entries.length);
   const inputs = JSON.parse(source('docs/contracts/championship/WEB_BUILD_INPUTS.v1.json')), allow = JSON.parse(source('docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json'));

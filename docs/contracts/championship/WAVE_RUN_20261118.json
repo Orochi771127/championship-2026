@@ -1,0 +1,82 @@
+{
+  "id": "WAVE_RUN_20261118",
+  "classification": "OWNER_APPROVED_ADAPTATION: story and challenge battles become runs of waves over the existing auto battle, with ground drops picked by a tap or the magnet talent; only the challenge offers leave-with-loot or fight-on after each won wave (Owner 2026-11-18)",
+  "supersedes": {
+    "contract": "docs/contracts/championship/SUPPLEMENTS_20261118.json",
+    "sourceLock": "src/championship/app/championshipStandaloneSave.js"
+  },
+  "saveField": {
+    "path": "progression.waveRun = { version: 1, runId, mode: STORY|CHALLENGE, encounterId, seed, party: [instanceId] (1..3), wave, waves (story), status: FIGHTING|REST, bossPresets (story), attempts: [attemptId], drops: [{ id: runId:wave:foeSlot:index, wave, slot, kind: BITS|ITEM, record?, amount, state: GROUND|PICKED|SETTLED, x, y }] } while a run is open; a finished run is never saved",
+    "migration": "none: a save without it has no run; an unknown shape is no run (productWaveRun.normalizeWaveRun); a repeated drop id is kept once; a run saved mid-wave reloads as a rest before that same wave (its drops were never dropped, so nothing pays twice)"
+  },
+  "rules": {
+    "shared": "one wave controller (productWaveRun.js, rules in WAVE_RUN_RULES); each wave is a fresh free-battle session (kind WAVE, no purse, no sponsor stake, no per-wave Sync EXP, gacha drop, talent Bits or skill-card reward); a wave is cleared only on the settled battle result; HP and TP carry across waves through the battle write-back; at most three a side",
+    "drops": "a won wave drops Bits worth WAVE_RUN_RULES.dropBitsPercent of each beaten foe's purse in up to dropPilesMax piles plus, at itemChancePercent, one existing raising item (feed, wound medicine, protein, medicine); ids and amounts come from the run seed (never the battle RNG), so a reload never rerolls them; nothing is credited when a drop falls",
+    "pickup": "one authority (app.collectWaveDrop) for a tap and the magnet: GROUND -> PICKED once; story picks are paid at once through a speculative shop (wallet cap and item caps hold; what does not fit stays picked and unpaid) and marked SETTLED in the same save; challenge picks join the run loot",
+    "story": "no leave or continue choice between waves; WAVE_RUN_RULES.storyWaves waves (lower tiers, then the authored foes last); a battle that cannot start or is left is never a win: the director asks retry or back, back ends the chapter with no clear and no first-clear reward",
+    "challenge": "after each won wave a rest: waves cleared, picked loot, partner HP, next threat (foe count, foe boost percent); 帶著戰利品離場 settles the picked loot once and returns to the Journey challenge tab; 繼續挑戰 starts the next wave; never on a timer; leaving with drops on the ground warns on the key (second press), never a modal; waves grow from one foe to three, tier floor(n/2), foes stronger by challengeBoostPerWave percent from wave challengeBoostFrom (damage dealt and taken, not HP alone)",
+    "defeat": "WAVE_RUN_RULES.defeatPolicy KEEP_PICKED (Owner had not decided): picked drops are paid, ground drops are lost; LOSE_ALL is the other named setting",
+    "endings": "LEFT, CLEARED, DEFEATED, ABANDONED (left mid-wave or another node opened) and FAILED (could not be fought) are recorded apart; backgrounding the app is none of them",
+    "magnet": "trader.magnet (tier 1, one rank, key dropMagnet) collects every ground drop on a story or challenge field, one every magnetEveryMs, through the same authority; a respec stops it",
+    "settlement": "the run pays its Sync EXP once at its end (grantBattleSync kind FREE, won unless defeated or abandoned) and the tamer once, never per wave"
+  },
+  "notChanged": [
+    "the battle engine, its RNG, AI and damage",
+    "the free battle catalog and its purses",
+    "the save key and schemaVersion",
+    "the battleEconomy.active guard",
+    "tower, patrol, zones, sparring, titles, championship, password/link and Data Arena"
+  ],
+  "sourceLocks": {
+    "src/championship/app/championshipStandaloneSave.js": "a732ddb063bd0f77dd87324416d0aca637621f809c7b95e989e6c692c07bde9d"
+  },
+  "historicalSourceLocks": {
+    "SUPPLEMENTS_20261118": {
+      "src/championship/app/championshipStandaloneSave.js": "ea910abfe33957649bad345806b22a452df968c9fcee005f91a126648211469f"
+    },
+    "SAVE_ID_20261108": {
+      "src/championship/app/championshipStandaloneSave.js": "2a02ee9de2394e485902252f0c4f5d96e6c3f77a141074752bf7bf928a7dccda"
+    },
+    "TAMER_TALENTS_20261117": {
+      "src/championship/app/championshipStandaloneSave.js": "6f39de1bfe87973d281413d3504946b72bc854604125866290371585b765c1da"
+    },
+    "JOURNEY_20261110": {
+      "src/championship/app/championshipStandaloneSave.js": "9881b49c9f9a322bceb7bded5aa8b03a2a0fb08982ebb5693ac719f17ef426d7"
+    },
+    "SYNC_LEVEL_20261109": {
+      "src/championship/app/championshipStandaloneSave.js": "eaf8df4ab8f0329f2337afe19d7d34f703065e1ec3ce30f54b4b8a09d1d1c1c5"
+    },
+    "ROYAL_NEW_MAPS_20261103": {
+      "src/championship/app/championshipStandaloneSave.js": "16ddc21be1570c51e87fb592635d5a5437ed25b9a8aeb660993f07494598b8c1"
+    },
+    "HUNT_TOOL_TIERS_20261103": {
+      "src/championship/app/championshipStandaloneSave.js": "798b838a72251d800b6feb989946e6a5feed1e6724bd5455a562ad55958b613a"
+    },
+    "DIAMOND_ECONOMY_20261102": {
+      "src/championship/app/championshipStandaloneSave.js": "15067ee0d3f47971a91a8189edaaa0c22ba3d43a831408b4f8bcc1e525b64c11"
+    },
+    "STAGE_REDESIGN_BURST_20261102": {
+      "src/championship/app/championshipStandaloneSave.js": "44b4ceec862776600a237a9cc54a160952f24305ed431a0b33a5addf4bba968d"
+    },
+    "ONLINE_BIND_REWARD_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c7abccc2403e3428e4754c87981a940db378dc4b1c17995363df6049ceeb680"
+    },
+    "CYBER_GACHA_20261029": {
+      "src/championship/app/championshipStandaloneSave.js": "1c4e7336e17e35099758cea84ff533e81c60c08bacbafef356afdbf55953b135"
+    },
+    "BATTLE_TACTICS_20261028": {
+      "src/championship/app/championshipStandaloneSave.js": "3a72fce7d38151f473f343fb8b9f59349daef1beb7cb09b6a0547c628d07ac8e"
+    },
+    "HEX_CAGE_WORLD_20261026": {
+      "src/championship/app/championshipStandaloneSave.js": "aaa72f6e08b150ac9bebb81fb2e6a8efefd532ab0ed7b7e24a7a0a9ae3d97f74"
+    }
+  },
+  "authorization": "Owner 2026-11-18: 「直接持續實作、測試與修正」 (wave run spec, story without leave, challenge with leave or continue, magnet talent)",
+  "tests": [
+    "tests/championship-wave-run-cases.mjs",
+    "tests/championship-wave-run-app-cases.mjs",
+    "tests/championship-wave-run-field-cases.mjs",
+    "tests/championship-story-vn-cases.mjs"
+  ],
+  "physicalDeviceAccepted": false
+}

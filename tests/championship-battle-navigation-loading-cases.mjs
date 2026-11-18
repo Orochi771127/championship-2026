@@ -44,7 +44,8 @@ function ownerFixture(target,{hudLoad=async()=>hud([cell('result')]),stageLoad=n
   const host={parentElement:null,getBoundingClientRect:()=>null};
   const newView=()=>({getCharacterHost:()=>host,setHudArt:art=>hudUpdates.push(art),render:view=>renders.push(view),dispose:()=>events.push('view-dispose')});
   // ROADMAP_R4_20261118: the battle screen also mounts the skill-card hand; this fixture's runtime has none, so it mounts nothing.
-  const context=vm.createContext({mountBattleSkillHand:()=>null,AbortController,console:{warn:(...args)=>warnings.push(args)},URLSearchParams,performance,
+  // WAVE_RUN_20261118: the wave field mounts only for a wave attempt (none here).
+  const context=vm.createContext({mountBattleSkillHand:()=>null,mountWaveRunField:()=>null,waveDriver:null,battleStandProjector:null,AbortController,console:{warn:(...args)=>warnings.push(args)},URLSearchParams,performance,
     location:{href:'https://localhost/championship.html',search:''},
     CHAMPIONSHIP_SCREENS:{RAISING_HOME:'RAISING_HOME',BATTLE_FIELD:'BATTLE_FIELD',BATTLE_RESULT:'BATTLE_RESULT',SHOP:'SHOP',DATABASE:'DATABASE'},
     app:{getScreen:()=>screen,getInteractiveTutorialBattle:()=>null,getTitleProgress:()=>({record:{}}),

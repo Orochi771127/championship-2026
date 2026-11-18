@@ -230,7 +230,7 @@ test('wiring: the result screen reads the record, a spar bout skips the sponsor,
   const main = source('src/championship/app/main.js'), app = source('src/championship/app/championshipStandaloneApp.js');
   assert.match(main, /tacticRecord: tactic\?\.panel \?\? null/);
   assert.match(main, /get\('tacticRecord'\) === 'off' \? 'A' : 'B'/);
-  assert.match(app, /mode===2&&prepared\.freeMatch\.kind!=='SPAR'\?\{begin:attemptId,kind:'FREE'\}:null/);
+  assert.match(app, /mode===2&&prepared\.freeMatch\.kind!=='SPAR'&&prepared\.freeMatch\.kind!=='WAVE'\?\{begin:attemptId,kind:'FREE'\}:null/);
   assert.match(source('src/championship/app/journeyScreen.js'), /result\.counts && p\.variant !== "A"/, 'the A side sees no counts on the practice tab');
   assert.match(source('src/championship/app/journeyScreen.js'), /\["PRACTICE", host\.practice\.text\("practice\.tab"\)\]/);
 });

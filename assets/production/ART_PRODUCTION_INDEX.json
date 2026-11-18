@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 142,
+    "registeredRuntimeBundles": 143,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -1893,20 +1893,6 @@
       "count": 8
     },
     {
-      "assetId": "art:ui:talent-icons:r1",
-      "manifestPath": "assets/production/ui/talent-icons-r1/manifest.json",
-      "manifestSha256": "9b53412e8005f80d0228a5801dd8da68787dfae61081f969b765a16f4666991e",
-      "rightsStatus": "ORIGINAL_GENERATED",
-      "productionStatus": "ORIGINAL_GENERATED_ART_ASSISTANT_REVIEWED",
-      "shippingStatus": "NOT_SHIPPING_READY",
-      "humanApproved": false,
-      "assistantReviewed": true,
-      "runtimeEligible": true,
-      "shippingReady": false,
-      "scope": "48 talent tree icons (44 nodes and keystones, 4 line emblems), TALENT_TREE_20261118; presentation only, no gameplay or commercial-rights claim",
-      "count": 48
-    },
-    {
       "assetId": "art:ui:skill-cards:r1",
       "manifestPath": "assets/production/ui/skill-cards-r1/manifest.json",
       "manifestSha256": "e0cd88a5f489ef3c43970dfe9a019f1c92f3d72b8d1fc3e3e7002af7204f00d5",
@@ -1919,6 +1905,34 @@
       "shippingReady": false,
       "scope": "20 tamer skill card faces, ROADMAP_R4_20261118; presentation only, no gameplay or commercial-rights claim",
       "count": 20
+    },
+    {
+      "assetId": "art:ui:talent-icons:r1",
+      "manifestPath": "assets/production/ui/talent-icons-r1/manifest.json",
+      "manifestSha256": "983054f334d042a5d03792297875fa8de01eb92968e7a4b15e403a963b36963d",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "ORIGINAL_GENERATED_ART_ASSISTANT_REVIEWED",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "assistantReviewed": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "scope": "49 talent tree icons (45 nodes and keystones, 4 line emblems), TALENT_TREE_20261118; presentation only, no gameplay or commercial-rights claim",
+      "count": 49
+    },
+    {
+      "assetId": "art:ui:wave-run:r1",
+      "manifestPath": "assets/production/ui/wave-run-r1/manifest.json",
+      "manifestSha256": "428527963182d918a84e869f5e286429c050eed6eb4b05648527ccae4e430842",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "ORIGINAL_GENERATED_ART_ASSISTANT_REVIEWED",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "assistantReviewed": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "scope": "Wave run field pieces (drops, loot bag, threat mark, leave/continue keys, wave flag), WAVE_RUN_20261118; presentation only, no gameplay or commercial-rights claim",
+      "count": 7
     }
   ]
 }
