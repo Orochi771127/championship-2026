@@ -123886,7 +123886,7 @@
     },
     {
       "path": "src/championship/presentation/vfx/moveVfxChoreography.js",
-      "sha256": "28f54e045ffd85cebe62bcfdcb13f0375b38a92b43058b7cc6aafcaf354e3ea2"
+      "sha256": "dce36080a246e4d4d9cf26dd76e0795b6cc8fa3a02a417bd6df8a8d53252a7a2"
     },
     {
       "path": "src/championship/presentation/vfx/moveVfxKit.js",
@@ -123902,7 +123902,823 @@
     },
     {
       "path": "src/championship/presentation/vfx/moveVfxPieceSprites3dIndex.js",
-      "sha256": "92342c93c17b16024207401b15ed114c6459f36de6f8269333175fb41a73eda2"
+      "sha256": "f7a85364678f98f89f707bfe4b89d14006d401a57bb001364a24c3ab56c75fd3"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b100.js",
+      "sha256": "fbca25ed2e173983c9ae51bfe7d7d0d6e8c16f105f87d7efeb87a25daedc9d49"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b104.js",
+      "sha256": "3ab0687beafcce53377385c03523575d008e01120690dac4977f1bbc6f57bd1d"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b106.js",
+      "sha256": "6be2345c08b1bf9ed23add373f91521b253eda32a8ed2ee2620602e2277978c0"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b108.js",
+      "sha256": "354401ff7f0fc53e0b33f049a38c58fd4c6bc0f9741c93fee5ead2a9157145ed"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b111.js",
+      "sha256": "c1b12b2f990070dc48d0b1d432cb3f7a160fa40d0e45c6b5748d1fb49a9fe533"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b113.js",
+      "sha256": "7e1dab8b549d7458351549a00521ad08198c39d7cb58aec3a39197f502e1e3ba"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b115.js",
+      "sha256": "6874e2e2b3e2005190c899ef3507f6746ee698531440eb64d19331640149e6a8"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b117.js",
+      "sha256": "356dbc9c13a48bc405c8e158cd6cb5b6d84505a319739155bbaa033df557786a"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b121.js",
+      "sha256": "ee2d75b2ee24d3a0685466644168fc8a50d7d471c08a3a31359845142ea65799"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b123.js",
+      "sha256": "c29e0297122487d7896bfd3788939916af80b8a502f30d3b0423a1b6fc57270d"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b125.js",
+      "sha256": "93c6c902f065dc7baf13b04838dfdab1d7f8ad484007ad898c2153100b80e61e"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b127.js",
+      "sha256": "b77508e2bd15bb9a565310a817191160075e3c7a5bdebf442efcfc98701cc077"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b129.js",
+      "sha256": "ca7c90e9d60435cbf0c403b285982fd700a85dcbd956e00f9aef86b7cd9f64fc"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b131.js",
+      "sha256": "64685c17683c587734b802644450edf61c9ab74a693da91e2ac269cee390b63d"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b135.js",
+      "sha256": "6b098f1c5d62c0da24f51b83eadc80896225a7ac6bcc2b8e525fe3d2d23482ba"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b139.js",
+      "sha256": "7aebd2bafb48d045d817892bd04a9974148795eaee2e53cff36b206c466752d7"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b142.js",
+      "sha256": "7b23e496361e9cdbe32dabeab2a845175c385cdea54eab4b110d9398629d5a39"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b145.js",
+      "sha256": "3df21ba2d30b03cd4e08479be51c0d89ab4f25f720dd032c2fe97406f6be5038"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b147.js",
+      "sha256": "bca254daa6fd2e36efed4f08d36040100711499e78c1e774b783b3bb255201b2"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b150.js",
+      "sha256": "a240fcf57d60c6ff85a77dd22b1dc4874c8243093b8b20332bfeccd1a2bf48ae"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b153.js",
+      "sha256": "c1ee4dd02309b4e5188d26c5e291f0358321268ef8436b50c1e3647e9c990a22"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b157.js",
+      "sha256": "31d34eaf4ca3ef957a1c12719215b0bc4daa73da15493788ad77f67ad461e40f"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b160.js",
+      "sha256": "492a5c52fe78bc31eee0597425f7e071daad41a73d8a4d30e2e5d1c4cf18947c"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b162.js",
+      "sha256": "71bca214d5b2e1dc9395eb16be820ec3fad7f15bfaec0e84bb156f58b8ea1d30"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b164.js",
+      "sha256": "ef1d546411200a5b6ba3f0e8c1135b0ab3dd2164e27b44b895f0c5ea665912b9"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b166.js",
+      "sha256": "f41b5775dfd969cd037c088729759647a501a396e472bbe69c3324e82c11c9c0"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b169.js",
+      "sha256": "7e6d22379a70afeffa580bb546e45c8f46b3c6c19e2fb03f4294c3837a0f64ad"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b171.js",
+      "sha256": "4842962043d3938817da1fc48533f0d17936b6067dbd634f358ab01d912cc79a"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b173.js",
+      "sha256": "6d305c282b2c1cdfcc692f9b6bba652fef2cbd7771b2de14f9597b52a2d4080b"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b177.js",
+      "sha256": "ca172bc5e2b1e9f3eb69bfc2cc89596dd888f7a5546257580bfe3ec3089f7a5a"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b179.js",
+      "sha256": "0b88ba9bca2900ad1b59166b9806c681002c1c5007cc1bb8f886f99f7c083785"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b182.js",
+      "sha256": "f41bfc3bdfaa7a4c2b427bd5ff6d52cdcec547a6ea255b9005cefffdd2b804dd"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b184.js",
+      "sha256": "8b9ad69d6e8a14a46546dd6fcdaf00159fde325bdb4c17adff5e2bac516d4279"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b186.js",
+      "sha256": "916f4dfe2b755283fba18520ea9bb68afc49906f6b42c273e123297d2bda885d"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b188.js",
+      "sha256": "c71381ec9adc1a3bb29c471f8e592114ef5fb6345de34514a80a4b7aef5285a9"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b190.js",
+      "sha256": "cf352f182fa989cee6976fda3f55bdfc34901cc5a4b335e1d69ec89f367a3c81"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b193.js",
+      "sha256": "0e5efc516b4f2335c95e08bebb604b2e81066a13389d2c0ea38f430af7d523be"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b196.js",
+      "sha256": "2445168a264bdf7a4be67081190c3383c35b5bc372fbbbe572fa5fa1a05de3d1"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b198.js",
+      "sha256": "fdba16a665e5c58c0c874d1f60eef1cc595290463f9984582f988f9381e17236"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b200.js",
+      "sha256": "97d80bc91a293146891e7fd75cb3a99650933a6cedf9ed87636f1ddcea24e0fb"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b202.js",
+      "sha256": "fd04a96bf13fefdea06d19e0e65cfef31e5e2cf62e1691ebfbee47dcadef8674"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b205.js",
+      "sha256": "ea5a84eb2d56be954262369d12f3c713a362cbeccc6eca849c20f885c1eb602f"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b207.js",
+      "sha256": "852c53ba9ff09caa0b7f883284ade52abe9d52916fa080ff5685da2dc8e4e2c6"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b209.js",
+      "sha256": "571b754208bd3661fc7f9277d6df2112c29dcd446d7f152e1e0909589c14f8fc"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b211.js",
+      "sha256": "6a863b4e25f4541b28b972204a7bf0752877bbdfbf52137d25c72c541d72af0b"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b213.js",
+      "sha256": "af8fc4164e459341cf3372401487547de7f7b30d4cd69016538c8cc62c4259c3"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b217.js",
+      "sha256": "9de53664ccc7e364f3c726a5da56b2a23265d982e8ae26beb73a174910b8fad4"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b220.js",
+      "sha256": "88a4935536f8a7f69ae9f97b8c2d5c571bac0125799b6f51c5dd087df4ec2c80"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b222.js",
+      "sha256": "d46393f8fd5b2bfff2f448ccb886ad290d9d66d1541680636468d2c49ab74dad"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b224.js",
+      "sha256": "ca56cf45f6a7b68dfeb105fdc2f08c1492c55c2073e84a8fd9471a9dcbecadfc"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b226.js",
+      "sha256": "f3bff1d5f4a46fa00fd329df548581e80c05d8549f4fbd20a72078d4441a1767"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b228.js",
+      "sha256": "cb967af8098f84fdbab87b70f151bb942c985fdf9d314f3409ee0addd7c1deca"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b230.js",
+      "sha256": "9ddb1ef9de2f0a0edda98ce3b4f519e7add7f9cbf688226fa38c1fe88d6d2b78"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b233.js",
+      "sha256": "8bb5dfc61a19649890bb40f0ac82315bdf9abc0dcb24a3cfe61cd4dadd53935c"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b235.js",
+      "sha256": "7443089ad2231f463dfa18fc0a0a2592e0c7482c96b91b24cb5b11aa6bbb3d87"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b237.js",
+      "sha256": "0fd39a4c0aba5a15c3b4f18520e96155026450338a1a8c776abb6317aa66e4bc"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b239.js",
+      "sha256": "463c6681413f1131d8f6621876d2b6eea320be11c6be1f6e9a1550018b437cf4"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b241.js",
+      "sha256": "2760ed4bc2580a87935be4233d76778f29238a5571235db73c5b1fd6dc2b5b5d"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b243.js",
+      "sha256": "92320648e28ff6919f90362d7b3b0015d797baccc78e2c87c47ca96d985bddb5"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b246.js",
+      "sha256": "d4827762e82f5d6850021b38ae97e3585f35ac83b6a171f44e2966c5ff46c54f"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b248.js",
+      "sha256": "019e86ade740d4e19a509238f532c19b3aebfb001f729da08c98fedd167c5d72"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b250.js",
+      "sha256": "d1f21eb9597db2d25b3792fddfd8046244152d43187bba0382395282faec70a8"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b254.js",
+      "sha256": "473ad29e133a1eb7dfab5283dd89035c0ab73c74c3e80f5c4c879763b2fdd40c"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b256.js",
+      "sha256": "2348212322db2bc23b7236eff17d4e82e2a9f5715baf8f176cbeb14c18744974"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b259.js",
+      "sha256": "62e393e6aa6c104444d0b3afaa69bdb28c7bad421a1d7ab3de9992f5346728e3"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b262.js",
+      "sha256": "0d5669560979f04a050908c7b334cd24a8b70b82dd22227cf638fec8c08110ee"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b264.js",
+      "sha256": "270f22cb307cbb8d707ce82b56601a0f2b3c78a3e47149d433929a5570f712bd"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b266.js",
+      "sha256": "959b5ab01c1e7178b77bc5bd545fc5550d8fa8af1bb968b353ca7e21080b2aca"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b269.js",
+      "sha256": "e2e03d3ea7392694201ed341777716b6fd0f49bbfb4208655286894e7622107f"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b271.js",
+      "sha256": "e576c03fddf0aee64b7af0ccedb8a507845ca2361a2aafce4c811ed5900a9752"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b273.js",
+      "sha256": "462102efeba24b88a3fc67b8e41ec4630d7c99c94fca314a08b4d0b0008d30b3"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b275.js",
+      "sha256": "b62169aecadef25557eebb019d87d5c8ec49f37494ad154057057ef445b545f0"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b277.js",
+      "sha256": "42a2f725f362c8f3457a11784452e694f1da69dfa201a1b38ceb34c3ec0e20e6"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b281.js",
+      "sha256": "7d9b2b81de3004db0658bb5342a809e13a5144146691f2ee130406e935ff8163"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b285.js",
+      "sha256": "994c9845bbe68e55545bcc7cfea0b3b05dae25de989de77a6fc0081e936cf0ee"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b289.js",
+      "sha256": "e995b5eae078c71c6217eaafc8b240d6a862332486e27ea34175753b02b9c6a2"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b293.js",
+      "sha256": "197c0527567cf6f74957b75a07b5b8637255d424363b1fbb252331f6f1d27e17"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b296.js",
+      "sha256": "f795fdecd91233e4a9745cc269e2129ea3c7dfbdde09e88eaa4a54dcc89b2f9c"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b299.js",
+      "sha256": "dd584793d6dce451829b02dd6f5e3d6448731a9dbf25be72a4d6199c663af039"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b301.js",
+      "sha256": "46019cf520433b874343782df9abde6b38f89f0aa4e8bac142b8f3ec898bcd1c"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b304.js",
+      "sha256": "4d6924fe32688cdd396c00e8ec226e8598b26465caf6e5f67e911058d8a1303d"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b306.js",
+      "sha256": "4bcabddf68fd4fa52f3295e231a1102f7e00d42674782d7d07d1fdb49afaa563"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b309.js",
+      "sha256": "1c011f0538e5b830cda3a212d3d9635731a2b597e132fc0b53affbb0cdbef270"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b31.js",
+      "sha256": "72fe5b6210e9de1116eba9653951364921c41a3e7e9ac8d960922d8924195910"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b311.js",
+      "sha256": "5ec29a6afae17de4215f686884b37c542136c201f06673b1fa4fea4742e67950"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b312.js",
+      "sha256": "378c379e650648e9b9a11ace2ba9af14218c944f48c3981e6d8a1cd5dd09a975"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b314.js",
+      "sha256": "09909cb14626affac4e3c84e5696ba9b16e025b161e05b34b74e4476d01eeceb"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b315.js",
+      "sha256": "ec92f743af3c86d4f26444f41ca790567d3d77b11151f4dcefcd80680d181ba6"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b318.js",
+      "sha256": "69630a923091e390129152090f0c7a690a063bd289be7ec3b2370389d2827a96"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b321.js",
+      "sha256": "7443d824c030c3a327e4336ec76d165f5aa7524588f5b510201398ad5f8a23c2"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b324.js",
+      "sha256": "d2837d37be7367836a21affb31d6729cd5e995eb15ca02a903396fe9e581ea25"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b327.js",
+      "sha256": "f71dbfe0f24acd9de19e0ba2ba4871d6269a633a2084e2753d5e83eb337a864b"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b33.js",
+      "sha256": "cb75669ebf8d78c89369573f0daea0099cbdd678c3a8b8e8c56b0b8a29e7743d"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b330.js",
+      "sha256": "a3d67eddb789cf1def59ac4edbd95de4ee29ebdedd2b7d221f2be18edddbea48"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b333.js",
+      "sha256": "e7cdff606a1e7c0b910368fdf9f7b37cd6f7647ee61550732abc7ec7e48031db"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b336.js",
+      "sha256": "0ce5aae2e5ab7ff1e854fc41c15b8a41da05903d7b0ac87d4741066ea609f39b"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b339.js",
+      "sha256": "d2958a7c07c4203c1b5882a167945a044c0498e21f7ba251499d5637bf89aec7"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b342.js",
+      "sha256": "2a9a83cf3466cad0ccacb1594a08f79923ef303fbe4aa4bbb606ec7a3dd1ea0f"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b345.js",
+      "sha256": "96d1c096d542ac520304bdbc075ee611985420bd1fdc4cf78875db8605f9527f"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b348.js",
+      "sha256": "b5c8f287d2e3f5877feadb2176910969262906ae00ad1bea5378a4aede2f8f6a"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b35.js",
+      "sha256": "6d2a8716fc87478aaaf5ad1537124bb631000d97d6b1c82fe454292f0c44bd5c"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b351.js",
+      "sha256": "da46f51b0bc7523ff93723f840121312d87150b3d677cb6c9c4dde503e7d004c"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b354.js",
+      "sha256": "32f0fc76981addab96ceb3ad3b5bc4abeca19c846b02a821ecca67e32137a10d"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b357.js",
+      "sha256": "ba0486d40fd64068349dc5d9b5d449461342a59f3fb9cbaf74e7d461b28b67a0"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b360.js",
+      "sha256": "1896b8244f84cf36da9370bfd3cee5febeb12a9ab9d6d999ef580d4422a086a4"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b363.js",
+      "sha256": "0a9a16ae6a04cff578bcde3c0f5345a9727f76afbf130fc0b34a7338894b2a2e"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b366.js",
+      "sha256": "5f80207e2691cf3cfa790f049baae4d228da508f98a7be182eeb0e900b9587f7"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b369.js",
+      "sha256": "0a46606002b6faac1687faf1bdb840aafa3118e81f82aaba5c88aa0aca7c6096"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b37.js",
+      "sha256": "90178bd0dfd6ec037375985b84bb7b398c6f16d6dc59407016015f0b74c4d88c"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b372.js",
+      "sha256": "e4cbc5d97251331e4e474a46009a773c468ba1ebd42b624a6998aa7326423c1d"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b375.js",
+      "sha256": "802de70183e91a8a548926cff3b3927c6e95ced8fdc09aa667598ace90f6bebf"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b378.js",
+      "sha256": "9b9d2165091b69b417ed55a7394b8209bb474f71641334871f1eba04d841aff6"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b381.js",
+      "sha256": "454ebfded5163f248f759ac621f45be64555e3758f25cde41dc8308e2febc967"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b384.js",
+      "sha256": "d3050ac8cd345f7609d11aa64b563c65f95fab3b78d84325281a21893590199a"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b387.js",
+      "sha256": "9c07b426150124dfb96faf0942e1e6467308dcdae9fc703155b8354ac73a86ae"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b39.js",
+      "sha256": "f2157a72d58efb652f52266d3753aa6fc052adf37b063d07f56207a4e71667a5"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b390.js",
+      "sha256": "5b71e38b4d7e745af705855f77fb037d1ac90b48e4dd6729506932035ecaf786"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b393.js",
+      "sha256": "a8acf7de99f6b55d906e030be5febb37622841d00a9b8476efccbe11e38888d3"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b396.js",
+      "sha256": "f9484c56a2427ad20bec162dccf5092011b0fb8ba26733ab695c2b6b3c3a2eb4"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b399.js",
+      "sha256": "2f8fd5bd518946f3f3122c86deb856bf2c2ce9b3ad796b33f4836a96b1dd600a"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b403.js",
+      "sha256": "e45a50c3e9f63976c20ad0b0bcaba20c1c5dc992341bf18f21bff1b833f8a82f"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b406.js",
+      "sha256": "f17d95430df96c6933ba582c4f86433cc281779289f96772cfebca63c2f3f6e2"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b409.js",
+      "sha256": "c6b42a05133aa1c708cf0b83f2c6ab094d52e082257e5a6cf0db23fa0a56de08"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b41.js",
+      "sha256": "63fe453fde6291db4ea7ea70ed8177b52cf670d6cd189e915f668de9ab563715"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b412.js",
+      "sha256": "fd405ac67ea843d70df7e44478478a9cf3e072dd53b2ccde3c2a239151770bff"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b415.js",
+      "sha256": "b4b4d574b1fcbe064ad56ef1706f2428c690d591bea415509ab6a3899fed050d"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b418.js",
+      "sha256": "0478aa06a050102a84fe4cf4a92bdfdc9ea6f7bc4a4d4a110a2fef0027bd49f2"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b421.js",
+      "sha256": "7ce96eb273e84b014820d031408c1e4aee449331e457c7a4ef73391955321043"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b424.js",
+      "sha256": "30b681c8ff667a839bbc313903d87f942c73b244e5bb86c76185284ef81789b5"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b427.js",
+      "sha256": "c46c945e429052e2af30a7fe2c07f57a99d9839c7f3d2cdd4cb6b00a5be3aeb9"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b43.js",
+      "sha256": "d62fb6a21df817fdde433ea34f475a1df4ef64f212736253f71a799fc6dd27d3"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b430.js",
+      "sha256": "82d4bae6ffdf1335fc91fef24cc3fd20a343261dd0547faed77f976d47b6c72b"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b434.js",
+      "sha256": "11392de968ef662019b3c89b434503576914522ff41b0abb50bc4267271a65ba"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b437.js",
+      "sha256": "aca238848f006446ca0e674e7ff140cd4a366ecdf3880fbd67ca28f8888837db"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b440.js",
+      "sha256": "900f189514db6c06f81ee7a9343e77526e1f0430cc29e75a27e2a9cdfb524ae8"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b443.js",
+      "sha256": "fe71c98075eef71216cb2702f7276ec147804c11dbb3ed086ec4e203ce0a632b"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b446.js",
+      "sha256": "d1f45d3693b2cb7f6bef97e83e5c7e73adbb6c4715144f137146bf19f8581b79"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b449.js",
+      "sha256": "090c8240aa2ed309ce4e99a123e94f4f762053ca5c1e663c258737a65a517b53"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b45.js",
+      "sha256": "867c7a3ac5174eec16c9baa90996e3d95c955b3361f88a885aa0c557747789c8"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b452.js",
+      "sha256": "3f4860d0b85e518e675fe00f094a79e3ec88ad531edc783431f9743dfc58054b"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b456.js",
+      "sha256": "c124e6909f7331ac7b872f28d3b2acc759cef110d8466f9a97af24f1dfd0cea3"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b460.js",
+      "sha256": "85278a72cb1bfc094937b52c6acf7ae1eef9ce8c6558f997ce5ba6d986ff7d14"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b464.js",
+      "sha256": "0de662bc679dd51975f2fd436f07426cd63e353911c04282f2d6665df897dff2"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b468.js",
+      "sha256": "79cdae84e9adf73b10f3ba4d072ae44f59922918a367d73ec0e6702f818e8b4c"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b47.js",
+      "sha256": "eb9837964651a9d034d75831db6514ae9a0bb9e2c6ce12f88f0730106fac2504"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b471.js",
+      "sha256": "796dbb52c60032a0cbfbb485386d90312a6a39805dd8bf2f3f5b694bcd55d5f6"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b474.js",
+      "sha256": "83cedd811a3512cbcbd7a83ea23bda4ad242c7b90aa21d76fadd1cf8464f91e5"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b477.js",
+      "sha256": "9e0f796832a59ebd10c84b8015123423988b417155d72a2e1e2e096811b07433"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b480.js",
+      "sha256": "e1e09c9268ad59095258260edd14c1be41b817936d48acf38e161d2aea5a1df7"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b483.js",
+      "sha256": "55dca5b20e7cb42073fd9682eb3eebb77a9a5a46e0a7e03d87dc52dcf482c1a4"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b486.js",
+      "sha256": "cc21718f2fbf8b5405b6027b764c54776a7fba551cd228cef962680ccb286b24"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b489.js",
+      "sha256": "6450769e15c2a05fd2e9027e33f8ee879ad0a3eb2b54a8cf3b834c6c77ced95e"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b49.js",
+      "sha256": "01d74e06a4c5ae0c12a36a9cf5de5dae37554327c17565cda7d00f974966ddab"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b492.js",
+      "sha256": "6b7825e243f38f487e468bb1969eb7bde47934fe119d762a099015a65d77b96e"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b495.js",
+      "sha256": "2b1c6fe943850496d3170fc026c3b49dccf9ad3312a32e4204c5f7bb4d5729ee"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b498.js",
+      "sha256": "eda8589310521d42dd4f660ddc3dfa88282388671b0670e859b89f86476929eb"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b501.js",
+      "sha256": "99a89f83b903e2d23bf28ee84c9c2f852c5e748c54611ec192895b69c1fb078d"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b505.js",
+      "sha256": "c457267b1f4db84b7b590e19427af4afcee1105db393980cf35b77028ff02915"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b508.js",
+      "sha256": "f5cde409c4ca81e38f69ced32106efcf0725a064f54facaa9fbb05827665a072"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b51.js",
+      "sha256": "8924b9db97948af4ea4d4ca56d03b2795c82241586cabee508ef85198dcb7c02"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b511.js",
+      "sha256": "fdeff5cf22877e32281c0662c1233279cb3b2289ea207c96521980692d549e39"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b514.js",
+      "sha256": "f6184780f5cf82bd1278fbf3d51cdeb6fb95adcbf4b554efff4b0f889eb848c0"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b517.js",
+      "sha256": "7af225eb1e486fc882cdadb8c29ab3e78569a541a4aa43a2176e58aeb32d24aa"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b520.js",
+      "sha256": "5c079ed45c5f38417178272d45b2109ac21170849aed2cc5e816e12b293f909d"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b523.js",
+      "sha256": "24477b6417a03f6b58844c0629cd09eba3e594676bda658708163e83a55675fc"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b526.js",
+      "sha256": "dd34645ab330a3f06f82a9f1a23dc34d4aeffecbe521771248ab5ead9f9ea2a9"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b529.js",
+      "sha256": "cd77f108fc992ddf00ecd64e2cfba523ccc84543916898c19e09d2d99396bf54"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b53.js",
+      "sha256": "4dc6f31e8351d80de59319de2e37be6483aae3b551c19eb685e270487dcbf51a"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b532.js",
+      "sha256": "2dfcf641d0a78ff794442beb1febdb84cc82e1997987e6bf35bc59db6365d22c"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b535.js",
+      "sha256": "0fc3ffe1a59319482a451a4faa95961b05f2a2bbd66554c9d1eac1b41ff2998f"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b538.js",
+      "sha256": "72fea9095f0ae8a8b6ed346f593f4df6011e0c25cdf91462b4ee52ad0175d51b"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b541.js",
+      "sha256": "7f0284f274f534a28e8a0160d2d354bdd198a7936268e94f1a9f9b2581d2a8f0"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b544.js",
+      "sha256": "9fb42b5777b4fac170f23614f1b4feb62c1f282bfc10db30084949251b166f32"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b548.js",
+      "sha256": "ca9a51310b64f807e7e2452023a0a14605c40322e41dc8ece006d470e34ec5a1"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b55.js",
+      "sha256": "2aef04baaf10ca38569299c7f8e38dfa39826f02b2ead5f4e976936fb60d1603"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b551.js",
+      "sha256": "a4e5919de74eb46e978c533476be9b19f972f46489d973b886bbfc5702dbfae8"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b554.js",
+      "sha256": "4200a3b5591762c550306a5d8e2b07cb20c468d73b14c8be7ba60c3bc872c2b4"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b557.js",
+      "sha256": "27bcdee6f9b3bc8c75d3f7e713a0ba4fbfcc7e522ff1d353f0980c7113486793"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b560.js",
+      "sha256": "4731a769e29387a5aac58ceab8dc46a275d7ab15f9034c0f48906f90ab8896c5"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b563.js",
+      "sha256": "9d6ed7d1aaa7b8879911bd0b0402e34dcbef058a0dadcafe766da4dbcdd65976"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b566.js",
+      "sha256": "32a653515a42fd13b14536808e2037eadd084a9b028f7ab96d1199dfaf250616"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b57.js",
+      "sha256": "2aea2cfdeaa9a9c81e1432e5ca78ee15612fa6344a0f5e7479c9bcfd5739e29f"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b570.js",
+      "sha256": "3dddd9fd46d9a3ef522aa5a10eaafb59a707487d88066714181c7aa6b6ac9b75"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b574.js",
+      "sha256": "33ae579f81b62ec14392653202101c8ec6c60d3447e7183eea1b136f4464718e"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b578.js",
+      "sha256": "32859dcca20998ded5181c7889df7a7ab36184d72a0e0a1db024b814d4900d42"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b582.js",
+      "sha256": "70440f3395dd97f608336d898578416deb3d204880c0796e713fce09d2431e31"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b586.js",
+      "sha256": "a620a5cab69ba4bd5fc7f57d3a15562f1bff924e96a2190e5c95b5aa94472df3"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b59.js",
+      "sha256": "4b798d9dcfc04e9dbd284b7359e82e13152f4ffde8ab505f3d8ccf60099407e7"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b62.js",
+      "sha256": "0cd7d94d7a5c5cf05b61bf9a4b7891266b97f1a671c73613e1a36e288554b12d"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b65.js",
+      "sha256": "cbbcdea2c7be8b442f883fe5c1cbae254871f0a6d79f7012a85b5efc519e71be"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b67.js",
+      "sha256": "ea210f2196aea63a35e96f973009be6a36d183221c9792586b0c34e1f14a6b67"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b69.js",
+      "sha256": "65aa90eb8986f3c1ca8511a0b5227ddbf937c8cf9d98c5ec682144c4a8ed2256"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b73.js",
+      "sha256": "75278928de7cd51319e2dac1077ad15935cb5f3132252f1ab88ae2601299e37f"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b75.js",
+      "sha256": "8977251d7911d54bc2c0bd4f29c42669079dcea1b63184b46b0c7596c804f96c"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b78.js",
+      "sha256": "137c7974503235d9f318d4f0f364e08d51733e13a5f66d862625191afc625f89"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b81.js",
+      "sha256": "7a5d6ce4ad9ec6a317827fb80c02060ea6206773097d84198da876b052f93cbd"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b83.js",
+      "sha256": "c978254fd1bda2b30b1edd75f7d7463ba598d8ba47cdc98e2aa5eade7766c439"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b85.js",
+      "sha256": "c354256a8df117392101775fa5d65973c4d27c0dd5ca660727e21a1542a07ce9"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b87.js",
+      "sha256": "13536159c43f61eca4dbea6526c37920ac73115d2024a76de48192f843b071bd"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b89.js",
+      "sha256": "8e8183e1f4a9feb9de38724ba44ce0fdfce99123fd2d4973dbcec3e20ebd9732"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b91.js",
+      "sha256": "ef89d417339c2b4880ed18ad5146781c7bda241361606c8b1766f0453f0d7567"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b93.js",
+      "sha256": "5b6edafa806ab02e07a2fb10605293034ea47b985f0e015b516f1d1a29fff7d3"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b96.js",
+      "sha256": "f162007b48877e4df82625e33d17fdf5bdce2fc28d8bcd46bd48d86e7228c787"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.b98.js",
+      "sha256": "0bcfb0a49a2b3731757c7f6023104d07298439ac3528835bab1459fe027a44e9"
     },
     {
       "path": "src/championship/presentation/vfx/moveVfxPieceSprites3d.s101.js",

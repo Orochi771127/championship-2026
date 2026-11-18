@@ -32,7 +32,9 @@ Done in the first batch:
 
 - U3 (third part): every species skill (157) lands a three.js piece no other skill of its element plays, from six skill variants (smaller and quicker) so none repeats an ultimate's look (`scripts/vfx/move-piece-3d-skills.json`).
 
-Not done yet: the icons (U2, generating), the Data Arena moves in the auto battle (U1-2/3), and the basic moves' own pieces (U3 continues).
+- U3 (fourth part): every species basic move (204) lands a three.js piece no other basic of its element plays, from six basic variants (the smallest and quickest) so none repeats a skill's or an ultimate's look (`scripts/vfx/move-piece-3d-basics.json`). With this, every attacking move in the game plays a contact piece of its own.
+
+Not done yet: the icons (U2, generating) and the Data Arena moves in the auto battle (U1-2/3).
 <!-- record-id: TAMER_TALENTS_T5_20261118 -->
 ## 2026-11-18 — Tamer talents T5: 安撫 and the first three keystones
 
