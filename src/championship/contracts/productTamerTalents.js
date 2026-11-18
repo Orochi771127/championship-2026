@@ -114,7 +114,9 @@ export const TALENT_WIRED_KEYS = new Set([
   // T4 (TAMER_TALENTS_T4_20261118): the shop's Bits prices, what a hunt and a stroll bring back.
   "shopBitsPercent", "scavengePercent", "strollBitsPercent", "strollExtraPercent",
   // T5 (TAMER_TALENTS_T5_20261118)
-  "moodDecayPercent"
+  "moodDecayPercent",
+  // T7 (TAMER_TALENTS_T7_20261118)
+  "ammoSavePercent"
 ]);
 // T5 (TAMER_TALENTS_T5_20261118): the first keystones. A line takes one of its two.
 // T6 (TAMER_TALENTS_T6_20261118) adds the breeder's 傳承.
@@ -254,6 +256,11 @@ export function grantTamerExp(state, amount) {
   return { state: { ...current, level: lv, exp },
     gain: deepFreeze({ amount: granted, before: { level: current.level, exp: current.exp }, after: { level: lv, exp,
       next: lv >= TAMER_LEVEL_MAX ? 0 : tamerExpRequired(lv) }, levels: lv - current.level }) };
+}
+
+/** A talent that is a chance: true when `roll` (in [0, 1)) falls under `percent`. No chance without the talent or a roll. */
+export function talentChance(percent, roll) {
+  return Number.isFinite(percent) && percent > 0 && Number.isFinite(roll) && roll >= 0 && roll * 100 < Math.min(100, percent);
 }
 
 /** The summed value of an effect key over the learned nodes (0 when none). */

@@ -43,7 +43,7 @@ import {RELAY_ROSTER} from '../modes/dataArena/dataArenaRelayRoster.js';
 import {RELAY_ELEMENT_KITS} from '../modes/dataArena/dataArenaRelayKits.js';
 import {rollPartnerGrade,applyGradeHeadStart,fusionLineMultiplier,FUSION_MAX_FODDER,FUSION_WARN_LEVEL,fusionInheritance} from '../contracts/productLineFusion.js';
 import {normalizeTamerTalents,createTamerTalentState,tamerTalentPoints,talentValue,grantTamerExp,tamerCaptureExp,tamerBattleExp,tamerDailyExp,TAMER_EXP,
-  learnTalent,talentRefusal,chooseKeystone,keystoneRefusal,hasKeystone,KEYSTONE_RULES,respecTalents,talentRespecCost,talentSpent,talentSpentInLine,talentOpen,commanderCappedTalents,
+  learnTalent,talentRefusal,chooseKeystone,keystoneRefusal,hasKeystone,KEYSTONE_RULES,talentChance,respecTalents,talentRespecCost,talentSpent,talentSpentInLine,talentOpen,commanderCappedTalents,
   TALENT_NODES,TALENT_KEYSTONES,TALENT_LINES,TALENT_TREE_POINTS,TALENT_TIER_GATE,TALENT_KEYSTONE_GATE,TALENT_KEYSTONE_COST,tamerExpRequired,TAMER_LEVEL_MAX}
   from '../contracts/productTamerTalents.js';
 import {normalizeTamerSupplies,createTamerSupplies,SUPPLEMENTS,getSupplement,supplyOwned,supplyPurchase,spendSupply,applyRecoverySupply,
@@ -6033,6 +6033,12 @@ export function createChampionshipStandaloneApp({
         const candidateRuntime = factory({ world, nativeEntry:entry,
           captureReplay:huntCaptureReplay, maxCardG:huntMemoryCapacityG(),
           nativeControls:entry ? {loadout:requireLoadout(),consumeItem:(id,n=1)=>{
+              // 省彈 (the hunter talent, TAMER_TALENTS_T7_20261118): 10 % a rank that a shot costs no ammunition. The shot is
+              // fired as usual and one round must be held; ropes, wires, traps and capture replays are never free.
+              if(n===1&&huntCaptureReplay===null&&getHuntCatalogItem(id)?.equipmentClass==='SHOT'){
+                const held=huntInventory?.getQuantity?.(id)??0;
+                if(held>0&&talentChance(talent('ammoSavePercent'),productRoll(0x64)))return Object.freeze({ok:true,itemId:id,quantity:0,owned:held,saved:true});
+              }
               // A snapped rope is spent in the save at once (HUNT_TOOL_TIERS_20261103).
               const spent=requireShop().consumeHuntItem(id,n);if(spent.ok&&getHuntCatalogItem(id)?.equipmentClass==='ROPE')savePort.markDirty();return spent;},
             ropeLedger:{wear:id=>requireShop().getRopeWear(id),setWear:(id,fraction)=>requireShop().setRopeWear(id,fraction),

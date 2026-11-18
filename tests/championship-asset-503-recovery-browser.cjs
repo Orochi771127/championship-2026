@@ -26,11 +26,12 @@ const {chromium}=require('playwright');
   await page.goto(base+'/championship.html');await page.locator('#cm-login').click();await page.locator('#cm-continue').click();
   await page.locator('[data-screen="RAISING_HOME"]').waitFor();
   const timeline=[];
-  for(let i=0;i<12;i++){await page.waitForTimeout(5000);const s=await state();timeline.push(`${(i+1)*5}s ${s.load} ${s.buttons.join('/')} ${s.status.join('|')}`);
+  for(let i=0;i<24;i++){await page.waitForTimeout(5000);const s=await state();timeline.push(`${(i+1)*5}s ${s.load} ${s.buttons.join('/')} ${s.status.join('|')}`);
     const retry=page.locator('button:visible',{hasText:/^重新載入牧場$/}).first();
     const failedNow=s.status.some(t=>/失敗/.test(t));
     if(failedNow&&await retry.isVisible().catch(()=>false)){await retry.click();timeline.push(`${(i+1)*5}s clicked retry`);continue;}
-    if(s.load==='ready'&&!failedNow&&i>=2)break;}
+    // Done only when nothing is said any more: a 「正在載入夥伴外觀…」 after a retry is still loading, not the end.
+    if(s.load==='ready'&&s.status.length===0&&i>=2)break;}
   out.timeline=timeline;out.final=await state();
   out.failedCount=failed.length;out.failedSample=[...new Set(failed)].slice(0,5);out.requestsPerUrl=[...seen.values()].reduce((m,n)=>Math.max(m,n),0);
   out.residents=await page.evaluate(()=>{try{return JSON.parse(localStorage.getItem('championshipModernSave:v1')).raising.collection.length}catch{return null}});

@@ -1,5 +1,16 @@
 # Championship Owner Direction
 
+<!-- record-id: TAMER_TALENTS_T7_20261118 -->
+## 2026-11-18 — Tamer talents T7: 省彈, and one normal-entry run of the whole game on main
+
+Under the standing goal and `LINE_FUSION_TAMER_TALENTS_DESIGN_20261117` (talent plan section 4.1).
+
+- `OWNER_APPROVED_ADAPTATION`, as designed: hunter 省彈 (10 % a rank that a shot costs no ammunition). 32 of the 36 nodes and 4 of the 8 keystones are open.
+- The four nodes and four keystones still closed either change the native hunt itself (繩索保養, 疾步, 穩手, 慧眼, 連獵), wait for the Owner (蓄能: which meter), or need something not built (萃取, 行商).
+- Verification record: `docs/reports/normal-entry-run-2026-11-18/REPORT_ZH_TW.md` (every ranch entry and back, a battle, the Data Arena, the gachapon, and partner art answering 503, on main `806a49fb`).
+
+Contract: `docs/contracts/championship/TAMER_TALENTS_20261117.json` (`wiredT7`).
+
 <!-- record-id: TAMER_TALENTS_T6_20261118 -->
 ## 2026-11-18 — Tamer talents T6: the breeder keystone 傳承 (fusion P4)
 
