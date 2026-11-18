@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 138,
+    "registeredRuntimeBundles": 139,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -1863,6 +1863,20 @@
       "shippingReady": false,
       "scope": "31 battle glyphs (3 battle styles / move classes, 13 statuses, 15 special-skill and empty-slot icons), BATTLE_STYLE_V1 2026-11-16; no gameplay or commercial-rights claim",
       "count": 31
+    },
+    {
+      "assetId": "art:ui:move-icons:r1",
+      "manifestPath": "assets/production/ui/move-icons-r1/manifest.json",
+      "manifestSha256": "398ce630839332e9f67bbf5f33f12756eb25fa75fffbb4b0c43648a80e12038d",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "ORIGINAL_GENERATED_ART_ASSISTANT_REVIEWED",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "assistantReviewed": true,
+      "runtimeEligible": true,
+      "shippingReady": false,
+      "scope": "666 move icons (species, original-character, learnable support and Data Arena moves), UNIFIED_MOVES_20261118 U2; no gameplay or commercial-rights claim",
+      "count": 666
     }
   ]
 }

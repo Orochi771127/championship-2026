@@ -9,6 +9,7 @@
 // keep their own approved names in zhHant.js.
 import { getLocale } from "./locale.js";
 import { productOriginalMoveNames } from "../contracts/productOriginalSpecies.js";
+import { productArenaMoveNames } from "../contracts/productArenaMoves.js";
 
 const LOCALE_COLUMN = Object.freeze({ "zh-Hant": 0, en: 1, ja: 2, th: 3, vi: 4 });
 
@@ -585,8 +586,11 @@ export const BATTLE_MOVE_NAMES = Object.freeze({
 for (const entry of Object.values(BATTLE_MOVE_NAMES)) Object.freeze(entry);
 
 /** The approved name of a species move in the current locale, or null. */
+// productArenaMoveNames: the Data Arena's moves learned for the auto battle (records 623+, UNIFIED_MOVES_20261118).
+const ARENA_MOVE_NAMES = productArenaMoveNames();
 export function battleMoveName(moveId) {
   const entry = BATTLE_MOVE_NAMES[moveId];
+  if (!entry && ARENA_MOVE_NAMES[moveId]) return ARENA_MOVE_NAMES[moveId][LOCALE_COLUMN[getLocale()] ?? 0] ?? ARENA_MOVE_NAMES[moveId][0];
   if (!entry) return null;
   return entry[LOCALE_COLUMN[getLocale()] ?? 0] ?? entry[0];
 }

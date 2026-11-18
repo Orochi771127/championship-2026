@@ -1525,6 +1525,15 @@ body[data-day-period="NIGHT"] .int-rh2-field-host::after { background-color: rgb
 }
 
 /* Battle glyphs (BATTLE_STYLE_V1, 2026-11-16): small icons beside short labels. */
+/* UNIFIED_MOVES_20261118: a move's own icon (assets/production/ui/move-icons-r1) beside its name */
+.cm-move-icon { display: inline-block; flex: 0 0 auto; width: 1.6em; height: 1.6em; object-fit: contain; vertical-align: -0.4em; margin-right: 4px; pointer-events: none; }
+.cm-dex-move-card__icon { width: 1.9em; height: 1.9em; }
+.cm-dex-move-card__icon + .cm-dex-move-card__name { margin-right: auto; text-align: left; }
+/* UNIFIED_MOVES_20261118: the partner page's 競技招式 picker (a Data Arena move learned for the auto battle) */
+.cm-arena-learn__choices { display: flex; flex-wrap: wrap; gap: 4px; }
+.cm-arena-learn__choice { display: inline-flex; align-items: center; gap: 2px; min-height: 32px; padding: 2px 8px 2px 4px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.25); background: rgba(14, 26, 44, 0.55); color: inherit; font: inherit; font-size: 0.85em; cursor: pointer; }
+.cm-arena-learn__choice[aria-pressed="true"] { border-color: #ffd34d; background: rgba(255, 211, 77, 0.22); font-weight: 800; }
+.da-move-icon { width: 1.5em; height: 1.5em; margin-right: 3px; }
 .cm-glyph { display: inline-block; flex: 0 0 auto; width: 1.35em; height: 1.35em; object-fit: contain; vertical-align: -0.3em; }
 .cm-glyph-chip { display: inline-flex; align-items: center; gap: 2px; padding: 0 7px 0 3px; border-radius: 999px;
   font: 800 var(--fs-label, 12px)/1.5 var(--font-ui, sans-serif); white-space: nowrap; }

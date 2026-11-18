@@ -10,6 +10,7 @@
 //    stepping. close() removes the callback, every listener (one
 //    AbortController), the scene, sounds and the character bundles.
 
+import { moveIcon, moveIconSrc } from './moveIcons.js';
 import { createDataArenaSimulation } from "../modes/dataArena/dataArenaSimulation.js";
 import { DATA_ARENA_KITS, DATA_ARENA_MATE, DATA_ARENA_MAX_STEPS_PER_FRAME, DATA_ARENA_PARTNERS, DATA_ARENA_STEP_SECONDS, DATA_ARENA_TIMELINE,
   DATA_ARENA_TOURNAMENT } from "../modes/dataArena/dataArenaConfig.js";
@@ -85,6 +86,8 @@ const ownMoveText = (id) => { const own = relayOwnMoveInfo(id); if (!own) return
   return `${battleMoveName(own.record) ?? id}｜${lent ? (t(`move.${lent}`).split(/\s*[｜|]\s*/)[1] ?? '') : `${t(`relay.style.${own.style}`)}${t(`relay.palette.${own.palette}`)}`}`; };
 const moveText = (id) => ownMoveText(id) ?? t(`move.${id}`);
 const moveName = (id) => moveText(id).split(/\s*[｜|]\s*/)[0];
+// UNIFIED_MOVES_20261118: the move's icon (shared with the auto battle and the Dex), none for a basic attack.
+const arenaMoveIcon = (id) => { const icon = id && typeof moveIcon === 'function' && !/^relay/.test(String(id)) ? moveIcon(id, 'cm-move-icon da-move-icon') : null; return icon ? [icon] : []; };
 const moveEffect = (id) => moveText(id).split(/\s*[｜|]\s*/)[1] ?? "";
 const basicName = (partnerId) => { const record = relayBasicRecord(relayPartner(partnerId)?.speciesIndex); return (record !== null && battleMoveName(record)) || t(`move.${RELAY_ACTION_PROFILES[partnerId].basic}`); };
 // Skill-button colour key only: relay partners carry their roster element.
@@ -552,13 +555,13 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     kitMoves.forEach((id, slot) => {
       const node = button("da-slot", "", () => { if (root.dataset.state === "PLAY") { latch.cast = slot; latch.castAuto = !pointer.mouse; } }, signal);
       const cool = el("span", "da-slot__cool");
-      node.append(el("span", "da-slot__key", SLOT_KEYS[slot]), el("span", "da-slot__name", moveName(id)), cool);
+      node.append(el("span", "da-slot__key", SLOT_KEYS[slot]), ...arenaMoveIcon(id), el("span", "da-slot__name", moveName(id)), cool);
       node.title = `${moveName(id)} — ${moveEffect(id)}`;
       hudRefs.slots.push(node);
       kit.appendChild(node);
     });
     hudRefs.ult = button("da-slot da-slot--ult", "", () => { if (root.dataset.state === "PLAY") { latch.ult = true; latch.castAuto = !pointer.mouse; } }, signal);
-    hudRefs.ult.append(el("span", "da-slot__key", "R"), el("span", "da-slot__name", moveName(activeKit?.ultimate ?? "")), el("span", "da-slot__charge"), el('span', 'da-slot__meta'));
+    hudRefs.ult.append(el("span", "da-slot__key", "R"), ...arenaMoveIcon(activeKit?.ultimate), el("span", "da-slot__name", moveName(activeKit?.ultimate ?? "")), el("span", "da-slot__charge"), el('span', 'da-slot__meta'));
     kit.appendChild(hudRefs.ult);
     for (const [slot, node] of skillButtons.entries()) node.firstChild.textContent = kitMoves[slot] ? moveName(kitMoves[slot]) : "";
     ultButton.firstChild.textContent = t(gameMode === 'RELAY' ? 'relay.touch.ult' : 'touch.ult');
@@ -1032,7 +1035,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const casterName = activeBurstForm?.phase === "BURST" && activeBurstForm.form
       ? speciesName(activeBurstForm.form)
       : (mine ? cast.partners.find((p) => p.speciesId === speciesId)?.name ?? "" : rivalName(rival?.definitionId ?? rival?.id));
-    cutIn.play({ team: mine ? "ally" : "enemy", species: speciesId, moveName: moveName(event.moveId),
+    cutIn.play({ team: mine ? "ally" : "enemy", species: speciesId, moveName: moveName(event.moveId), moveIcon: /^relay/.test(String(event.moveId)) ? null : moveIconSrc(event.moveId),
       casterName, palette: element ?? (mine ? "light" : "dark"), focus });
   }
   let vignetteTimer = null;
@@ -1434,11 +1437,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         chip.dataset.slot = String(slot);
         chip.setAttribute("aria-expanded", String(openChips === `${id}:${slot}`));
         chip.setAttribute("aria-label", `${partnerName(id)} ${kitKey(true, slot)} ${moveName(moveId)}`);
-        chip.append(el("span", "da-skill__key", kitKey(touchActive, slot)), el("strong", "da-skill__name", moveName(moveId)), cost(move));
+        chip.append(el("span", "da-skill__key", kitKey(touchActive, slot)), ...arenaMoveIcon(moveId), el("strong", "da-skill__name", moveName(moveId)), cost(move));
         slots.appendChild(chip);
       });
       const ult = el("div", "da-skill da-skill--ult");
-      ult.append(el("span", "da-skill__key", kitKey(touchActive, "ult")), el("strong", "da-skill__name", moveName(selected.ultimate)), cost({ energy: DATA_ARENA_RELAY.ultimateTp }));
+      ult.append(el("span", "da-skill__key", kitKey(touchActive, "ult")), ...arenaMoveIcon(selected.ultimate), el("strong", "da-skill__name", moveName(selected.ultimate)), cost({ energy: DATA_ARENA_RELAY.ultimateTp }));
       slots.appendChild(ult);
       wrap.appendChild(slots);
       const [openId, openSlot] = (openChips ?? "").split(":");
@@ -1461,7 +1464,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           choice.setAttribute("aria-selected", String(at === slot));
           choice.dataset.element = relayMoveElement(moveId, partnerElement(id));
           choice.dataset.move = moveId;
-          choice.append(el("strong", "da-skill__name", moveName(moveId)), cost(move),
+          choice.append(...arenaMoveIcon(moveId), el("strong", "da-skill__name", moveName(moveId)), cost(move),
             el("span", "da-skill__effect", moveEffect(moveId)), ...(at >= 0 && at !== slot ? [el("span", "da-skill__key", kitKey(touchActive, at))] : []));
           choices.appendChild(choice);
         }

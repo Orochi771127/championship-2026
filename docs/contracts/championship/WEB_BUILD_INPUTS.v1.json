@@ -24,6 +24,7 @@
     "src/championship/app/badgeUnlockText.js",
     "src/championship/app/battleFxLookups.js",
     "src/championship/app/battleGlyphs.js",
+    "src/championship/app/moveIcons.js",
     "src/championship/app/battlePresentationSource.js",
     "src/championship/app/battleRosterSource.js",
     "src/championship/app/battleRuntime.js",
@@ -216,6 +217,7 @@
     "src/championship/contracts/productSpeciesExtensions.js",
     "src/championship/contracts/productSupplements.js",
     "src/championship/contracts/productSyncLevel.js",
+    "src/championship/contracts/productArenaMoves.js",
     "src/championship/contracts/productTacticPractice.js",
     "src/championship/contracts/productTamerTalents.js",
     "src/championship/contracts/speciesTaxonomy.js",
@@ -8841,6 +8843,672 @@
     "assets/production/ui/battle-glyphs-r1/style_attack_64.webp",
     "assets/production/ui/battle-glyphs-r1/style_skill_64.webp",
     "assets/production/ui/battle-glyphs-r1/style_support_64.webp",
+    "assets/production/ui/move-icons-r1/move_100_64.webp",
+    "assets/production/ui/move-icons-r1/move_101_64.webp",
+    "assets/production/ui/move-icons-r1/move_102_64.webp",
+    "assets/production/ui/move-icons-r1/move_103_64.webp",
+    "assets/production/ui/move-icons-r1/move_104_64.webp",
+    "assets/production/ui/move-icons-r1/move_105_64.webp",
+    "assets/production/ui/move-icons-r1/move_106_64.webp",
+    "assets/production/ui/move-icons-r1/move_107_64.webp",
+    "assets/production/ui/move-icons-r1/move_108_64.webp",
+    "assets/production/ui/move-icons-r1/move_109_64.webp",
+    "assets/production/ui/move-icons-r1/move_10_64.webp",
+    "assets/production/ui/move-icons-r1/move_110_64.webp",
+    "assets/production/ui/move-icons-r1/move_111_64.webp",
+    "assets/production/ui/move-icons-r1/move_112_64.webp",
+    "assets/production/ui/move-icons-r1/move_113_64.webp",
+    "assets/production/ui/move-icons-r1/move_114_64.webp",
+    "assets/production/ui/move-icons-r1/move_115_64.webp",
+    "assets/production/ui/move-icons-r1/move_116_64.webp",
+    "assets/production/ui/move-icons-r1/move_117_64.webp",
+    "assets/production/ui/move-icons-r1/move_118_64.webp",
+    "assets/production/ui/move-icons-r1/move_119_64.webp",
+    "assets/production/ui/move-icons-r1/move_11_64.webp",
+    "assets/production/ui/move-icons-r1/move_120_64.webp",
+    "assets/production/ui/move-icons-r1/move_121_64.webp",
+    "assets/production/ui/move-icons-r1/move_122_64.webp",
+    "assets/production/ui/move-icons-r1/move_123_64.webp",
+    "assets/production/ui/move-icons-r1/move_124_64.webp",
+    "assets/production/ui/move-icons-r1/move_125_64.webp",
+    "assets/production/ui/move-icons-r1/move_126_64.webp",
+    "assets/production/ui/move-icons-r1/move_127_64.webp",
+    "assets/production/ui/move-icons-r1/move_128_64.webp",
+    "assets/production/ui/move-icons-r1/move_129_64.webp",
+    "assets/production/ui/move-icons-r1/move_12_64.webp",
+    "assets/production/ui/move-icons-r1/move_130_64.webp",
+    "assets/production/ui/move-icons-r1/move_131_64.webp",
+    "assets/production/ui/move-icons-r1/move_132_64.webp",
+    "assets/production/ui/move-icons-r1/move_133_64.webp",
+    "assets/production/ui/move-icons-r1/move_134_64.webp",
+    "assets/production/ui/move-icons-r1/move_135_64.webp",
+    "assets/production/ui/move-icons-r1/move_136_64.webp",
+    "assets/production/ui/move-icons-r1/move_137_64.webp",
+    "assets/production/ui/move-icons-r1/move_138_64.webp",
+    "assets/production/ui/move-icons-r1/move_139_64.webp",
+    "assets/production/ui/move-icons-r1/move_13_64.webp",
+    "assets/production/ui/move-icons-r1/move_140_64.webp",
+    "assets/production/ui/move-icons-r1/move_141_64.webp",
+    "assets/production/ui/move-icons-r1/move_142_64.webp",
+    "assets/production/ui/move-icons-r1/move_143_64.webp",
+    "assets/production/ui/move-icons-r1/move_144_64.webp",
+    "assets/production/ui/move-icons-r1/move_145_64.webp",
+    "assets/production/ui/move-icons-r1/move_146_64.webp",
+    "assets/production/ui/move-icons-r1/move_147_64.webp",
+    "assets/production/ui/move-icons-r1/move_148_64.webp",
+    "assets/production/ui/move-icons-r1/move_149_64.webp",
+    "assets/production/ui/move-icons-r1/move_14_64.webp",
+    "assets/production/ui/move-icons-r1/move_150_64.webp",
+    "assets/production/ui/move-icons-r1/move_151_64.webp",
+    "assets/production/ui/move-icons-r1/move_152_64.webp",
+    "assets/production/ui/move-icons-r1/move_153_64.webp",
+    "assets/production/ui/move-icons-r1/move_154_64.webp",
+    "assets/production/ui/move-icons-r1/move_155_64.webp",
+    "assets/production/ui/move-icons-r1/move_156_64.webp",
+    "assets/production/ui/move-icons-r1/move_157_64.webp",
+    "assets/production/ui/move-icons-r1/move_158_64.webp",
+    "assets/production/ui/move-icons-r1/move_159_64.webp",
+    "assets/production/ui/move-icons-r1/move_15_64.webp",
+    "assets/production/ui/move-icons-r1/move_160_64.webp",
+    "assets/production/ui/move-icons-r1/move_161_64.webp",
+    "assets/production/ui/move-icons-r1/move_162_64.webp",
+    "assets/production/ui/move-icons-r1/move_163_64.webp",
+    "assets/production/ui/move-icons-r1/move_164_64.webp",
+    "assets/production/ui/move-icons-r1/move_165_64.webp",
+    "assets/production/ui/move-icons-r1/move_166_64.webp",
+    "assets/production/ui/move-icons-r1/move_167_64.webp",
+    "assets/production/ui/move-icons-r1/move_168_64.webp",
+    "assets/production/ui/move-icons-r1/move_169_64.webp",
+    "assets/production/ui/move-icons-r1/move_16_64.webp",
+    "assets/production/ui/move-icons-r1/move_170_64.webp",
+    "assets/production/ui/move-icons-r1/move_171_64.webp",
+    "assets/production/ui/move-icons-r1/move_172_64.webp",
+    "assets/production/ui/move-icons-r1/move_173_64.webp",
+    "assets/production/ui/move-icons-r1/move_174_64.webp",
+    "assets/production/ui/move-icons-r1/move_175_64.webp",
+    "assets/production/ui/move-icons-r1/move_176_64.webp",
+    "assets/production/ui/move-icons-r1/move_177_64.webp",
+    "assets/production/ui/move-icons-r1/move_178_64.webp",
+    "assets/production/ui/move-icons-r1/move_179_64.webp",
+    "assets/production/ui/move-icons-r1/move_17_64.webp",
+    "assets/production/ui/move-icons-r1/move_180_64.webp",
+    "assets/production/ui/move-icons-r1/move_181_64.webp",
+    "assets/production/ui/move-icons-r1/move_182_64.webp",
+    "assets/production/ui/move-icons-r1/move_183_64.webp",
+    "assets/production/ui/move-icons-r1/move_184_64.webp",
+    "assets/production/ui/move-icons-r1/move_185_64.webp",
+    "assets/production/ui/move-icons-r1/move_186_64.webp",
+    "assets/production/ui/move-icons-r1/move_187_64.webp",
+    "assets/production/ui/move-icons-r1/move_188_64.webp",
+    "assets/production/ui/move-icons-r1/move_189_64.webp",
+    "assets/production/ui/move-icons-r1/move_18_64.webp",
+    "assets/production/ui/move-icons-r1/move_190_64.webp",
+    "assets/production/ui/move-icons-r1/move_191_64.webp",
+    "assets/production/ui/move-icons-r1/move_192_64.webp",
+    "assets/production/ui/move-icons-r1/move_193_64.webp",
+    "assets/production/ui/move-icons-r1/move_194_64.webp",
+    "assets/production/ui/move-icons-r1/move_195_64.webp",
+    "assets/production/ui/move-icons-r1/move_196_64.webp",
+    "assets/production/ui/move-icons-r1/move_197_64.webp",
+    "assets/production/ui/move-icons-r1/move_198_64.webp",
+    "assets/production/ui/move-icons-r1/move_199_64.webp",
+    "assets/production/ui/move-icons-r1/move_19_64.webp",
+    "assets/production/ui/move-icons-r1/move_1_64.webp",
+    "assets/production/ui/move-icons-r1/move_200_64.webp",
+    "assets/production/ui/move-icons-r1/move_201_64.webp",
+    "assets/production/ui/move-icons-r1/move_202_64.webp",
+    "assets/production/ui/move-icons-r1/move_203_64.webp",
+    "assets/production/ui/move-icons-r1/move_204_64.webp",
+    "assets/production/ui/move-icons-r1/move_205_64.webp",
+    "assets/production/ui/move-icons-r1/move_206_64.webp",
+    "assets/production/ui/move-icons-r1/move_207_64.webp",
+    "assets/production/ui/move-icons-r1/move_208_64.webp",
+    "assets/production/ui/move-icons-r1/move_209_64.webp",
+    "assets/production/ui/move-icons-r1/move_20_64.webp",
+    "assets/production/ui/move-icons-r1/move_210_64.webp",
+    "assets/production/ui/move-icons-r1/move_211_64.webp",
+    "assets/production/ui/move-icons-r1/move_212_64.webp",
+    "assets/production/ui/move-icons-r1/move_213_64.webp",
+    "assets/production/ui/move-icons-r1/move_214_64.webp",
+    "assets/production/ui/move-icons-r1/move_215_64.webp",
+    "assets/production/ui/move-icons-r1/move_216_64.webp",
+    "assets/production/ui/move-icons-r1/move_217_64.webp",
+    "assets/production/ui/move-icons-r1/move_218_64.webp",
+    "assets/production/ui/move-icons-r1/move_219_64.webp",
+    "assets/production/ui/move-icons-r1/move_21_64.webp",
+    "assets/production/ui/move-icons-r1/move_220_64.webp",
+    "assets/production/ui/move-icons-r1/move_221_64.webp",
+    "assets/production/ui/move-icons-r1/move_222_64.webp",
+    "assets/production/ui/move-icons-r1/move_223_64.webp",
+    "assets/production/ui/move-icons-r1/move_224_64.webp",
+    "assets/production/ui/move-icons-r1/move_225_64.webp",
+    "assets/production/ui/move-icons-r1/move_226_64.webp",
+    "assets/production/ui/move-icons-r1/move_227_64.webp",
+    "assets/production/ui/move-icons-r1/move_228_64.webp",
+    "assets/production/ui/move-icons-r1/move_229_64.webp",
+    "assets/production/ui/move-icons-r1/move_22_64.webp",
+    "assets/production/ui/move-icons-r1/move_230_64.webp",
+    "assets/production/ui/move-icons-r1/move_231_64.webp",
+    "assets/production/ui/move-icons-r1/move_232_64.webp",
+    "assets/production/ui/move-icons-r1/move_233_64.webp",
+    "assets/production/ui/move-icons-r1/move_234_64.webp",
+    "assets/production/ui/move-icons-r1/move_235_64.webp",
+    "assets/production/ui/move-icons-r1/move_236_64.webp",
+    "assets/production/ui/move-icons-r1/move_237_64.webp",
+    "assets/production/ui/move-icons-r1/move_238_64.webp",
+    "assets/production/ui/move-icons-r1/move_239_64.webp",
+    "assets/production/ui/move-icons-r1/move_23_64.webp",
+    "assets/production/ui/move-icons-r1/move_240_64.webp",
+    "assets/production/ui/move-icons-r1/move_241_64.webp",
+    "assets/production/ui/move-icons-r1/move_242_64.webp",
+    "assets/production/ui/move-icons-r1/move_243_64.webp",
+    "assets/production/ui/move-icons-r1/move_244_64.webp",
+    "assets/production/ui/move-icons-r1/move_245_64.webp",
+    "assets/production/ui/move-icons-r1/move_246_64.webp",
+    "assets/production/ui/move-icons-r1/move_247_64.webp",
+    "assets/production/ui/move-icons-r1/move_248_64.webp",
+    "assets/production/ui/move-icons-r1/move_249_64.webp",
+    "assets/production/ui/move-icons-r1/move_24_64.webp",
+    "assets/production/ui/move-icons-r1/move_250_64.webp",
+    "assets/production/ui/move-icons-r1/move_251_64.webp",
+    "assets/production/ui/move-icons-r1/move_252_64.webp",
+    "assets/production/ui/move-icons-r1/move_253_64.webp",
+    "assets/production/ui/move-icons-r1/move_254_64.webp",
+    "assets/production/ui/move-icons-r1/move_255_64.webp",
+    "assets/production/ui/move-icons-r1/move_256_64.webp",
+    "assets/production/ui/move-icons-r1/move_257_64.webp",
+    "assets/production/ui/move-icons-r1/move_258_64.webp",
+    "assets/production/ui/move-icons-r1/move_259_64.webp",
+    "assets/production/ui/move-icons-r1/move_25_64.webp",
+    "assets/production/ui/move-icons-r1/move_260_64.webp",
+    "assets/production/ui/move-icons-r1/move_261_64.webp",
+    "assets/production/ui/move-icons-r1/move_262_64.webp",
+    "assets/production/ui/move-icons-r1/move_263_64.webp",
+    "assets/production/ui/move-icons-r1/move_264_64.webp",
+    "assets/production/ui/move-icons-r1/move_265_64.webp",
+    "assets/production/ui/move-icons-r1/move_266_64.webp",
+    "assets/production/ui/move-icons-r1/move_267_64.webp",
+    "assets/production/ui/move-icons-r1/move_268_64.webp",
+    "assets/production/ui/move-icons-r1/move_269_64.webp",
+    "assets/production/ui/move-icons-r1/move_26_64.webp",
+    "assets/production/ui/move-icons-r1/move_270_64.webp",
+    "assets/production/ui/move-icons-r1/move_271_64.webp",
+    "assets/production/ui/move-icons-r1/move_272_64.webp",
+    "assets/production/ui/move-icons-r1/move_273_64.webp",
+    "assets/production/ui/move-icons-r1/move_274_64.webp",
+    "assets/production/ui/move-icons-r1/move_275_64.webp",
+    "assets/production/ui/move-icons-r1/move_276_64.webp",
+    "assets/production/ui/move-icons-r1/move_277_64.webp",
+    "assets/production/ui/move-icons-r1/move_278_64.webp",
+    "assets/production/ui/move-icons-r1/move_279_64.webp",
+    "assets/production/ui/move-icons-r1/move_27_64.webp",
+    "assets/production/ui/move-icons-r1/move_280_64.webp",
+    "assets/production/ui/move-icons-r1/move_281_64.webp",
+    "assets/production/ui/move-icons-r1/move_282_64.webp",
+    "assets/production/ui/move-icons-r1/move_283_64.webp",
+    "assets/production/ui/move-icons-r1/move_284_64.webp",
+    "assets/production/ui/move-icons-r1/move_285_64.webp",
+    "assets/production/ui/move-icons-r1/move_286_64.webp",
+    "assets/production/ui/move-icons-r1/move_287_64.webp",
+    "assets/production/ui/move-icons-r1/move_288_64.webp",
+    "assets/production/ui/move-icons-r1/move_289_64.webp",
+    "assets/production/ui/move-icons-r1/move_28_64.webp",
+    "assets/production/ui/move-icons-r1/move_290_64.webp",
+    "assets/production/ui/move-icons-r1/move_291_64.webp",
+    "assets/production/ui/move-icons-r1/move_292_64.webp",
+    "assets/production/ui/move-icons-r1/move_293_64.webp",
+    "assets/production/ui/move-icons-r1/move_294_64.webp",
+    "assets/production/ui/move-icons-r1/move_295_64.webp",
+    "assets/production/ui/move-icons-r1/move_296_64.webp",
+    "assets/production/ui/move-icons-r1/move_297_64.webp",
+    "assets/production/ui/move-icons-r1/move_298_64.webp",
+    "assets/production/ui/move-icons-r1/move_299_64.webp",
+    "assets/production/ui/move-icons-r1/move_29_64.webp",
+    "assets/production/ui/move-icons-r1/move_2_64.webp",
+    "assets/production/ui/move-icons-r1/move_300_64.webp",
+    "assets/production/ui/move-icons-r1/move_301_64.webp",
+    "assets/production/ui/move-icons-r1/move_302_64.webp",
+    "assets/production/ui/move-icons-r1/move_303_64.webp",
+    "assets/production/ui/move-icons-r1/move_304_64.webp",
+    "assets/production/ui/move-icons-r1/move_305_64.webp",
+    "assets/production/ui/move-icons-r1/move_306_64.webp",
+    "assets/production/ui/move-icons-r1/move_307_64.webp",
+    "assets/production/ui/move-icons-r1/move_308_64.webp",
+    "assets/production/ui/move-icons-r1/move_309_64.webp",
+    "assets/production/ui/move-icons-r1/move_30_64.webp",
+    "assets/production/ui/move-icons-r1/move_310_64.webp",
+    "assets/production/ui/move-icons-r1/move_311_64.webp",
+    "assets/production/ui/move-icons-r1/move_312_64.webp",
+    "assets/production/ui/move-icons-r1/move_313_64.webp",
+    "assets/production/ui/move-icons-r1/move_314_64.webp",
+    "assets/production/ui/move-icons-r1/move_315_64.webp",
+    "assets/production/ui/move-icons-r1/move_316_64.webp",
+    "assets/production/ui/move-icons-r1/move_317_64.webp",
+    "assets/production/ui/move-icons-r1/move_318_64.webp",
+    "assets/production/ui/move-icons-r1/move_319_64.webp",
+    "assets/production/ui/move-icons-r1/move_31_64.webp",
+    "assets/production/ui/move-icons-r1/move_320_64.webp",
+    "assets/production/ui/move-icons-r1/move_321_64.webp",
+    "assets/production/ui/move-icons-r1/move_322_64.webp",
+    "assets/production/ui/move-icons-r1/move_323_64.webp",
+    "assets/production/ui/move-icons-r1/move_324_64.webp",
+    "assets/production/ui/move-icons-r1/move_325_64.webp",
+    "assets/production/ui/move-icons-r1/move_326_64.webp",
+    "assets/production/ui/move-icons-r1/move_327_64.webp",
+    "assets/production/ui/move-icons-r1/move_328_64.webp",
+    "assets/production/ui/move-icons-r1/move_329_64.webp",
+    "assets/production/ui/move-icons-r1/move_32_64.webp",
+    "assets/production/ui/move-icons-r1/move_330_64.webp",
+    "assets/production/ui/move-icons-r1/move_331_64.webp",
+    "assets/production/ui/move-icons-r1/move_332_64.webp",
+    "assets/production/ui/move-icons-r1/move_333_64.webp",
+    "assets/production/ui/move-icons-r1/move_334_64.webp",
+    "assets/production/ui/move-icons-r1/move_335_64.webp",
+    "assets/production/ui/move-icons-r1/move_336_64.webp",
+    "assets/production/ui/move-icons-r1/move_337_64.webp",
+    "assets/production/ui/move-icons-r1/move_338_64.webp",
+    "assets/production/ui/move-icons-r1/move_339_64.webp",
+    "assets/production/ui/move-icons-r1/move_33_64.webp",
+    "assets/production/ui/move-icons-r1/move_340_64.webp",
+    "assets/production/ui/move-icons-r1/move_341_64.webp",
+    "assets/production/ui/move-icons-r1/move_342_64.webp",
+    "assets/production/ui/move-icons-r1/move_343_64.webp",
+    "assets/production/ui/move-icons-r1/move_344_64.webp",
+    "assets/production/ui/move-icons-r1/move_345_64.webp",
+    "assets/production/ui/move-icons-r1/move_346_64.webp",
+    "assets/production/ui/move-icons-r1/move_347_64.webp",
+    "assets/production/ui/move-icons-r1/move_348_64.webp",
+    "assets/production/ui/move-icons-r1/move_349_64.webp",
+    "assets/production/ui/move-icons-r1/move_34_64.webp",
+    "assets/production/ui/move-icons-r1/move_350_64.webp",
+    "assets/production/ui/move-icons-r1/move_351_64.webp",
+    "assets/production/ui/move-icons-r1/move_352_64.webp",
+    "assets/production/ui/move-icons-r1/move_353_64.webp",
+    "assets/production/ui/move-icons-r1/move_354_64.webp",
+    "assets/production/ui/move-icons-r1/move_355_64.webp",
+    "assets/production/ui/move-icons-r1/move_356_64.webp",
+    "assets/production/ui/move-icons-r1/move_357_64.webp",
+    "assets/production/ui/move-icons-r1/move_358_64.webp",
+    "assets/production/ui/move-icons-r1/move_359_64.webp",
+    "assets/production/ui/move-icons-r1/move_35_64.webp",
+    "assets/production/ui/move-icons-r1/move_360_64.webp",
+    "assets/production/ui/move-icons-r1/move_361_64.webp",
+    "assets/production/ui/move-icons-r1/move_362_64.webp",
+    "assets/production/ui/move-icons-r1/move_363_64.webp",
+    "assets/production/ui/move-icons-r1/move_364_64.webp",
+    "assets/production/ui/move-icons-r1/move_365_64.webp",
+    "assets/production/ui/move-icons-r1/move_366_64.webp",
+    "assets/production/ui/move-icons-r1/move_367_64.webp",
+    "assets/production/ui/move-icons-r1/move_368_64.webp",
+    "assets/production/ui/move-icons-r1/move_369_64.webp",
+    "assets/production/ui/move-icons-r1/move_36_64.webp",
+    "assets/production/ui/move-icons-r1/move_370_64.webp",
+    "assets/production/ui/move-icons-r1/move_371_64.webp",
+    "assets/production/ui/move-icons-r1/move_372_64.webp",
+    "assets/production/ui/move-icons-r1/move_373_64.webp",
+    "assets/production/ui/move-icons-r1/move_374_64.webp",
+    "assets/production/ui/move-icons-r1/move_375_64.webp",
+    "assets/production/ui/move-icons-r1/move_376_64.webp",
+    "assets/production/ui/move-icons-r1/move_377_64.webp",
+    "assets/production/ui/move-icons-r1/move_378_64.webp",
+    "assets/production/ui/move-icons-r1/move_379_64.webp",
+    "assets/production/ui/move-icons-r1/move_37_64.webp",
+    "assets/production/ui/move-icons-r1/move_380_64.webp",
+    "assets/production/ui/move-icons-r1/move_381_64.webp",
+    "assets/production/ui/move-icons-r1/move_382_64.webp",
+    "assets/production/ui/move-icons-r1/move_383_64.webp",
+    "assets/production/ui/move-icons-r1/move_384_64.webp",
+    "assets/production/ui/move-icons-r1/move_385_64.webp",
+    "assets/production/ui/move-icons-r1/move_386_64.webp",
+    "assets/production/ui/move-icons-r1/move_387_64.webp",
+    "assets/production/ui/move-icons-r1/move_388_64.webp",
+    "assets/production/ui/move-icons-r1/move_389_64.webp",
+    "assets/production/ui/move-icons-r1/move_38_64.webp",
+    "assets/production/ui/move-icons-r1/move_390_64.webp",
+    "assets/production/ui/move-icons-r1/move_391_64.webp",
+    "assets/production/ui/move-icons-r1/move_392_64.webp",
+    "assets/production/ui/move-icons-r1/move_393_64.webp",
+    "assets/production/ui/move-icons-r1/move_394_64.webp",
+    "assets/production/ui/move-icons-r1/move_395_64.webp",
+    "assets/production/ui/move-icons-r1/move_396_64.webp",
+    "assets/production/ui/move-icons-r1/move_397_64.webp",
+    "assets/production/ui/move-icons-r1/move_398_64.webp",
+    "assets/production/ui/move-icons-r1/move_399_64.webp",
+    "assets/production/ui/move-icons-r1/move_39_64.webp",
+    "assets/production/ui/move-icons-r1/move_3_64.webp",
+    "assets/production/ui/move-icons-r1/move_400_64.webp",
+    "assets/production/ui/move-icons-r1/move_401_64.webp",
+    "assets/production/ui/move-icons-r1/move_402_64.webp",
+    "assets/production/ui/move-icons-r1/move_403_64.webp",
+    "assets/production/ui/move-icons-r1/move_404_64.webp",
+    "assets/production/ui/move-icons-r1/move_405_64.webp",
+    "assets/production/ui/move-icons-r1/move_406_64.webp",
+    "assets/production/ui/move-icons-r1/move_407_64.webp",
+    "assets/production/ui/move-icons-r1/move_408_64.webp",
+    "assets/production/ui/move-icons-r1/move_409_64.webp",
+    "assets/production/ui/move-icons-r1/move_40_64.webp",
+    "assets/production/ui/move-icons-r1/move_410_64.webp",
+    "assets/production/ui/move-icons-r1/move_411_64.webp",
+    "assets/production/ui/move-icons-r1/move_412_64.webp",
+    "assets/production/ui/move-icons-r1/move_413_64.webp",
+    "assets/production/ui/move-icons-r1/move_414_64.webp",
+    "assets/production/ui/move-icons-r1/move_415_64.webp",
+    "assets/production/ui/move-icons-r1/move_416_64.webp",
+    "assets/production/ui/move-icons-r1/move_417_64.webp",
+    "assets/production/ui/move-icons-r1/move_418_64.webp",
+    "assets/production/ui/move-icons-r1/move_419_64.webp",
+    "assets/production/ui/move-icons-r1/move_41_64.webp",
+    "assets/production/ui/move-icons-r1/move_420_64.webp",
+    "assets/production/ui/move-icons-r1/move_421_64.webp",
+    "assets/production/ui/move-icons-r1/move_422_64.webp",
+    "assets/production/ui/move-icons-r1/move_423_64.webp",
+    "assets/production/ui/move-icons-r1/move_424_64.webp",
+    "assets/production/ui/move-icons-r1/move_425_64.webp",
+    "assets/production/ui/move-icons-r1/move_426_64.webp",
+    "assets/production/ui/move-icons-r1/move_427_64.webp",
+    "assets/production/ui/move-icons-r1/move_428_64.webp",
+    "assets/production/ui/move-icons-r1/move_429_64.webp",
+    "assets/production/ui/move-icons-r1/move_42_64.webp",
+    "assets/production/ui/move-icons-r1/move_430_64.webp",
+    "assets/production/ui/move-icons-r1/move_431_64.webp",
+    "assets/production/ui/move-icons-r1/move_432_64.webp",
+    "assets/production/ui/move-icons-r1/move_433_64.webp",
+    "assets/production/ui/move-icons-r1/move_434_64.webp",
+    "assets/production/ui/move-icons-r1/move_435_64.webp",
+    "assets/production/ui/move-icons-r1/move_436_64.webp",
+    "assets/production/ui/move-icons-r1/move_437_64.webp",
+    "assets/production/ui/move-icons-r1/move_438_64.webp",
+    "assets/production/ui/move-icons-r1/move_439_64.webp",
+    "assets/production/ui/move-icons-r1/move_43_64.webp",
+    "assets/production/ui/move-icons-r1/move_440_64.webp",
+    "assets/production/ui/move-icons-r1/move_441_64.webp",
+    "assets/production/ui/move-icons-r1/move_442_64.webp",
+    "assets/production/ui/move-icons-r1/move_443_64.webp",
+    "assets/production/ui/move-icons-r1/move_444_64.webp",
+    "assets/production/ui/move-icons-r1/move_445_64.webp",
+    "assets/production/ui/move-icons-r1/move_446_64.webp",
+    "assets/production/ui/move-icons-r1/move_447_64.webp",
+    "assets/production/ui/move-icons-r1/move_448_64.webp",
+    "assets/production/ui/move-icons-r1/move_449_64.webp",
+    "assets/production/ui/move-icons-r1/move_44_64.webp",
+    "assets/production/ui/move-icons-r1/move_450_64.webp",
+    "assets/production/ui/move-icons-r1/move_451_64.webp",
+    "assets/production/ui/move-icons-r1/move_452_64.webp",
+    "assets/production/ui/move-icons-r1/move_453_64.webp",
+    "assets/production/ui/move-icons-r1/move_454_64.webp",
+    "assets/production/ui/move-icons-r1/move_455_64.webp",
+    "assets/production/ui/move-icons-r1/move_456_64.webp",
+    "assets/production/ui/move-icons-r1/move_457_64.webp",
+    "assets/production/ui/move-icons-r1/move_458_64.webp",
+    "assets/production/ui/move-icons-r1/move_459_64.webp",
+    "assets/production/ui/move-icons-r1/move_45_64.webp",
+    "assets/production/ui/move-icons-r1/move_460_64.webp",
+    "assets/production/ui/move-icons-r1/move_461_64.webp",
+    "assets/production/ui/move-icons-r1/move_462_64.webp",
+    "assets/production/ui/move-icons-r1/move_463_64.webp",
+    "assets/production/ui/move-icons-r1/move_464_64.webp",
+    "assets/production/ui/move-icons-r1/move_465_64.webp",
+    "assets/production/ui/move-icons-r1/move_466_64.webp",
+    "assets/production/ui/move-icons-r1/move_467_64.webp",
+    "assets/production/ui/move-icons-r1/move_468_64.webp",
+    "assets/production/ui/move-icons-r1/move_469_64.webp",
+    "assets/production/ui/move-icons-r1/move_46_64.webp",
+    "assets/production/ui/move-icons-r1/move_470_64.webp",
+    "assets/production/ui/move-icons-r1/move_471_64.webp",
+    "assets/production/ui/move-icons-r1/move_472_64.webp",
+    "assets/production/ui/move-icons-r1/move_473_64.webp",
+    "assets/production/ui/move-icons-r1/move_474_64.webp",
+    "assets/production/ui/move-icons-r1/move_475_64.webp",
+    "assets/production/ui/move-icons-r1/move_476_64.webp",
+    "assets/production/ui/move-icons-r1/move_477_64.webp",
+    "assets/production/ui/move-icons-r1/move_478_64.webp",
+    "assets/production/ui/move-icons-r1/move_479_64.webp",
+    "assets/production/ui/move-icons-r1/move_47_64.webp",
+    "assets/production/ui/move-icons-r1/move_480_64.webp",
+    "assets/production/ui/move-icons-r1/move_481_64.webp",
+    "assets/production/ui/move-icons-r1/move_482_64.webp",
+    "assets/production/ui/move-icons-r1/move_483_64.webp",
+    "assets/production/ui/move-icons-r1/move_484_64.webp",
+    "assets/production/ui/move-icons-r1/move_485_64.webp",
+    "assets/production/ui/move-icons-r1/move_486_64.webp",
+    "assets/production/ui/move-icons-r1/move_487_64.webp",
+    "assets/production/ui/move-icons-r1/move_488_64.webp",
+    "assets/production/ui/move-icons-r1/move_489_64.webp",
+    "assets/production/ui/move-icons-r1/move_48_64.webp",
+    "assets/production/ui/move-icons-r1/move_490_64.webp",
+    "assets/production/ui/move-icons-r1/move_491_64.webp",
+    "assets/production/ui/move-icons-r1/move_492_64.webp",
+    "assets/production/ui/move-icons-r1/move_493_64.webp",
+    "assets/production/ui/move-icons-r1/move_494_64.webp",
+    "assets/production/ui/move-icons-r1/move_495_64.webp",
+    "assets/production/ui/move-icons-r1/move_496_64.webp",
+    "assets/production/ui/move-icons-r1/move_497_64.webp",
+    "assets/production/ui/move-icons-r1/move_498_64.webp",
+    "assets/production/ui/move-icons-r1/move_499_64.webp",
+    "assets/production/ui/move-icons-r1/move_49_64.webp",
+    "assets/production/ui/move-icons-r1/move_4_64.webp",
+    "assets/production/ui/move-icons-r1/move_500_64.webp",
+    "assets/production/ui/move-icons-r1/move_501_64.webp",
+    "assets/production/ui/move-icons-r1/move_502_64.webp",
+    "assets/production/ui/move-icons-r1/move_503_64.webp",
+    "assets/production/ui/move-icons-r1/move_504_64.webp",
+    "assets/production/ui/move-icons-r1/move_505_64.webp",
+    "assets/production/ui/move-icons-r1/move_506_64.webp",
+    "assets/production/ui/move-icons-r1/move_507_64.webp",
+    "assets/production/ui/move-icons-r1/move_508_64.webp",
+    "assets/production/ui/move-icons-r1/move_509_64.webp",
+    "assets/production/ui/move-icons-r1/move_50_64.webp",
+    "assets/production/ui/move-icons-r1/move_510_64.webp",
+    "assets/production/ui/move-icons-r1/move_511_64.webp",
+    "assets/production/ui/move-icons-r1/move_512_64.webp",
+    "assets/production/ui/move-icons-r1/move_513_64.webp",
+    "assets/production/ui/move-icons-r1/move_514_64.webp",
+    "assets/production/ui/move-icons-r1/move_515_64.webp",
+    "assets/production/ui/move-icons-r1/move_516_64.webp",
+    "assets/production/ui/move-icons-r1/move_517_64.webp",
+    "assets/production/ui/move-icons-r1/move_518_64.webp",
+    "assets/production/ui/move-icons-r1/move_519_64.webp",
+    "assets/production/ui/move-icons-r1/move_51_64.webp",
+    "assets/production/ui/move-icons-r1/move_520_64.webp",
+    "assets/production/ui/move-icons-r1/move_521_64.webp",
+    "assets/production/ui/move-icons-r1/move_522_64.webp",
+    "assets/production/ui/move-icons-r1/move_523_64.webp",
+    "assets/production/ui/move-icons-r1/move_524_64.webp",
+    "assets/production/ui/move-icons-r1/move_525_64.webp",
+    "assets/production/ui/move-icons-r1/move_526_64.webp",
+    "assets/production/ui/move-icons-r1/move_527_64.webp",
+    "assets/production/ui/move-icons-r1/move_528_64.webp",
+    "assets/production/ui/move-icons-r1/move_529_64.webp",
+    "assets/production/ui/move-icons-r1/move_52_64.webp",
+    "assets/production/ui/move-icons-r1/move_530_64.webp",
+    "assets/production/ui/move-icons-r1/move_531_64.webp",
+    "assets/production/ui/move-icons-r1/move_532_64.webp",
+    "assets/production/ui/move-icons-r1/move_533_64.webp",
+    "assets/production/ui/move-icons-r1/move_534_64.webp",
+    "assets/production/ui/move-icons-r1/move_535_64.webp",
+    "assets/production/ui/move-icons-r1/move_536_64.webp",
+    "assets/production/ui/move-icons-r1/move_537_64.webp",
+    "assets/production/ui/move-icons-r1/move_538_64.webp",
+    "assets/production/ui/move-icons-r1/move_539_64.webp",
+    "assets/production/ui/move-icons-r1/move_53_64.webp",
+    "assets/production/ui/move-icons-r1/move_540_64.webp",
+    "assets/production/ui/move-icons-r1/move_541_64.webp",
+    "assets/production/ui/move-icons-r1/move_542_64.webp",
+    "assets/production/ui/move-icons-r1/move_543_64.webp",
+    "assets/production/ui/move-icons-r1/move_544_64.webp",
+    "assets/production/ui/move-icons-r1/move_545_64.webp",
+    "assets/production/ui/move-icons-r1/move_546_64.webp",
+    "assets/production/ui/move-icons-r1/move_547_64.webp",
+    "assets/production/ui/move-icons-r1/move_548_64.webp",
+    "assets/production/ui/move-icons-r1/move_549_64.webp",
+    "assets/production/ui/move-icons-r1/move_54_64.webp",
+    "assets/production/ui/move-icons-r1/move_550_64.webp",
+    "assets/production/ui/move-icons-r1/move_551_64.webp",
+    "assets/production/ui/move-icons-r1/move_552_64.webp",
+    "assets/production/ui/move-icons-r1/move_553_64.webp",
+    "assets/production/ui/move-icons-r1/move_554_64.webp",
+    "assets/production/ui/move-icons-r1/move_555_64.webp",
+    "assets/production/ui/move-icons-r1/move_556_64.webp",
+    "assets/production/ui/move-icons-r1/move_557_64.webp",
+    "assets/production/ui/move-icons-r1/move_558_64.webp",
+    "assets/production/ui/move-icons-r1/move_559_64.webp",
+    "assets/production/ui/move-icons-r1/move_55_64.webp",
+    "assets/production/ui/move-icons-r1/move_560_64.webp",
+    "assets/production/ui/move-icons-r1/move_561_64.webp",
+    "assets/production/ui/move-icons-r1/move_562_64.webp",
+    "assets/production/ui/move-icons-r1/move_563_64.webp",
+    "assets/production/ui/move-icons-r1/move_564_64.webp",
+    "assets/production/ui/move-icons-r1/move_565_64.webp",
+    "assets/production/ui/move-icons-r1/move_566_64.webp",
+    "assets/production/ui/move-icons-r1/move_567_64.webp",
+    "assets/production/ui/move-icons-r1/move_568_64.webp",
+    "assets/production/ui/move-icons-r1/move_569_64.webp",
+    "assets/production/ui/move-icons-r1/move_56_64.webp",
+    "assets/production/ui/move-icons-r1/move_570_64.webp",
+    "assets/production/ui/move-icons-r1/move_571_64.webp",
+    "assets/production/ui/move-icons-r1/move_572_64.webp",
+    "assets/production/ui/move-icons-r1/move_573_64.webp",
+    "assets/production/ui/move-icons-r1/move_574_64.webp",
+    "assets/production/ui/move-icons-r1/move_575_64.webp",
+    "assets/production/ui/move-icons-r1/move_576_64.webp",
+    "assets/production/ui/move-icons-r1/move_577_64.webp",
+    "assets/production/ui/move-icons-r1/move_578_64.webp",
+    "assets/production/ui/move-icons-r1/move_579_64.webp",
+    "assets/production/ui/move-icons-r1/move_57_64.webp",
+    "assets/production/ui/move-icons-r1/move_580_64.webp",
+    "assets/production/ui/move-icons-r1/move_581_64.webp",
+    "assets/production/ui/move-icons-r1/move_582_64.webp",
+    "assets/production/ui/move-icons-r1/move_583_64.webp",
+    "assets/production/ui/move-icons-r1/move_584_64.webp",
+    "assets/production/ui/move-icons-r1/move_585_64.webp",
+    "assets/production/ui/move-icons-r1/move_586_64.webp",
+    "assets/production/ui/move-icons-r1/move_587_64.webp",
+    "assets/production/ui/move-icons-r1/move_588_64.webp",
+    "assets/production/ui/move-icons-r1/move_589_64.webp",
+    "assets/production/ui/move-icons-r1/move_58_64.webp",
+    "assets/production/ui/move-icons-r1/move_590_64.webp",
+    "assets/production/ui/move-icons-r1/move_591_64.webp",
+    "assets/production/ui/move-icons-r1/move_592_64.webp",
+    "assets/production/ui/move-icons-r1/move_593_64.webp",
+    "assets/production/ui/move-icons-r1/move_594_64.webp",
+    "assets/production/ui/move-icons-r1/move_595_64.webp",
+    "assets/production/ui/move-icons-r1/move_596_64.webp",
+    "assets/production/ui/move-icons-r1/move_597_64.webp",
+    "assets/production/ui/move-icons-r1/move_598_64.webp",
+    "assets/production/ui/move-icons-r1/move_599_64.webp",
+    "assets/production/ui/move-icons-r1/move_59_64.webp",
+    "assets/production/ui/move-icons-r1/move_5_64.webp",
+    "assets/production/ui/move-icons-r1/move_600_64.webp",
+    "assets/production/ui/move-icons-r1/move_604_64.webp",
+    "assets/production/ui/move-icons-r1/move_605_64.webp",
+    "assets/production/ui/move-icons-r1/move_606_64.webp",
+    "assets/production/ui/move-icons-r1/move_607_64.webp",
+    "assets/production/ui/move-icons-r1/move_608_64.webp",
+    "assets/production/ui/move-icons-r1/move_609_64.webp",
+    "assets/production/ui/move-icons-r1/move_60_64.webp",
+    "assets/production/ui/move-icons-r1/move_610_64.webp",
+    "assets/production/ui/move-icons-r1/move_611_64.webp",
+    "assets/production/ui/move-icons-r1/move_612_64.webp",
+    "assets/production/ui/move-icons-r1/move_613_64.webp",
+    "assets/production/ui/move-icons-r1/move_614_64.webp",
+    "assets/production/ui/move-icons-r1/move_617_64.webp",
+    "assets/production/ui/move-icons-r1/move_618_64.webp",
+    "assets/production/ui/move-icons-r1/move_619_64.webp",
+    "assets/production/ui/move-icons-r1/move_61_64.webp",
+    "assets/production/ui/move-icons-r1/move_620_64.webp",
+    "assets/production/ui/move-icons-r1/move_621_64.webp",
+    "assets/production/ui/move-icons-r1/move_622_64.webp",
+    "assets/production/ui/move-icons-r1/move_62_64.webp",
+    "assets/production/ui/move-icons-r1/move_63_64.webp",
+    "assets/production/ui/move-icons-r1/move_64_64.webp",
+    "assets/production/ui/move-icons-r1/move_65_64.webp",
+    "assets/production/ui/move-icons-r1/move_66_64.webp",
+    "assets/production/ui/move-icons-r1/move_67_64.webp",
+    "assets/production/ui/move-icons-r1/move_68_64.webp",
+    "assets/production/ui/move-icons-r1/move_69_64.webp",
+    "assets/production/ui/move-icons-r1/move_6_64.webp",
+    "assets/production/ui/move-icons-r1/move_70_64.webp",
+    "assets/production/ui/move-icons-r1/move_71_64.webp",
+    "assets/production/ui/move-icons-r1/move_72_64.webp",
+    "assets/production/ui/move-icons-r1/move_73_64.webp",
+    "assets/production/ui/move-icons-r1/move_74_64.webp",
+    "assets/production/ui/move-icons-r1/move_75_64.webp",
+    "assets/production/ui/move-icons-r1/move_76_64.webp",
+    "assets/production/ui/move-icons-r1/move_77_64.webp",
+    "assets/production/ui/move-icons-r1/move_78_64.webp",
+    "assets/production/ui/move-icons-r1/move_79_64.webp",
+    "assets/production/ui/move-icons-r1/move_7_64.webp",
+    "assets/production/ui/move-icons-r1/move_80_64.webp",
+    "assets/production/ui/move-icons-r1/move_81_64.webp",
+    "assets/production/ui/move-icons-r1/move_82_64.webp",
+    "assets/production/ui/move-icons-r1/move_83_64.webp",
+    "assets/production/ui/move-icons-r1/move_84_64.webp",
+    "assets/production/ui/move-icons-r1/move_85_64.webp",
+    "assets/production/ui/move-icons-r1/move_86_64.webp",
+    "assets/production/ui/move-icons-r1/move_87_64.webp",
+    "assets/production/ui/move-icons-r1/move_88_64.webp",
+    "assets/production/ui/move-icons-r1/move_89_64.webp",
+    "assets/production/ui/move-icons-r1/move_8_64.webp",
+    "assets/production/ui/move-icons-r1/move_90_64.webp",
+    "assets/production/ui/move-icons-r1/move_91_64.webp",
+    "assets/production/ui/move-icons-r1/move_92_64.webp",
+    "assets/production/ui/move-icons-r1/move_93_64.webp",
+    "assets/production/ui/move-icons-r1/move_94_64.webp",
+    "assets/production/ui/move-icons-r1/move_95_64.webp",
+    "assets/production/ui/move-icons-r1/move_96_64.webp",
+    "assets/production/ui/move-icons-r1/move_97_64.webp",
+    "assets/production/ui/move-icons-r1/move_98_64.webp",
+    "assets/production/ui/move-icons-r1/move_99_64.webp",
+    "assets/production/ui/move-icons-r1/move_9_64.webp",
+    "assets/production/ui/move-icons-r1/move_arcBolt_64.webp",
+    "assets/production/ui/move-icons-r1/move_arcFan_64.webp",
+    "assets/production/ui/move-icons-r1/move_arcField_64.webp",
+    "assets/production/ui/move-icons-r1/move_arcStorm_64.webp",
+    "assets/production/ui/move-icons-r1/move_barkGuard_64.webp",
+    "assets/production/ui/move-icons-r1/move_boltDash_64.webp",
+    "assets/production/ui/move-icons-r1/move_brutalCharge_64.webp",
+    "assets/production/ui/move-icons-r1/move_cinderGuard_64.webp",
+    "assets/production/ui/move-icons-r1/move_clawSweep_64.webp",
+    "assets/production/ui/move-icons-r1/move_coreNova_64.webp",
+    "assets/production/ui/move-icons-r1/move_dawnLance_64.webp",
+    "assets/production/ui/move-icons-r1/move_duskGuard_64.webp",
+    "assets/production/ui/move-icons-r1/move_emberBolt_64.webp",
+    "assets/production/ui/move-icons-r1/move_fangRush_64.webp",
+    "assets/production/ui/move-icons-r1/move_flameRing_64.webp",
+    "assets/production/ui/move-icons-r1/move_foamZone_64.webp",
+    "assets/production/ui/move-icons-r1/move_frostFan_64.webp",
+    "assets/production/ui/move-icons-r1/move_frostStep_64.webp",
+    "assets/production/ui/move-icons-r1/move_glacierGuard_64.webp",
+    "assets/production/ui/move-icons-r1/move_grovePulse_64.webp",
+    "assets/production/ui/move-icons-r1/move_haloPulse_64.webp",
+    "assets/production/ui/move-icons-r1/move_iceCage_64.webp",
+    "assets/production/ui/move-icons-r1/move_iceShard_64.webp",
+    "assets/production/ui/move-icons-r1/move_impactNova_64.webp",
+    "assets/production/ui/move-icons-r1/move_impactShot_64.webp",
+    "assets/production/ui/move-icons-r1/move_ironGuard_64.webp",
+    "assets/production/ui/move-icons-r1/move_leafFan_64.webp",
+    "assets/production/ui/move-icons-r1/move_nightPulse_64.webp",
+    "assets/production/ui/move-icons-r1/move_quakeSlam_64.webp",
+    "assets/production/ui/move-icons-r1/move_radiantDash_64.webp",
+    "assets/production/ui/move-icons-r1/move_rockGuard_64.webp",
+    "assets/production/ui/move-icons-r1/move_scatterLight_64.webp",
+    "assets/production/ui/move-icons-r1/move_seedBolt_64.webp",
+    "assets/production/ui/move-icons-r1/move_shadeBolt_64.webp",
+    "assets/production/ui/move-icons-r1/move_shadeField_64.webp",
+    "assets/production/ui/move-icons-r1/move_shadeStep_64.webp",
+    "assets/production/ui/move-icons-r1/move_shardStorm_64.webp",
+    "assets/production/ui/move-icons-r1/move_shardVolley_64.webp",
+    "assets/production/ui/move-icons-r1/move_stormGuard_64.webp",
+    "assets/production/ui/move-icons-r1/move_sunShield_64.webp",
+    "assets/production/ui/move-icons-r1/move_sunSpear_64.webp",
+    "assets/production/ui/move-icons-r1/move_surfRush_64.webp",
+    "assets/production/ui/move-icons-r1/move_thornRush_64.webp",
+    "assets/production/ui/move-icons-r1/move_tideBolt_64.webp",
+    "assets/production/ui/move-icons-r1/move_tideGuard_64.webp",
+    "assets/production/ui/move-icons-r1/move_tideWave_64.webp",
+    "assets/production/ui/move-icons-r1/move_vineSnare_64.webp",
+    "assets/production/ui/move-icons-r1/move_vortex_64.webp",
+    "assets/production/ui/move-icons-r1/move_whiteout_64.webp",
     "assets/production/ui/capture-frame-a-v1/default.23d67f8d950520a9.svg",
     "assets/production/ui/capture-frame-a-v1/release-confirm.a5e9b94ce74c8825.svg",
     "assets/production/ui/capture-frame-a-v1/selected.2e83f9041d0f0dd4.svg",
@@ -8941,6 +9609,7 @@
     "src/championship/app/badgeUnlockText.js",
     "src/championship/app/battleFxLookups.js",
     "src/championship/app/battleGlyphs.js",
+    "src/championship/app/moveIcons.js",
     "src/championship/app/battlePresentationSource.js",
     "src/championship/app/battleRosterSource.js",
     "src/championship/app/battleRuntime.js",
@@ -9170,6 +9839,7 @@
     "src/championship/contracts/productSpeciesExtensions.js",
     "src/championship/contracts/productSupplements.js",
     "src/championship/contracts/productSyncLevel.js",
+    "src/championship/contracts/productArenaMoves.js",
     "src/championship/contracts/productTacticPractice.js",
     "src/championship/contracts/productTamerTalents.js",
     "src/championship/contracts/speciesTaxonomy.js",
@@ -10200,6 +10870,8 @@
     "src/data/championship/catalogs/tutorial-hunt-scene.r1.json",
     "src/data/championship/catalogs/tutorial-steps.r1.json",
     "src/data/championship/data-arena-relay-kits.v1.json",
+    "src/data/championship/product-arena-moves.v1.json",
+    "src/data/championship/product-arena-move-names.v1.json",
     "src/data/championship/data-arena-relay-maps.v1.json",
     "src/data/championship/data-arena-relay-roster.v1.json",
     "src/data/championship/database-body-stats.v1.json",
@@ -41120,6 +41792,2670 @@
         "sha256": "aff9dce439b3a6cc4a3c4dce9cb0bec6c41d0e913a17a926af7eee263320800e"
       },
       {
+        "path": "assets/production/ui/move-icons-r1/move_100_64.webp",
+        "sha256": "35ab8a038c1a74fc701de224be6c3b97bc557aece03a9656dfb5d8a5f145ebcb"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_101_64.webp",
+        "sha256": "4944e727d8fb4f22fcbaa1bdb9dcd097a0df232a1bfa481801894cb58a902135"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_102_64.webp",
+        "sha256": "ab9bc367dd518e3f261cfc98ad2d23b99720a8ff29c670a5cedd01417f02fa51"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_103_64.webp",
+        "sha256": "5fc313c9dffdc615a4a285abb75b322ad1deb559b7cf93a897c1a08dbc9a212a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_104_64.webp",
+        "sha256": "9994cb89011444eca2fa00a7d8bb47b5cb7361e76b305200468a01d7c72513a0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_105_64.webp",
+        "sha256": "5eb5dd66a8d7f2683b77bc2501b25cf9331583f88fe5e427eeda76d9b2e24093"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_106_64.webp",
+        "sha256": "5f4b192677931bf2d9c14b9ef495eaaae3ef043eb30792027a973f367cb505af"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_107_64.webp",
+        "sha256": "5ccde9b8b2563977314496b27753312976f2ec2bed73b2a52abca3e29d24f347"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_108_64.webp",
+        "sha256": "aa0a6ddc97e43d44236e9eb68b5481df4751bf1147744b094bd4b35d68b59acc"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_109_64.webp",
+        "sha256": "8cbdb214a4ea778dcf33f460a59f689ccef42d3195ee36260c2671eff4f8a44d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_10_64.webp",
+        "sha256": "35ef4c90a86a6ef9efa417e03de1bdbe7c148b0bcf70f67c88c016945f1b136a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_110_64.webp",
+        "sha256": "fb382fc7b7c6ae997bd21215ae36fa9ed26217e4a1b90494e8017c158236c39d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_111_64.webp",
+        "sha256": "b9c0317af5a49f7ecd70ac867967fc3a08488fce2a22f9cd1bbe82da8c775f08"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_112_64.webp",
+        "sha256": "07b4e22a108b92ba848e115f463a7e9a8858c07398dc0a1ed151c2610dc0de94"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_113_64.webp",
+        "sha256": "4c5cc9864d417fcb83d37ceebed8d663a47235cc34c7db809f364890952b08c3"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_114_64.webp",
+        "sha256": "659216d85c7e49eb3ad1208ad994961b33c3ad71884c405d338a46a0fd60f087"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_115_64.webp",
+        "sha256": "c560883067ee8cf79e44d36345bc3e271321efeaf5cdd90e81b47991db01d692"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_116_64.webp",
+        "sha256": "5c7654d26de6df780e13b431a22c0de209a23f41e7012af5dd9bc0567faabc1c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_117_64.webp",
+        "sha256": "569e1ed9b0901b31ef548b5b9706fd4b20b2f60eaa9d28bd951ae4eff2bfdfd4"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_118_64.webp",
+        "sha256": "a19190e1307047e279bbe3498916b0a6b641ff05ea258039a955893d2cce06bd"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_119_64.webp",
+        "sha256": "72c58417ccf54f6198203ebc6bd5efb945b3a734e98f23b86a7f3d43c75217a6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_11_64.webp",
+        "sha256": "5f45b4be69e006b0c411c450bec76dc15145a60acff61f2e409bc4b9583d8fc6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_120_64.webp",
+        "sha256": "10ec2a3ed697aa41e2691042a1aedcf60319781c4b7fd56752c63bed67fdfc1c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_121_64.webp",
+        "sha256": "03b665343d7ff3bd61abe59baf3c818d9a6ee662c2b737a19cafdd956c3ae183"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_122_64.webp",
+        "sha256": "2a299695059cb4c1bd8483b712fd865f5fc12adea6840581ce2044e2777f7b44"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_123_64.webp",
+        "sha256": "cc7a44468318bb3d48631bd60eca466c14377e48ea7cef83be8071319ec1a704"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_124_64.webp",
+        "sha256": "b4b0d168090f7ba1a0d6c7d7c4dffe5b3f7b8dfc98c08d3d7ae3130c8480ef01"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_125_64.webp",
+        "sha256": "03e433286d03586cb408fe2fe9a9913d080e209302fdb59a841f02b28f30d173"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_126_64.webp",
+        "sha256": "aca0478937fbdd5576814d3a5405c9e7bbfbf67c904cf96724e10e89170f8893"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_127_64.webp",
+        "sha256": "02e94bfed1bd8999e432eac3b99296887b370c232dcd798039d438d04a033e34"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_128_64.webp",
+        "sha256": "1ddc53e74f115f57869d17388f0daab7aeb03b230e65d76429758a2040e879b8"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_129_64.webp",
+        "sha256": "92a2c4f1377d83432e6bd44412e354eec563abe03ce68382d98fdac3ade3989f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_12_64.webp",
+        "sha256": "b452e14b293f528f57a1c660dcaeb3c1ae18ebb6cefc95dab8799c9618a095bb"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_130_64.webp",
+        "sha256": "5f577652f2dce460390332749a4d538bc4fc7ff8c843f87f27bc6d94449025af"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_131_64.webp",
+        "sha256": "116792cb31e4ca77b899c688b6deda3071327f4e661c65e340e3340b583aeb3b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_132_64.webp",
+        "sha256": "d0e7e823ba4a7aa6ad807bb721511f09aec768f788b1b6cc0f8385e913aea1fa"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_133_64.webp",
+        "sha256": "0dd1076cd3b0bc1fc7a9bcc4f9fe1d2f4be5fa60d4e403aca7e6c39b472df86d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_134_64.webp",
+        "sha256": "942312ff3931afe04456c54d3b4276c80edbf2410722813e03fcf91268d8fbbf"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_135_64.webp",
+        "sha256": "955ecbceeb81037c2d8155560ffd326f5cd48c49d9d8512c220f677acf8ac799"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_136_64.webp",
+        "sha256": "f3a27dab22bedd503752faf620884615b10b34255b0090d2608e28e204e96f64"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_137_64.webp",
+        "sha256": "7e0786a079c66489339cd71c2b5652ce532a329a05ab5d00fca63037230f795c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_138_64.webp",
+        "sha256": "7a7d3bae9581d9fb67ff7f1b2a5f296f05e00953421132417ab19c88bc002f86"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_139_64.webp",
+        "sha256": "dd74f63215379ff9cdb95d3f6343918bb5a03490f7e974cb308001310f730bb5"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_13_64.webp",
+        "sha256": "440be919a8fa902eed206700885b82583dc7e3e03627fb6f579ea1855dda4e3c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_140_64.webp",
+        "sha256": "ff33d309409c3d3bdb7a933aefddda31a83cc8d09df23893b8ecdb24e7271cd4"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_141_64.webp",
+        "sha256": "492b0bdd752a16f7f951566a15f7e54d97924165209d4c4b825e1e8daae14c16"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_142_64.webp",
+        "sha256": "7493f291e87fe7421d1ccdd48e64e7477ac5eedd1362403341d754344bd4d274"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_143_64.webp",
+        "sha256": "bafe7103a9e86d5cc8204298d93a45d5f80fcae6f48007d789ad12282e8da1dc"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_144_64.webp",
+        "sha256": "c641bfbbe36e16d420e585d77f5881f671af75fe81d1cb1248873090a27dbec5"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_145_64.webp",
+        "sha256": "d40a6cd1184e73e9cf915ab5b6c73565719d07c59a4cec472141ebbbeaa0a181"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_146_64.webp",
+        "sha256": "759454d9eec082cacc5f356dbb6d94536a9a8b5f4d25bca61b39f1d6fb028aa9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_147_64.webp",
+        "sha256": "79a9c8c361fc97f8e25c0cacb325a1b15e22ce66ab5ad78eea5889c8d149fb3c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_148_64.webp",
+        "sha256": "54ec272d5bbaa40a0c5dc2f73731c18d5188a82c20480012d9e9242957fd0035"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_149_64.webp",
+        "sha256": "78dbfc06a2205fbf099eb534d6b089b8a18209d126dd4e13196079b80b39c901"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_14_64.webp",
+        "sha256": "b30d3e9f424b6d30817ea4da1e1b96e57b7524f84fbeb00b38bbc55c38493871"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_150_64.webp",
+        "sha256": "fad6af6681bd0cc1c7387463c41139f9d785ac85fc5e02489616bd40e86518d9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_151_64.webp",
+        "sha256": "6c737caeb8cd3530cac5d03c9e40316e1a54548586b82a22a9ce4f5287405b71"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_152_64.webp",
+        "sha256": "0fadfc4dff1c898e92ed9c6be774033fd8e266c36db5f784d8ae58f871e50684"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_153_64.webp",
+        "sha256": "a8667bcc1a73370b17ab984643915ac55428a9936e9c58ecb82745ee13595b3b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_154_64.webp",
+        "sha256": "16b125e74a2296d9834a249b17abbf6e4d24c3673592f73765ea6a815c165edb"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_155_64.webp",
+        "sha256": "225e3adacb399da2fcc16d360df6887befa2bac86b6248e621469a52e4fab477"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_156_64.webp",
+        "sha256": "65f065c623f9ff2327f5a776d39de496b690385a3ab651ede5578f1250ddff11"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_157_64.webp",
+        "sha256": "bf8c832973e8d870e1da1c75d583880ff6ea22dd9d3bea85f1ad85086933f608"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_158_64.webp",
+        "sha256": "abb55f4a109008603fa7dbdfd9e2079de63dc1b055f48ddff1ce90721e8c2e2c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_159_64.webp",
+        "sha256": "870d73b72cd4f4fa0b2d5a79a3015824eadb1c19ad85c5e56b49613cbf9e553d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_15_64.webp",
+        "sha256": "9f3170f540fc406b4cdc3469e252369fafe53ece14b19016c5552f18f2a28aff"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_160_64.webp",
+        "sha256": "e5775478edf1297175e28ac275746e218e6cd4cbf075e852803ea3d89c55853c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_161_64.webp",
+        "sha256": "d586f9058fcf609d822a0dbbc1dbbd5babae07eedd04dfd52c6586467b3b7442"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_162_64.webp",
+        "sha256": "4d5fa5628a85f447232773d79a385a09e112b7c2b9c5703daea1df2b7582df72"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_163_64.webp",
+        "sha256": "e536663dae2ab2d2e63d59d823dec6cc323d3c0d46eb7eeeac0dc87bb98d8ded"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_164_64.webp",
+        "sha256": "e16e57b045aa9ea3a6c8908f225ba8ec054fb8606a15d7e77af31560e5cfe15e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_165_64.webp",
+        "sha256": "d1f21ff6eeb1b1cc06e3e0e4db72ad9f06c07cc65fde92d1c0171e7721629b7e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_166_64.webp",
+        "sha256": "be60ccf0cd63c06767249a41e6837aebec42d9d0a24add9b47476151c3d1f371"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_167_64.webp",
+        "sha256": "49d7cb2e59b748b12ceb99a3ba3a8d082f756dba7adb3503bbf52d56650a5ae1"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_168_64.webp",
+        "sha256": "7e512753e8803c19798a63b7668e9571379a388b603f124c75122c3b110d0835"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_169_64.webp",
+        "sha256": "d1ec2258ba9d5bda5aa86f0bac02ee71c61d3b8a171acf7556c0dad6484332b6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_16_64.webp",
+        "sha256": "b12e7d97f204028b1f6ed050e6ddcd18f4a5e99cbf16fd1a2d9e12ff17f1f4e6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_170_64.webp",
+        "sha256": "647f90bab5dd990e41e5d1ae5641fc99ca959baf5fe838a1987db2d1563f9012"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_171_64.webp",
+        "sha256": "c88875565e09f43d4215dbf73a52393ecf3a56f0b54bc5bff987d2da1bda2577"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_172_64.webp",
+        "sha256": "4bfd04fee205e0c2ab533cc60101dceb9a14d6079dbf6f9ebc0ab46dcc946585"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_173_64.webp",
+        "sha256": "95fce6449e79427fca0096a85615530a975e914fc4a00a8ac8c08ff0b070f9f2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_174_64.webp",
+        "sha256": "da476aacd6bde3b898bad82c1de919d222b1a1e6b3bc14fd6afef0726574b298"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_175_64.webp",
+        "sha256": "6e0af9e78a634f5a26f3d723d3b105b096ab8969a7b0460968240f174849635b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_176_64.webp",
+        "sha256": "cd3b986eee1c362a49b5cae5c3019d34f8126aed573d5375fe802243af960a8b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_177_64.webp",
+        "sha256": "e338683bb19df60cd4a8e5b4afaeeccfd37907e3e7b27fd5c327bff22f4a67b5"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_178_64.webp",
+        "sha256": "f6b4ab4ad65bb5b61e0ebc75cf3850cca43fe3aec8bb6cd93c1c15c23b4bd130"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_179_64.webp",
+        "sha256": "5be16e1ebfdc047d11ae13cace7973c1941523a98bba5252f2b65a73da4183e6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_17_64.webp",
+        "sha256": "dd1613d87dd5984085f6ed4db6388975c1297bb6d05a64d1741062c81e8b1d0f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_180_64.webp",
+        "sha256": "f7d02a24daebe7a01d9f471cf19809094c8410312fce52cdf96848bc29823fe9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_181_64.webp",
+        "sha256": "b4c8bd1cc094d78049db37d1634e2c30a9b6a4f96f522ef43e7455169a99494b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_182_64.webp",
+        "sha256": "32f2c5f429321ce7f965ec1167c41c8d493bd3b19942bed9905a0111ce75829c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_183_64.webp",
+        "sha256": "2b52e8290bd1651834b1f69baa663a624a5f19dd6b00d7d780eb368bcd77f8d4"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_184_64.webp",
+        "sha256": "33718061265a84f94109f00f917725ff0ee44dda92590ad96045bfae7a3687d7"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_185_64.webp",
+        "sha256": "9c11fed75f42b23c33b9a2a820d534e40d26dd57cb6de51c28b4afc4d38f60f2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_186_64.webp",
+        "sha256": "2d43c13864f12f19f07aead1ef37a5e9ebf8142dbaad38b28ca83b81e3c0226e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_187_64.webp",
+        "sha256": "e4476f8df44c20ad64b5015c84a70616ccd631d18273524c62b2de18b2089e96"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_188_64.webp",
+        "sha256": "01d88f1d2d722fd3430078c01428e0bf347884faf62c7c4735f0c3c1eeb1c6f3"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_189_64.webp",
+        "sha256": "39927aa3c771825e6abb3026a831fe6b854d443af17731b34468e0c8073c374d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_18_64.webp",
+        "sha256": "761abc7bcc315452f2cba1c4a412ce5044c922f3ba0b83293cef2c0a7fef0af2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_190_64.webp",
+        "sha256": "c21abc3116bb7657019eb1fdbe7c587baef6428c64c516beeabbddbf4c7db727"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_191_64.webp",
+        "sha256": "2d793a4a31f7fbc50209a58d140e38b313cd3028de5ba5f23e319b192327655a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_192_64.webp",
+        "sha256": "32b78c9cc5bd14d7eabc4beb9dd3cf4bd82a2bc1148258c2807040ea69b15f67"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_193_64.webp",
+        "sha256": "747c47064671986d6ea203b63414a4c69d3c2a713cf390d16484db5c47f10b90"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_194_64.webp",
+        "sha256": "27e6f18f7700611ad969bec0838decd1fe153493e8f681e62a69c13d49773a9e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_195_64.webp",
+        "sha256": "23c30c74d0d974312714837c081b78aba936d8e2770d22ac4ce8fedfd978536e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_196_64.webp",
+        "sha256": "2271961bd096dc168099395a452e510d899944e64e532c82bb8306bc92c6ca7d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_197_64.webp",
+        "sha256": "51837c7cb71fa9320be753674f370463a9a815b1795825c947f6caa766e1bb6b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_198_64.webp",
+        "sha256": "90cfefb2db78bc51a4f2583b79249f7028b75e564c7c3b7592d9aa09e5928466"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_199_64.webp",
+        "sha256": "dc07f10bc7e31595b33d62e848c80eb670f6b6435e7d704766196c9d83b89fc6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_19_64.webp",
+        "sha256": "7a27d35ba39eb7ede5b7956927a81f91480ce73bbe54d8ceb9d66f085b81e988"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_1_64.webp",
+        "sha256": "0f0c9b303f4493b4918214296a3ec8e480206828e10d3c37ed4808aa7e66fb97"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_200_64.webp",
+        "sha256": "9fbc6f4d50aff10a027ec535cf04fe6a603ca69704733f421893a87138f21b38"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_201_64.webp",
+        "sha256": "db30169c28db5cac1bc0a518e847eba0e7d44e5ef05f7878444b90601a8505c9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_202_64.webp",
+        "sha256": "41b0b3951e4403a978c29078022968b26db317496c1ca74e43048ff824a4c203"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_203_64.webp",
+        "sha256": "be7e55dc26ddedb5acf26cceab2aed31c8cf9573bb38aaefaee374b9a4cf9c73"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_204_64.webp",
+        "sha256": "ba97610a28af506bad2e634a21e3871bab61ee21a614570e981bf7b519539ec1"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_205_64.webp",
+        "sha256": "d708a3a30c18f27ce6f41f01c69bd68659361b7648e8b7de3ea8476c8dc52b28"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_206_64.webp",
+        "sha256": "a542d73323a31eb0d2b628a4b6da88ce793d74d25d78413792104ee94ee14ead"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_207_64.webp",
+        "sha256": "8769315854bc95ffd4706e105a7e1207c7bec463b8bc590e12a87aed536dd140"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_208_64.webp",
+        "sha256": "3e43319375d81f054a1986924b3e073d43eca1ff3910ac29c890dd9a3cb92591"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_209_64.webp",
+        "sha256": "265675f2531a80b10c941ba9e323248fabae801d2ef49aa941ce0426cfa082e0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_20_64.webp",
+        "sha256": "b8d6f13876af786366b76383cb67222a4bb488fe576d1606c9be4982440b32be"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_210_64.webp",
+        "sha256": "4e1a7f21165187c4ccf56401ce4307a8b39d6a65d4979ba224918dcbfed02a34"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_211_64.webp",
+        "sha256": "b463a3993db7963ddfb00aa2af662f89ff99bb2a2df573c268636c4c9bfdcf22"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_212_64.webp",
+        "sha256": "8b59083ddd38765d24686cff92aaca49357dfa6ec753fad4e8b2e2975b16e916"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_213_64.webp",
+        "sha256": "29aaa8426c35743ac3548eeed0441165a4e1afa9cd0e16638c0d6c86aa8be397"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_214_64.webp",
+        "sha256": "5cefba1adbaff226783b0d0b3d3bd35f0002c7c451d92cea0f28f18a67a703eb"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_215_64.webp",
+        "sha256": "e37e73c272b54e1902947dd12cbdcb1631736ad8a74bf468aaac992856d9e82a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_216_64.webp",
+        "sha256": "bd6418556535d4a8cbe7339c37ac9eac9f1a87ff8d2428d4bf4a543cffc60cf4"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_217_64.webp",
+        "sha256": "96c8e68c86f5f42e0740d919981510c6aea39eb87e62e433d6b65fd6bf321cf5"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_218_64.webp",
+        "sha256": "8b3ae99b4ebdb729c872467d6a8e7c01e9cee11df4c82976798a81553543424f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_219_64.webp",
+        "sha256": "3a389419e23bcf536e77d6b75ede8a1123341d7acdf32d692d558809ceb67487"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_21_64.webp",
+        "sha256": "d9d1125bbe8d882a3893f0862346e84aba0555ad8d6b945646c88e3454a65512"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_220_64.webp",
+        "sha256": "5bbc5fa05a3158ac8049ac7eb260f82f5cf59cd4fa46336e6ffa2f4a1e1b6c13"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_221_64.webp",
+        "sha256": "d5256dae6ea7d29acb90bc041385458ac2decd1ff60dd7c92cad71de9d389db1"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_222_64.webp",
+        "sha256": "e233cfb3b28e93de787e1a28896187e94eac6a13e2f5fa6f3562c9477d2b79ca"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_223_64.webp",
+        "sha256": "f700f1bb587210861aa3e26fb6bfbe026c7fdc92d8f9be14a53514bcee69492a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_224_64.webp",
+        "sha256": "043c6ee8c0a6363d5007f4fef5e28cebaabe58d81d4669cc093d4223e5cb6c8b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_225_64.webp",
+        "sha256": "8055280ea78cbf940a9cfa4247aa0642478e84c963da8711ed365f9a36de4944"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_226_64.webp",
+        "sha256": "f3553aae923386d1678286087114993ec7202e911e2d2749ccaf8fb4f1e4dcc6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_227_64.webp",
+        "sha256": "0939a1cff74b99be6d75acebb706b1d8a4921a3bc660bbf9d7488f2d3b91363b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_228_64.webp",
+        "sha256": "a915818e8371ddaa0017fb79dbf8a0741b012ef3adb3672d219ed64f9da20774"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_229_64.webp",
+        "sha256": "6b886495fe2efc77ae6e109e77a22c0b22ee078c04e4698efbe65a8ef9ce435d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_22_64.webp",
+        "sha256": "c056fadcd25912a14d444154f3d1fd533655feac232a05f68119c48739422f75"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_230_64.webp",
+        "sha256": "939ddf98a52ea7f0b36a79fa505e8eb716e3ef215ff31c83aa4793adeeb06951"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_231_64.webp",
+        "sha256": "051c405549569548827a966ea3f264d3df8d34625426fd1f335d66ab5b655d3d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_232_64.webp",
+        "sha256": "86befdab42ffb6da61ff8bff9dce3b21e40dc9a8b826ae0ec64a427b5c6895e6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_233_64.webp",
+        "sha256": "b36dfbbde93a04a8c5345ededf4e6e048afdbead7ee91fc989cfa4591c9a29d7"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_234_64.webp",
+        "sha256": "82258cd10fcd2091c784494b19e9d9d26273811df314381654a29f8eae07a1b7"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_235_64.webp",
+        "sha256": "8ebc3f5a17afe97a1606bf6fac6e45277363324901f3f7b3f628ffb500f9cbd9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_236_64.webp",
+        "sha256": "fe01b7bf54bc6964d3f52049eb83dbe3f1280c48ea11f9c76ace0bab0ed69c87"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_237_64.webp",
+        "sha256": "03f88439503ba562bce8bacb124d044e96c76b39686f99c847ef3bc110566c37"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_238_64.webp",
+        "sha256": "003b6352d3b28b98cac14882f77338a3b5536a92a8044ef377e4aa455919b47d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_239_64.webp",
+        "sha256": "4145e06731f22a2167c3154fb41358acfe7dc50a4784a689ddff5a65a0ed0109"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_23_64.webp",
+        "sha256": "7d4e0dbe50197e47bb61f9c5684d5387538499abdc3d3fe7a1cce887d13be431"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_240_64.webp",
+        "sha256": "d57c0ee450915c9b09167913673a31f711f288a606e91ca4e091f52fe975d9f6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_241_64.webp",
+        "sha256": "52a4763daf92033d9f7032a2c0ab5593fa86285ad05bacfc7b1734d1d6f3efc6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_242_64.webp",
+        "sha256": "fd88677862873919ec660c46b5d770e9cc5f2849bf6769e3d731645083be3bd8"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_243_64.webp",
+        "sha256": "47f6065efc189573fa85f2e21ea60276069652ebc2f998d76580f049f584fa6b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_244_64.webp",
+        "sha256": "9762701d828f03c3f33f988fab2d77b3ac9b8667ce7abccf399e1bd093cb4571"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_245_64.webp",
+        "sha256": "5016b807264f9167bb80671bc0c529827288b4f404b786afa53b4359e3859d6d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_246_64.webp",
+        "sha256": "c617b97f89868a3cda982b78dbb676d736c27fa53e380d6eda2f68a15c3b2534"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_247_64.webp",
+        "sha256": "2ec4d376ca1e5df8f9d79c5b1be332ce30442439e6ed0716de229253b885b09c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_248_64.webp",
+        "sha256": "308534d9f0782c6af9b671661904f43ee7c61d884fc566cf83d7c20c04eee351"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_249_64.webp",
+        "sha256": "37ccde7b44171fd5098180b3e6f90700e19989c496ac5a42aa8334fac4288d58"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_24_64.webp",
+        "sha256": "9aed278a4a98729b243e1845eaca431d439d04d4257e5175b2cc29ac611c413a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_250_64.webp",
+        "sha256": "3ef5e9efda1871707a501bcc55b702988e0d9aa91a83f65f7b650622fdadb6e2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_251_64.webp",
+        "sha256": "e16bb73b449f11b549ef02a5ce4ff68c106350d687e860f2d04770016b9f2341"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_252_64.webp",
+        "sha256": "3b2e3295d2af2efc4ab30b54c6dd767a8cdce3b8654ec439794f085f27a86cb8"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_253_64.webp",
+        "sha256": "174d11d65e901404fa382e5de243cf58d422678b9182f9cce9788ed38e682eee"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_254_64.webp",
+        "sha256": "90a9a414f84918c450d336aff029de3210cf7881a86a9d20da49d72ab59553a3"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_255_64.webp",
+        "sha256": "ff655aa659c05dc71a00b23aaea5cb5cdc9b2b7858cda2f5b643bb68ba7ec13d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_256_64.webp",
+        "sha256": "94ad3db8203589f174b90cc087d9d082c9c8f11dd585b057a41d58ca95b22f00"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_257_64.webp",
+        "sha256": "df570100056ea0e662b46e1e27099ed187df00efb46ac648e3a5a0a6a8516e78"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_258_64.webp",
+        "sha256": "bf62345fa3d24ad999a1f4d900b709cf94572425039cee74d625388d7ece79bb"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_259_64.webp",
+        "sha256": "88ab2d7184e71a9e4a217a1af53faf34425218cecaf66a31bb718c8a5d0b6049"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_25_64.webp",
+        "sha256": "b6375dee5855104f9e2e55bd43a24529e595ecc835fa9101b6a7c045a4121163"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_260_64.webp",
+        "sha256": "31bb3d4a0719d502a9dda90e17a99a9d9b96b84057410be154e8b895f46e9f21"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_261_64.webp",
+        "sha256": "445c92470d95615714482b63f5e831dcaad55283d719e4d45a6aca394633419c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_262_64.webp",
+        "sha256": "3138b2548a00536a9aa731cc391c6225add400d0e5b870020850126e1d4e5691"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_263_64.webp",
+        "sha256": "99827e4d4ea26fdff9566a68d77ce5b293f7b06da2d0d630c15b70e276491f0e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_264_64.webp",
+        "sha256": "b01e3d20e2cee2417253df813869d056a7c0ec90b82185e9ec13e39f225653cd"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_265_64.webp",
+        "sha256": "222e6762b3e389ffe06e554bfab77776809d92947223aaadb0740f87a7f35eb2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_266_64.webp",
+        "sha256": "8e03b03ae4d448902d5d0b05e15ac5ac642f6a73de02f18a13b79bd3c2086785"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_267_64.webp",
+        "sha256": "80ea8a787653a38cc5b6baeced81569bb59132577b8cb6ea34c2f3e5881b71ec"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_268_64.webp",
+        "sha256": "55995bbf71000af35581551fa0004a310ce76f4fa16726f2f2cf1dbf320005f4"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_269_64.webp",
+        "sha256": "e7e556be648e22e0ec6ac0096c705d075e7409da14d805ee9a2d048d4e0dd0aa"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_26_64.webp",
+        "sha256": "993131eeda3d91ef60817cadbcb311fd988d47daf167a97f2b692341cfc99c9b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_270_64.webp",
+        "sha256": "85a4e5c2049248b2c24e4b36d5a02ebc37bd0967939d852f260a438c1b51658a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_271_64.webp",
+        "sha256": "c08145eda97faca5512722578ecfbdb771a8004611ab9195607c3b2576f8a13c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_272_64.webp",
+        "sha256": "31b1094531fea5a31d8f1b9bd4ae7be58c4e75b9101771ff0c58f84e698e0c69"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_273_64.webp",
+        "sha256": "b183284b39afd0d6b2860e9d7e477fd3f80fa8a342a59b2e18c0a3fe1c0080d8"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_274_64.webp",
+        "sha256": "8e162c0fda05b2d0d732a7ba2733656eaa9b651b85ad6d833a3b8691c4ecf5fb"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_275_64.webp",
+        "sha256": "4ce913365b6cf2e6e58d1d754da6f1e4f7c778fab6b31b2aa1bf1edfc89ebcbd"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_276_64.webp",
+        "sha256": "d3b3ea1f00b20d6d01c84602329ed2b1855b0c87d913eff290e377393537a34e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_277_64.webp",
+        "sha256": "7588d10e2bef4fd954cbe9af9cebed6bf7009a704980531131b618cf60e47e65"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_278_64.webp",
+        "sha256": "e4217c164ba002e60b755cb2b36a0fc822296f414babb0776e42a6b81f87d1a2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_279_64.webp",
+        "sha256": "b14aab95857211742eec2ae9b77228c2700db7fc715ea58d74fac61c295b64e1"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_27_64.webp",
+        "sha256": "a4908533c306928153bc7ec529910a9e9ec51b83be3a424a1d5630276e31d203"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_280_64.webp",
+        "sha256": "18f49b80727a60eb3af6daee6586211f7ea547c7b50353db8cd460c467b17715"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_281_64.webp",
+        "sha256": "3837d10fa88eeed1227bd0ae2183adc0f74a778c2a65c817ef23f3b82f1f5e0c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_282_64.webp",
+        "sha256": "7406a57a7463eeb3aca673c966267a3c588b1570d94935a298ba7b1761125597"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_283_64.webp",
+        "sha256": "946de2a29c2c47a4df4c22a0dea01975260062bc1c483a28eee0bcbc18b1f1ef"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_284_64.webp",
+        "sha256": "2b875e7c3608b88460f2a312b548e921d740df1f0a37e97700c7e6bfb3f7e916"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_285_64.webp",
+        "sha256": "4559bad75072eaa9cb873548384f34128cdb2d3e4940b00ff97d2ee5bbf83165"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_286_64.webp",
+        "sha256": "541363c62d54498a22a40e06df256d1c3698bfbe3d26d57a661951c11f95e1ff"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_287_64.webp",
+        "sha256": "6bad914d8dbfe68e90191692a3bd4d0ed34821b504d77c354a403e096214f7bf"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_288_64.webp",
+        "sha256": "37dc0ad1b33e89ce7a40f64ee309f197f0c7c74e1a26aa082a7b76be0ac00f7f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_289_64.webp",
+        "sha256": "472623c5299fb823e7bff005a805af72258b685cbc57d330271db0dd42098bd2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_28_64.webp",
+        "sha256": "135d113fc18550e83c47b5131987db3d631242aa4a81cb5f7b753682a7c48074"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_290_64.webp",
+        "sha256": "5209bfd3bca730a309d53a91d5895240e6e42a78e224413f055ddde03d8987de"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_291_64.webp",
+        "sha256": "2ca41a8edc75e064cc82590ee7defdb6aa38448c78fac82b70ba213666404a27"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_292_64.webp",
+        "sha256": "4003858dc5cc7f743d57fbdeedff1b866fd2c77a6f4d89acf1bc8f7f645ab6ef"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_293_64.webp",
+        "sha256": "43fa8ea1f436b6bc753dd991352b6acab193b4d4aaafeae81149a0daa939c3e8"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_294_64.webp",
+        "sha256": "083eb032f798e5cdaa6820c9884a11048d4dba82ebef0e20d4f4e37619e084f1"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_295_64.webp",
+        "sha256": "e9116040a33dad7ce6c80395df58b85afa409042afd607ef12d9959fa2729615"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_296_64.webp",
+        "sha256": "d08cd230c3d55b6dc2c01adc35d0a891350318103629c3338fdec2aa875b7ecd"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_297_64.webp",
+        "sha256": "57a510489c3ad8f6bbaa37bde94235a1499078867e7741bdda60cc9a1ac7bf0e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_298_64.webp",
+        "sha256": "cff3875f53d70823f5148f273112f6673007426d56e8c6b438cc4c2f27286266"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_299_64.webp",
+        "sha256": "01bdb89fe402dad5e910dd4329acd949c83a82df302e16556ea9cb2b9f06a3bd"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_29_64.webp",
+        "sha256": "f0d135e4ac111e2f61c86898504a3004e749dcf6784116675bee4a81aedf7604"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_2_64.webp",
+        "sha256": "92be59a55ed942f29e5d6461f74faa72bc3de6df719228a957e13fdde71fc4e7"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_300_64.webp",
+        "sha256": "3254e8f96a51e97749f8c94b1fd0731a45a1d74a0536584ad17a3b8eaacb4063"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_301_64.webp",
+        "sha256": "d61be8885b21125a84018cee96db74b27d5228cda341ecbfb053120653aaf78b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_302_64.webp",
+        "sha256": "7e8b6ab01c9c186991032ca14de38c1e250fc862b9c1b22ac8d67c88dc797895"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_303_64.webp",
+        "sha256": "6eb4ad4fd0763b8de66bf02938de8f656a7c078f51c4061230de8e4e2893e5e5"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_304_64.webp",
+        "sha256": "7532f07bda179b4959681dca5c324c86a01091f7403b5c26cc6bf7533c9a4b25"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_305_64.webp",
+        "sha256": "8cdabe05ef2a37eee294af03c11a2e05529f3a2bdcb5d225a0b2e144cd35155b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_306_64.webp",
+        "sha256": "5da107a1a241388b53b2e04d33bd11686b4abe84ab8fe77329cc575af20d31dd"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_307_64.webp",
+        "sha256": "de2431c32f93b2c72b127cd90f36070f3c85e8e5008ea7595dd9f64dfe38e15f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_308_64.webp",
+        "sha256": "c62505c8e31ccbf22a7f191a0b2bb04dc6d788e671993737a17454ca280305ae"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_309_64.webp",
+        "sha256": "0a44ed73e84da338791f32ce4ffeb2392d38c5e881261390ab5bae48b360f8a0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_30_64.webp",
+        "sha256": "873f0b446dde96c1d4bcb3a67f94a2e69e4167aef07a204039a2ea8a7ecce195"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_310_64.webp",
+        "sha256": "42ed9156750b2b0311572977f5708956319ca8573bee9af8b1ee044b4307c8c0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_311_64.webp",
+        "sha256": "8ec60c983a8d943a0a7ad600e2b0748ca12ef9fe06acf2e7db5f94e478e65788"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_312_64.webp",
+        "sha256": "f14795d9f5575ca6a79ec368780613c7f141a50817eece4666bb8bc14c5294de"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_313_64.webp",
+        "sha256": "c799d3f5549acdd7baa55340a787785004e6ecdd27659169f8a800f4f6ca31ae"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_314_64.webp",
+        "sha256": "1da1856aff1654c1d3e2470f65321206e0b00bf484b3f1443475bb397b933243"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_315_64.webp",
+        "sha256": "50d3762250c4666a6f23ed0813172c0cdd262540cd32aade1746fa236bea05f5"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_316_64.webp",
+        "sha256": "24044f45fd1d9a0a493311a2d57c96619751cd1dbf4ff860d7747c5cb632a55c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_317_64.webp",
+        "sha256": "7e01c60864f6da34e9459ccd64d5c06af75432278d4ccbf3c50fba8f5915c392"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_318_64.webp",
+        "sha256": "f7ffd7d90108e8235a78680e556ace2afb6c67923f6b115649a1b4de9bcfa617"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_319_64.webp",
+        "sha256": "081f7c775a909f8420d4570be8dec0854bbf2e99ba6b8e2a4ed5c6c588e50514"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_31_64.webp",
+        "sha256": "692e910a3349654100e6459a54c83a65a7518893d26c2d02ffd4dcd310453d59"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_320_64.webp",
+        "sha256": "95b243b11c4848b0b35e6eb4f55befa36fef2737231389b90e3b12bb79cdc84b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_321_64.webp",
+        "sha256": "290bab2443a9af7fc8db05feb6ca6f9a3867ef9e6de15aba4f53828a6a3ca037"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_322_64.webp",
+        "sha256": "1551d1b32cc79c84518e01c744dd5d88db1cac34c88457a6a132d02fa4434cb6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_323_64.webp",
+        "sha256": "1daf393f63e8bd484bc07281621229ec30d08bf6d58a6b34387a6e5ae93047d2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_324_64.webp",
+        "sha256": "b4728efadef0a0e4cd08946adcbffe34e5cffdd8b07459be45de03919268621c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_325_64.webp",
+        "sha256": "8666050d6459e36e70eac88e90cbb17bc85980836f98e09aabb2a0af28678bef"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_326_64.webp",
+        "sha256": "c9da4d5ee7a56cea4b8502d74d9cbf44d87e4b72ad4c19b8dd4e464875810847"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_327_64.webp",
+        "sha256": "d62fbe477949d13f2c6846f501d2ae558bbcecd75b1c51eee861ef7fa48bb779"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_328_64.webp",
+        "sha256": "960aec57ea1d473e2a58c26172698de59cb5e634588da14b293eeac45c1c4f5a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_329_64.webp",
+        "sha256": "5fd381b0aea870dac65151ed03e74c6455e4a3a2c376595fc6e3db116ef1c6cd"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_32_64.webp",
+        "sha256": "7e2f5dfbc4666bcfe16e87a85dd5e28ea4b6d5f695c1aa836a196c557af42e89"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_330_64.webp",
+        "sha256": "c3404c2e1b57196496e56eaa1f470fe2382cd0c90b062e6d77eeff56fa633100"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_331_64.webp",
+        "sha256": "6ed89497d942a637be1a42a442e25e9b388beb983cce3ba75d70519296a39922"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_332_64.webp",
+        "sha256": "1adad5caf59f712a04cbf4bd261112bd7a7371130a58e2dbcf840713d4987092"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_333_64.webp",
+        "sha256": "5fa6a942a219bc16c9e28a90f156152c15a31e9f3ec5a0d155516a70580d793b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_334_64.webp",
+        "sha256": "040b2b0cec77a3e74779d6460b1b181cd72280eb24325522bf1f764416033092"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_335_64.webp",
+        "sha256": "d81dfea9e49ff247a75bc60ef1ed72aa9ac6ae83b4dcbe137f7c592796d433a1"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_336_64.webp",
+        "sha256": "2a40a2c38d59d73372e203a0fa423a8264a12a5f53655591327ea181834d144a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_337_64.webp",
+        "sha256": "937fc392e3a5744e293e951f7998c88c8990ee8ce16a283ab479ea3e9d0eef0a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_338_64.webp",
+        "sha256": "cedeaa434940c4a3a5a2b9c2b21567c9d0959be874c397968882c6698e46ceb6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_339_64.webp",
+        "sha256": "2a62a8f0c26d3c889cb0030c42c3f86f26b929d2ac39280b7a6112b7adf3215f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_33_64.webp",
+        "sha256": "ecb5e10c53a08535a9c642535569445fa58c1ae9d6f65cd00c625873cea6457c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_340_64.webp",
+        "sha256": "76376ce3c50fc566b98787ec62a0d3fdaac80d89d354e557bedc6cf334791580"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_341_64.webp",
+        "sha256": "c97dfc67242ee8391f1bbc9953fa790441595bc789e5b61ca0b84f0a0a500173"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_342_64.webp",
+        "sha256": "da511d4755a5bf9d6e09812c47c75023918ec89662a6ddf0f1772f3c0faa7107"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_343_64.webp",
+        "sha256": "90451a08eac25b731540f1fc9b2a0fddf17c015e98c67766ef24df456a4dcde8"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_344_64.webp",
+        "sha256": "8e839d5fce66977c4c44119c3eeb3e9b27c4bbb83722746aa64b7dafd805636f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_345_64.webp",
+        "sha256": "1eed30314de97548d8e7ddf6338637858109f11f070c2c29bed4acd87d03e023"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_346_64.webp",
+        "sha256": "b1fa5964cd075eddab159a77234dd92ac1dfc3fee57b0f28b270de9cdb7813b3"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_347_64.webp",
+        "sha256": "02cfb9c20b77f48d51b808b42f2462a940e919732af01d88dbd4c2a9c4c44e7f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_348_64.webp",
+        "sha256": "5c037e4489cc6bde2948ea844852a2448b9c51e56bab753598c3ff2e23b12449"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_349_64.webp",
+        "sha256": "729e2f804380114e051989e5aed46fc682d6fe95a8c212fbe55451161799b9f4"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_34_64.webp",
+        "sha256": "5c160a8ce1475c5eb51b0d74a20847113f48d9a26054fa2b4f207579267282ad"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_350_64.webp",
+        "sha256": "55b498b802feb0ef7d7335fbc28385bd8149e9eca5c8c212b3f9c26d47c97e48"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_351_64.webp",
+        "sha256": "4cea7b0b7ff58a2f3e1dd36288bf93ee82f32f934fa17257923e6e1ccd1a5148"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_352_64.webp",
+        "sha256": "ad533ab782c5e7104a56a7e3273ca0ef46487f92a6df7695529e7700ae2e7af2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_353_64.webp",
+        "sha256": "c029ecd56e0d5b4951055520aca83cffbdef870562175839f8fbfaebc70311c5"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_354_64.webp",
+        "sha256": "d28e24c4422888b2912333a811db2e3a90ac2d80a7bbb2f202e31009e2a8096b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_355_64.webp",
+        "sha256": "5e82f45c9bc678bdb5a5a4657538fb3dc86d322c3919dced38d17c1f757e9129"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_356_64.webp",
+        "sha256": "7638cdb15d2cafb1cc04d602ca8cd55ba66739f9ed636985606f978972a81288"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_357_64.webp",
+        "sha256": "faf88a08f415e26be08b46679c92e47c90c4093daaf8cbbb9e1f75bd3f7791ce"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_358_64.webp",
+        "sha256": "ec9ed9b468a461e0f3611c60d6a85df231558745ef7f72465d4cc0c226ed819a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_359_64.webp",
+        "sha256": "5efa47a7496191f3284b91f0ee7177d94699915dd48b61fa30a5f4d1fcc237a3"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_35_64.webp",
+        "sha256": "40fb376af1a1dfff7806d74728aa3257fcd05365b49feabf9748b8384149cf02"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_360_64.webp",
+        "sha256": "16e8874acb810cd2467e926a8874afbedb373f9e3df29c71e5f2376e8973cc02"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_361_64.webp",
+        "sha256": "f411a371cff9c48340212f5db2179edae8ad4e4519d0d75336ecb358e187b96d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_362_64.webp",
+        "sha256": "4d6989168e2284abc3c04b476f402171a989dcd4767d3b973ec51134f4abd6c6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_363_64.webp",
+        "sha256": "eb45e97a048a1a55dfbc87cc9cdd0c83824e1c2def2b985011204ae2282706ec"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_364_64.webp",
+        "sha256": "71e7400177783f17402758bca5c5bccc17c34a1ff9c5eeaa332593788dfc5ac0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_365_64.webp",
+        "sha256": "c39e08bd72dade117cd68bd3bbdce8982252dee145ac4369a80b3a038e1ebe80"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_366_64.webp",
+        "sha256": "87c5518db142a5d4f8aa02d57e289b6704f0960ab83250c8ecb6f40ec3a64fea"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_367_64.webp",
+        "sha256": "bd68caf500bd31d8e81ba2ea2a5aacef418d6e5e353267afefe584c050e46c6b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_368_64.webp",
+        "sha256": "1d7a47c8bd2331a57f0de0547abd96f6c2a514b16cd0cacd3f2a40b37a66c961"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_369_64.webp",
+        "sha256": "5af8cb425d2e8abf70c4867c9382da686e0f513d24ed9ccfdfd95e92520f57a0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_36_64.webp",
+        "sha256": "19d31742a9f2e27956c1fbe665c02fca0d7311d83729b3eefff864fd4ced8bc3"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_370_64.webp",
+        "sha256": "0ece88b010441597e4aa5ede11dda8aeb3bc822770a1d6e61042ec19bfc9916f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_371_64.webp",
+        "sha256": "820d3cc103ea0b71ed88256bb85b29fb9136027ad7d9971c726edb84f688bfcd"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_372_64.webp",
+        "sha256": "196061a5174c60e280912b6001087f90add047f675f86328bba97f98b15f651a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_373_64.webp",
+        "sha256": "aabd21a7a6db82e5f04be245f81121b24d45250571565566e10a881424d19c10"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_374_64.webp",
+        "sha256": "0cd4effb4dfb990e1bed5e6c456a73e932f4b4744c13cf725f2d7cb3fe29fa44"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_375_64.webp",
+        "sha256": "7a1abde7b88eb0232adf488d6af99336643dca70ea5ccfbd4354c206dd3e0c2e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_376_64.webp",
+        "sha256": "f3b5928789341bd8f06610a27ea440c37c7a8cc74f155ed35395a94e95cce490"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_377_64.webp",
+        "sha256": "21da065d9184d3345a0ddf8bea8959c0717730cec67eae65084fb54fd831a496"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_378_64.webp",
+        "sha256": "b89b8ceb647052f3f413955997a17449de4070884d5d270ced343ae058de6fcb"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_379_64.webp",
+        "sha256": "f8073b9fcb48e43c6611d9886870206aee4ff566c37a500ed2edcf60f98c5946"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_37_64.webp",
+        "sha256": "3b8f09b1a9546e774c37351f3ccd19774a84e63b2e52e9ac3df9695dbc26e2b3"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_380_64.webp",
+        "sha256": "029a5f05d209bb7c874b9dd84198c5e0069439335f629c30f4d9165c51b9cbb2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_381_64.webp",
+        "sha256": "5d2e9e83984c6dc7585e0c27014529444d00b97b174188b04464ce80b7d6a42b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_382_64.webp",
+        "sha256": "8dec44a309e916f1c5491f9a808a69b75e3c978f9e0ebef4457446174fd4be08"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_383_64.webp",
+        "sha256": "d07562eeabae4b9814ecab3cfe0fad7d76f7e1b2cb69ca016909d867ebe930a8"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_384_64.webp",
+        "sha256": "3703daa58dc898570964cb2fb38e4a2041dcb1e97b30f35482e3918219fce6e1"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_385_64.webp",
+        "sha256": "0079d0ddf87f872220b19f3d2260505900920652e42277f447ee88d6ba6e3b24"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_386_64.webp",
+        "sha256": "934e9fe24c9c34733634e36301159fe93c0851bf3448ce1f7b2cff4601c8a77f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_387_64.webp",
+        "sha256": "8ee097351a5419473dc85b58ff8e17cf3eafd3e68162e4d40bbda1636f1e8ab0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_388_64.webp",
+        "sha256": "afc3a5ee32ac1b3f60196536c9d6a924d438ea0562917f9343b241c799a5d4bd"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_389_64.webp",
+        "sha256": "530b4ebc90b4b9bb74e52bcd900cd67f109a44c52a72032311d66a938bd19e0b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_38_64.webp",
+        "sha256": "5f225a456074bcff1da0229159e70544a497e46499d360929a636198b5ca746a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_390_64.webp",
+        "sha256": "ef6615ee88648e02bc2e29d37cc5f1c71149ad82a04031cdee36b43e4a403681"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_391_64.webp",
+        "sha256": "e4c375362b09467465a4790e3f94e3b0ada8517d21406d3aeb0d4e6f836500f9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_392_64.webp",
+        "sha256": "ebf184d37c66d394f601cfbf7d91554434087c3ae9647b9e766c0cf616740c7f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_393_64.webp",
+        "sha256": "bf4702aef1da360d129a4cbf7171c2dff0f0f39a45ceac8d84b0ed0df1a5cca9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_394_64.webp",
+        "sha256": "1c07e2358fccc63f265df70743c58914a9ac05123b1a236339e3dd005e104d1a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_395_64.webp",
+        "sha256": "dd6ec3b843cd6cb2217b508b47b3a75a4f705bad966716ef9df76496acc1a660"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_396_64.webp",
+        "sha256": "abc859f40f3d30cff172775d88d75964113cb09c6917c901653c2c0fb70459ea"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_397_64.webp",
+        "sha256": "e201c4ebbdd7ed18d4fe149b774bb11f1110d2b370bd8271b8c69b2e838c3c98"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_398_64.webp",
+        "sha256": "608a8be8650a918976f3ef79975b29484d3831f3d5c05d9df4d5b4ac39b195eb"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_399_64.webp",
+        "sha256": "2e9d28a5cc04042a9354444bff5e5f6bf6ee9a14228c929f9e1ea1a8937c0745"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_39_64.webp",
+        "sha256": "21c6cd65e15dc0fc74b6429153d78c3c4dbec5ecfe5de4ec7c88cbe387f89a23"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_3_64.webp",
+        "sha256": "35fe599d6f9a88ea06afbaabc123d741aa7ea16b33e463136b5fa74fb6cf828a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_400_64.webp",
+        "sha256": "b25ae614e5ee9d32057ec75f2e782833e00befa69dc066b452c578f06d0e1e32"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_401_64.webp",
+        "sha256": "0ad107811cbf8ad211980220cc83460e73148fb98ab10ffe62e01f11b1b0864a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_402_64.webp",
+        "sha256": "65876aaf81a18930c3cbe341ef0c46835c6a411f4ad63b39903239583e1c0efc"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_403_64.webp",
+        "sha256": "bfcd8932e289f958f3c8f24ce1d5d9935816e5ff4fdd508e754b24a7da6429a3"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_404_64.webp",
+        "sha256": "d77441153f420e1cf9a31c171e095b78ddd548511a933fd85fba714d9961ea6d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_405_64.webp",
+        "sha256": "6e72db9883de436832fa93c2fac8cc4fc3e1e6079378aa5b9cf20066f84cd347"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_406_64.webp",
+        "sha256": "45c14f275cb2520da5903df02bdb43e3ee22d3502b97f35448b6c9048a9df574"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_407_64.webp",
+        "sha256": "6d3bb928efdb5922f9815c48f9d6217228558688e3e0578a38416f83a797dc57"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_408_64.webp",
+        "sha256": "e14f54899552037bfcb23ef307eef64f764ac02111087c69ae57fb82baca753b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_409_64.webp",
+        "sha256": "fdcf55c04ee696bf6b3a6997ef74ef973ee1b9c9cc960d2c85b30ec58d28c7d9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_40_64.webp",
+        "sha256": "565f8c14040efcb4600813cb807da37fe8bce6e5363b01dc3c5dc5c3ed7ad00c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_410_64.webp",
+        "sha256": "f68372259e4b924b52faf81b89572f4c870a6f3ccf52480d024fd91d3f6aac91"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_411_64.webp",
+        "sha256": "8cdcbccee901df2060cd70123eff770d7820b5a1ec9142fdeb14c87da8081eb9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_412_64.webp",
+        "sha256": "0c93226b7f097ef91a8663696b4193f8c180d46a62a00be712aaaaf202061ebe"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_413_64.webp",
+        "sha256": "3f341bcbaee8f435859b659e024d5aabd27831e9d8571c9d44fd8e065caf9e11"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_414_64.webp",
+        "sha256": "4addc5893305176790e8a8c164ac3a7dc48469869eb4e57bb101a269b251dd39"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_415_64.webp",
+        "sha256": "7ad7c5f6398e789df9058025f9a7fec13f74a13fb781b2c41285b65784d3a267"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_416_64.webp",
+        "sha256": "e5562853f7036d3782196c11792666de3ab69611482354b7eb3be7e3c18faa16"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_417_64.webp",
+        "sha256": "7ac4bd8d9e407c70d9d2776c2b827b46f3b07ccb16f656568d12b3eeb4f54137"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_418_64.webp",
+        "sha256": "6a51fd998efbb683e068b8ea1790e1d9a103fca81de392dce164ae92fb4a08f9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_419_64.webp",
+        "sha256": "a43b4ed9ba9ca9bcd2486a2940d787d508e26d89bacf55beea45f695ab2209e9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_41_64.webp",
+        "sha256": "4a7ba502894d642ef7a7f7a8e1618731e80714c0fb015912dc2632802906c8b1"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_420_64.webp",
+        "sha256": "689e10ad9ce800b92f4c8742207f4a71b32de202be882efea762ae1fcf842221"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_421_64.webp",
+        "sha256": "1767dc3e3b9c203e58ae3c36ac9eb2196c0666569b479b0e2b16b22102980fae"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_422_64.webp",
+        "sha256": "dbcdd765d1bcfda4be4cc217379b69a19dd4a9b56a45675a7d6e3299804af30e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_423_64.webp",
+        "sha256": "729e35327642148e4de0396dc158beef544e07b817dde4f302d08858fb265dba"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_424_64.webp",
+        "sha256": "f0dee91da414e696cc5cf3a78a0f100cb2064bd49c055526d1ecba0a95c03c57"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_425_64.webp",
+        "sha256": "9b24b166c8701d415a7bd1f28b0c4a793032c3918bc1500e10d18f5df6d968e0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_426_64.webp",
+        "sha256": "4799ebd71a92d32d85cbd4ebee6d49be8643c8c80e8e7d519a335dd3b37409ed"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_427_64.webp",
+        "sha256": "fcd6cb9325c16b0a9cc7e1ba21a313ab376f37136b74e43653c4cd9e550f3649"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_428_64.webp",
+        "sha256": "9f73e8f71cb3085b2babc257a3c307397fa039d36c5de59f1d1d9aa25c9886ac"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_429_64.webp",
+        "sha256": "34e8f200c50971504d8fa26dc2e1ebcf36e547301f2d077b6c1738aa3e07ec7d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_42_64.webp",
+        "sha256": "2da3f48cba1d846c5f0a1d8ff482921cf1d8fc6834c8ed65295e5533d1dfb1e5"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_430_64.webp",
+        "sha256": "8e8e392b2bdba7aec31d329735bd2084811258ee4983b27d57132969ba7b19d7"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_431_64.webp",
+        "sha256": "1e594c7ae8832e595a433d229a2ead9d8635982355dccba8242b90d7fbc27095"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_432_64.webp",
+        "sha256": "ba3cec0d0e3077772535beb7fd1494a533ab649cb5743a09d3e8a97cfa9dc02d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_433_64.webp",
+        "sha256": "acd5a371cb62b318e8c36a3de3978f83d2449079eddbea01f88e159f688cbac9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_434_64.webp",
+        "sha256": "817cbb2e1249c65d1853efaf5258e14ba532b89a2d3ba34d432ce2e9a68dc8b0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_435_64.webp",
+        "sha256": "fd09eb8b743cd3af572267bcd91b7a7103f190a8dab61b0ec286ae5422644bfa"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_436_64.webp",
+        "sha256": "0846ed2a8c60be65727b71213c02f8614a0d031911657344a9bc01344678f819"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_437_64.webp",
+        "sha256": "e8ce267e9ad1a778d0d91b154b8484773a3aeaf4554fca9932292499e07f8094"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_438_64.webp",
+        "sha256": "e50c1f8f4bd438a535056a41176d44a4ea9cfeb68310ebfba2a0bb45a2f87b42"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_439_64.webp",
+        "sha256": "46c95b6407a45db7f7f5cd7c5736c94381d61d97dd9fdc47fd4bb2bf35d38f6a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_43_64.webp",
+        "sha256": "5399f5ae1372f1c7f1ff3d5f43bf271801ade4fdb965df7fc1c307753b82d90e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_440_64.webp",
+        "sha256": "0f10d15c8354655954b01208845abc17711aafe6378548c52e38a0382cbff2cb"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_441_64.webp",
+        "sha256": "2708ac491b3b7d1dde30d1d499a486ded4fcbfdf44ac6c9e3c9b3f0641a83e70"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_442_64.webp",
+        "sha256": "854951026df9910b31e520c8d40590fa4b0fca7d5032acad41360bba0878b399"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_443_64.webp",
+        "sha256": "599e63083aa58c9b989c6fb2f22f645886b2768d08606ecca44e6c93b449fe0d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_444_64.webp",
+        "sha256": "f22e572cd8f6a6a6f54e27f895e79393eff3b4b34bb813e5db69c2251520b9c3"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_445_64.webp",
+        "sha256": "0af1b2db44f398f1685c4448c31bbe16fcad65b2c46e6dbc0f2f0082bd2f7784"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_446_64.webp",
+        "sha256": "c69fc18249fdbe44be96d3aba166bbb71d0d3f1d9036767728d3fda8a2554f62"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_447_64.webp",
+        "sha256": "11712033c7dec33ab7ee32e0b6fec2c8d80f8c8cabd0d0aa0371f8e51abc876d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_448_64.webp",
+        "sha256": "e8f155397c4441f86ed8c879093cc24306632431dcfab041abafae85001e118c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_449_64.webp",
+        "sha256": "7a79a9efceab5ed38a7ee22e4de8b16d2c5801fd4e7183a039ce2971272118da"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_44_64.webp",
+        "sha256": "aec3fc6a4e16ac215cb08f681006913f5908f2fec68e1de5d9f3a8a614de0a46"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_450_64.webp",
+        "sha256": "60b7038c0fb2c9f99c02c0c923b0a4878cfcc2ff019ea139ceb7da83381b02c5"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_451_64.webp",
+        "sha256": "7212eacc2c29b68d21736875c5cc0b6ed403ab40dc029ac5e5fc89f39bb39597"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_452_64.webp",
+        "sha256": "e041839a543083581d94d949d806ecf1756c9c9ffbfd24e60055c391d0bd4d6c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_453_64.webp",
+        "sha256": "1a904a5727f767f7c39fb8e2682ff6ccdd2e04d4368d835318d8f31ad0e4d366"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_454_64.webp",
+        "sha256": "3cd094ed1a43ef6b431efff88923c583dc49734b139c8605f0fa4b11e83efa62"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_455_64.webp",
+        "sha256": "6bd2d70697753663d8573341c746f41c438ee33dbf1b4699726ea409d0b3bb66"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_456_64.webp",
+        "sha256": "9a3ac0587833f3535a2373619b6dedeb0d06db0f30747d97103ad9c78a46aba6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_457_64.webp",
+        "sha256": "d2432f7e2a8dee276a75d91b2728666d066f77bc22dca1a44b9be68c84ecbc04"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_458_64.webp",
+        "sha256": "7026c1b6ca2d8714e4b4210bf3f7d12a1b62393dd60e58d0665cb24836e9274c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_459_64.webp",
+        "sha256": "74181fa4b6230f1c829912c851f854b0ac2f6b2f9de65215b688bc573077498f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_45_64.webp",
+        "sha256": "c0061cc2b1763905e8feb1cc16252a4ea26d9bb515acf0b8761138f988d255e4"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_460_64.webp",
+        "sha256": "ea38f45f63e0c8be4129295739c2dac2c36c3839112153bdb5d34103146d5c00"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_461_64.webp",
+        "sha256": "d3cc874ae40a1f800e803c8d48d29f4bf6ad63ee47807a978bde3f8f05c0ce49"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_462_64.webp",
+        "sha256": "a52f4b5fc70e18f7e7532c8c378c67329af1fd35aef9dfd722aa0f2344e77732"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_463_64.webp",
+        "sha256": "4bf36526afcff6f9c6f470f7c43a68200c04174c7e1ddb48f82d4bfd1baa13b2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_464_64.webp",
+        "sha256": "e7174a675dfc7c950eb942ed9646fc6c76ac06dc8132e579ab854a75843bca35"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_465_64.webp",
+        "sha256": "41e3668f438819cfff32e32e7995e1d6d105e9721f0b51e70bf14757d2964f47"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_466_64.webp",
+        "sha256": "2daac6b71077d91a4b3e18a5401c41ada8aeb151e2d9a422db8fff0856ef50f2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_467_64.webp",
+        "sha256": "8ba1b3bbfa2e717a7703d1840820b13c0978849c0833d1e28408806fd510e053"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_468_64.webp",
+        "sha256": "aef3ee80c37ab8e6b8828ce2340e549c6045023f821c92210cf21c96505bf6c0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_469_64.webp",
+        "sha256": "4051de39f614791aaace2670fc81775798e4fc1d864870bc58b1377734915022"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_46_64.webp",
+        "sha256": "cf98e69ba9f57b46e72e68a3819ebcdcf576330061b5fd255f093222757400e8"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_470_64.webp",
+        "sha256": "cb13ae7bab50f2f23b261d1cb98f215c74e5cd764a454a2018cc4fe686a3373f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_471_64.webp",
+        "sha256": "b7a548fbf642f6089fb5a7e049cd0a2beb2d2431db50ba5a474eed9e0299bbec"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_472_64.webp",
+        "sha256": "036c6fca1450d898f1c3b2a8a46b45cefafcc251e5bca41ed63a459c69a8fd5d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_473_64.webp",
+        "sha256": "9bae76ef0182245b4388ffdb2b8f8cb79b2b302c075afb9a97c362b2f2614c11"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_474_64.webp",
+        "sha256": "78ab276b20e494814afe9a47c1354f8d609cde8625e4ae15985f2b1fe19cc6f6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_475_64.webp",
+        "sha256": "ef6bb25ce7d342c1a2a7e849b99448aae04a0357b0004cf19ca54de94dad37ca"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_476_64.webp",
+        "sha256": "c35a36bfe527830731e4336c43dd5ec84473da9336d5ad41f530a4f2059f2a35"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_477_64.webp",
+        "sha256": "ec165982803956da8a06c8c44e35154929a18961d2bd278ca885aabba60c16c3"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_478_64.webp",
+        "sha256": "ac45aff213f2eb2157f7196372aa06e93d8f649dc686a7ef857c77eb6a87f7fe"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_479_64.webp",
+        "sha256": "ef17db066770e726eb347ce2ca7deaaf67e173de492272dc5b5180f46935cafe"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_47_64.webp",
+        "sha256": "50b3aeae68ec4870104b3f6e5308d33235c6e0545fca736c83aee913c5043fa0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_480_64.webp",
+        "sha256": "c48ba5de61cf5da0c9bfa2dfad3a4bfb947e9adaf4bc055dd897d577e6fb7218"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_481_64.webp",
+        "sha256": "d568f659fbc68770ca06c9f14bbd41a883c3d57588f61eb8e690e82a242db16f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_482_64.webp",
+        "sha256": "e6cc5b8551ac9d118b754153a2f1aa9268d71ed6e26ce6dc10dc2a868651e1bb"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_483_64.webp",
+        "sha256": "118ad1e3c990abf0c6b103c00bc6349c2f0644afcdcffcacd0a7503905e19af7"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_484_64.webp",
+        "sha256": "6040a25165e06b2563254b5e2ddd8662c8f7e63ed3c168afc4ad83739b21bcd0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_485_64.webp",
+        "sha256": "e2f9f5c6de3ac65d741854f44667525beb72e0debbd49cd31dcf98aa83df8e29"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_486_64.webp",
+        "sha256": "f6f4a2676bc5b75c4c921cf8a9806bc6cc565a5ff34b988ce6b34e055917099a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_487_64.webp",
+        "sha256": "73b3bb44a29de88adace8d37bfd1c67e5a2d19d11512a059c581a53d335456bc"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_488_64.webp",
+        "sha256": "1275ed5fbd2eeb4cba456c3af2978bdf0fb3ba21b6a7503dd3f80afb0fc05e87"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_489_64.webp",
+        "sha256": "44161ee6f5a937d13a70174ea9e426806e7118903339449b8ba24c3ec63e9ae6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_48_64.webp",
+        "sha256": "2fdda4cfb23729bf5006d1a54132a9fd87da3a9acfc4fe0ed73143522a993fe4"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_490_64.webp",
+        "sha256": "ed946ec94fc9fcac14c92b55f37e117740fb49720dc6468942ef94d1b98c1e15"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_491_64.webp",
+        "sha256": "8c1b2e16408d73d32bdeef8c83794ffbc7b959c1b37f81a331fbc6c740d67f87"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_492_64.webp",
+        "sha256": "16bfe512e0394fb20526bc937d05f951fefb816e4ef0eb8151b98f7ed3433b49"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_493_64.webp",
+        "sha256": "8f5ae2646e00cd9dda3c02c3b689bacab10956d46da683dab9bf62ba0844fff8"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_494_64.webp",
+        "sha256": "ad98ce9f0e10ceed96455cd80b3b123667b7c44d7c0011c6196321b22fcc1d01"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_495_64.webp",
+        "sha256": "d37fa2ecd09b9fcf1dda1c380547efbf3aa3e49ff3de75417bc6055325bbf779"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_496_64.webp",
+        "sha256": "835fba9b055966759ee87c16a07e08a94308d974af26974b21029987830e8ea4"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_497_64.webp",
+        "sha256": "be1efcfbc6ce7a121803413f8155730a232a131ad8387298f59c361b54b58003"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_498_64.webp",
+        "sha256": "752ced430bb487a3f6e4daf6a08fb5f6f1f1d5a26d2c4c134822111b11dea3d2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_499_64.webp",
+        "sha256": "4531ce7aed1aa9f8fe0a71a2fdbbd01a317c5f36f0df188a9516a77faa678ca0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_49_64.webp",
+        "sha256": "ca406ddb0082f937c60822d18fd09f39c8985637d97fa106c2640366a8f98487"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_4_64.webp",
+        "sha256": "44fbce16d13fbd74908822e55bfd20bfbb15f808e8ab33a815b432eecdc680c7"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_500_64.webp",
+        "sha256": "f285fd9010802ce930a64c020dffa1d90070109070354f06b8565a62e0c02fbf"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_501_64.webp",
+        "sha256": "58c1e2617e593005cecf5b9208cd40293066bf7f9d53adee64fafb082c86941a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_502_64.webp",
+        "sha256": "ec740b14fd4080edf8b1d42300634c319a0dea09608f5f81f928c018444e24bf"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_503_64.webp",
+        "sha256": "16f4039940dce32e90129becba99427138cad85348be21c1d5782bb54358986d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_504_64.webp",
+        "sha256": "218a62564dab9dc86de9e337e921481745423adbdb2b512a5f25626a95b51048"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_505_64.webp",
+        "sha256": "58495e0e5dd6b4baae89937dce800391f1b607ef345373c233283d43eb8cabe2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_506_64.webp",
+        "sha256": "5d002425059df3ec75a248c91d7c6f74083f50d425f2dda5c24d47fc122baa87"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_507_64.webp",
+        "sha256": "9f0f7fb0a4abdf7eb60cbd97e4d9dd1ce27f5cdd651bbb12ab233e0b0407476b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_508_64.webp",
+        "sha256": "25c54b03080c06fcdb9dff9fdfa6b2f9fb36cbfe7a62e9af5fa1ebe5cf145368"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_509_64.webp",
+        "sha256": "cd99b4fbd93e88ec8c14f89cef96612cfcb8e7c2ef5f2755147f3ed3ef66d91a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_50_64.webp",
+        "sha256": "175fcbaf6256a71d506013183e506fc37f54f5ed4d8c4acc18da7b9104f993c5"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_510_64.webp",
+        "sha256": "bae196567d40a008e63865702a847cce5d36620c339f452272f0c617e23d398a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_511_64.webp",
+        "sha256": "0e834c9935e70afc577414d4dc3107f5d670129f0ea29fdc74942ee33969d57a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_512_64.webp",
+        "sha256": "b9e9f4d9e8782cc183a5241adf1ee4d6c706e6e0baf8f519106c58b99c35db22"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_513_64.webp",
+        "sha256": "4ad198cc7f3bde691361cb728805ba7f02c6419d1ea7c6a45ef8493d046650e6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_514_64.webp",
+        "sha256": "a893e23df61ec3a84e35d56d463dfd52bd28b71d1c7f403e0a3daa505c45ee2c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_515_64.webp",
+        "sha256": "0ef0e2732f9afc54d616577739a1be3ffc04f4e850e674989be78db0c0743ed0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_516_64.webp",
+        "sha256": "83715ea2f0ff87ebef2c6308bccedb3918bae1c5e1d35b9a27f42add3d8a608d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_517_64.webp",
+        "sha256": "727860dd641a2d56076da785abc4e7ebf315d7fad09d16643568f668ab1bf9fa"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_518_64.webp",
+        "sha256": "d42844e12af228de932ab6f32ba8b418fb649def2eeaa3ed580a669723983e27"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_519_64.webp",
+        "sha256": "dc6f70f8e147244d0d98045f6ab7311ed39b1f96994cb9ccd95b6a3a7692be45"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_51_64.webp",
+        "sha256": "cbcd3f1565564f1131f8481bccbff78bd780888ad162ead2ca690acd95ef6c0a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_520_64.webp",
+        "sha256": "f73827166b903e3dda41aef1e535dd99d0917aeb17bfbae4815eb5db89754e95"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_521_64.webp",
+        "sha256": "a48ecb50b161fb505915e5ec8c37d26738d31bbcbd90cf3fc976a2ae1c167cf8"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_522_64.webp",
+        "sha256": "bed4444ff708562b4667695b3e2ed78f80337e177cfccf1232dfc346bc184b25"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_523_64.webp",
+        "sha256": "f6ff94ed26a2e475d84737b9ab041864657a1c598227076e17f199b3c7553904"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_524_64.webp",
+        "sha256": "79aa4de9776b1f6d7aad6c8fae3022aefbbe83e360e95ab8f05e3c49a8c014bd"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_525_64.webp",
+        "sha256": "988c9b9474971044c8990960a0b87a25da916c3041d24d777ae9fffc0c0098a2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_526_64.webp",
+        "sha256": "800ff77b6a6c95e528607131be71d899f3325be088714dd54cd6355a14c4c282"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_527_64.webp",
+        "sha256": "674f6f390d7c4a5e0ac96f6374d03a8bf35551429a74a3dde63b4cbfd45f1282"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_528_64.webp",
+        "sha256": "0ac16949c57b6bb8bef06fff35f9b9bec088f53187332313bd0933fc23463f0a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_529_64.webp",
+        "sha256": "5dbc6f9c16d5a827754e54514370a833aa695d6346c09bf0c65be3bd3fcc3e09"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_52_64.webp",
+        "sha256": "ed4aa4907fe83a5cafd78b4abe89d3f4b40d06ca055b58d19e25f45e7c87ffd9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_530_64.webp",
+        "sha256": "5d4189b132a4c289458c049f114c0a90d582de2d4b1a291bd1726b534b9c1a4d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_531_64.webp",
+        "sha256": "ede1587b95c46b8469f24c05cb1f809813aab68fac77fc68c4263bf77f248fb7"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_532_64.webp",
+        "sha256": "34dd19b7bc9581f4e9c4d311c78de234ee4e9df7aaffc2042725e86edc73670d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_533_64.webp",
+        "sha256": "46822b3ce84992ab02dae432b8db27f8d6b728269cf8e9b177345f64520e875a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_534_64.webp",
+        "sha256": "84efbdb5da6352b7d8f7d7b48ed28a76e6f4e683ef67571bf115ea748762080a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_535_64.webp",
+        "sha256": "91aa59ea40117bfb6887322021e3962c7d1082d00796fa9984e180a64b16c5d5"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_536_64.webp",
+        "sha256": "0d3321f2c7e7f9c2a3a8c73b4a7fa8e20524597efa27f579fdbca1006871597c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_537_64.webp",
+        "sha256": "f3793e187de96122fe7c82919b7d42a95ae7429a7dddb1830c07a30306bec88f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_538_64.webp",
+        "sha256": "4c7aa626b7ec38673a04befd8ab9ad8b1593684734b494d1da4db104e8567c17"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_539_64.webp",
+        "sha256": "f12c4029900c942b4889aad06423ec88e5cddd58c71098378dda767f02ab34d3"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_53_64.webp",
+        "sha256": "658492690640039b7fa993fc5e6e88845f11df6167faf61c5812f05d8d5ea244"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_540_64.webp",
+        "sha256": "205201bf379a7ca4efb0dff56f8e4c46ccf0715a79b20dab2bb12cfd717f16b1"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_541_64.webp",
+        "sha256": "3879c6947443842fc21a18e0efd3fcf033396ee88b96309c4a8ca976be607dd7"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_542_64.webp",
+        "sha256": "7e08f9a816af3de17a203f0d1f669c8edbc2295c710f7b65c578b8910c3e7a97"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_543_64.webp",
+        "sha256": "a0409a444f96280fef1165f77f174a57529f6c1ab15f73a4ef0ba8b31fccf324"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_544_64.webp",
+        "sha256": "11bae6f80b5ffc5dac304d4352fc83ddaf441c20a24a5503f417f3307bff7eb9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_545_64.webp",
+        "sha256": "30fb9fe7b34d85cca9b3774c1fb0af5a8522020c60d848edf45aed96b81ce911"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_546_64.webp",
+        "sha256": "0dd37ed877551fbb0f4341fc54206761b9f16edc80fe302f88f9c48f4e542d2e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_547_64.webp",
+        "sha256": "56845137a0058a63cf795c75a15f48ab82f73388ba4173eb35dff47489d0a49e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_548_64.webp",
+        "sha256": "f72b28ad767cb9613185f873c2a7de5b726834ad0a29643bab38f0a48881b749"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_549_64.webp",
+        "sha256": "234403ff1127c7fb19a975803b9b90e16d26b12c8e133fe89f79b6d5c42f6c1d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_54_64.webp",
+        "sha256": "faf39ab02bcc8bce66dda878244e72544554e7a651f462be393faf83cb8d21d0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_550_64.webp",
+        "sha256": "05a634919f1131ee52947506bd912133cc349b0c5202d8f3420df28449090ef6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_551_64.webp",
+        "sha256": "708caaa639349b664336ffb051e456076f91767993607a92728351e889779a47"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_552_64.webp",
+        "sha256": "15814d9f57f4f0fe7b2b58455ee9d9966c9b8112bfc8a7a18d581ca72c38d5bb"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_553_64.webp",
+        "sha256": "bea89ca607b79954022024791197fbcff26759edd8b414ef1a9f7adb4243787b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_554_64.webp",
+        "sha256": "301e1a338b17aa17da291310f21c643e1f6955c5ee8c25954b71c6bb0b540be8"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_555_64.webp",
+        "sha256": "582594f9908c38721b7eec0f3b5f9c0d414ebbc2d8f529d8c1570a2a229ee22b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_556_64.webp",
+        "sha256": "8b9247ae062fd2365448e8c3ca948568a1f61e095a48057aa37f36e17016dedb"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_557_64.webp",
+        "sha256": "cac87fc4584e6e3822a43d3040051aeee509f137857b202753e34c988bf63508"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_558_64.webp",
+        "sha256": "f72f1c0592beeceb8d03e4cdfffc8c67010b9f63dd6e52e8bb112a153c6b5147"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_559_64.webp",
+        "sha256": "869d7b68234cf86c6a0127e5fbee0ae04fb5b4a86c453396f7904bca7fafc596"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_55_64.webp",
+        "sha256": "d805d1657a65383f2f8c7684a611946b7fce48fb045cdddd385cd42a6fb9750e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_560_64.webp",
+        "sha256": "bedff9403029ae2cafb324cd5423da89c57068722ffe99ec9d93fb408b265f79"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_561_64.webp",
+        "sha256": "d7b2ae06d2a4eff859718fa1f5865fbc1d2130a2f49bf3e2ac19cafb564f4c6e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_562_64.webp",
+        "sha256": "5529fc13d80e7e61595596941a36d89f805670049c281a94db7d44a6ae44df10"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_563_64.webp",
+        "sha256": "dde41950645e7bcf85c9b6a2de49debe00831e79014d6cc7d1f45ca24c8bd54c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_564_64.webp",
+        "sha256": "a74cdf1dd18dcd30feec9cfa06169c41b946af53a55e838bd65bad69a5b530de"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_565_64.webp",
+        "sha256": "17a654032b9536fe69e20295c22d091e1c474c7de55add4148471857e1cea7df"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_566_64.webp",
+        "sha256": "4079a819f062f93b179a6a0c84f5021d2690f58263d61cf005dc96f905f432c3"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_567_64.webp",
+        "sha256": "b9b4259b3dd720927d55c3e671027a2dafc47d7b35f1fc95e30fe5c303e715d8"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_568_64.webp",
+        "sha256": "5eee9976bf98040010172afe559c531e342a0228cf3c093973b22fb93aac27ec"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_569_64.webp",
+        "sha256": "19d9a6e6c3747227227a8e54c02f564e71ea2a505d9dd6865a4f868ea721b738"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_56_64.webp",
+        "sha256": "53312904a7e8881fcc6c6c929f12557d8ee0c21a5a7d78fac0fc9bc3e9417d0a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_570_64.webp",
+        "sha256": "8fd00236eb3861db6383f6cd345297d7aa1881bb919591ce10f7d60c9f6186ef"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_571_64.webp",
+        "sha256": "93d7353708e5d9a80751d6b8d811b13db39ccd153b90cb0f66ecb34e38827730"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_572_64.webp",
+        "sha256": "ba8911c0aec2b24049a98bdcbc14112dbf1176697b3e3e64a2bd4d3918c195df"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_573_64.webp",
+        "sha256": "682bdcb3418e1b113a225b151173ac419e0210f12034e8f26b75b5d0eb970db4"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_574_64.webp",
+        "sha256": "820bf7803e7a91310b2a02324ff525577315759defca7ec13371a59da718df94"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_575_64.webp",
+        "sha256": "eaeaa5767648d1f55ede744ac720183a1c26d51541b231ff3d440c1167c39c9f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_576_64.webp",
+        "sha256": "6d31b752e22918576e079059d0a98803f982613ec2438ecfbc4bbf19cc39f586"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_577_64.webp",
+        "sha256": "82b94a4712ac06fa8d6af17e42de77589f5fea2202b0bfe004e466fe814920d7"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_578_64.webp",
+        "sha256": "b439d6b264e4cba9cf8ad7f329a3139364a12b3ff16ec5365caffb493bf7486b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_579_64.webp",
+        "sha256": "1acf70d68f6ea9bc87d7d10b1ef6da45d968a8904cbf1d19229b14d0911a0382"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_57_64.webp",
+        "sha256": "b7f85bd1fa8b6cc65597c043aefe46c5f79f00fe198dcd9c06bec915d58afc4a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_580_64.webp",
+        "sha256": "e8e5a5f33793836e3f7f20f2bbb1229a232d8bb1b3e0d4adc57c9be8ecc1a982"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_581_64.webp",
+        "sha256": "d23df9724c449d94bd8816493a11f2c8f6f715a413cf4737570969fe5772de5e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_582_64.webp",
+        "sha256": "17c85eef170b7b62548a38569cc42c7112928a7ddb4afa2aeae75890495bbd26"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_583_64.webp",
+        "sha256": "0eaf7b97a7515d1ac4c659731cf73adb0bab1ee61ea42c290416074cab67ae27"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_584_64.webp",
+        "sha256": "9b63538754eae238f9f8f9d035205ea463a975127d7976fc3b901466ee34e339"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_585_64.webp",
+        "sha256": "22a9bab915dfc6ff482e75a25ce006ecd75736ce536c1627db8c5dda833884df"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_586_64.webp",
+        "sha256": "c14ad8e501ccf40e8649bb4a166b62c6a84cb29768af8ec33d34cbdf54e2aabf"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_587_64.webp",
+        "sha256": "39e0a8a2e744494311eada9e1a938a3b3283eb9d4117aba8413634be0cbec7bb"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_588_64.webp",
+        "sha256": "7aa17a9a8486155de0891498c3dc745ec97341947e1e9bd23b6dceafbfbe46ca"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_589_64.webp",
+        "sha256": "6f675501e1d2d08dfc3e7a7b7e2ed404d9a87cc6789ac87354f5f13747b739b4"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_58_64.webp",
+        "sha256": "eeeaf09a75c13958fb624f76d8f7f515f3067f73137e4c10c4171c936f4c4260"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_590_64.webp",
+        "sha256": "619b25113587e4597f957be656657cfbbea9438da5f4184ee5e49bf786ce96f5"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_591_64.webp",
+        "sha256": "158680454f778a3ae018ac7bc14d1bc58ef633125aa6983bee83bc7e9217c0c7"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_592_64.webp",
+        "sha256": "8833250a2124859521e59d256b94f39cf15f1989ff940962eddd8d510ab776f9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_593_64.webp",
+        "sha256": "a4f32a55c642236dd4f76d9fd65af192f17580f80e53ebbe1803a0e2ad6dc18d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_594_64.webp",
+        "sha256": "1685ea5b7c43b00b26dc05810211c2d0b631f971a7dab33da53aa8a25af24dda"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_595_64.webp",
+        "sha256": "9f09b8566b44cfb1977f5e2614c0a580a7cb23d772c248294c72a0483120c4a2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_596_64.webp",
+        "sha256": "9ff639795e8a43953cda4d1798d97d37dfaa7976b6e4ccf6e5053da3127de7ad"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_597_64.webp",
+        "sha256": "927877f5ed6a080050db71772e6d58dc54b1e6e7b30ff0de5005fafdcaff50f9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_598_64.webp",
+        "sha256": "9efa035d5f5bf79fd3c1d5186720d5c2c5d8980f0132a6220c9b4676cd3d38ba"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_599_64.webp",
+        "sha256": "1c4c9d21d353df555f2baef71920a149b6a04b0a028a3b1107b1ebe007583a5c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_59_64.webp",
+        "sha256": "8088f3feee1d29f3c9d3e140c325fa1caf4c05f761854cb54ae571022e2cc54d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_5_64.webp",
+        "sha256": "21eb9e9938da21ddb4e80636dca1304dcd934f9735f0ba98c38f32d3c739505c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_600_64.webp",
+        "sha256": "e2236534a6a91fca14c4c1ba89265483485fb8f9dabf6e42aed46baa2fdfaad7"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_604_64.webp",
+        "sha256": "08ff6bfbcf14fdc83a7d6a4a74225770492b628b6c5a4da7c0b51ebd355cbf48"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_605_64.webp",
+        "sha256": "820a537571d1a2f6b446dc46166ae1b638d8f9f6553d53d6bdb6eed39da8683b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_606_64.webp",
+        "sha256": "c4ed4a0e010a378352dad75cf78f52124819ff6e385e08eaf8911976d42009ff"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_607_64.webp",
+        "sha256": "8c3e4d4f840dbca7fe86b9f8465acdadf21303239048b18fa474db100d07ba41"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_608_64.webp",
+        "sha256": "d15682b0af7fa8628bb30cfbdb2ca82f0eaf60793487950f695f9197198904a2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_609_64.webp",
+        "sha256": "d011eaf9accd9933c6a41432f21ceb7ff78f354199c46f2d62290ae8914de4b2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_60_64.webp",
+        "sha256": "c8178ac3f25d9b50a0723cb795d4fd33704568ba3d3b9732520379ff7ff3847d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_610_64.webp",
+        "sha256": "ed974c48436fbeaf64ccd636821aa2d44daf521ad9115ce1fe6d1da41b70525d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_611_64.webp",
+        "sha256": "13122798b8620bc7b7760021025b8c866e61c47ce9c786e4425cf0315a800f76"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_612_64.webp",
+        "sha256": "1f5738e52e18a0926ffa8a94e321aad380b972c8e4680a201e69d32b94374246"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_613_64.webp",
+        "sha256": "8f93b7812ee5de3644e7c391d9f489d76bff3879dcb91dc075e22494781cb2a0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_614_64.webp",
+        "sha256": "dd0252a801056f257dba1d5cd220062771fd791724e4f87d79f3ee91e99ac88f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_617_64.webp",
+        "sha256": "7ebd9feffd4e4b587e3515722d3245dd329b520595d5f96941a0af01f84e62a2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_618_64.webp",
+        "sha256": "5d7db4165848173145e8c293d36af19147b2b8dc00a0889574c836c837489d75"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_619_64.webp",
+        "sha256": "96aa39622df4b41b415adddfa7f59d06808f1a6fb72015e7fb9b3209b105c33f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_61_64.webp",
+        "sha256": "3a147174537bf289b08a75551aa4ac36cd10b331cb45b74f4bd352256e85be59"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_620_64.webp",
+        "sha256": "927c1bf2fc02a96043e0d0f6c26d8fd5564c31f7fe6341621646a8c210d49ec7"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_621_64.webp",
+        "sha256": "76e3372e948da7612777ee82f667d7e0da8050f5fd09e0dd01476b44d375e46f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_622_64.webp",
+        "sha256": "0860500f7d600ae50ce5f1289e94d12b56cfe33524294732bad8ecc1bea6e374"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_62_64.webp",
+        "sha256": "769a00fd2835a825788174ebfbc8380604a5ad05f200fa211499894f5a40c3e8"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_63_64.webp",
+        "sha256": "8710cdf74cc95152b7f7e30cabb07f4466f61d504808ca45c61d513950a7a65e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_64_64.webp",
+        "sha256": "31e8c09459f4bb1454f68bf23bbd686bdbfd6e39fc6d45002f2f5cfeb09f390f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_65_64.webp",
+        "sha256": "f70c165bbbf883cee4f8b0e56c018c1e344ead4f8225b56bf0d82457953d3b87"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_66_64.webp",
+        "sha256": "4f6e7f7f97a0fa0f1839dcda8117fa2ce90e0bb4fafc14681b24572c6714c7a0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_67_64.webp",
+        "sha256": "4e98ab331842e6f3630ac277bd20cbb895a16593d5cc6caf024f7cbe5e023404"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_68_64.webp",
+        "sha256": "1d95787dbc85b788b54e24d1951dc77aab52394f6d743de204831d773fe15848"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_69_64.webp",
+        "sha256": "e3c1a508385c5600b4f7ebcf9cbe79737eb6b845e2ea452747fe4a5b04484e50"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_6_64.webp",
+        "sha256": "20d6f58728e7fc07748e2143f312cb22a9f332483fc29660caefae17372a81a0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_70_64.webp",
+        "sha256": "fd8c3bf3da0e8b8be4797e64e6750518ddda99fe21ea3c2f3a38e5c81fd2af8c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_71_64.webp",
+        "sha256": "5884b61fa1b98a772997266fed1886292c263daec9fc5e8c9f58adfae06bcedb"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_72_64.webp",
+        "sha256": "273a8dd97cd5f4c52c50f542ca36866a0fbf67dcd42a1659433077d891b23e45"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_73_64.webp",
+        "sha256": "93ce329767e659d41102809294574f360b73b76491503c6aff834e112a80082b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_74_64.webp",
+        "sha256": "9a10e4b4f21ccc0012c7429e5d2d9158c3813bf358bceae3c8fead3ab6227fa6"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_75_64.webp",
+        "sha256": "9912f4e609802f61e4c2cb299dc3a18b4a4125343a898afdeb3658eb28972204"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_76_64.webp",
+        "sha256": "5fdbd2683e28b9864120915facf7a7141f4dbf097100ee45a0ba4e9aa63e9b83"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_77_64.webp",
+        "sha256": "13db85c5cc3247bf4df15ff2d884b4b9d91a1f5404168a2c32af3f970e7021ea"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_78_64.webp",
+        "sha256": "819a129fc9aa7722132472acb4a32932fd3cd9a1626d812eac11ad86cfd56402"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_79_64.webp",
+        "sha256": "ee2c31472b433630ad5905ef05f24c5b60ad56273ae66e55e7415063f33a9ae3"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_7_64.webp",
+        "sha256": "8a8976932be1f3a0f9b457208ddf44b8521df84904fe07504c5a889d2a7ebfde"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_80_64.webp",
+        "sha256": "a4acf606736f6baa840c73ad7fd59faae97c7e17c9483406f44fb6ec24c82dd9"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_81_64.webp",
+        "sha256": "770f144b3d7487799d4624c9d9412de9cb882aaae184917d8db291401c99b65a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_82_64.webp",
+        "sha256": "b96b0ca600566b8b9e83f2e61888eb18a8ca41ef8aabc249369ae3c3359f9cb4"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_83_64.webp",
+        "sha256": "3d0018292dabf18ffcfadae7b07bea2827472eee7df7f3a0088d918ad59fe415"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_84_64.webp",
+        "sha256": "92833431cdb94fe44a1fc86260ed86a2d7cf91689110f2b977f2fc43e044ad3a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_85_64.webp",
+        "sha256": "0b4f16214674b6a70d2d58fe07687dabfa3f2c96331c11daf0ebab40d84dc626"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_86_64.webp",
+        "sha256": "886586a2a0c94dfd98abc72bfcb7c7c1fdd4feea0930fe3431fb8782064ee4bb"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_87_64.webp",
+        "sha256": "2d4cd51f3ad218f10055c76d3092fc3168df20f8813b3b389603cce99d6d450d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_88_64.webp",
+        "sha256": "893140226f6a8ba6acb22886fa438c0947b704821b0cc2e2688adbd0b59ff32c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_89_64.webp",
+        "sha256": "0fe9f085f89eb9085861244e85ac63217ffded2926b3ae6b80ed8f33f2b7222a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_8_64.webp",
+        "sha256": "19e6b5ee4cd057afb091ae63d3227a9a73e55d9af890a6101bc5efa748ac28e5"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_90_64.webp",
+        "sha256": "c1a633de6bdab364e9cc1a8c31747e47a45f02f2dc21ccb9cb3ee9e0abdd918c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_91_64.webp",
+        "sha256": "3877be487160b29db67d3035fe645dedc73aa93bdfebdef67d3c4296249f0e11"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_92_64.webp",
+        "sha256": "0dbedf70e4054304fc2a447fb8d3b0a5595f35ab872d26144159700b814fdad3"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_93_64.webp",
+        "sha256": "223c0e53787e69cbb49f0c50f9e96d23dbea48f3c78759bd566d53546a0aed41"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_94_64.webp",
+        "sha256": "5f76fa30bd2c208512c9ad188bb39b7e4bc3bd18cb24aadfffee966f0aa0b7f8"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_95_64.webp",
+        "sha256": "308590535b578a2c0d3798dba54ab1c386ab77914629ee228b7a641f1b0c24d8"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_96_64.webp",
+        "sha256": "eb98604e7cafc179afd784d1028d74c17f82b6785300e13495ef4c35c418c537"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_97_64.webp",
+        "sha256": "4870cc58e50f726341273df2b5386a8f31554f15ef48015070b8616e65c3e0b1"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_98_64.webp",
+        "sha256": "706c624f9f5ab831e28e97eae34b626ac659269e42a0add37f94d908a434e99a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_99_64.webp",
+        "sha256": "fbc785f4a24c68e284d375c29222187d89d984249afbd429636f64673cf9c986"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_9_64.webp",
+        "sha256": "9773d7fe5aac87635c7f4340a216abe219f215d3021a4b52265edbeac420f9de"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_arcBolt_64.webp",
+        "sha256": "1ad24cca88dcb27ca86d5f7d3bf9c298e78235172b2c5d1b776f4c398d53c6dd"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_arcFan_64.webp",
+        "sha256": "d9006096ea754bcea0ad6feff485548049506788ad8a3403537e6fa8b1ac134a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_arcField_64.webp",
+        "sha256": "3d4ae9a057f528bea4f57b5881f598023b87731e303fb60ce4693ac4c6e0dbf4"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_arcStorm_64.webp",
+        "sha256": "3bc3fdf71cff40814cc2cd480931ee86b29be362d74eea7ffb4c6dd1f8f0379c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_barkGuard_64.webp",
+        "sha256": "e388100203823f4566ddbc601c046b38bc15e5abe9ca0a61e5f53e4b9912d4c3"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_boltDash_64.webp",
+        "sha256": "824397c006e064c7c0b89ae23faafd767e017f804dd816a30faa6579e3502faa"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_brutalCharge_64.webp",
+        "sha256": "31835a06cb8d255a6d775f399a83b4e1e36ff3778cdddeec1eec011a31786c32"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_cinderGuard_64.webp",
+        "sha256": "f3547838f4c52afe412a612afbd6579dc059660d889b48382458446a15842f96"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_clawSweep_64.webp",
+        "sha256": "52df8bac95ccb4e3846f4babf26d0a4cf998b288d2ae1b380a522b37140eb1a5"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_coreNova_64.webp",
+        "sha256": "ba2e882854c3d84a37e47289fe1544dee69d723ea013f39da3d512b3786a4294"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_dawnLance_64.webp",
+        "sha256": "0fbffbaa46eda5003d22e5e1c04c87acbd1a901ebf8d79edd17361edd2db6d59"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_duskGuard_64.webp",
+        "sha256": "06fac455cc698169a4df5e5756fe2fce3789ffbdbcbc6dd23f179db2b9186ce0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_emberBolt_64.webp",
+        "sha256": "cd831c1bfdff8d7cc2cfa72db12ff3011d1d6e40b9fba28eb8e6da2a4c6d0140"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_fangRush_64.webp",
+        "sha256": "a0c67f4d36ca7e87533d3a192baf2129aaca43a2e63c45894fc40af15ad2dcc0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_flameRing_64.webp",
+        "sha256": "9bb5a8f124c663242be74df73fc6b6ace01dd15cb515f9e031ea114c46798a97"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_foamZone_64.webp",
+        "sha256": "eaec1c51b2abfd5201025cabfa098d54a4824c52b4dfb951f5824d563a12cd32"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_frostFan_64.webp",
+        "sha256": "ea2f8b7bf8e76566d93c683c0a21c099695fe5823d687b1c3bda2620d701f5d4"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_frostStep_64.webp",
+        "sha256": "280f5e49fbc7ff259bee08841deb0e5a6d057576ce0780131bc5ee3b4458d109"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_glacierGuard_64.webp",
+        "sha256": "c52cf0cf9337cffafbca6e96f952e09f4ec444580397a3dd64e73cb0c15b25fe"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_grovePulse_64.webp",
+        "sha256": "f34ecc1655bbe98d1865e6f78ad86e0e7f6dd2c8af332ce1962a0c822cd74d9e"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_haloPulse_64.webp",
+        "sha256": "5bae8a9e78a2ab4f96bbb2aeba4e235d1ba2b3853688834cba98455adda0ad34"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_iceCage_64.webp",
+        "sha256": "b9abdacc3ef1cc61365bec8447659f114f31514a18199ee75cd9ab9446b45953"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_iceShard_64.webp",
+        "sha256": "a384a0c5c3e45b47e760d74d4b141512540165c342ebfc2abb0428f0d6d8fc86"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_impactNova_64.webp",
+        "sha256": "8b6859f24a12e8d1fd0c072400fe9595bd70a7de05b72ec6944c547f09481c22"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_impactShot_64.webp",
+        "sha256": "ed27b84d66689b3d1c8e540847246e2d241c6012e97532d5367952efc4e7bb8a"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_ironGuard_64.webp",
+        "sha256": "f53be987f3b1062b45164e8bafec047f658ba1eadfb82d0f66858d41b6458002"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_leafFan_64.webp",
+        "sha256": "8d6c8eb91f1acf459dda01eab7bb3de7b04329ab96d21e1a49b0cc20f2887447"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_nightPulse_64.webp",
+        "sha256": "8a1716ab0e2f96633b7648fc7b339e0d70c51eee14c7cdb8f05e1fa1e1be19c0"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_quakeSlam_64.webp",
+        "sha256": "8c840a8af463fe795cf70801de86b7f826492190978816a1a63e26c69b1c4e43"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_radiantDash_64.webp",
+        "sha256": "d5c9cbb29d50d614cb492bbeaa4f89114529ebec3f2664ac33fde65d682166a7"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_rockGuard_64.webp",
+        "sha256": "0517ed4b306b75a6da0b49cb174eb9a53ffc8d8fc002f7292c0f538cd9dff818"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_scatterLight_64.webp",
+        "sha256": "464011fd7b22394f2e40b56ca9da3867ce21c389e301dd0b1bcc2463016d9a20"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_seedBolt_64.webp",
+        "sha256": "efa681b6ef3123c15b20ae12bac1be3afd163408806d0ec812b6472aa0455405"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_shadeBolt_64.webp",
+        "sha256": "256e50b2c74ca13f72c630ed5c64662a2d49f2e2120b4af494e71fb4f68a2c96"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_shadeField_64.webp",
+        "sha256": "0833c0a61faa1faf9cf181b991590861116b99e5dec6396f8120baf7b45a1e5b"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_shadeStep_64.webp",
+        "sha256": "06b5bbb438e26f4584272a8c79396df138b0bb1eae566c49d2ac26451493637c"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_shardStorm_64.webp",
+        "sha256": "e36fb57f883ae200b1bec227ee1c67e0fca1b0553e23b8869dec4171af3e03d2"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_shardVolley_64.webp",
+        "sha256": "4eadd394a368e0f829c5f65a065182fd010b359eb0a8e97891c1865a426f460f"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_stormGuard_64.webp",
+        "sha256": "3fb5b999c345874ef9ea88923825d3f4c19a79b903f379c66d4d635796f726c4"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_sunShield_64.webp",
+        "sha256": "460c9ca5d46ebdffcc95eb2d482b538588002810fbca7d77b4f35711bf675a26"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_sunSpear_64.webp",
+        "sha256": "26c29e959e99fa31b74c24819a63c136f5399677220385a508dc36d1e00f1762"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_surfRush_64.webp",
+        "sha256": "8953e41afed5865206dda6a27c2afd9d4d65d58ab089f6f7e655699829a8a875"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_thornRush_64.webp",
+        "sha256": "86482a275190dfd794c5b469345dc92a8ad9ed35ca996cc6c3f8e6ba0cadddad"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_tideBolt_64.webp",
+        "sha256": "fc378e957a74ed7bd94f9c26137850f9687c89d6d245cbfb20acf3b8bb40b319"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_tideGuard_64.webp",
+        "sha256": "b957a614876e0c2c4ae98ac53d8de32b9de6b7237270a900b98bba6b68ba6a24"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_tideWave_64.webp",
+        "sha256": "bf72c1a89f46e64456f36f16dd639f58deaea9e2ee47055ac8261e9f77dd05f1"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_vineSnare_64.webp",
+        "sha256": "24dd24c08b834e196da0a43541dcea22d58113d05e9930dabc10d4eca23c8117"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_vortex_64.webp",
+        "sha256": "97f383cbe23cd832fe512cc9afa4f0de59dd65f013bfbe9932a3eabd009d193d"
+      },
+      {
+        "path": "assets/production/ui/move-icons-r1/move_whiteout_64.webp",
+        "sha256": "0f1171fba3a584bfb82dda22e9debdda0eadd3a29856e7f391e3f1f53fa5384d"
+      },
+      {
         "path": "assets/production/ui/capture-frame-a-v1/default.23d67f8d950520a9.svg",
         "sha256": "23d67f8d950520a930f25630030ca4982e1e925f488d7ec296dffb35be153aab"
       },
@@ -41513,11 +44849,15 @@
       },
       {
         "path": "src/championship/app/battleFxLookups.js",
-        "sha256": "6c03786ed19c1c417074796835dcc6232d340df7477fcfa9f6728004b47bff4b"
+        "sha256": "d36e5970315af8b1a0be0f2bc76dd603f10ab12e2cb615ee631fd14c99bc58f1"
       },
       {
         "path": "src/championship/app/battleGlyphs.js",
         "sha256": "32568edfcaea45bad1233ac0b7673c3e6ee78832f8b6319cfead43944801967d"
+      },
+      {
+        "path": "src/championship/app/moveIcons.js",
+        "sha256": "79c3864efff72569c6c0c822dca309893ede404d4fa274c9b0d17493ce943947"
       },
       {
         "path": "src/championship/app/battlePresentationSource.js",
@@ -41525,7 +44865,7 @@
       },
       {
         "path": "src/championship/app/battleRosterSource.js",
-        "sha256": "2914b0c41df4f61f856c0a6d4c8dcc69ee72b5159eb5cfe6c25f3f589d5ae09f"
+        "sha256": "7d958247e4b073565f76934aa1ffa18ea0c4a43782a032909cbf31d88d7d3fbf"
       },
       {
         "path": "src/championship/app/battleRuntime.js",
@@ -41569,7 +44909,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "7e2a25a0403d49343feb81cbb4faf77c2ab9cbb7db4123a627be511c544aad37"
+        "sha256": "8114483813449fdce778a4c431d75740902ff7af7eab6c0d90acf9daddd378a5"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -41613,11 +44953,11 @@
       },
       {
         "path": "src/championship/app/dataArena.css",
-        "sha256": "3505dd8032cf2cb605be1dea69369f5e34a382c1ef3af0a0730d496a511444d9"
+        "sha256": "0e2bc222fbe32391fd29a5acd2ca38a12333a213f6944ceb0525050a01f3345b"
       },
       {
         "path": "src/championship/app/dataArenaScreen.js",
-        "sha256": "96eb82d87960eb4abb075b77a986f1f55c7f70e6c1598b5cb6038a0373d8237f"
+        "sha256": "d1b07bf04228103c32e7745597d14933ca8fad0527772ebd9142530f7aa7864a"
       },
       {
         "path": "src/championship/app/daylightSkin.css",
@@ -41625,7 +44965,7 @@
       },
       {
         "path": "src/championship/app/digimonListScreen.js",
-        "sha256": "d69b1190114a48a6d172730f528a7201959725c04ebc099f6d53ef689efa8e50"
+        "sha256": "4902a0a14643f3f7e03833c364cd1cdd3d3fa9a92cde29eee88682b63e2a598d"
       },
       {
         "path": "src/championship/app/downloadSaveBackup.js",
@@ -41729,7 +45069,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "46067fea9178aa6979f0f2e3fdf32e1368a8db3dc9ed52216144a50a70cec863"
+        "sha256": "41674aa55887e635a8bcbdfdf01632e2aabde63307af4bd399da45bd955d518c"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -41921,7 +45261,7 @@
       },
       {
         "path": "src/championship/app/styles.css",
-        "sha256": "6d58f263f42c02cf7a8273c32ce7c380c1a234fab56421ece4e8cacf7dd7a453"
+        "sha256": "9d7c75deb25f702864ea9e1763e1affd92ae527c7287768765abcbf3090ac30f"
       },
       {
         "path": "src/championship/app/tamerInfoScreen.js",
@@ -41989,7 +45329,7 @@
       },
       {
         "path": "src/championship/app/ui/juicyShowcase.css",
-        "sha256": "3896c36ea6b8cd529cc1e16106b6f84396c58dd8a96af73a952c81d10a6240b7"
+        "sha256": "e7cda6fb43f114540081d8cdf37df26fa9ebce3dd6465632a0cdbaf735472cc9"
       },
       {
         "path": "src/championship/app/ui/layoutSets.css",
@@ -42069,7 +45409,7 @@
       },
       {
         "path": "src/championship/app/vs4Screens.js",
-        "sha256": "b0463eb2bdf80396bd7bb9f9bc9317db9baede65ded70b633ce278dc206348bc"
+        "sha256": "121390b682b9b849fa6cdc254f35b29bbcb5f1a60735ed71568620a75b1878a5"
       },
       {
         "path": "src/championship/app/vs5Screens.js",
@@ -42105,7 +45445,7 @@
       },
       {
         "path": "src/championship/battle/battleCatalogs.js",
-        "sha256": "0be9459cad554b9f7fd5ee707edffe969b5eb01105a4c70aa37fc317a104d7f4"
+        "sha256": "061c4565f5b663c408a3b73213ac684aabcfd3a67a69deb3d74bf725bf52b3c9"
       },
       {
         "path": "src/championship/battle/battleContactTargeting.js",
@@ -42209,7 +45549,7 @@
       },
       {
         "path": "src/championship/battle/battleParty.js",
-        "sha256": "98a449e4a27411ddfd23bc3cb1aab1061fe312c2fff543ab302eee7dcd3b142b"
+        "sha256": "532a65a3457d8abeb76bbbebb12ef2d622675f8a5e0ed9b3338ed38d3f29c2d8"
       },
       {
         "path": "src/championship/battle/battlePresentationHost.js",
@@ -42241,7 +45581,7 @@
       },
       {
         "path": "src/championship/battle/battleSession.js",
-        "sha256": "6c6b11a9c411f0e2e39d356c46825627de893be7293670d791959531a48b0939"
+        "sha256": "9eb7bec9da5b866e494ebcbc8ec2f9a19b001940dc59f10bb23e8251d2294654"
       },
       {
         "path": "src/championship/battle/battleSoundEvents.js",
@@ -42433,7 +45773,11 @@
       },
       {
         "path": "src/championship/contracts/productSyncLevel.js",
-        "sha256": "a6d6e5a8078ba8c5e87fc17392350ec1324a8dbe75d2e156db8636858c85d25d"
+        "sha256": "864cb80d68b946369ea1b671567432ff4eca6500bb979448acac9b52b424036e"
+      },
+      {
+        "path": "src/championship/contracts/productArenaMoves.js",
+        "sha256": "0877bd8506a4babbded7b4d044e9502608d1dd685ea9ac131bbabf6da6a4a0c2"
       },
       {
         "path": "src/championship/contracts/productTacticPractice.js",
@@ -43161,7 +46505,7 @@
       },
       {
         "path": "src/championship/presentation/juicy/skillCutIn.js",
-        "sha256": "f873b2214172908604315adddf404735d9eab07974874959ec319a292961cf4c"
+        "sha256": "86d6da070d4abf4277e645ecedafdb306c1a3676281908b8d2ece0ab1c1ad515"
       },
       {
         "path": "src/championship/presentation/juicy/spriteMotionPlayer.js",
@@ -43457,7 +46801,7 @@
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxChoreography.js",
-        "sha256": "dce36080a246e4d4d9cf26dd76e0795b6cc8fa3a02a417bd6df8a8d53252a7a2"
+        "sha256": "1d05052a7286e0bc2d616607d8d149638418badb57c4ddf8ef7e3fe1169c4bc7"
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxKit.js",
@@ -45777,7 +49121,7 @@
       },
       {
         "path": "src/championship/presentation/vfx/moveVfxSignatures.js",
-        "sha256": "316872205be087354084d9c50bc8a046fead9cf6e0219f69dbf7ba4a338bb226"
+        "sha256": "068ccab590df5870a971b526be82f3f0c2c3d27d6396a041a82b9c7e8077827e"
       },
       {
         "path": "src/championship/presentation/vfx/nitroVfxAnimationSidecar.js",
@@ -45821,7 +49165,7 @@
       },
       {
         "path": "src/championship/presentation/vfx/unifiedMoveVfxResolver.js",
-        "sha256": "ef8c99ac53812ed97553b2bcb885c2f06e00c19f74aaea81e63555436754194c"
+        "sha256": "a56502e4ce6e0fb7930faa31120e9812e8fc082503a50b2755bb33a6d791e8c9"
       },
       {
         "path": "src/championship/presentation/vs2/createGateSelectThreePresentation.js",
@@ -46153,7 +49497,7 @@
       },
       {
         "path": "src/championship/text/battleMoveNames.js",
-        "sha256": "f6a7e9dd9246d582041820ccfc9eb434f2c0e96272b0d2244ad958649493fe2b"
+        "sha256": "895c57b06909a215c193bc9cb50145f014aedb7e0a9c4cf427ea8cf2f2a25345"
       },
       {
         "path": "src/championship/text/battleOpeningText.js",
@@ -46337,11 +49681,11 @@
       },
       {
         "path": "src/championship/text/uiText.en.js",
-        "sha256": "4acf32e196fae9b3a46cb5e734e0c4c5d47ee5e3db7dce0c5857ece86504893e"
+        "sha256": "8e853513f418db5074f128170f87531971f50917f02f8e6a4863b6d7ceef2e73"
       },
       {
         "path": "src/championship/text/uiText.ja.js",
-        "sha256": "f7dbdc933af227951e5f26d47899530d6c60c0ed4a098edec3ab2e1841c237e7"
+        "sha256": "e5a2400d3a4637b191fd760ad10ba7622613491075979ae81daf20bdc45c1209"
       },
       {
         "path": "src/championship/text/uiText.js",
@@ -46349,11 +49693,11 @@
       },
       {
         "path": "src/championship/text/uiText.th.js",
-        "sha256": "c9100d78fda362482b33bd4130549be069d1de78ad4d2dbfaee740a28af96d07"
+        "sha256": "a8865728f86d3b7a26783e1a6296e9eb5d2b7cb54d29507a91addde4e2484949"
       },
       {
         "path": "src/championship/text/uiText.vi.js",
-        "sha256": "2695c3f87f5155f651915facd8a6bcb7087ffb53b6fa1647f2953ec96c8a2b58"
+        "sha256": "4fb3f2cfb5ea67e9e11ec1c6ef9c1b39220de634cfc5d88b696a8c92386262ce"
       },
       {
         "path": "src/championship/text/weeklyScheduleText.js",
@@ -46554,6 +49898,14 @@
       {
         "path": "src/data/championship/data-arena-relay-kits.v1.json",
         "sha256": "ab6aca2032ad7efb29d30b7ebd0d921f02cf7340509e8b90ce5f2ae8983c8111"
+      },
+      {
+        "path": "src/data/championship/product-arena-moves.v1.json",
+        "sha256": "6f56cc58444a754318d656f2f90f61953b65ef69986c2025eeff6388f6d34532"
+      },
+      {
+        "path": "src/data/championship/product-arena-move-names.v1.json",
+        "sha256": "614c7183b9436d9e6e8242ee6d75011a11912da3f929d1c99db64685cd9a0300"
       },
       {
         "path": "src/data/championship/data-arena-relay-maps.v1.json",

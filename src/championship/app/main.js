@@ -118,6 +118,7 @@ import { configureCeremonyAudio, playCeremony, playCeremonySound } from '../pres
 import { bindOverLimitPress } from './ui/overLimitPress.js';
 import { OVER_LIMIT_RULES } from '../contracts/productAwakeningOverdrive.js';
 import { createSkillCutInLayer } from '../presentation/juicy/skillCutIn.js';
+import { moveIconSrc } from './moveIcons.js';
 import { juicyPresentationEnabled, juicySpeciesIndex } from '../presentation/juicy/juicyArt.js';
 import { createActionPortrait, setActionPortrait, clearActionPortrait, warmActionPortraits, releaseDetachedActionPortraits } from '../presentation/juicy/actionPortrait.js';
 // Owner 2026-11-12: partners outside the Database are drawn as their own animated bodies.
@@ -2176,7 +2177,7 @@ async function mountBattleField() {
           const fxLookups = fxLookupsModule
             ? fxLookupsModule.createBattleFxLookups({getView:()=>source.getView(),localTeam:()=>activeRuntime.localTeamIndex(),onFeed:(line,cue)=>view.feed?.(line,cue),onTally:tallyBattleEvent,
               onCutIn:juicy?cue=>cutIn?.play({team:cue.team===activeRuntime.localTeamIndex()?'ally':'enemy',species:cue.speciesId,
-                moveName:cue.moveName,casterName:cue.casterName,palette:cue.palette}):null,
+                moveName:cue.moveName,moveIcon:moveIconSrc(cue.moveId),casterName:cue.casterName,palette:cue.palette}):null,
               // Local acceptance shows stable skill IDs; players see approved names only.
               showIds:String(location.search??'').includes('battleFxDebug')&&['localhost','127.0.0.1','[::1]'].includes(location.hostname)}) : null;
           progress?.start('scene');
@@ -2576,6 +2577,11 @@ async function mountCurrentScreen() {
         if (result.ok) autosave?.request('rename');
         return result.ok ? { ...result, entries: projectRoster() } : result;
       },
+      // UNIFIED_MOVES_20261118: learn a Data Arena move for the auto battle (local battles only).
+      arenaMoves: typeof app.getArenaMoveLearning === 'function' ? {
+        get: instanceId => app.getArenaMoveLearning(instanceId),
+        learn(instanceId, moveId) { const result = app.learnArenaMove(instanceId, moveId); if (result.ok) autosave?.request('arena-move'); return result; }
+      } : null,
       onRebirth(instanceId) {
         const result = app.rebirthRaisingPartner(instanceId);
         if (result.ok) autosave?.request('rebirth');
@@ -2840,7 +2846,9 @@ async function openGameplay({ beforeFirstMount = null } = {}) {
     globalThis.__championshipGachaQa = { grantTickets: (amount) => app.grantGachaTickets(amount, 'QA'), frame: () => app.getCyberGachaFrame() };
   // Loopback review only (?syncQa): crystal points and feeding, so the level-up panel can be checked.
   if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("syncQa"))
-    globalThis.__championshipSyncQa = { grant: (n) => app.grantSyncCrystals(n), feed: (id, n) => app.feedSyncCrystals(id, n), level: (id) => app.getSyncLevel(id), partners: () => app.getBattlePartyCandidates(null) };
+    globalThis.__championshipSyncQa = { grant: (n) => app.grantSyncCrystals(n), feed: (id, n) => app.feedSyncCrystals(id, n), level: (id) => app.getSyncLevel(id), partners: () => app.getBattlePartyCandidates(null),
+      // UNIFIED_MOVES_20261118: the learned arena move each local party member carries into battle
+      party: (ids) => app.prepareBattleParty(null, ids, { sync: { capped: false } }).then(p => p.ok ? p.individuals.map(i => i.arenaMoveRecord ?? null) : p) };
   // Loopback review only (?diamondQa): automation items into the bag, and the land / badge readouts.
   if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("diamondQa"))
     globalThis.__championshipDiamondQa = { grant: (id, n = 1) => app.grantAutomationItem(id, n, 'QA'), cage: () => app.getCageEditFrame(),

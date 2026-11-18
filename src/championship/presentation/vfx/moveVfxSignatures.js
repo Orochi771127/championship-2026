@@ -13,6 +13,7 @@
 // learnable support moves) or a Data Arena pool move id. Presentation only: a
 // signature never changes a move's power, element rule, range, timing or RNG.
 import table from '../../../data/championship/move-vfx-signatures.r1.json' with {type: 'json'};
+import {arenaMoveIdOfRecord} from '../../contracts/productArenaMoves.js';
 
 export const MOVE_VFX_SIGNATURE_DIMS = Object.freeze({
   volley: Object.freeze([1, 2, 3, 5]),
@@ -41,6 +42,8 @@ const signatures = new Map(table.moves.map(row => {
  */
 export function moveVfxSignature(key) {
   if (typeof key === 'string' && key.startsWith('own-')) key = Number(key.slice(4));
+  // a learned arena move's record (623+) wears that arena move's signature
+  key = arenaMoveIdOfRecord(key) ?? key;
   return signatures.get(key) ?? null;
 }
 

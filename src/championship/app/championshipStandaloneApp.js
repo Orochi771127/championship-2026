@@ -37,7 +37,10 @@ import {applyProductTrainingGains} from '../raising/nativeRaisingTraining.js';
 import {inscribeGachaBloodline,grantGachaMetal} from '../gacha/cyberGacha.js';
 import {REALTIME_TRAINING_POLICY,recommendedCages,TRAINING_KIND_OF_CONDITION} from '../raising/productTrainingPolicy.js';
 import {normalizeSyncLevels,createSyncLevelState,syncOf,syncCapForRank,syncBattleExp,grantSyncExp,feedSyncCrystals,reconcileSyncRebirth,
-  boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX,partnerGradeOf,recordPartnerGrade,fuseSyncPartners} from '../contracts/productSyncLevel.js';
+  boostSyncNativeProfile,restoreSyncNativeProfile,syncArenaPower,SYNC_LEVEL_MAX,partnerGradeOf,recordPartnerGrade,fuseSyncPartners,learnedArenaMoveOf,recordLearnedArenaMove} from '../contracts/productSyncLevel.js';
+import {arenaMoveRecordIndex} from '../contracts/productArenaMoves.js';
+import {RELAY_ROSTER} from '../modes/dataArena/dataArenaRelayRoster.js';
+import {RELAY_ELEMENT_KITS} from '../modes/dataArena/dataArenaRelayKits.js';
 import {rollPartnerGrade,applyGradeHeadStart,fusionLineMultiplier,FUSION_MAX_FODDER,FUSION_WARN_LEVEL,fusionInheritance} from '../contracts/productLineFusion.js';
 import {normalizeTamerTalents,createTamerTalentState,tamerTalentPoints,talentValue,grantTamerExp,tamerCaptureExp,tamerBattleExp,tamerDailyExp,TAMER_EXP,
   learnTalent,talentRefusal,chooseKeystone,keystoneRefusal,hasKeystone,KEYSTONE_RULES,talentChance,respecTalents,talentRespecCost,talentSpent,talentSpentInLine,talentOpen,commanderCappedTalents,
@@ -4645,6 +4648,22 @@ export function createChampionshipStandaloneApp({
     getSyncLevel(instanceId){return syncLevelOf(instanceId);},
     /** LINE_FUSION_20261117: the saved grade and its six q values, or null. */
     getPartnerGrade(instanceId){return partnerGradeOf(syncLevels,instanceId);},
+    /**
+     * UNIFIED_MOVES_20261118: the Data Arena moves a partner may learn for the auto battle -- its element pool in the
+     * arena (the moves that fill its arena kit, ultimate included) -- and the one it learned. Local battles only.
+     */
+    getArenaMoveLearning(instanceId){
+      const speciesIndex=raisingNativeProfile(instanceId)?.fields?.['000'];
+      const element=RELAY_ROSTER.find(p=>p.speciesIndex===speciesIndex)?.element??null,kit=RELAY_ELEMENT_KITS[element];
+      const options=kit?[...new Set([...kit.moves,kit.ultimate])].filter(id=>arenaMoveRecordIndex(id)!==null):[];
+      return Object.freeze({element,options:Object.freeze(options),learned:learnedArenaMoveOf(syncLevels,instanceId)});
+    },
+    /** Learn one of those moves (or forget it with null); the learned move joins the partner's moves in local battles. */
+    learnArenaMove(instanceId,moveId){
+      if(moveId!==null&&!this.getArenaMoveLearning(instanceId).options.includes(moveId))return {ok:false,reason:'NOT_LEARNABLE'};
+      syncLevels=recordLearnedArenaMove(syncState(),instanceId,moveId);savePort.markDirty();publishRaising();
+      return {ok:true,learned:learnedArenaMoveOf(syncLevels,instanceId)};
+    },
     /** The cap a title match or championship applies at the current tamer rank. */
     getSyncCap(){return syncCapForRank(tamerRankValue);},
     getSyncCrystals(){return normalizeSyncLevels(syncLevels).crystals;},
@@ -5723,7 +5742,10 @@ export function createChampionshipStandaloneApp({
         const supplyIds=sync?armedSupplies(tamerSupplies,instanceId):[];
         // 好心情 only where Sync applies, and capped with the commander line in title matches and tournaments.
         const moodCap=sync?talent('moodCapPercent',commanderTalentsFor(sync)):0;
+        // UNIFIED_MOVES_20261118: a learned Data Arena move joins its moves only where Sync applies (local battles).
+        const arenaMoveRecord=sync?arenaMoveRecordIndex(learnedArenaMoveOf(syncLevels,instanceId)):null;
         individuals.push({instanceId,nativeProfile:boostBattleProfile(nativeProfile,syncLevel,moodTier,supplyIds,moodCap),syncLevel,moodTier,supplyIds,moodCap,
+          ...(arenaMoveRecord!==null?{arenaMoveRecord}:{}),
           ...(fitting!==null?{burst:battleBurstPlanOf(instanceId,Object.freeze({form:fitting,tier:burstFormTier(fitting)}))}:{})});
       }
       return {ok:true,individuals};
