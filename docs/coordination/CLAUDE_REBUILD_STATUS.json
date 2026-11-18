@@ -507,10 +507,10 @@
       "ROM-derived art is research only"
     ],
     "git": {
-      "main": "873734ab (Merge PR #293)",
+      "main": "dd87250f (Merge PR #294)",
       "openPullRequests": [],
       "branchesInFlight": [
-        "feat/talent-tree-20261118"
+        "feat/journey-glance-20261118"
       ],
       "worktree": ".claude/worktrees/skill-scroll-20261117 (clean worktree cut from origin/main; the shared checkout holds other agents' uncommitted work and is not touched)"
     },
@@ -528,7 +528,7 @@
         "CHAMPIONSHIP_QA_ORIGIN=<isolated origin> node tests/championship-data-arena-browser.cjs",
         "CHAMPIONSHIP_QA_ORIGIN=<isolated origin> FAILS=1|3 node tests/championship-asset-503-recovery-browser.cjs"
       ],
-      "lastFullSuite": "3,964 / 3,964 on feat/talent-tree-20261118 (local, Windows, Node 24.18)",
+      "lastFullSuite": "3,966 / 3,966 on feat/journey-glance-20261118 (local, Windows, Node 24.18)",
       "ci": "PR #266 to #292: Claude's merged with all checks green, except #292 where 'Verify external character delivery / browser' was red for a reason outside the change: it has been red on main since PR #290 (another session), because 35 requests for the new Growth arena-fill atlases (GR01, GR17, GR27 ...) answer 404 on the live host; rerun, same result. Other reruns: the webkit evolution baseline control on #288 and #291, the hud (webkit) opening letter on #289",
       "report": "docs/reports/normal-entry-run-2026-11-18/REPORT_ZH_TW.md (the normal-entry run on main 806a49fb); docs/reports/ci-browser-checks-2026-11-17/REPORT_ZH_TW.md"
     },
@@ -790,9 +790,16 @@
       {
         "id": "TALENT_TREE",
         "source": "Owner 2026-11-18 (TALENT_TREE_20261118)",
-        "state": "IMPLEMENTED_LOCAL",
+        "state": "MERGED",
         "acceptance": "the talent screen is a tree of icons: a tap lights a node, a press-and-hold shows what it does, and the first layer has no sentence",
-        "evidence": "branch feat/talent-tree-20261118: tamerTalentPanel.js redrawn as a tree, 48 Codex icons art:ui:talent-icons:r1, tests/championship-talent-tree-cases.mjs; headless Chromium from the normal entry at 390x844 and 1366x768: 11 icons loaded per line, a 520 ms press wrote 「長息 +5 秒狩獵」 without learning, a tap lit the node and saved rank 1, a locked node refused with its reason, the commander tab showed its tree, no overflow, no touch target under 44 px, no page error; full suite 3,964 / 3,964, build and validate exit 0"
+        "evidence": "branch feat/talent-tree-20261118: tamerTalentPanel.js redrawn as a tree, 48 Codex icons art:ui:talent-icons:r1, tests/championship-talent-tree-cases.mjs; headless Chromium from the normal entry at 390x844 and 1366x768: 11 icons loaded per line, a 520 ms press wrote 「長息 +5 秒狩獵」 without learning, a tap lit the node and saved rank 1, a locked node refused with its reason, the commander tab showed its tree, no overflow, no touch target under 44 px, no page error; full suite 3,964 / 3,964, build and validate exit 0; PR #294 dd87250f, 9 of 10 checks green, the red one the external character delivery 404 (see tests.ci)"
+      },
+      {
+        "id": "JOURNEY_GLANCE",
+        "source": "Owner 2026-11-18 (TALENT_TREE_20261118: systems read at a glance)",
+        "state": "IMPLEMENTED_LOCAL",
+        "acceptance": "the Journey's purse, patrol pod, star rules and sparring rules read at a glance; sentences become accessible names or sit behind a ? key",
+        "evidence": "branch feat/journey-glance-20261118: crystal emblem purse, patrol pod as icon + crystal gauge + rate tag, three star chips, sparring rules behind a ? key; tests/championship-journey-glance-cases.mjs; headless Chromium from the normal entry: visible text on the sparring tab 113 to 73 characters, feed tab 102 to 84, tower 156 to 138; no page error; full suite 3,966 / 3,966, build and validate exit 0"
       }
     ],
     "decisionsForOwner": [

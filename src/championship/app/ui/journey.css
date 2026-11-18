@@ -185,3 +185,22 @@
 .cm-journey__tp-label { color: #b9fbff; font-size: calc(12px * var(--text-scale, 1)); font-weight: 900; font-variant-numeric: tabular-nums; }
 .cm-journey__tp-bar { position: relative; height: 10px; overflow: hidden; border-radius: 999px; background: rgba(0, 0, 0, 0.35); }
 .cm-journey__tp-bar > i { position: absolute; inset: 0; transform-origin: left center; background: linear-gradient(90deg, #2e8bff, #6ff7ff); }
+
+/* ---- JOURNEY_GLANCE_20261118: icons, gauges and chips in place of sentences ---- */
+.cm-journey__crystals { display: inline-flex; align-items: center; gap: 4px; }
+.cm-journey__pod-top { align-items: center; flex-wrap: nowrap; }
+.cm-journey__pod-top > .cm-talent-icon { flex: 0 0 auto; width: 40px; height: 40px; }
+.cm-journey__pod-top > .cm-journey__gauge { position: relative; flex: 1 1 auto; height: 22px; box-sizing: border-box; border: 2px solid #0e101a; border-radius: 999px; overflow: hidden; }
+.cm-journey__gauge-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 4px; color: #fff; font-weight: 900;
+  font-size: var(--fs-label, 12px); font-variant-numeric: tabular-nums; text-shadow: 0 1px 0 #0e101a, 0 0 3px rgba(14, 16, 26, 0.9); }
+.cm-journey__gauge[data-full="true"] { animation: cm-star-capped 1100ms ease-in-out infinite alternate; }
+.cm-journey__pod-rate { flex: 0 0 auto; padding: 1px 8px; border: 2px solid #0e101a; border-radius: 999px; background: rgba(14, 16, 26, 0.6); }
+.cm-journey__pod-held[hidden] { display: none; }
+.cm-journey__stars-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0; }
+.cm-journey__star-chip { display: inline-flex; align-items: center; gap: 4px; padding: 1px 9px; border: 2px solid #0e101a; border-radius: 999px; background: rgba(14, 16, 26, 0.6);
+  font-size: var(--fs-label, 12px); font-weight: 800; }
+.cm-journey__star-chip > b { color: #ffc531; letter-spacing: -1px; }
+.cm-journey__ask-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.cm-journey__ask { min-width: var(--cm-touch, 44px); min-height: var(--cm-touch, 44px); padding: 0; border-radius: 50%; font-weight: 900; }
+.cm-journey__practice-rule[hidden] { display: none; }
+:root[data-motion="reduced"] .cm-journey__gauge[data-full="true"] { animation: none; }
