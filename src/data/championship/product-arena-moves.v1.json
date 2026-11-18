@@ -1,0 +1,794 @@
+{
+  "schemaVersion": 1,
+  "kind": "PRODUCT_ARENA_MOVE_RECORDS",
+  "authority": "OWNER_APPROVED_ADAPTATION_20261118",
+  "generator": "scripts/build-product-arena-moves.mjs",
+  "note": "The Data Arena moves as auto-battle records: a donor native move's timing and effect banks, the move's own kind 1, power, cost, element and status. Learnable one per partner (local play only).",
+  "firstRecordIndex": 623,
+  "entries": [
+    {
+      "id": "arcBolt",
+      "recordIndex": 623,
+      "element": "storm",
+      "donorMoveRecord": 143,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 340,
+      "actionCost": 18,
+      "elementSelect": 5,
+      "statusCode": 0,
+      "names": [
+        "電弧針",
+        "Arc needle"
+      ]
+    },
+    {
+      "id": "arcFan",
+      "recordIndex": 624,
+      "element": "storm",
+      "donorMoveRecord": 143,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 220,
+      "actionCost": 26,
+      "elementSelect": 5,
+      "statusCode": 0,
+      "names": [
+        "雷芒扇",
+        "Arc fan"
+      ]
+    },
+    {
+      "id": "arcField",
+      "recordIndex": 625,
+      "element": "storm",
+      "donorMoveRecord": 143,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 360,
+      "actionCost": 28,
+      "elementSelect": 5,
+      "statusCode": 0,
+      "names": [
+        "靜電場",
+        "Static field"
+      ]
+    },
+    {
+      "id": "arcStorm",
+      "recordIndex": 626,
+      "element": "storm",
+      "donorMoveRecord": 66,
+      "ultimate": true,
+      "field0C": 2,
+      "power": 420,
+      "actionCost": 40,
+      "elementSelect": 5,
+      "statusCode": 0,
+      "names": [
+        "雷網穿刺",
+        "Arc storm"
+      ]
+    },
+    {
+      "id": "barkGuard",
+      "recordIndex": 627,
+      "element": "nature",
+      "donorMoveRecord": 99,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 150,
+      "actionCost": 20,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "樹皮盾",
+        "Bark Shield"
+      ]
+    },
+    {
+      "id": "boltDash",
+      "recordIndex": 628,
+      "element": "storm",
+      "donorMoveRecord": 368,
+      "ultimate": false,
+      "field0C": 1,
+      "power": 360,
+      "actionCost": 22,
+      "elementSelect": 5,
+      "statusCode": 0,
+      "names": [
+        "雷光突進",
+        "Bolt Dash"
+      ]
+    },
+    {
+      "id": "brutalCharge",
+      "recordIndex": 629,
+      "element": "neutral",
+      "donorMoveRecord": 71,
+      "ultimate": false,
+      "field0C": 1,
+      "power": 360,
+      "actionCost": 24,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "衝鋒",
+        "Brutal Charge"
+      ]
+    },
+    {
+      "id": "cinderGuard",
+      "recordIndex": 630,
+      "element": "fire",
+      "donorMoveRecord": 99,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 150,
+      "actionCost": 20,
+      "elementSelect": 1,
+      "statusCode": 0,
+      "names": [
+        "燼盾",
+        "Cinder Guard"
+      ]
+    },
+    {
+      "id": "clawSweep",
+      "recordIndex": 631,
+      "element": "neutral",
+      "donorMoveRecord": 63,
+      "ultimate": false,
+      "field0C": 1,
+      "power": 340,
+      "actionCost": 18,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "爪環掃擊",
+        "Claw Sweep"
+      ]
+    },
+    {
+      "id": "coreNova",
+      "recordIndex": 632,
+      "element": "fire",
+      "donorMoveRecord": 543,
+      "ultimate": true,
+      "field0C": 2,
+      "power": 420,
+      "actionCost": 40,
+      "elementSelect": 1,
+      "statusCode": 0,
+      "names": [
+        "熔核爆發",
+        "Core Nova"
+      ]
+    },
+    {
+      "id": "dawnLance",
+      "recordIndex": 633,
+      "element": "light",
+      "donorMoveRecord": 40,
+      "ultimate": true,
+      "field0C": 1,
+      "power": 420,
+      "actionCost": 40,
+      "elementSelect": 3,
+      "statusCode": 0,
+      "names": [
+        "曦冕審判",
+        "Dawn Lances"
+      ]
+    },
+    {
+      "id": "duskGuard",
+      "recordIndex": 634,
+      "element": "shadow",
+      "donorMoveRecord": 473,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 150,
+      "actionCost": 20,
+      "elementSelect": 4,
+      "statusCode": 0,
+      "names": [
+        "暮影盾",
+        "Dusk Veil"
+      ]
+    },
+    {
+      "id": "emberBolt",
+      "recordIndex": 635,
+      "element": "fire",
+      "donorMoveRecord": 60,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 280,
+      "actionCost": 18,
+      "elementSelect": 1,
+      "statusCode": 0,
+      "names": [
+        "餘燼彈",
+        "Cinder Shot"
+      ]
+    },
+    {
+      "id": "fangRush",
+      "recordIndex": 636,
+      "element": "fire",
+      "donorMoveRecord": 172,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 360,
+      "actionCost": 22,
+      "elementSelect": 1,
+      "statusCode": 0,
+      "names": [
+        "焰牙衝",
+        "Fang Rush"
+      ]
+    },
+    {
+      "id": "flameRing",
+      "recordIndex": 637,
+      "element": "fire",
+      "donorMoveRecord": 60,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 360,
+      "actionCost": 30,
+      "elementSelect": 1,
+      "statusCode": 0,
+      "names": [
+        "火環",
+        "Flame Ring"
+      ]
+    },
+    {
+      "id": "foamZone",
+      "recordIndex": 638,
+      "element": "water",
+      "donorMoveRecord": 411,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 340,
+      "actionCost": 24,
+      "elementSelect": 2,
+      "statusCode": 0,
+      "names": [
+        "泡沫區",
+        "Foam Field"
+      ]
+    },
+    {
+      "id": "frostFan",
+      "recordIndex": 639,
+      "element": "frost",
+      "donorMoveRecord": 219,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 210,
+      "actionCost": 22,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "晶霜扇",
+        "Crystal Fan"
+      ]
+    },
+    {
+      "id": "frostStep",
+      "recordIndex": 640,
+      "element": "frost",
+      "donorMoveRecord": 219,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 150,
+      "actionCost": 20,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "霜步",
+        "Frost Step"
+      ]
+    },
+    {
+      "id": "glacierGuard",
+      "recordIndex": 641,
+      "element": "frost",
+      "donorMoveRecord": 99,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 150,
+      "actionCost": 20,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "冰脊盾",
+        "Glacier Guard"
+      ]
+    },
+    {
+      "id": "grovePulse",
+      "recordIndex": 642,
+      "element": "nature",
+      "donorMoveRecord": 499,
+      "ultimate": true,
+      "field0C": 1,
+      "power": 420,
+      "actionCost": 40,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "森域震波",
+        "Grove pulse"
+      ]
+    },
+    {
+      "id": "haloPulse",
+      "recordIndex": 643,
+      "element": "light",
+      "donorMoveRecord": 109,
+      "ultimate": false,
+      "field0C": 1,
+      "power": 360,
+      "actionCost": 28,
+      "elementSelect": 3,
+      "statusCode": 0,
+      "names": [
+        "冕環震波",
+        "Halo Pulse"
+      ]
+    },
+    {
+      "id": "iceCage",
+      "recordIndex": 644,
+      "element": "frost",
+      "donorMoveRecord": 257,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 310,
+      "actionCost": 30,
+      "elementSelect": 0,
+      "statusCode": 3,
+      "names": [
+        "冰牢",
+        "Ice Cage"
+      ]
+    },
+    {
+      "id": "iceShard",
+      "recordIndex": 645,
+      "element": "frost",
+      "donorMoveRecord": 219,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 260,
+      "actionCost": 16,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "冰錐",
+        "Ice Shard"
+      ]
+    },
+    {
+      "id": "impactNova",
+      "recordIndex": 646,
+      "element": "physical",
+      "donorMoveRecord": 187,
+      "ultimate": true,
+      "field0C": 2,
+      "power": 420,
+      "actionCost": 40,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "崩環重擊",
+        "Impact nova"
+      ]
+    },
+    {
+      "id": "impactShot",
+      "recordIndex": 647,
+      "element": "physical",
+      "donorMoveRecord": 417,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 360,
+      "actionCost": 18,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "重壓彈",
+        "Impact shot"
+      ]
+    },
+    {
+      "id": "ironGuard",
+      "recordIndex": 648,
+      "element": "physical",
+      "donorMoveRecord": 99,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 150,
+      "actionCost": 20,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "鋼鐵盾",
+        "Iron Guard"
+      ]
+    },
+    {
+      "id": "leafFan",
+      "recordIndex": 649,
+      "element": "nature",
+      "donorMoveRecord": 380,
+      "ultimate": false,
+      "field0C": 1,
+      "power": 220,
+      "actionCost": 24,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "葉刃扇",
+        "Leaf fan"
+      ]
+    },
+    {
+      "id": "nightPulse",
+      "recordIndex": 650,
+      "element": "shadow",
+      "donorMoveRecord": 413,
+      "ultimate": true,
+      "field0C": 2,
+      "power": 420,
+      "actionCost": 40,
+      "elementSelect": 4,
+      "statusCode": 0,
+      "names": [
+        "夜幕震波",
+        "Night pulse"
+      ]
+    },
+    {
+      "id": "quakeSlam",
+      "recordIndex": 651,
+      "element": "neutral",
+      "donorMoveRecord": 88,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 360,
+      "actionCost": 26,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "重擊",
+        "Quake Slam"
+      ]
+    },
+    {
+      "id": "radiantDash",
+      "recordIndex": 652,
+      "element": "light",
+      "donorMoveRecord": 504,
+      "ultimate": false,
+      "field0C": 1,
+      "power": 360,
+      "actionCost": 22,
+      "elementSelect": 3,
+      "statusCode": 0,
+      "names": [
+        "曦光突進",
+        "Radiant Dash"
+      ]
+    },
+    {
+      "id": "rockGuard",
+      "recordIndex": 653,
+      "element": "earth",
+      "donorMoveRecord": 99,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 150,
+      "actionCost": 20,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "岩壁盾",
+        "Rock Wall"
+      ]
+    },
+    {
+      "id": "scatterLight",
+      "recordIndex": 654,
+      "element": "light",
+      "donorMoveRecord": 331,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 220,
+      "actionCost": 26,
+      "elementSelect": 3,
+      "statusCode": 0,
+      "names": [
+        "散光",
+        "Scatter Light"
+      ]
+    },
+    {
+      "id": "seedBolt",
+      "recordIndex": 655,
+      "element": "nature",
+      "donorMoveRecord": 380,
+      "ultimate": false,
+      "field0C": 1,
+      "power": 340,
+      "actionCost": 16,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "芽核彈",
+        "Seed bolt"
+      ]
+    },
+    {
+      "id": "shadeBolt",
+      "recordIndex": 656,
+      "element": "shadow",
+      "donorMoveRecord": 244,
+      "ultimate": false,
+      "field0C": 1,
+      "power": 340,
+      "actionCost": 18,
+      "elementSelect": 4,
+      "statusCode": 0,
+      "names": [
+        "影核彈",
+        "Shade bolt"
+      ]
+    },
+    {
+      "id": "shadeField",
+      "recordIndex": 657,
+      "element": "shadow",
+      "donorMoveRecord": 413,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 360,
+      "actionCost": 28,
+      "elementSelect": 4,
+      "statusCode": 0,
+      "names": [
+        "幽影領域",
+        "Shade field"
+      ]
+    },
+    {
+      "id": "shadeStep",
+      "recordIndex": 658,
+      "element": "shadow",
+      "donorMoveRecord": 244,
+      "ultimate": false,
+      "field0C": 1,
+      "power": 150,
+      "actionCost": 22,
+      "elementSelect": 4,
+      "statusCode": 0,
+      "names": [
+        "暗影滑步",
+        "Shade step"
+      ]
+    },
+    {
+      "id": "shardStorm",
+      "recordIndex": 659,
+      "element": "earth",
+      "donorMoveRecord": 240,
+      "ultimate": true,
+      "field0C": 2,
+      "power": 420,
+      "actionCost": 40,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "碎晶風暴",
+        "Shard Storm"
+      ]
+    },
+    {
+      "id": "shardVolley",
+      "recordIndex": 660,
+      "element": "earth",
+      "donorMoveRecord": 219,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 300,
+      "actionCost": 18,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "碎晶連射",
+        "Shard Volley"
+      ]
+    },
+    {
+      "id": "stormGuard",
+      "recordIndex": 661,
+      "element": "storm",
+      "donorMoveRecord": 99,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 150,
+      "actionCost": 20,
+      "elementSelect": 5,
+      "statusCode": 0,
+      "names": [
+        "電磁盾",
+        "Static Shield"
+      ]
+    },
+    {
+      "id": "sunShield",
+      "recordIndex": 662,
+      "element": "light",
+      "donorMoveRecord": 99,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 150,
+      "actionCost": 20,
+      "elementSelect": 3,
+      "statusCode": 0,
+      "names": [
+        "光盾",
+        "Sun Shield"
+      ]
+    },
+    {
+      "id": "sunSpear",
+      "recordIndex": 663,
+      "element": "light",
+      "donorMoveRecord": 497,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 360,
+      "actionCost": 22,
+      "elementSelect": 3,
+      "statusCode": 0,
+      "names": [
+        "光矛",
+        "Sun Spear"
+      ]
+    },
+    {
+      "id": "surfRush",
+      "recordIndex": 664,
+      "element": "water",
+      "donorMoveRecord": 204,
+      "ultimate": false,
+      "field0C": 1,
+      "power": 360,
+      "actionCost": 22,
+      "elementSelect": 2,
+      "statusCode": 0,
+      "names": [
+        "衝浪",
+        "Surf Rush"
+      ]
+    },
+    {
+      "id": "thornRush",
+      "recordIndex": 665,
+      "element": "nature",
+      "donorMoveRecord": 112,
+      "ultimate": false,
+      "field0C": 1,
+      "power": 340,
+      "actionCost": 22,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "棘刺突進",
+        "Thorn Rush"
+      ]
+    },
+    {
+      "id": "tideBolt",
+      "recordIndex": 666,
+      "element": "water",
+      "donorMoveRecord": 411,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 250,
+      "actionCost": 14,
+      "elementSelect": 2,
+      "statusCode": 0,
+      "names": [
+        "水彈",
+        "Tide Shot"
+      ]
+    },
+    {
+      "id": "tideGuard",
+      "recordIndex": 667,
+      "element": "water",
+      "donorMoveRecord": 99,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 150,
+      "actionCost": 20,
+      "elementSelect": 2,
+      "statusCode": 0,
+      "names": [
+        "水幕盾",
+        "Tide Veil"
+      ]
+    },
+    {
+      "id": "tideWave",
+      "recordIndex": 668,
+      "element": "water",
+      "donorMoveRecord": 411,
+      "ultimate": false,
+      "field0C": 2,
+      "power": 340,
+      "actionCost": 26,
+      "elementSelect": 2,
+      "statusCode": 0,
+      "names": [
+        "潮浪",
+        "Breaker"
+      ]
+    },
+    {
+      "id": "vineSnare",
+      "recordIndex": 669,
+      "element": "nature",
+      "donorMoveRecord": 347,
+      "ultimate": false,
+      "field0C": 1,
+      "power": 360,
+      "actionCost": 28,
+      "elementSelect": 0,
+      "statusCode": 0,
+      "names": [
+        "藤根束縛",
+        "Vine snare"
+      ]
+    },
+    {
+      "id": "vortex",
+      "recordIndex": 670,
+      "element": "water",
+      "donorMoveRecord": 94,
+      "ultimate": true,
+      "field0C": 2,
+      "power": 420,
+      "actionCost": 40,
+      "elementSelect": 2,
+      "statusCode": 0,
+      "names": [
+        "漩渦",
+        "Vortex"
+      ]
+    },
+    {
+      "id": "whiteout",
+      "recordIndex": 671,
+      "element": "frost",
+      "donorMoveRecord": 478,
+      "ultimate": true,
+      "field0C": 2,
+      "power": 420,
+      "actionCost": 40,
+      "elementSelect": 0,
+      "statusCode": 3,
+      "names": [
+        "白霧領域",
+        "Whiteout"
+      ]
+    }
+  ]
+}

@@ -22,6 +22,7 @@
 
 import {moveVfxSignature} from './moveVfxSignatures.js';
 import {MOVE_VFX_3D_PIECE_GROUP} from './moveVfxPieceSprites3dIndex.js';
+import {arenaMoveIdOfRecord} from '../../contracts/productArenaMoves.js';
 
 const entry = value => Object.freeze({...value, release: value.release ? Object.freeze(value.release) : null,
   contact: value.contact ? Object.freeze(value.contact) : null});
@@ -1316,7 +1317,9 @@ export const MOVE_VFX_CHOREOGRAPHY = Object.freeze({
  */
 export function moveVfxChoreography(moveId) {
   if (moveId === null || moveId === undefined) return null;
-  const key = typeof moveId === 'string' && moveId.startsWith('own-') ? Number(moveId.slice(4)) : moveId;
+  let key = typeof moveId === 'string' && moveId.startsWith('own-') ? Number(moveId.slice(4)) : moveId;
+  // a learned arena move in the auto battle (records 623+) plays as that arena move (UNIFIED_MOVES_20261118)
+  key = arenaMoveIdOfRecord(key) ?? key;
   let raw = MOVE_VFX_CHOREOGRAPHY[key] ?? null;
   if (!raw) return null;
   // UNIFIED_MOVES_20261118 U3: every species ultimate lands its own three.js piece (scripts/vfx/move-piece-3d-specs.mjs);

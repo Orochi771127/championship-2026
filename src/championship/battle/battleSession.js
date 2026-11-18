@@ -124,11 +124,16 @@ const SESSION_FIELDS = deepFreeze([
   // The two words at stats +0x12C and +0x130 that fill the candidate buckets,
   // and the four scalars AI selection reads alongside them.
   "source12C", "source130",
+  // a learned Data Arena move's record (UNIFIED_MOVES_20261118), present only when one is learned
+  "arenaMoveRecord",
   "sessionScalarIndex", "metricBase", "metricLimit", "pendingField24",
   // +0x5C, the action object currently claimed, and stats +0x8C, the speed the
   // rebuilt cooldown is computed from.
   "committedAction", "speedIndex"
 ]);
+
+// Session fields a combatant may leave out (a native combatant carries none of them).
+const OPTIONAL_SESSION_FIELDS = new Set(["arenaMoveRecord"]);
 
 function sessionError(message) {
   return new Error(`BATTLE_SESSION_${message}`);
@@ -168,6 +173,7 @@ export function createSessionCombatant(overrides = {}) {
     }
   }
   for (const key of SESSION_FIELDS) {
+    if (OPTIONAL_SESSION_FIELDS.has(key) && sessionFields[key] === undefined) continue;
     if (!Number.isSafeInteger(sessionFields[key])) {
       throw sessionError(`${key.toUpperCase()}_MUST_BE_AN_INTEGER`);
     }

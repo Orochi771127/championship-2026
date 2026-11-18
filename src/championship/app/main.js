@@ -2577,6 +2577,11 @@ async function mountCurrentScreen() {
         if (result.ok) autosave?.request('rename');
         return result.ok ? { ...result, entries: projectRoster() } : result;
       },
+      // UNIFIED_MOVES_20261118: learn a Data Arena move for the auto battle (local battles only).
+      arenaMoves: typeof app.getArenaMoveLearning === 'function' ? {
+        get: instanceId => app.getArenaMoveLearning(instanceId),
+        learn(instanceId, moveId) { const result = app.learnArenaMove(instanceId, moveId); if (result.ok) autosave?.request('arena-move'); return result; }
+      } : null,
       onRebirth(instanceId) {
         const result = app.rebirthRaisingPartner(instanceId);
         if (result.ok) autosave?.request('rebirth');
@@ -2841,7 +2846,9 @@ async function openGameplay({ beforeFirstMount = null } = {}) {
     globalThis.__championshipGachaQa = { grantTickets: (amount) => app.grantGachaTickets(amount, 'QA'), frame: () => app.getCyberGachaFrame() };
   // Loopback review only (?syncQa): crystal points and feeding, so the level-up panel can be checked.
   if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("syncQa"))
-    globalThis.__championshipSyncQa = { grant: (n) => app.grantSyncCrystals(n), feed: (id, n) => app.feedSyncCrystals(id, n), level: (id) => app.getSyncLevel(id), partners: () => app.getBattlePartyCandidates(null) };
+    globalThis.__championshipSyncQa = { grant: (n) => app.grantSyncCrystals(n), feed: (id, n) => app.feedSyncCrystals(id, n), level: (id) => app.getSyncLevel(id), partners: () => app.getBattlePartyCandidates(null),
+      // UNIFIED_MOVES_20261118: the learned arena move each local party member carries into battle
+      party: (ids) => app.prepareBattleParty(null, ids, { sync: { capped: false } }).then(p => p.ok ? p.individuals.map(i => i.arenaMoveRecord ?? null) : p) };
   // Loopback review only (?diamondQa): automation items into the bag, and the land / badge readouts.
   if (["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname) && new URLSearchParams(location.search).has("diamondQa"))
     globalThis.__championshipDiamondQa = { grant: (id, n = 1) => app.grantAutomationItem(id, n, 'QA'), cage: () => app.getCageEditFrame(),

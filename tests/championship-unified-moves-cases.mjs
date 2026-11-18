@@ -105,3 +105,89 @@ test('every move has its own icon, shipped as a 64 px WebP with a manifest (U2)'
   assert.equal(moveIconSrc('whiteout'), 'assets/production/ui/move-icons-r1/move_whiteout_64.webp');
   for (const f of manifest.files) assert.ok(fs.existsSync(new URL(`../${f.path}`, import.meta.url)), f.path);
 });
+
+test('the 49 Data Arena moves are auto-battle records that animate with a donor and play as their arena move (U1-2)', async () => {
+  const {listProductArenaMoveRecords, arenaMoveRecordIndex, arenaMoveIdOfRecord, PRODUCT_ARENA_MOVE_FIRST_RECORD} = await import('../src/championship/contracts/productArenaMoves.js');
+  const {getBattleCatalogRecord} = await import('../src/championship/battle/battleCatalogs.js');
+  const {battleMoveName} = await import('../src/championship/text/battleMoveNames.js');
+  const {RELAY_POOL_MOVE_ELEMENT} = await import('../src/championship/modes/dataArena/dataArenaRelayKits.js');
+  const {moveVfxSignature} = await import('../src/championship/presentation/vfx/moveVfxSignatures.js');
+  const {moveIconSrc} = await import('../src/championship/app/moveIcons.js');
+  const records = listProductArenaMoveRecords();
+  assert.equal(records.length, Object.keys(RELAY_POOL_MOVE_ELEMENT).length);
+  assert.equal(PRODUCT_ARENA_MOVE_FIRST_RECORD, 623);
+  for (const r of records) {
+    const id = arenaMoveIdOfRecord(r.recordIndex);
+    assert.equal(arenaMoveRecordIndex(id), r.recordIndex);
+    assert.equal(getBattleCatalogRecord('moves', r.recordIndex), r);
+    assert.equal(r.kind, 1);
+    assert.ok([1, 2].includes(r.field0C), `${id} files into a native bucket`);
+    assert.ok(r.power >= 150 && r.power <= 420 && r.actionCost >= 8 && r.actionCost <= 40, id);
+    assert.ok(Number.isInteger(r.productDonorRecord) && r.productDonorRecord > 30 && r.productDonorRecord < 596, id);
+    assert.ok(battleMoveName(r.recordIndex), `${id} has a name`);
+    assert.deepEqual(moveVfxChoreography(r.recordIndex), moveVfxChoreography(id));
+    assert.equal(moveVfxSignature(r.recordIndex), moveVfxSignature(id));
+    assert.equal(moveIconSrc(r.recordIndex), moveIconSrc(id));
+  }
+});
+
+test('a learned arena move joins a partner\'s moves only when it carries one; a native combatant is unchanged (U1-3)', async () => {
+  const {listMoveRecordsForCombatant} = await import('../src/championship/battle/battleCatalogs.js');
+  const {buildMoveBuckets} = await import('../src/championship/battle/battleMoveBuckets.js');
+  const {combatantFieldsFor} = await import('../src/championship/app/battleRosterSource.js');
+  const native = listMoveRecordsForCombatant({speciesId: 87, source12C: 0, source130: 0}).map(r => r.recordIndex);
+  const learned = listMoveRecordsForCombatant({speciesId: 87, source12C: 0, source130: 0, arenaMoveRecord: 632}).map(r => r.recordIndex);
+  assert.deepEqual(learned, [...native, 632]);
+  assert.deepEqual(listMoveRecordsForCombatant({speciesId: 87, source12C: 0, source130: 0, arenaMoveRecord: 9999}).map(r => r.recordIndex), native);
+  assert.ok(Object.values(buildMoveBuckets(listMoveRecordsForCombatant({speciesId: 87, source12C: 0, source130: 0, arenaMoveRecord: 632})).buckets).flat().some(e => e.actionId === 632));
+  const creature = {currentHp: 10, maxHp: 10, metricBase: 1, metricLimit: 1, source12C: 0, source130: 0, speciesId: 87};
+  assert.equal('arenaMoveRecord' in combatantFieldsFor(creature, 0), false);
+  assert.equal(combatantFieldsFor({...creature, arenaMoveRecord: 632}, 0).arenaMoveRecord, 632);
+});
+
+test('a partner learns one arena move in its sync record; a bad id is refused and null forgets it (U1-3)', async () => {
+  const {createSyncLevelState, recordLearnedArenaMove, learnedArenaMoveOf, normalizeSyncLevels} = await import('../src/championship/contracts/productSyncLevel.js');
+  let state = recordLearnedArenaMove(createSyncLevelState(), 'p1', 'whiteout');
+  assert.equal(learnedArenaMoveOf(state, 'p1'), 'whiteout');
+  assert.equal(learnedArenaMoveOf(recordLearnedArenaMove(state, 'p1', 'nonsense'), 'p1'), 'whiteout');
+  assert.equal(learnedArenaMoveOf(normalizeSyncLevels({...state, partners: {p1: {level: 1, exp: 0, rebirths: 0, arenaMove: 'nonsense'}}}), 'p1'), null);
+  state = recordLearnedArenaMove(state, 'p1', null);
+  assert.equal(learnedArenaMoveOf(state, 'p1'), null);
+  assert.equal('arenaMove' in normalizeSyncLevels(state).partners.p1, false);
+});
+
+test('a whole battle runs with learned arena moves, and the AI casts one (U1-3)', async () => {
+  const {createBattleRuntime} = await import('../src/championship/app/battleRuntime.js');
+  const {createNativeHuntIndividual} = await import('../src/championship/hunt/capture/nativeHuntIndividual.js');
+  const {nativeHuntSpeciesByIndex} = await import('../src/championship/hunt/capture/nativeHuntSources.js');
+  const {nativeIndividualProfile} = await import('../src/championship/raising/nativeIndividualProfile.js');
+  const individual = (id, species, seed, arenaMoveRecord = null) => {
+    const profile = structuredClone(nativeIndividualProfile(createNativeHuntIndividual({species: nativeHuntSpeciesByIndex(species), rng: {next: () => seed}})));
+    // a fresh capture has 10 TP; a seasoned partner can afford a special
+    profile.fields['054'] = 999; profile.fields['05c'] = 999;
+    return {instanceId: id, nativeProfile: profile, ...(arenaMoveRecord ? {arenaMoveRecord} : {})};
+  };
+  let cast = 0, ended = false;
+  for (const seed of [3, 7, 11]) {
+    const runtime = createBattleRuntime({mode: 5, battleType: 0, seed, aiPolicy: 'IMPROVED_V1',
+      playerIndividuals: [159, 148, 61].map((s, i) => individual('A' + i, s, seed + i, [635, 645, 646][i])),
+      opponentIndividuals: [124, 149, 186].map((s, i) => individual('B' + i, s, seed * 7 + i))});
+    runtime.choosePracticeBattle({arenaIndex: 2});
+    const source = runtime.startMatch();
+    const seen = new Set();
+    for (let t = 0; t < 12000 && !source.getView().outcome.ended; t++) {
+      source.tick();
+      for (const l of source.getView().nativeLifecycle?.active ?? []) if (l.moveId >= 623 && !seen.has(l)) { seen.add(l); cast++; }
+    }
+    ended ||= source.getView().outcome.ended;
+    runtime.dispose();
+  }
+  assert.ok(ended, 'a battle reaches its end');
+  assert.ok(cast > 0, 'a learned arena move is cast');
+});
+
+test('the arena move records are current with their generator', async () => {
+  const {execFileSync} = await import('node:child_process');
+  const out = execFileSync(process.execPath, ['scripts/build-product-arena-moves.mjs', '--check'], {cwd: new URL('..', import.meta.url), encoding: 'utf8'});
+  assert.match(out, /current/);
+});

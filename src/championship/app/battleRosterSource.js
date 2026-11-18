@@ -172,6 +172,8 @@ export function combatantFieldsFor(creature, slot, personalityPolicy = "BASELINE
     metricLimit: creature.metricLimit,
     source12C: creature.source12C,
     source130: creature.source130,
+    // A learned Data Arena move (UNIFIED_MOVES_20261118); absent, the combatant is exactly the native one.
+    ...(Number.isSafeInteger(creature.arenaMoveRecord) ? { arenaMoveRecord: creature.arenaMoveRecord } : {}),
     // Without this the session builds its move buckets for species 0 and every
     // combatant commits the same wrong action. battleMoveBuckets keys on it.
     speciesId: Number.isSafeInteger(creature.speciesId) ? creature.speciesId : 0,

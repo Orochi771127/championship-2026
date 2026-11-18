@@ -1,4 +1,5 @@
 import {productFormText} from '../text/productFormText.js';
+import { productArenaMoveRecord } from '../contracts/productArenaMoves.js';
 import {productBaseSpeciesIndex,isKnownSpeciesIndex,productSpeciesRecord} from '../contracts/productSpeciesData.js';
 import {isPlayableProductOriginal} from '../contracts/productOriginalSpecies.js';
 import {getProductExtension} from '../contracts/productSpeciesExtensions.js';
@@ -80,7 +81,9 @@ export function battlePartyAdmission(profile,recordIndex=null,{burstForms=[]}={}
 // ARM9 0x020924A0..0x020924B4 starts every team member's battle policy at 1;
 // the team-setup menu (0x020525A0 / 0x020525CC) is what changes it.
 export const BATTLE_PARTY_DEFAULT_TACTIC=1;
-export function buildOwnedBattleCreature({instanceId,nativeProfile,tactic=BATTLE_PARTY_DEFAULT_TACTIC}) {
+// UNIFIED_MOVES_20261118: `arenaMoveRecord`, a Data Arena move the partner learned (records 623+), joins its moves in
+// local battles only; password, link and online individuals never carry one.
+export function buildOwnedBattleCreature({instanceId,nativeProfile,tactic=BATTLE_PARTY_DEFAULT_TACTIC,arenaMoveRecord=null}) {
   const f=nativeProfile?.fields;
   if(typeof instanceId!=='string'||!f)throw new Error('BATTLE_PARTY_INDIVIDUAL_REQUIRED');
   if(!Number.isInteger(tactic)||tactic<0||tactic>3)throw new Error('BATTLE_PARTY_TACTIC_INVALID');
@@ -89,7 +92,8 @@ export function buildOwnedBattleCreature({instanceId,nativeProfile,tactic=BATTLE
     speciesId:read('000'),currentHp:read('050'),maxHp:read('058'),metricBase:read('05c'),metricLimit:read('054'),
     // Personality is read only by the ORIGINAL wiring; a baseline battle never
     // depends on it, so a missing value leaves that slot on the baseline.
-    source12C:read('12c'),source130:read('130'),...(Number.isInteger(f['018'])?{personality:f['018']}:{}),tactic,stats:{},levels:{}};
+    source12C:read('12c'),source130:read('130'),...(Number.isInteger(f['018'])?{personality:f['018']}:{}),tactic,stats:{},levels:{},
+    ...(productArenaMoveRecord(arenaMoveRecord)?{arenaMoveRecord}:{})};
   for(const entry of BATTLE_CREATURE_STAT_MAP){
     creature.stats[`field${entry.value.toString(16).toUpperCase().padStart(2,'0')}`]=read(entry.value.toString(16).padStart(3,'0'));
     if(entry.level!==null)creature.levels[entry.preset]=read(entry.level.toString(16).padStart(3,'0'));
