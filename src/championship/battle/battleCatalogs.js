@@ -45,6 +45,7 @@ import arenaDocument from "../../data/championship/catalogs/battle-arenas.r1.jso
 import eligibilityDocument from "../../data/championship/catalogs/battle-eligibility.r1.json" with { type: "json" };
 import moveDocument from "../../data/championship/catalogs/battle-moves.r1.json" with { type: "json" };
 import { productOriginalMoveRecord, listProductOriginalMoveRecords } from "../contracts/productOriginalSpecies.js";
+import { productArenaMoveRecord } from "../contracts/productArenaMoves.js";
 import opponentTeamDocument from "../../data/championship/catalogs/battle-opponent-teams.r1.json" with { type: "json" };
 import presetDocument from "../../data/championship/catalogs/battle-presets.r1.json" with { type: "json" };
 import titleEventDocument from "../../data/championship/catalogs/battle-title-events.r1.json" with { type: "json" };
@@ -114,7 +115,7 @@ export function listBattleCatalogRecords(name) {
 
 export function getBattleCatalogRecord(name, recordIndex) {
   // Playable original characters' moves continue after the cartridge's table (productOriginalSpecies.js).
-  const record = listBattleCatalogRecords(name)[recordIndex] ?? (name === "moves" ? productOriginalMoveRecord(recordIndex) : undefined);
+  const record = listBattleCatalogRecords(name)[recordIndex] ?? (name === "moves" ? productOriginalMoveRecord(recordIndex) ?? productArenaMoveRecord(recordIndex) : undefined);
   if (!record || record.recordIndex !== recordIndex) {
     throw catalogError(`UNKNOWN_RECORD: ${name}[${recordIndex}]`);
   }
@@ -171,5 +172,7 @@ export function listMoveRecordsForCombatant(combatant) {
   for(const id of [combatant.source12C,combatant.source130]){
     if(id!==undefined&&id!==0)moves.push(getBattleCatalogRecord('moves',id));
   }
+  // UNIFIED_MOVES_20261118: a learned Data Arena move joins the partner's own moves (local battles only).
+  if(Number.isSafeInteger(combatant.arenaMoveRecord)&&productArenaMoveRecord(combatant.arenaMoveRecord))moves.push(productArenaMoveRecord(combatant.arenaMoveRecord));
   return moves;
 }

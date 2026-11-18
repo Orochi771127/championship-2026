@@ -4,11 +4,16 @@
 // move by its id. The same icon serves the auto battle, the Data Arena and the Dex; an icon
 // that fails to load removes itself so the move's name beside it still reads on its own.
 
+import { arenaMoveIdOfRecord } from '../contracts/productArenaMoves.js';
+
 export const MOVE_ICON_BASE = 'assets/production/ui/move-icons-r1/';
 
 /** The icon key of a move id: a record index, an `own-<record>` arena id, or an arena move id. */
 export function moveIconKey(id) {
   if (typeof id === 'string' && id.startsWith('own-')) return Number(id.slice(4));
+  // a learned arena move's auto-battle record (623+) shows that arena move's icon
+  const arena = Number.isSafeInteger(id) ? arenaMoveIdOfRecord(id) : null;
+  if (arena) return arena;
   if (Number.isSafeInteger(id) || (typeof id === 'string' && /^[a-zA-Z]+$/.test(id))) return id;
   return null;
 }

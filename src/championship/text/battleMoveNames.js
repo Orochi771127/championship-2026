@@ -9,13 +9,16 @@
 // keep their own approved names in zhHant.js.
 import { getLocale } from "./locale.js";
 import { productOriginalMoveNames } from "../contracts/productOriginalSpecies.js";
+import { productArenaMoveNames } from "../contracts/productArenaMoves.js";
 
 const LOCALE_COLUMN = Object.freeze({ "zh-Hant": 0, en: 1, ja: 2, th: 3, vi: 4 });
 
 // Playable original characters' moves (records 596+) carry their own five names in
 // product-species-originals.r1.json.
+// The Data Arena's moves (records 623+, UNIFIED_MOVES_20261118) keep the arena's own names.
 export const BATTLE_MOVE_NAMES = Object.freeze({
   ...productOriginalMoveNames(),
+  ...productArenaMoveNames(),
   31: ["鈴芽頭槌", "Chime Headbutt", "鈴芽ずつき", "โขกหัวกระดิ่ง", "Húc Đầu Chuông"],
   32: ["清鈴波動", "Chime Wave", "清鈴ウェーブ", "คลื่นกระดิ่งใส", "Sóng Chuông Trong"],
   33: ["焰角頂", "Ember Butt", "焔角ツキ", "ขวิดเขาไฟ", "Húc Sừng Lửa"],
