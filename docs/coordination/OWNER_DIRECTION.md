@@ -1,5 +1,18 @@
 # Championship Owner Direction
 
+<!-- record-id: ROADMAP_R1B_LEVEL_UNLOCKS_20261118 -->
+## 2026-11-18 — Roadmap R1b: the tamer's level also opens the shop and the gates
+
+Under `TAMER_PROGRESSION_ROADMAP_20261118` (Owner handed over the tamer's progression; the crystals now raise the tamer, so the level has to open something).
+
+`OWNER_APPROVED_ADAPTATION`, decided by Claude under that hand-over:
+
+- A shop row, a hunt tool or a hunt gate that asks for a tamer rank opens at that rank or at the tamer level that stands for it: 5 levels a rank, Lv.45 = rank 9.
+- The title rank and everything else it gives are unchanged: title matches, ranch land, generation licence, Sync cap, burst tier. A badge lock still asks for the badge.
+- The lock copy names both roads; the rank overview and the talent panel say which level opens the next rank.
+
+Contract: `docs/contracts/championship/TAMER_TALENTS_20261117.json` (`levelUnlocksR1b`).
+
 <!-- record-id: ROADMAP_R1_CRYSTALS_FEED_TAMER_20261118 -->
 ## 2026-11-18 — Roadmap R1: the crystals raise the tamer
 

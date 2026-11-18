@@ -507,10 +507,10 @@
       "ROM-derived art is research only"
     ],
     "git": {
-      "main": "98f087e1 (Merge PR #287)",
+      "main": "75fc82a8 (Merge PR #288)",
       "openPullRequests": [],
       "branchesInFlight": [
-        "feat/roadmap-r1-crystals-tamer-20261118"
+        "feat/roadmap-r1b-level-unlocks-20261118"
       ],
       "worktree": ".claude/worktrees/skill-scroll-20261117 (clean worktree cut from origin/main; the shared checkout holds other agents' uncommitted work and is not touched)"
     },
@@ -528,8 +528,8 @@
         "CHAMPIONSHIP_QA_ORIGIN=<isolated origin> node tests/championship-data-arena-browser.cjs",
         "CHAMPIONSHIP_QA_ORIGIN=<isolated origin> FAILS=1|3 node tests/championship-asset-503-recovery-browser.cjs"
       ],
-      "lastFullSuite": "3,938 / 3,938 on feat/roadmap-r1-crystals-tamer-20261118 (local, Windows, Node 24.18)",
-      "ci": "PR #266 to #286: every one of Claude's merged with all checks green; another session merges into main in parallel",
+      "lastFullSuite": "3,943 / 3,943 on feat/roadmap-r1b-level-unlocks-20261118 (local, Windows, Node 24.18)",
+      "ci": "PR #266 to #288: every one of Claude's merged with all checks green (the webkit evolution baseline control needed one rerun on #288); another session merges into main in parallel",
       "report": "docs/reports/normal-entry-run-2026-11-18/REPORT_ZH_TW.md (the normal-entry run on main 806a49fb); docs/reports/ci-browser-checks-2026-11-17/REPORT_ZH_TW.md"
     },
     "checklist": [
@@ -723,17 +723,18 @@
       {
         "id": "ROADMAP_R1_CRYSTALS_TO_TAMER",
         "source": "docs/planning/TAMER_PROGRESSION_ROADMAP_2026-11-18_ZH_TW.md (Owner 2026-11-18)",
-        "state": "IMPLEMENTED_LOCAL",
+        "state": "VERIFIED_LIVE",
         "acceptance": "the Journey feed tab feeds the tamer; partners no longer take crystals; saved crystals untouched; battle Sync EXP stays; the crystal-to-EXP rate is sized against the tamer curve (137,370 EXP to Lv.50) and written in the contract",
         "owner": "Claude",
-        "evidence": "branch feat/roadmap-r1-crystals-tamer-20261118: feedTamerCrystals (1 crystal = 1 tamer EXP, one save, nothing past Lv.50), the partner feed refused, the Journey feed page is one tamer row; tests/championship-crystals-feed-tamer-cases.mjs; full suite 3,938 / 3,938, build and validate exit 0; headless Chromium from the normal entry with 5,000 crystals: one tamer row, one press Lv.1 -> Lv.2 with 4,960 saved, three more Lv.5 with 4,452, no page error"
+        "evidence": "branch feat/roadmap-r1-crystals-tamer-20261118: feedTamerCrystals (1 crystal = 1 tamer EXP, one save, nothing past Lv.50), the partner feed refused, the Journey feed page is one tamer row; tests/championship-crystals-feed-tamer-cases.mjs; full suite 3,938 / 3,938, build and validate exit 0; headless Chromium from the normal entry with 5,000 crystals: one tamer row, one press Lv.1 -> Lv.2 with 4,960 saved, three more Lv.5 with 4,452, no page error; PR #288 75fc82a8, all checks green; live pages-build commit 75fc82a8 (build c6db7fab) and CRYSTALS_FEED_TAMER / feedTamerCrystals in the live bundle"
       },
       {
         "id": "ROADMAP_R1B_LEVEL_UNLOCKS",
         "source": "docs/planning/TAMER_PROGRESSION_ROADMAP_2026-11-18_ZH_TW.md (Owner 2026-11-18)",
-        "state": "NOT_STARTED",
+        "state": "IMPLEMENTED_LOCAL",
         "acceptance": "shop and hunt gates read the higher of the title rank and a rank worked out from the tamer level; native title rules unchanged",
-        "owner": "Claude"
+        "owner": "Claude",
+        "evidence": "branch feat/roadmap-r1b-level-unlocks-20261118: a rank lock of the shop, the hunt tools and the gates also opens at 5 tamer levels a rank; tests/championship-tamer-level-unlocks-cases.mjs; full suite 3,943 / 3,943, build and validate exit 0; headless Chromium from the normal entry with the friends playtest off, title rank 0 and tamer Lv.10: rank 1-2 gates enterable, rank 3 gate reads the two-road lock line, shop locks start at rank 3, talent panel names Lv.15, no page error"
       },
       {
         "id": "ROADMAP_R2_EVOLUTION_LEVEL",
@@ -837,6 +838,6 @@
       "傳承 through the Hunt Result fusion panel in a browser (the ranch fusion was run)",
       "省彈 seen in a browser hunt (rule and source tests only)"
     ],
-    "nextAction": "Merge R0 (PR #287), then R1; then R1b (tamer level opens product unlocks), R2 (evolution level gate) and on through the roadmap; fetch main before every merge."
+    "nextAction": "Merge R1b; then R2 (evolution level gate), R3 (stars), R4 (skill-card hand), R5 (push mode), R6 (leftover talent nodes); fetch main before every merge."
   }
 }

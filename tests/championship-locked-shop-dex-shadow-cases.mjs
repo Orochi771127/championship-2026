@@ -43,7 +43,7 @@ test('reaching a rank moves its rows from locked to listed', () => {
 
 test('the lock line names the tamer rank or the title badge', () => {
   setLocale('zh-Hant');
-  assert.equal(shopUnlockText({ kind: 'TAMER_RANK_THRESHOLD', parameter: 1 }, { short: true }), `${tamerRankName(1)}開放`);
+  assert.equal(shopUnlockText({ kind: 'TAMER_RANK_THRESHOLD', parameter: 1 }, { short: true }), `${tamerRankName(1)}／Lv.5 開放`); // R1b: the tamer's level opens it too
   assert.match(shopUnlockText({ kind: 'TAMER_RANK_THRESHOLD', parameter: 1 }), new RegExp(tamerRankName(1)));
   const title = titleEventText(33, 'name');
   assert.match(shopUnlockText({ kind: 'BATTLE_BADGE_ID_0_BASED', parameter: 33 }, { short: true }), new RegExp(title));

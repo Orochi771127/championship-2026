@@ -128,6 +128,8 @@ function rankUnlockPanel(current) {
     : uiText("已達最高階級"));
   summary.append(preview);
   panel.append(summary);
+  // R1b: the shop and the hunt gates also open by the tamer's level.
+  panel.append(element("p", "cm-rank-unlocks__note", uiText("狩獵場、商店：馴獸師每 5 級也算 1 階")));
   const list = element("ol", "cm-rank-unlocks__list");
   for (const row of RANK_UNLOCKS) {
     const item = element("li", "cm-rank-unlocks__row");

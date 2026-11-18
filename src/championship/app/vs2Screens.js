@@ -120,7 +120,7 @@ function actionButton(label, { primary = false } = {}) {
 
 function gateAdmissionMessage(admission) {
   if (admission?.reason === "GATE_LOCKED") return admission.unlockKind === 1
-    ? uiText("馴獸師階級達到 {rank} 後開放。", { rank: admission.unlockParameter })
+    ? uiText("階級 {rank} 或馴獸師 Lv.{level} 開放。", { rank: admission.unlockParameter, level: admission.unlockLevel })
     : "取得對應比賽勝利後開放。";
   if (admission?.reason === "INSUFFICIENT_FUNDS") {
     return uiText("持有金額不足，入場需要 {bits} 位元幣。", { bits: admission.chargeBits });

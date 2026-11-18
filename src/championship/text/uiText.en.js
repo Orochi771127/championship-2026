@@ -1311,7 +1311,9 @@ export const TEXT_EN = Object.freeze({
   "輕觸畫面略過": "Tap to skip",
 
   // ---- Gate, loadout and hunt ------------------------------------------------------------------------
-  "馴獸師階級達到 {rank} 後開放。": "Opens at tamer rank {rank}.",
+  "階級 {rank} 或馴獸師 Lv.{level} 開放。": "Opens at rank {rank} or tamer Lv.{level}.",
+  "{rank}／Lv.{level} 開放": "{rank} / Lv.{level}",
+  "狩獵場、商店：馴獸師每 5 級也算 1 階": "Hunt gates and shop: every 5 tamer levels count as 1 rank",
   "取得對應比賽勝利後開放。": "Opens after you win the matching match.",
   "持有金額不足，入場需要 {bits} 位元幣。": "Not enough Bits. Entry costs {bits} Bits.",
   "選擇狩獵場": "Choose a hunting ground",
@@ -1404,7 +1406,7 @@ export const TEXT_EN = Object.freeze({
   "已達最高 {tier} 階": "Top tier {tier} reached",
   "{to} 尚未開放": "{to} not open yet",
   "{rank}開放": "Opens at {rank}",
-  "尚未開放：馴獸師階級達到「{rank}」後即可購買。": "Locked: reach tamer rank {rank} to buy it.",
+  "尚未開放：階級「{rank}」或馴獸師 Lv.{level}。": "Locked: rank {rank} or tamer Lv.{level}.",
   "贏得「{title}」開放": "Win {title} to open",
   "尚未開放：在頭銜賽贏得「{title}」徽章後即可購買。": "Locked: win the {title} badge in a title match to buy it.",
   "尚未開放。": "Not open yet.",

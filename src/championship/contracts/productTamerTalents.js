@@ -283,6 +283,25 @@ export function feedTamerCrystals(state, crystals, amount) {
   return { state: fed.state, spent: spend, gain: fed.gain };
 }
 
+// ---- The tamer's level also opens the shop and the gates (ROADMAP_R1B_20261118) ----
+//
+// A shop row or a hunt gate that asks for a tamer rank opens at that rank OR at the tamer level that stands for
+// it: every 5 levels count as one rank (Lv.5 = rank 1 ... Lv.45 = rank 9). Only the shop, the hunt tools and
+// the gates read this. The title matches, the ranch land, the generation licence, the Sync cap and the burst
+// tier keep reading the rank the titles gave.
+export const TAMER_LEVELS_PER_RANK = 5;
+export const TAMER_LEVEL_RANK_MAX = 9;
+/** The rank a tamer level stands for at the shop and the gates (0..9). */
+export function tamerLevelRank(level) {
+  const lv = Number.isFinite(level) ? Math.floor(level) : 0;
+  return Math.max(0, Math.min(TAMER_LEVEL_RANK_MAX, Math.floor(lv / TAMER_LEVELS_PER_RANK)));
+}
+/** The tamer level that stands for `rank` (rank 0 needs none). */
+export function tamerLevelForRank(rank) {
+  const r = Number.isFinite(rank) ? Math.floor(rank) : 0;
+  return Math.max(0, Math.min(TAMER_LEVEL_RANK_MAX, r)) * TAMER_LEVELS_PER_RANK;
+}
+
 /** A talent that is a chance: true when `roll` (in [0, 1)) falls under `percent`. No chance without the talent or a roll. */
 export function talentChance(percent, roll) {
   return Number.isFinite(percent) && percent > 0 && Number.isFinite(roll) && roll >= 0 && roll * 100 < Math.min(100, percent);
