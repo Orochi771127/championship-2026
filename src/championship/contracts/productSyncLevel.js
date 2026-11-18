@@ -53,6 +53,48 @@ export function syncCapForRank(rank) {
 const count = (value) => (Number.isSafeInteger(value) && value >= 0 ? Math.min(value, COUNT_MAX) : 0);
 const level = (value) => (Number.isSafeInteger(value) ? Math.max(1, Math.min(SYNC_LEVEL_MAX, value)) : 1);
 
+// ---- Stars (ROADMAP_R3_20261118, Owner 2026-11-18) ----
+//
+// 「同一隻合成的時候有機會提升一顆星的等級，最高是五星」, built as the Owner left it to Claude: a METER, not a
+// chance. Fusing a partner of the same species fills the base's star meter (a better grade fills more; a lower
+// stage of its own line fills a little, so a form no hunt gate holds can still rise). A full meter is one more
+// star, and every star lifts the Sync Level cap by ten: 1 star Lv.10 ... 5 stars Lv.50. Stars are played for and
+// are never in the gachapon. EXP a partner cannot take at its cap becomes crystals, as it always did at Lv.50.
+export const STAR_MAX = 5;
+export const STAR_LEVEL_STEP = 10;
+/** Points that fill the meter from this star to the next. */
+export const STAR_POINTS_NEEDED = deepFreeze({ 1: 6, 2: 10, 3: 16, 4: 24 });
+/** Points one fodder pays: its own species by grade, or a lower stage of the base's line. */
+export const STAR_FODDER_POINTS = deepFreeze({ SAME_SPECIES: { S: 4, A: 3, B: 2, C: 2 }, SAME_SPECIES_DEFAULT: 2, LOWER_STAGE: 1 });
+/** A fodder that had stars of its own hands over this share of the points it had gathered. */
+export const STAR_CARRIED_SHARE = 0.5;
+const starOfValue = (value) => (Number.isSafeInteger(value) ? Math.max(1, Math.min(STAR_MAX, value)) : 1);
+/** The Sync Level a partner of `star` stars can reach. */
+export function starLevelCap(star) {
+  return Math.min(SYNC_LEVEL_MAX, STAR_LEVEL_STEP * starOfValue(star));
+}
+/** The fewest stars a partner of `lv` must have (a save from before stars is read this way, so no level is lost). */
+export function starForLevel(lv) {
+  return starOfValue(Math.ceil(level(lv) / STAR_LEVEL_STEP));
+}
+/** Points still needed at `star` (0 at five stars). */
+export function starPointsNeeded(star) {
+  return STAR_POINTS_NEEDED[starOfValue(star)] ?? 0;
+}
+/** Points one fodder pays the base: `line` is 1 for the base's own species, less for a lower stage of its line. */
+export function starFodderPoints({ line = 0, grade = null } = {}) {
+  if (!(line > 0)) return 0;
+  if (line < 1) return STAR_FODDER_POINTS.LOWER_STAGE;
+  const id = typeof grade === "string" ? grade : grade?.grade;
+  return STAR_FODDER_POINTS.SAME_SPECIES[id] ?? STAR_FODDER_POINTS.SAME_SPECIES_DEFAULT;
+}
+/** Every point a partner has gathered: the meters it filled plus the one it is filling. */
+export function starTotalPoints(star, points = 0) {
+  let total = count(points);
+  for (let s = 1; s < starOfValue(star); s++) total += STAR_POINTS_NEEDED[s];
+  return total;
+}
+
 export function createSyncLevelState() {
   return { version: 1, partners: {}, crystals: 0 };
 }
@@ -69,14 +111,43 @@ export function normalizeSyncLevels(value) {
     const grade = normalizePartnerGrade(entry.grade);
     // UNIFIED_MOVES_20261118: the Data Arena move this partner learned for the auto battle (an arena move id)
     const arenaMove = typeof entry.arenaMove === "string" && arenaMoveRecordIndex(entry.arenaMove) !== null ? entry.arenaMove : null;
-    partners[id] = { level: lv, exp, rebirths: count(entry.rebirths), ...(grade ? { grade } : {}), ...(arenaMove ? { arenaMove } : {}) };
+    // ROADMAP_R3: stars and the meter. A record from before stars gets the stars its level needs.
+    const star = Math.max(starOfValue(entry.star), starForLevel(lv));
+    const starPoints = star >= STAR_MAX ? 0 : Math.min(count(entry.starPoints), STAR_POINTS_NEEDED[star] - 1);
+    partners[id] = { level: lv, exp: lv >= starLevelCap(star) ? 0 : exp, rebirths: count(entry.rebirths), ...(grade ? { grade } : {}), ...(arenaMove ? { arenaMove } : {}),
+      ...(star > 1 ? { star } : {}), ...(starPoints > 0 ? { starPoints } : {}) };
   }
   return { version: 1, partners, crystals: count(value.crystals) };
 }
 
 export function syncOf(state, instanceId) {
   const entry = normalizeSyncLevels(state).partners[instanceId];
-  return Object.freeze({ level: entry?.level ?? 1, exp: entry?.exp ?? 0, next: entry?.level >= SYNC_LEVEL_MAX ? 0 : syncExpRequired(entry?.level ?? 1) });
+  const star = entry?.star ?? 1;
+  return Object.freeze({ level: entry?.level ?? 1, exp: entry?.exp ?? 0, next: entry?.level >= SYNC_LEVEL_MAX ? 0 : syncExpRequired(entry?.level ?? 1),
+    // ROADMAP_R3: `capped` is true while more stars are needed before the next level.
+    star, starPoints: entry?.starPoints ?? 0, starNeed: starPointsNeeded(star), cap: starLevelCap(star),
+    capped: (entry?.level ?? 1) >= starLevelCap(star) && (entry?.level ?? 1) < SYNC_LEVEL_MAX });
+}
+
+/**
+ * Pay `points` into a partner's star meter. A full meter is one more star and the rest carries on.
+ * Returns the new state and `{before, after, gained}`; nothing changes at five stars or for no points.
+ */
+export function grantStarPoints(state, instanceId, points) {
+  const current = normalizeSyncLevels(state);
+  const before = current.partners[instanceId] ?? { level: 1, exp: 0, rebirths: 0 };
+  let star = before.star ?? 1, held = before.starPoints ?? 0, left = count(Math.round(points));
+  const from = { star, points: held, need: starPointsNeeded(star) };
+  while (left > 0 && star < STAR_MAX) {
+    const need = STAR_POINTS_NEEDED[star] - held;
+    if (left < need) { held += left; left = 0; break; }
+    left -= need; star += 1; held = 0;
+  }
+  if (star >= STAR_MAX) held = 0;
+  const { star: _star, starPoints: _points, ...rest } = before;
+  const after = { ...rest, ...(star > 1 ? { star } : {}), ...(held > 0 ? { starPoints: held } : {}) };
+  return { state: { ...current, partners: { ...current.partners, [instanceId]: after } },
+    gain: deepFreeze({ instanceId, points: count(Math.round(points)), before: from, after: { star, points: held, need: starPointsNeeded(star) }, gained: star - from.star }) };
 }
 
 /** A partner's saved grade (null for a partner caught before grades, hatched or from the gachapon). */
@@ -175,9 +246,11 @@ export function reconcileSyncRebirth(state, instanceId, rebirthCount) {
 export function grantSyncExp(state, instanceId, amount) {
   const current = normalizeSyncLevels(state);
   const before = current.partners[instanceId] ?? { level: 1, exp: 0, rebirths: 0 };
+  // ROADMAP_R3: a partner levels up to its stars' cap; what it cannot take becomes crystals.
+  const cap = starLevelCap(before.star ?? 1);
   let lv = before.level, exp = before.exp, left = count(Math.round(amount)), overflow = 0;
   while (left > 0) {
-    if (lv >= SYNC_LEVEL_MAX) { overflow += left; left = 0; break; }
+    if (lv >= cap) { overflow += left; left = 0; exp = 0; break; }
     const need = syncExpRequired(lv) - exp;
     if (left < need) { exp += left; left = 0; break; }
     left -= need; lv += 1; exp = 0;
@@ -190,6 +263,7 @@ export function grantSyncExp(state, instanceId, amount) {
       instanceId, amount: count(Math.round(amount)), overflow,
       before: { level: before.level, exp: before.exp, next: before.level >= SYNC_LEVEL_MAX ? 0 : syncExpRequired(before.level) },
       after: { level: lv, exp, next: lv >= SYNC_LEVEL_MAX ? 0 : syncExpRequired(lv) },
+      cap, capped: lv >= cap && lv < SYNC_LEVEL_MAX,
       breakthroughs: SYNC_BREAKTHROUGHS.filter((entry) => entry.level > before.level && entry.level <= lv).map((entry) => entry.id),
       vitalPercent: { before: syncVitalPercent(before.level), after: syncVitalPercent(lv) }
     })
@@ -262,7 +336,14 @@ export function fuseSyncPartners(state, baseId, fodders, { bonusPercent = 0 } = 
   if (typeof baseId !== "string" || !baseId || !Array.isArray(fodders) || fodders.length < 1 || fodders.length > FUSION_MAX_FODDER) return null;
   if (fodders.some((fodder) => !(fodder?.line > 0) || fodder.instanceId === baseId)) return null;
   const before = syncOf(current, baseId), gains = [];
-  let total = 0, overflow = 0;
+  let total = 0, overflow = 0, starPoints = 0;
+  // ROADMAP_R3: every fodder's star points first, so a star they give together already lifts the cap for all
+  // their EXP and the order the fodder are picked in never wastes any.
+  for (const fodder of fodders) {
+    const own = fodder.instanceId ? current.partners[fodder.instanceId] : null;
+    starPoints += starFodderPoints(fodder) + (fodder.line >= 1 && own ? Math.floor(starTotalPoints(own.star ?? 1, own.starPoints ?? 0) * STAR_CARRIED_SHARE) : 0);
+  }
+  if (starPoints > 0) current = grantStarPoints(current, baseId, starPoints).state;
   for (const fodder of fodders) {
     const carried = fodder.instanceId ? syncTotalExp(current, fodder.instanceId) : 0;
     const amount = fusionExp({ required: syncExpRequired(syncOf(current, baseId).level), grade: fodder.grade ?? null, line: fodder.line, carried, bonusPercent });
@@ -275,8 +356,10 @@ export function fuseSyncPartners(state, baseId, fodders, { bonusPercent = 0 } = 
     gains.push(granted.gain); total += amount; overflow += granted.gain.overflow;
   }
   const after = syncOf(current, baseId);
-  return { state: current, gains, total, overflow,
+  return { state: current, gains, total, overflow, starPoints,
     summary: deepFreeze({ instanceId: baseId, amount: total, overflow, before, after,
+      stars: { points: starPoints, gained: after.star - before.star,
+        before: { star: before.star, points: before.starPoints, need: before.starNeed }, after: { star: after.star, points: after.starPoints, need: after.starNeed } },
       breakthroughs: gains.flatMap((gain) => gain.breakthroughs),
       vitalPercent: { before: syncVitalPercent(before.level), after: syncVitalPercent(after.level) } }) };
 }

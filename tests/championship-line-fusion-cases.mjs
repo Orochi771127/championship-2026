@@ -36,6 +36,9 @@ test('one B fodder of the base species pays a quarter of the level, as the plan 
   assert.equal(fusionExp({required, grade: 'B', line: 0}), 0);
 });
 
+// ROADMAP_R3_20261118: the Sync record also carries the stars; these cases read the level part of it.
+const levelOf = sync => ({level: sync.level, exp: sync.exp, next: sync.next});
+
 test('each fodder is paid on the level the base has at that moment, and a saved fodder loses its record', () => {
   const state = {version: 1, crystals: 0, partners: {base: {level: 1, exp: 0, rebirths: 0}, old: {level: 3, exp: 10, rebirths: 0, grade: S_GRADE}}};
   assert.equal(syncTotalExp(state, 'old'), syncExpRequired(1) + syncExpRequired(2) + 10);
@@ -46,7 +49,9 @@ test('each fodder is paid on the level the base has at that moment, and a saved 
     while (gain > 0) { const need = syncExpRequired(level) - exp; if (gain < need) { exp += gain; gain = 0; } else { gain -= need; level += 1; exp = 0; } }
   }
   assert.equal(fused.total, total);
-  assert.deepEqual(syncOf(fused.state, 'base'), {level, exp, next: syncExpRequired(level)});
+  assert.deepEqual(levelOf(syncOf(fused.state, 'base')), {level, exp, next: syncExpRequired(level)});
+  // R3: S same species 4 + ungraded same species 2 + a lower stage 1 = 7 points: one star (6) and 1 over.
+  assert.deepEqual([fused.starPoints, syncOf(fused.state, 'base').star, syncOf(fused.state, 'base').starPoints], [7, 2, 1]);
   assert.equal(fused.state.partners.old, undefined, 'the fodder has no Sync record left');
   assert.deepEqual(state.partners.old.grade, S_GRADE, 'the input state is not changed');
   assert.equal(fused.summary.amount, total); assert.equal(fused.summary.before.level, 1); assert.equal(fused.summary.after.level, level);
@@ -145,7 +150,7 @@ test('fusing pays the base, removes the fodder and their records, keeps the Dex,
     assert.deepEqual(done.fused, [idOf(2), idOf(3)]);
     const roster = app.getRaisingInstances().map(entry => entry.instanceId);
     assert.ok(roster.includes(idOf(1)) && !roster.includes(idOf(2)) && !roster.includes(idOf(3)));
-    assert.deepEqual(app.getSyncLevel(idOf(1)), {level: expected.after.level, exp: expected.after.exp, next: expected.after.next});
+    assert.deepEqual(levelOf(app.getSyncLevel(idOf(1))), {level: expected.after.level, exp: expected.after.exp, next: expected.after.next});
     assert.equal(app.getPartnerGrade(idOf(2)), null);
     assert.deepEqual(registered(), dexBefore, 'a fused species stays registered');
     const save = saved();
@@ -156,7 +161,7 @@ test('fusing pays the base, removes the fodder and their records, keeps the Dex,
     reloaded = make();
     await reloaded.continueGame();
     assert.deepEqual(reloaded.getRaisingInstances().map(entry => entry.instanceId), roster);
-    assert.deepEqual(reloaded.getSyncLevel(idOf(1)), {level: expected.after.level, exp: expected.after.exp, next: expected.after.next});
+    assert.deepEqual(levelOf(reloaded.getSyncLevel(idOf(1))), {level: expected.after.level, exp: expected.after.exp, next: expected.after.next});
   } finally { await (reloaded ?? app).dispose(); }
 });
 
@@ -258,10 +263,10 @@ test('a catch fused on the Hunt Result never comes Home, and its EXP is paid by 
     assert.equal(base.fusionGain.amount, preview.amount);
     assert.equal(base.canRelease, false, 'a partner promised EXP can no longer be released on this screen');
     assert.deepEqual(saved(), saveBefore, 'nothing is written before the Home commit');
-    assert.deepEqual(app.getSyncLevel(idOf(2)), {level: 5, exp: 0, next: syncExpRequired(5)});
+    assert.deepEqual(levelOf(app.getSyncLevel(idOf(2))), {level: 5, exp: 0, next: syncExpRequired(5)});
     await app.confirmHuntResult();
     assert.deepEqual(app.getRaisingInstances().map(entry => entry.instanceId), before, 'no new resident');
-    assert.deepEqual(app.getSyncLevel(idOf(2)), {level: preview.after.level, exp: preview.after.exp, next: preview.after.next});
+    assert.deepEqual(levelOf(app.getSyncLevel(idOf(2))), {level: preview.after.level, exp: preview.after.exp, next: preview.after.next});
     assert.equal(saved().progression.syncLevels.partners[idOf(2)].exp, preview.after.exp);
     assert.equal(app.getHuntResult(), null);
   } finally { await app.dispose(); }

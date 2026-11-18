@@ -399,6 +399,20 @@
   .cm-cer-hint { display: none; }
 }
 
+/* ---- 6. Star-up (moment over the roster, ROADMAP_R3_20261118) ------------- */
+/* 升星: the partner cheers on the rays while its new star is stamped into the row. */
+.cm-ceremony[data-kind="star-up"] {
+  background: radial-gradient(60% 45% at 50% 40%, rgba(255, 197, 49, 0.4) 0%, transparent 70%), rgba(14, 16, 26, 0.8);
+  animation: cm-cer-fade 240ms linear backwards;
+}
+.cm-cer-starup__stars { display: flex; justify-content: center; padding: 6px 12px; border: 2px solid #0e101a; border-radius: 999px; background: rgba(14, 16, 26, 0.82);
+  animation: cm-cer-pop 380ms var(--ease-spring) backwards 260ms; }
+.cm-cer-starup__stars .cm-stars { gap: 6px; }
+.cm-cer-starup__stars .cm-stars__cell[data-new="true"] { animation: cm-star-stamp 620ms var(--ease-spring) backwards calc(760ms + var(--i) * 150ms); }
+.cm-cer-starup .cm-cer-plate { animation-delay: 1180ms; }
+.cm-cer-starup .cm-cer-kicker { color: var(--c-gold-strong); }
+.cm-ceremony[data-motion="reduced"] .cm-stars__cell { animation: none; }
+
 /* Reduced motion also keeps the two sides of the versus card still on exit
    (that exit rule is more specific than the general stop above). */
 .cm-ceremony[data-motion="reduced"][data-kind="versus"] .cm-cer-versus__side { animation: none; }

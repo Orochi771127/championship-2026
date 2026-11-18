@@ -288,7 +288,7 @@ export function createHuntResultView({ root, source, hudArt = null }) {
         name.textContent = base.displayName;
         const preview = base.preview;
         gain.textContent = preview
-          ? `Lv.${preview.before.level} → Lv.${preview.after.level} · +${preview.amount.toLocaleString("en-US")} EXP${base.line < 1 ? " · ×0.6" : ""}${preview.inherit?.length ? " · " + uiText("FUSION_INHERIT", { n: preview.inherit.length }) : ""}`
+          ? `Lv.${preview.before.level} → Lv.${preview.after.level} · +${preview.amount.toLocaleString("en-US")} EXP${base.line < 1 ? " · ×0.6" : ""}${preview.stars?.gained > 0 ? " · " + uiText("FUSION_STAR_UP", { before: preview.stars.before.star, after: preview.stars.after.star }) : preview.stars?.points > 0 && preview.stars.after.need > 0 ? " · " + uiText("STAR_METER", { points: preview.stars.after.points, need: preview.stars.after.need }) : ""}${preview.inherit?.length ? " · " + uiText("FUSION_INHERIT", { n: preview.inherit.length }) : ""}`
           : "";
         pick.append(name, gain);
         pick.disabled = !preview;

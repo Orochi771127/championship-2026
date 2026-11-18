@@ -892,6 +892,76 @@ dialog.cm-dialog[open] { animation: cm-pop var(--dur-base) var(--ease-spring); }
 .cm-digimon-fusion__name { font-weight: 800; min-width: 0; overflow-wrap: anywhere; }
 .cm-digimon-fusion__facts { font-variant-numeric: tabular-nums; font-weight: 800; white-space: nowrap; }
 .cm-digimon-fusion__warning { grid-column: 2 / -1; color: #b45309; font-weight: 800; font-size: var(--fs-label); }
+/* ---- Partner stars (ROADMAP_R3_20261118) -----------------------------------
+   The emblem, the row of five, the star meter and the level gauge are drawn by
+   presentation/starEmblemArt.js. Thick ink outline and gold body: the arcade
+   key language. Travel is one-shot (a stamp); what loops is opacity or glow
+   only, so nothing a player presses ever moves under the finger. */
+.cm-star { display: block; overflow: visible; filter: drop-shadow(0 2px 0 rgba(14, 16, 26, 0.6)); }
+.cm-star__body { fill: #ffc531; stroke: #0e101a; stroke-width: 1.9; stroke-linejoin: round; paint-order: stroke; }
+.cm-star__facet { fill: #ffe98a; }
+.cm-star__glint { fill: none; stroke: #fff; stroke-width: 1.5; stroke-linecap: round; opacity: 0.92; }
+.cm-star[data-on="false"] { filter: none; }
+.cm-star[data-on="false"] .cm-star__body { fill: rgba(14, 16, 26, 0.42); stroke: rgba(255, 255, 255, 0.3); stroke-width: 1.4; }
+/* The sticker art carries its own outline and shadow; the socket is lifted a little so it reads on a dark plate. */
+img.cm-star { object-fit: contain; filter: none; user-select: none; -webkit-user-drag: none; }
+img.cm-star[data-on="false"] { filter: brightness(1.9) saturate(0.6); opacity: 0.8; }
+.cm-stars { display: inline-flex; align-items: center; gap: 2px; vertical-align: middle; line-height: 0; }
+.cm-stars__cell { position: relative; }
+.cm-stars__burst { position: absolute; left: 50%; top: 50%; width: 230%; height: 230%; margin: -115% 0 0 -115%; pointer-events: none; opacity: 0;
+  animation: cm-star-burst 760ms ease-out backwards calc(760ms + var(--i) * 150ms); }
+@keyframes cm-star-burst { 0% { opacity: 0; transform: scale(0.4) rotate(-20deg); } 30% { opacity: 1; transform: scale(1.05) rotate(0deg); } 100% { opacity: 0; transform: scale(1.3) rotate(8deg); } }
+.cm-stars__cell { display: grid; place-items: center; }
+.cm-stars__cell[data-new="true"] { animation: cm-star-stamp 540ms var(--ease-spring, cubic-bezier(0.2, 1.4, 0.4, 1)) backwards calc(var(--i) * 110ms); }
+.cm-stars__cell[data-ghost="true"] { animation: cm-star-ghost 720ms ease-in-out infinite alternate; }
+@keyframes cm-star-stamp { 0% { opacity: 0; transform: scale(2.8) rotate(-32deg); } 62% { opacity: 1; transform: scale(0.84) rotate(6deg); } }
+@keyframes cm-star-ghost { from { opacity: 0.3; } to { opacity: 0.95; } }
+@keyframes cm-star-capped { from { box-shadow: 0 0 0 2px #ffc531, 0 0 4px rgba(255, 197, 49, 0.35); } to { box-shadow: 0 0 0 2px #ffe98a, 0 0 14px rgba(255, 197, 49, 0.85); } }
+@keyframes cm-star-flash { 0% { filter: brightness(2.4) saturate(1.4); } 100% { filter: none; } }
+
+.cm-star-meter { position: relative; display: inline-block; width: 104px; height: 14px; box-sizing: border-box; overflow: hidden; vertical-align: middle;
+  border: 2px solid #0e101a; border-radius: 999px; background: rgba(14, 16, 26, 0.6); }
+.cm-star-meter > i { position: absolute; inset: 0; display: block; }
+.cm-star-meter__fill { transform-origin: left center; transform: scaleX(var(--fill, 0)); background: linear-gradient(#ffe98a, #ffc531 55%, #f08a1c);
+  transition: transform 460ms var(--ease-spring, ease-out); }
+.cm-star-meter__ahead { left: calc(var(--fill, 0) * 100%) !important; right: auto !important; width: calc(var(--ahead, 0) * 100%);
+  background: repeating-linear-gradient(135deg, rgba(255, 233, 138, 0.95) 0 4px, rgba(255, 197, 49, 0.35) 4px 8px); animation: cm-star-ghost 720ms ease-in-out infinite alternate; }
+.cm-star-meter__ticks { background: repeating-linear-gradient(90deg, transparent 0 calc(100% / var(--notches, 1) - 1.5px), rgba(14, 16, 26, 0.75) calc(100% / var(--notches, 1) - 1.5px) calc(100% / var(--notches, 1))); }
+.cm-star-meter[data-full="true"] .cm-star-meter__ticks { display: none; }
+
+.cm-star-gauge { position: relative; display: inline-flex; align-items: baseline; gap: 1px; min-width: 78px; height: 22px; padding: 0 9px; box-sizing: border-box; overflow: hidden;
+  border: 2px solid #0e101a; border-radius: 999px; background: rgba(14, 16, 26, 0.6); color: #fff; font-weight: 900; font-variant-numeric: tabular-nums; vertical-align: middle; }
+.cm-star-gauge__fill { position: absolute; inset: 0; transform-origin: left center; transform: scaleX(var(--fill, 0)); background: linear-gradient(#7af0d6, #1fb89a);
+  transition: transform 460ms var(--ease-spring, ease-out); }
+.cm-star-gauge__label, .cm-star-gauge__cap { position: relative; line-height: 18px; text-shadow: 0 1px 0 #0e101a, 0 0 3px rgba(14, 16, 26, 0.9); }
+.cm-star-gauge__label { font-size: var(--fs-label, 12px); }
+.cm-star-gauge__cap { font-size: calc(var(--fs-label, 12px) * 0.84); opacity: 0.92; }
+.cm-star-gauge[data-capped="true"] { animation: cm-star-capped 1100ms ease-in-out infinite alternate; }
+.cm-star-gauge[data-capped="true"] .cm-star-gauge__fill { background: linear-gradient(#ffe98a, #ffc531 60%, #f08a1c); }
+
+/* The roster strip: stars, the level against its cap, the meter to the next star. */
+.cm-digimon-controls > .cm-digimon-star:not([hidden]) { flex: 1 0 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; box-sizing: border-box; margin: 0;
+  padding: 7px 12px; border: 2px solid #0e101a; border-radius: 14px; background: rgba(14, 16, 26, 0.8); color: #fff; }
+.cm-digimon-star__next { display: inline-flex; align-items: center; gap: 5px; font-size: calc(var(--fs-label, 12px) * 0.92); font-weight: 900; font-variant-numeric: tabular-nums; }
+.cm-digimon-star[data-flash="true"] .cm-stars { animation: cm-star-flash 620ms ease-out; }
+/* The roster scrolls: its star-up moment plays on a layer pinned to the screen. */
+.cm-digimon-starstage { position: fixed; inset: 0; z-index: var(--z-lifecycle); pointer-events: none; }
+.cm-digimon-starstage > .cm-ceremony { pointer-events: auto; }
+/* What a fusion would give, drawn above the words. */
+.cm-digimon-fusion__viz:not([hidden]) { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: 0; padding: 7px 10px; border: 2px solid #0e101a; border-radius: 12px; background: rgba(14, 16, 26, 0.8); color: #fff; }
+.cm-digimon-fusion__arrow { font-weight: 900; color: #ffe98a; }
+/* The ranch card: small stars beside the name. */
+.int-rh2-companion__stars:not([hidden]) { display: inline-flex; align-items: center; gap: 2px; flex: 0 0 auto; padding: 1px 7px 1px 4px; border: 2px solid #0e101a; border-radius: 999px;
+  background: rgba(14, 16, 26, 0.82); color: #ffe98a; font-weight: 900; font-size: var(--fs-label, 12px); line-height: 16px; font-variant-numeric: tabular-nums; }
+
+:root[data-motion="reduced"] :is(.cm-stars__cell, .cm-star-meter__ahead, .cm-star-gauge) { animation: none; }
+:root[data-motion="reduced"] .cm-stars__burst { display: none; }
+:root[data-motion="reduced"] :is(.cm-star-meter__fill, .cm-star-gauge__fill) { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion="full"]) :is(.cm-stars__cell, .cm-star-meter__ahead, .cm-star-gauge) { animation: none; }
+  :root:not([data-motion="full"]) :is(.cm-star-meter__fill, .cm-star-gauge__fill) { transition: none; }
+}
+
 .cm-digimon-fusion__preview { margin: 0; min-height: 1.4em; font-weight: 900; font-variant-numeric: tabular-nums; }
 .cm-digimon-fusion__empty { margin: 0; }
 /* Tamer talent tree (TAMER_TALENTS_20261117): level and points on top, four lines of nodes, numbers first. */

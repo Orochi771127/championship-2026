@@ -657,6 +657,11 @@
         "id": "ROADMAP_R1_CRYSTALS_TO_TAMER",
         "state": "VERIFIED_LIVE",
         "evidence": "branch feat/roadmap-r1-crystals-tamer-20261118: feedTamerCrystals (1 crystal = 1 tamer EXP, one save, nothing past Lv.50), the partner feed refused, the Journey feed page is one tamer row; tests/championship-crystals-feed-tamer-cases.mjs; full suite 3,938 / 3,938, build and validate exit 0; headless Chromium from the normal entry with 5,000 crystals: one tamer row, one press Lv.1 -> Lv.2 with 4,960 saved, three more Lv.5 with 4,452, no page error; PR #288 75fc82a8, all checks green; live pages-build commit 75fc82a8 (build c6db7fab) and CRYSTALS_FEED_TAMER / feedTamerCrystals in the live bundle"
+      },
+      {
+        "id": "ROADMAP_R1B_LEVEL_UNLOCKS",
+        "state": "VERIFIED_LIVE",
+        "evidence": "branch feat/roadmap-r1b-level-unlocks-20261118: a rank lock of the shop, the hunt tools and the gates also opens at 5 tamer levels a rank; tests/championship-tamer-level-unlocks-cases.mjs; full suite 3,943 / 3,943, build and validate exit 0; headless Chromium from the normal entry with the friends playtest off, title rank 0 and tamer Lv.10: rank 1-2 gates enterable, rank 3 gate reads the two-road lock line, shop locks start at rank 3, talent panel names Lv.15, no page error; PR #289 63beaf0f, all checks green after one rerun of hud (webkit); live pages-build commit 63beaf0f (build 8032327b)"
       }
     ],
     "openForClaude": [
@@ -669,16 +674,12 @@
         "state": "PARTLY_DONE"
       },
       {
-        "id": "ROADMAP_R1B_LEVEL_UNLOCKS",
+        "id": "ROADMAP_R2_EVOLUTION_LEVEL",
         "state": "MERGED"
       },
       {
-        "id": "ROADMAP_R2_EVOLUTION_LEVEL",
-        "state": "IMPLEMENTED_LOCAL"
-      },
-      {
         "id": "ROADMAP_R3_STARS",
-        "state": "NOT_STARTED"
+        "state": "IMPLEMENTED_LOCAL"
       },
       {
         "id": "ROADMAP_R4_SKILL_CARDS",
@@ -690,6 +691,10 @@
       },
       {
         "id": "ROADMAP_R6_LEFTOVERS",
+        "state": "NOT_STARTED"
+      },
+      {
+        "id": "PRESENTATION_RETROFIT_R1_R2",
         "state": "NOT_STARTED"
       }
     ],

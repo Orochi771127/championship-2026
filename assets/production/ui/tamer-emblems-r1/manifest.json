@@ -1,0 +1,41 @@
+{
+ "id": "art:ui:tamer-emblems:r1",
+ "rightsStatus": "ORIGINAL_GENERATED",
+ "provenance": "Generated 2026-11-18 by Codex (codex.exe 0.167 exec, gpt-6.1-sol, built-in image tool) from the written brief in briefs/b001.md, at the Owner's direction (2026-11-18: new mechanics are shown as game art and motion; art is requested from Codex by CLI). Inputs: the brief text and three screenshots of this product's own arcade HUD (taken on the isolated QA origin) as style context only; no ROM frame, research-library file or third-party character was an input. Masters are 256 x 256 RGBA PNG kept outside the repository; each runtime file is the master trimmed to its drawn bounds on a square canvas and reduced to 96 px (Lanczos), lossless WebP.",
+ "scope": "Partner star emblems for ROADMAP_R3_20261118 (lit star, empty socket, star with a burst for the star-up moment); presentation only, no gameplay or commercial-rights claim",
+ "files": [
+  {
+   "path": "assets/production/ui/tamer-emblems-r1/star-on_96.webp",
+   "key": "star-on",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "bcbb18e4727f20073a30a02dd7108fda2550cb8e969bee8b7e02be26ff3b3722",
+   "masterSha256": "bd170347a4a29607cb0220f5f1915870ffb9dcd7fcf7047cabb9432f389b2cd9",
+   "brief": "briefs/b001.md"
+  },
+  {
+   "path": "assets/production/ui/tamer-emblems-r1/star-off_96.webp",
+   "key": "star-off",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "3ffaeb8b67307e2342e63534f51bc83495ad8440fcf11123d352cd87d15ab60c",
+   "masterSha256": "f37658e8ac39fa21c79ca57db8d3937f90fac4327b4d77020752f73aee16a7ea",
+   "brief": "briefs/b001.md"
+  },
+  {
+   "path": "assets/production/ui/tamer-emblems-r1/star-burst_96.webp",
+   "key": "star-burst",
+   "size": [
+    96,
+    96
+   ],
+   "sha256": "2a011e98ceee0dec8df3e50a5d043cbd2509e03ec8b63ee53f2fc438741c5dd0",
+   "masterSha256": "f159e45c30679ed026fc3f8740a8b033f35b13a59f49ac9fa14884e3dd62f7b2",
+   "brief": "briefs/b001.md"
+  }
+ ]
+}

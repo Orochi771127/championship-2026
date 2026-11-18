@@ -31,6 +31,38 @@
       "notApplied": "the interactive tutorial (its own native actor) and the friends playtest (lifted like the rank licence)",
       "shown": "ranch partner card chip 進化需 Lv.{need} while a ready partner waits; the gachapon partner picker 進化需 Lv.{need}（現在 Lv.{level}）",
       "save": "no new field"
+    },
+    "stars": {
+      "batch": "ROADMAP_R3_20261118",
+      "owner": "2026-11-18: 「要不要再加上星級的系統，同一隻合成的時候有機會提升一顆星的等級，最高是五星，加入這個會好玩嗎？」 with the whole roadmap handed to Claude",
+      "shape": "a meter, not a chance: every fodder pays known points, a full meter is one more star",
+      "max": 5,
+      "levelCap": "10 Sync Levels a star: 1 star Lv.10, 2 Lv.20, 3 Lv.30, 4 Lv.40, 5 Lv.50; EXP a partner cannot take at its cap becomes crystals one for one, as it always did at Lv.50",
+      "pointsNeeded": {
+        "1 -> 2": 6,
+        "2 -> 3": 10,
+        "3 -> 4": 16,
+        "4 -> 5": 24
+      },
+      "fodderPoints": {
+        "own species": {
+          "S": 4,
+          "A": 3,
+          "B": 2,
+          "C": 2,
+          "no grade": 2
+        },
+        "a lower stage of the base's line": 1,
+        "anything else": 0
+      },
+      "why lower stages count": "14 of the 64 native 成熟期 species are in no hunt gate, so a partner of such a form could never rise on its own species alone",
+      "starredFodder": "a fodder of the base's own species that had stars hands over half of every point it had gathered (rounded down) on top of its own points; a lower-stage fodder hands over only its 1 point",
+      "order": "in a fusion every fodder's star points are counted first and the EXP is paid after, so a star the fodder give together already lifts the cap for all their EXP and the order they are picked in wastes none",
+      "kept": "stars and the meter stay through an evolution and a rebirth",
+      "oldSaves": "no migration step: a record without stars reads with the stars its level needs (Lv.11-20 two, ... Lv.41-50 five), so no level is lost; a star is never lowered under that",
+      "save": "progression.syncLevels.partners[id].star (omitted at 1) and .starPoints (omitted at 0)",
+      "notInGachapon": "no machine, ticket, chip, metal or diamond purchase gives stars or star points",
+      "shown": "roster line ★{star} Lv.{level}／上限 Lv.{cap} · 升星 {points}/{need}; fusion preview and receipt (★1 → ★2 or the meter); the hunt result fusion offer; the post-battle panel at the cap; party rows carry ★{star} before the level; a starred fodder asks for the second confirmation"
     }
   },
   "notChanged": [
@@ -71,7 +103,8 @@
     "tests/championship-sync-level-cases.mjs",
     "tests/championship-battle-owned-party-cases.mjs",
     "tests/championship-lion-display-correction-cases.mjs",
-    "tests/championship-evolution-level-gate-cases.mjs"
+    "tests/championship-evolution-level-gate-cases.mjs",
+    "tests/championship-partner-stars-cases.mjs"
   ],
   "physicalDeviceAccepted": false
 }

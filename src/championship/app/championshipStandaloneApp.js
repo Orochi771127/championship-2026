@@ -823,6 +823,7 @@ export function createChampionshipStandaloneApp({
       affection:Math.max(0,Math.min(100,Number(fields['020'])||0)),greeting:partnerLifeState.greetings.some(g=>g.a===id||g.b===id),
       // Owner 2026-11-04: its next form would overfill the cage for this tamer rank.
       crowded:Boolean(actor.capacityBlocked),
+      star:syncOf(syncLevels,id).star, // R3: the star emblem on the ranch card
       // R2: its conditions already choose a next form, but its Sync Level is under the stage's gate.
       evolveLevel:actor.levelBlocked?evolutionLevelNeed(id,fields['000']):null});
   }
@@ -2042,6 +2043,8 @@ export function createChampionshipStandaloneApp({
   function fusionFodderWarnings(instanceId){
     const warnings=[],level=syncOf(syncLevels,instanceId).level;
     if(level>=FUSION_WARN_LEVEL)warnings.push(Object.freeze({kind:'LEVEL',level}));
+    // R3: a fodder with stars of its own hands over half its star points; the rest is lost with it.
+    {const star=syncOf(syncLevels,instanceId).star;if(star>1)warnings.push(Object.freeze({kind:'STAR',star}));}
     if(burstUnlocksOf(burstState(),instanceId).length>0)warnings.push(Object.freeze({kind:'BURST'}));
     if(gachaBloodlineOf(cyberGacha,instanceId))warnings.push(Object.freeze({kind:'BLOODLINE'}));
     return Object.freeze(warnings);

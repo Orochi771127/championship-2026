@@ -1836,7 +1836,7 @@ async function mountBattleSelect() {
       const sync=entry?.instanceId?app.getSyncLevel?.(entry.instanceId):null;
       // Owner 2026-11-16: the partner's mood face and tier, since mood now moves battle a little.
       const mood=entry?.instanceId?app.getPartnerMoodBadge?.(entry.instanceId)??null:null;
-      return {speciesId:entry?.speciesId??null,stage:sync?(sync.next>0?syncText('level',{level:sync.level}):syncText('level.max')):null,mood,
+      return {speciesId:entry?.speciesId??null,stage:sync?`★${sync.star} ${sync.next>0?syncText('level',{level:sync.level}):syncText('level.max')}`:null,mood,
         styleChip:battleStyleChip(entry?.battleStyle),
         badges:entry?.speciesId?taxonomyBadgeRow(speciesTaxonomyForId(entry.speciesId)):null};},
     getPracticeSelection:async()=>({candidates:await app.getBattlePartyCandidates(null)}),
@@ -2593,6 +2593,7 @@ async function mountCurrentScreen() {
       fusion: {
         candidates: (instanceId) => app.getFusionCandidates(instanceId),
         preview: (instanceId, fodderIds) => app.previewPartnerFusion(instanceId, fodderIds),
+        sync: (instanceId) => app.getSyncLevel(instanceId), // R3: stars, cap and meter for the roster line
         fuse(instanceId, fodderIds) {
           const result = app.fusePartners(instanceId, fodderIds);
           return result.ok ? { ...result, entries: projectRoster() } : result;
