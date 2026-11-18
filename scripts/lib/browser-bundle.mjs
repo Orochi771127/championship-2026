@@ -33,7 +33,8 @@ export function compileBrowserBundle(root,input){
   if(!input.browserBundle)return null;
   const result=JSON.parse(execFileSync(process.execPath,[fileURLToPath(new URL('./browser-bundle-worker.mjs',import.meta.url))],
     {cwd:root,input:JSON.stringify({root,files:input.files,recipe:input.browserBundle,importMap:input.importMap,characterAssetDelivery:input.characterAssetDelivery??null}),encoding:'utf8',
-      maxBuffer:64*1024*1024,windowsHide:true}));
+      // the bundle (base64) carries every on-demand move piece module (UNIFIED_MOVES_20261118): well past 64 MB
+      maxBuffer:512*1024*1024,windowsHide:true}));
   return {...result,files:result.files.map(file=>({path:file.path,bytes:Buffer.from(file.base64,'base64')}))};
 }
 
