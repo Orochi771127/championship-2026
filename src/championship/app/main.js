@@ -2605,13 +2605,19 @@ async function mountBattleResult() {
       let statusText = pvp.simulated ? onlineText('pvpReportSimulated') : onlineText('pvpReportPending');
       const applyStatus = (text) => { statusText = text; if (statusNode) statusNode.textContent = text; };
       if (pvp.session && typeof pvp.session.reportOutcome === 'function') {
-        void pvp.session.reportOutcome({ winningTeam: outcome.winningTeam, verdict: outcome.verdict, reason: outcome.reason })
-          .then((res) => {
-            if (pvp.simulated) { applyStatus(onlineText('pvpReportSimulated')); return; }
-            if (res?.status === 'finished') applyStatus(onlineText('pvpReportAgreed'));
-            else if (res?.status === 'disputed') applyStatus(onlineText('pvpReportDisputed'));
-            else applyStatus(onlineText('pvpReportWaiting'));
-          }).catch(() => {});
+        const localIndex = battleRuntime?.localTeamIndex?.() ?? (pvp.role === 'guest' ? 1 : 0);
+        // battleRuntime.outcome() maps winningTeam to local-relative (0 = me, 1 = foe);
+        // convert back to canonical host-relative (0 = host, 1 = guest) before reporting to room.
+        const canonicalWinningTeam = outcome.winningTeam === null ? null : (localIndex === 1 ? 1 - outcome.winningTeam : outcome.winningTeam);
+        const updateFromSession = (s) => {
+          if (pvp.simulated) { applyStatus(onlineText('pvpReportSimulated')); return; }
+          if (s?.reportStatus === 'AGREED') applyStatus(onlineText('pvpReportAgreed'));
+          else if (s?.reportStatus === 'DISPUTED') applyStatus(onlineText('pvpReportDisputed'));
+          else if (s?.reportStatus === 'WAITING_PEER') applyStatus(onlineText('pvpReportWaiting'));
+        };
+        pvp.session.subscribe?.(updateFromSession);
+        void pvp.session.reportOutcome({ winningTeam: canonicalWinningTeam, verdict: outcome.verdict, reason: outcome.reason })
+          .then(() => updateFromSession(pvp.session.state)).catch(() => {});
       }
       pvpMeta = {
         kind: 'ROOM_SYNC',

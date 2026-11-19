@@ -388,7 +388,8 @@ test("two independent PvP clients complete room handshake, simulate identical de
     assert.equal(hostSession.state.prepared.ok, true);
     assert.equal(guestSession.state.prepared.ok, true);
 
-    // 4. Both independent clients simulate the prepared link battle to completion
+    // 4. Both independent clients simulate the prepared link battle to completion,
+    // reading battleRuntime.outcome() (local-relative) and converting back to canonical host-relative.
     const simulate = (prepared) => {
       const rt = createBattleRuntime({
         mode: 3,
@@ -402,7 +403,10 @@ test("two independent PvP clients complete room handshake, simulate identical de
         rt.chooseLinkBattle({ arenaIndex: prepared.arenaIndex });
         const view = rt.startMatch();
         for (let step = 0; step < 120000 && !view.getView().outcome.ended; step += 1) view.tick();
-        return view.getView().outcome;
+        const localOutcome = rt.outcome();
+        const localIndex = rt.localTeamIndex();
+        const canonicalWinningTeam = localOutcome.winningTeam === null ? null : (localIndex === 1 ? 1 - localOutcome.winningTeam : localOutcome.winningTeam);
+        return { ...localOutcome, winningTeam: canonicalWinningTeam };
       } finally {
         rt.dispose();
       }

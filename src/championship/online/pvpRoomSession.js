@@ -16,11 +16,11 @@ export function createPvpRoomSession({ adapter, game, codeLength = 4, setTimer =
   const listeners = new Set();
   // peerOnline (Owner 2026-10-29): the other player's Presence in the room channel; null until known.
   let state = Object.freeze({ phase: "idle", role: null, matchId: null, roomCode: null, seed: null, reason: null, prepared: null, opponent: null, hostId: null, guestId: null, simulated: false, countdownEndsAt: null, peerOnline: null, reportStatus: null, reportedWinnerId: null });
-  let unsubscribe = null, countdown = null, invite = null, prepared = null, started = false, disposed = false, reportPromise = null, reportReceipt = null;
+  let unsubscribe = null, countdown = null, invite = null, prepared = null, started = false, disposed = false, reportPromise = null, reportReceipt = null, reportWatch = null;
 
   const emit = patch => { state = Object.freeze({ ...state, ...patch }); for (const fn of listeners) { try { fn(state); } catch { /* listener */ } } };
   const fail = (reason, extra = {}) => { cleanup(); emit({ phase: "failed", reason, ...extra }); return state; };
-  function cleanup() { unsubscribe?.(); unsubscribe = null; clearTimer(countdown); countdown = null; }
+  function cleanup() { unsubscribe?.(); unsubscribe = null; reportWatch?.(); reportWatch = null; clearTimer(countdown); countdown = null; }
   const watch = matchId => adapter.subscribeMatch(matchId, match => { void onMatch(match); }, {
     presence: { role: state.role }, onPresence: roles => { if (!disposed) emit({ peerOnline: roles.includes(state.role === "host" ? "guest" : "host") }); } });
   function startCountdown() {
@@ -65,6 +65,20 @@ export function createPvpRoomSession({ adapter, game, codeLength = 4, setTimer =
           reportedWinnerId: receipt?.winnerId ?? result?.winnerId ?? null,
           phase: status === "AGREED" || status === "DISPUTED" ? "finished" : state.phase
         });
+        if (status === "WAITING_PEER" && !disposed && typeof adapter.subscribeMatch === "function") {
+          reportWatch?.();
+          reportWatch = adapter.subscribeMatch(state.matchId, (match) => {
+            if (disposed || !match) return;
+            if (match.status === "finished" || match.status === "disputed") {
+              reportWatch?.(); reportWatch = null;
+              emit({
+                reportStatus: match.status === "finished" ? "AGREED" : "DISPUTED",
+                reportedWinnerId: match.winnerId ?? null,
+                phase: "finished"
+              });
+            }
+          });
+        }
         return receipt;
       } catch (error) {
         const failed = Object.freeze({ ok: false, reason: error?.reason ?? error?.message ?? "REPORT_FAILED" });

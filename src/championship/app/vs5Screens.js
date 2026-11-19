@@ -656,6 +656,10 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     // Room-code connection (Owner 2026-10-28): the room carries the existing link
     // invite / reply codes and starts the same deterministic LINK_BATTLE.
     if(onlineLobby?.room){
+      const manualBox=element('details','cm-vs5-manual-exchange');
+      if(prefill?.codes)manualBox.open=true;
+      manualBox.append(element('summary','cm-vs5-manual-exchange__summary','PVP_ADVANCED_MANUAL'),...Array.from(partyPanel.childNodes));
+      partyPanel.append(manualBox);
       const startLink=async prepared=>{
         if(entering||!prepared?.ok||cubeDisposed||request!==partyRequest)return;
         entering=true;refresh();entryNotice.hidden=true;
@@ -791,6 +795,9 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     // Quick match / ladder mirror (Owner 2026-10-28): another player's defense
     // team code against the player's own, as the existing PASSWORD_BATTLE.
     if(onlineLobby?.quick){
+      const manualBox=element('details','cm-vs5-manual-exchange');
+      manualBox.append(element('summary','cm-vs5-manual-exchange__summary','PVP_ADVANCED_MANUAL'),...Array.from(partyPanel.childNodes));
+      partyPanel.append(manualBox);
       const startPassword=async codes=>{
         if(entering||!Array.isArray(codes)||cubeDisposed||request!==partyRequest)return;
         entering=true;host.disabled=true;guest.disabled=true;back.disabled=true;entryNotice.hidden=true;
