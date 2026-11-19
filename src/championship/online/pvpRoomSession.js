@@ -15,8 +15,8 @@ export function createPvpRoomSession({ adapter, game, codeLength = 4, setTimer =
   if (!game?.createInvite || !game.prepareGuest || !game.prepareHost) throw new TypeError("PVP_GAME_HOOKS_REQUIRED");
   const listeners = new Set();
   // peerOnline (Owner 2026-10-29): the other player's Presence in the room channel; null until known.
-  let state = Object.freeze({ phase: "idle", role: null, matchId: null, roomCode: null, seed: null, reason: null, prepared: null, opponent: null, countdownEndsAt: null, peerOnline: null });
-  let unsubscribe = null, countdown = null, invite = null, prepared = null, started = false, disposed = false;
+  let state = Object.freeze({ phase: "idle", role: null, matchId: null, roomCode: null, seed: null, reason: null, prepared: null, opponent: null, hostId: null, guestId: null, simulated: false, countdownEndsAt: null, peerOnline: null, reportStatus: null, reportedWinnerId: null });
+  let unsubscribe = null, countdown = null, invite = null, prepared = null, started = false, disposed = false, reportPromise = null, reportReceipt = null;
 
   const emit = patch => { state = Object.freeze({ ...state, ...patch }); for (const fn of listeners) { try { fn(state); } catch { /* listener */ } } };
   const fail = (reason, extra = {}) => { cleanup(); emit({ phase: "failed", reason, ...extra }); return state; };
@@ -31,8 +31,12 @@ export function createPvpRoomSession({ adapter, game, codeLength = 4, setTimer =
   async function onMatch(match) {
     if (disposed || started) return;
     if (["cancelled", "expired"].includes(match.status)) { fail(match.status === "expired" ? "ROOM_EXPIRED" : "ROOM_CANCELLED"); return; }
+    const idsPatch = {};
+    if (match.hostId && match.hostId !== state.hostId) idsPatch.hostId = match.hostId;
+    if (match.guestId && match.guestId !== state.guestId) idsPatch.guestId = match.guestId;
+    if (Object.keys(idsPatch).length) emit(idsPatch);
     if (state.role === "host") {
-      if (match.status === "joined" && state.phase === "waiting") emit({ phase: "joined", opponent: match.guestId ?? null });
+      if (match.status === "joined" && state.phase === "waiting") emit({ phase: "joined", opponent: match.guestId ?? null, guestId: match.guestId ?? state.guestId });
       if (match.replyCode && !prepared) {
         const result = await game.prepareHost(invite.inviteCode, match.replyCode);
         if (!result?.ok) { fail(result?.reason ?? "HOST_PREPARE_FAILED", { message: result?.message ?? null }); await adapter.cancelRoom(match.matchId); return; }
@@ -41,6 +45,35 @@ export function createPvpRoomSession({ adapter, game, codeLength = 4, setTimer =
         if (ready?.status === "playing") startCountdown();
       } else if (match.status === "playing" && prepared) startCountdown();
     } else if (match.status === "playing" && prepared) startCountdown();
+  }
+
+  async function reportOnce(result) {
+    if (!state.matchId) return null;
+    if (reportReceipt) return reportReceipt;
+    if (reportPromise) return reportPromise;
+    emit({ reportStatus: "PENDING", reportedWinnerId: result?.winnerId ?? null });
+    reportPromise = Promise.resolve().then(async () => {
+      try {
+        const receipt = await adapter.reportResult(state.matchId, result);
+        const status = receipt?.ok === false ? "FAILED"
+          : receipt?.status === "finished" ? "AGREED"
+          : receipt?.status === "disputed" ? "DISPUTED"
+          : "WAITING_PEER";
+        reportReceipt = receipt;
+        emit({
+          reportStatus: status,
+          reportedWinnerId: receipt?.winnerId ?? result?.winnerId ?? null,
+          phase: status === "AGREED" || status === "DISPUTED" ? "finished" : state.phase
+        });
+        return receipt;
+      } catch (error) {
+        const failed = Object.freeze({ ok: false, reason: error?.reason ?? error?.message ?? "REPORT_FAILED" });
+        emit({ reportStatus: "FAILED" });
+        reportPromise = null;
+        return failed;
+      }
+    });
+    return reportPromise;
   }
 
   return Object.freeze({
@@ -54,7 +87,8 @@ export function createPvpRoomSession({ adapter, game, codeLength = 4, setTimer =
       if (!invite?.ok) return fail(invite?.reason ?? "INVITE_FAILED", { message: invite?.message ?? null });
       const room = await adapter.createRoom(invite.inviteCode, codeLength, "room");
       if (!room?.ok) return fail(room?.reason ?? "ROOM_CREATE_FAILED", { message: room?.message ?? null });
-      emit({ phase: "waiting", matchId: room.matchId, roomCode: room.roomCode, seed: room.seed ?? null });
+      const self = await adapter.currentIdentity?.().catch?.(() => null) ?? null;
+      emit({ phase: "waiting", matchId: room.matchId, roomCode: room.roomCode, seed: room.seed ?? null, hostId: room.hostId ?? self?.userId ?? null, simulated: Boolean(room.simulated) });
       unsubscribe = watch(room.matchId);
       return state;
     },
@@ -64,7 +98,8 @@ export function createPvpRoomSession({ adapter, game, codeLength = 4, setTimer =
       emit({ phase: "creating", role: "guest" });
       const room = await adapter.joinRoom(String(roomCode ?? "").trim());
       if (!room?.ok) return fail(room?.reason ?? "ROOM_JOIN_FAILED", { message: room?.message ?? null });
-      emit({ phase: "joined", matchId: room.matchId, roomCode: room.roomCode, seed: room.seed ?? null, opponent: room.host ?? null });
+      const self = await adapter.currentIdentity?.().catch?.(() => null) ?? null;
+      emit({ phase: "joined", matchId: room.matchId, roomCode: room.roomCode, seed: room.seed ?? null, opponent: room.host ?? null, hostId: room.host?.userId ?? room.hostId ?? null, guestId: room.guestId ?? self?.userId ?? null, simulated: Boolean(room.simulated) });
       const result = await game.prepareGuest(room.inviteCode, instanceIds);
       if (!result?.ok) { await adapter.cancelRoom(room.matchId); return fail(result?.reason ?? "GUEST_PREPARE_FAILED", { message: result?.message ?? null }); }
       prepared = result;
@@ -76,7 +111,15 @@ export function createPvpRoomSession({ adapter, game, codeLength = 4, setTimer =
       if (ready?.status === "playing") startCountdown();
       return state;
     },
-    async report(result) { if (!state.matchId) return null; return adapter.reportResult(state.matchId, result); },
+    async report(result) { return reportOnce(result); },
+    /**
+     * Report the settled deterministic link-battle outcome once.
+     * In the shared link battle, team 0 is always the host and team 1 is always the guest.
+     */
+    async reportOutcome({ winningTeam = null, reason = null, verdict = null } = {}) {
+      const winnerId = winningTeam === 0 ? state.hostId : winningTeam === 1 ? state.guestId : null;
+      return reportOnce({ winnerId, winningTeam, outcome: verdict ?? (winningTeam === null ? "DRAW" : "SETTLED"), reason });
+    },
     async cancel() { if (state.matchId && !started) await adapter.cancelRoom(state.matchId); cleanup(); emit({ phase: "cancelled" }); },
     dispose() { disposed = true; cleanup(); listeners.clear(); }
   });

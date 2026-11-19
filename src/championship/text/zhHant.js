@@ -188,15 +188,15 @@ export const BATTLE_FACE_LABELS = deepFreeze({
 
 /** One line under each battle-menu prism face (Owner 2026-11-09). */
 export const BATTLE_FACE_TAGLINES = deepFreeze({
-  HUB_JOURNEY: "塔・戰區・自由・練習",
+  HUB_JOURNEY: "故事・挑戰・同步之塔",
   HUB_TOURNAMENT: "頭銜賽・冠軍賽",
-  HUB_LINK: "通訊・密碼對戰",
-  JOURNEY: "同步之塔・巡航・戰區",
+  HUB_LINK: "房間同步・防守隊挑戰",
+  JOURNEY: "故事・挑戰・同步之塔・巡航",
   CHAMPIONSHIP: "多輪盃賽・奪取獎牌",
   TITLE_MATCH: "依行事曆開賽・贏得頭銜",
   FREE_BATTLE: "挑選對手・自由開戰",
-  LINK_BATTLE: "交換通訊碼・與好友對戰",
-  PASSWORD_BATTLE: "輸入隊伍密碼・挑戰隊伍",
+  LINK_BATTLE: "雙人房間同步自動對戰",
+  PASSWORD_BATTLE: "非同步 AI 防守隊挑戰",
   PRACTICE_BATTLE: "自家拍檔互相對練"
 });
 

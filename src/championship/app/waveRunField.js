@@ -350,6 +350,20 @@ export function mountWaveRunField({host, frame, collect, project = () => null, c
     },
     /** The run ended under the field (a defeat): the drops left on the ground are gone with it. */
     refresh() { if (!disposed) { paintChip(null); paintDrops(); paintDock(); } },
+    /** The next wave arrives on the same field: clear rest state, hide the dock, keep unpicked ground drops & bag. */
+    beginWave() {
+      if (disposed) return;
+      settled = false;
+      busy = false;
+      leaveArmedAt = 0;
+      delete root.dataset.phase;
+      if (magnetTimer) { timers.clearTimeout(magnetTimer); magnetTimer = null; }
+      if (autoTimer) { timers.clearTimeout(autoTimer); autoTimer = null; }
+      dock.hidden = true;
+      dock.replaceChildren();
+      paintChip(null);
+      paintDrops();
+    },
     dispose() {
       if (disposed) return;
       disposed = true;

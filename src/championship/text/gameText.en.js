@@ -84,15 +84,15 @@ export const BATTLE_MENU_LABELS_EN = Object.freeze({
 });
 
 export const BATTLE_FACE_TAGLINES_EN = Object.freeze({
-  HUB_JOURNEY: "Tower, zones, free and practice",
+  HUB_JOURNEY: "Story, Challenge & Sync Tower",
   HUB_TOURNAMENT: "Title matches and cups",
-  HUB_LINK: "Link and password battles",
-  JOURNEY: "Tower, patrol and zones",
+  HUB_LINK: "Room Auto-Battle & Defense Teams",
+  JOURNEY: "Story, Challenge, Tower & Patrol",
   CHAMPIONSHIP: "Multi-round cups for medals",
   TITLE_MATCH: "Calendar fixtures for titles",
   FREE_BATTLE: "Pick any rival and fight",
-  LINK_BATTLE: "Swap link codes with a friend",
-  PASSWORD_BATTLE: "Challenge a team password",
+  LINK_BATTLE: "2-player synced room auto-battle",
+  PASSWORD_BATTLE: "Async AI defense-team challenge",
   PRACTICE_BATTLE: "Spar between your own partners"
 });
 

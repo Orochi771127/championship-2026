@@ -71,15 +71,15 @@ export const BATTLE_MENU_LABELS_VI = Object.freeze({
 });
 
 export const BATTLE_FACE_TAGLINES_VI = Object.freeze({
-  HUB_JOURNEY: "Tháp · khu · tự do · luyện tập",
+  HUB_JOURNEY: "Cốt truyện · Thử thách · Tháp",
   HUB_TOURNAMENT: "Trận danh hiệu · cúp",
-  HUB_LINK: "Kết nối · mật mã",
-  JOURNEY: "Tháp, tuần tra, chiến khu",
+  HUB_LINK: "Phòng đồng bộ · Thách đội thủ",
+  JOURNEY: "Cốt truyện, Thử thách, Tháp, Tuần tra",
   CHAMPIONSHIP: "Cúp nhiều vòng, giành huy chương",
   TITLE_MATCH: "Giải theo lịch, giành danh hiệu",
   FREE_BATTLE: "Tự chọn đối thủ để đấu",
-  LINK_BATTLE: "Đổi mã liên kết, đấu với bạn",
-  PASSWORD_BATTLE: "Thách đấu bằng mật mã đội",
+  LINK_BATTLE: "Đấu tự động đồng bộ phòng 2 người",
+  PASSWORD_BATTLE: "Thách đấu đội phòng thủ AI bất đồng bộ",
   PRACTICE_BATTLE: "Luyện tập giữa các cộng sự"
 });
 

@@ -71,15 +71,15 @@ export const BATTLE_MENU_LABELS_JA = Object.freeze({
 });
 
 export const BATTLE_FACE_TAGLINES_JA = Object.freeze({
-  HUB_JOURNEY: "塔・戦区・フリー・練習",
+  HUB_JOURNEY: "ストーリー・チャレンジ・塔",
   HUB_TOURNAMENT: "称号戦・大会",
-  HUB_LINK: "通信・パスワード対戦",
-  JOURNEY: "塔・巡航・戦区",
+  HUB_LINK: "ルーム同期・防衛隊チャレンジ",
+  JOURNEY: "ストーリー・チャレンジ・塔・巡航",
   CHAMPIONSHIP: "連戦カップでメダル獲得",
   TITLE_MATCH: "日程の大会で称号を獲得",
   FREE_BATTLE: "好きな相手と自由に対戦",
-  LINK_BATTLE: "通信コードでフレンド対戦",
-  PASSWORD_BATTLE: "チームパスワードに挑戦",
+  LINK_BATTLE: "2人ルーム同期オートバトル",
+  PASSWORD_BATTLE: "非同期AI防衛隊への挑戦",
   PRACTICE_BATTLE: "自分のパートナー同士で練習"
 });
 

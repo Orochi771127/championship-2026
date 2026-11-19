@@ -8,6 +8,9 @@
 
 import { journeyText as t } from "../text/journeyText.js";
 import { syncText } from "../text/syncLevelText.js";
+import { uiText } from "../text/uiText.js";
+import { taxonomyText } from "../text/taxonomyText.js";
+import { factionResonance, speciesTaxonomyForId } from "../contracts/speciesTaxonomy.js";
 import { createActionPortrait } from "../presentation/juicy/actionPortrait.js";
 import { tamerEmblem, tamerLevelBadge, flyEmblems } from "../presentation/tamerEmblemArt.js";
 import { talentIcon } from "../presentation/talentIconArt.js";
@@ -131,6 +134,11 @@ export function createJourneyScreen(host) {
     quick.disabled = !patrol.quickAvailable;
     quick.dataset.journeyAction = "quick";
     actions.append(claim, quick);
+    if (host.tamer && frame.crystals > 0 && tab !== "FEED") {
+      const upgrade = button("cm-journey__key cm-arcade-key cm-journey__key--tamer", uiText("TAMER_UPGRADE_SHORT"), () => { tab = "FEED"; paint(); });
+      upgrade.dataset.journeyAction = "open-feed";
+      actions.append(upgrade);
+    }
     pod.append(top, held, actions);
   }
 
@@ -170,6 +178,46 @@ export function createJourneyScreen(host) {
     return row;
   }
 
+  function teamResonanceBanner(selectedIds) {
+    const picked = selectedIds.map((id) => candidates.find((c) => c.instanceId === id)).filter(Boolean);
+    const factions = picked.map((entry) => speciesTaxonomyForId(entry.speciesId)?.faction);
+    const active = factionResonance(factions);
+    const bar = el("p", "cm-journey__resonance");
+    bar.dataset.active = String(active.length > 0);
+    if (active.length > 0) {
+      bar.textContent = active.map((id) => `${uiText("CHALLENGE_TEAM_RESONANCE", { label: taxonomyText(`resonance.${id}`) })} · ${taxonomyText(`resonance.${id}.desc`)}`).join(" ／ ");
+    } else {
+      bar.textContent = `${taxonomyText("resonance.title")}：${taxonomyText("resonance.none")}`;
+    }
+    return bar;
+  }
+
+  function squadTacticsStrip(selectedIds) {
+    if (!host.practice || !selectedIds.length) return null;
+    const p = host.practice, pt = p.text;
+    const wrap = el("div", "cm-journey__squad-tactics");
+    for (const id of selectedIds) {
+      const entry = candidates.find((c) => c.instanceId === id);
+      if (!entry) continue;
+      const look = host.describe(entry), current = p.tacticOf(id);
+      const row = el("div", "cm-journey__squad-tactic");
+      row.dataset.instanceId = id;
+      row.append(el("span", "cm-journey__squad-tactic-name", look.name));
+      const keys = el("div", "cm-journey__squad-tactic-keys");
+      for (const value of [0, 1, 2]) {
+        const key = button("cm-journey__tactic-pill", pt(`plan.${value}`), () => {
+          if (!busy) { p.setTactic(id, value); paint(); }
+        });
+        key.setAttribute("aria-pressed", String(value === current));
+        key.dataset.plan = String(value);
+        keys.append(key);
+      }
+      row.append(keys);
+      wrap.append(row);
+    }
+    return wrap;
+  }
+
   function paintTower() {
     const frame = host.frame();
     if (selectedFloor === null || selectedFloor > frame.next) selectedFloor = frame.next;
@@ -205,7 +253,8 @@ export function createJourneyScreen(host) {
     const go = button("cm-journey__go cm-arcade-key", t("tower.challenge", { floor: selectedFloor }), () => void start(selectedFloor));
     go.dataset.journeyAction = "challenge";
     go.disabled = busy || team.length === 0 || !info.open;
-    detail.append(roster, go);
+    const tactics = squadTacticsStrip(team);
+    detail.append(roster, teamResonanceBanner(team), ...(tactics ? [tactics] : []), go);
     panel.append(detail);
     body.replaceChildren(panel);
   }
@@ -302,6 +351,7 @@ export function createJourneyScreen(host) {
     const zone = frame.zones[selectedZone - 1];
     if (selectedStage === null || !zone.stages[selectedStage - 1]?.open) selectedStage = [...zone.stages].reverse().find((st) => st.open)?.stage ?? 1;
     const panel = el("div", "cm-journey__zones");
+    panel.append(el("p", "cm-journey__side-tag", uiText("DATA_ARENA_SIDE_TAG")));
     const strip = el("div", "cm-journey__zone-strip");
     strip.setAttribute("role", "tablist");
     for (const z of frame.zones) {
@@ -501,6 +551,12 @@ export function createJourneyScreen(host) {
     card.append(waveArt("threat", "cm-journey__wave-art"), el("strong", "cm-journey__wave-title", w.text("mode.challenge")));
     if (w.best?.() > 0) card.append(el("span", "cm-journey__wave-chip", w.text("best", { n: w.best() })));
     panel.append(card);
+    const meta = el("div", "cm-journey__wave-meta");
+    meta.append(
+      el("span", "cm-journey__wave-brief", uiText("CHALLENGE_THREAT_LINE")),
+      el("span", "cm-journey__wave-safe", uiText("CHALLENGE_RULE_SAFE"))
+    );
+    panel.append(meta);
     if (run) {
       // A run saved between waves (a reload or the field's back): its loot, and the same two keys as the rest.
       const loot = el("div", "cm-journey__wave-loot");
@@ -525,20 +581,23 @@ export function createJourneyScreen(host) {
     panel.append(el("p", "cm-journey__team-title", w.text("team", { n: `${team.length}/3` })));
     const roster = el("div", "cm-journey__team");
     for (const entry of candidates.filter((c) => c.admission?.ok)) {
-      const look = host.describe(entry);
+      const look = host.describe(entry), sync = host.syncOf(entry.instanceId);
       const chip = button("cm-journey__member", "", () => {
         team = team.includes(entry.instanceId) ? team.filter((id) => id !== entry.instanceId) : team.length < 3 ? [...team, entry.instanceId] : team;
         paint();
       });
       chip.dataset.instanceId = entry.instanceId;
       chip.setAttribute("aria-pressed", String(team.includes(entry.instanceId)));
-      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name));
+      const lvLabel = sync.next > 0 ? `★${sync.star ?? 1} ${syncText("level", { level: sync.level })}` : `★${sync.star ?? 1} ${syncText("level.max")}`;
+      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name), ...(look.styleChip ? [look.styleChip] : []),
+        el("span", "cm-journey__member-lv", lvLabel));
       roster.append(chip);
     }
     const go = button("cm-journey__go cm-arcade-key", w.text("start"), () => void startChallenge([...team]));
     go.dataset.journeyAction = "wave-start";
     go.disabled = busy || team.length === 0;
-    panel.append(roster, go);
+    const tactics = squadTacticsStrip(team);
+    panel.append(roster, teamResonanceBanner(team), ...(tactics ? [tactics] : []), go);
     body.replaceChildren(panel);
   }
   async function startChallenge(ids) {
@@ -589,6 +648,7 @@ export function createJourneyScreen(host) {
     try { candidates = await host.candidates(); } catch { candidates = []; }
     const frame = host.frame(), usable = new Set(candidates.filter((c) => c.admission?.ok).map((c) => c.instanceId));
     team = (host.prefill?.team ?? frame.team).filter((id) => usable.has(id)).slice(0, 3);
+    if (team.length === 0) team = [...usable].slice(0, 3);
     if (Number.isInteger(host.prefill?.floor)) selectedFloor = host.prefill.floor;
     paint();
     if (host.prefill?.autoStart && team.length) void start(selectedFloor ?? frame.next);

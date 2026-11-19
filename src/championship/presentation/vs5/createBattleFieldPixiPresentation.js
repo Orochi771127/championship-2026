@@ -326,7 +326,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   // Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): the hex shell that wraps and bursts a partner.
   const burstShell = createBattleBurstShell({PIXI:stage.PIXI, layer:actorLayer, reducedMotion});
   const shellSlots = new Set();
-  const tracker = fxLayer ? createBattleFxEventTracker() : null;
+  let tracker = fxLayer ? createBattleFxEventTracker() : null;
   // One authored map only. The camera covers the viewport and stays within
   // the real arena throughout tracking, zoom and shake; no duplicated terrain.
   const slotInfos = new Map();
@@ -829,6 +829,26 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       const p=lastStandProjection;
       if(!p||!Number.isFinite(stand?.x)||!Number.isFinite(stand?.y))return null;
       return {x:p.zoom*(p.art.x+stand.x*p.art.width)+p.x,y:p.zoom*(p.art.y+stand.y*p.art.height)+p.y,viewport:p.viewport};
+    },
+    /** Single-entry wave run: reset per-wave actors/tracker in place without reloading the arena, VFX, or ticker. */
+    resetWaveState(){
+      if(disposed)return;
+      for(const [slot,entry] of actors){
+        actorLayer.removeChild(entry.actor.sprite);
+        entry.actor.sprite.destroy();
+        entry.flashSprite?.destroy();
+        entry.statusGlow?.destroy();
+        statusFx?.retire(slot);
+      }
+      actors.clear();
+      burstShell.retireExcept(new Set());
+      statusFx?.retireExcept(new Set());
+      if(fxLayer)tracker=createBattleFxEventTracker();
+      pendingFrames=0;
+      lastTickerOpeningCue=null;
+      preludeZoom=1;
+      preludeAnchor=null;
+      redraw();
     },
 
     getDiagnostics() {

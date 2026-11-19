@@ -1272,10 +1272,11 @@ export function createChampionshipStandaloneApp({
     savePort.markDirty();
   }
 
-  function enterPreparedLocalBattle({mode,attemptId,playerInstanceIds=[],passwords=null,linkKey=null,rngPreparation}){
+  function enterPreparedLocalBattle({mode,attemptId,playerInstanceIds=[],passwords=null,linkKey=null,rngPreparation,stayInField=false}){
     requireSession();
     if(battleTransactionActive)return {ok:false,reason:'TRANSACTION_ACTIVE'};
-    if(screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return {ok:false,reason:'BATTLE_SELECT_NOT_ACTIVE'};
+    const inFieldWave=stayInField&&mode===2&&screens.current()===CHAMPIONSHIP_SCREENS.BATTLE_FIELD&&!battleEconomy.active;
+    if(!inFieldWave&&screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return {ok:false,reason:'BATTLE_SELECT_NOT_ACTIVE'};
     const prepared=battleRngPreparations.get(rngPreparation);
     const passwordMode=mode===4,linkMode=mode===3,transientMode=passwordMode||linkMode;
     if(!prepared||prepared.localMode!==mode||prepared.session!==session||prepared.base!==JSON.stringify(gameplayRngSnapshot())
@@ -1292,7 +1293,8 @@ export function createChampionshipStandaloneApp({
       mode===2&&prepared.freeMatch.kind!=='SPAR'&&prepared.freeMatch.kind!=='WAVE'?{begin:attemptId,kind:'FREE'}:null);
     if(!result.ok||result.duplicate)return result;
     battleRngPreparations.delete(rngPreparation);battlePartyIds=transientMode?null:[...playerInstanceIds];
-    screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);publishScreens();return result;
+    if(!inFieldWave)screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);
+    publishScreens();return result;
   }
 
   function restoreCandidate(save) {
@@ -4971,10 +4973,10 @@ export function createChampionshipStandaloneApp({
       return {ok:true,presetIndices:[...foes.presets],arenaIndex,foeBoostPercent:foes.foeBoostPercent,boss:foes.boss,wave:waveRun.wave,
         individuals:party.individuals,rngPreparation,playerInstanceIds:standing};
     },
-    enterWaveBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation}={}){
+    enterWaveBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation,stayInField=false}={}){
       const prepared=battleRngPreparations.get(rngPreparation),wave=prepared?.wave;
       if(!wave||!waveRun||waveRun.status!=='FIGHTING')return {ok:false,reason:'NO_WAVE_TO_FIGHT'};
-      const result=enterPreparedLocalBattle({mode:2,attemptId,playerInstanceIds,rngPreparation});
+      const result=enterPreparedLocalBattle({mode:2,attemptId,playerInstanceIds,rngPreparation,stayInField});
       if(result.ok&&!result.duplicate)pendingWave=Object.freeze({attemptId,wave:wave.wave,presets:wave.presets});
       return result;
     },

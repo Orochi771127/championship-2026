@@ -11,6 +11,7 @@ import { PRODUCT_GIVEN_NAME_MAX_LENGTH } from "./championshipRaisingProduction.j
 import { VS2_UI_AUTHORITY, VS2_PRESENTATION_MODES } from "./vs2PresentationAuthority.js";
 import { playReveal } from "../presentation/ceremony/ceremonyRunner.js";
 import { createActionPortrait } from "../presentation/juicy/actionPortrait.js";
+import { syncVitalPercent } from "../contracts/productSyncLevel.js";
 
 const RESULT_TITLE = "HUNT RESULT";
 const RESULT_OUTCOME = "BROUGHT HOME";
@@ -39,7 +40,7 @@ function presentationMode() {
  * the battle result already draw from, which keeps one art language rather
  * than introducing a second source for the same creature.
  */
-export function createHuntResultView({ root, source, hudArt = null }) {
+export function createHuntResultView({ root, source, hudArt = null, onAfterConfirm = null }) {
   const frame = source.getFrame();
   const block = frame.huntResult;
   if (!block) throw new Error("CHAMPIONSHIP_HUNT_RESULT_NOT_ACTIVE");
@@ -164,6 +165,16 @@ export function createHuntResultView({ root, source, hudArt = null }) {
   home.type = "button";
   home.setAttribute("aria-label", uiText("Return to Raising Home"));
   footer.append(home);
+  let goRoster = null, goBattle = null;
+  if (typeof onAfterConfirm === "function") {
+    goRoster = element("button", "cm-vs2-action cm-vs2-action--jump", "LOOP_GO_ROSTER");
+    goRoster.type = "button";
+    goRoster.dataset.loopAction = "roster";
+    goBattle = element("button", "cm-vs2-action cm-vs2-action--jump", "LOOP_GO_BATTLE");
+    goBattle.type = "button";
+    goBattle.dataset.loopAction = "battle";
+    footer.append(goRoster, goBattle);
+  }
 
   shell.append(header, body, footer);
   root.append(shell);
@@ -172,6 +183,12 @@ export function createHuntResultView({ root, source, hudArt = null }) {
     const nextName = nameInput.value.trim();
     if (nextName && nextName !== presentedName) source.intents.setHuntResultName(nextName);
   }
+  function confirmAndJump(target) {
+    commitName();
+    source.intents.confirmHuntResult();
+    const after = source.getFrame?.();
+    if (after?.screen !== "HUNT_RESULT" && !after?.huntResult?.commitError) onAfterConfirm?.(target);
+  }
 
   nameInput.addEventListener("change", commitName);
   nameInput.addEventListener("input", commitName);
@@ -179,6 +196,8 @@ export function createHuntResultView({ root, source, hudArt = null }) {
     commitName();
     source.intents.confirmHuntResult();
   });
+  goRoster?.addEventListener("click", () => confirmAndJump("roster"));
+  goBattle?.addEventListener("click", () => confirmAndJump("battle"));
 
   function render(nextFrame) {
     const next = nextFrame?.huntResult;
@@ -226,6 +245,11 @@ export function createHuntResultView({ root, source, hudArt = null }) {
         badge.title = uiText(`WILD_INSTINCT_${row.instinct}_NOTE`);
         line.append(badge);
       }
+      if (row.kind === "CARD") {
+        const valueTag = element("span", "cm-vs2-result__value-tag", row.canFuse ? "HUNT_TAG_FUSABLE" : "HUNT_TAG_NEW_ROLE");
+        valueTag.dataset.role = row.canFuse ? "fusable" : "new";
+        line.append(valueTag);
+      }
       if (row.kind === "CARD" && catches > 1) {
         const pick = element("button", "cm-vs2-action cm-vs2-result__pick", row.selected ? "NAMING" : "NAME THIS ONE");
         pick.type = "button";
@@ -268,7 +292,10 @@ export function createHuntResultView({ root, source, hudArt = null }) {
     }
     releasePrompt.replaceChildren();
     releasePrompt.hidden = !next.pendingRelease && !next.pendingFusion;
-    home.disabled = Boolean(next.pendingRelease) || Boolean(next.pendingFusion);
+    const locked = Boolean(next.pendingRelease) || Boolean(next.pendingFusion);
+    home.disabled = locked;
+    if (goRoster) goRoster.disabled = locked;
+    if (goBattle) goBattle.disabled = locked;
     if (next.pendingFusion) {
       // Pick the partner that takes the EXP; each choice shows what it gains. Numbers first, no sentences.
       const fusion = next.pendingFusion;
@@ -287,8 +314,11 @@ export function createHuntResultView({ root, source, hudArt = null }) {
         const name = element("span", "cm-vs2-result__fusion-name", ""), gain = element("span", "cm-vs2-result__fusion-preview", "");
         name.textContent = base.displayName;
         const preview = base.preview;
+        const vital = preview && preview.after.level > preview.before.level
+          ? " · " + uiText("FUSION_COMBAT_VITAL", { before: syncVitalPercent(preview.before.level), after: syncVitalPercent(preview.after.level) })
+          : "";
         gain.textContent = preview
-          ? `Lv.${preview.before.level} → Lv.${preview.after.level} · +${preview.amount.toLocaleString("en-US")} EXP${base.line < 1 ? " · ×0.6" : ""}${preview.stars?.gained > 0 ? " · " + uiText("FUSION_STAR_UP", { before: preview.stars.before.star, after: preview.stars.after.star }) : preview.stars?.points > 0 && preview.stars.after.need > 0 ? " · " + uiText("STAR_METER", { points: preview.stars.after.points, need: preview.stars.after.need }) : ""}${preview.inherit?.length ? " · " + uiText("FUSION_INHERIT", { n: preview.inherit.length }) : ""}`
+          ? `Lv.${preview.before.level} → Lv.${preview.after.level} · +${preview.amount.toLocaleString("en-US")} EXP${vital}${base.line < 1 ? " · ×0.6" : ""}${preview.stars?.gained > 0 ? " · " + uiText("FUSION_STAR_UP", { before: preview.stars.before.star, after: preview.stars.after.star }) : preview.stars?.points > 0 && preview.stars.after.need > 0 ? " · " + uiText("STAR_METER", { points: preview.stars.after.points, need: preview.stars.after.need }) : ""}${preview.inherit?.length ? " · " + uiText("FUSION_INHERIT", { n: preview.inherit.length }) : ""}`
           : "";
         pick.append(name, gain);
         pick.disabled = !preview;

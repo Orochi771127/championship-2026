@@ -71,15 +71,15 @@ export const BATTLE_MENU_LABELS_TH = Object.freeze({
 });
 
 export const BATTLE_FACE_TAGLINES_TH = Object.freeze({
-  HUB_JOURNEY: "หอคอย · โซน · อิสระ · ซ้อม",
+  HUB_JOURNEY: "เนื้อเรื่อง · ท้าทาย · หอคอย",
   HUB_TOURNAMENT: "แมตช์ฉายา · ถ้วย",
-  HUB_LINK: "เชื่อมต่อ · รหัสผ่าน",
-  JOURNEY: "หอคอย ลาดตระเวน เขตสงคราม",
+  HUB_LINK: "ห้องสู้ซิงก์ · ท้าทีมป้องกัน",
+  JOURNEY: "เนื้อเรื่อง ท้าทาย หอคอย ลาดตระเวน",
   CHAMPIONSHIP: "ถ้วยหลายรอบ ชิงเหรียญรางวัล",
   TITLE_MATCH: "แข่งตามปฏิทิน ชิงตำแหน่ง",
   FREE_BATTLE: "เลือกคู่ต่อสู้ได้อย่างอิสระ",
-  LINK_BATTLE: "แลกโค้ดลิงก์ สู้กับเพื่อน",
-  PASSWORD_BATTLE: "ท้าสู้ด้วยรหัสทีม",
+  LINK_BATTLE: "ห้อง 2 คนสู้ซิงก์อัตโนมัติ",
+  PASSWORD_BATTLE: "ท้าทีมป้องกัน AI แบบไม่พร้อมกัน",
   PRACTICE_BATTLE: "ซ้อมระหว่างคู่หูของคุณเอง"
 });
 

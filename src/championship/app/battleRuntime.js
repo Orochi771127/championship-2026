@@ -615,6 +615,8 @@ export function createBattleRuntime(options = {}) {
     },
     /** The hand on screen: each card's state and the frame the next one becomes playable. */
     getSkillCards() { return session&&!session.ended?skillCards.snapshot(session.frame):null; },
+    /** Cross-wave carry-over state: exact drawn hand and played ids (never redrawn between waves). */
+    getSkillCardCarryState() { return skillCards.on?skillCards.exportState():null; },
     requestBurst(slot,{overLimit=false}={}) {
       if(!session||battleTeamOfSlot(slot)!==localTeamIndex)return false;
       return burst.request(slot,{overLimit});
@@ -862,6 +864,7 @@ export function createBattleRuntime(options = {}) {
       signatureMoves=session.slots.map(c=>c?signatureMoveOf(c.speciesId):null);
       taxonomy.applyStart(session.slots);
       skillCards=createBattleSkillCards({hand:Array.isArray(options.skillCards)?options.skillCards:[],team:localTeamIndex,teamOf:battleTeamOfSlot});
+      if(Array.isArray(options.skillCardsPlayed)&&options.skillCardsPlayed.length)skillCards.restorePlayed(options.skillCardsPlayed);
       nativeActors=createBattleNativeActors({slots:session.slots,creatures:roster,stands:normalBattleStands(session.slots)});
       soundEvents.attach(nativeActors.memory);
       // Use the same species move list as current normal selection. Appended

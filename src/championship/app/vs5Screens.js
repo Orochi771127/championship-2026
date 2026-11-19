@@ -270,16 +270,18 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   const dropLobby=()=>{lobbyMount?.dispose?.();lobbyMount=null;};
   const matchOnlyNodes = [];
   let arenaLabels = null;
+  let arenaNode = null;
   if (typeof onOpenDataArena === 'function') {
     const arena = actionButton('');
     arena.id = 'cm-data-arena';
-    arena.classList.add('cm-vs5-data-arena');
+    arena.classList.add('cm-vs5-data-arena', 'cm-vs5-data-arena--side');
     arenaLabels = [element('span', '', arenaText('entry'), false), element('span', 'cm-vs5-match__fee', arenaText('entry.description'), false)];
-    arena.append(...arenaLabels);
+    arena.append(element('span', 'cm-vs5-data-arena__side-tag', uiText('DATA_ARENA_SIDE_TAG'), false), ...arenaLabels);
     // The LIVE badge is drawn from this attribute, so the label text stays as is.
     arena.dataset.badge = arenaText('entry.badge');
     arena.addEventListener('click', () => { if (!entering) void onOpenDataArena(arena); });
-    header.append(arena);
+    arenaNode = arena;
+    if (typeof mountCube !== 'function') header.append(arena);
     matchOnlyNodes.push(arena);
   }
   // Cyber Gachapon bounty beacons (Owner 2026-11-02): one rides the next won AI
@@ -365,6 +367,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       menuCopy.faceNotice);
     section.append(note);
     matchOnlyNodes.push(stage, note);
+    if (arenaNode) section.append(arenaNode);
   }
 
   const list = element("ul", "cm-vs5-matches");
@@ -841,6 +844,11 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     }
   }
   renderMatches(matches);
+  // When the 3-face hub prism opens on 征途 (Journey), keep the Title Match list hidden
+  // until the player explicitly opens 頭銜賽 or 自由對戰, avoiding a stray list under Journey.
+  if (typeof onOpenJourney === "function" && typeof mountCube === "function" && !prefill?.mode) {
+    list.hidden = true;
+  }
   section.append(list, partyPanel, entryNotice);
 
   // The multi-round tournaments sit in this menu in the original too:
@@ -1141,13 +1149,21 @@ export function createBattleFieldView({ root, frame, mountField, onExit,onLoadEr
   const opponents = element("ul", "cm-vs5-roster cm-vs5-roster--opponent");
   const players = element("ul", "cm-vs5-roster cm-vs5-roster--player");
   const cards = new Map();
-  for (const combatant of frame.combatants) {
-    const compact = combatant.team !== localTeamIndex;
-    const built = combatantCard(combatant, compact,hudArt,dynamicFx,next=>burstCall(next),
-      dynamicFx && typeof fighterBadge === "function" && combatant.present ? fighterBadge(combatant) : null);
-    cards.set(combatant.slot, built);
-    (compact ? opponents : players).append(built.card);
+  let activeFrame = frame;
+  function buildRosterCards(nextFrame) {
+    for (const card of cards.values()) card.dispose?.();
+    cards.clear();
+    opponents.replaceChildren();
+    players.replaceChildren();
+    for (const combatant of nextFrame.combatants) {
+      const compact = combatant.team !== localTeamIndex;
+      const built = combatantCard(combatant, compact, hudArt, dynamicFx, next => burstCall(next),
+        dynamicFx && typeof fighterBadge === "function" && combatant.present ? fighterBadge(combatant) : null);
+      cards.set(combatant.slot, built);
+      (compact ? opponents : players).append(built.card);
+    }
   }
+  buildRosterCards(frame);
 
   const host = element("div", "cm-vs5-field");
   host.setAttribute("aria-label", uiText("Battle field. The match runs on its own."));
@@ -1350,8 +1366,18 @@ export function createBattleFieldView({ root, frame, mountField, onExit,onLoadEr
     /** A line for the record band from the dynamic presentation. */
     feed(text, cue = null) {
       if (viewDisposed) return;
-      const team = cue ? frame.combatants.find((c) => c.slot === cue.slot)?.team : undefined;
+      const team = cue ? activeFrame.combatants.find((c) => c.slot === cue.slot)?.team : undefined;
       log.feed(text, cue && { tier: cue.tier, side: team === undefined ? "" : team === localTeamIndex ? "player" : "opponent" });
+    },
+    /** WAVE_RUN: refresh HUD roster cards in place when the next wave spawns on the same field. */
+    setWaveFrame(nextFrame) {
+      if (viewDisposed || !nextFrame?.combatants) return;
+      activeFrame = nextFrame;
+      buildRosterCards(nextFrame);
+      section.dataset.ended = "false";
+      delete section.dataset.verdict;
+      delete section.dataset.endReason;
+      measureSafe();
     },
     /** Called with each view the presentation source publishes. */
     render(view) {
@@ -1472,7 +1498,7 @@ function resultSummary(summary, winningTeam) {
   return box;
 }
 
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, syncPanel=null, followUp=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null, sponsor=null, tacticRecord=null }) {
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, syncPanel=null, followUp=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null, sponsor=null, tacticRecord=null, diagnosis=null, loopActions=null, pvpMeta=null }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
   let disposed=false;
 
@@ -1519,6 +1545,29 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
         frag.append(line);
       }
       if (summary?.rows?.length) frag.append(resultSummary(summary, outcome.winningTeam));
+      if (pvpMeta?.label) {
+        const pvpBox = element("section", "cm-vs5-result__pvp");
+        pvpBox.dataset.pvpKind = pvpMeta.kind ?? "";
+        pvpBox.append(element("strong", "cm-vs5-result__pvp-title", pvpMeta.label, false));
+        const statusEl = element("p", "cm-vs5-result__pvp-status", pvpMeta.statusText ?? "", false);
+        statusEl.setAttribute("role", "status");
+        pvpBox.append(statusEl);
+        pvpMeta.bindStatus?.(statusEl);
+        frag.append(pvpBox);
+      }
+      if (diagnosis?.items?.length) {
+        const diagBox = element("section", "cm-vs5-result__diagnosis");
+        diagBox.dataset.won = String(Boolean(diagnosis.won));
+        diagBox.append(element("h2", "cm-vs5-result__diagnosis-title", diagnosis.title, false));
+        const ul = element("ul", "cm-vs5-result__diagnosis-list");
+        for (const item of diagnosis.items) {
+          const li = element("li", "cm-vs5-result__diagnosis-item", item.text, false);
+          li.dataset.kind = item.kind ?? "";
+          ul.append(li);
+        }
+        diagBox.append(ul);
+        frag.append(diagBox);
+      }
       return frag;
     }
   });
@@ -1657,6 +1706,19 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
   }
   exit.classList.add("cm-vs5-exit");
   if (typeof onExit === "function") exit.addEventListener("click", () => onExit());
+  const nextRow = !tutorial && Array.isArray(loopActions) && loopActions.length
+    ? element("div", "cm-vs5-result__next-row")
+    : null;
+  if (nextRow) {
+    for (const action of loopActions) {
+      if (!action || typeof action.onClick !== "function") continue;
+      const btn = actionButton(action.label, { primary: Boolean(action.primary) });
+      btn.classList.add("cm-vs5-result__next-btn");
+      if (action.id) btn.dataset.loopAction = action.id;
+      btn.addEventListener("click", () => { if (!disposed) action.onClick(); });
+      nextRow.append(btn);
+    }
+  }
 
   const body = element("div", "cm-vs5-result__body");
   const characterHost=element('div','cm-vs5-result__characters');
@@ -1693,6 +1755,7 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     advance.hidden = last;
     exit.hidden = !last;
     if (follow) follow.hidden = !last;
+    if (nextRow) nextRow.hidden = !last;
   }
 
   let entrance = null;
@@ -1706,7 +1769,7 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     if (index < panels.length - 1) { index += 1; paint(); }
   });
 
-  section.append(resultStage, advance, exit, ...(follow ? [follow] : []));
+  section.append(resultStage, advance, ...(follow ? [follow] : []), ...(nextRow ? [nextRow] : []), exit);
   // Owner 2026-10-29: a won battle can be shared as a brag card (product-authored; not a result scene).
   if (!tutorial && outcome.winningTeam === 0 && typeof brag?.onOpen === "function") {
     const share = document.createElement("button");
