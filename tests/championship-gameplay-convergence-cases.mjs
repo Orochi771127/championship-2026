@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
 import { createBattleSkillCards } from "../src/championship/battle/battleSkillCards.js";
+import { mountBattleSkillHand } from "../src/championship/app/battleSkillHand.js";
 import { buildBattleResultDiagnosis } from "../src/championship/app/battleResultDiagnosis.js";
 import { createPvpRoomSession, PVP_COUNTDOWN_MS } from "../src/championship/online/pvpRoomSession.js";
 import { createChampionshipStandaloneApp } from "../src/championship/app/championshipStandaloneApp.js";
@@ -476,4 +477,54 @@ test("two-client PvP marks disputed on conflicting reports and handles peer canc
   assert.equal(guestB.state.reason, "ROOM_CANCELLED");
   hostB.dispose();
   guestB.dispose();
+});
+
+test("throwing a skill card triggers onPlayed with localized name and effect, while refused throws stay silent", () => {
+  class MiniNode {
+    constructor(tag) {
+      this.tagName = tag; this.children = []; this.dataset = {}; this.attributes = {}; this.listeners = {};
+      this.style = { props: {}, setProperty(k, v) { this.props[k] = v; }, removeProperty(k) { delete this.props[k]; } };
+      this.textContent = ""; this.hidden = false; this.parent = null;
+    }
+    append(...nodes) { for (const n of nodes) { n.parent = this; this.children.push(n); } }
+    remove() { if (this.parent) this.parent.children = this.parent.children.filter((c) => c !== this); this.parent = null; }
+    setAttribute(k, v) { this.attributes[k] = String(v); }
+    addEventListener(type, fn) { this.listeners[type] = fn; }
+    querySelector(sel) { const cls = sel.slice(1); return this.all().find((n) => (n.className ?? "").split(" ").includes(cls)) ?? null; }
+    all() { return this.children.flatMap((c) => [c, ...c.all()]); }
+  }
+  const doc = { createElement: (tag) => new MiniNode(tag), defaultView: null };
+  const host = new MiniNode("main");
+  const playedLog = [];
+  let view = {
+    on: true, frame: 200, nextFrame: 180, allowed: 1, used: 0,
+    cards: [
+      { id: "basic.cheer", line: "basic", kind: "TEAM_TP", state: "READY" },
+      { id: "hunter.snare", line: "hunter", kind: "FOE_DELAY", state: "WAIT" }
+    ]
+  };
+  const hand = mountBattleSkillHand({
+    host, doc, snapshot: () => view,
+    play: (id) => {
+      if (id === "basic.cheer") {
+        view = { ...view, used: 1, cards: view.cards.map((c) => (c.id === id ? { ...c, state: "PLAYED" } : c)) };
+        return { ok: true, id };
+      }
+      return { ok: false, reason: "NOT_READY" };
+    },
+    onPlayed: (card, info) => playedLog.push({ id: card.id, ...info }),
+    subscribe: () => () => {}
+  });
+  const cards = () => hand.element.all().filter((n) => n.className === "cm-skill-card");
+  // Refused WAIT card must not invoke onPlayed
+  cards().find((c) => c.dataset.card === "hunter.snare").listeners.click();
+  assert.equal(playedLog.length, 0);
+  // Two taps on READY card throws and notifies onPlayed with name + concrete effect
+  const cheer = cards().find((c) => c.dataset.card === "basic.cheer");
+  cheer.listeners.click();
+  cheer.listeners.click();
+  assert.equal(playedLog.length, 1);
+  assert.equal(playedLog[0].id, "basic.cheer");
+  assert.ok(playedLog[0].name.length > 0 && playedLog[0].effect.length > 0);
+  hand.dispose();
 });

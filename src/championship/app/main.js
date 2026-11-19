@@ -2394,6 +2394,7 @@ async function mountBattleField() {
   // The tamer's skill-card hand (ROADMAP_R4_20261118): over the field, gone with the battle screen.
   const skillHand = tutorial ? null : mountBattleSkillHand({ host: root, snapshot: () => activeRuntime.getSkillCards?.() ?? null,
     play: id => activeRuntime.requestSkillCard?.(id) ?? { ok: false, reason: 'NO_HAND' },
+    onPlayed: (card, info) => view.announceSkillCard?.({ ...info, side: /^FOE|MARK/.test(card?.kind ?? '') ? 'opponent' : 'player' }),
     subscribe: listener => { handListeners.add(listener); return () => handListeners.delete(listener); } });
   // Single-entry wave controller: swaps in Wave N+1 on the same battlefield without leaving BATTLE_FIELD or redrawing the skill hand.
   if (typeof activeWaveController !== 'undefined') activeWaveController = waveField ? {

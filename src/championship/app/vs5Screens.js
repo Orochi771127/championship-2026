@@ -1370,12 +1370,29 @@ export function createBattleFieldView({ root, frame, mountField, onExit,onLoadEr
       loadingText.textContent=uiText(recover.hidden?'對戰場地載入失敗，請返回牧場後再試。':'BATTLE_LOAD_ERROR_TUTORIAL');}
   });
 
+  let cardPulseTimer = null;
   return Object.freeze({
     /** A line for the record band from the dynamic presentation. */
     feed(text, cue = null) {
       if (viewDisposed) return;
       const team = cue ? activeFrame.combatants.find((c) => c.slot === cue.slot)?.team : undefined;
       log.feed(text, cue && { tier: cue.tier, side: team === undefined ? "" : team === localTeamIndex ? "player" : "opponent" });
+    },
+    /** Highlight a thrown tamer skill card in the live ticker and pulse the affected side's HUD cards. */
+    announceSkillCard({ name = "", effect = "", side = "player" } = {}) {
+      if (viewDisposed || !name) return;
+      log.feed(uiText("BATTLE_CARD_LOG", { name, effect }), { tier: "special", side });
+      const row = side === "opponent" ? opponents : players;
+      if (row?.dataset) {
+        delete players.dataset.cardPulse;
+        delete opponents.dataset.cardPulse;
+        row.dataset.cardPulse = side;
+        if (cardPulseTimer) clearTimeout(cardPulseTimer);
+        cardPulseTimer = setTimeout(() => {
+          cardPulseTimer = null;
+          if (!viewDisposed) { delete players.dataset.cardPulse; delete opponents.dataset.cardPulse; }
+        }, 700);
+      }
     },
     /** WAVE_RUN: refresh HUD roster cards in place when the next wave spawns on the same field. */
     setWaveFrame(nextFrame) {
@@ -1439,6 +1456,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,onLoadEr
     },
     dispose() {
       viewDisposed = true;
+      if (cardPulseTimer) { clearTimeout(cardPulseTimer); cardPulseTimer = null; }
       for (const card of cards.values()) card.dispose?.();
       safeObserver?.disconnect();
       versus?.dispose();

@@ -28,7 +28,7 @@ function el(doc, tag, className, text) {
  * @param {(id: string) => {ok: boolean, reason?: string}} options.play  runtime.requestSkillCard
  * @param {(listener: () => void) => () => void} [options.subscribe]  battle frame updates
  */
-export function mountBattleSkillHand({host, snapshot, play, subscribe = null, doc = globalThis.document} = {}) {
+export function mountBattleSkillHand({host, snapshot, play, subscribe = null, onPlayed = null, doc = globalThis.document} = {}) {
   const first = snapshot?.();
   if (!host || !first?.on || !first.cards.length) return null;
   const root = el(doc, 'div', 'cm-skill-hand');
@@ -72,7 +72,10 @@ export function mountBattleSkillHand({host, snapshot, play, subscribe = null, do
     // gone after the flight even when the animation never reports its end (a hidden tab, a frozen clock)
     globalThis.setTimeout?.(() => { key.remove(); keys.delete(card.id); }, 760);
     requestArcadeFx(key, 'levelup');
-    say(`${skillCardText(`${card.id}.name`)}！`);
+    const cardName = skillCardText(`${card.id}.name`);
+    const cardEffect = skillCardText(`${card.id}.effect`);
+    say(`${cardName}！`);
+    try { onPlayed?.(card, { name: cardName, effect: cardEffect }); } catch { /* feedback listener */ }
     if (!reduced() && key.animate) {
       const run = key.animate([{transform: getComputedStyleTransform(key), opacity: 1},
         {transform: 'translateY(-46vh) rotate(-8deg) scale(1.35)', opacity: 1, offset: 0.7},

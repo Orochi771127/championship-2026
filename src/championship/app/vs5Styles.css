@@ -1112,3 +1112,7 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 .cm-vs5-result__next-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; width: 100%; }
 .cm-vs5-result__next-row[hidden] { display: none; }
 .cm-vs5-result__next-btn { flex: 1 1 110px; }
+/* In-battle skill-card feedback pulse on affected side HUD row */
+.cm-vs5-fighters[data-card-pulse="player"] .cm-vs5-fighter { box-shadow: 0 0 0 2px #6ff7ff, 0 0 16px rgba(111, 247, 255, 0.55); transition: box-shadow 180ms ease; }
+.cm-vs5-fighters[data-card-pulse="opponent"] .cm-vs5-fighter { box-shadow: 0 0 0 2px #ff8a5c, 0 0 16px rgba(255, 138, 92, 0.55); transition: box-shadow 180ms ease; }
+@media (prefers-reduced-motion: reduce) { .cm-vs5-fighters[data-card-pulse] .cm-vs5-fighter { transition: none; } }
