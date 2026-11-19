@@ -3,6 +3,9 @@ import test from "node:test";
 import { readFileSync } from "node:fs";
 import { createBattleSkillCards } from "../src/championship/battle/battleSkillCards.js";
 import { mountBattleSkillHand } from "../src/championship/app/battleSkillHand.js";
+import { createBattleFxEventTracker } from "../src/championship/presentation/battleFx/battleFxEvents.js";
+import { createBattleImpactAudio } from "../src/championship/presentation/battleFx/battleImpactAudio.js";
+import { waveSyncBonusPercent } from "../src/championship/contracts/productWaveRun.js";
 import { buildBattleResultDiagnosis } from "../src/championship/app/battleResultDiagnosis.js";
 import { createPvpRoomSession, PVP_COUNTDOWN_MS } from "../src/championship/online/pvpRoomSession.js";
 import { createChampionshipStandaloneApp } from "../src/championship/app/championshipStandaloneApp.js";
@@ -555,4 +558,76 @@ test("gate habitat summary resolves ROM biome indices and flags same-line fusion
   } finally {
     app.dispose?.();
   }
+});
+
+test("battleFxEvents propagates real critical and moveId attribution from HIT_STATE_WRITTEN reactions", () => {
+  const tracker = createBattleFxEventTracker();
+  const baseView = (hp, reactionsHistory = []) => ({
+    animationFrame: 10,
+    combatants: [
+      { present: true, slot: 0, team: 0, down: false, hp: { current: 500, maximum: 500 } },
+      { present: false, slot: 1, team: 0, down: false, hp: { current: 0, maximum: 1 } },
+      { present: false, slot: 2, team: 0, down: false, hp: { current: 0, maximum: 1 } },
+      { present: true, slot: 3, team: 1, down: false, hp: { current: hp, maximum: 500 } }
+    ],
+    nativeLifecycle: { active: [], reactions: { history: reactionsHistory } },
+    outcome: { ended: false }
+  });
+  tracker.consume(baseView(500));
+  const critEvents = tracker.consume(baseView(380, [
+    { frame: 10, slot: 3, type: "HIT_STATE_WRITTEN", hp: 380, critical: true, moveId: 61 }
+  ]));
+  const hit = critEvents.find((e) => e.type === "HIT");
+  assert.ok(hit, "HIT event emitted");
+  assert.equal(hit.critical, true, "real critical attribution propagated");
+  assert.equal(hit.moveId, 61, "exact moveId propagated");
+  assert.equal(hit.damage, 120);
+
+  const normalEvents = tracker.consume(baseView(340, [
+    { frame: 11, slot: 3, type: "HIT_STATE_WRITTEN", hp: 340, critical: false, moveId: 59 }
+  ]));
+  const normalHit = normalEvents.find((e) => e.type === "HIT");
+  assert.equal(normalHit.critical, false);
+  assert.equal(normalHit.moveId, 59);
+});
+
+test("procedural battle impact audio synthesizes cues, throttles bursts, and handles absent output safely", () => {
+  const silent = createBattleImpactAudio({ getOutput: () => null });
+  assert.equal(silent.playHit({ tier: "heavy", critical: true }), false);
+  silent.dispose();
+
+  let clock = 1000, started = 0;
+  const fakeParam = () => ({ setValueAtTime() {}, linearRampToValueAtTime() {}, exponentialRampToValueAtTime() {} });
+  const fakeContext = {
+    state: "running", sampleRate: 44100, currentTime: 0,
+    createBuffer: (_c, len) => ({ getChannelData: () => new Float32Array(len) }),
+    createOscillator: () => ({ type: "sine", frequency: fakeParam(), connect() {}, start() { started += 1; }, stop() {} }),
+    createGain: () => ({ gain: fakeParam(), connect() {} }),
+    createBufferSource: () => ({ buffer: null, connect() {}, start() { started += 1; }, stop() {} }),
+    createBiquadFilter: () => ({ type: "bandpass", frequency: fakeParam(), Q: fakeParam(), connect() {} })
+  };
+  const audio = createBattleImpactAudio({ getOutput: () => ({ context: fakeContext, destination: {} }), now: () => clock });
+  assert.equal(audio.playHit({ tier: "heavy", critical: true, combo: 3 }), true);
+  assert.equal(audio.playHit({ tier: "heavy", critical: true, combo: 4 }), false, "throttled inside gap");
+  clock += 120;
+  assert.equal(audio.playKo(), true);
+  assert.equal(audio.playUltimate(), true);
+  assert.equal(audio.playSupport("skillCard"), true);
+  assert.equal(audio.playDropPick(), true);
+  assert.ok(started >= 8, "synthesized multiple Web Audio nodes");
+  const diag = audio.getDiagnostics();
+  assert.equal(diag.played, 5);
+  assert.equal(diag.throttled, 1);
+  audio.dispose();
+  assert.equal(audio.playKo(), false, "disposed audio stays silent");
+});
+
+test("waveSyncBonusPercent scales linearly per extra wave cleared and caps cleanly", () => {
+  assert.equal(waveSyncBonusPercent(0), 0);
+  assert.equal(waveSyncBonusPercent(1), 0);
+  assert.equal(waveSyncBonusPercent(2), 40);
+  assert.equal(waveSyncBonusPercent(3), 80);
+  assert.equal(waveSyncBonusPercent(5), 160);
+  assert.equal(waveSyncBonusPercent(10), 360);
+  assert.equal(waveSyncBonusPercent(30), 360);
 });

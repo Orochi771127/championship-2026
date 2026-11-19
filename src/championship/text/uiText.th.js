@@ -429,6 +429,9 @@ export const UI_COPY_TH = Object.freeze({
   "RANCH_FUSION_AVAILABLE": "หลอมได้ ({count})",
   "RANCH_STAR_CAPPED": "ถึงเพดานดาว",
   "BATTLE_COMBO_HIT": "คอมโบ {count}!",
+  "BATTLE_SPEED_TOGGLE": "สลับความเร็วการต่อสู้ (ตอนนี้ {speed}x)",
+  "WAVE_STREAK_NEXT": "Sync ×{now} → คลื่นถัดไป ×{next}",
+  "WAVE_DEBRIEF_STREAK": "โบนัสต่อเนื่อง +{percent}%",
   "輕觸數碼獸查看": "แตะพันธมิตรเพื่อดู",
   "野生數碼獸": "สหายป่า",
 

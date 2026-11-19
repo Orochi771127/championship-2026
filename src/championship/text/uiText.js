@@ -427,6 +427,9 @@ export const UI_COPY = Object.freeze({
   "RANCH_FUSION_AVAILABLE": "可融合（{count}）",
   "RANCH_STAR_CAPPED": "達星級上限",
   "BATTLE_COMBO_HIT": "{count} 連擊！",
+  "BATTLE_SPEED_TOGGLE": "切換戰鬥速度（目前 {speed}x）",
+  "WAVE_STREAK_NEXT": "同步 ×{now} → 下波 ×{next}",
+  "WAVE_DEBRIEF_STREAK": "連戰加成 +{percent}%",
   "輕觸數碼獸查看": "輕觸夥伴查看",
   "野生數碼獸": "野生夥伴",
 

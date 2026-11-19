@@ -764,7 +764,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       if(!Number.isFinite(elapsed)||elapsed<0)throw new TypeError('BATTLE_INVALID_FRAME_ELAPSED');
       // Slow motion (signature hit, final K.O.) paces the same frames more slowly; none is skipped.
       // The original's long knockout freeze plays its same frames faster (battleFxFreezePace); a hit-stop keeps its length.
-      pendingFrames += elapsed/nativeFrameMs*(director?.timeScale?.() ?? 1)*(fxLayer ? battleFxFreezePace(current,reducedMotion) : 1);
+      const playbackSpeed = typeof getPlaybackSpeed === 'function' ? Math.max(0.5, Math.min(2, Number(getPlaybackSpeed()) || 1)) : 1;
+      pendingFrames += elapsed/nativeFrameMs*playbackSpeed*(director?.timeScale?.() ?? 1)*(fxLayer ? battleFxFreezePace(current,reducedMotion) : 1);
       while(pendingFrames+1e-9>=1 && !disposed && !source.getFrame().outcome.ended){
         pendingFrames=Math.max(0,pendingFrames-1);
         const beforeOpening=(current ?? source.getView()).opening;

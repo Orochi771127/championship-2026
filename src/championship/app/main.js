@@ -1714,6 +1714,7 @@ function buildTacticRecordPanel(runtime, { attemptId, matchTitle, context = null
 }
 
 let battleRuntime = null;
+let battlePlaybackSpeed = 1;
 let battleAttemptId = null;
 // Active PvP battle metadata & room session (transferred from onlineBattleLobby on battle start,
 // reported once on BATTLE_RESULT, and disposed on exit).
@@ -2169,6 +2170,8 @@ async function mountBattleField() {
     hudArt:hudProxy,
     onBurst: (slot, options) => activeRuntime.requestBurst?.(slot, options) ?? false,
     bindBurstPress: (button, calls) => bindOverLimitPress(button, { holdMs: OVER_LIMIT_RULES.holdMs, doubleTapMs: OVER_LIMIT_RULES.doubleTapMs, ...calls }),
+    playbackSpeed: tutorial ? 1 : battlePlaybackSpeed,
+    onPlaybackSpeed: tutorial ? null : (next) => { battlePlaybackSpeed = next; },
     resonance: (()=>{const t=activeRuntime.taxonomy?.(),local=activeRuntime.localTeamIndex();return t?{player:t.resonance[local],opponent:t.resonance[1-local],render:keys=>resonanceStrip(keys,{hint:false})}:null;})(),
     dynamicFx: BATTLE_DYNAMIC_FX,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
@@ -2282,7 +2285,8 @@ async function mountBattleField() {
           };
           scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster: liveRoster, effectArt,onView:frame=>view.render(frame),
             dynamicFx:BATTLE_DYNAMIC_FX, responsiveLayout:RESPONSIVE_BATTLE_CANDIDATE, fx:fxLookups, localTeam:activeRuntime.localTeamIndex(), juicy, safeInsets,
-            impactAudio: typeof impactAudio !== 'undefined' ? impactAudio : null });
+            impactAudio: typeof impactAudio !== 'undefined' ? impactAudio : null,
+            getPlaybackSpeed: typeof battlePlaybackSpeed !== 'undefined' ? () => battlePlaybackSpeed : null });
           resetSceneWave = () => { if (!disposed) scene?.resetWaveState?.(); };
           if (disposed) {
             await Promise.all([release(vfxOverlay),release(scene)]);

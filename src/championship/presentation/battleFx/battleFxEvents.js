@@ -95,7 +95,7 @@ export function createBattleFxEventTracker() {
           const hpBefore = before.hp?.current ?? 0, hpAfter = combatant.hp?.current ?? 0, maxHp = Math.max(1, combatant.hp?.maximum ?? 1);
           if (hpAfter < hpBefore) {
             const attacker = attackerFor(slot, combatants);
-            const meta = hitMetaBySlot.get(slot);
+            const meta = hitMetaBySlot.get(combatant.slot ?? slot);
             events.push(Object.freeze({type: 'HIT', frame, slot, damage: hpBefore - hpAfter, hpBefore, hpAfter, maxHp,
               ratio: (hpBefore - hpAfter) / maxHp, attackerSlot: attacker?.slot ?? null,
               moveId: meta?.moveId ?? attacker?.moveId ?? null, critical: meta?.critical === true}));

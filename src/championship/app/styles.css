@@ -1780,6 +1780,7 @@ body[data-day-period="NIGHT"] .int-rh2-field-host::after { background-color: rgb
 .cm-wave-rest__pips { display: inline-flex; gap: 2px; }
 .cm-wave-rest__pip { width: 10px; height: 10px; border: 2px solid #0e101a; border-radius: 50%; background: #e2344f; }
 .cm-wave-rest__boost { color: #c02646; }
+.cm-wave-rest__streak { grid-column: 1 / -1; justify-content: center; padding: 3px 8px; border-radius: 999px; background: #0e101a; color: #7ff6ff; }
 .cm-wave-rest__team { display: grid; gap: 4px; }
 .cm-wave-rest__partner { display: grid; grid-template-columns: minmax(0, 1fr) 2fr; align-items: center; gap: 6px; font-size: var(--fs-label, 12px); font-weight: 800; }
 .cm-wave-rest__partner[data-down="true"] { opacity: 0.45; }

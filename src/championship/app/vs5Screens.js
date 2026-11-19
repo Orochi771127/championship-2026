@@ -1161,7 +1161,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
  * The match. `mountField` attaches the Pixi scene to the host this creates; the
  * DOM carries the words the scene cannot draw and nothing else.
  */
-export function createBattleFieldView({ root, frame, mountField, onExit,onLoadErrorExit=null,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null, resonance=null, onBurst=null, fighterBadge=null, bindBurstPress=null }) {
+export function createBattleFieldView({ root, frame, mountField, onExit,onLoadErrorExit=null,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null, resonance=null, onBurst=null, fighterBadge=null, bindBurstPress=null, playbackSpeed=1, onPlaybackSpeed=null }) {
   if (!frame || !Array.isArray(frame.combatants)) throw new TypeError("The Battle field view requires a battle frame");
   if (typeof mountField !== "function") throw new TypeError("The Battle field view requires the published field mounter");
   if(![0,1].includes(localTeamIndex))throw new TypeError('The Battle field view requires a local team');
@@ -1291,6 +1291,22 @@ export function createBattleFieldView({ root, frame, mountField, onExit,onLoadEr
     VS5_EVIDENCE_LABELS[frame.rosterEvidence] ?? VS5_EVIDENCE_LABELS.PRODUCT_AUTHORED));
   clock.band.prepend(caption);
   if(resonance?.player?.length&&resonance.render){const strip=resonance.render(resonance.player);strip.classList.add('cm-vs5-resonance');caption.append(strip);}
+  if (typeof onPlaybackSpeed === "function") {
+    const SPEEDS = [1, 1.5, 2];
+    let currentSpeed = SPEEDS.includes(playbackSpeed) ? playbackSpeed : 1;
+    const speedBtn = element("button", "cm-vs5-speed", `${currentSpeed}×`, false);
+    speedBtn.type = "button";
+    speedBtn.dataset.speed = String(currentSpeed);
+    speedBtn.setAttribute("aria-label", uiText("BATTLE_SPEED_TOGGLE", { speed: currentSpeed }));
+    speedBtn.addEventListener("click", () => {
+      currentSpeed = SPEEDS[(SPEEDS.indexOf(currentSpeed) + 1) % SPEEDS.length];
+      speedBtn.textContent = `${currentSpeed}×`;
+      speedBtn.dataset.speed = String(currentSpeed);
+      speedBtn.setAttribute("aria-label", uiText("BATTLE_SPEED_TOGGLE", { speed: currentSpeed }));
+      onPlaybackSpeed(currentSpeed);
+    });
+    clock.band.append(speedBtn);
+  }
   const log = eventLogBand({ running: "對戰進行中" });
   const localOutcome=outcome=>localTeamIndex===0?outcome:{...outcome,
     verdict:outcome.verdict==='TEAM_ZERO_AHEAD'?'TEAM_ONE_AHEAD':outcome.verdict==='TEAM_ONE_AHEAD'?'TEAM_ZERO_AHEAD':outcome.verdict,

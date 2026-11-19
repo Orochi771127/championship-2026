@@ -621,6 +621,9 @@ export function createJourneyScreen(host) {
       const statsRow = el("div", "cm-journey__wave-debrief-stats");
       statsRow.append(el("span", "cm-journey__wave-debrief-pill", w.text("cleared", { n: finished.waves })));
       statsRow.append(el("span", "cm-journey__wave-debrief-pill cm-journey__wave-debrief-pill--bits", uiText("WAVE_DEBRIEF_BITS", { bits: (finished.bits ?? 0).toLocaleString() })));
+      if ((finished.syncBonusPercent ?? 0) > 0) {
+        statsRow.append(el("span", "cm-journey__wave-debrief-pill cm-journey__wave-debrief-pill--streak", uiText("WAVE_DEBRIEF_STREAK", { percent: finished.syncBonusPercent })));
+      }
       const itemTotal = Object.values(finished.items ?? {}).reduce((sum, n) => sum + (Number(n) || 0), 0);
       if (itemTotal > 0) {
         statsRow.append(el("span", "cm-journey__wave-debrief-pill", uiText("WAVE_DEBRIEF_ITEMS", { count: itemTotal })));

@@ -5,6 +5,8 @@
 // DOM and Web Animations only: no canvas, no frame callback (the magnet steps on a timer and stops with the field).
 // Every pick goes through the one authority the app gives (collect); the field never pays anything itself.
 import {waveRunText} from '../text/waveRunText.js';
+import {uiText} from '../text/uiText.js';
+import {waveSyncBonusPercent} from '../contracts/productWaveRun.js';
 import {GACHA_GOODS} from '../gacha/cyberGacha.js';
 import {GACHA_CURRENCY_ART} from './cyberGachaIcons.js';
 import {prefersReducedMotion} from '../presentation/presentationPreferences.js';
@@ -299,7 +301,11 @@ export function mountWaveRunField({host, frame, collect, project = () => null, c
       threat.append(pips);
       if (next.foeBoostPercent > 0) threat.append(el(doc, 'b', 'cm-wave-rest__boost', waveRunText('stronger', {n: next.foeBoostPercent})));
     }
-    stats.append(cleared, loot, threat);
+    const nowMult = ((100 + waveSyncBonusPercent(run.wave)) / 100).toFixed(1);
+    const nextMult = ((100 + waveSyncBonusPercent(run.wave + 1)) / 100).toFixed(1);
+    const streak = el(doc, 'div', 'cm-wave-rest__stat cm-wave-rest__streak');
+    streak.append(el(doc, 'b', '', uiText('WAVE_STREAK_NEXT', { now: nowMult, next: nextMult })));
+    stats.append(cleared, loot, threat, streak);
     const team = el(doc, 'div', 'cm-wave-rest__team');
     for (const partner of partners()) {
       const row = el(doc, 'div', 'cm-wave-rest__partner');

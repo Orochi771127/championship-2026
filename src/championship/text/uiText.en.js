@@ -441,6 +441,9 @@ export const UI_COPY_EN = Object.freeze({
   "RANCH_FUSION_AVAILABLE": "Can fuse ({count})",
   "RANCH_STAR_CAPPED": "At star cap",
   "BATTLE_COMBO_HIT": "{count} HIT!",
+  "BATTLE_SPEED_TOGGLE": "Toggle battle speed (currently {speed}x)",
+  "WAVE_STREAK_NEXT": "Sync ×{now} → Next ×{next}",
+  "WAVE_DEBRIEF_STREAK": "Wave streak +{percent}%",
   "輕觸數碼獸查看": "Tap a partner to see it",
   "野生數碼獸": "Wild Creatures",
 

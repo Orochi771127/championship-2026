@@ -429,6 +429,9 @@ export const UI_COPY_VI = Object.freeze({
   "RANCH_FUSION_AVAILABLE": "Có thể dung hợp ({count})",
   "RANCH_STAR_CAPPED": "Đã chạm trần sao",
   "BATTLE_COMBO_HIT": "Liên kích {count}!",
+  "BATTLE_SPEED_TOGGLE": "Đổi tốc độ chiến đấu (hiện {speed}x)",
+  "WAVE_STREAK_NEXT": "Đồng bộ ×{now} → Đợt sau ×{next}",
+  "WAVE_DEBRIEF_STREAK": "Thưởng liên chiến +{percent}%",
   "輕觸數碼獸查看": "Nhấn vào đối tác để xem",
   "野生數碼獸": "bạn đồng hành hoang dã",
 

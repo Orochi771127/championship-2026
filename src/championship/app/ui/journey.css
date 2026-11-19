@@ -247,5 +247,6 @@
 .cm-journey__wave-debrief-stats { display: flex; flex-wrap: wrap; gap: 6px; }
 .cm-journey__wave-debrief-pill { padding: 3px 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); color: #fff; font-size: var(--fs-label, 12px); font-weight: 900; font-variant-numeric: tabular-nums; }
 .cm-journey__wave-debrief-pill--bits { background: rgba(255, 197, 49, 0.22); color: #ffe27a; }
+.cm-journey__wave-debrief-pill--streak { background: rgba(16, 185, 129, 0.24); color: #a7f3d0; }
 .cm-journey__wave-debrief-sync { margin: 0; color: #a6f5c6; font-size: var(--fs-label, 12px); font-weight: 800; line-height: 1.45; }
 .cm-journey__wave-debrief-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }

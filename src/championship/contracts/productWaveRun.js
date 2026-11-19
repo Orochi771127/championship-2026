@@ -27,6 +27,12 @@ export const WAVE_RUN_RULES = deepFreeze({
   magnetEveryMs: 160,            // the magnet pulls one drop this often (presentation pace only)
   dropsShownMax: 24              // more piles than this are merged on screen, never in value
 });
+
+/** Streak Sync EXP bonus percent for clearing multiple waves in one run (1 wave = 0%, +40% per extra wave, cap +360%). */
+export function waveSyncBonusPercent(wavesWon) {
+  const n = Math.max(0, Math.floor(wavesWon) || 0);
+  return n <= 1 ? 0 : Math.min(360, (n - 1) * 40);
+}
 export const WAVE_DEFEAT_POLICIES = Object.freeze(['KEEP_PICKED', 'LOSE_ALL']);
 const ITEM_DROPS = deepFreeze([
   {record: RAISING_TOOL_SHOP_RECORDS.feed, weight: 4}, {record: RAISING_TOOL_SHOP_RECORDS.woundMedicine, weight: 3},

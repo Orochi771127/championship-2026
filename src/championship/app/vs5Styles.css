@@ -1142,3 +1142,19 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
   100% { filter: none; transform: scale(1); }
 }
 :root[data-motion="reduced"] .cm-vs5-fighter:is([data-hit], [data-ko-flash]) { animation: none; }
+.cm-vs5-speed {
+  flex: 0 0 auto;
+  min-width: 46px;
+  min-height: 30px;
+  padding: 2px 9px;
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(14, 16, 26, 0.78);
+  color: #e9e4ff;
+  font: 900 var(--fs-label, 12px)/1 var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.cm-vs5-speed[data-speed="1.5"] { border-color: #6ff7ff; background: rgba(14, 48, 66, 0.88); color: #b9fbff; }
+.cm-vs5-speed[data-speed="2"] { border-color: #ffc531; background: rgba(66, 46, 12, 0.9); color: #ffe27a; }
