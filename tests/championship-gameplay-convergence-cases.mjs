@@ -6,6 +6,9 @@ import { mountBattleSkillHand } from "../src/championship/app/battleSkillHand.js
 import { createBattleFxEventTracker } from "../src/championship/presentation/battleFx/battleFxEvents.js";
 import { createBattleImpactAudio } from "../src/championship/presentation/battleFx/battleImpactAudio.js";
 import { waveSyncBonusPercent } from "../src/championship/contracts/productWaveRun.js";
+import { buildPartnerEvolutionCompass, buildPartnerIdentityCard } from "../src/championship/app/partnerEvolutionCompass.js";
+import { createFullQaSaveText } from "../scripts/lib/championshipFullQaSave.mjs";
+import { growthBranchHistoryIndex } from "../src/championship/contracts/productGrowthRules.js";
 import { buildBattleResultDiagnosis } from "../src/championship/app/battleResultDiagnosis.js";
 import { createPvpRoomSession, PVP_COUNTDOWN_MS } from "../src/championship/online/pvpRoomSession.js";
 import { createChampionshipStandaloneApp } from "../src/championship/app/championshipStandaloneApp.js";
@@ -630,4 +633,112 @@ test("waveSyncBonusPercent scales linearly per extra wave cleared and caps clean
   assert.equal(waveSyncBonusPercent(5), 160);
   assert.equal(waveSyncBonusPercent(10), 360);
   assert.equal(waveSyncBonusPercent(30), 360);
+});
+
+test("buildPartnerEvolutionCompass evaluates real branching routes, masks undiscovered names, and flags Sync Level gate", () => {
+  // Species 25 (Rookie, gen=3) has multiple natural branching evolutions.
+  const ind = createNativeHuntIndividual({ species: nativeHuntSpeciesByIndex(25), rng: { next: () => 11 } });
+  const profile = nativeIndividualProfile(ind);
+
+  // Undiscovered by default: names stay masked (null) and Sync Level gate Lv.1 < need is surfaced.
+  const masked = buildPartnerEvolutionCompass({ profile, sync: { level: 1, star: 1 } });
+  assert.ok(masked && masked.branches.length >= 1);
+  assert.equal(masked.speciesIndex, 25);
+  assert.ok(masked.syncGate && masked.syncGate.need > 1, "low-level Rookie shows Sync Level gate");
+  for (const branch of masked.branches) {
+    assert.equal(branch.revealed, false);
+    assert.equal(branch.targetName, null);
+    assert.ok(branch.totalCount >= 1);
+  }
+
+  // Once both target species and branch history offset are discovered, targetName reveals honestly.
+  const first = masked.branches[0];
+  const historyOffset = (25 - 8) * 5 + growthBranchHistoryIndex(25, first.branchIndex);
+  const revealed = buildPartnerEvolutionCompass({
+    profile,
+    sync: { level: 40, star: 4 },
+    registeredSpecies: [first.targetSpeciesIndex],
+    evolutionBranches: [historyOffset]
+  });
+  assert.equal(revealed.syncGate, null, "high Sync level clears gate");
+  const revealedFirst = revealed.branches.find((b) => b.branchIndex === first.branchIndex);
+  assert.equal(revealedFirst.revealed, true);
+  assert.ok(typeof revealedFirst.targetName === "string" && revealedFirst.targetName.length > 0);
+});
+
+test("buildPartnerIdentityCard distinguishes two raised individuals of the same species", () => {
+  const base = createNativeHuntIndividual({ species: nativeHuntSpeciesByIndex(53), rng: { next: () => 11 } });
+  const baseProfile = nativeIndividualProfile(base);
+
+  // Clone and sculpt one individual as a heavy HP/DEF Tank and another as a high-SPD Speedster.
+  const tankFields = { ...baseProfile.fields, "058": baseProfile.fields["0a8"], "064": baseProfile.fields["0c0"], "020": 90, "024": 10, "028": 8 };
+  const speedFields = { ...baseProfile.fields, "06c": baseProfile.fields["0d0"], "020": 45, "024": 5, "028": 2 };
+
+  const tank = buildPartnerIdentityCard({
+    profile: { fields: tankFields, narrowFields: { ...baseProfile.narrowFields, "03d": 0, "03c": 2 } },
+    sync: { star: 3, level: 22 },
+    tactic: 2,
+    grade: "S"
+  });
+  const speedster = buildPartnerIdentityCard({
+    profile: { fields: speedFields, narrowFields: { ...baseProfile.narrowFields, "03d": 3, "03c": 0 } },
+    sync: { star: 1, level: 8 },
+    tactic: 0,
+    grade: "B"
+  });
+
+  assert.equal(tank.archetype, "TANK");
+  assert.equal(speedster.archetype, "SPEED");
+  assert.equal(tank.careMistakes, 0);
+  assert.equal(tank.affection, 90);
+  assert.equal(tank.winPercent, 80);
+  assert.equal(tank.rebirths, 2);
+  assert.equal(tank.tactic, 2);
+  assert.equal(speedster.careMistakes, 3);
+  assert.equal(speedster.winPercent, 40);
+});
+
+test("app.getRanchGlanceAction surfaces actionable fusion opportunities with localized names", async () => {
+  const data = new Map();
+  const storage = {
+    getItem: (k) => data.get(k) ?? null,
+    removeItem: (k) => data.delete(k),
+    setItem: (k, v) => data.set(k, v)
+  };
+  const cages = readJson("docs/contracts/championship/raising-home-presentation.v1.json").cages;
+  const make = () => createChampionshipStandaloneApp({
+    storage,
+    catalog: readJson("src/data/championship/catalogs/creature-species.r1.json"),
+    cages,
+    rngClock: () => ({ hour: 13, minute: 20, second: 50 })
+  });
+  let app = make();
+  try {
+    await app.newGame();
+    app.save();
+    // Single starter with no fodder and no patrol crystals -> no glance clutter.
+    assert.equal(app.getRanchGlanceAction(), null);
+
+    // Upgrade to a multi-partner save with two same-line partners (species 53).
+    const [key, text] = [...data][0];
+    const save = JSON.parse(createFullQaSaveText(JSON.parse(text), { cageIds: cages.map((e) => e.cageId) }));
+    const partner1 = save.raising.collection[0];
+    const partner2 = save.raising.collection[1];
+    partner1.speciesId = "species-053";
+    partner1.displayName = "SPECIES 053";
+    partner1.nativeProfile.fields["000"] = 53;
+    partner2.speciesId = "species-053";
+    partner2.nativeProfile.fields["000"] = 53;
+    data.set(key, JSON.stringify(save));
+    await app.dispose();
+
+    app = make();
+    await app.continueGame();
+    const glance = app.getRanchGlanceAction();
+    assert.ok(glance && (glance.kind === "FUSION_READY" || glance.kind === "STAR_FUSION"), "fusion fodder surfaces fusion glance");
+    assert.ok(glance.count >= 1);
+    assert.ok(!/^SPECIES \d+$/i.test(glance.name), `partner name must be localized, got ${glance.name}`);
+  } finally {
+    await app.dispose();
+  }
 });

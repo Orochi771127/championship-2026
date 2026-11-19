@@ -302,7 +302,82 @@ export function appendArenaMoveLearning(detail, entry, arenaMoves, rerender) {
   detail.append(group);
 }
 
+function appendPartnerIdentityCard(detail, entry) {
+  const card = entry?.identityCard;
+  if (!card) return;
+  const wrap = element("div", "cm-partner-identity");
+  wrap.dataset.archetype = card.archetype;
+  const head = element("div", "cm-partner-identity__head");
+  head.append(
+    element("span", "cm-partner-identity__title", "PARTNER_IDENTITY_TITLE"),
+    element("span", "cm-partner-identity__archetype", `PARTNER_ARCHETYPE_${card.archetype}`),
+    element("span", "cm-partner-identity__tactic", `PARTNER_TACTIC_${card.tactic}`)
+  );
+  const chips = element("div", "cm-partner-identity__chips");
+  const careText = card.careMistakes === 0
+    ? uiText("PARTNER_CARE_PERFECT")
+    : uiText("PARTNER_CARE_MISTAKES", { count: card.careMistakes });
+  chips.append(element("span", `cm-partner-identity__chip${card.careMistakes === 0 ? " cm-partner-identity__chip--good" : ""}`, careText, false));
+  const bondText = card.affection >= 80
+    ? uiText("PARTNER_BOND_DEEP", { value: card.affection })
+    : uiText("PARTNER_BOND_CLOSE", { value: card.affection });
+  chips.append(element("span", `cm-partner-identity__chip${card.affection >= 80 ? " cm-partner-identity__chip--good" : ""}`, bondText, false));
+  if (card.battles > 0) {
+    chips.append(element("span", "cm-partner-identity__chip", uiText("PARTNER_BATTLE_RECORD", { battles: card.battles, win: card.winPercent }), false));
+  }
+  if (card.rebirths > 0) {
+    chips.append(element("span", "cm-partner-identity__chip", uiText("PARTNER_REBIRTH_LINEAGE", { count: card.rebirths }), false));
+  }
+  wrap.append(head, chips);
+  detail.append(wrap);
+}
+
+function appendEvolutionCompass(detail, entry) {
+  const compass = entry?.evolutionCompass;
+  if (!compass?.branches?.length) return;
+  const wrap = element("div", "cm-evolution-compass");
+  wrap.dataset.species = String(compass.speciesIndex);
+  const head = element("div", "cm-evolution-compass__head");
+  head.append(element("span", "cm-evolution-compass__title", "EVOLUTION_COMPASS_TITLE"));
+  if (compass.syncGate) {
+    head.append(element("span", "cm-evolution-compass__gate", uiText("EVOLUTION_COMPASS_SYNC_GATE", compass.syncGate), false));
+  }
+  wrap.append(head);
+  for (let i = 0; i < compass.branches.length; i++) {
+    const branch = compass.branches[i];
+    const row = element("div", "cm-evolution-compass__branch");
+    row.dataset.ready = String(branch.ready);
+    row.dataset.revealed = String(branch.revealed);
+    const top = element("div", "cm-evolution-compass__row");
+    const targetLabel = branch.targetName ?? uiText("EVOLUTION_COMPASS_UNKNOWN", { n: i + 1 });
+    top.append(
+      element("span", "cm-evolution-compass__target", targetLabel, false),
+      element("span", "cm-evolution-compass__badge", branch.ready
+        ? uiText("EVOLUTION_COMPASS_READY")
+        : uiText("EVOLUTION_COMPASS_PROGRESS", { met: branch.metCount, total: branch.totalCount }), false)
+    );
+    const bar = element("div", "cm-evolution-compass__bar");
+    const fill = element("span", "cm-evolution-compass__fill");
+    fill.style.width = `${Math.round(Math.max(0, Math.min(1, branch.ratio)) * 100)}%`;
+    bar.append(fill);
+    row.append(top, bar);
+    if (branch.unmet.length) {
+      const gaps = branch.unmet.map((item) => {
+        const label = uiText(item.labelKey);
+        return item.operator === "LTE"
+          ? uiText("EVOLUTION_COMPASS_GAP_LTE", { label, target: item.target, current: item.current })
+          : uiText("EVOLUTION_COMPASS_GAP_GTE", { label, gap: item.gap, current: item.current, target: item.target });
+      });
+      row.append(element("p", "cm-evolution-compass__gaps", gaps.join(" · "), false));
+    }
+    wrap.append(row);
+  }
+  detail.append(wrap);
+}
+
 export function appendCreatureDetail(detail, entry, { onBurstForm = null, onAwakening = null } = {}) {
+  appendPartnerIdentityCard(detail, entry);
+  appendEvolutionCompass(detail, entry);
   const style = entryBattleStyle(entry);
   for (const row of TRACED_DETAIL_ROWS) {
     if (row.id === "sp1" && style) {

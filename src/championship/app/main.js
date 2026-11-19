@@ -1283,6 +1283,8 @@ async function mountRaisingHome() {
     getRosterEntry: creatureId => projectRoster().find(entry => entry.instanceId === creatureId) ?? null,
     renderCreatureDetail: appendCreatureDetail,
     openRoster: (instanceId = null) => { rosterOpenOn = instanceId; runToolbarMenuEntry({ id: "digimon", screen: CHAMPIONSHIP_SCREENS.DIGIMON_LIST }); },
+    getGlanceAction: () => app.getRanchGlanceAction?.() ?? null,
+    openPatrol: () => { if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) { app.openBattle(); void openJourney({ tab: 'FEED' }); } },
     firstRunHint: true, // UI entry guidance; its first-use preference is not calendar/save state.
     nextHintDuration: () => consumeRaisingHintDuration(settings.store),
     storySeen: () => settings.store.get().storyRiftChapter1Seen === true,
@@ -2170,8 +2172,8 @@ async function mountBattleField() {
     hudArt:hudProxy,
     onBurst: (slot, options) => activeRuntime.requestBurst?.(slot, options) ?? false,
     bindBurstPress: (button, calls) => bindOverLimitPress(button, { holdMs: OVER_LIMIT_RULES.holdMs, doubleTapMs: OVER_LIMIT_RULES.doubleTapMs, ...calls }),
-    playbackSpeed: tutorial ? 1 : battlePlaybackSpeed,
-    onPlaybackSpeed: tutorial ? null : (next) => { battlePlaybackSpeed = next; },
+    playbackSpeed: tutorial || typeof battlePlaybackSpeed === 'undefined' ? 1 : battlePlaybackSpeed,
+    onPlaybackSpeed: tutorial || typeof battlePlaybackSpeed === 'undefined' ? null : (next) => { battlePlaybackSpeed = next; },
     resonance: (()=>{const t=activeRuntime.taxonomy?.(),local=activeRuntime.localTeamIndex();return t?{player:t.resonance[local],opponent:t.resonance[1-local],render:keys=>resonanceStrip(keys,{hint:false})}:null;})(),
     dynamicFx: BATTLE_DYNAMIC_FX,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
@@ -3351,6 +3353,8 @@ function projectRoster() {
       // OWNER_APPROVED_ADAPTATION 2026-11-02: the 成熟期 partner's burst forms and their progress.
       burst: app.getPartnerBurst?.(instanceId) ?? null,
       awakening: app.getPartnerAwakening?.(instanceId) ?? null,
+      evolutionCompass: app.getPartnerEvolutionCompass?.(instanceId) ?? null,
+      identityCard: app.getPartnerIdentityCard?.(instanceId) ?? null,
       renameable: source?.kind !== "STARTER"
         && Boolean(app.getRaisingState()?.collection?.some((entry) => entry.instanceId === instanceId)),
       stats: profile,
