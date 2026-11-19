@@ -56,6 +56,7 @@ import {loadRegisteredHuntFeedbackArt} from '../presentation/huntFeedbackArt.js'
 import {mountBattleResultCharacters} from '../presentation/battleResultCharacters.js';
 import {nativeBattleWinPercent} from '../battle/nativeTitleProgression.js';
 import { mountBattleAudioPresentation } from '../presentation/battleAudioPresentation.js';
+import { createBattleImpactAudio } from '../presentation/battleFx/battleImpactAudio.js';
 // The battle menu box. Its four faces are ROM_VERIFIED from launcher13.nsbmd;
 // the geometry is original-created, exactly as the Gate world sphere is.
 import { battleMenuLabels, speciesName, raisingDisplayName, starterName, titleEventText, tamerRankName } from "../text/zhHant.js";
@@ -2150,6 +2151,8 @@ async function mountBattleField() {
   startBattleSummaryTally(activeAttemptId);
   activeRuntime.prepareOpening();
   let hudArt=null,viewDisposed=false,loadWaveSprites=null,resetSceneWave=null;
+  const impactAudio = typeof createBattleImpactAudio === 'function'
+    ? createBattleImpactAudio({ getOutput: () => settings?.audio?.output?.('sfx') ?? null }) : null;
   // Optional portraits must not hold the screen/navigation owner hostage.
   // Cards already read their art on render, so this proxy can fill in later.
   const hudProxy={getBattleFrame:(...args)=>hudArt?.getBattleFrame?.(...args)??null,
@@ -2278,7 +2281,8 @@ async function mountBattleField() {
             if (previousExtra && previousExtra !== loadedExtra) void release(previousExtra);
           };
           scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster: liveRoster, effectArt,onView:frame=>view.render(frame),
-            dynamicFx:BATTLE_DYNAMIC_FX, responsiveLayout:RESPONSIVE_BATTLE_CANDIDATE, fx:fxLookups, localTeam:activeRuntime.localTeamIndex(), juicy, safeInsets });
+            dynamicFx:BATTLE_DYNAMIC_FX, responsiveLayout:RESPONSIVE_BATTLE_CANDIDATE, fx:fxLookups, localTeam:activeRuntime.localTeamIndex(), juicy, safeInsets,
+            impactAudio: typeof impactAudio !== 'undefined' ? impactAudio : null });
           resetSceneWave = () => { if (!disposed) scene?.resetWaveState?.(); };
           if (disposed) {
             await Promise.all([release(vfxOverlay),release(scene)]);
@@ -2363,7 +2367,7 @@ async function mountBattleField() {
   // moves on to the result once the battle has judged itself.
   // WAVE_RUN_20261118: a wave of a story or challenge run gets the wave chip, the drops and the rest over the field.
   const waveField = tutorial || waveDriver?.attemptId !== activeAttemptId ? null : mountWaveRunField({ host: root, frame: () => app.getWaveRun(),
-    collect: id => { const got = app.collectWaveDrop(id); if (got?.ok) autosave?.request('wave-drop'); return got; },
+    collect: id => { const got = app.collectWaveDrop(id); if (got?.ok) { impactAudio?.playDropPick?.(); autosave?.request('wave-drop'); } return got; },
     project: stand => battleStandProjector?.(stand) ?? null, canvasRect: () => pixiStage?.app?.canvas?.getBoundingClientRect?.() ?? null,
     partners: () => app.getWaveRun()?.team ?? [], localTeam: activeRuntime.localTeamIndex(),
     choose: choice => waveDriver?.attemptId === activeAttemptId && waveDriver.resolve(choice) });
@@ -2400,7 +2404,7 @@ async function mountBattleField() {
   // The tamer's skill-card hand (ROADMAP_R4_20261118): over the field, gone with the battle screen.
   const skillHand = tutorial ? null : mountBattleSkillHand({ host: root, snapshot: () => activeRuntime.getSkillCards?.() ?? null,
     play: id => activeRuntime.requestSkillCard?.(id) ?? { ok: false, reason: 'NO_HAND' },
-    onPlayed: (card, info) => view.announceSkillCard?.({ ...info, side: /^FOE|MARK/.test(card?.kind ?? '') ? 'opponent' : 'player' }),
+    onPlayed: (card, info) => { impactAudio?.playSupport?.('skillCard'); view.announceSkillCard?.({ ...info, side: /^FOE|MARK/.test(card?.kind ?? '') ? 'opponent' : 'player' }); },
     subscribe: listener => { handListeners.add(listener); return () => handListeners.delete(listener); } });
   // Single-entry wave controller: swaps in Wave N+1 on the same battlefield without leaving BATTLE_FIELD or redrawing the skill hand.
   if (typeof activeWaveController !== 'undefined') activeWaveController = waveField ? {
@@ -2438,7 +2442,7 @@ async function mountBattleField() {
     stopObserveRuntime?.();stopObserveRuntime=null;handListeners.clear();source.dispose();
     // The field went away under a wave: left mid-fight (no result), or from the rest by the screen's own back.
     waveField?.dispose();if(waveField&&waveDriver?.attemptId===activeAttemptId)waveDriver.resolve(waveSettled?'BACK':'LEFT_FIELD');
-    hudLoad.cancel();hudArt=null;view.dispose();}};
+    hudLoad.cancel();hudArt=null;impactAudio?.dispose?.();view.dispose();}};
 }
 
 /** Developer readout: per slot, the wiring a battle received and its tallies. */

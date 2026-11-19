@@ -428,6 +428,7 @@ export const UI_COPY_VI = Object.freeze({
   "RANCH_FUSION_STAR_UP": "Dung hợp tăng sao ({count})",
   "RANCH_FUSION_AVAILABLE": "Có thể dung hợp ({count})",
   "RANCH_STAR_CAPPED": "Đã chạm trần sao",
+  "BATTLE_COMBO_HIT": "Liên kích {count}!",
   "輕觸數碼獸查看": "Nhấn vào đối tác để xem",
   "野生數碼獸": "bạn đồng hành hoang dã",
 

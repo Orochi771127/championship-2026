@@ -214,7 +214,7 @@ export function battleHyperWrapStreaks({count = 18, phase = 0} = {}) {
 
 export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, quality = 'balanced', reducedMotion = false, responsiveLayout = false,
   flashScale = 1, describeMove = () => null, nameOfSlot = () => '', moveNameOf = () => '', text = value => value, seed = 0x51ed, juicy = false,
-  resolveMove = () => null, effectArt = null, hitFeel = null}) {
+  resolveMove = () => null, effectArt = null, hitFeel = null, impactAudio = null}) {
   const textures = createTextures(PIXI);
   if (!textures) return null;
   const random = battleFxRandom(seed);
@@ -327,7 +327,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   const rings = [];
   const words = [];
   const tracked = new Map(); // live effect actor id -> its look and recent path
-  const actorFx = new Map(); // slot -> {flash, squash, knock, knockDir}
+  const actorFx = new Map(); // slot -> {flash, squash, knock, knockDir, lunge, lungeDir}
+  const comboByTeam = {0: {count: 0, at: -1e9}, 1: {count: 0, at: -1e9}};
   const bars = new Map();
   const landedAt = new Map();
   const seenImpacts = new Set();
@@ -418,7 +419,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   }
   function fxFor(slot) {
     let fx = actorFx.get(slot);
-    if (!fx) { fx = {flash: 0, squash: 0, knock: 0, knockDir: 0, knockPx: 3, charge: 0, flashTint: 0xffffff, dashTint: null, dashMs: 0}; actorFx.set(slot, fx); }
+    if (!fx) { fx = {flash: 0, squash: 0, knock: 0, knockDir: 0, knockPx: 3, lunge: 0, lungeDir: 0, charge: 0, flashTint: 0xffffff, dashTint: null, dashMs: 0}; actorFx.set(slot, fx); }
     return fx;
   }
   /** A pooled damage number that arcs away from the hit (juicy). */
@@ -748,6 +749,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           director?.sequence([{slots: [event.slot], durationMs: 650, boost: 0.26}, {slots: [event.slot, ...ctx.opponentsOf(event.slot)], durationMs: 1100, boost: -0.05}]);
           { const s = toScreen(ctx, info.x, info.top + info.height * 0.5); hitFeel?.rush(s.x, s.y); }
           director?.shake(0.18);
+          impactAudio?.playUltimate?.();
         }
         // An ordinary attack does not re-aim the shot (calm shot, Owner 2026-11-11): six fighters
         // launching in turn re-aimed it several times a second. The standing framing shows it.
@@ -771,6 +773,19 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const fx = fxFor(event.slot);
         fx.flash = 1; fx.squash = tier === 'heavy' ? 1 : tier === 'medium' ? 0.7 : 0.4;
         fx.knock = tier === 'heavy' ? 1 : 0.6; fx.knockDir = attacker ? Math.sign(target.x - attacker.x) || -target.facing : -target.facing;
+        if (attacker && event.attackerSlot !== null) {
+          const afx = fxFor(event.attackerSlot);
+          afx.lunge = tier === 'heavy' || critical ? 1 : 0.65;
+          afx.lungeDir = fx.knockDir || attacker.facing;
+        }
+        const strikerTeam = attacker?.team ?? (target.team === 0 ? 1 : 0);
+        const streak = comboByTeam[strikerTeam];
+        if (streak) {
+          streak.count = elapsed - streak.at <= 2000 ? streak.count + 1 : 1;
+          streak.at = elapsed;
+        }
+        const comboCount = streak?.count ?? 1;
+        impactAudio?.playHit?.({tier, critical, combo: comboCount});
         if (juicy) {
           // White first, then the move's element on the rim; the knock follows the hit.
           fx.flashTint = palette.main; fx.knock = 1; fx.knockPx = choreo?.knockPx ?? BATTLE_FX_JUICY.knockPx[tier];
@@ -851,6 +866,13 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         if (critical) word({screenX: p.x, screenY: p.y - 14, content: text('會心一擊！'), size: 20, fill: 0xffe36a});
         else if (tier === 'heavy') word({screenX: p.x, screenY: p.y - 14, content: text('重擊！'), size: 20, fill: palette.core});
         else if (tier === 'medium') word({screenX: p.x, screenY: p.y - 10, content: text('命中！'), size: 14, fill: 0xffffff, life: 600, rise: 16});
+        if (juicy && comboCount >= 2) {
+          const comboColor = comboCount >= 6 ? 0xff6e6e : comboCount >= 4 ? 0xffd23f : 0x7ff6ff;
+          const comboLabel = text('BATTLE_COMBO_HIT', {count: comboCount});
+          word({screenX: p.x + (fx.knockDir || 1) * 18, screenY: p.y - 32,
+            content: comboLabel === 'BATTLE_COMBO_HIT' ? `${comboCount} HIT!` : comboLabel,
+            size: Math.min(22, 13 + comboCount), fill: comboColor, life: 680, rise: 22});
+        }
         continue;
       }
       if (event.type === 'LANDED') { land(event.slot, ctx, 1); continue; }
@@ -858,6 +880,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       if (event.type === 'HEAL' || event.type === 'SUPPORT') {
         const info = slot(event.slot);
         if (!info) continue;
+        impactAudio?.playSupport?.('support');
         if (event.type === 'SUPPORT') cue({type: 'BUFF', system: supportVfxSystem(event.statusCode), slot: event.slot, x: info.x, y: info.groundY});
         // A heal that no support move cast (a regen, an item) shows the baked heal on the body.
         if (event.type === 'HEAL' && piecesBaked()) setPieces.play('heal', {x: info.x, y: info.top + info.height * 0.5, groundY: info.groundY,
@@ -887,6 +910,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       if (event.type === 'KO') {
         const info = slot(event.slot);
         if (!info) continue;
+        impactAudio?.playKo?.();
         // The fall: a dust burst, two rings, debris and scorch where it lands.
         dust({x: info.x, groundY: info.groundY, count: rich ? 10 : 5, spread: info.width * 0.7, scale: 1.3, life: 900});
         if (piecesBaked()) setPieces.play('prop-dust', {x: info.x, y: info.groundY, groundY: info.groundY, palette: BATTLE_FX_PALETTES.earth,
@@ -1088,6 +1112,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       fx.flash = Math.max(0, fx.flash - dtMs / 120);
       fx.squash = Math.max(0, fx.squash - dtMs / 180);
       fx.knock = Math.max(0, fx.knock - dtMs / BATTLE_FX_JUICY.knockMs);
+      fx.lunge = Math.max(0, fx.lunge - dtMs / 140);
       fx.charge = Math.max(0, fx.charge - dtMs / BATTLE_FX_JUICY.windupMs);
       fx.dashMs = Math.max(0, fx.dashMs - dtMs);
       if (fx.flash === 0) fx.flashTint = 0xffffff;
@@ -1274,12 +1299,13 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         // knock is an eased 8-12 px push along the hit with a small shiver.
         const windup = reducedMotion ? 0 : Math.sin(Math.min(1, 1 - fx.charge) * Math.PI) * (fx.charge > 0 ? 1 : 0);
         const push = easeOut(fx.knock);
+        const lungeSnap = reducedMotion ? 0 : Math.sin(fx.lunge * Math.PI) * fx.lungeDir * 7;
         return {flash: fx.flash, flashTint: fx.flashTint,
           squashX: 1 + fx.squash * 0.1 + windup * 0.12, squashY: 1 - fx.squash * 0.08 - windup * 0.12,
-          offsetX: reducedMotion ? 0 : push * fx.knockDir * fx.knockPx + fx.knock * wave * 1.2};
+          offsetX: reducedMotion ? 0 : push * fx.knockDir * fx.knockPx + fx.knock * wave * 1.2 + lungeSnap};
       }
       return {flash: fx.flash, squashX: 1 + fx.squash * 0.1, squashY: 1 - fx.squash * 0.08,
-        offsetX: reducedMotion ? 0 : fx.knock * fx.knockDir * 3 + fx.knock * wave * 1.2};
+        offsetX: reducedMotion ? 0 : fx.knock * fx.knockDir * 3 + fx.knock * wave * 1.2 + Math.sin(fx.lunge * Math.PI) * fx.lungeDir * 4};
     },
     /** Juicy hit-stop: whether this slot's drawn frame should hold this frame. */
     holdFor(slot) { return Boolean(hitStop?.slots.has(slot)); },

@@ -1073,6 +1073,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
     burstMeter = { wrap, fill };
     card.append(wrap);
   }
+  let hitRecoilTimer = null, koFlashTimer = null, wasDown = Boolean(combatant.down);
   return {
     card,
     update(next,frame=0,outcome=null,actingSlot=null) {
@@ -1115,8 +1116,21 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
       // The arcade rebuild's hit feel: the bar drops at once and a white ghost
       // (the meter's ::before, CSS-delayed) follows after a beat.
       hp.wrap.style?.setProperty?.("--ghost", hp.fill.style.width);
-      if (Number.isFinite(paintedHp) && next.hp.current < paintedHp) arcadeFx(hp.wrap, "damage", `-${paintedHp - next.hp.current}`);
+      if (Number.isFinite(paintedHp) && next.hp.current < paintedHp) {
+        const drop = paintedHp - next.hp.current;
+        arcadeFx(hp.wrap, "damage", `-${drop}`);
+        const maxHp = Math.max(1, next.hp.maximum || 1);
+        card.dataset.hit = drop / maxHp >= 0.15 ? "heavy" : "normal";
+        if (hitRecoilTimer) clearTimeout(hitRecoilTimer);
+        hitRecoilTimer = setTimeout(() => { delete card.dataset.hit; hitRecoilTimer = null; }, 240);
+      }
       paintedHp = next.hp.current;
+      if (!wasDown && next.down) {
+        card.dataset.koFlash = "true";
+        if (koFlashTimer) clearTimeout(koFlashTimer);
+        koFlashTimer = setTimeout(() => { delete card.dataset.koFlash; koFlashTimer = null; }, 420);
+      }
+      wasDown = Boolean(next.down);
       if (updateHpNumerals) updateHpNumerals(next.hp);
       else hpValue.textContent = uiText("生命值 {hp} / {max}", { hp: next.hp.current, max: next.hp.maximum });
       hp.wrap.setAttribute('aria-label', floatingHud ? `${uiText('Health')} ${next.hp.current} / ${next.hp.maximum}` : uiText(hpValue.textContent));
@@ -1136,6 +1150,8 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
       }
     },
     dispose() {
+      if (hitRecoilTimer) { clearTimeout(hitRecoilTimer); hitRecoilTimer = null; }
+      if (koFlashTimer) { clearTimeout(koFlashTimer); koFlashTimer = null; }
       if (miniImage) hudArt?.clearActionPortrait?.(miniImage);
     }
   };

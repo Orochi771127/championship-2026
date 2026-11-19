@@ -428,6 +428,7 @@ export const UI_COPY_TH = Object.freeze({
   "RANCH_FUSION_STAR_UP": "หลอมเพิ่มดาวได้ ({count})",
   "RANCH_FUSION_AVAILABLE": "หลอมได้ ({count})",
   "RANCH_STAR_CAPPED": "ถึงเพดานดาว",
+  "BATTLE_COMBO_HIT": "คอมโบ {count}!",
   "輕觸數碼獸查看": "แตะพันธมิตรเพื่อดู",
   "野生數碼獸": "สหายป่า",
 

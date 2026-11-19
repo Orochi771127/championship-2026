@@ -226,7 +226,7 @@ function drawField(graphic, rect, frame, view, renderedSlots) {
  */
 export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt = null, characterRoster = null, effectArt = null, autoAdvance = true,
   onView = null, dynamicFx = false, fx = null, localTeam = 0, responsiveLayout = false,
-  reducedMotion = prefersReducedMotion(), juicy = false, safeInsets = null }) {
+  reducedMotion = prefersReducedMotion(), juicy = false, safeInsets = null, impactAudio = null, getPlaybackSpeed = null }) {
   assertDependencies(stage, source);
   responsiveLayout = responsiveLayout && dynamicFx;
   if (fieldArt !== null && (!fieldArt.displayObject || typeof fieldArt.update !== "function"
@@ -282,7 +282,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   const fxLayer = dynamicFx ? createBattleFxLayer({PIXI:stage.PIXI, worldBack:fxBack, worldFront:fxFront, screen:fxScreen, hitFeel,
     quality:currentQualityTier(), reducedMotion, responsiveLayout, flashScale:currentFlashScale(),
     describeMove:fx?.describeMove, nameOfSlot:fx?.nameOfSlot, moveNameOf:fx?.moveNameOf, text:fx?.text, juicy,
-    resolveMove:fx?.resolveMove, effectArt:shownArt}) : null;
+    resolveMove:fx?.resolveMove, effectArt:shownArt, impactAudio}) : null;
   // Status ailments (STATUS_AILMENT_VFX_20261110): a loop round each fighter whose
   // negative-status slot is set, and a tint / glow on its own frame. Display only.
   const statusFx = fxLayer ? createBattleStatusAilmentFx({PIXI:stage.PIXI, layer:actorLayer, reducedMotion, quality:currentQualityTier()}) : null;
