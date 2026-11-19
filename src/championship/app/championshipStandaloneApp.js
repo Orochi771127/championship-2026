@@ -4644,22 +4644,27 @@ export function createChampionshipStandaloneApp({
     getBattleBurstPlan(instanceId){return battleBurstPlanOf(instanceId);},
     /** Awakening raising (OWNER_APPROVED_ADAPTATION 2026-11-02): the partner's awakening path, or null. */
     getPartnerAwakening(instanceId){return partnerAwakeningView(instanceId);},
-    getPartnerEvolutionCompass(instanceId){
+    getPartnerEvolutionCompass(instanceId,{pinnedBranchIndex=null}={}){
       if(!session)return null;
       return buildPartnerEvolutionCompass({
         profile:syncProfileOf(instanceId),
         sync:syncLevelOf(instanceId),
         registeredSpecies:registeredSpeciesValue,
-        evolutionBranches:raising?.nativeHome?.evolutionBranches??[]
+        evolutionBranches:raising?.nativeHome?.evolutionBranches??[],
+        pinnedBranchIndex
       });
     },
     getPartnerIdentityCard(instanceId){
       if(!session)return null;
+      const reading=partnerLife?partnerReading(instanceId):null;
+      const tier=reading?PARTNER_MOOD_TIERS.find(t=>t.id===reading.moodTier):null;
+      const mood=reading?{emoji:reading.emoji,tier:reading.moodTier,label:uiText(tier?.label??'心情普通')}:null;
       return buildPartnerIdentityCard({
         profile:syncProfileOf(instanceId),
         sync:syncLevelOf(instanceId),
         tactic:battleTactics?.[instanceId]??BATTLE_TACTIC_DEFAULT,
-        grade:partnerGradeOf(syncLevels,instanceId)
+        grade:partnerGradeOf(syncLevels,instanceId),
+        mood
       });
     },
     getRanchGlanceAction(){

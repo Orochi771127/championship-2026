@@ -32,7 +32,8 @@ export function buildPartnerEvolutionCompass({
   sync = null,
   registeredSpecies = [],
   evolutionBranches = [],
-  maxBranches = 2
+  maxBranches = 2,
+  pinnedBranchIndex = null
 } = {}) {
   const fields = profile?.fields;
   const narrow = profile?.narrowFields;
@@ -103,6 +104,7 @@ export function buildPartnerEvolutionCompass({
       targetSpeciesIndex: rule.target,
       revealed,
       targetName: revealed ? speciesName(rule.target) : null,
+      pinned: pinnedBranchIndex === branchIndex,
       metCount,
       totalCount,
       ratio,
@@ -114,6 +116,7 @@ export function buildPartnerEvolutionCompass({
 
   if (!evaluated.length) return null;
   evaluated.sort((a, b) => {
+    if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
     if (a.ready !== b.ready) return a.ready ? -1 : 1;
     if (b.ratio !== a.ratio) return b.ratio - a.ratio;
     if (a.unmet.length !== b.unmet.length) return a.unmet.length - b.unmet.length;
@@ -122,22 +125,70 @@ export function buildPartnerEvolutionCompass({
 
   const syncLevel = sync?.level ?? 1;
   const syncGate = evolutionLevelShort(species.generation, syncLevel);
+  const pinnedBranch = evaluated.find((b) => b.pinned) ?? null;
+  const visible = evaluated.slice(0, Math.max(1, maxBranches));
   return deepFreeze({
     speciesIndex,
     totalBranches: evaluated.length,
     syncGate: syncGate ? { need: syncGate.need, level: syncGate.level } : null,
-    branches: evaluated.slice(0, Math.max(1, maxBranches))
+    pinnedGoal: pinnedBranch ? {
+      branchIndex: pinnedBranch.branchIndex,
+      revealed: pinnedBranch.revealed,
+      targetName: pinnedBranch.targetName,
+      metCount: pinnedBranch.metCount,
+      totalCount: pinnedBranch.totalCount,
+      ratio: pinnedBranch.ratio,
+      ready: pinnedBranch.ready,
+      syncGate: syncGate ? { need: syncGate.need, level: syncGate.level } : null,
+      nextGap: pinnedBranch.unmet[0] ?? null
+    } : null,
+    branches: visible
   });
+}
+
+export const EVOLUTION_PIN_STORAGE_KEY = "championship:evolutionPins:v1";
+
+function readPinStore(storage) {
+  try {
+    const raw = storage?.getItem?.(EVOLUTION_PIN_STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+export function getPinnedEvolutionBranch(storage, instanceId, speciesIndex) {
+  if (!instanceId || !Number.isInteger(speciesIndex)) return null;
+  const entry = readPinStore(storage)[instanceId];
+  if (!entry || entry.speciesIndex !== speciesIndex || !Number.isInteger(entry.branchIndex)) return null;
+  return entry.branchIndex;
+}
+
+export function togglePinnedEvolutionBranch(storage, instanceId, speciesIndex, branchIndex) {
+  if (!storage || !instanceId || !Number.isInteger(speciesIndex) || !Number.isInteger(branchIndex)) return null;
+  const store = readPinStore(storage);
+  const current = store[instanceId];
+  let next = null;
+  if (current && current.speciesIndex === speciesIndex && current.branchIndex === branchIndex) {
+    delete store[instanceId];
+  } else {
+    store[instanceId] = { speciesIndex, branchIndex };
+    next = branchIndex;
+  }
+  try { storage.setItem?.(EVOLUTION_PIN_STORAGE_KEY, JSON.stringify(store)); } catch {}
+  return next;
 }
 
 // Six core stats: HP(058), TP(05c), ATK(060), DEF(064), WIS(068), SPD(06c) with bounds at 0xa8 + i*8.
 const CORE_STAT_KEYS = Object.freeze(["058", "05c", "060", "064", "068", "06c"]);
 
 /**
- * Derive an individual partner's recognizable build archetype & raising history
+ * Derive an individual partner's recognizable build archetype & living story
  * from its own real native fields (distinguishing two partners of the same species).
  */
-export function buildPartnerIdentityCard({ profile, sync = null, tactic = 0, grade = null } = {}) {
+export function buildPartnerIdentityCard({ profile, sync = null, tactic = 0, grade = null, mood = null } = {}) {
   const fields = profile?.fields;
   const narrow = profile?.narrowFields;
   if (!fields || !narrow) return null;
@@ -169,8 +220,29 @@ export function buildPartnerIdentityCard({ profile, sync = null, tactic = 0, gra
   const winPercent = battles > 0 ? Math.round((wins / battles) * 100) : 0;
   const rebirths = Math.max(0, narrow["03c"] ?? 0);
 
+  // Pick a vivid, factually-grounded story line rather than a spreadsheet readout.
+  let storyKey = "PARTNER_STORY_ROOKIE";
+  if (rebirths > 0) storyKey = "PARTNER_STORY_REBIRTH";
+  else if (battles >= 5 && winPercent >= 60) storyKey = "PARTNER_STORY_VETERAN";
+  else if (affection >= 75 && battles > 0) storyKey = "PARTNER_STORY_BONDED";
+  else if (affection >= 75) storyKey = "PARTNER_STORY_BONDED_CALM";
+  else if (battles > 0 && careMistakes > 0) storyKey = "PARTNER_STORY_SCRAPPY";
+  else if (battles > 0) storyKey = "PARTNER_STORY_FIGHTER";
+
+  // Milestones only light up when genuinely earned (max 3).
+  const milestones = [];
+  if (careMistakes === 0 && (battles > 0 || affection >= 50 || rebirths > 0)) milestones.push("CARE_PERFECT");
+  if (affection >= 80) milestones.push("DEEP_BOND");
+  if (battles >= 5 && winPercent >= 70) milestones.push("VETERAN");
+  if (rebirths > 0) milestones.push("REBIRTH");
+
   return deepFreeze({
     archetype,
+    traitKey: `PARTNER_TRAIT_${archetype}`,
+    careKey: careMistakes === 0 ? "PARTNER_CARE_PHRASE_CLEAN" : "PARTNER_CARE_PHRASE_LIVELY",
+    storyKey,
+    milestones: milestones.slice(0, 3),
+    mood: mood ? { emoji: mood.emoji, tier: mood.tier, label: mood.label } : null,
     tactic: Number.isInteger(tactic) && tactic >= 0 && tactic <= 2 ? tactic : 0,
     grade: typeof grade === "string" ? grade : grade?.grade ?? null,
     star: sync?.star ?? 1,

@@ -212,7 +212,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   // ROADMAP_R2_20261118: ready to evolve, but its Sync Level is under the stage's gate.
   const levelChip = node('span', 'int-rh2-companion__evolve-level'); levelChip.hidden = true;
   const fusionChip = node('span', 'int-rh2-companion__fusion'); fusionChip.hidden = true;
-  placeRow.append(placeChip, starsChip, fusionChip, moodChip, habitatChip, levelChip, crowdedChip);
+  const goalChip = node('span', 'int-rh2-companion__goal'); goalChip.hidden = true;
+  placeRow.append(placeChip, starsChip, fusionChip, goalChip, moodChip, habitatChip, levelChip, crowdedChip);
   const more = node("span", "int-rh2-companion__more", "詳細");
   more.setAttribute("aria-hidden", "true");
 
@@ -833,6 +834,23 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     const placeTitle = livesIn ? uiText(`Living in ${livesIn}`) : '';
     if (placeChip.title !== placeTitle) placeChip.title = placeTitle;
     paintPartnerMood(resident?.partner ?? null);
+    const pinnedGoal = entry?.evolutionCompass?.pinnedGoal ?? null;
+    writeHidden(goalChip, !pinnedGoal);
+    if (pinnedGoal) {
+      writeData(goalChip, 'ready', String(Boolean(pinnedGoal.ready)));
+      const target = pinnedGoal.targetName ?? uiText('EVOLUTION_PIN_UNKNOWN');
+      const gap = pinnedGoal.nextGap;
+      const goalText = pinnedGoal.ready && pinnedGoal.syncGate
+        ? uiText('EVOLUTION_PIN_CHIP_SYNC', { target, need: pinnedGoal.syncGate.need })
+        : pinnedGoal.ready
+          ? uiText('EVOLUTION_PIN_CHIP_READY', { target })
+          : gap
+            ? (gap.operator === 'LTE'
+              ? uiText('EVOLUTION_PIN_CHIP_LTE', { target, label: uiText(gap.labelKey), max: gap.target })
+              : uiText('EVOLUTION_PIN_CHIP_GAP', { target, label: uiText(gap.labelKey), gap: gap.gap }))
+            : uiText('EVOLUTION_PIN_CHIP_READY', { target });
+      writeText(goalChip, goalText);
+    }
     placeCard(resident);
     if (!resident) closeDetail(); else paintDetail(resident);
 

@@ -57,6 +57,7 @@ import {mountBattleResultCharacters} from '../presentation/battleResultCharacter
 import {nativeBattleWinPercent} from '../battle/nativeTitleProgression.js';
 import { mountBattleAudioPresentation } from '../presentation/battleAudioPresentation.js';
 import { createBattleImpactAudio } from '../presentation/battleFx/battleImpactAudio.js';
+import { getPinnedEvolutionBranch, togglePinnedEvolutionBranch } from './partnerEvolutionCompass.js';
 // The battle menu box. Its four faces are ROM_VERIFIED from launcher13.nsbmd;
 // the geometry is original-created, exactly as the Gate world sphere is.
 import { battleMenuLabels, speciesName, raisingDisplayName, starterName, titleEventText, tamerRankName } from "../text/zhHant.js";
@@ -1981,8 +1982,9 @@ async function openJourney(prefill = null) {
     if (app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) { journeyView = null; return; }
     const describe = (entry) => {
       const index = juicySpeciesIndex(entry?.speciesId);
+      const mood = entry?.instanceId ? app.getPartnerMoodBadge?.(entry.instanceId) ?? null : null;
       return { name: entry?.displayName || (index === null ? '' : speciesName(index)), portrait: index === null ? null : { species: index },
-        styleChip: battleStyleChip(entry?.battleStyle) };
+        styleChip: battleStyleChip(entry?.battleStyle), mood };
     };
     root.inert = true;
     journeyView = createJourneyScreen({
@@ -2827,6 +2829,12 @@ async function mountCurrentScreen() {
         if (result.ok) autosave?.request('burst-form');
         return result.ok ? { ...result, entries: projectRoster() } : result;
       },
+      onToggleEvolutionPin(instanceId, speciesIndex, branchIndex) {
+        if (typeof togglePinnedEvolutionBranch === 'function') {
+          togglePinnedEvolutionBranch(globalThis.localStorage, instanceId, speciesIndex, branchIndex);
+        }
+        return { ok: true, entries: projectRoster() };
+      },
       // Awakening raising (2026-11-02): goal, energy items, core transcendence, battle form and ranch look.
       onAwakening(action, instanceId, value) {
         const result = action === 'target' ? app.setAwakeningTarget(instanceId, value)
@@ -3353,7 +3361,11 @@ function projectRoster() {
       // OWNER_APPROVED_ADAPTATION 2026-11-02: the 成熟期 partner's burst forms and their progress.
       burst: app.getPartnerBurst?.(instanceId) ?? null,
       awakening: app.getPartnerAwakening?.(instanceId) ?? null,
-      evolutionCompass: app.getPartnerEvolutionCompass?.(instanceId) ?? null,
+      evolutionCompass: app.getPartnerEvolutionCompass?.(instanceId, {
+        pinnedBranchIndex: typeof getPinnedEvolutionBranch === 'function'
+          ? getPinnedEvolutionBranch(globalThis.localStorage, instanceId, profile?.speciesIndex ?? null)
+          : null
+      }) ?? null,
       identityCard: app.getPartnerIdentityCard?.(instanceId) ?? null,
       renameable: source?.kind !== "STARTER"
         && Boolean(app.getRaisingState()?.collection?.some((entry) => entry.instanceId === instanceId)),

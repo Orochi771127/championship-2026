@@ -178,6 +178,24 @@ body[data-desktop-raising] .int-rh2-companion[data-open="false"] {
   line-height: 1;
   cursor: pointer;
 }
+.int-rh2-companion__goal {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--c-accent-line);
+  background: color-mix(in srgb, var(--c-accent) 16%, var(--c-surface-1));
+  color: var(--c-text-1);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-strong);
+  white-space: nowrap;
+}
+.int-rh2-companion__goal[hidden] { display: none; }
+.int-rh2-companion__goal[data-ready="true"] {
+  background: var(--c-accent);
+  color: var(--c-text-on-accent);
+}
 /* One finite visual fade, shared by entry guidance and tool instructions. */
 .int-rh2-hint, .cm-toolbar__tool-hint { transition: opacity .3s ease-out; }
 .int-rh2-hint[data-hint-phase="fading"], .cm-toolbar__tool-hint[data-hint-phase="fading"] { opacity: 0; }

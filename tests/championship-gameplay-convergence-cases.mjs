@@ -6,7 +6,12 @@ import { mountBattleSkillHand } from "../src/championship/app/battleSkillHand.js
 import { createBattleFxEventTracker } from "../src/championship/presentation/battleFx/battleFxEvents.js";
 import { createBattleImpactAudio } from "../src/championship/presentation/battleFx/battleImpactAudio.js";
 import { waveSyncBonusPercent } from "../src/championship/contracts/productWaveRun.js";
-import { buildPartnerEvolutionCompass, buildPartnerIdentityCard } from "../src/championship/app/partnerEvolutionCompass.js";
+import {
+  buildPartnerEvolutionCompass,
+  buildPartnerIdentityCard,
+  getPinnedEvolutionBranch,
+  togglePinnedEvolutionBranch
+} from "../src/championship/app/partnerEvolutionCompass.js";
 import { createFullQaSaveText } from "../scripts/lib/championshipFullQaSave.mjs";
 import { growthBranchHistoryIndex } from "../src/championship/contracts/productGrowthRules.js";
 import { buildBattleResultDiagnosis } from "../src/championship/app/battleResultDiagnosis.js";
@@ -689,6 +694,10 @@ test("buildPartnerIdentityCard distinguishes two raised individuals of the same 
 
   assert.equal(tank.archetype, "TANK");
   assert.equal(speedster.archetype, "SPEED");
+  assert.equal(tank.storyKey, "PARTNER_STORY_REBIRTH");
+  assert.deepEqual(tank.milestones, ["CARE_PERFECT", "DEEP_BOND", "VETERAN"]);
+  assert.equal(speedster.storyKey, "PARTNER_STORY_SCRAPPY");
+  assert.deepEqual(speedster.milestones, []);
   assert.equal(tank.careMistakes, 0);
   assert.equal(tank.affection, 90);
   assert.equal(tank.winPercent, 80);
@@ -696,6 +705,29 @@ test("buildPartnerIdentityCard distinguishes two raised individuals of the same 
   assert.equal(tank.tactic, 2);
   assert.equal(speedster.careMistakes, 3);
   assert.equal(speedster.winPercent, 40);
+});
+
+test("evolution pin storage toggles, elevates pinned branch in compass, and auto-clears after species evolution", () => {
+  const mem = new Map();
+  const storage = { getItem: (k) => mem.get(k) ?? null, setItem: (k, v) => mem.set(k, v) };
+  assert.equal(getPinnedEvolutionBranch(storage, "p-1", 25), null);
+  assert.equal(togglePinnedEvolutionBranch(storage, "p-1", 25, 1), 1);
+  assert.equal(getPinnedEvolutionBranch(storage, "p-1", 25), 1);
+  // If the partner evolves from species 25 -> 53, the old pin auto-invalidates!
+  assert.equal(getPinnedEvolutionBranch(storage, "p-1", 53), null);
+
+  const ind = createNativeHuntIndividual({ species: nativeHuntSpeciesByIndex(25), rng: { next: () => 11 } });
+  const profile = nativeIndividualProfile(ind);
+  const compass = buildPartnerEvolutionCompass({ profile, sync: { level: 3, star: 1 }, pinnedBranchIndex: 1 });
+  assert.equal(compass.branches[0].branchIndex, 1, "pinned branch is surfaced first");
+  assert.equal(compass.branches[0].pinned, true);
+  assert.ok(compass.pinnedGoal && compass.pinnedGoal.branchIndex === 1);
+  assert.equal(compass.pinnedGoal.revealed, false, "unrevealed pinned branch stays masked");
+  assert.equal(compass.pinnedGoal.targetName, null);
+
+  // Toggling the same branch again unpins cleanly
+  assert.equal(togglePinnedEvolutionBranch(storage, "p-1", 25, 1), null);
+  assert.equal(getPinnedEvolutionBranch(storage, "p-1", 25), null);
 });
 
 test("app.getRanchGlanceAction surfaces actionable fusion opportunities with localized names", async () => {
