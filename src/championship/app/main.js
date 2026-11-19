@@ -1889,6 +1889,7 @@ async function mountBattleSelect() {
     onOpenChampionship() { app.openChampionship(); },
     onOpenDataArena: enterDataArena,
     onOpenJourney: () => void openJourney(),
+    onGoHunt: () => { if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen(); expeditionSource?.intents.openGate(); },
     async onEnter(recordIndex,playerInstanceIds,mode,selectedArena=null) {
       // Battle simulation uses this existing Application's ticker. Do not
       // charge for a session that cannot start advancing on the shared stage.
@@ -2016,7 +2017,12 @@ async function openJourney(prefill = null) {
         variant: TACTIC_RECORD_VARIANT,
         downloadLog: new URLSearchParams(location.search).get('playtest') === '1' ? downloadTacticPlaytestLog : null
       },
-      onClose: closeJourney
+      onClose: closeJourney,
+      onGoHunt: () => {
+        closeJourney();
+        if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen();
+        expeditionSource?.intents.openGate();
+      }
     });
     if (app) recordSessionScreenMounted(app.getScreen());
   } catch (error) { console.warn('Journey unavailable', error); closeJourney(); }

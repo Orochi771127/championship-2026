@@ -231,3 +231,7 @@
   font: 900 calc(15px * var(--text-scale, 1))/1 var(--font-ui); }
 .cm-journey__wave-icon { width: 32px; height: 32px; object-fit: contain; }
 .cm-journey__wave-keys { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cm-journey__empty-team { display: grid; gap: 8px; padding: 12px; border-radius: 14px; background: rgba(255, 210, 63, 0.12); box-shadow: inset 0 0 0 1px rgba(255, 210, 63, 0.4); }
+.cm-journey__empty-hint { margin: 0; color: #fff4c2; font-size: var(--fs-body-sm, 14px); font-weight: 800; line-height: 1.4; }
+.cm-journey__empty-reason { margin: 0; color: #d9d2ff; font-size: var(--fs-label, 12px); font-weight: 700; }
+.cm-journey__hunt-cta { --key-face: #6ff7ff; --key-shade: #10739a; --key-ink: #08212a; }

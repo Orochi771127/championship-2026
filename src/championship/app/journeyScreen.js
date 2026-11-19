@@ -218,6 +218,25 @@ export function createJourneyScreen(host) {
     return wrap;
   }
 
+  function emptyTeamCard() {
+    const box = el("div", "cm-journey__empty-team");
+    box.append(el("p", "cm-journey__empty-hint", uiText("JOURNEY_NO_TEAM_HINT")));
+    const reasons = candidates
+      .filter((c) => c.admission && !c.admission.ok)
+      .slice(0, 3)
+      .map((c) => {
+        const look = host.describe(c);
+        return c.admission?.message ? `${look.name}：${c.admission.message}` : look.name;
+      });
+    for (const line of reasons) box.append(el("p", "cm-journey__empty-reason", line));
+    if (typeof host.onGoHunt === "function") {
+      const goHunt = button("cm-journey__go cm-arcade-key cm-journey__hunt-cta", uiText("JOURNEY_NO_TEAM_CTA"), () => host.onGoHunt());
+      goHunt.dataset.journeyAction = "go-hunt";
+      box.append(goHunt);
+    }
+    return box;
+  }
+
   function paintTower() {
     const frame = host.frame();
     if (selectedFloor === null || selectedFloor > frame.next) selectedFloor = frame.next;
@@ -238,7 +257,8 @@ export function createJourneyScreen(host) {
     if (info.cleared) rewards.dataset.claimed = "true";
     detail.append(rewards, el("p", "cm-journey__team-title", t("tower.team")));
     const roster = el("div", "cm-journey__team");
-    for (const entry of candidates.filter((c) => c.admission?.ok)) {
+    const eligible = candidates.filter((c) => c.admission?.ok);
+    for (const entry of eligible) {
       const look = host.describe(entry), sync = host.syncOf(entry.instanceId);
       const chip = button("cm-journey__member", "", () => {
         team = team.includes(entry.instanceId) ? team.filter((id) => id !== entry.instanceId) : team.length < 3 ? [...team, entry.instanceId] : team;
@@ -254,7 +274,8 @@ export function createJourneyScreen(host) {
     go.dataset.journeyAction = "challenge";
     go.disabled = busy || team.length === 0 || !info.open;
     const tactics = squadTacticsStrip(team);
-    detail.append(roster, teamResonanceBanner(team), ...(tactics ? [tactics] : []), go);
+    if (eligible.length === 0) detail.append(emptyTeamCard(), go);
+    else detail.append(roster, teamResonanceBanner(team), ...(tactics ? [tactics] : []), go);
     panel.append(detail);
     body.replaceChildren(panel);
   }
@@ -438,7 +459,8 @@ export function createJourneyScreen(host) {
     const partnerId = series?.instanceId ?? practicePick;
     panel.append(el("p", "cm-journey__team-title", pt("practice.partner")));
     const roster = el("div", "cm-journey__team");
-    for (const entry of candidates.filter((c) => c.admission?.ok)) {
+    const eligible = candidates.filter((c) => c.admission?.ok);
+    for (const entry of eligible) {
       const look = host.describe(entry);
       const chip = button("cm-journey__member", "", () => {
         if (busy) return;
@@ -450,6 +472,7 @@ export function createJourneyScreen(host) {
       chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name), ...(look.styleChip ? [look.styleChip] : []));
       roster.append(chip);
     }
+    if (eligible.length === 0) { panel.append(emptyTeamCard()); body.replaceChildren(panel); return; }
     panel.append(roster);
     if (!partnerId) { body.replaceChildren(panel); return; }
     // P2: the TP this partner carries into the next bout (what a skill-heavy plan spends).
@@ -580,7 +603,8 @@ export function createJourneyScreen(host) {
     }
     panel.append(el("p", "cm-journey__team-title", w.text("team", { n: `${team.length}/3` })));
     const roster = el("div", "cm-journey__team");
-    for (const entry of candidates.filter((c) => c.admission?.ok)) {
+    const eligible = candidates.filter((c) => c.admission?.ok);
+    for (const entry of eligible) {
       const look = host.describe(entry), sync = host.syncOf(entry.instanceId);
       const chip = button("cm-journey__member", "", () => {
         team = team.includes(entry.instanceId) ? team.filter((id) => id !== entry.instanceId) : team.length < 3 ? [...team, entry.instanceId] : team;
@@ -597,7 +621,8 @@ export function createJourneyScreen(host) {
     go.dataset.journeyAction = "wave-start";
     go.disabled = busy || team.length === 0;
     const tactics = squadTacticsStrip(team);
-    panel.append(roster, teamResonanceBanner(team), ...(tactics ? [tactics] : []), go);
+    if (eligible.length === 0) panel.append(emptyTeamCard(), go);
+    else panel.append(roster, teamResonanceBanner(team), ...(tactics ? [tactics] : []), go);
     body.replaceChildren(panel);
   }
   async function startChallenge(ids) {

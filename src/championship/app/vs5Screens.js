@@ -195,7 +195,7 @@ export function createSponsorContractStrip(source, busy = () => false) {
   return strip;
 }
 
-export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, onOpenJourney=null, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null, describeMember=null, speciesBody=null, sponsorContracts=null }) {
+export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, onOpenJourney=null, onGoHunt=null, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null, describeMember=null, speciesBody=null, sponsorContracts=null }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -507,7 +507,15 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       card.append(button,plan);
       controls.push([entry,button,card,plan]);partyPanel.append(card);
     }
-    if(!candidates.some(c=>c.admission.ok))partyPanel.append(element('p','cm-vs5-entry-notice','目前沒有符合這場比賽條件的拍檔。'));
+    if(!candidates.some(c=>c.admission.ok)){
+      partyPanel.append(element('p','cm-vs5-entry-notice','目前沒有符合這場比賽條件的拍檔。'));
+      if(typeof onGoHunt==='function'){
+        const goHunt=actionButton('JOURNEY_NO_TEAM_CTA',{primary:true});
+        goHunt.dataset.loopAction='hunt';
+        goHunt.addEventListener('click',()=>{if(!entering)onGoHunt();});
+        partyPanel.append(goHunt);
+      }
+    }
     confirm.addEventListener('click',async()=>{if(confirm.disabled||entering)return;confirm.disabled=true;entering=true;back.disabled=true;
       try{showRefusal(await onEnter(match.recordIndex,[...selectedIds],mode,...(arena?[arena.value()]:[])),match);}
       catch(error){if(!cubeDisposed)showRefusal({ok:false,message:'對戰準備失敗，請再試一次。'},match);}
