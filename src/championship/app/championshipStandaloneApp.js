@@ -831,8 +831,20 @@ export function createChampionshipStandaloneApp({
       // Owner 2026-11-04: its next form would overfill the cage for this tamer rank.
       crowded:Boolean(actor.capacityBlocked),
       star:syncOf(syncLevels,id).star, // R3: the star emblem on the ranch card
+      starCapped:Boolean(syncOf(syncLevels,id).capped),
+      fusionCount:fusionFodderCountOf(id),
       // R2: its conditions already choose a next form, but its Sync Level is under the stage's gate.
       evolveLevel:actor.levelBlocked?evolutionLevelNeed(id,fields['000']):null});
+  }
+  function fusionFodderCountOf(baseId){
+    if(!raising?.collection?.length||fusionSpeciesOf(baseId)===null)return 0;
+    let count=0;
+    for(const entry of raising.collection){
+      if(entry.instanceId===baseId)continue;
+      if(fusionHomeFodderRefusal(entry.instanceId)!==null)continue;
+      if(fusionLineOf(baseId,fusionSpeciesOf(entry.instanceId))>0)count+=1;
+    }
+    return count;
   }
   /** R2: `{need, level}` while this partner is too low to evolve out of its stage (null in the playtest and above the gate). */
   function evolutionLevelNeed(instanceId,speciesIndex){

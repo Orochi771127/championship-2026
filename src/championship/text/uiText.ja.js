@@ -425,6 +425,9 @@ export const UI_COPY_JA = Object.freeze({
   "WAVE_DEBRIEF_LEVEL_UP": "{name} Lv.{before}→Lv.{after}",
   "WAVE_DEBRIEF_CAPPED": "{name} は星上限に到達（同系統融合で星アップ）",
   "WAVE_DEBRIEF_DISMISS": "結果を閉じる",
+  "RANCH_FUSION_STAR_UP": "星アップ融合可（{count}）",
+  "RANCH_FUSION_AVAILABLE": "融合可（{count}）",
+  "RANCH_STAR_CAPPED": "星上限に到達",
   "輕觸數碼獸查看": "表示するパートナーをタップします",
   "野生數碼獸": "野生の仲間",
 

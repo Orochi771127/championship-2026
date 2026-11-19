@@ -968,6 +968,9 @@ img.cm-star[data-on="false"] { filter: brightness(1.9) saturate(0.6); opacity: 0
 /* The ranch card: small stars beside the name. */
 .int-rh2-companion__stars:not([hidden]) { display: inline-flex; align-items: center; gap: 1px; flex: 0 0 auto; color: #0e101a; font-weight: 900; font-size: var(--fs-label, 12px); line-height: 16px;
   font-variant-numeric: tabular-nums; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75); }
+.int-rh2-companion__fusion:not([hidden]) { display: inline-flex; align-items: center; flex: 0 0 auto; padding: 1px 7px; border-radius: 999px; font-size: var(--fs-label, 12px); font-weight: 900; line-height: 1.35; background: #10b981; color: #052e16; box-shadow: 0 1px 0 rgba(14, 16, 26, 0.25); }
+.int-rh2-companion__fusion[data-mode="star-up"] { background: #ffc531; color: #14141f; }
+.int-rh2-companion__fusion[data-mode="capped"] { background: rgba(255, 197, 49, 0.26); color: #7a4a00; border: 1px solid rgba(196, 122, 0, 0.45); }
 
 :root[data-motion="reduced"] :is(.cm-stars__cell, .cm-star-meter__ahead, .cm-star-gauge) { animation: none; }
 :root[data-motion="reduced"] .cm-stars__burst { display: none; }

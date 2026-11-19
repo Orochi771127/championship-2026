@@ -425,6 +425,9 @@ export const UI_COPY_VI = Object.freeze({
   "WAVE_DEBRIEF_LEVEL_UP": "{name} Lv.{before}→Lv.{after}",
   "WAVE_DEBRIEF_CAPPED": "{name} đã chạm trần sao (nên dung hợp tăng sao)",
   "WAVE_DEBRIEF_DISMISS": "Đóng tổng kết",
+  "RANCH_FUSION_STAR_UP": "Dung hợp tăng sao ({count})",
+  "RANCH_FUSION_AVAILABLE": "Có thể dung hợp ({count})",
+  "RANCH_STAR_CAPPED": "Đã chạm trần sao",
   "輕觸數碼獸查看": "Nhấn vào đối tác để xem",
   "野生數碼獸": "bạn đồng hành hoang dã",
 

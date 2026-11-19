@@ -425,6 +425,9 @@ export const UI_COPY_TH = Object.freeze({
   "WAVE_DEBRIEF_LEVEL_UP": "{name} Lv.{before}→Lv.{after}",
   "WAVE_DEBRIEF_CAPPED": "{name} ถึงเพดานดาวแล้ว (แนะนำหลอมเพิ่มดาว)",
   "WAVE_DEBRIEF_DISMISS": "ปิดสรุปผล",
+  "RANCH_FUSION_STAR_UP": "หลอมเพิ่มดาวได้ ({count})",
+  "RANCH_FUSION_AVAILABLE": "หลอมได้ ({count})",
+  "RANCH_STAR_CAPPED": "ถึงเพดานดาว",
   "輕觸數碼獸查看": "แตะพันธมิตรเพื่อดู",
   "野生數碼獸": "สหายป่า",
 

@@ -437,6 +437,9 @@ export const UI_COPY_EN = Object.freeze({
   "WAVE_DEBRIEF_LEVEL_UP": "{name} Lv.{before}→Lv.{after}",
   "WAVE_DEBRIEF_CAPPED": "{name} hit star cap (fuse to raise stars)",
   "WAVE_DEBRIEF_DISMISS": "Dismiss debrief",
+  "RANCH_FUSION_STAR_UP": "Star-up fusion ({count})",
+  "RANCH_FUSION_AVAILABLE": "Can fuse ({count})",
+  "RANCH_STAR_CAPPED": "At star cap",
   "輕觸數碼獸查看": "Tap a partner to see it",
   "野生數碼獸": "Wild Creatures",
 
