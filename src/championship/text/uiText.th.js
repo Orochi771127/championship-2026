@@ -413,6 +413,10 @@ export const UI_COPY_TH = Object.freeze({
   "RESIDENT_ART_ERROR": "โหลดภาพคู่หูไม่สำเร็จ ข้อมูลเกมยังคงอยู่",
   "RESIDENT_ART_RETRY": "ลองโหลดภาพอีกครั้ง",
   "OPENING_COMIC_LOADING": "กำลังโหลดเรื่องราว…",
+  "GATE_FUSION_MATCH_COUNT": "หลอมได้ ×{count}",
+  "GATE_FUSION_TARGETS": "วัตถุดิบสายเดียวกัน → {partners}",
+  "GATE_WILD_HABITAT": "สายพันธุ์ป่า ({count} ชนิด)",
+  "GATE_WILD_MORE": "+อีก {count}",
   "輕觸數碼獸查看": "แตะพันธมิตรเพื่อดู",
   "野生數碼獸": "สหายป่า",
 

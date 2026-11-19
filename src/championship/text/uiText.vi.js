@@ -413,6 +413,10 @@ export const UI_COPY_VI = Object.freeze({
   "RESIDENT_ART_ERROR": "Không tải được hình ảnh bạn đồng hành. Dữ liệu trò chơi vẫn được giữ.",
   "RESIDENT_ART_RETRY": "Thử tải lại hình ảnh",
   "OPENING_COMIC_LOADING": "Đang tải câu chuyện…",
+  "GATE_FUSION_MATCH_COUNT": "Dung hợp ×{count}",
+  "GATE_FUSION_TARGETS": "Nguyên liệu cùng tuyến → {partners}",
+  "GATE_WILD_HABITAT": "Hoang dã cư trú ({count} loài)",
+  "GATE_WILD_MORE": "+{count} loài",
   "輕觸數碼獸查看": "Nhấn vào đối tác để xem",
   "野生數碼獸": "bạn đồng hành hoang dã",
 

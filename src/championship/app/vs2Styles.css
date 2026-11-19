@@ -211,6 +211,16 @@
 .cm-vs2-preview__state { color: var(--c-accent); font-size: var(--fs-label); font-weight: var(--fw-strong); }
 .cm-vs2-preview__costs { display: grid; grid-template-columns: auto 1fr; gap: 2px var(--sp-3); margin: 0; color: var(--c-text-2); font-size: var(--fs-body-sm); }
 .cm-vs2-preview__costs dd { margin: 0; color: var(--c-gold-strong); font-weight: var(--fw-strong); text-align: right; font-variant-numeric: tabular-nums; }
+.cm-vs2-preview__habitat { grid-column: 1 / -1; display: grid; gap: 4px; padding-top: 4px; border-top: 1px solid color-mix(in srgb, currentColor 14%, transparent); }
+.cm-vs2-preview__habitat[hidden] { display: none; }
+.cm-vs2-preview__habitat-label { font-size: calc(11px * var(--text-scale, 1)); font-weight: var(--fw-strong); color: var(--c-text-2); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cm-vs2-preview__habitat-label[data-fusion="true"] { color: #6ee7b7; }
+.cm-vs2-preview__chips { display: flex; flex-wrap: nowrap; gap: 4px; overflow-x: auto; scrollbar-width: none; padding-bottom: 1px; }
+.cm-vs2-preview__chip { flex: 0 0 auto; padding: 1px 7px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); color: rgba(255, 255, 255, 0.88); font-size: calc(10.5px * var(--text-scale, 1)); font-weight: var(--fw-strong); line-height: 1.45; white-space: nowrap; }
+.cm-vs2-preview__chip[data-fusion="true"] { background: rgba(16, 185, 129, 0.28); border: 1px solid rgba(52, 211, 153, 0.72); color: #ecfdf5; }
+.cm-vs2-preview__chip--more { background: rgba(255, 255, 255, 0.06); color: rgba(255, 255, 255, 0.65); }
+.cm-vs2-gate__fusion { position: absolute; top: 4px; right: 4px; z-index: 3; padding: 1px 5px; border-radius: 999px; background: #10b981; color: #052e16; font-size: calc(9.5px * var(--text-scale, 1)); font-weight: 900; line-height: 1.35; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45); pointer-events: none; }
+.cm-vs2-gate[data-has-fusion-match="true"]:not([data-selected="true"]):not([data-availability="LOCKED"]) { border-color: color-mix(in srgb, #10b981 65%, var(--c-line-2)); }
 .cm-vs2-preview:has(.cm-vs2-preview__image[hidden]) :is(.cm-vs2-preview__copy, .cm-vs2-preview__costs) { grid-column: 1 / -1; }
 .cm-vs2-destination { grid-template-columns: minmax(0, 1fr); }
 .cm-vs2-destination__fee { color: var(--c-text-2); font-size: var(--fs-body-sm); font-variant-numeric: tabular-nums; }

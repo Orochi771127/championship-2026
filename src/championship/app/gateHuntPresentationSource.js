@@ -165,6 +165,7 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
         unlockKind: gate.unlockKind,
         unlockParameter: gate.unlockParameter,
         selected: gate.gateId === selectedGateId,
+        habitat: gate.tutorial ? null : (app.getGateHabitatSummary?.(gate.biomeId) ?? null),
         art: { thumbnail: gate.tutorial?null:huntGateThumbnail(gate) }
       })),
       gateCount: { value: app.getGates().length, evidence: "ROM_VERIFIED" },

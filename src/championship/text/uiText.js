@@ -411,6 +411,10 @@ export const UI_COPY = Object.freeze({
   "RESIDENT_ART_ERROR": "夥伴外觀載入失敗，遊戲資料仍保留。",
   "RESIDENT_ART_RETRY": "重試外觀",
   "OPENING_COMIC_LOADING": "正在載入故事…",
+  "GATE_FUSION_MATCH_COUNT": "可融合 ×{count}",
+  "GATE_FUSION_TARGETS": "可刷同線素材 → {partners}",
+  "GATE_WILD_HABITAT": "棲息野生（共 {count} 種）",
+  "GATE_WILD_MORE": "+{count} 種",
   "輕觸數碼獸查看": "輕觸夥伴查看",
   "野生數碼獸": "野生夥伴",
 

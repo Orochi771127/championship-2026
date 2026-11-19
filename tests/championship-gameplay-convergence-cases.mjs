@@ -532,3 +532,27 @@ test("throwing a skill card triggers onPlayed with localized name and effect, wh
   assert.ok(playedLog[0].name.length > 0 && playedLog[0].effect.length > 0);
   hand.dispose();
 });
+
+test("gate habitat summary resolves ROM biome indices and flags same-line fusion matches for owned partners", async () => {
+  const { app } = await bootTestApp({ species: 53 });
+  try {
+    const gates = app.getGates();
+    assert.equal(gates.length, 16);
+    let totalFusionGates = 0;
+    for (const gate of gates) {
+      const habitat = app.getGateHabitatSummary(gate.biomeId);
+      assert.ok(habitat, `habitat missing for ${gate.biomeId}`);
+      assert.ok(habitat.totalSpecies >= 10, `${gate.biomeId} has wild catalog`);
+      assert.ok(habitat.sampleSpecies.length > 0 && habitat.sampleSpecies.length <= 6);
+      if (habitat.fusionMatches.length > 0) {
+        totalFusionGates += 1;
+        assert.equal(habitat.sampleSpecies[0].isFusionMatch, true, "fusion matches are prioritized first in sampleSpecies");
+        assert.ok(habitat.partnerTargets.length > 0);
+      }
+    }
+    assert.ok(totalFusionGates > 0, "at least one gate matches species-053's fusion line");
+    assert.equal(app.getGateHabitatSummary("NonexistentBiome"), null);
+  } finally {
+    app.dispose?.();
+  }
+});

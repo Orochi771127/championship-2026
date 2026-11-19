@@ -413,6 +413,10 @@ export const UI_COPY_JA = Object.freeze({
   "RESIDENT_ART_ERROR": "パートナーの画像を読み込めませんでした。ゲームデータは保持されています。",
   "RESIDENT_ART_RETRY": "画像を再読み込み",
   "OPENING_COMIC_LOADING": "ストーリーを読み込み中…",
+  "GATE_FUSION_MATCH_COUNT": "融合素材 ×{count}",
+  "GATE_FUSION_TARGETS": "同系統の融合素材 → {partners}",
+  "GATE_WILD_HABITAT": "生息する野生（全 {count} 種）",
+  "GATE_WILD_MORE": "ほか {count} 種",
   "輕觸數碼獸查看": "表示するパートナーをタップします",
   "野生數碼獸": "野生の仲間",
 

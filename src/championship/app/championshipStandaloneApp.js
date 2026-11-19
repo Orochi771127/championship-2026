@@ -109,6 +109,7 @@ import { gateAdmission, isGateUnlocked } from "../gate/gateAdmission.js";
 import { createHuntWorld } from "../hunt/huntWorld.js";
 import { applyNativeHuntReturn } from "../hunt/capture/nativeHuntHistory.js";
 import { productHuntCatalogForBiome, resolveProductHuntPoolSources, nativeHuntSpeciesByIndex } from "../hunt/capture/nativeHuntSources.js";
+import { nativeHuntBiomeIndexForGate } from "../hunt/capture/nativeHuntSceneSources.js";
 import { nativeIndividualProfile, projectNativeIndividualStats } from "../raising/nativeIndividualProfile.js";
 import { createNativeRaisingStarter } from "../raising/nativeRaisingStarter.js";
 import {createNativeHuntIndividual} from '../hunt/capture/nativeHuntIndividual.js';
@@ -3805,6 +3806,60 @@ export function createChampionshipStandaloneApp({
       if(tutorialBaseline)return Object.freeze([TUTORIAL_GATE]);
       return Object.freeze(listChampionshipGates().map(gate => Object.freeze({ ...gate,
         state: isGateUnlocked(gate, progressionContext()) ? "AVAILABLE" : "LOCKED" })));
+    },
+
+    getGateHabitatSummary(biomeId) {
+      if (tutorialBaseline || typeof biomeId !== "string") return null;
+      const biomeIndex = nativeHuntBiomeIndexForGate(biomeId);
+      if (biomeIndex === null) return null;
+      const catalog = productHuntCatalogForBiome(biomeIndex);
+      const homes = listRaisingInstances(instanceSources());
+      const fusionMatches = [];
+      const others = [];
+      const seen = new Set();
+      for (const entry of catalog) {
+        const idx = entry.speciesIndex;
+        if (seen.has(idx)) continue;
+        seen.add(idx);
+        const speciesId = `species-${String(idx).padStart(3, "0")}`;
+        const displayName = speciesDisplayName(speciesId);
+        const forPartners = [];
+        for (const home of homes) {
+          if (fusionLineOf(home.instanceId, idx) > 0) {
+            const name = home.displayName ?? speciesDisplayName(home.speciesId);
+            if (!forPartners.includes(name)) forPartners.push(name);
+          }
+        }
+        if (forPartners.length > 0) {
+          fusionMatches.push(Object.freeze({
+            speciesIndex: idx,
+            speciesId,
+            displayName,
+            isFusionMatch: true,
+            forPartners: Object.freeze(forPartners)
+          }));
+        } else {
+          others.push(Object.freeze({
+            speciesIndex: idx,
+            speciesId,
+            displayName,
+            isFusionMatch: false,
+            forPartners: Object.freeze([])
+          }));
+        }
+      }
+      const partnerTargets = [];
+      for (const m of fusionMatches) {
+        for (const p of m.forPartners) if (!partnerTargets.includes(p)) partnerTargets.push(p);
+      }
+      const sampleSpecies = [...fusionMatches, ...others].slice(0, 6);
+      return Object.freeze({
+        biomeIndex,
+        totalSpecies: seen.size,
+        fusionMatches: Object.freeze(fusionMatches),
+        partnerTargets: Object.freeze(partnerTargets),
+        sampleSpecies: Object.freeze(sampleSpecies)
+      });
     },
 
     getGateAdmission(gateId = confirmedGateId ?? selectedGateId) {

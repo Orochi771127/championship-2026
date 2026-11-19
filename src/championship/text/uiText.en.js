@@ -425,6 +425,10 @@ export const UI_COPY_EN = Object.freeze({
   "RESIDENT_ART_ERROR": "Companion artwork could not load. Your game data is retained.",
   "RESIDENT_ART_RETRY": "Retry artwork",
   "OPENING_COMIC_LOADING": "Loading the story…",
+  "GATE_FUSION_MATCH_COUNT": "Fusion ×{count}",
+  "GATE_FUSION_TARGETS": "Same-line fodder → {partners}",
+  "GATE_WILD_HABITAT": "Wild habitat ({count} species)",
+  "GATE_WILD_MORE": "+{count} more",
   "輕觸數碼獸查看": "Tap a partner to see it",
   "野生數碼獸": "Wild Creatures",
 
