@@ -235,3 +235,17 @@
 .cm-journey__empty-hint { margin: 0; color: #fff4c2; font-size: var(--fs-body-sm, 14px); font-weight: 800; line-height: 1.4; }
 .cm-journey__empty-reason { margin: 0; color: #d9d2ff; font-size: var(--fs-label, 12px); font-weight: 700; }
 .cm-journey__hunt-cta { --key-face: #6ff7ff; --key-shade: #10739a; --key-ink: #08212a; }
+.cm-journey__wave-debrief { display: grid; gap: 8px; padding: 12px; border: 2px solid #0e101a; border-radius: 16px;
+  background: linear-gradient(155deg, rgba(22, 42, 66, 0.92), rgba(20, 16, 46, 0.92)); box-shadow: 0 4px 0 #0e101a, inset 0 0 0 1px rgba(111, 247, 255, 0.32); }
+.cm-journey__wave-debrief[data-status="DEFEATED"] { background: linear-gradient(155deg, rgba(56, 26, 44, 0.92), rgba(24, 16, 42, 0.92)); box-shadow: 0 4px 0 #0e101a, inset 0 0 0 1px rgba(255, 197, 49, 0.38); }
+.cm-journey__wave-debrief-head { display: flex; align-items: center; gap: 6px; }
+.cm-journey__wave-debrief-title { flex: 1 1 auto; color: #fff; font-size: var(--fs-body, 15px); font-weight: 900; }
+.cm-journey__wave-debrief-best { padding: 2px 8px; border-radius: 999px; background: #ffc531; color: #0e101a; font-size: var(--fs-label, 12px); font-weight: 900; }
+.cm-journey__wave-debrief-close { min-width: 30px; min-height: 30px; padding: 0; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 999px; background: rgba(255, 255, 255, 0.08); color: #e9e4ff; font-size: var(--fs-label, 12px); font-weight: 900; cursor: pointer; }
+.cm-journey__wave-debrief-status { margin: 0; color: #b9fbff; font-size: var(--fs-body-sm, 14px); font-weight: 800; }
+.cm-journey__wave-debrief[data-status="DEFEATED"] .cm-journey__wave-debrief-status { color: #ffe27a; }
+.cm-journey__wave-debrief-stats { display: flex; flex-wrap: wrap; gap: 6px; }
+.cm-journey__wave-debrief-pill { padding: 3px 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.12); color: #fff; font-size: var(--fs-label, 12px); font-weight: 900; font-variant-numeric: tabular-nums; }
+.cm-journey__wave-debrief-pill--bits { background: rgba(255, 197, 49, 0.22); color: #ffe27a; }
+.cm-journey__wave-debrief-sync { margin: 0; color: #a6f5c6; font-size: var(--fs-label, 12px); font-weight: 800; line-height: 1.45; }
+.cm-journey__wave-debrief-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }

@@ -2002,6 +2002,7 @@ async function openJourney(prefill = null) {
         start: (ids) => { closeJourney(); return runWaveRun({ mode: 'CHALLENGE', encounterId: 'challenge', partyIds: ids }); },
         leave: () => { const done = app.finishWaveRun('LEAVE'); if (done?.ok) autosave?.request('wave-run'); return done; },
         best: () => app.getWaveRunBest?.() ?? 0,
+        lastSyncGains: () => app.getLastSyncGains?.() ?? null,
         text: waveRunText, artBase: WAVE_RUN_ART_BASE
       },
       practice: {
@@ -2022,6 +2023,11 @@ async function openJourney(prefill = null) {
         closeJourney();
         if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen();
         expeditionSource?.intents.openGate();
+      },
+      onGoRoster: () => {
+        closeJourney();
+        if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen();
+        app.openDigimonList?.();
       }
     });
     if (app) recordSessionScreenMounted(app.getScreen());

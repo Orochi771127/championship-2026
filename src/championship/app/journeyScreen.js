@@ -71,7 +71,7 @@ export function createJourneyScreen(host) {
   root.setAttribute("role", "dialog");
   root.setAttribute("aria-label", t("title"));
   let tab = host.prefill?.tab ?? "TOWER", candidates = [], selectedFloor = null, team = [], busy = false, disposed = false;
-  let selectedZone = host.prefill?.zone ?? null, selectedStage = null;
+  let selectedZone = host.prefill?.zone ?? null, selectedStage = null, dismissedWaveRunId = null;
 
   const head = el("header", "cm-journey__head");
   const back = button("cm-journey__back cm-arcade-key", t("close"), () => close());
@@ -600,6 +600,61 @@ export function createJourneyScreen(host) {
       panel.append(loot, keys);
       body.replaceChildren(panel);
       return;
+    }
+    const finished = frame?.finished?.mode === "CHALLENGE" && frame.finished.runId !== dismissedWaveRunId ? frame.finished : null;
+    if (finished) {
+      const debrief = el("section", "cm-journey__wave-debrief");
+      debrief.dataset.status = String(finished.status ?? "");
+      const headRow = el("div", "cm-journey__wave-debrief-head");
+      const heading = el("strong", "cm-journey__wave-debrief-title", uiText("WAVE_DEBRIEF_TITLE"));
+      headRow.append(heading);
+      if (finished.waves > 0 && finished.waves >= (w.best?.() ?? 0)) {
+        headRow.append(el("span", "cm-journey__wave-debrief-best", uiText("WAVE_DEBRIEF_NEW_BEST")));
+      }
+      const dismiss = button("cm-journey__wave-debrief-close", "✕", () => {
+        dismissedWaveRunId = finished.runId;
+        paint();
+      });
+      dismiss.setAttribute("aria-label", uiText("WAVE_DEBRIEF_DISMISS"));
+      headRow.append(dismiss);
+      const outcomeLine = el("p", "cm-journey__wave-debrief-status", w.text(`over.${finished.status}`));
+      const statsRow = el("div", "cm-journey__wave-debrief-stats");
+      statsRow.append(el("span", "cm-journey__wave-debrief-pill", w.text("cleared", { n: finished.waves })));
+      statsRow.append(el("span", "cm-journey__wave-debrief-pill cm-journey__wave-debrief-pill--bits", uiText("WAVE_DEBRIEF_BITS", { bits: (finished.bits ?? 0).toLocaleString() })));
+      const itemTotal = Object.values(finished.items ?? {}).reduce((sum, n) => sum + (Number(n) || 0), 0);
+      if (itemTotal > 0) {
+        statsRow.append(el("span", "cm-journey__wave-debrief-pill", uiText("WAVE_DEBRIEF_ITEMS", { count: itemTotal })));
+      }
+      debrief.append(headRow, outcomeLine, statsRow);
+      const syncGains = w.lastSyncGains?.();
+      if (finished.waves > 0 && syncGains?.gains?.length) {
+        const totalExp = syncGains.gains.reduce((sum, g) => sum + (g.amount ?? 0), 0);
+        const notes = [];
+        if (totalExp > 0) notes.push(uiText("WAVE_DEBRIEF_SYNC_EXP", { exp: totalExp.toLocaleString() }));
+        for (const g of syncGains.gains) {
+          const entry = candidates.find((c) => c.instanceId === g.instanceId);
+          const name = entry ? host.describe(entry).name : g.instanceId;
+          if ((g.after?.level ?? 0) > (g.before?.level ?? 0)) {
+            notes.push(uiText("WAVE_DEBRIEF_LEVEL_UP", { name, before: g.before.level, after: g.after.level }));
+          } else if (g.capped) {
+            notes.push(uiText("WAVE_DEBRIEF_CAPPED", { name }));
+          }
+        }
+        if (notes.length > 0) debrief.append(el("p", "cm-journey__wave-debrief-sync", notes.join(" · ")));
+      }
+      const nextActions = el("div", "cm-journey__wave-debrief-actions");
+      if (typeof host.onGoRoster === "function") {
+        const rosterBtn = button("cm-journey__key cm-arcade-key", uiText("LOOP_GO_ROSTER"), () => host.onGoRoster());
+        rosterBtn.dataset.journeyAction = "debrief-roster";
+        nextActions.append(rosterBtn);
+      }
+      if (typeof host.onGoHunt === "function") {
+        const huntBtn = button("cm-journey__key cm-arcade-key", uiText("LOOP_GO_HUNT"), () => host.onGoHunt());
+        huntBtn.dataset.journeyAction = "debrief-hunt";
+        nextActions.append(huntBtn);
+      }
+      if (nextActions.childElementCount > 0) debrief.append(nextActions);
+      panel.append(debrief);
     }
     panel.append(el("p", "cm-journey__team-title", w.text("team", { n: `${team.length}/3` })));
     const roster = el("div", "cm-journey__team");
