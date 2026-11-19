@@ -1144,6 +1144,7 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 :root[data-motion="reduced"] .cm-vs5-fighter:is([data-hit], [data-ko-flash]) { animation: none; }
 .cm-vs5-speed {
   flex: 0 0 auto;
+  pointer-events: auto;
   min-width: 46px;
   min-height: 30px;
   padding: 2px 9px;
