@@ -165,7 +165,17 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
         unlockKind: gate.unlockKind,
         unlockParameter: gate.unlockParameter,
         selected: gate.gateId === selectedGateId,
-        habitat: gate.tutorial ? null : (app.getGateHabitatSummary?.(gate.biomeId) ?? null),
+        habitat: (() => {
+          if (gate.tutorial) return null;
+          const raw = app.getGateHabitatSummary?.(gate.biomeId) ?? null;
+          if (!raw) return null;
+          const localize = (sp) => ({ ...sp, displayName: speciesNameForId(sp.speciesId) || sp.displayName });
+          return {
+            ...raw,
+            fusionMatches: raw.fusionMatches.map(localize),
+            sampleSpecies: raw.sampleSpecies.map(localize)
+          };
+        })(),
         art: { thumbnail: gate.tutorial?null:huntGateThumbnail(gate) }
       })),
       gateCount: { value: app.getGates().length, evidence: "ROM_VERIFIED" },
