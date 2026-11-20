@@ -22,6 +22,7 @@ import { mountDataArenaEnvironment, dataArenaEnvironmentFloorOffset } from "./da
 import { mountDataArenaInteractionView } from "./dataArenaInteractionView.js";
 
 import { createDataArenaRelayEffects } from './dataArenaRelayEffects.js';
+import { createArenaMoveAtlas } from './dataArenaMoveAtlas.js';
 import { createDataArenaElementFx } from './dataArenaElementFx.js';
 import { bakedPieceLook, paintBakedPieceFrames, loadMoveVfxPieceSprites } from '../vfx/moveVfxSetPieces.js';
 import { reviewedReleasePoint, releaseOffset, reviewedIdleBreath, reviewedWinHop, reviewedMoveRate } from './dataArenaReviewedMotion.js';
@@ -178,6 +179,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const elementFx = typeof createDataArenaElementFx === 'function' ? createDataArenaElementFx({ PIXI, ground: cellFx, front: particles, art: effectArt, quality, reducedMotion,
     // One-style move effects (MOVE_VFX_KIT_20261105); ?moveVfx=classic keeps the cells over vector heads.
     kit: new URLSearchParams(globalThis.location?.search ?? '').get('moveVfx') !== 'classic' }) : null;
+  const atlas = createArenaMoveAtlas({ PIXI, ground: zoneSigils, front: shots, reducedMotion });
+  rollback.push(() => atlas.dispose());
+  const atlasLunges = new Map();
+  const warningOwners = new WeakMap();
   const kitShots = Boolean(elementFx?.drawsShots?.());
   if (elementFx) rollback.push(() => elementFx.dispose());
 
@@ -649,7 +654,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     entry.glow.visible = rich;
     shots.addChild(entry.sprite); shotGlow.addChild(entry.glow); shotGlow.addChildAt(entry.shadow, 0);
     entry.origin = releaseOrigins.get(projectile.actionId) ?? null; entry.from = null;
-    if (state.gameMode === 'RELAY' && projectile.moveId && elementFx?.projectile) {
+    entry.atlasDrawn = atlas.ready(projectile.moveId, 'travel');
+    entry.kitDrawn = false;
+    if (!entry.atlasDrawn && state.gameMode === 'RELAY' && projectile.moveId && elementFx?.projectile) {
       const ownerSpecies = projectile.owner === 'player' ? state.player.speciesId
         : (state.rivals.find(r => r.active && r.hp > 0) ?? state.rivals[0])?.speciesId ?? null;
       entry.kitDrawn = elementFx.projectile({
@@ -691,16 +698,19 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     return sprite;
   }
   function releaseCellSprite(sprite) { sprite.visible = false; sprite.parent?.removeChild(sprite); cellPool.push(sprite); }
+  function syncFireCell(i) {
+    const burning = grid.fire[i] > 0;
+    let flame = fireSprites.get(i);
+    if (burning && !flame) {
+      flame = acquireCellSprite(textures.flame[i % 2], "add");
+      flame.anchor.set(0.5, 0.95);
+      flame.position.set((i % grid.cols + 0.5) * cell, (Math.floor(i / grid.cols) + 0.85) * cell);
+      fireSprites.set(i, flame);
+    } else if (!burning && flame) { releaseCellSprite(flame); fireSprites.delete(i); }
+  }
   function syncCells() {
     for (let i = 0; i < grid.count; i++) {
-      const burning = grid.fire[i] > 0;
-      let flame = fireSprites.get(i);
-      if (burning && !flame) {
-        flame = acquireCellSprite(textures.flame[i % 2], "add");
-        flame.anchor.set(0.5, 0.95);
-        flame.position.set((i % grid.cols + 0.5) * cell, (Math.floor(i / grid.cols) + 0.85) * cell);
-        fireSprites.set(i, flame);
-      } else if (!burning && flame) { releaseCellSprite(flame); fireSprites.delete(i); }
+      syncFireCell(i);
       const frozen = grid.ice[i] > 0;
       let ice = iceSprites.get(i);
       if (frozen && !ice) {
@@ -949,18 +959,27 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const heavyHit = (amount) => { if (!reducedMotion && amount >= 22) hitStop = Math.max(hitStop, relayMode && amount >= 40 ? 0.08 : 0.055); };
   const casterSpecies = (event) => event.team === 'player' || event.casterId === state.player.id ? state.player.speciesId
     : (state.rivals ?? []).find(r => r.id === event.casterId)?.speciesId ?? null;
-  const lastRelease = { player: null, rival: null };
-  const bodyCenter = (target) => () => target && target.hp > 0 ? { x: target.x, y: target.y - 30 } : null;
+
+
 
   // ------------------------------------------------------------------ events -> presentation
   const elementTint = { BURN: 0xff7a2a, DROWN: 0x4fc3ff, STEAM: 0xeef7ff, FROST: 0xb8f0ff, CRYO_BRIDGE: 0xb8f0ff };
   function handleEvents(events) {
     for (const event of events) {
-        if (event.type === 'ROUND_INTRO') {actionEvents.clear();playerView.resetAction();mateView.resetAction();bossView?.resetAction();for(const view of rivalViews.values())view.resetAction();}
+      if (event.type === 'CAST' || event.type === 'ULT_CAST') atlas.request(event.moveId);
+        if (event.type === 'ROUND_INTRO') {atlas.clear(); atlasLunges.clear(); actionEvents.clear();playerView.resetAction();mateView.resetAction();bossView?.resetAction();for(const view of rivalViews.values())view.resetAction();}
       else if (['PLAYER_DOWN', 'PLAYER_RESPAWN'].includes(event.type)) actionEvents.delete(state.player.id);
       else if (['CAST', 'ULT_CAST', 'CAST_RELEASE'].includes(event.type)) actionEvents.set(event.casterId, event);
     }
     for (const event of events) {
+      const confirmed = event.contact;
+      const atlasContact = confirmed && atlas.ready(confirmed.moveId, 'contact');
+      if (event.type === 'MOVE_CONTACT' && atlasContact) {
+        atlas.place(confirmed, confirmed.moveId, 'contact', confirmed.x, confirmed.y - BEAM_ELEVATION,
+          confirmed.angle, 1, 0, false, true);
+      }
+      const atlasLunge = event.type === 'CAST_RELEASE' && event.moveType === 'LUNGE' && atlas.ready(event.moveId, 'travel');
+      if (atlasLunge) atlasLunges.set(event.actionId, event.t);
       if (elementFx) {
         if (event.type === 'CAST' && event.moveType !== 'LUNGE') { const at = releaseAt(event); elementFx.cast({ x: at.x, y: at.y, moveId: event.moveId, speciesId: casterSpecies(event), windup: event.windup }); }
         else if (event.type === 'ULT_CAST') {
@@ -969,15 +988,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           hitStop = Math.max(hitStop, reducedMotion ? 0 : 0.055);
         } else if (event.type === 'CAST_RELEASE') {
           const at = releaseAt(event);
-          elementFx.release({ x: at.x, y: at.y, angle: event.angle ?? 0, moveId: event.moveId, speciesId: casterSpecies(event), melee: event.moveType === 'LUNGE' });
-          lastRelease[event.team === 'player' ? 'player' : 'rival'] = { moveId: event.moveId, speciesId: casterSpecies(event), angle: event.angle ?? 0 };
-        } else if (event.type === 'SKILL_HIT') {
-          elementFx.hit({ x: event.x, y: event.y - 14, groundY: event.y, moveId: event.moveId, speciesId: state.player.speciesId });
-        } else if (event.type === 'RIVAL_HIT' && event.cause !== 'LASER' && lastRelease.player) {
-          const rival = (state.rivals ?? []).find(r => Math.hypot(r.x - event.x, r.y - event.y) < 2);
-          elementFx.hit({ x: event.x, y: event.y - 30, groundY: event.y, ...lastRelease.player, heavy: event.amount >= 22, follow: bodyCenter(rival) });
-        } else if (event.type === 'PLAYER_HIT' && lastRelease.rival) {
-          elementFx.hit({ x: event.x, y: event.y - 30, groundY: event.y, ...lastRelease.rival, heavy: event.amount >= 22, follow: bodyCenter(state.player) });
+          if (!atlasLunge) elementFx.release({ x: at.x, y: at.y, angle: event.angle ?? 0, moveId: event.moveId, speciesId: casterSpecies(event), melee: event.moveType === 'LUNGE' });
+        } else if (event.type === 'SKILL_HIT' && !atlasContact && confirmed) {
+          elementFx.hit({ x: event.x, y: event.y - 14, groundY: event.y, moveId: confirmed.moveId, speciesId: casterSpecies(confirmed) });
+        } else if ((event.type === 'RIVAL_HIT' || event.type === 'PLAYER_HIT') && confirmed && !atlasContact && event.cause !== 'SKILL') {
+          elementFx.hit({ x: confirmed.x, y: confirmed.y - BEAM_ELEVATION, groundY: confirmed.y, moveId: confirmed.moveId, speciesId: casterSpecies(confirmed), angle: confirmed.angle });
         }
       }
       switch (event.type) {
@@ -988,12 +1003,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           ring(event.x, event.y, 46, tint, 0.3);
           break;
         }
-        case "PLAYER_HIT": camera.addTrauma(0.38); burst(event.x, event.y - 30, { count: 8, speed: 200, tint: 0xff4a4a }); damageNumber(event.x, event.y - 56, event.amount, 0xffb0a8); heavyHit(event.amount); break;
+        case "PLAYER_HIT": camera.addTrauma(0.38); if (!atlasContact) burst(event.x, event.y - 30, { count: 8, speed: 200, tint: 0xff4a4a }); damageNumber(event.x, event.y - 56, event.amount, 0xffb0a8); heavyHit(event.amount); break;
         case "MATE_HIT": burst(event.x, event.y - 40, { count: 4, speed: 160, tint: 0x9fe8ff }); break;
         case "PERFECT_DODGE": ring(event.x, event.y - 20, 70, 0x7fe9ff, 0.35); burst(event.x, event.y - 20, { count: 10, speed: 320, tint: 0x7fe9ff }); break;
         case "DASH": afterimage(event.x, event.y, event.dirX); puff(event.x, event.y, 0xa89580, 3, 0.9); break;
-        case "FIRE_IGNITE": if (event.source !== "SPREAD") burst(event.x, event.y, { count: 6, speed: 160, tint: 0xff9a3c, gravity: -120 }); break;
-        case "FIRE_OUT": puff(event.x, event.y, 0xe8f4ff, 3, 1.4); break;
+        case "FIRE_BURNT_OUT": syncFireCell(event.cell); break;
+        case "FIRE_IGNITE": syncFireCell(event.cell); if (event.source !== "SPREAD") burst(event.x, event.y, { count: 6, speed: 160, tint: 0xff9a3c, gravity: -120 }); break;
+        case "FIRE_OUT": syncFireCell(event.cell); puff(event.x, event.y, 0xe8f4ff, 3, 1.4); break;
         case "ICE_FORM": burst(event.x, event.y, { count: 3, speed: 70, tint: 0xd8f6ff, texture: textures.shard, life:.3 }); break;
         case "ICE_CRACK_WARN": burst(event.x, event.y, { count: 2, speed: 80, tint: 0xffffff, texture: textures.shard, life: 0.3 }); break;
         case "ICE_MELT": ring(event.x, event.y, 30, 0x7fd8ff, 0.4, 0.6);spawn({x:event.x,y:event.y,texture:textures.iceMelt,scale:1,scaleTo:.8,life:.35,alpha:.7,add:false});break;
@@ -1054,6 +1070,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             // Charge orb at the hand: grows through the windup, so the release reads before it lands.
             if(event.moveType!=='LUNGE'&&!elementFx){const at=releaseAt(event);spawn({x:at.x,y:at.y,texture:textures.glow,tint:fx.tint,scale:.12,scaleTo:.5,life:Math.max(.12,event.windup),alpha:.9});}}break;
         case "CAST_RELEASE": {
+          if (atlasLunge) break;
           if(state.gameMode==='RELAY') {
             const fx=relayLook(event.moveId,event.team),{x,y,reviewed}=releaseAt(event);
             // Shots of a reviewed body are drawn leaving its mouth or hand, then settle on their path.
@@ -1120,7 +1137,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           for (let i = 0; i < 3; i++) ring(event.x, event.y, event.radius * (0.6 + i * 0.25), state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xc8f4ff : event.effect === "SLOW" ? 0x5fd8c8 : 0xff8a3c, 0.4 + i * 0.12);
           burst(event.x, event.y - 20, { count: 24, speed: 380, tint: state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xd8f6ff : 0xffb070, texture: textures.shard, scale: 1.8, gravity: 200, life: 0.7 }); camera.addTrauma(0.5);
           if (state.gameMode === 'RELAY') relayImpact(event.x, event.y - 20, relayLook(event.moveId, event.team)); break;
-        case "ZONE_BURST": if (kitShots && state.gameMode === 'RELAY' && elementFx.area({ x: event.x, y: event.y, radius: event.radius, moveId: event.moveId, speciesId: casterSpecies(event) })) { camera.addTrauma(0.18); break; }
+        case "ZONE_BURST": if (atlas.place(event, event.moveId, 'burst', event.x, event.y,
+          0, event.radius, 0, true, true)) { camera.addTrauma(0.18); break; }
+          if (kitShots && state.gameMode === 'RELAY' && elementFx.area({ x: event.x, y: event.y, radius: event.radius, moveId: event.moveId, speciesId: casterSpecies(event) })) { camera.addTrauma(0.18); break; }
           ring(event.x, event.y, event.radius, event.team === "player" ? 0x6ff7ff : 0xff5a3c, 0.35);
           burst(event.x, event.y, { count: 12, speed: 260, tint: state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xd8f6ff : event.effect === "IGNITE" ? 0xff9a3c : 0xbff4ff, gravity: 260, life: 0.5 }); camera.addTrauma(0.18);
           if (state.gameMode === 'RELAY') relayImpact(event.x, event.y, relayLook(event.moveId, event.team)); break;
@@ -1134,11 +1153,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           if (event.mult > 1) burst(event.x, event.y - 34, { count: 6, speed: 200, tint: 0xffd34d, life: 0.35 }); break;
         case "STATUS_CLEARED": burst(event.x, event.y - 24, { count: 8, speed: 180, tint: 0xd8f6ff, texture: textures.shard, gravity: 300, life: 0.45 }); puff(event.x, event.y - 10, 0xeef7ff, 3, 1); break;
         case "BLINK": afterimage(event.fromX, event.fromY, event.x - event.fromX); burst(event.x, event.y - 20, { count: 10, speed: 200, tint: 0xd8f6ff, texture: textures.shard }); break;
-        case "RIVAL_HIT": if (event.cause !== "LASER" && !(kitShots && relayMode)) { burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); contact(event.x, event.y - 30, 0xffb070); }
+        case "RIVAL_HIT": if (!atlasContact && event.cause !== "LASER" && !(kitShots && relayMode)) { burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); contact(event.x, event.y - 30, 0xffb070); }
           damageNumber(event.x, event.y - 56, event.amount, 0xffffff); heavyHit(event.amount); break;
         case "RIVAL_DODGE": puff(event.x, event.y, 0xa89580, 3, 0.9); break;
         case "RIVAL_SPLASH": ring(event.x, event.y, 50, 0x9fe8ff, 0.4); break;
-        case "SKILL_HIT": if (kitShots && state.gameMode === 'RELAY') break;
+        case "SKILL_HIT": if (atlasContact || (!confirmed && atlas.supports(event.moveId))) break;
+          if (kitShots && state.gameMode === 'RELAY') break;
           spawn({ x: event.x, y: event.y - 14, texture: textures.glow, tint: state.gameMode==='RELAY'?relayLook(event.moveId,'player').tint:MOVE_TINT[event.moveId] ?? 0xffffff, scale: 0.6, scaleTo: 0.15, life: 0.14 });
           if (state.gameMode === 'RELAY') { relayImpact(event.x, event.y - 14, relayLook(event.moveId, 'player')); } break;
         case "STATUS": burst(event.x, event.y - 30, { count: 4, speed: 120, tint: event.status === "ROOT" ? 0xd8f6ff : event.status === "SLOW" ? 0x7fc8ff : 0xff9a3c, life: 0.35 }); break;
@@ -1176,6 +1196,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const observedFrameMs=dtMs;
     if(ambientPaused)dtMs=0;
     const dt = Math.min(0.1, dtMs / 1000);
+    atlas.beginFrame();
     elapsed += dt; frameCount++;
     if (!ambientPaused) ambientElapsed += dt;
     if(!ambientPaused)fpsWindow.push(observedFrameMs); if (fpsWindow.length > 120) fpsWindow.shift();
@@ -1400,7 +1421,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       liveShots.add(projectile.id);
       const entry = shotView(projectile);
       const visible = inView(projectile.x, projectile.y);
-      entry.sprite.visible = visible && !entry.kitDrawn; entry.glow.visible = visible && rich && !entry.kitDrawn; entry.shadow.visible = visible;
+      const atlasShot = visible && entry.atlasDrawn && atlas.place(projectile, projectile.moveId, 'travel',
+        projectile.x, projectile.y - 12, Math.atan2(projectile.vy, projectile.vx), projectile.radius / 10, projectile.life * 1000, false);
+      entry.sprite.visible = visible && !entry.kitDrawn && !atlasShot; entry.glow.visible = visible && rich && !entry.kitDrawn && !atlasShot; entry.shadow.visible = visible;
       if (!visible) continue;
       const lift = projectile.kind === "TIDE" ? 18 : 12;
       if (entry.origin) { entry.from = [entry.origin.x - projectile.x, entry.origin.y - (projectile.y - lift)]; entry.fromBorn = entry.origin.born; entry.origin = null; }
@@ -1422,7 +1445,18 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     }
 
     drawBeams();
+    const liveLunges = new Set();
+    for (const body of [player, ...state.rivals]) {
+      const lunge = body.lunge;
+      if (!lunge || !atlasLunges.has(lunge.actionId)) continue;
+      liveLunges.add(lunge.actionId);
+      const angle = Math.atan2(lunge.dirY, lunge.dirX);
+      const point = releaseAt({ casterId: body.id, x: body.x, y: body.y, angle, moveId: lunge.moveId });
+      atlas.place(lunge, lunge.moveId, 'travel', point.x, point.y, angle, 1, (state.time - atlasLunges.get(lunge.actionId)) * 1000, false);
+    }
+    for (const id of atlasLunges.keys()) if (!liveLunges.has(id)) atlasLunges.delete(id);
     drawMarks();
+    atlas.endFrame(dt * 1000);
     updateParticles(dt);
     updateNumbers(dt);
     for (let i = ghosts.length - 1; i >= 0; i--) {
@@ -1604,6 +1638,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const ZONE_COLOR = { IGNITE: 0xff5a1f, ROOT: 0x22e568, SLOW: 0x1ca3ff, NONE: 0xff3b5c };
     for (const zone of state.zones) {
       const p = clamp(zone.t / zone.delay, 0, 1);
+      // Choose once per placed zone. A sheet finishing mid-warning cannot stack with older sparks.
+      if (!warningOwners.has(zone)) warningOwners.set(zone, atlas.ready(zone.moveId, 'warning'));
+      if (warningOwners.get(zone) && atlas.place(zone, zone.moveId, 'warning', zone.x, zone.y, 0,
+        zone.radius, p, true)) continue;
       const zMoveId = zone.moveId ?? zone.move?.id;
       const moveTint = zMoveId ? relayLook(zMoveId, zone.team).tint : null;
       const color = ZONE_COLOR[zone.move?.effect] ?? moveTint ?? (zone.team === "player" ? 0x1ca3ff : 0xff3b5c);
@@ -1706,7 +1744,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       return {
         renderer: "CHAMPIONSHIP_SINGLE_PIXI_STAGE", scene: "DATA_ARENA", quality, reducedMotion, hasCreatureArt: playerView.hasArt,
         environment: environmentView?.diagnostics() ?? null,
-        interactions:interactionView.diagnostics(),elementFx:elementFx?.getDiagnostics() ?? null,hitStop,effectsElapsed:elapsed, playerAnimation: playerView.diagnostics(),
+        moveAtlas: { ...atlas.diagnostics(),
+          shotLayerConflicts: [...shotViews.values()].filter(v => v.atlasDrawn && (v.sprite.visible || v.glow.visible || v.kitDrawn)).length,
+          warningLayerConflicts: state.zones.filter(z => warningOwners.get(z) && sigilSprites.has(z)).length },
+        fireCells: [...fireSprites.keys()], interactions:interactionView.diagnostics(),elementFx:elementFx?.getDiagnostics() ?? null,hitStop,effectsElapsed:elapsed, playerAnimation: playerView.diagnostics(),
         rivalAnimations: [...rivalViews.values()].map(view => view.diagnostics()),
         particleAgeTotal:live.reduce((n,p)=>n+p.age,0),scorchSprites:[...decalSprites.values()].filter(d=>d.kind!=="wet").length,
         fireMotion:[...fireSprites].slice(0,8).map(([cell,s])=>({cell,x:s.scale.x,y:s.scale.y,frame:textures.flame.indexOf(s.texture)})),
@@ -1727,6 +1768,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       // Character sprites come from their bundles; destroy display objects only,
       // the bundles' textures are released by their owner (the screen).
       environment?.detach?.();
+      atlas.dispose();
       root.destroy({ children: true, texture: false, textureSource: false });
       for (const sprite of [...pool, ...cellPool]) if (!sprite.destroyed) sprite.destroy();
       for (const entry of [...shotPool, ...enemyPool]) for (const part of Object.values(entry)) if (part?.destroy && !part.destroyed) part.destroy();

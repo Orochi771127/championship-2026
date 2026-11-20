@@ -699,7 +699,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const team = caster.team;
     const hostileKind = move.shard ? "SHARD" : move.type === "WAVE" ? "WAVE" : move.onTerrain === "IGNITE" ? "EMBER" : "RBOLT";
     const damageScale = (caster === player ? stat.skillDamage : caster.damageScale ?? 1);
-    return spawnProjectile({ kind: team === "player" ? "PBOLT" : hostileKind, owner: team === "player" ? "player" : "rival", moveId: Object.keys(DATA_ARENA_MOVES).find((key) => DATA_ARENA_MOVES[key] === move),
+    return spawnProjectile({ casterId: caster.id, kind: team === "player" ? "PBOLT" : hostileKind, owner: team === "player" ? "player" : "rival", moveId: Object.keys(DATA_ARENA_MOVES).find((key) => DATA_ARENA_MOVES[key] === move),
       x: caster.x + Math.cos(angle) * (caster.radius + 8), y: caster.y + Math.sin(angle) * (caster.radius + 8),
       vx: Math.cos(angle) * move.speed, vy: Math.sin(angle) * move.speed, radius: move.radius, damage: move.damage * damageScale * (extra.damageBonus ?? 1),
       range: move.range, travelled: 0, pierce: move.pierce ?? 0, hits: new Set(), onHit: move.onHit ?? null, onTerrain: move.onTerrain ?? null,
@@ -730,7 +730,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         if (isRival(caster)) caster.invulnerable = Math.max(caster.invulnerable ?? 0, 0.1);
         break;
       case "ZONE":
-        state.zones.push({ id: nextId++, moveId, team: caster.team, x: aimX, y: aimY, radius: move.radius, delay: move.delay, t: 0, move, damage: move.damage * damageScale, caster: caster.id, arenaElement, attackElement });
+        state.zones.push({ id: nextId++, actionId, moveId, team: caster.team, x: aimX, y: aimY, radius: move.radius, delay: move.delay, t: 0, move, damage: move.damage * damageScale, caster: caster.id, arenaElement, attackElement });
         emit({ type: "ZONE_PLACED", team: caster.team, x: aimX, y: aimY, radius: move.radius, delay: move.delay });
         break;
       case "BARRIER":
@@ -926,6 +926,18 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     if ((move.freezeWater || (!relayMode && move.effect === "ROOT")) && events.slice(before).some((e) => e.type === "ICE_FORM")) chain("FROST", x, y);
   }
 
+  // Report only a recipient whose HP actually changed during this resolved contact.
+  // The existing damage events retain their HUD/audio roles and share this contact identity.
+  function confirmMoveContact(start, oldHp, target, source, casterId, x, y, angle) {
+    if (!source.moveId || source.actionId == null || !(target.hp < oldHp)) return;
+    const contact = { actionId: source.actionId, instanceId: source.id ?? source.actionId,
+      casterId, targetId: target.id, moveId: source.moveId, x, y, angle };
+    for (let i = start; i < events.length; i++) {
+      if (['RIVAL_HIT', 'PLAYER_HIT', 'SKILL_HIT'].includes(events[i].type)) events[i].contact = contact;
+    }
+    emit({ type: 'MOVE_CONTACT', contact });
+  }
+
   function updateLunge(caster) {
     const lunge = caster.lunge;
     if (!lunge) return;
@@ -949,7 +961,9 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         lunge.hits.add(target.id);
         if (target === player && player.dashGrace > 0) { perfectDodge(caster.x, caster.y); continue; }
         if(relayMode&&!hasSight(caster.x,caster.y,target.x,target.y))continue;
+        const beforeContact = events.length, oldHp = target.hp;
         const hit=strike(target, lunge.damage, "LUNGE", { slow: 0.3, slowSeconds: 0.6 }, target.x, target.y, lunge.arenaElement, lunge.attackElement, lunge.isBasic);
+        if (hit) confirmMoveContact(beforeContact, oldHp, target, lunge, caster.id, target.x, target.y, Math.atan2(lunge.dirY, lunge.dirX));
         if(relayMode&&!hit)continue;
         launch(target, lunge.dirX, lunge.dirY, DATA_ARENA_ENERGY.launch.LUNGE);
       }
@@ -972,7 +986,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         strike(target, zone.damage, "ZONE", zoneStatus(zone.move), zone.x, zone.y, zone.arenaElement, zone.attackElement);
       }
       areaElement(zone.x, zone.y, zone.radius, zone.move,zone.damage,zone.arenaElement);
-      emit({ type: "ZONE_BURST", moveId:zone.moveId, team: zone.team, x: zone.x, y: zone.y, radius: zone.radius, effect: zone.move.effect });
+      emit({ type: "ZONE_BURST", actionId: zone.actionId, instanceId: zone.id, casterId: zone.caster, moveId:zone.moveId, team: zone.team, x: zone.x, y: zone.y, radius: zone.radius, effect: zone.move.effect });
     }
     if (state.zones.some((zone) => zone.done)) state.zones = state.zones.filter((zone) => !zone.done);
   }
@@ -1394,9 +1408,11 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       if (projectile.hits.has(target.id)) continue;
       if (distance(target.x, target.y, projectile.x, projectile.y) > (target.radius ?? 20) + projectile.radius) continue;
       projectile.hits.add(target.id);
+      const beforeContact = events.length, oldHp = target.hp;
       const applied=strike(target, projectile.damage, "SKILL", projectile.onHit, projectile.x, projectile.y, projectile.arenaElement, projectile.attackElement, projectile.isBasic);
       if(relayMode&&!applied)return;
       emit({ type: "SKILL_HIT", actionId: projectile.actionId, x: projectile.x, y: projectile.y, moveId: projectile.moveId });
+      if (applied) confirmMoveContact(beforeContact, oldHp, target, projectile, projectile.casterId, projectile.x, projectile.y, Math.atan2(projectile.vy, projectile.vx));
       if (projectile.pierce <= 0) { projectile.dead = true; terrainEffect(projectile); return; }
       projectile.pierce--;
     }
@@ -1516,7 +1532,9 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       if (hitsPlayerBody(projectile.x, projectile.y, projectile.radius)) {
         if (player.dashGrace > 0 && player.state !== "RIDING") continue; // passes through the dash
         const mult = relayMode && projectile.arenaElement ? taxonomyMultiplier(projectile.attackElement, player) : 1;
+        const beforeContact = events.length, oldHp = player.hp;
         if (hurtPlayer(projectile.damage * mult, projectile.kind, projectile.x, projectile.y)) {
+          confirmMoveContact(beforeContact, oldHp, player, projectile, projectile.casterId, projectile.x, projectile.y, Math.atan2(projectile.vy, projectile.vx));
           if (relayMode) relayAfterHit(player, projectile.damage * mult, projectile.arenaElement, mult, projectile.x, projectile.y);
           if (projectile.onHit) applyStatus(player, projectile.onHit);
           if (projectile.knockback) { const v = Math.hypot(projectile.vx, projectile.vy) || 1; launch(player, projectile.vx / v, projectile.vy / v, DATA_ARENA_ENERGY.launch.WAVE); }

@@ -615,7 +615,8 @@
     "src/data/championship/battleCharacterProfiles.js",
     "src/data/championship/battleNativeMathTables.js",
     "src/data/championship/nativeBookSpecies.js",
-    "src/data/championship/r2/fields/fieldInventoryR2.js"
+    "src/data/championship/r2/fields/fieldInventoryR2.js",
+    "src/championship/presentation/dataArena/dataArenaMoveAtlas.js"
   ],
   "importMap": {
     "three": "./node_modules/three/build/three.module.js",
@@ -8996,7 +8997,16 @@
     "src/data/championship/ranch-render-selection.v1.json",
     "src/data/championship/reviewed-animation-selection.v1.json",
     "src/data/championship/species-taxonomy.v1.json",
-    "src/data/championship/stage-body-size.v1.json"
+    "src/data/championship/stage-body-size.v1.json",
+    "assets/production/vfx/arena-moves/arcField.json",
+    "assets/production/vfx/arena-moves/arcField.png",
+    "assets/production/vfx/arena-moves/emberBolt.json",
+    "assets/production/vfx/arena-moves/emberBolt.png",
+    "assets/production/vfx/arena-moves/fangRush.json",
+    "assets/production/vfx/arena-moves/fangRush.png",
+    "assets/production/vfx/arena-moves/flameRing.json",
+    "assets/production/vfx/arena-moves/flameRing.png",
+    "src/championship/presentation/dataArena/dataArenaMoveAtlas.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -40984,7 +40994,7 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaSimulation.js",
-        "sha256": "ee96a943c4b8fac85433dea520e2801188df29ee3f0744173c29b558697b63ab"
+        "sha256": "42afa9f34aafba19669ab644686f9249080982e0d1a50b24dc9de83ca445df9a"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaUpgrades.js",
@@ -41180,7 +41190,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
-        "sha256": "cc6705551c23dcd9b43d46ebfdc75e2641b31846c90de58fb54de51b305ef3eb"
+        "sha256": "203012630107f36a219566ca327f4876866af4b92077f71a45b61ead95d6c416"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
@@ -42501,6 +42511,42 @@
       {
         "path": "src/data/championship/stage-body-size.v1.json",
         "sha256": "956a246d432e6956b31ac9e13f8c7ca20c2e0903136ee2ae065c2ab919f79076"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/arcField.json",
+        "sha256": "152a83a7d9e4f965cb51540600113d1193081121d9adfd1b3544e84f35f38afe"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/arcField.png",
+        "sha256": "ba6cf127713f4fe5fa7cec76a862f9054f41d9cacad62ff66495680cdaaf2c79"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/emberBolt.json",
+        "sha256": "bd273ad8824354691ddda75504e45e5ff7e8de77f5b032dd248140285d4e6595"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/emberBolt.png",
+        "sha256": "609f0a30ff62d0b0666b4010d32580bf26954a99e7661d98bfb3ff7f33dfcd85"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/fangRush.json",
+        "sha256": "c99bb58511d08599050c66826598262ec64b3bebc2197ca457b84c311760572c"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/fangRush.png",
+        "sha256": "3fd32e6c8409faf8e1239e854b12af8658b85917f7c3a604e595d52a4e4961e9"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/flameRing.json",
+        "sha256": "98e15677157f58996d5e81e02fcfe37560a3c8424325a6dbd607be92e1b911fd"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/flameRing.png",
+        "sha256": "d50a07b6900cb93018ea54c04c0d05d3f16cdd71c0ac13b34ad66592177d7c6c"
+      },
+      {
+        "path": "src/championship/presentation/dataArena/dataArenaMoveAtlas.js",
+        "sha256": "80ca96d4c6b2b400e2d29bcc370fb24050ead0b5d75f8141a9afeddd7259511c"
       }
     ],
     "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",
