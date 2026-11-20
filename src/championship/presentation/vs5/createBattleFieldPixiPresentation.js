@@ -685,7 +685,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       const events = [...tracker.consume(view), ...motionEvents, ...moveQaEvents(view, dtMs)];
       camera = director.update({dtMs, viewport:{width:rect.width, height:rect.height}, art:artRect,
         subjects:[...slotInfos.values()], points:fxLayer.projectilePoints(), insets, prelude:Boolean(view.specialPrelude)});
-      autoMoveAtlas.update(view, artRect, nativeScale, dtMs, events);
+      autoMoveAtlas.update(view, artRect, nativeScale, dtMs, events, slotInfos);
       fxContext = {autoMoveAtlas, artRect, nativeScale, localTeam, opening:view.opening, viewport:{width:rect.width, height:rect.height}, insets,
         slotInfo:slot => slotInfos.get(slot) ?? null,
         opponentsOf:slot => view.combatants.filter(c => c.present && !c.down && c.team !== view.combatants[slot]?.team).map(c => c.slot),

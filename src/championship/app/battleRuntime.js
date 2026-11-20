@@ -439,7 +439,7 @@ export function createBattleRuntime(options = {}) {
         confirmedContacts.push({ id: ++nextContactId, frame: session.frame, actionId: origin.actionId,
           actorId: parameters ? effectActors.instanceOf(parameters) : null, slot, targetSlot, moveId: move.recordIndex,
           sourcePoint: parameters ? effectActors.position(parameters) : nativeActors.position(slot),
-          targetPoint: nativeActors.position(targetSlot), hpBefore, hpAfter: defender.currentHp });
+          casterPoint: nativeActors.position(slot), targetPoint: nativeActors.position(targetSlot), hpBefore, hpAfter: defender.currentHp });
         if (confirmedContacts.length > 128) confirmedContacts.shift();
       }
       hits.push({ slot: targetSlot, damage: resolved.damage, critical: resolved.critical });
