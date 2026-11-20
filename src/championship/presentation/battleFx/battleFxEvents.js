@@ -15,22 +15,11 @@ export function createBattleFxEventTracker() {
   const liveLaunches = new Set();
   const seenHistory = new Set();
   let historyFrame = -1;
-  const lastLaunchBySlot = new Map();
+  let lastContactId = 0;
 
   function launchesOf(view) {
     return (view.nativeLifecycle?.active ?? [])
       .filter(launch => Number.isInteger(launch?.ownerSlot) && Number.isInteger(launch?.moveId) && launch.phase !== 'DONE');
-  }
-
-  /** The most recent launch by the opposing team, for knockback direction. */
-  function attackerFor(slot, combatants) {
-    const team = combatants[slot]?.team;
-    let best = null;
-    for (const [owner, info] of lastLaunchBySlot) {
-      if (combatants[owner]?.team === team) continue;
-      if (!best || info.frame > best.frame) best = {slot: owner, ...info};
-    }
-    return best;
   }
 
   return Object.freeze({
@@ -50,7 +39,6 @@ export function createBattleFxEventTracker() {
         const key = `${launch.object}:${launch.moveId}:${launch.ownerSlot}`;
         live.add(key);
         if (liveLaunches.has(key)) continue;
-        lastLaunchBySlot.set(launch.ownerSlot, {moveId: launch.moveId, frame});
         events.push(Object.freeze({type: 'LAUNCH', frame, slot: launch.ownerSlot, moveId: launch.moveId}));
       }
       liveLaunches.clear();
@@ -80,15 +68,25 @@ export function createBattleFxEventTracker() {
         }
       }
 
+      const freshContacts = [];
+      for (const contact of view.nativeLifecycle?.contacts?.confirmed ?? []) {
+        if (contact.id <= lastContactId) continue;
+        lastContactId = contact.id;
+        if (contact.hpBefore <= contact.hpAfter) continue;
+        freshContacts.push(contact);
+        events.push(Object.freeze({type: 'MOVE_CONTACT', frame: contact.frame, contact}));
+      }
+
       if (previous) {
         combatants.forEach((combatant, slot) => {
           const before = previous[slot];
           if (!combatant?.present || !before?.present) return;
           const hpBefore = before.hp?.current ?? 0, hpAfter = combatant.hp?.current ?? 0, maxHp = Math.max(1, combatant.hp?.maximum ?? 1);
           if (hpAfter < hpBefore) {
-            const attacker = attackerFor(slot, combatants);
+            const matches = freshContacts.filter(c => c.targetSlot === slot && c.hpBefore === hpBefore && c.hpAfter === hpAfter);
+            const contact = matches.length === 1 ? matches[0] : null;
             events.push(Object.freeze({type: 'HIT', frame, slot, damage: hpBefore - hpAfter, hpBefore, hpAfter, maxHp,
-              ratio: (hpBefore - hpAfter) / maxHp, attackerSlot: attacker?.slot ?? null, moveId: attacker?.moveId ?? null}));
+              ratio: (hpBefore - hpAfter) / maxHp, attackerSlot: contact?.slot ?? null, moveId: contact?.moveId ?? null}));
           } else if (hpAfter > hpBefore) {
             events.push(Object.freeze({type: 'HEAL', frame, slot, amount: hpAfter - hpBefore, maxHp}));
           }

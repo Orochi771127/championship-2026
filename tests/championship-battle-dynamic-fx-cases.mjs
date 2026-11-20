@@ -141,7 +141,7 @@ test('the tracker turns successive views into launch, hit, status, knockout and 
     history: [{frame: 4, slot: 3, type: 'STATUS_APPLIED', code: 3}]}));
   assert.deepEqual(types(events), ['STATUS', 'HIT', 'FLASH']);
   const hit = events.find(e => e.type === 'HIT');
-  assert.deepEqual([hit.slot, hit.damage, hit.attackerSlot, hit.moveId], [3, 240, 0, 61]);
+  assert.deepEqual([hit.slot, hit.damage, hit.attackerSlot, hit.moveId], [3, 240, null, null]);
   assert.equal(hit.ratio, 0.24);
   // The same history entry is not reported again on the next view.
   assert.deepEqual(types(tracker.consume(fakeView({frame: 5, hps: [1000, null, null, 760, null, null],
@@ -295,4 +295,20 @@ test('the approved public playtest URL plays the selected remade shared effects 
   assert.equal(originalSharedVfxManifestFor(publicUrl + '?vfxOriginal=shared-v1&vfxRevision=157-baseline'), 'assets/production/public-runtime/shared-vfx.render.v1.json');
   for (const url of ['https://orochi771127.github.io/other/?vfxOriginal=shared-v1', 'https://example.org/championship-2026/?vfxOriginal=shared-v1'])
     assert.equal(originalSharedVfxReviewRequested(url), false, url);
+});
+
+test('a confirmed older Auto projectile keeps its owner and move after a new launch by the same slot', () => {
+  const tracker = createBattleFxEventTracker();
+  const launch = moveId => ({ object: moveId, ownerSlot: 0, moveId, phase: 'PRIMARY' });
+  const hps = [900, null, null, 800];
+  tracker.consume(fakeView({ frame: 10, hps, active: [launch(76)] }));
+  tracker.consume(fakeView({ frame: 12, hps, active: [launch(76), launch(143)] }));
+  const view = fakeView({ frame: 14, hps: [900, null, null, 731], active: [launch(143)] });
+  const contact = { id: 1, actionId: 4, actorId: 18, frame: 13, moveId: 76, slot: 0, targetSlot: 3,
+    hpBefore: 800, hpAfter: 731, sourcePoint: [68, 88, 10], targetPoint: [76, 90, 0] };
+  view.nativeLifecycle.contacts = { confirmed: [contact] };
+  const events = tracker.consume(view);
+  assert.deepEqual(events.find(e => e.type === 'MOVE_CONTACT').contact, contact);
+  assert.equal(events.find(e => e.type === 'HIT').moveId, 76);
+  assert.equal(tracker.consume(view).filter(e => e.type === 'MOVE_CONTACT').length, 0);
 });

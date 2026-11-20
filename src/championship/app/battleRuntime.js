@@ -228,6 +228,8 @@ export function createBattleRuntime(options = {}) {
   // freezes it, and a live VM's slots are typed arrays that cannot be frozen. It
   // also keeps the battle lane's data plain, which is where that line belongs.
   const scriptStates = new WeakMap();
+  let nextActionId = 0, nextContactId = 0;
+  const confirmedContacts = [];
   let nativeActors=null,effectActors=null;
   const nativeLaunches=new Set(), nativeHistory=[];
   const impactEffects=createBattleImpactEffects();
@@ -285,7 +287,7 @@ export function createBattleRuntime(options = {}) {
   function scriptStateFor(action) {
     let state = scriptStates.get(action);
     if (!state) {
-      state = { memory: new Map(), script: {} };
+      state = { memory: new Map(), script: {}, actionId: ++nextActionId };
       scriptStates.set(action, state);
     }
     return state;
@@ -333,7 +335,8 @@ export function createBattleRuntime(options = {}) {
         const actorResult=nativeActors.call(routine,args);
         if(engaged&&(routine===0x02047904||routine===0x020479a4))state.scriptPose=nativeActors.animationRequestOf(slot)?.sequenceRequestId;
         if(actorResult!==undefined)return actorResult;
-        const effectResult=effectActors.call(routine,args);if(effectResult!==undefined)return effectResult;
+        const origin = routine === 0x0211b264 ? { actionId: state.actionId, moveId: move.recordIndex, slot } : null;
+        const effectResult=effectActors.call(routine,args,origin);if(effectResult!==undefined)return effectResult;
         const soundResult=soundEvents.call(routine,args,session.frame,move.recordIndex);if(soundResult!==undefined)return soundResult;
         const impactResult=impactEffects.call(nativeActors.memory,routine,args);if(impactResult!==undefined)return impactResult;
         if ((routine===0x02114320 || routine===0x0211436c) && args[0]===ownerObject) {
@@ -420,6 +423,7 @@ export function createBattleRuntime(options = {}) {
       const resolved = {...resolvedNative, damage: foeScaled(slot, targetSlot, burst.scaleDamage({attackerSlot: slot, defenderSlot: targetSlot,
         damage: taxonomy.scaleDamage({attackerSlot: slot, defenderSlot: targetSlot,
           elementSelector: move.elementSelect ?? 0, damage: resolvedNative.damage, signature: signatureMoves[slot] === move.recordIndex})}))};
+      const hpBefore = defender.currentHp;
       const result=hitRuntime.apply(targetSlot,{move,damage:resolved.damage,critical:resolved.critical,nativeKind,
         sourcePoint:parameters?effectActors.position(parameters):nativeActors.position(slot),statusInputs:{attackerIndex:inputs.statusAttackerIndex,
           selectedDefenseIndex:inputs.statusDefenderIndex,
@@ -429,6 +433,15 @@ export function createBattleRuntime(options = {}) {
       if(parameters){contacts.projectileHits++;contacts.history.push({frame:session.frame,moveId:move.recordIndex,slot,targetSlot,
         actor:parameters,sourcePoint:effectActors.position(parameters),hpAfter:defender.currentHp,result:result.code});
         if(contacts.history.length>128)contacts.history.shift();}
+      const origin = parameters ? effectActors.originOf(parameters) : state;
+      if (hpBefore > defender.currentHp && origin && origin.actionId === state?.actionId
+        && (!parameters || (origin.moveId === move.recordIndex && origin.slot === slot))) {
+        confirmedContacts.push({ id: ++nextContactId, frame: session.frame, actionId: origin.actionId,
+          actorId: parameters ? effectActors.instanceOf(parameters) : null, slot, targetSlot, moveId: move.recordIndex,
+          sourcePoint: parameters ? effectActors.position(parameters) : nativeActors.position(slot),
+          targetPoint: nativeActors.position(targetSlot), hpBefore, hpAfter: defender.currentHp });
+        if (confirmedContacts.length > 128) confirmedContacts.shift();
+      }
       hits.push({ slot: targetSlot, damage: resolved.damage, critical: resolved.critical });
       burst.onHit({attackerSlot:slot,defenderSlot:targetSlot,damage:resolved.damage,defenderMaxHp:defender.maxHp??0,defenderHp:defender.currentHp});
       arenaHazards?.onHit({move,attackerSlot:slot,targetPosition:nativeActors?.position(targetSlot)});
@@ -879,7 +892,7 @@ export function createBattleRuntime(options = {}) {
           timing:{pause:nativeActors.memory.readU32(nativeActors.worldAddress,0x1f134),slowdown:nativeActors.memory.readU32(nativeActors.worldAddress,0x1f138),issues:[...timingIssues]},
           // No impact has flashed before the first frame (-1 === 0-1 is not a flash).
           flash:{active:!session.ended&&impactFlashFrame>=0&&impactFlashFrame===session.frame-1,frame:impactFlashFrame,source:'0210FC68'},
-          effectPool:effectActors.diagnostics(),effectActors:effectActors.snapshot(),contacts:{...contacts,history:[...contacts.history]},poseWaitAdaptations:poseWaitAdaptations.map(a=>({...a})),reactions:hitRuntime.snapshot(),normalFlow:session.normalFlow.snapshot()}) });
+          effectPool:effectActors.diagnostics(),effectActors:effectActors.snapshot(),contacts:{...contacts,history:[...contacts.history],confirmed:[...confirmedContacts]},poseWaitAdaptations:poseWaitAdaptations.map(a=>({...a})),reactions:hitRuntime.snapshot(),normalFlow:session.normalFlow.snapshot()}) });
       unsubscribe = source.subscribe(() => {
         const view = source.getView();
         for (const observer of [...observers]) {
@@ -949,7 +962,7 @@ export function createBattleRuntime(options = {}) {
       impactEffects.clear();
       soundEvents.clear();
       effectActors?.clear();effectActors=null;
-      contacts.projectileCalls=0;contacts.projectileHits=0;contacts.meleeCalls=0;contacts.history.length=0;
+      contacts.projectileCalls=0;contacts.projectileHits=0;contacts.meleeCalls=0;contacts.history.length=0;confirmedContacts.length=0;
       specialPrelude = null;
       completedRound = null;
     }
