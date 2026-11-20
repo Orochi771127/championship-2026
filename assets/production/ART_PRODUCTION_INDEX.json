@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 57,
+    "registeredRuntimeBundles": 60,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -707,6 +707,36 @@
     {
       "assetId": "art:vfx:arena:flameRing",
       "manifestPath": "assets/production/vfx/arena-moves/flameRing.json",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "LOCAL_PLAYABLE_PILOT",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "runtimeEligible": true,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:vfx:arena:arcBolt",
+      "manifestPath": "assets/production/vfx/arena-moves/arcBolt.json",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "LOCAL_PLAYABLE_PILOT",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "runtimeEligible": true,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:vfx:arena:frostFan",
+      "manifestPath": "assets/production/vfx/arena-moves/frostFan.json",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "LOCAL_PLAYABLE_PILOT",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "runtimeEligible": true,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:vfx:arena:shadeBolt",
+      "manifestPath": "assets/production/vfx/arena-moves/shadeBolt.json",
       "rightsStatus": "ORIGINAL_GENERATED",
       "productionStatus": "LOCAL_PLAYABLE_PILOT",
       "shippingStatus": "NOT_SHIPPING_READY",

@@ -1,4 +1,7 @@
-const records = new Map([['arcField', 625], ['emberBolt', 635], ['fangRush', 636], ['flameRing', 637]]);
+const records = new Map([
+  ['arcBolt', 623], ['arcField', 625], ['emberBolt', 635], ['fangRush', 636],
+  ['flameRing', 637], ['frostFan', 639], ['shadeBolt', 656]
+]);
 // Outer warning strokes measured from the atlas pivot, in source pixels.
 const groundRadii = new Map([['arcField', 26], ['flameRing', 29]]);
 const assetRoot = 'assets/production/vfx/arena-moves/';
