@@ -1,9 +1,26 @@
 const records = new Map([
-  ['arcBolt', 623], ['arcField', 625], ['emberBolt', 635], ['fangRush', 636],
-  ['flameRing', 637], ['frostFan', 639], ['shadeBolt', 656]
+  ['arcBolt', 623], ['arcField', 625], ['clawSweep', 631],
+  ['coreNova', 632], ['emberBolt', 635], ['fangRush', 636],
+  ['flameRing', 637], ['foamZone', 638], ['frostFan', 639],
+  ['grovePulse', 642], ['haloPulse', 643], ['iceCage', 644],
+  ['impactNova', 646], ['nightPulse', 650], ['quakeSlam', 651],
+  ['shadeBolt', 656], ['shadeField', 657], ['vineSnare', 669],
+  ['vortex', 670], ['whiteout', 671]
 ]);
-// Outer warning strokes measured from the atlas pivot, in source pixels.
-const groundRadii = new Map([['arcField', 26], ['flameRing', 29]]);
+// Painted extents in source pixels, measured separately for each clip from its pivot.
+const groundRadii = new Map([
+  ['arcField/warning', 26], ['arcField/burst', 26],
+  ['flameRing/warning', 29], ['flameRing/burst', 29],
+  ['foamZone/warning', 29], ['foamZone/burst', 30],
+  ['iceCage/warning', 26], ['iceCage/burst', 28],
+  ['quakeSlam/warning', 26], ['quakeSlam/burst', 27],
+  ['shadeField/warning', 29], ['shadeField/burst', 30],
+  ['vineSnare/warning', 30], ['vineSnare/burst', 27],
+  ['clawSweep/burst', 28], ['coreNova/burst', 26],
+  ['grovePulse/burst', 28], ['haloPulse/burst', 27],
+  ['impactNova/burst', 28], ['nightPulse/burst', 27],
+  ['vortex/burst', 35], ['whiteout/burst', 34]
+]);
 const assetRoot = 'assets/production/vfx/arena-moves/';
 
 // Each scene owns its decoded images. Starting a new cast can retry a failed request.
@@ -67,7 +84,7 @@ export function createArenaMoveAtlas({ PIXI, ground, front, reducedMotion }) {
     actor.frame = frame;
     actor.sprite.position.set(x, y);
     actor.sprite.rotation = angle;
-    actor.sprite.scale.set(onGround ? scale / groundRadii.get(key) : scale);
+    actor.sprite.scale.set(onGround ? scale / groundRadii.get(key + '/' + phase) : scale);
     // Warning progress follows the live countdown; travelling art loops on its own instance clock.
     const ms = phase === 'warning' ? age * clip.duration : phase === 'travel' ? age % clip.duration : age;
     paint(actor, ms);

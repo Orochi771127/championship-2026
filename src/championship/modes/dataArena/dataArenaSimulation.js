@@ -738,7 +738,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         emit({ type: "BARRIER_UP", x: caster.x, y: caster.y, angle });
         break;
       case "BLINK": blink(caster, move, angle); break;
-      case "NOVA": nova(caster, move, damageScale, moveId, isBasic); break;
+      case "NOVA": nova(caster, move, damageScale, moveId, isBasic, actionId); break;
       default: break;
     }
   }
@@ -880,7 +880,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   const attackElementOf = (caster, moveId) => { const cover = coverElement(caster, moveId); return cover && cover !== 'physical' ? speciesTaxonomyForId(caster.speciesId)?.element ?? null : null; };
   const taxonomyMultiplier = (attackElement, target) => attackElement ? elementMultiplierPercent(attackElement, speciesTaxonomyForId(target.speciesId)?.element) / 100 : 1;
 
-  function nova(caster, move, damageScale, moveId, isBasic = false) {
+  function nova(caster, move, damageScale, moveId, isBasic, actionId) {
     const team = caster.team;
     for (const target of targetsFor(team)) {
       if (distance(target.x, target.y, caster.x, caster.y) > move.radius + (target.radius ?? 20)) continue;
@@ -894,7 +894,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       }
     }
     areaElement(caster.x, caster.y, move.radius, move,move.damage*damageScale,relayMode?coverElement(caster,moveId):null);
-    emit({ type: "NOVA", team, moveId, x: caster.x, y: caster.y, radius: move.radius, effect: move.effect });
+    emit({ type: "NOVA", actionId, casterId: caster.id, team, moveId, x: caster.x, y: caster.y, radius: move.radius, effect: move.effect });
   }
 
   function zoneStatus(move) {

@@ -1133,7 +1133,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           ring(event.x, event.y - 24, 130, 0xffe066, 0.48);
           burst(event.x, event.y - 24, { count: 22, speed: 320, tint: 0xffe066, life: 0.55 });
           break;
-        case "NOVA": if (kitShots && state.gameMode === 'RELAY' && elementFx.area({ x: event.x, y: event.y - 20, radius: event.radius, moveId: event.moveId, speciesId: casterSpecies(event) })) { camera.addTrauma(0.5); break; }
+        case "NOVA":
+          if (atlas.place(event, event.moveId, 'burst', event.x, event.y, 0, event.radius, 0, true, true)) {
+            camera.addTrauma(0.5); break;
+          }
+          if (kitShots && state.gameMode === 'RELAY' && elementFx.area({ x: event.x, y: event.y - 20, radius: event.radius, moveId: event.moveId, speciesId: casterSpecies(event) })) { camera.addTrauma(0.5); break; }
           for (let i = 0; i < 3; i++) ring(event.x, event.y, event.radius * (0.6 + i * 0.25), state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xc8f4ff : event.effect === "SLOW" ? 0x5fd8c8 : 0xff8a3c, 0.4 + i * 0.12);
           burst(event.x, event.y - 20, { count: 24, speed: 380, tint: state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xd8f6ff : 0xffb070, texture: textures.shard, scale: 1.8, gravity: 200, life: 0.7 }); camera.addTrauma(0.5);
           if (state.gameMode === 'RELAY') relayImpact(event.x, event.y - 20, relayLook(event.moveId, event.team)); break;

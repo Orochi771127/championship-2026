@@ -9012,7 +9012,33 @@
     "assets/production/vfx/arena-moves/frostFan.json",
     "assets/production/vfx/arena-moves/frostFan.png",
     "assets/production/vfx/arena-moves/shadeBolt.json",
-    "assets/production/vfx/arena-moves/shadeBolt.png"
+    "assets/production/vfx/arena-moves/shadeBolt.png",
+    "assets/production/vfx/arena-moves/foamZone.json",
+    "assets/production/vfx/arena-moves/foamZone.png",
+    "assets/production/vfx/arena-moves/iceCage.json",
+    "assets/production/vfx/arena-moves/iceCage.png",
+    "assets/production/vfx/arena-moves/quakeSlam.json",
+    "assets/production/vfx/arena-moves/quakeSlam.png",
+    "assets/production/vfx/arena-moves/shadeField.json",
+    "assets/production/vfx/arena-moves/shadeField.png",
+    "assets/production/vfx/arena-moves/vineSnare.json",
+    "assets/production/vfx/arena-moves/vineSnare.png",
+    "assets/production/vfx/arena-moves/clawSweep.json",
+    "assets/production/vfx/arena-moves/clawSweep.png",
+    "assets/production/vfx/arena-moves/coreNova.json",
+    "assets/production/vfx/arena-moves/coreNova.png",
+    "assets/production/vfx/arena-moves/grovePulse.json",
+    "assets/production/vfx/arena-moves/grovePulse.png",
+    "assets/production/vfx/arena-moves/haloPulse.json",
+    "assets/production/vfx/arena-moves/haloPulse.png",
+    "assets/production/vfx/arena-moves/impactNova.json",
+    "assets/production/vfx/arena-moves/impactNova.png",
+    "assets/production/vfx/arena-moves/nightPulse.json",
+    "assets/production/vfx/arena-moves/nightPulse.png",
+    "assets/production/vfx/arena-moves/vortex.json",
+    "assets/production/vfx/arena-moves/vortex.png",
+    "assets/production/vfx/arena-moves/whiteout.json",
+    "assets/production/vfx/arena-moves/whiteout.png"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -41000,7 +41026,7 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaSimulation.js",
-        "sha256": "42afa9f34aafba19669ab644686f9249080982e0d1a50b24dc9de83ca445df9a"
+        "sha256": "89b01425e1d3ad654923e93d91d4a3387cd112396c96b5c57e8ad1a76a62af61"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaUpgrades.js",
@@ -41196,7 +41222,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
-        "sha256": "203012630107f36a219566ca327f4876866af4b92077f71a45b61ead95d6c416"
+        "sha256": "800076177bd0a89b3e1b9c764e18034ec0547b4b8d1c554304ccc6eb0e5d085c"
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
@@ -42552,7 +42578,7 @@
       },
       {
         "path": "src/championship/presentation/dataArena/dataArenaMoveAtlas.js",
-        "sha256": "36718726e467cb4d13f52a37218724f30d59b54c6abc24945f506fdca0918c69"
+        "sha256": "1dd92dacdfb6050de4b2fa669e3bd8ce69907e0a6b32c3806a76d29e24a64660"
       },
       {
         "path": "assets/production/vfx/arena-moves/arcBolt.json",
@@ -42577,6 +42603,110 @@
       {
         "path": "assets/production/vfx/arena-moves/shadeBolt.png",
         "sha256": "7ddb382825298517189ff4a885bbf51abc6354be57ddbcd8f446d1421f64794e"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/foamZone.json",
+        "sha256": "69ac36421f3a3a6c1228f9bb0a1391f3007733c80a74b68c9b2c48887bb95c18"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/foamZone.png",
+        "sha256": "7b02b23649d0dd2b81f25e1f2cc5844b5ccd9d0fec3089582fd4c9397c026a44"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/iceCage.json",
+        "sha256": "93ebf881984483b9676f6fb7e3f5cf947715ab9ac890d37bde33e46d72d09aef"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/iceCage.png",
+        "sha256": "570d89326331d22efa2596492f5203f2f7b6ab386467fed33e8f2c1309f95aa3"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/quakeSlam.json",
+        "sha256": "fbe36aeb15006b8576c8b48076b54f4ef5025570235c586a3ad636c85a094492"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/quakeSlam.png",
+        "sha256": "cdf8d324b9747d0e731496fbf1ac5a53ab772b77b34b2847ea00a305fa06267f"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/shadeField.json",
+        "sha256": "ce14681207c36c5dbd7240772cb18823e6dd71bd6f176503f65c71e72d53d4ca"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/shadeField.png",
+        "sha256": "02ffa92058d1ea7e474d03444ed9b85fe0856e1f0413a047151fee58e576b67f"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/vineSnare.json",
+        "sha256": "5ad84e0382cd0f329d63cf3e2f2ff1cf531c4ef8bdcf7e5ac7525b13fece1c66"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/vineSnare.png",
+        "sha256": "1deb39a28a53265eb40845120a4bb943d6296773f2a1cdfd27a761023223263a"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/clawSweep.json",
+        "sha256": "54d93e3abbd974e8703d9483bdeb175f82977d42f316a4cf24465e9b8b61f1b1"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/clawSweep.png",
+        "sha256": "ca5daeb9286421a5212dc4335683309bd46924db184f0987d76f046509eee4ed"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/coreNova.json",
+        "sha256": "c29815f24f6437a42d21437f2c17353f197dea49eda1bae3757837f8f3d480c1"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/coreNova.png",
+        "sha256": "47856370b01a931557b21f1f66c928e8b8be4998f9501db71b36e43ad3de838c"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/grovePulse.json",
+        "sha256": "f06f476675ab128a92d50d26bd5be4cbe6fea074646e990ddd43c8e6538785b4"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/grovePulse.png",
+        "sha256": "35e5e2280656e6b2e1667373c90561dcef906ededb779b8c267f8a65e3c5ecb3"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/haloPulse.json",
+        "sha256": "8d5ab916aad9cdc177de49c72d926c5e0c9e164b074416414bda543c075f1979"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/haloPulse.png",
+        "sha256": "0f2fffaaf6f0ea329fcf956990a21414a2bd66909ee9817061a8ae93ba1fb250"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/impactNova.json",
+        "sha256": "99df661c8b96bc2700b630dbb5d2211298ccccf83b0c1c2c38289b3585c00534"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/impactNova.png",
+        "sha256": "dab861a876020aa4c740b91ab5f7ba65ca5c6ea322efd5266a013f9d9a6b430e"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/nightPulse.json",
+        "sha256": "34dac46713a19050bc4b541ae55850e6ee3d7dbb2f673c158da65f25b4631cbf"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/nightPulse.png",
+        "sha256": "0b1bf7524cc956962f09bc506f7a76dec00b967aa4c9aab657e1b4da6e2f9ab8"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/vortex.json",
+        "sha256": "95b92aa791f4f6ec7e0769a2862e5f6e105e44d1074594246cbc177b4f5f0418"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/vortex.png",
+        "sha256": "d98f111d99ad001f9aebad1b116ab70cedbbc1abb09d5d76eb9dd1aca71eacb2"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/whiteout.json",
+        "sha256": "ace97a40837840962ad509be6c109da23ccb6e92f4dc5d71c16fd525b0f47b60"
+      },
+      {
+        "path": "assets/production/vfx/arena-moves/whiteout.png",
+        "sha256": "ed8e30e425d86a955c6f086b3d8cd17eb2187731e4bf0ad0be1a68a53bea156c"
       }
     ],
     "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",
