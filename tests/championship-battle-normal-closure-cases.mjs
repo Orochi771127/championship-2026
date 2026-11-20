@@ -97,3 +97,20 @@ test('R9 closure integrated HP-zero abort rejects new launches and releases allo
  assert.equal(initialized,0);assert.equal(released,1);assert.equal(c.state,1);assert.ok(c.launchSlots.every(x=>!x));
  assert.equal(m.readU32(actors.address(0),0x78),0);
 });
+
+
+test('a committed taunt publishes one body cue for each opponent actually redirected',()=>{
+ const {session,actors,flow}=fixture(),caster=session.slots[0],m=actors.memory;
+ session.allocateAction=(_slot,_decision,{targetSlot})=>({index:0,targetSlot,release(){}});
+ flow.beforeFrame();
+ Object.assign(caster,{state:16,stateCounter:0,field180:0,field17C:0,pendingTargetSlot:0,pendingDecision:{actionId:1},pendingDecisionId:19});
+ flow.stepState(0,()=>{});
+ assert.ok(flow.snapshot().history.some(e=>e.type==='LAUNCHED'&&e.moveId===1),JSON.stringify({history:flow.snapshot().history.slice(-8),state:caster.state,flags:actors.worldFlags(),notification:caster.field17C,counter:caster.field180,slots:caster.launchSlots}));
+ session.slots[4].flags9A=2;session.slots[5].currentHp=0;
+ actors.requestSequence(0,35,'CONTROLLED_FOLLOWUP_TEST');for(let i=0;i<200;i++)actors.advance();
+ caster.stateCounter=2;flow.stepState(0,()=>{});
+ const results=flow.snapshot().history.filter(e=>e.type==='TAUNT_RECIPIENT').map(e=>e.receipt);
+ assert.deepEqual(results.map(r=>[r.moveId,r.actionIndex,r.decisionId,r.casterSlot,r.targetSlot,r.result]),[[1,0,19,0,3,'taunt']]);
+ assert.equal(m.readU32(actors.address(3),0x5c),actors.address(0));assert.equal(session.slots[3].statusCode,1);
+ assert.deepEqual([session.slots[4].statusCode,session.slots[5].statusCode],[0,0]);
+});

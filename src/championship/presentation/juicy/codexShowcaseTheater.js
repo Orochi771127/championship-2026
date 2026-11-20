@@ -33,15 +33,14 @@ import { applyJuicyPalette, juicyNode, juicyPortrait } from "./juicyArt.js";
 import { playCyberMorphEvolution } from "./cyberMorphEvolutionRunner.js";
 import { createSkillCutInLayer } from "./skillCutIn.js";
 import { createShowcaseBankCells } from "./showcaseBankCells.js";
-import { playShowcaseBakedPiece, preloadShowcaseBakedPieces } from "./showcaseBakedPiece.js";
+import { playShowcaseBakedPiece, createShowcaseMoveAtlas } from "./showcaseBakedPiece.js";
 import { moveVfxChoreography } from "../vfx/moveVfxChoreography.js";
-import { loadMoveVfx3dPieces } from "../vfx/moveVfxSetPieces.js";
+import { autoMoveBindings } from "../battleFx/autoMoveBindings.js";
+import { productArenaMoveRecord } from "../../contracts/productArenaMoves.js";
 import { SHOWCASE_CARRIER_STYLES, SHOWCASE_STREAM_STYLES, playShowcaseStyle, showcaseStyleIsMelee } from "./showcaseMoveVfx.js";
 import { SHOWCASE_ACTIONS, SHOWCASE_ATTACK_SEQUENCE, createSpriteMotion, loadShowcaseMotionShared, showcaseFitScale,
   showcaseMotionAvailable } from "./spriteMotionPlayer.js";
 
-// The baked move pieces (about 3.7 MB of text) start loading with the Dex, ahead of the first preview's hit.
-if (typeof preloadShowcaseBakedPieces === "function" && typeof document !== "undefined") preloadShowcaseBakedPieces();
 const moveRecords = new Map([...(movesCatalog.records ?? []), ...listProductOriginalMoveRecords()].map(record => [record.recordIndex, record]));
 
 /**
@@ -101,7 +100,6 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
   const ensureBankCells = () => {
     if (!bankCells) {
       bankCells = createShowcaseBankCells({ doc, fetchImpl });
-      if (typeof preloadShowcaseBakedPieces === "function") preloadShowcaseBakedPieces();
       const own = bankCells;
       own.ready.then(() => { if (bankCells === own) cellsReady = true; }, () => { if (bankCells === own) cellsReady = true; });
     }
@@ -266,6 +264,8 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     if (!theater) return;
     for (const timer of theater.timers) { if (typeof timer?.cancel === "function") timer.cancel(); else globalThis.clearTimeout(timer); }
     theater.timers.clear();
+    theater.moveAtlas?.dispose();
+    theater.moveAtlas = null;
     theater.run?.dispose();
     theater.run = null;
     theater.cutIn?.dispose();
@@ -294,9 +294,9 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     clearStage();
     view.kind = kind;
     view.payload = payload;
-    // a move with a three.js contact piece starts loading it as the preview opens (UNIFIED_MOVES_20261118)
-    const contact = typeof moveVfxChoreography === "function" ? moveVfxChoreography(payload?.move?.recordIndex)?.contact : null;
-    if (contact && typeof loadMoveVfx3dPieces === "function") loadMoveVfx3dPieces([contact.piece]);
+    const record = payload?.move?.recordIndex;
+    const key = productArenaMoveRecord(record)?.productDonorRecord ?? record;
+    if (kind === "special" && autoMoveBindings.has(key)) view.moveAtlas = createShowcaseMoveAtlas({doc, key, fetchImpl});
     view.runId = (view.runId ?? 0) + 1; // a replay is a new run, even with the same payload
     view.root.hidden = false;
     view.root.dataset.kind = kind;
@@ -542,6 +542,7 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
       fx.dataset.bodyH = String(Math.round(from.h));
       const dx = to.x - from.x;
       const style = payload.look.style;
+      if (theater.moveAtlas?.play(['travel', 'beam'], {layer:fx, from, to, width:Math.max(48, to.h), duration:T.contact-T.travel, reduced:!full})) return;
       playCell("launch", from.x, from.y) ?? playCell("prepare", from.x, from.y);
       // Release: a shock ring across the shot and seven recoil sparks at the muzzle.
       if (!showcaseStyleIsMelee(style) && full) {
@@ -600,40 +601,44 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     function impact() {
       const to = dummyPoint();
       playCeremonySound("impact", doc);
-      const core = spawn("cm-showcase__impact", to.x, to.y);
-      animate(core, [{ opacity: 1, transform: "translate(-50%, -50%) scale(0.3)" }, { opacity: 0.9, offset: 0.3, transform: "translate(-50%, -50%) scale(1)" },
-        { opacity: 0, transform: "translate(-50%, -50%) scale(1.6)" }], { duration: 300, easing: "ease-out" });
-      playShowcaseStyle("impact", payload.look.style, styleContext());
-      // The move's own piece (refinement pass 5): the same baked contact as in battle (the Dex keeps
-      // its own impact flash), so the Dex shows each move as it lands in a fight.
-      const choreo = typeof moveVfxChoreography === "function" ? moveVfxChoreography(payload.move?.recordIndex) : null;
-      if (choreo?.contact && typeof playShowcaseBakedPiece === "function") {
-        const body = point(dummy.body, 1), palette = BATTLE_FX_PALETTES[payload.look.palette] ?? BATTLE_FX_PALETTES.neutral;
-        // sized to the stage, not the dummy's thin post: a fighter is about a quarter of the stage wide
-        const width = Math.max(110, stage.getBoundingClientRect().width * 0.3), groundY = body.top + body.h;
-        playShowcaseBakedPiece({ doc, layer: fx, name: showcasePieceLook(choreo.contact), palette, x: to.x, y: to.y, groundY, width, scale: choreo.contact.scale ?? 1 });
-      }
-      const carried = SHOWCASE_CARRIER_STYLES.includes(payload.look.style) || SHOWCASE_STREAM_STYLES[payload.look.style];
-      if (!carried) playCell("body", to.x, to.y);
-      playCell("hit", to.x, to.y);
-      later(90, () => playCell("extra", to.x, to.y, null, { scale: cellScale() * 1.1 }));
-      if (payload.look.accent) playCell(payload.look.accent, to.x, to.y, null, { hue: 0 });
-      // The struck body keeps the element a moment: embers, rime, sparks, bubbles.
-      if (payload.look.overlay) for (let i = 0; i < 2; i++) later(i * 300, () => playCell(payload.look.overlay, to.x + (i ? 10 : -8), to.y - 6, null, { hue: 0, duration: 420, scale: cellScale() * 0.8 }));
-      // A four-second ground mark under the dummy.
-      const groundAt = point(dummy.body, 1);
-      const mark = node(doc, "i", "cm-showcase__decal");
-      mark.dataset.decal = payload.look.decal;
-      mark.style.left = `${Math.round(groundAt.x)}px`;
-      mark.style.top = `${Math.round(groundAt.top + groundAt.h - 6)}px`;
-      backdrop.append(mark);
-      animate(mark, [{ opacity: 0 }, { opacity: 1, offset: 0.03 }, { opacity: 1, offset: 0.7 }, { opacity: 0 }], { duration: 4000, easing: "linear" });
-      for (let i = 0; i < (full ? 6 : 0); i++) {
-        const spark = spawn("cm-showcase__spark", to.x, to.y);
-        const angle = (Math.PI * 2 * i) / 6 + (i % 2) * 0.2, reach = 46 + (i % 3) * 16;
-        animate(spark, [{ opacity: 1, transform: `translate(-50%, -50%) rotate(${angle}rad) translateX(0) scaleX(1)` },
-          { opacity: 0, transform: `translate(-50%, -50%) rotate(${angle}rad) translateX(${reach}px) scaleX(0.3)` }],
-          { duration: 360, easing: "cubic-bezier(.1,.7,.3,1)" });
+      const binding = autoMoveBindings.get(payload.move?.recordIndex);
+      const at = binding?.anchor.startsWith('caster_') ? casterPoint() : binding?.anchor === 'target_ground' ? point(dummy.body, 1) : to;
+      if (!theater.moveAtlas?.play(['contact', 'target_single'], {layer:fx, from:at, width:Math.max(48, to.h), reduced:!full})) {
+        const core = spawn("cm-showcase__impact", to.x, to.y);
+        animate(core, [{ opacity: 1, transform: "translate(-50%, -50%) scale(0.3)" }, { opacity: 0.9, offset: 0.3, transform: "translate(-50%, -50%) scale(1)" },
+          { opacity: 0, transform: "translate(-50%, -50%) scale(1.6)" }], { duration: 300, easing: "ease-out" });
+        playShowcaseStyle("impact", payload.look.style, styleContext());
+        // The move's own piece (refinement pass 5): the same baked contact as in battle (the Dex keeps
+        // its own impact flash), so the Dex shows each move as it lands in a fight.
+        const choreo = typeof moveVfxChoreography === "function" ? moveVfxChoreography(productArenaMoveRecord(payload.move?.recordIndex)?.productDonorRecord ?? payload.move?.recordIndex) : null;
+        if (choreo?.contact && typeof playShowcaseBakedPiece === "function") {
+          const body = point(dummy.body, 1), palette = BATTLE_FX_PALETTES[payload.look.palette] ?? BATTLE_FX_PALETTES.neutral;
+          // sized to the stage, not the dummy's thin post: a fighter is about a quarter of the stage wide
+          const width = Math.max(110, stage.getBoundingClientRect().width * 0.3), groundY = body.top + body.h;
+          playShowcaseBakedPiece({ doc, layer: fx, name: showcasePieceLook(choreo.contact), palette, x: to.x, y: to.y, groundY, width, scale: choreo.contact.scale ?? 1 });
+        }
+        const carried = SHOWCASE_CARRIER_STYLES.includes(payload.look.style) || SHOWCASE_STREAM_STYLES[payload.look.style];
+        if (!carried) playCell("body", to.x, to.y);
+        playCell("hit", to.x, to.y);
+        later(90, () => playCell("extra", to.x, to.y, null, { scale: cellScale() * 1.1 }));
+        if (payload.look.accent) playCell(payload.look.accent, to.x, to.y, null, { hue: 0 });
+        // The struck body keeps the element a moment: embers, rime, sparks, bubbles.
+        if (payload.look.overlay) for (let i = 0; i < 2; i++) later(i * 300, () => playCell(payload.look.overlay, to.x + (i ? 10 : -8), to.y - 6, null, { hue: 0, duration: 420, scale: cellScale() * 0.8 }));
+        // A four-second ground mark under the dummy.
+        const groundAt = point(dummy.body, 1);
+        const mark = node(doc, "i", "cm-showcase__decal");
+        mark.dataset.decal = payload.look.decal;
+        mark.style.left = `${Math.round(groundAt.x)}px`;
+        mark.style.top = `${Math.round(groundAt.top + groundAt.h - 6)}px`;
+        backdrop.append(mark);
+        animate(mark, [{ opacity: 0 }, { opacity: 1, offset: 0.03 }, { opacity: 1, offset: 0.7 }, { opacity: 0 }], { duration: 4000, easing: "linear" });
+        for (let i = 0; i < (full ? 6 : 0); i++) {
+          const spark = spawn("cm-showcase__spark", to.x, to.y);
+          const angle = (Math.PI * 2 * i) / 6 + (i % 2) * 0.2, reach = 46 + (i % 3) * 16;
+          animate(spark, [{ opacity: 1, transform: `translate(-50%, -50%) rotate(${angle}rad) translateX(0) scaleX(1)` },
+            { opacity: 0, transform: `translate(-50%, -50%) rotate(${angle}rad) translateX(${reach}px) scaleX(0.3)` }],
+            { duration: 360, easing: "cubic-bezier(.1,.7,.3,1)" });
+        }
       }
       // The dummy: white flash, element rim, knockback 11 px along the hit.
       animate(target, [{ filter: "brightness(3.2) saturate(0)" }, { offset: 0.35, filter: "brightness(1.6) drop-shadow(0 0 6px var(--jc-main))" },

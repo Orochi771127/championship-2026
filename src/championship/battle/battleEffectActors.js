@@ -46,7 +46,7 @@ export function createBattleEffectActors({memory:m,worldAddress,loadedBankIds}){
   w(actor,0x8c,e.data+0x40);h(e.data+0x40,0,s.frames.length);w(e.data+0x40,0xc,e.data+0x80);
   s.frames.forEach((f,i)=>h(e.data+0x80,i*8+4,f.ticks));updateCell(e);return 1;
  }
- function allocate(encoded,mode){
+ function allocate(encoded,mode,origin=null){
   const id=(encoded>>8)&255,sequence=(encoded&255)-1;
   if(sequence<0||!id||id>=152)return 0;
   const bank=banks.get(id);if(!bank){unavailable.add(`BANK:${id}`);return 0;}
@@ -58,7 +58,7 @@ export function createBattleEffectActors({memory:m,worldAddress,loadedBankIds}){
   for(const o of [4,8,0x10])w(actor,o,4096);w(actor,0x34,0x7fffffff);
   for(const o of [0x14,0x16,0x1a,0x58,0x59,0x5b])b(actor,o,0);
   b(actor,0x15,31);b(actor,0x17,255);h(actor,0x18,32767);
-  const data=0x40000000+index*0x1000,e={actor,data,bank,id:++serial,sequenceId:null};entries.set(actor,e);
+  const data=0x40000000+index*0x1000,e={actor,data,bank,id:++serial,sequenceId:null,origin:origin ? {...origin, selector:encoded} : null};entries.set(actor,e);
   w(actor,0xc8,data);w(data,4,data+0x10);w(data+0x10,0,bank.address);
   w(actor,0x70,data+0x20);w(data+0x20,0,data+0x30);
   // Resource setup initializes sequence0 before allocator selects lowByte-1.
@@ -70,6 +70,8 @@ export function createBattleEffectActors({memory:m,worldAddress,loadedBankIds}){
   for(let i=0;i<live;i++)if(m.readU32(base,liveAt+i*4)===actor){
    w(base,liveCount,live-1);w(base,liveAt+i*4,m.readU32(base,liveAt+(live-1)*4));
    const n=m.readU32(base,freeCount);w(base,freeAt+n*4,actor);w(base,freeCount,n+1);w(base,modeAt+indexOf(actor)*4,0);
+   // A retired allocation cannot identify a later visual contact at this address.
+   entries.get(actor).origin=null;
    // ACF8 only removes the live handle. Resource/animator memory survives
    // until the next allocation resets that slot; a VM may still query it.
    released++;return true;
@@ -86,7 +88,11 @@ export function createBattleEffectActors({memory:m,worldAddress,loadedBankIds}){
   return actor;
  }
  return {
-  base,allocate,release,has:actor=>entries.has(actor),box:actor=>readSpriteCellBox(m,actor,1)?.box??null,
+  noteContactProbe(actor,actionId,moveId,slot){
+    const entry=entries.get(actor), o=entry?.origin;
+    if(o && !o.contactProbe && o.actionId===actionId && o.moveId===moveId && o.slot===slot)entry.origin={...o,contactProbe:true};
+  },
+  base,allocate,release,instanceOf:actor=>entries.get(actor)?.id??null,originOf:actor=>entries.get(actor)?.origin??null,has:actor=>entries.has(actor),box:actor=>readSpriteCellBox(m,actor,1)?.box??null,
   position:actor=>[0x24,0x28,0x2c].map(o=>m.readU32(actor,o)|0),
   advanceOwned(object){for(let i=0;i<24;i++){const a=m.readU32(object,0x24+i*4);if(a&&m.readU8(a,0x5b)){animate(a);physics(a);}}},
   advance({exclusive=false}={}){for(let i=0;i<m.readU32(base,liveCount);i++){
@@ -95,8 +101,8 @@ export function createBattleEffectActors({memory:m,worldAddress,loadedBankIds}){
    else if(mode===0&&!exclusive){animate(a);physics(a);}
   }},
   clear(){while(m.readU32(base,liveCount)){const a=m.readU32(base,liveAt);b(a,0x5b,0);release(a);}},
-  call(routine,args){const [actor,id,start]=args;
-   if(routine===0x0211b264)return allocate(id,start);
+  call(routine,args,origin=null){const [actor,id,start]=args;
+   if(routine===0x0211b264)return allocate(id,start,origin);
    // AD9C compares the actor's resource against loaded banks, not its sequence.
    if(routine===0x0211ad9c){if(actor!==base)return undefined;return entries.get(id)?.bank.id??0;}
    if(!entries.has(actor))return undefined;const e=entries.get(actor);
@@ -112,7 +118,7 @@ export function createBattleEffectActors({memory:m,worldAddress,loadedBankIds}){
    return undefined;
   },
   snapshot(){return Array.from({length:m.readU32(base,liveCount)},(_,i)=>entries.get(m.readU32(base,liveAt+i*4)))
-   .filter(e=>m.readU8(e.actor,0x5b)).map(e=>({id:e.id,actor:e.actor,bankId:e.bank.id,name:e.bank.name,
+   .filter(e=>m.readU8(e.actor,0x5b)).map(e=>({id:e.id,actor:e.actor,origin:e.origin,bankId:e.bank.id,name:e.bank.name,
    sequenceId:e.sequenceId,cell:e.sample.cell,frame:e.sample.frameIndex,active:e.sample.active,
    point:[0x24,0x28,0x2c].map(o=>m.readU32(e.actor,o)|0),box:readSpriteCellBox(m,e.actor,1)?.box,
    sin:m.readU32(e.actor,0xc)|0,cos:m.readU32(e.actor,0x10)|0,scaleX:m.readU32(e.actor,4)|0,scaleY:m.readU32(e.actor,8)|0,
