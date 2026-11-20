@@ -77,7 +77,7 @@ export function createShowcaseMoveAtlas({doc, key, fetchImpl = globalThis.fetch}
     phases = data.phases;
   }
   if (doc?.baseURI && typeof fetchImpl === 'function') load().catch(() => {});
-  function play(keys, {layer, from, to = from, width, duration, reduced}) {
+  function play(keys, {layer, from, to = from, width, duration, reduced, later}) {
     const phase = phases.find(p => keys.includes(p.key));
     if (!bitmap || !phase) return false;
     const canvas = doc.createElement('canvas'), ctx = canvas.getContext('2d');
@@ -108,7 +108,9 @@ export function createShowcaseMoveAtlas({doc, key, fetchImpl = globalThis.fetch}
         canvas.style.transformOrigin = (f.pivot.x*scale)+'px '+(f.pivot.y*scale)+'px';
         canvas.style.transform = 'rotate('+Math.atan2(dy,dx)+'rad)';
       }
-      view.requestAnimationFrame(draw);
+      const remaining = span-elapsed;
+      const delay = reduced ? remaining : Math.min(remaining, Math.max(1, -t*span/clip));
+      later(delay, () => draw(view.performance.now()));
     }
     draw(start); return true;
   }

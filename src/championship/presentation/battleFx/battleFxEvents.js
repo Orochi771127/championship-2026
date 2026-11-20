@@ -78,7 +78,8 @@ export function createBattleFxEventTracker() {
             const prevMeta = hitMetaBySlot.get(entry.slot);
             hitMetaBySlot.set(entry.slot, {
               critical: Boolean(prevMeta?.critical || entry.critical === true),
-              moveId: Number.isInteger(entry.moveId) ? entry.moveId : (prevMeta?.moveId ?? null)
+              hp: entry.hp,
+              moveId: !prevMeta && Number.isInteger(entry.moveId) ? entry.moveId : null
             });
           }
         });
@@ -122,7 +123,7 @@ export function createBattleFxEventTracker() {
             const contact = matches.length === 1 ? matches[0] : null;
             events.push(Object.freeze({type: 'HIT', frame, slot, damage: hpBefore - hpAfter, hpBefore, hpAfter, maxHp,
               ratio: (hpBefore - hpAfter) / maxHp, critical: meta?.critical === true, contactId: contact?.id ?? null,
-              ...(!contact && coversDelta(freshContacts.filter(c=>c.targetSlot===slot),hpBefore,hpAfter)), attackerSlot: contact?.slot ?? null, moveId: contact?.moveId ?? null}));
+              ...(!contact && coversDelta(freshContacts.filter(c=>c.targetSlot===slot),hpBefore,hpAfter)), attackerSlot: contact?.slot ?? null, moveId: contact?.moveId ?? (meta?.hp === hpAfter && !freshContacts.some(c => c.targetSlot === slot) ? meta.moveId : null)}));
           } else if (hpAfter > hpBefore) {
             events.push(Object.freeze({type: 'HEAL', frame, slot, amount: hpAfter - hpBefore, maxHp}));
           }

@@ -544,7 +544,7 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
       fx.dataset.bodyH = String(Math.round(from.h));
       const dx = to.x - from.x;
       const style = payload.look.style;
-      if (theater.moveAtlas?.play(['travel', 'beam'], {layer:fx, from, to, width:Math.max(48, to.h), duration:T.contact-T.travel, reduced:!full})) return;
+      if (theater.moveAtlas?.play(['travel', 'beam'], {layer:fx, from, to, width:Math.max(48, to.h), duration:T.contact-T.travel, reduced:!full, later})) return;
       playCell("launch", from.x, from.y) ?? playCell("prepare", from.x, from.y);
       // Release: a shock ring across the shot and seven recoil sparks at the muzzle.
       if (!showcaseStyleIsMelee(style) && full) {
@@ -605,7 +605,7 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
       playCeremonySound("impact", doc);
       const binding = theater.moveBinding;
       const at = binding?.anchor.startsWith('caster_') ? casterPoint() : binding?.anchor === 'target_ground' ? point(dummy.body, 1) : to;
-      if (!theater.moveAtlas?.play(['contact', 'target_single'], {layer:fx, from:at, width:Math.max(48, to.h), reduced:!full})) {
+      if (!theater.moveAtlas?.play(['contact', 'target_single'], {layer:fx, from:at, width:Math.max(48, to.h), reduced:!full, later})) {
         const core = spawn("cm-showcase__impact", to.x, to.y);
         animate(core, [{ opacity: 1, transform: "translate(-50%, -50%) scale(0.3)" }, { opacity: 0.9, offset: 0.3, transform: "translate(-50%, -50%) scale(1)" },
           { opacity: 0, transform: "translate(-50%, -50%) scale(1.6)" }], { duration: 300, easing: "ease-out" });

@@ -632,7 +632,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
             piece: Boolean(entry.moveId !== null && moveVfxChoreography(entry.moveId)?.contact)});
         } else if (stage === 'body' || form === 'projectile' || form === 'stream' || form === 'beam') {
           // A body that lands and stands (a mushroom, a bomb) is drawn planted where the battle put it.
-          kit.projectile({follow: during, paletteKey, archetype: shot, size, signature, planted: !productArenaMoveRecord(entry.moveId) && stage === 'body' && moveVfxArchetypeIsPlanted(archetype)});
+          kit.projectile({follow: during, paletteKey, archetype: shot, size, signature, planted: stage === 'body' && moveVfxArchetypeIsPlanted(archetype) && !productArenaMoveRecord(entry.moveId)});
         } else kit.launch({x: at.x, y: at.y, paletteKey, archetype, size, signature});
         continue;
       }
