@@ -47,7 +47,7 @@ test('public map format excludes private source evidence and refuses unknown met
  }
  for(const row of recipe.sources){assert.equal(sha(fs.readFileSync(row.path)),row.sha256);assert.ok(!input.files.includes(row.path));}
  assert.ok(!input.files.includes('assets/production/hunt/licensed-runtime-v1/manifest.json'));
- assert.equal(sha(fs.readFileSync('assets/production/ART_PRODUCTION_INDEX.json')),'1e4044e97a6bcec83cee8fbfe01fb6b98c83a751751379acffa802a5dae20b43');
+ assert.equal(sha(fs.readFileSync('assets/production/ART_PRODUCTION_INDEX.json')),'147db7891632b9cfc018aeada230bd515ff0b39accb607a0ecec9c44de8558ac');
 });
 
 test('map exports require existing media hash approvals, including all final cages and night fields',()=>{

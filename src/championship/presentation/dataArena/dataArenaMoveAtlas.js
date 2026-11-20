@@ -1,10 +1,16 @@
 const records = new Map([
-  ['arcBolt', 623], ['arcField', 625], ['clawSweep', 631],
-  ['coreNova', 632], ['emberBolt', 635], ['fangRush', 636],
-  ['flameRing', 637], ['foamZone', 638], ['frostFan', 639],
-  ['grovePulse', 642], ['haloPulse', 643], ['iceCage', 644],
-  ['impactNova', 646], ['nightPulse', 650], ['quakeSlam', 651],
-  ['shadeBolt', 656], ['shadeField', 657], ['vineSnare', 669],
+  ['arcBolt', 623], ['arcFan', 624], ['arcField', 625],
+  ['arcStorm', 626], ['boltDash', 628], ['brutalCharge', 629],
+  ['clawSweep', 631], ['coreNova', 632], ['dawnLance', 633],
+  ['emberBolt', 635], ['fangRush', 636], ['flameRing', 637],
+  ['foamZone', 638], ['frostFan', 639], ['grovePulse', 642],
+  ['haloPulse', 643], ['iceCage', 644], ['iceShard', 645],
+  ['impactNova', 646], ['impactShot', 647], ['leafFan', 649],
+  ['nightPulse', 650], ['quakeSlam', 651], ['radiantDash', 652],
+  ['scatterLight', 654], ['seedBolt', 655], ['shadeBolt', 656],
+  ['shadeField', 657], ['shardStorm', 659], ['shardVolley', 660],
+  ['sunSpear', 663], ['surfRush', 664], ['thornRush', 665],
+  ['tideBolt', 666], ['tideWave', 668], ['vineSnare', 669],
   ['vortex', 670], ['whiteout', 671]
 ]);
 // Painted extents in source pixels, measured separately for each clip from its pivot.
