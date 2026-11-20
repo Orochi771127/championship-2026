@@ -34,13 +34,24 @@ function placeContact(atlas, binding, c, rect, scale, bodies) {
   return atlas.place(c, c.moveId, phase, at.x, at.y, 0, scale, 0, false, true,
     binding.family === 'melee' ? facing : 1);
 }
-const flightSelector = 0x0702;
+const pilotFlightSelector = 0x0702;
 const shrinkSteps = [0.77, 0.54, 0.31];
+
+// Scale only along the painted beam axis. The measured extremities meet the native endpoints.
+function placeBeam(atlas, id, key, start, end, scale, age, transient) {
+  const span = atlas.span(key, 'beam');
+  if (!span || !start || !end) return false;
+  const dx=end.x-start.x, dy=end.y-start.y, distance=Math.hypot(dx,dy);
+  if (distance < scale) return false;
+  return atlas.place(id,key,'beam',start.x-dx*span.left/span.width,start.y-dy*span.left/span.width,
+    Math.atan2(dy,dx),scale,age,false,transient,distance/(span.width*scale));
+}
 
 export function createAutoMoveAtlas({PIXI, front, ground, reducedMotion}) {
   const atlas = createMoveAtlas({PIXI, front, ground, reducedMotion, records, maxSheets:12, mode:'auto',
     assetRoot:'assets/production/vfx/auto-moves/', labelPrefix:'auto-move'});
   const flights = new Map(), owned = new Set(), contactIds = new Set();
+  const cues = new Set();
   const recipients = new Map(), ownedSupport = new Set(), heals = new Set();
   function update(view, rect, scale, dt, events, bodies) {
     owned.clear(); contactIds.clear(); ownedSupport.clear(); heals.clear(); atlas.beginFrame();
@@ -66,16 +77,31 @@ export function createAutoMoveAtlas({PIXI, front, ground, reducedMotion}) {
     }
     const live = new Set();
     for (const event of events) if (event.type === 'LAUNCH') atlas.request(event.moveId);
+    // The actor remains in its native allocation and collision lifecycle.
     for (const a of view.nativeLifecycle?.effectActors ?? []) {
       const o = a.origin;
-      if (o?.moveId !== 76 || o.selector !== flightSelector) continue;
+      const family = autoMoveBindings.get(o?.moveId)?.family;
+      if (family !== 'travel' && family !== 'beam') continue;
+      if (!o.contactProbe && !(o.moveId === 76 && o.selector === pilotFlightSelector)) continue;
       live.add(a.id);
       let shot = flights.get(a.id);
       if (!shot) {
-        shot = {draw:atlas.ready(76,'travel'), actionId:o.actionId, slot:o.slot, age:0, ended:null};
+        shot = {key:o.moveId, family, draw:atlas.ready(o.moveId,family), actionId:o.actionId, slot:o.slot, age:0, ended:null};
         flights.set(a.id,shot);
+        if (shot.key === 122 && shot.draw && !cues.has(o.actionId)) {
+          const body=bodies?.get(o.slot);
+          if (body && atlas.place(o,122,'cue',body.x+body.width*0.30*body.facing,body.top+body.height*0.5,
+            0,scale,0,false,true)) cues.add(o.actionId);
+        }
       }
       if (!shot.draw) continue;
+      if (family === 'beam') {
+        const body=bodies?.get(o.slot);
+        if (body && placeBeam(atlas,shot,o.moveId,{x:body.x,y:body.top+body.height*0.5},
+          project(a.point,rect,scale),scale,shot.age,false)) owned.add(a.id);
+        shot.age += dt;
+        continue;
+      }
       owned.add(a.id);
       if (!shot.ended) {
         shot.point = a.point;
@@ -88,8 +114,22 @@ export function createAutoMoveAtlas({PIXI, front, ground, reducedMotion}) {
       const binding = autoMoveBindings.get(c.moveId);
       if (binding && ['melee','target_single','contact'].includes(binding.family)) {
         if (placeContact(atlas, binding, c, rect, scale, bodies)) contactIds.add(c.id);
-      } else if (c.moveId === 76) {
+      } else if (binding?.family === 'beam' || binding?.family === 'travel') {
         const shot = flights.get(c.actorId);
+        const same = shot?.actionId === c.actionId && shot.slot === c.slot && shot.key === c.moveId;
+        if (binding.family === 'beam' && !(same && owned.has(c.actorId))) {
+          // A non-projectile contact can supply a true endpoint even when there is no live beam actor.
+          const start=project(c.casterPoint,rect,scale), end=project(c.targetPoint,rect,scale);
+          const body=bodies?.get(c.slot);
+          if(body) start.y -= body.height*0.5;
+          placeBeam(atlas,c,c.moveId,start,end,scale,0,true);
+        }
+        if (c.moveId !== 76) {
+          if (same && !shot.draw) continue;
+          const point=project(c.actorId ? c.sourcePoint : c.targetPoint,rect,scale);
+          if (atlas.place(c.id,c.moveId,'contact',point.x,point.y,0,scale,0,false,true)) contactIds.add(c.id);
+          continue;
+        }
         if (!shot?.draw || shot.actionId !== c.actionId || shot.slot !== c.slot) continue;
         if (!shot.ended) { shot.ended = {age:0}; shot.point = c.sourcePoint; }
         contactIds.add(c.id);
@@ -97,18 +137,20 @@ export function createAutoMoveAtlas({PIXI, front, ground, reducedMotion}) {
     }
     for (const [id,shot] of flights) {
       if (!live.has(id) && (!shot.ended || shot.ended.age >= 167)) { flights.delete(id); continue; }
-      if (!shot.draw || (shot.ended && shot.ended.age >= 167)) continue;
+      if (!shot.draw || shot.family === 'beam' || (shot.ended && shot.ended.age >= 167)) continue;
       const [x,y,z] = shot.point;
       const size = shot.ended ? shrinkSteps[Math.min(2,Math.floor(shot.ended.age*3/167))] : 1;
-      atlas.place(shot,76,'travel',rect.x+x/4096*scale,rect.y+(y-z)/4096*scale,
-        shot.angle,scale*0.5*size,shot.age,false);
+      atlas.place(shot,shot.key,'travel',rect.x+x/4096*scale,rect.y+(y-z)/4096*scale,
+        shot.angle,scale*(shot.key===76 ? 0.5 : 1)*size,shot.age,false);
       if (shot.ended) shot.ended.age += dt;
       shot.age += dt;
     }
+    const liveCueActions = new Set([...flights.values()].filter(s => s.key===122).map(s => s.actionId));
+    for (const id of cues) if (!liveCueActions.has(id)) cues.delete(id);
     atlas.endFrame(dt);
   }
   return {update, supports:key=>records.has(key), ownsActor:id=>owned.has(id), ownsContact:id=>contactIds.has(id),
     ownsSupport:r=>ownedSupport.has(r), ownsHeal:(slot,amount)=>heals.has(slot+"/"+amount),
     diagnostics:()=>({...atlas.diagnostics(),flightIds:[...owned],contactIds:[...contactIds]}),
-    dispose(){recipients.clear();ownedSupport.clear();heals.clear();flights.clear();owned.clear();contactIds.clear();atlas.dispose();}};
+    dispose(){cues.clear();recipients.clear();ownedSupport.clear();heals.clear();flights.clear();owned.clear();contactIds.clear();atlas.dispose();}};
 }

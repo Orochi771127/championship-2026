@@ -28,7 +28,7 @@ export function createMoveAtlas({ PIXI, ground, front, reducedMotion, records, m
             duration += f.durationMs;
             return { texture, ax: f.pivot.x / f.w, ay: f.pivot.y / f.h, end: duration };
           });
-          clips.set(phase.key, { frames, duration });
+          clips.set(phase.key, { frames, duration, span:phase.span });
         }
         sheets.set(key, { bitmap, source, textures, clips, used: frame });
       } catch (error) {
@@ -92,6 +92,7 @@ export function createMoveAtlas({ PIXI, ground, front, reducedMotion, records, m
     request,
     supports: key => records.has(key),
     ready: (key, phase) => sheets.get(key)?.clips.has(phase) ?? false,
+    span: (key, phase) => sheets.get(key)?.clips.get(phase)?.span,
     duration: (key, phase) => sheets.get(key)?.clips.get(phase)?.duration ?? 0,
     beginFrame() { frame++; },
     place,

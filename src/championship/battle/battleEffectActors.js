@@ -88,6 +88,10 @@ export function createBattleEffectActors({memory:m,worldAddress,loadedBankIds}){
   return actor;
  }
  return {
+  noteContactProbe(actor,actionId,moveId,slot){
+    const entry=entries.get(actor), o=entry?.origin;
+    if(o && !o.contactProbe && o.actionId===actionId && o.moveId===moveId && o.slot===slot)entry.origin={...o,contactProbe:true};
+  },
   base,allocate,release,instanceOf:actor=>entries.get(actor)?.id??null,originOf:actor=>entries.get(actor)?.origin??null,has:actor=>entries.has(actor),box:actor=>readSpriteCellBox(m,actor,1)?.box??null,
   position:actor=>[0x24,0x28,0x2c].map(o=>m.readU32(actor,o)|0),
   advanceOwned(object){for(let i=0;i<24;i++){const a=m.readU32(object,0x24+i*4);if(a&&m.readU8(a,0x5b)){animate(a);physics(a);}}},

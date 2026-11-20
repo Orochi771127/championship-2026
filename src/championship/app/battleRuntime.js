@@ -391,6 +391,8 @@ export function createBattleRuntime(options = {}) {
     const attacker = roster[slot];
     if (!attacker || !move) return null;
     contacts[parameters?'projectileCalls':'meleeCalls']++;
+    // Only this native collision path certifies which allocated actor supplies the contact box.
+    if (parameters) effectActors.noteContactProbe(parameters, state?.actionId, move.recordIndex, slot);
 
     const walk = selectActionTargets({ roster, attacker });
     const hits = [];
