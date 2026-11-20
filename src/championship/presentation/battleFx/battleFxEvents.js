@@ -57,6 +57,7 @@ export function createBattleFxEventTracker() {
       for (const key of live) liveLaunches.add(key);
 
       const history = view.nativeLifecycle?.reactions?.history ?? [];
+      const hitMetaBySlot = new Map();
       if (history.length) {
         const latest = history[history.length - 1].frame;
         // Entries older than the last processed frame were already seen. Equal
@@ -73,6 +74,13 @@ export function createBattleFxEventTracker() {
           if (entry.type === 'STATUS_APPLIED') events.push(Object.freeze({type: 'STATUS', frame, slot: entry.slot, code: entry.code}));
           else if (entry.type === 'SUPPORT_APPLIED') events.push(Object.freeze({type: 'SUPPORT', frame, slot: entry.slot, statusCode: entry.statusCode}));
           else if (entry.type === 'LANDED') events.push(Object.freeze({type: 'LANDED', frame, slot: entry.slot}));
+          else if (entry.type === 'HIT_STATE_WRITTEN') {
+            const prevMeta = hitMetaBySlot.get(entry.slot);
+            hitMetaBySlot.set(entry.slot, {
+              critical: Boolean(prevMeta?.critical || entry.critical === true),
+              moveId: Number.isInteger(entry.moveId) ? entry.moveId : (prevMeta?.moveId ?? null)
+            });
+          }
         });
         if (latest > historyFrame) {
           for (const key of [...seenHistory]) if (Number(key.split(':')[0]) < latest) seenHistory.delete(key);
@@ -87,8 +95,10 @@ export function createBattleFxEventTracker() {
           const hpBefore = before.hp?.current ?? 0, hpAfter = combatant.hp?.current ?? 0, maxHp = Math.max(1, combatant.hp?.maximum ?? 1);
           if (hpAfter < hpBefore) {
             const attacker = attackerFor(slot, combatants);
+            const meta = hitMetaBySlot.get(combatant.slot ?? slot);
             events.push(Object.freeze({type: 'HIT', frame, slot, damage: hpBefore - hpAfter, hpBefore, hpAfter, maxHp,
-              ratio: (hpBefore - hpAfter) / maxHp, attackerSlot: attacker?.slot ?? null, moveId: attacker?.moveId ?? null}));
+              ratio: (hpBefore - hpAfter) / maxHp, attackerSlot: attacker?.slot ?? null,
+              moveId: meta?.moveId ?? attacker?.moveId ?? null, critical: meta?.critical === true}));
           } else if (hpAfter > hpBefore) {
             events.push(Object.freeze({type: 'HEAL', frame, slot, amount: hpAfter - hpBefore, maxHp}));
           }

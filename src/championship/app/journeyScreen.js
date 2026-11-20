@@ -178,6 +178,16 @@ export function createJourneyScreen(host) {
     return row;
   }
 
+  const MOOD_TP_DELTA = Object.freeze({ superb: "+10% TP", good: "+5% TP", low: "-5% TP", awful: "-10% TP" });
+  function moodBadge(mood) {
+    if (!mood?.emoji) return null;
+    const delta = MOOD_TP_DELTA[mood.tier];
+    const tag = el("span", "cm-journey__member-mood", delta ? `${mood.emoji} ${delta}` : mood.emoji);
+    tag.dataset.tier = mood.tier ?? "normal";
+    tag.title = mood.label ?? "";
+    return tag;
+  }
+
   function teamResonanceBanner(selectedIds) {
     const picked = selectedIds.map((id) => candidates.find((c) => c.instanceId === id)).filter(Boolean);
     const factions = picked.map((entry) => speciesTaxonomyForId(entry.speciesId)?.faction);
@@ -266,7 +276,9 @@ export function createJourneyScreen(host) {
       });
       chip.dataset.instanceId = entry.instanceId;
       chip.setAttribute("aria-pressed", String(team.includes(entry.instanceId)));
+      const moodTag = moodBadge(look.mood);
       chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name), ...(look.styleChip ? [look.styleChip] : []),
+        ...(moodTag ? [moodTag] : []),
         el("span", "cm-journey__member-lv", sync.next > 0 ? syncText("level", { level: sync.level }) : syncText("level.max")));
       roster.append(chip);
     }
@@ -469,7 +481,8 @@ export function createJourneyScreen(host) {
       });
       chip.dataset.instanceId = entry.instanceId;
       chip.setAttribute("aria-pressed", String(entry.instanceId === partnerId));
-      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name), ...(look.styleChip ? [look.styleChip] : []));
+      const moodTag = moodBadge(look.mood);
+      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name), ...(look.styleChip ? [look.styleChip] : []), ...(moodTag ? [moodTag] : []));
       roster.append(chip);
     }
     if (eligible.length === 0) { panel.append(emptyTeamCard()); body.replaceChildren(panel); return; }
@@ -621,6 +634,9 @@ export function createJourneyScreen(host) {
       const statsRow = el("div", "cm-journey__wave-debrief-stats");
       statsRow.append(el("span", "cm-journey__wave-debrief-pill", w.text("cleared", { n: finished.waves })));
       statsRow.append(el("span", "cm-journey__wave-debrief-pill cm-journey__wave-debrief-pill--bits", uiText("WAVE_DEBRIEF_BITS", { bits: (finished.bits ?? 0).toLocaleString() })));
+      if ((finished.syncBonusPercent ?? 0) > 0) {
+        statsRow.append(el("span", "cm-journey__wave-debrief-pill cm-journey__wave-debrief-pill--streak", uiText("WAVE_DEBRIEF_STREAK", { percent: finished.syncBonusPercent })));
+      }
       const itemTotal = Object.values(finished.items ?? {}).reduce((sum, n) => sum + (Number(n) || 0), 0);
       if (itemTotal > 0) {
         statsRow.append(el("span", "cm-journey__wave-debrief-pill", uiText("WAVE_DEBRIEF_ITEMS", { count: itemTotal })));
@@ -668,7 +684,9 @@ export function createJourneyScreen(host) {
       chip.dataset.instanceId = entry.instanceId;
       chip.setAttribute("aria-pressed", String(team.includes(entry.instanceId)));
       const lvLabel = sync.next > 0 ? `★${sync.star ?? 1} ${syncText("level", { level: sync.level })}` : `★${sync.star ?? 1} ${syncText("level.max")}`;
+      const moodTag = moodBadge(look.mood);
       chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name), ...(look.styleChip ? [look.styleChip] : []),
+        ...(moodTag ? [moodTag] : []),
         el("span", "cm-journey__member-lv", lvLabel));
       roster.append(chip);
     }

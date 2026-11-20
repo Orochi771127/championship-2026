@@ -1073,6 +1073,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
     burstMeter = { wrap, fill };
     card.append(wrap);
   }
+  let hitRecoilTimer = null, koFlashTimer = null, wasDown = Boolean(combatant.down);
   return {
     card,
     update(next,frame=0,outcome=null,actingSlot=null) {
@@ -1115,8 +1116,21 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
       // The arcade rebuild's hit feel: the bar drops at once and a white ghost
       // (the meter's ::before, CSS-delayed) follows after a beat.
       hp.wrap.style?.setProperty?.("--ghost", hp.fill.style.width);
-      if (Number.isFinite(paintedHp) && next.hp.current < paintedHp) arcadeFx(hp.wrap, "damage", `-${paintedHp - next.hp.current}`);
+      if (Number.isFinite(paintedHp) && next.hp.current < paintedHp) {
+        const drop = paintedHp - next.hp.current;
+        arcadeFx(hp.wrap, "damage", `-${drop}`);
+        const maxHp = Math.max(1, next.hp.maximum || 1);
+        card.dataset.hit = drop / maxHp >= 0.15 ? "heavy" : "normal";
+        if (hitRecoilTimer) clearTimeout(hitRecoilTimer);
+        hitRecoilTimer = setTimeout(() => { delete card.dataset.hit; hitRecoilTimer = null; }, 240);
+      }
       paintedHp = next.hp.current;
+      if (!wasDown && next.down) {
+        card.dataset.koFlash = "true";
+        if (koFlashTimer) clearTimeout(koFlashTimer);
+        koFlashTimer = setTimeout(() => { delete card.dataset.koFlash; koFlashTimer = null; }, 420);
+      }
+      wasDown = Boolean(next.down);
       if (updateHpNumerals) updateHpNumerals(next.hp);
       else hpValue.textContent = uiText("生命值 {hp} / {max}", { hp: next.hp.current, max: next.hp.maximum });
       hp.wrap.setAttribute('aria-label', floatingHud ? `${uiText('Health')} ${next.hp.current} / ${next.hp.maximum}` : uiText(hpValue.textContent));
@@ -1136,6 +1150,8 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
       }
     },
     dispose() {
+      if (hitRecoilTimer) { clearTimeout(hitRecoilTimer); hitRecoilTimer = null; }
+      if (koFlashTimer) { clearTimeout(koFlashTimer); koFlashTimer = null; }
       if (miniImage) hudArt?.clearActionPortrait?.(miniImage);
     }
   };
@@ -1145,7 +1161,7 @@ function combatantCard(combatant, compact,hudArt=null, floatingHud=false, onBurs
  * The match. `mountField` attaches the Pixi scene to the host this creates; the
  * DOM carries the words the scene cannot draw and nothing else.
  */
-export function createBattleFieldView({ root, frame, mountField, onExit,onLoadErrorExit=null,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null, resonance=null, onBurst=null, fighterBadge=null, bindBurstPress=null }) {
+export function createBattleFieldView({ root, frame, mountField, onExit,onLoadErrorExit=null,hudArt=null,localTeamIndex=0, askToLeave=null, loadingProgress=null, dynamicFx=false, responsiveLayout=false, ceremonies=null, resonance=null, onBurst=null, fighterBadge=null, bindBurstPress=null, playbackSpeed=1, onPlaybackSpeed=null }) {
   if (!frame || !Array.isArray(frame.combatants)) throw new TypeError("The Battle field view requires a battle frame");
   if (typeof mountField !== "function") throw new TypeError("The Battle field view requires the published field mounter");
   if(![0,1].includes(localTeamIndex))throw new TypeError('The Battle field view requires a local team');
@@ -1275,6 +1291,22 @@ export function createBattleFieldView({ root, frame, mountField, onExit,onLoadEr
     VS5_EVIDENCE_LABELS[frame.rosterEvidence] ?? VS5_EVIDENCE_LABELS.PRODUCT_AUTHORED));
   clock.band.prepend(caption);
   if(resonance?.player?.length&&resonance.render){const strip=resonance.render(resonance.player);strip.classList.add('cm-vs5-resonance');caption.append(strip);}
+  if (typeof onPlaybackSpeed === "function") {
+    const SPEEDS = [1, 1.5, 2];
+    let currentSpeed = SPEEDS.includes(playbackSpeed) ? playbackSpeed : 1;
+    const speedBtn = element("button", "cm-vs5-speed", `${currentSpeed}×`, false);
+    speedBtn.type = "button";
+    speedBtn.dataset.speed = String(currentSpeed);
+    speedBtn.setAttribute("aria-label", uiText("BATTLE_SPEED_TOGGLE", { speed: currentSpeed }));
+    speedBtn.addEventListener("click", () => {
+      currentSpeed = SPEEDS[(SPEEDS.indexOf(currentSpeed) + 1) % SPEEDS.length];
+      speedBtn.textContent = `${currentSpeed}×`;
+      speedBtn.dataset.speed = String(currentSpeed);
+      speedBtn.setAttribute("aria-label", uiText("BATTLE_SPEED_TOGGLE", { speed: currentSpeed }));
+      onPlaybackSpeed(currentSpeed);
+    });
+    clock.band.append(speedBtn);
+  }
   const log = eventLogBand({ running: "對戰進行中" });
   const localOutcome=outcome=>localTeamIndex===0?outcome:{...outcome,
     verdict:outcome.verdict==='TEAM_ZERO_AHEAD'?'TEAM_ONE_AHEAD':outcome.verdict==='TEAM_ONE_AHEAD'?'TEAM_ZERO_AHEAD':outcome.verdict,

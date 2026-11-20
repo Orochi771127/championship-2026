@@ -75,7 +75,7 @@ export function createBattleFxLookups({getView, localTeam = () => 0, onFeed = nu
     resolveMove,
     nameOfSlot,
     moveNameOf,
-    text: value => uiText(value),
+    text: (value, params) => uiText(value, params),
     onEvent(event) {
       if (typeof onTally === 'function') onTally(event);
       if (typeof onFeed !== 'function') return;

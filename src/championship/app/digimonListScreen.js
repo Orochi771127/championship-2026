@@ -302,7 +302,105 @@ export function appendArenaMoveLearning(detail, entry, arenaMoves, rerender) {
   detail.append(group);
 }
 
-export function appendCreatureDetail(detail, entry, { onBurstForm = null, onAwakening = null } = {}) {
+const ARCHETYPE_EMBLEMS = Object.freeze({
+  TANK: "🛡️",
+  STRIKER: "🔥",
+  CASTER: "✨",
+  SPEED: "⚡",
+  BALANCED: "🌿"
+});
+
+function appendPartnerIdentityCard(detail, entry) {
+  const card = entry?.identityCard;
+  if (!card) return;
+  const wrap = element("div", "cm-partner-identity");
+  wrap.dataset.archetype = card.archetype;
+  const head = element("div", "cm-partner-identity__head");
+  const emblem = ARCHETYPE_EMBLEMS[card.archetype] ?? "🌿";
+  head.append(
+    element("span", "cm-partner-identity__archetype", `${emblem} ${uiText(`PARTNER_ARCHETYPE_${card.archetype}`)}`, false),
+    element("span", "cm-partner-identity__tactic", `PARTNER_TACTIC_${card.tactic}`)
+  );
+  if (card.mood) {
+    const mood = element("span", "cm-partner-identity__mood", `${card.mood.emoji} ${card.mood.label}`, false);
+    mood.dataset.tier = card.mood.tier;
+    head.append(mood);
+  }
+  const story = element("p", "cm-partner-identity__story", uiText(card.storyKey ?? "PARTNER_STORY_ROOKIE", {
+    trait: uiText(card.traitKey ?? `PARTNER_TRAIT_${card.archetype}`),
+    care: uiText(card.careKey ?? "PARTNER_CARE_PHRASE_CLEAN"),
+    wins: card.wins,
+    battles: card.battles,
+    rebirths: card.rebirths
+  }), false);
+  wrap.append(head, story);
+  if (Array.isArray(card.milestones) && card.milestones.length) {
+    const badges = element("div", "cm-partner-identity__milestones");
+    for (const id of card.milestones) {
+      const b = element("span", "cm-partner-identity__badge", `PARTNER_MILESTONE_${id}`);
+      b.dataset.milestone = id;
+      badges.append(b);
+    }
+    wrap.append(badges);
+  }
+  detail.append(wrap);
+}
+
+function appendEvolutionCompass(detail, entry, { onToggleEvolutionPin = null } = {}) {
+  const compass = entry?.evolutionCompass;
+  if (!compass?.branches?.length) return;
+  const wrap = element("div", "cm-evolution-compass");
+  wrap.dataset.species = String(compass.speciesIndex);
+  const head = element("div", "cm-evolution-compass__head");
+  head.append(element("span", "cm-evolution-compass__title", "EVOLUTION_COMPASS_TITLE"));
+  if (compass.syncGate) {
+    head.append(element("span", "cm-evolution-compass__gate", uiText("EVOLUTION_COMPASS_SYNC_GATE", compass.syncGate), false));
+  }
+  wrap.append(head);
+  for (let i = 0; i < compass.branches.length; i++) {
+    const branch = compass.branches[i];
+    const row = element("div", "cm-evolution-compass__branch");
+    row.dataset.ready = String(branch.ready);
+    row.dataset.revealed = String(branch.revealed);
+    row.dataset.pinned = String(Boolean(branch.pinned));
+    const top = element("div", "cm-evolution-compass__row");
+    const targetLabel = branch.targetName ?? uiText("EVOLUTION_COMPASS_UNKNOWN", { n: i + 1 });
+    top.append(element("span", "cm-evolution-compass__target", targetLabel, false));
+    const actions = element("span", "cm-evolution-compass__actions");
+    actions.append(element("span", "cm-evolution-compass__badge", branch.ready
+      ? uiText("EVOLUTION_COMPASS_READY")
+      : uiText("EVOLUTION_COMPASS_PROGRESS", { met: branch.metCount, total: branch.totalCount }), false));
+    if (onToggleEvolutionPin && entry?.instanceId) {
+      const pinBtn = element("button", "cm-evolution-compass__pin", branch.pinned ? "EVOLUTION_COMPASS_PINNED" : "EVOLUTION_COMPASS_PIN");
+      pinBtn.type = "button";
+      pinBtn.dataset.branchIndex = String(branch.branchIndex);
+      pinBtn.setAttribute("aria-pressed", String(Boolean(branch.pinned)));
+      pinBtn.addEventListener("click", () => onToggleEvolutionPin(entry.instanceId, compass.speciesIndex, branch.branchIndex));
+      actions.append(pinBtn);
+    }
+    top.append(actions);
+    const bar = element("div", "cm-evolution-compass__bar");
+    const fill = element("span", "cm-evolution-compass__fill");
+    fill.style.width = `${Math.round(Math.max(0, Math.min(1, branch.ratio)) * 100)}%`;
+    bar.append(fill);
+    row.append(top, bar);
+    if (branch.unmet.length) {
+      const gaps = branch.unmet.map((item) => {
+        const label = uiText(item.labelKey);
+        return item.operator === "LTE"
+          ? uiText("EVOLUTION_COMPASS_GAP_LTE", { label, target: item.target, current: item.current })
+          : uiText("EVOLUTION_COMPASS_GAP_GTE", { label, gap: item.gap, current: item.current, target: item.target });
+      });
+      row.append(element("p", "cm-evolution-compass__gaps", gaps.join(" · "), false));
+    }
+    wrap.append(row);
+  }
+  detail.append(wrap);
+}
+
+export function appendCreatureDetail(detail, entry, { onBurstForm = null, onAwakening = null, onToggleEvolutionPin = null } = {}) {
+  appendPartnerIdentityCard(detail, entry);
+  appendEvolutionCompass(detail, entry, { onToggleEvolutionPin });
   const style = entryBattleStyle(entry);
   for (const row of TRACED_DETAIL_ROWS) {
     if (row.id === "sp1" && style) {
@@ -426,7 +524,7 @@ export function appendCreatureDetail(detail, entry, { onBurstForm = null, onAwak
  * @param {(instanceId: string, name: string) => ({ok: boolean, entries?: Array<object>})} [options.onRename]
  * @param {(instanceId: string) => ({ok: boolean, reason?: string, entries?: Array<object>})} [options.onRebirth]
  */
-export function createDigimonListView({ root, entries = [], onExit, onRename = null, onRebirth = null, onBurstForm = null, onAwakening = null, fusion = null, initialInstanceId = null, arenaMoves = null, onGoBattle = null, onGoHunt = null } = {}) {
+export function createDigimonListView({ root, entries = [], onExit, onRename = null, onRebirth = null, onBurstForm = null, onAwakening = null, onToggleEvolutionPin = null, fusion = null, initialInstanceId = null, arenaMoves = null, onGoBattle = null, onGoHunt = null } = {}) {
   if (!root) throw new TypeError("The Digimon list requires a root element");
 
   root.replaceChildren();
@@ -458,6 +556,9 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
       const result = onAwakening(action, instanceId, value);
       if (Array.isArray(result?.entries)) { entries = result.entries; renderDetail(); }
       return result;
+    } : null, onToggleEvolutionPin: onToggleEvolutionPin ? (instanceId, speciesIndex, branchIndex) => {
+      const result = onToggleEvolutionPin(instanceId, speciesIndex, branchIndex);
+      if (result?.ok && Array.isArray(result.entries)) { entries = result.entries; renderDetail(); }
     } : null });
     if (arenaMoves) appendArenaMoveLearning(detail, entry, arenaMoves, renderDetail);
     // Say what is missing rather than leaving the panel silently short.

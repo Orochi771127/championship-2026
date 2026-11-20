@@ -56,6 +56,8 @@ import {loadRegisteredHuntFeedbackArt} from '../presentation/huntFeedbackArt.js'
 import {mountBattleResultCharacters} from '../presentation/battleResultCharacters.js';
 import {nativeBattleWinPercent} from '../battle/nativeTitleProgression.js';
 import { mountBattleAudioPresentation } from '../presentation/battleAudioPresentation.js';
+import { createBattleImpactAudio } from '../presentation/battleFx/battleImpactAudio.js';
+import { getPinnedEvolutionBranch, togglePinnedEvolutionBranch } from './partnerEvolutionCompass.js';
 // The battle menu box. Its four faces are ROM_VERIFIED from launcher13.nsbmd;
 // the geometry is original-created, exactly as the Gate world sphere is.
 import { battleMenuLabels, speciesName, raisingDisplayName, starterName, titleEventText, tamerRankName } from "../text/zhHant.js";
@@ -1282,6 +1284,8 @@ async function mountRaisingHome() {
     getRosterEntry: creatureId => projectRoster().find(entry => entry.instanceId === creatureId) ?? null,
     renderCreatureDetail: appendCreatureDetail,
     openRoster: (instanceId = null) => { rosterOpenOn = instanceId; runToolbarMenuEntry({ id: "digimon", screen: CHAMPIONSHIP_SCREENS.DIGIMON_LIST }); },
+    getGlanceAction: () => app.getRanchGlanceAction?.() ?? null,
+    openPatrol: () => { if (app.getScreen() === CHAMPIONSHIP_SCREENS.RAISING_HOME) { app.openBattle(); void openJourney({ tab: 'FEED' }); } },
     firstRunHint: true, // UI entry guidance; its first-use preference is not calendar/save state.
     nextHintDuration: () => consumeRaisingHintDuration(settings.store),
     storySeen: () => settings.store.get().storyRiftChapter1Seen === true,
@@ -1713,6 +1717,7 @@ function buildTacticRecordPanel(runtime, { attemptId, matchTitle, context = null
 }
 
 let battleRuntime = null;
+let battlePlaybackSpeed = 1;
 let battleAttemptId = null;
 // Active PvP battle metadata & room session (transferred from onlineBattleLobby on battle start,
 // reported once on BATTLE_RESULT, and disposed on exit).
@@ -1977,8 +1982,9 @@ async function openJourney(prefill = null) {
     if (app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) { journeyView = null; return; }
     const describe = (entry) => {
       const index = juicySpeciesIndex(entry?.speciesId);
+      const mood = entry?.instanceId ? app.getPartnerMoodBadge?.(entry.instanceId) ?? null : null;
       return { name: entry?.displayName || (index === null ? '' : speciesName(index)), portrait: index === null ? null : { species: index },
-        styleChip: battleStyleChip(entry?.battleStyle) };
+        styleChip: battleStyleChip(entry?.battleStyle), mood };
     };
     root.inert = true;
     journeyView = createJourneyScreen({
@@ -2150,6 +2156,8 @@ async function mountBattleField() {
   startBattleSummaryTally(activeAttemptId);
   activeRuntime.prepareOpening();
   let hudArt=null,viewDisposed=false,loadWaveSprites=null,resetSceneWave=null;
+  const impactAudio = typeof createBattleImpactAudio === 'function'
+    ? createBattleImpactAudio({ getOutput: () => settings?.audio?.output?.('sfx') ?? null }) : null;
   // Optional portraits must not hold the screen/navigation owner hostage.
   // Cards already read their art on render, so this proxy can fill in later.
   const hudProxy={getBattleFrame:(...args)=>hudArt?.getBattleFrame?.(...args)??null,
@@ -2166,6 +2174,8 @@ async function mountBattleField() {
     hudArt:hudProxy,
     onBurst: (slot, options) => activeRuntime.requestBurst?.(slot, options) ?? false,
     bindBurstPress: (button, calls) => bindOverLimitPress(button, { holdMs: OVER_LIMIT_RULES.holdMs, doubleTapMs: OVER_LIMIT_RULES.doubleTapMs, ...calls }),
+    playbackSpeed: tutorial || typeof battlePlaybackSpeed === 'undefined' ? 1 : battlePlaybackSpeed,
+    onPlaybackSpeed: tutorial || typeof battlePlaybackSpeed === 'undefined' ? null : (next) => { battlePlaybackSpeed = next; },
     resonance: (()=>{const t=activeRuntime.taxonomy?.(),local=activeRuntime.localTeamIndex();return t?{player:t.resonance[local],opponent:t.resonance[1-local],render:keys=>resonanceStrip(keys,{hint:false})}:null;})(),
     dynamicFx: BATTLE_DYNAMIC_FX,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
@@ -2278,7 +2288,9 @@ async function mountBattleField() {
             if (previousExtra && previousExtra !== loadedExtra) void release(previousExtra);
           };
           scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster: liveRoster, effectArt,onView:frame=>view.render(frame),
-            dynamicFx:BATTLE_DYNAMIC_FX, responsiveLayout:RESPONSIVE_BATTLE_CANDIDATE, fx:fxLookups, localTeam:activeRuntime.localTeamIndex(), juicy, safeInsets });
+            dynamicFx:BATTLE_DYNAMIC_FX, responsiveLayout:RESPONSIVE_BATTLE_CANDIDATE, fx:fxLookups, localTeam:activeRuntime.localTeamIndex(), juicy, safeInsets,
+            impactAudio: typeof impactAudio !== 'undefined' ? impactAudio : null,
+            getPlaybackSpeed: typeof battlePlaybackSpeed !== 'undefined' ? () => battlePlaybackSpeed : null });
           resetSceneWave = () => { if (!disposed) scene?.resetWaveState?.(); };
           if (disposed) {
             await Promise.all([release(vfxOverlay),release(scene)]);
@@ -2363,7 +2375,7 @@ async function mountBattleField() {
   // moves on to the result once the battle has judged itself.
   // WAVE_RUN_20261118: a wave of a story or challenge run gets the wave chip, the drops and the rest over the field.
   const waveField = tutorial || waveDriver?.attemptId !== activeAttemptId ? null : mountWaveRunField({ host: root, frame: () => app.getWaveRun(),
-    collect: id => { const got = app.collectWaveDrop(id); if (got?.ok) autosave?.request('wave-drop'); return got; },
+    collect: id => { const got = app.collectWaveDrop(id); if (got?.ok) { impactAudio?.playDropPick?.(); autosave?.request('wave-drop'); } return got; },
     project: stand => battleStandProjector?.(stand) ?? null, canvasRect: () => pixiStage?.app?.canvas?.getBoundingClientRect?.() ?? null,
     partners: () => app.getWaveRun()?.team ?? [], localTeam: activeRuntime.localTeamIndex(),
     choose: choice => waveDriver?.attemptId === activeAttemptId && waveDriver.resolve(choice) });
@@ -2400,7 +2412,7 @@ async function mountBattleField() {
   // The tamer's skill-card hand (ROADMAP_R4_20261118): over the field, gone with the battle screen.
   const skillHand = tutorial ? null : mountBattleSkillHand({ host: root, snapshot: () => activeRuntime.getSkillCards?.() ?? null,
     play: id => activeRuntime.requestSkillCard?.(id) ?? { ok: false, reason: 'NO_HAND' },
-    onPlayed: (card, info) => view.announceSkillCard?.({ ...info, side: /^FOE|MARK/.test(card?.kind ?? '') ? 'opponent' : 'player' }),
+    onPlayed: (card, info) => { impactAudio?.playSupport?.('skillCard'); view.announceSkillCard?.({ ...info, side: /^FOE|MARK/.test(card?.kind ?? '') ? 'opponent' : 'player' }); },
     subscribe: listener => { handListeners.add(listener); return () => handListeners.delete(listener); } });
   // Single-entry wave controller: swaps in Wave N+1 on the same battlefield without leaving BATTLE_FIELD or redrawing the skill hand.
   if (typeof activeWaveController !== 'undefined') activeWaveController = waveField ? {
@@ -2438,7 +2450,7 @@ async function mountBattleField() {
     stopObserveRuntime?.();stopObserveRuntime=null;handListeners.clear();source.dispose();
     // The field went away under a wave: left mid-fight (no result), or from the rest by the screen's own back.
     waveField?.dispose();if(waveField&&waveDriver?.attemptId===activeAttemptId)waveDriver.resolve(waveSettled?'BACK':'LEFT_FIELD');
-    hudLoad.cancel();hudArt=null;view.dispose();}};
+    hudLoad.cancel();hudArt=null;impactAudio?.dispose?.();view.dispose();}};
 }
 
 /** Developer readout: per slot, the wiring a battle received and its tallies. */
@@ -2816,6 +2828,12 @@ async function mountCurrentScreen() {
         const result = app.setPartnerBurstForm(instanceId, form);
         if (result.ok) autosave?.request('burst-form');
         return result.ok ? { ...result, entries: projectRoster() } : result;
+      },
+      onToggleEvolutionPin(instanceId, speciesIndex, branchIndex) {
+        if (typeof togglePinnedEvolutionBranch === 'function') {
+          togglePinnedEvolutionBranch(globalThis.localStorage, instanceId, speciesIndex, branchIndex);
+        }
+        return { ok: true, entries: projectRoster() };
       },
       // Awakening raising (2026-11-02): goal, energy items, core transcendence, battle form and ranch look.
       onAwakening(action, instanceId, value) {
@@ -3343,6 +3361,12 @@ function projectRoster() {
       // OWNER_APPROVED_ADAPTATION 2026-11-02: the 成熟期 partner's burst forms and their progress.
       burst: app.getPartnerBurst?.(instanceId) ?? null,
       awakening: app.getPartnerAwakening?.(instanceId) ?? null,
+      evolutionCompass: app.getPartnerEvolutionCompass?.(instanceId, {
+        pinnedBranchIndex: typeof getPinnedEvolutionBranch === 'function'
+          ? getPinnedEvolutionBranch(globalThis.localStorage, instanceId, profile?.speciesIndex ?? null)
+          : null
+      }) ?? null,
+      identityCard: app.getPartnerIdentityCard?.(instanceId) ?? null,
       renameable: source?.kind !== "STARTER"
         && Boolean(app.getRaisingState()?.collection?.some((entry) => entry.instanceId === instanceId)),
       stats: profile,

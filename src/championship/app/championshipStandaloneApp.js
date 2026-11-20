@@ -48,7 +48,7 @@ import {normalizeTamerTalents,createTamerTalentState,tamerTalentPoints,talentVal
   from '../contracts/productTamerTalents.js';
 import {ownedSkillCards,skillCardHandSize,drawSkillHand} from '../contracts/productTamerSkillCards.js';
 import {createWaveRun,normalizeWaveRun,waveFoes,recordWaveResult,continueWaveRun as continueWaveRunRule,collectWaveDrop as collectWaveDropRule,
-  waveLoot,markWaveDropsSettled,finishWaveRun,WAVE_RUN_RULES,WAVE_RUN_FINAL} from '../contracts/productWaveRun.js';
+  waveLoot,markWaveDropsSettled,finishWaveRun,waveSyncBonusPercent,WAVE_RUN_RULES,WAVE_RUN_FINAL} from '../contracts/productWaveRun.js';
 import {normalizeTamerSupplies,createTamerSupplies,SUPPLEMENTS,getSupplement,supplyOwned,supplyPurchase,spendSupply,applyRecoverySupply,
   startRanchSupply,ranchSupplyActive,ranchSupplyGrowthPercent,ranchSupplyNightCalm,armSupply,disarmSupply,armedSupplies,supplyBattleProfile,
   supplySyncExpPercent,settleArmedSupplies,armedSupplyItems,supplyDiscount,supplyValue,scavengeSupply,SUPPLY_BATTLE_SLOTS} from '../contracts/productSupplements.js';
@@ -124,6 +124,7 @@ import {TUTORIAL_STEP_COUNT,createTutorialCursor, tutorialFinished, tutorialStep
   skipTutorial as skipTutorialCursor} from './nativeTutorialProgression.js';
 import {tutorialLine, tutorialPrompt} from '../text/tutorialMessages.zhHant.js';
 import { uiText } from '../text/uiText.js';
+import { buildPartnerEvolutionCompass, buildPartnerIdentityCard } from './partnerEvolutionCompass.js';
 import {nativeTreatmentAdmission} from '../raising/nativeRaisingTreatment.js';
 import {treatNativeRaisingActor,notifyNativeRaisingResidentAdded,beginNativeRaisingCarry,releaseNativeRaisingCarry,cancelNativeRaisingCarry,beginNativeRaisingStroke,releaseNativeRaisingStroke,touchNativeRaisingActor} from '../raising/nativeRaisingActor.js';
 import {classifyNativeRaisingHand,stepNativeRaisingStrokeInput,nativeRaisingHandAdmission} from '../raising/nativeRaisingHand.js';
@@ -1423,19 +1424,20 @@ export function createChampionshipStandaloneApp({
     tamerTalents=paid.state;lastTamerGain=paid.gain;savePort.markDirty();
   }
   /** Pay one settled battle's Sync EXP to the partners that fought it. */
-  function grantBattleSync(instanceIds,{kind,won,attemptId=null,cardPercent=0}){
+  function grantBattleSync(instanceIds,{kind,won,attemptId=null,cardPercent=0,waveBonusPercent=0}){
     const gains=[];
     // One settled owned-party battle also pays the tamer (never password, link or online battles); the day's first pays 100 more.
     if(instanceIds.length){
       const day=tamerDailyExp(talentState(),journeyLocalDay(),'BATTLE');
       const paid=withTamerExp(day.state,tamerBattleExp(kind,won)+day.amount);tamerTalents=paid.state;lastTamerGain=paid.gain;
     }
-    // + the skill card 同步增幅 thrown in a won match (ROADMAP_R4_20261118)
+    // + the skill card 同步增幅 thrown in a won match (ROADMAP_R4_20261118) + multi-wave streak bonus
     const syncBonus=talent('syncExpPercent',battleTalents(kind))+(won?Math.max(0,cardPercent|0):0);
+    const waveStreakBonus=Math.max(0,waveBonusPercent|0);
     for(const instanceId of instanceIds){
       const base=syncBattleExp(syncLevelOf(instanceId).level,{kind,won});
       // The commander talent 同步訓練: +5 % Sync EXP a rank; 同步飲 carried into this battle: +50 %.
-      const amount=base>0?Math.round(base*(100+syncBonus+supplySyncExpPercent(armedSupplies(tamerSupplies,instanceId),talent('supplementPercent')))/100):0;
+      const amount=base>0?Math.round(base*(100+syncBonus+waveStreakBonus+supplySyncExpPercent(armedSupplies(tamerSupplies,instanceId),talent('supplementPercent')))/100):0;
       if(amount<=0)continue;
       const granted=grantSyncExp(syncState(),instanceId,amount);
       syncLevels=granted.state;gains.push(granted.gain);
@@ -1556,10 +1558,11 @@ export function createChampionshipStandaloneApp({
     // The partners that fought earn one battle's Sync EXP for the whole run, and the tamer once (never each wave).
     const before={syncLevels,lastSyncGains,tamerTalents,lastTamerGain,tamerSupplies};
     const wavesWon=settled.attempts.length-(reason==='DEFEATED'?1:0);
-    if(wavesWon>0&&reason!=='FAILED')grantBattleSync(settled.party.filter(id=>syncProfileOf(id)),{kind:'FREE',won:reason!=='DEFEATED'&&reason!=='ABANDONED'});
+    const syncBonusPercent=waveSyncBonusPercent(wavesWon);
+    if(wavesWon>0&&reason!=='FAILED')grantBattleSync(settled.party.filter(id=>syncProfileOf(id)),{kind:'FREE',won:reason!=='DEFEATED'&&reason!=='ABANDONED',waveBonusPercent:syncBonusPercent});
     const unpaid=pay.ids.filter(id=>!paid.includes(id));
     lastWaveFinish=Object.freeze({runId:settled.runId,mode:settled.mode,encounterId:settled.encounterId,reason,status:settled.status,waves:wavesWon,
-      bits,items:Object.freeze({...items}),unpaid:Object.freeze(unpaid),
+      bits,syncBonusPercent,items:Object.freeze({...items}),unpaid:Object.freeze(unpaid),
       earned:waveLoot(settled,'SETTLED')});
     if(!saveWaveRun(settled,{shop:candidate.toSave()})){
       ({syncLevels,lastSyncGains,tamerTalents,lastTamerGain,tamerSupplies}=before);lastWaveFinish=null;
@@ -4641,6 +4644,58 @@ export function createChampionshipStandaloneApp({
     getBattleBurstPlan(instanceId){return battleBurstPlanOf(instanceId);},
     /** Awakening raising (OWNER_APPROVED_ADAPTATION 2026-11-02): the partner's awakening path, or null. */
     getPartnerAwakening(instanceId){return partnerAwakeningView(instanceId);},
+    getPartnerEvolutionCompass(instanceId,{pinnedBranchIndex=null}={}){
+      if(!session)return null;
+      return buildPartnerEvolutionCompass({
+        profile:syncProfileOf(instanceId),
+        sync:syncLevelOf(instanceId),
+        registeredSpecies:registeredSpeciesValue,
+        evolutionBranches:raising?.nativeHome?.evolutionBranches??[],
+        pinnedBranchIndex
+      });
+    },
+    getPartnerIdentityCard(instanceId){
+      if(!session)return null;
+      const reading=partnerLife?partnerReading(instanceId):null;
+      const tier=reading?PARTNER_MOOD_TIERS.find(t=>t.id===reading.moodTier):null;
+      const mood=reading?{emoji:reading.emoji,tier:reading.moodTier,label:uiText(tier?.label??'心情普通')}:null;
+      return buildPartnerIdentityCard({
+        profile:syncProfileOf(instanceId),
+        sync:syncLevelOf(instanceId),
+        tactic:battleTactics?.[instanceId]??BATTLE_TACTIC_DEFAULT,
+        grade:partnerGradeOf(syncLevels,instanceId),
+        mood
+      });
+    },
+    getRanchGlanceAction(){
+      if(!session||tutorialBaseline)return null;
+      const homes=listRaisingInstances(instanceSources());
+      const partnerLabel=(home)=>localizeSpeciesCodes(home.displayName??'')||speciesNameForId(home.speciesId);
+      // Priority 1: partner with evolution conditions met but gated by Sync Level
+      for(const home of homes){
+        const actor=raisingActors.get(home.instanceId);
+        const profile=syncProfileOf(home.instanceId);
+        if(actor?.levelBlocked&&profile){
+          const need=evolutionLevelNeed(home.instanceId,profile.fields['000']);
+          if(need)return Object.freeze({kind:'EVOLVE_LEVEL',partnerId:home.instanceId,name:partnerLabel(home),need:need.need});
+        }
+      }
+      // Priority 2: partner at star cap with same-line fusion fodder ready
+      for(const home of homes){
+        const sync=syncOf(syncLevels,home.instanceId);
+        const count=fusionFodderCountOf(home.instanceId);
+        if(sync.capped&&count>0)return Object.freeze({kind:'STAR_FUSION',partnerId:home.instanceId,name:partnerLabel(home),count});
+      }
+      // Priority 3: offline patrol crystals ready (>= 60)
+      const pod=patrolStatus(journeyState(),journeyNow());
+      if(pod?.held>=60)return Object.freeze({kind:'PATROL_READY',amount:pod.held});
+      // Priority 4: any partner with same-line fusion fodder available
+      for(const home of homes){
+        const count=fusionFodderCountOf(home.instanceId);
+        if(count>0)return Object.freeze({kind:'FUSION_READY',partnerId:home.instanceId,name:partnerLabel(home),count});
+      }
+      return null;
+    },
     /** Sponsor stake contracts (AWAKENING_OVERDRIVE_20261109): the three, the stakes, the armed one and the wallet. */
     getSponsorContracts(){
       if(!session)return null;

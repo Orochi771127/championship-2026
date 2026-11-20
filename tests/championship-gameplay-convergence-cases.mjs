@@ -3,6 +3,17 @@ import test from "node:test";
 import { readFileSync } from "node:fs";
 import { createBattleSkillCards } from "../src/championship/battle/battleSkillCards.js";
 import { mountBattleSkillHand } from "../src/championship/app/battleSkillHand.js";
+import { createBattleFxEventTracker } from "../src/championship/presentation/battleFx/battleFxEvents.js";
+import { createBattleImpactAudio } from "../src/championship/presentation/battleFx/battleImpactAudio.js";
+import { waveSyncBonusPercent } from "../src/championship/contracts/productWaveRun.js";
+import {
+  buildPartnerEvolutionCompass,
+  buildPartnerIdentityCard,
+  getPinnedEvolutionBranch,
+  togglePinnedEvolutionBranch
+} from "../src/championship/app/partnerEvolutionCompass.js";
+import { createFullQaSaveText } from "../scripts/lib/championshipFullQaSave.mjs";
+import { growthBranchHistoryIndex } from "../src/championship/contracts/productGrowthRules.js";
 import { buildBattleResultDiagnosis } from "../src/championship/app/battleResultDiagnosis.js";
 import { createPvpRoomSession, PVP_COUNTDOWN_MS } from "../src/championship/online/pvpRoomSession.js";
 import { createChampionshipStandaloneApp } from "../src/championship/app/championshipStandaloneApp.js";
@@ -554,5 +565,212 @@ test("gate habitat summary resolves ROM biome indices and flags same-line fusion
     assert.equal(app.getGateHabitatSummary("NonexistentBiome"), null);
   } finally {
     app.dispose?.();
+  }
+});
+
+test("battleFxEvents propagates real critical and moveId attribution from HIT_STATE_WRITTEN reactions", () => {
+  const tracker = createBattleFxEventTracker();
+  const baseView = (hp, reactionsHistory = []) => ({
+    animationFrame: 10,
+    combatants: [
+      { present: true, slot: 0, team: 0, down: false, hp: { current: 500, maximum: 500 } },
+      { present: false, slot: 1, team: 0, down: false, hp: { current: 0, maximum: 1 } },
+      { present: false, slot: 2, team: 0, down: false, hp: { current: 0, maximum: 1 } },
+      { present: true, slot: 3, team: 1, down: false, hp: { current: hp, maximum: 500 } }
+    ],
+    nativeLifecycle: { active: [], reactions: { history: reactionsHistory } },
+    outcome: { ended: false }
+  });
+  tracker.consume(baseView(500));
+  const critEvents = tracker.consume(baseView(380, [
+    { frame: 10, slot: 3, type: "HIT_STATE_WRITTEN", hp: 380, critical: true, moveId: 61 }
+  ]));
+  const hit = critEvents.find((e) => e.type === "HIT");
+  assert.ok(hit, "HIT event emitted");
+  assert.equal(hit.critical, true, "real critical attribution propagated");
+  assert.equal(hit.moveId, 61, "exact moveId propagated");
+  assert.equal(hit.damage, 120);
+
+  const normalEvents = tracker.consume(baseView(340, [
+    { frame: 11, slot: 3, type: "HIT_STATE_WRITTEN", hp: 340, critical: false, moveId: 59 }
+  ]));
+  const normalHit = normalEvents.find((e) => e.type === "HIT");
+  assert.equal(normalHit.critical, false);
+  assert.equal(normalHit.moveId, 59);
+});
+
+test("procedural battle impact audio synthesizes cues, throttles bursts, and handles absent output safely", () => {
+  const silent = createBattleImpactAudio({ getOutput: () => null });
+  assert.equal(silent.playHit({ tier: "heavy", critical: true }), false);
+  silent.dispose();
+
+  let clock = 1000, started = 0;
+  const fakeParam = () => ({ setValueAtTime() {}, linearRampToValueAtTime() {}, exponentialRampToValueAtTime() {} });
+  const fakeContext = {
+    state: "running", sampleRate: 44100, currentTime: 0,
+    createBuffer: (_c, len) => ({ getChannelData: () => new Float32Array(len) }),
+    createOscillator: () => ({ type: "sine", frequency: fakeParam(), connect() {}, start() { started += 1; }, stop() {} }),
+    createGain: () => ({ gain: fakeParam(), connect() {} }),
+    createBufferSource: () => ({ buffer: null, connect() {}, start() { started += 1; }, stop() {} }),
+    createBiquadFilter: () => ({ type: "bandpass", frequency: fakeParam(), Q: fakeParam(), connect() {} })
+  };
+  const audio = createBattleImpactAudio({ getOutput: () => ({ context: fakeContext, destination: {} }), now: () => clock });
+  assert.equal(audio.playHit({ tier: "heavy", critical: true, combo: 3 }), true);
+  assert.equal(audio.playHit({ tier: "heavy", critical: true, combo: 4 }), false, "throttled inside gap");
+  clock += 120;
+  assert.equal(audio.playKo(), true);
+  assert.equal(audio.playUltimate(), true);
+  assert.equal(audio.playSupport("skillCard"), true);
+  assert.equal(audio.playDropPick(), true);
+  assert.ok(started >= 8, "synthesized multiple Web Audio nodes");
+  const diag = audio.getDiagnostics();
+  assert.equal(diag.played, 5);
+  assert.equal(diag.throttled, 1);
+  audio.dispose();
+  assert.equal(audio.playKo(), false, "disposed audio stays silent");
+});
+
+test("waveSyncBonusPercent scales linearly per extra wave cleared and caps cleanly", () => {
+  assert.equal(waveSyncBonusPercent(0), 0);
+  assert.equal(waveSyncBonusPercent(1), 0);
+  assert.equal(waveSyncBonusPercent(2), 40);
+  assert.equal(waveSyncBonusPercent(3), 80);
+  assert.equal(waveSyncBonusPercent(5), 160);
+  assert.equal(waveSyncBonusPercent(10), 360);
+  assert.equal(waveSyncBonusPercent(30), 360);
+});
+
+test("buildPartnerEvolutionCompass evaluates real branching routes, masks undiscovered names, and flags Sync Level gate", () => {
+  // Species 25 (Rookie, gen=3) has multiple natural branching evolutions.
+  const ind = createNativeHuntIndividual({ species: nativeHuntSpeciesByIndex(25), rng: { next: () => 11 } });
+  const profile = nativeIndividualProfile(ind);
+
+  // Undiscovered by default: names stay masked (null) and Sync Level gate Lv.1 < need is surfaced.
+  const masked = buildPartnerEvolutionCompass({ profile, sync: { level: 1, star: 1 } });
+  assert.ok(masked && masked.branches.length >= 1);
+  assert.equal(masked.speciesIndex, 25);
+  assert.ok(masked.syncGate && masked.syncGate.need > 1, "low-level Rookie shows Sync Level gate");
+  for (const branch of masked.branches) {
+    assert.equal(branch.revealed, false);
+    assert.equal(branch.targetName, null);
+    assert.ok(branch.totalCount >= 1);
+  }
+
+  // Once both target species and branch history offset are discovered, targetName reveals honestly.
+  const first = masked.branches[0];
+  const historyOffset = (25 - 8) * 5 + growthBranchHistoryIndex(25, first.branchIndex);
+  const revealed = buildPartnerEvolutionCompass({
+    profile,
+    sync: { level: 40, star: 4 },
+    registeredSpecies: [first.targetSpeciesIndex],
+    evolutionBranches: [historyOffset]
+  });
+  assert.equal(revealed.syncGate, null, "high Sync level clears gate");
+  const revealedFirst = revealed.branches.find((b) => b.branchIndex === first.branchIndex);
+  assert.equal(revealedFirst.revealed, true);
+  assert.ok(typeof revealedFirst.targetName === "string" && revealedFirst.targetName.length > 0);
+});
+
+test("buildPartnerIdentityCard distinguishes two raised individuals of the same species", () => {
+  const base = createNativeHuntIndividual({ species: nativeHuntSpeciesByIndex(53), rng: { next: () => 11 } });
+  const baseProfile = nativeIndividualProfile(base);
+
+  // Clone and sculpt one individual as a heavy HP/DEF Tank and another as a high-SPD Speedster.
+  const tankFields = { ...baseProfile.fields, "058": baseProfile.fields["0a8"], "064": baseProfile.fields["0c0"], "020": 90, "024": 10, "028": 8 };
+  const speedFields = { ...baseProfile.fields, "06c": baseProfile.fields["0d0"], "020": 45, "024": 5, "028": 2 };
+
+  const tank = buildPartnerIdentityCard({
+    profile: { fields: tankFields, narrowFields: { ...baseProfile.narrowFields, "03d": 0, "03c": 2 } },
+    sync: { star: 3, level: 22 },
+    tactic: 2,
+    grade: "S"
+  });
+  const speedster = buildPartnerIdentityCard({
+    profile: { fields: speedFields, narrowFields: { ...baseProfile.narrowFields, "03d": 3, "03c": 0 } },
+    sync: { star: 1, level: 8 },
+    tactic: 0,
+    grade: "B"
+  });
+
+  assert.equal(tank.archetype, "TANK");
+  assert.equal(speedster.archetype, "SPEED");
+  assert.equal(tank.storyKey, "PARTNER_STORY_REBIRTH");
+  assert.deepEqual(tank.milestones, ["CARE_PERFECT", "DEEP_BOND", "VETERAN"]);
+  assert.equal(speedster.storyKey, "PARTNER_STORY_SCRAPPY");
+  assert.deepEqual(speedster.milestones, []);
+  assert.equal(tank.careMistakes, 0);
+  assert.equal(tank.affection, 90);
+  assert.equal(tank.winPercent, 80);
+  assert.equal(tank.rebirths, 2);
+  assert.equal(tank.tactic, 2);
+  assert.equal(speedster.careMistakes, 3);
+  assert.equal(speedster.winPercent, 40);
+});
+
+test("evolution pin storage toggles, elevates pinned branch in compass, and auto-clears after species evolution", () => {
+  const mem = new Map();
+  const storage = { getItem: (k) => mem.get(k) ?? null, setItem: (k, v) => mem.set(k, v) };
+  assert.equal(getPinnedEvolutionBranch(storage, "p-1", 25), null);
+  assert.equal(togglePinnedEvolutionBranch(storage, "p-1", 25, 1), 1);
+  assert.equal(getPinnedEvolutionBranch(storage, "p-1", 25), 1);
+  // If the partner evolves from species 25 -> 53, the old pin auto-invalidates!
+  assert.equal(getPinnedEvolutionBranch(storage, "p-1", 53), null);
+
+  const ind = createNativeHuntIndividual({ species: nativeHuntSpeciesByIndex(25), rng: { next: () => 11 } });
+  const profile = nativeIndividualProfile(ind);
+  const compass = buildPartnerEvolutionCompass({ profile, sync: { level: 3, star: 1 }, pinnedBranchIndex: 1 });
+  assert.equal(compass.branches[0].branchIndex, 1, "pinned branch is surfaced first");
+  assert.equal(compass.branches[0].pinned, true);
+  assert.ok(compass.pinnedGoal && compass.pinnedGoal.branchIndex === 1);
+  assert.equal(compass.pinnedGoal.revealed, false, "unrevealed pinned branch stays masked");
+  assert.equal(compass.pinnedGoal.targetName, null);
+
+  // Toggling the same branch again unpins cleanly
+  assert.equal(togglePinnedEvolutionBranch(storage, "p-1", 25, 1), null);
+  assert.equal(getPinnedEvolutionBranch(storage, "p-1", 25), null);
+});
+
+test("app.getRanchGlanceAction surfaces actionable fusion opportunities with localized names", async () => {
+  const data = new Map();
+  const storage = {
+    getItem: (k) => data.get(k) ?? null,
+    removeItem: (k) => data.delete(k),
+    setItem: (k, v) => data.set(k, v)
+  };
+  const cages = readJson("docs/contracts/championship/raising-home-presentation.v1.json").cages;
+  const make = () => createChampionshipStandaloneApp({
+    storage,
+    catalog: readJson("src/data/championship/catalogs/creature-species.r1.json"),
+    cages,
+    rngClock: () => ({ hour: 13, minute: 20, second: 50 })
+  });
+  let app = make();
+  try {
+    await app.newGame();
+    app.save();
+    // Single starter with no fodder and no patrol crystals -> no glance clutter.
+    assert.equal(app.getRanchGlanceAction(), null);
+
+    // Upgrade to a multi-partner save with two same-line partners (species 53).
+    const [key, text] = [...data][0];
+    const save = JSON.parse(createFullQaSaveText(JSON.parse(text), { cageIds: cages.map((e) => e.cageId) }));
+    const partner1 = save.raising.collection[0];
+    const partner2 = save.raising.collection[1];
+    partner1.speciesId = "species-053";
+    partner1.displayName = "SPECIES 053";
+    partner1.nativeProfile.fields["000"] = 53;
+    partner2.speciesId = "species-053";
+    partner2.nativeProfile.fields["000"] = 53;
+    data.set(key, JSON.stringify(save));
+    await app.dispose();
+
+    app = make();
+    await app.continueGame();
+    const glance = app.getRanchGlanceAction();
+    assert.ok(glance && (glance.kind === "FUSION_READY" || glance.kind === "STAR_FUSION"), "fusion fodder surfaces fusion glance");
+    assert.ok(glance.count >= 1);
+    assert.ok(!/^SPECIES \d+$/i.test(glance.name), `partner name must be localized, got ${glance.name}`);
+  } finally {
+    await app.dispose();
   }
 });

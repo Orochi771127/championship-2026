@@ -101,7 +101,7 @@ function cageName(frame, cageId) {
  * @param {() => void} [options.openRoster] opens the Digimon roster
  */
 export async function createRaisingHomeP1RView({ root, source, mountField, hudArt=null, getRosterEntry=null,
-  renderCreatureDetail=null, openRoster=null, firstRunHint=false, nextHintDuration=consumeRaisingHintDuration, storySeen=null,
+  renderCreatureDetail=null, openRoster=null, getGlanceAction=null, openPatrol=null, firstRunHint=false, nextHintDuration=consumeRaisingHintDuration, storySeen=null,
   evolutionCinematic=null, actionPortraits=null } = {}) {
   if (!root) throw new TypeError("INT-RH2 P1R view requires a root element");
   const presentation = assertPresentationSource(source);
@@ -147,7 +147,11 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     if (!overflowing) restoreHintFocus();
   }
   hint.addEventListener('focus', event => { hintFocusReturn = event.relatedTarget; });
-  const hintTimer = createTransientHint(hint, { beforeHide: restoreHintFocus, onPhaseChange: syncHintOverflow });
+  let onHintPhaseDone = null;
+  const hintTimer = createTransientHint(hint, {
+    beforeHide: restoreHintFocus,
+    onPhaseChange: () => { syncHintOverflow(); onHintPhaseDone?.(); }
+  });
   function updateEntryHint(frame) {
     if (disposed || hintStarted || !firstRunHint || field.isPlayable === false) return;
     if (root.ownerDocument?.hidden || fieldHost.getAttribute('aria-busy') === 'true') return;
@@ -208,7 +212,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   // ROADMAP_R2_20261118: ready to evolve, but its Sync Level is under the stage's gate.
   const levelChip = node('span', 'int-rh2-companion__evolve-level'); levelChip.hidden = true;
   const fusionChip = node('span', 'int-rh2-companion__fusion'); fusionChip.hidden = true;
-  placeRow.append(placeChip, starsChip, fusionChip, moodChip, habitatChip, levelChip, crowdedChip);
+  const goalChip = node('span', 'int-rh2-companion__goal'); goalChip.hidden = true;
+  placeRow.append(placeChip, starsChip, fusionChip, goalChip, moodChip, habitatChip, levelChip, crowdedChip);
   const more = node("span", "int-rh2-companion__more", "詳細");
   more.setAttribute("aria-hidden", "true");
 
@@ -318,7 +323,30 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   }
   detail.append(detailHead, detailBody, detailFooter);
 
-  shell.append(fieldFrame, hint, companion, notice);
+  // Non-blocking, dismissible single-line return prompt above the toolbar.
+  const glance = node("div", "int-rh2-glance");
+  glance.hidden = true;
+  glance.setAttribute("role", "region");
+  const glanceGo = node("button", "int-rh2-glance__go");
+  glanceGo.type = "button";
+  const glanceCopy = node("span", "int-rh2-glance__text");
+  const glanceCta = node("span", "int-rh2-glance__cta", "RANCH_GLANCE_GO");
+  glanceGo.append(glanceCopy, glanceCta);
+  const glanceDismiss = button("int-rh2-glance__dismiss", "×", "RANCH_GLANCE_DISMISS");
+  glance.append(glanceGo, glanceDismiss);
+  let activeGlance = null, dismissedGlanceKey = null, lastGlanceKey = null;
+  const glanceActionKey = (action) => action ? `${action.kind}:${action.partnerId ?? ""}:${action.amount ?? action.count ?? action.need ?? ""}` : null;
+  glanceGo.addEventListener("click", () => {
+    if (!activeGlance) return;
+    if (activeGlance.kind === "PATROL_READY") openPatrol?.();
+    else openRoster?.(activeGlance.partnerId ?? null);
+  });
+  glanceDismiss.addEventListener("click", () => {
+    dismissedGlanceKey = glanceActionKey(activeGlance);
+    writeHidden(glance, true);
+  });
+
+  shell.append(fieldFrame, hint, glance, companion, notice);
   root.append(shell, detail);
   const discoveryJournal=mountRanchDiscoveryJournal(root,presentation);
   // Story theater entry (Owner 2026-10-28): the rift-watch badge under the journal.
@@ -699,11 +727,49 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     run.dispose();
     presentation.intents.setEvolutionPlayback?.(1);
   }
+  function paintGlance(frame) {
+    if (disposed || !frame || typeof getGlanceAction !== "function") { writeHidden(glance, true); return; }
+    const lifecycle = frame.lifecycle;
+    const blocked = Boolean(
+      selectedResident(frame) || !hint.hidden
+      || fieldHost.getAttribute("aria-busy") === "true"
+      || field.isPlayable === false
+      || (frame.tutorial && !frame.tutorial.finished)
+      || root.ownerDocument?.body?.hasAttribute?.("data-tutorial-guide")
+      || lifecycle?.day || lifecycle?.evolution || lifecycle?.confirmation
+      || lifecycle?.mailbox?.activeId
+    );
+    if (blocked) { writeHidden(glance, true); return; }
+    const action = getGlanceAction();
+    const key = glanceActionKey(action);
+    if (!action || !key || key === dismissedGlanceKey) {
+      activeGlance = null;
+      writeHidden(glance, true);
+      return;
+    }
+    activeGlance = action;
+    if (key !== lastGlanceKey) {
+      lastGlanceKey = key;
+      writeData(glance, "kind", action.kind);
+      const copy = action.kind === "EVOLVE_LEVEL"
+        ? uiText("RANCH_GLANCE_EVOLVE_LEVEL", { name: action.name, need: action.need })
+        : action.kind === "STAR_FUSION"
+          ? uiText("RANCH_GLANCE_STAR_FUSION", { name: action.name, count: action.count })
+          : action.kind === "PATROL_READY"
+            ? uiText("RANCH_GLANCE_PATROL_READY", { amount: action.amount })
+            : uiText("RANCH_GLANCE_FUSION_READY", { name: action.name, count: action.count });
+      writeText(glanceCopy, copy);
+    }
+    writeHidden(glance, false);
+  }
+  onHintPhaseDone = () => paintGlance(presentation.getFrame());
+
   function render(frame) {
     if (disposed || !frame) return;
     discoveryJournal.update(frame);
     storyBadge.update(frame);
     updateEntryHint(frame);
+    paintGlance(frame);
     if (frame.revision === lastRevision) return;
     lastRevision = frame.revision;
 
@@ -768,6 +834,23 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     const placeTitle = livesIn ? uiText(`Living in ${livesIn}`) : '';
     if (placeChip.title !== placeTitle) placeChip.title = placeTitle;
     paintPartnerMood(resident?.partner ?? null);
+    const pinnedGoal = entry?.evolutionCompass?.pinnedGoal ?? null;
+    writeHidden(goalChip, !pinnedGoal);
+    if (pinnedGoal) {
+      writeData(goalChip, 'ready', String(Boolean(pinnedGoal.ready)));
+      const target = pinnedGoal.targetName ?? uiText('EVOLUTION_PIN_UNKNOWN');
+      const gap = pinnedGoal.nextGap;
+      const goalText = pinnedGoal.ready && pinnedGoal.syncGate
+        ? uiText('EVOLUTION_PIN_CHIP_SYNC', { target, need: pinnedGoal.syncGate.need })
+        : pinnedGoal.ready
+          ? uiText('EVOLUTION_PIN_CHIP_READY', { target })
+          : gap
+            ? (gap.operator === 'LTE'
+              ? uiText('EVOLUTION_PIN_CHIP_LTE', { target, label: uiText(gap.labelKey), max: gap.target })
+              : uiText('EVOLUTION_PIN_CHIP_GAP', { target, label: uiText(gap.labelKey), gap: gap.gap }))
+            : uiText('EVOLUTION_PIN_CHIP_READY', { target });
+      writeText(goalChip, goalText);
+    }
     placeCard(resident);
     if (!resident) closeDetail(); else paintDetail(resident);
 
@@ -884,7 +967,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
 
   // Loading and tutorial suppression can finish without a new game
   // revision. Observe only their presentation flags, never poll or add a ticker.
-  const reconsiderHint = () => updateEntryHint(presentation.getFrame());
+  const reconsiderHint = () => { const f = presentation.getFrame(); updateEntryHint(f); paintGlance(f); };
   const loadTroubleObserver = typeof MutationObserver === 'function' ? new MutationObserver(yieldEvolutionCinematic) : null;
   loadTroubleObserver?.observe(root, { subtree: true, attributes: true, attributeFilter: ['hidden'] });
   const hintObserver = typeof MutationObserver === 'function' ? new MutationObserver(reconsiderHint) : null;
@@ -913,6 +996,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
       if (disposed) return;
       retranslate(root);
       lastRevision = -1;
+      lastGlanceKey = null;
       for (const text of trainingNodes.values()) text.remove();
       trainingNodes.clear();
       render(presentation.getFrame());
