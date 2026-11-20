@@ -232,6 +232,9 @@ export function createBattleRuntime(options = {}) {
   // freezes it, and a live VM's slots are typed arrays that cannot be frozen. It
   // also keeps the battle lane's data plain, which is where that line belongs.
   const scriptStates = new WeakMap();
+  let nextActionId = 0, nextContactId = 0;
+  const confirmedContacts = [];
+  const neutralReleases = [];
   let nativeActors=null,effectActors=null;
   const nativeLaunches=new Set(), nativeHistory=[];
   const impactEffects=createBattleImpactEffects();
@@ -289,7 +292,7 @@ export function createBattleRuntime(options = {}) {
   function scriptStateFor(action) {
     let state = scriptStates.get(action);
     if (!state) {
-      state = { memory: new Map(), script: {} };
+      state = { memory: new Map(), script: {}, actionId: ++nextActionId };
       scriptStates.set(action, state);
     }
     return state;
@@ -337,7 +340,12 @@ export function createBattleRuntime(options = {}) {
         const actorResult=nativeActors.call(routine,args);
         if(engaged&&(routine===0x02047904||routine===0x020479a4))state.scriptPose=nativeActors.animationRequestOf(slot)?.sequenceRequestId;
         if(actorResult!==undefined)return actorResult;
-        const effectResult=effectActors.call(routine,args);if(effectResult!==undefined)return effectResult;
+        const origin = routine === 0x0211b264 ? {
+          actionId:state.actionId, moveId:move.recordIndex, slot,
+          ...(state.impactContactId ? {contactId:state.impactContactId} : {}),
+          ...(state.supportTarget !== undefined ? {supportTarget:state.supportTarget} : {})
+        } : null;
+        const effectResult=effectActors.call(routine,args,origin);if(effectResult!==undefined)return effectResult;
         const soundResult=soundEvents.call(routine,args,session.frame,move.recordIndex);if(soundResult!==undefined)return soundResult;
         const impactResult=impactEffects.call(nativeActors.memory,routine,args);if(impactResult!==undefined)return impactResult;
         if ((routine===0x02114320 || routine===0x0211436c) && args[0]===ownerObject) {
@@ -362,14 +370,20 @@ export function createBattleRuntime(options = {}) {
 
   function applySupportFromLaunch(slot,action,state) {
     const move=action.move,slots=session.slots,ownTeam=battleTeamOfSlot(slot);
+    if (move.recordIndex >= 28 && move.recordIndex <= 30) {
+      neutralReleases.push({actionId:state.actionId, moveId:move.recordIndex, slot, frame:session.frame});
+      if (neutralReleases.length > 32) neutralReleases.shift();
+    }
     const targetSlots=slots.flatMap((c,i)=>c&&battleTeamOfSlot(i)===ownTeam?[{slot:i,currentHp:c.currentHp}]:[]);
     const singleTarget=slots[action.targetSlot]?{slot:action.targetSlot,currentHp:slots[action.targetSlot].currentHp}:null;
     const plan=planBattleContactTargets({actionField50:move.kind,actionField54:move.targetMode,singleTarget,targetSlots});
     for(const visit of plan.visits){
       if(visit.outcome!==BATTLE_CONTACT_ACCEPTED)continue;
       const targetSlot=isSingleTargetSelector(move.targetMode)?action.targetSlot:targetSlots[visit.slot].slot;
-      state.launch.startImpact({targetObject:nativeActors.address(targetSlot),xyz:nativeActors.position(targetSlot)});
-      hitRuntime.support(targetSlot,move);
+      state.supportTarget = targetSlot;
+      try { state.launch.startImpact({targetObject:nativeActors.address(targetSlot),xyz:nativeActors.position(targetSlot)}); }
+      finally { delete state.supportTarget; }
+      hitRuntime.support(targetSlot, move, {actionId:state.actionId, moveId:move.recordIndex, casterSlot:slot});
     }
   }
 
@@ -387,6 +401,8 @@ export function createBattleRuntime(options = {}) {
     const attacker = roster[slot];
     if (!attacker || !move) return null;
     contacts[parameters?'projectileCalls':'meleeCalls']++;
+    // Only this native collision path certifies which allocated actor supplies the contact box.
+    if (parameters) effectActors.noteContactProbe(parameters, state?.actionId, move.recordIndex, slot);
 
     const walk = selectActionTargets({ roster, attacker });
     const hits = [];
@@ -426,7 +442,12 @@ export function createBattleRuntime(options = {}) {
         damage: taxonomy.scaleDamage({attackerSlot: slot, defenderSlot: targetSlot,
           elementSelector: move.elementSelect ?? 0, damage: resolvedNative.damage, signature: signatureMoves[slot] === move.recordIndex,
           defenderHpPercent: defender?.maxHp > 0 ? defender.currentHp * 100 / defender.maxHp : 100})})}))};
-      const result=hitRuntime.apply(targetSlot,{move,damage:resolved.damage,critical:resolved.critical,nativeKind,
+      const hpBefore = defender.currentHp;
+      const origin = parameters ? effectActors.originOf(parameters) : state;
+      const contactOwner = origin && origin.actionId === state?.actionId
+        && (!parameters || (origin.moveId === move.recordIndex && origin.slot === slot))
+        ? {actionId:origin.actionId, actorId:parameters ? effectActors.instanceOf(parameters) : null, attackerSlot:slot} : null;
+      const result=hitRuntime.apply(targetSlot,{move,damage:resolved.damage,critical:resolved.critical,nativeKind,contactOwner,
         sourcePoint:parameters?effectActors.position(parameters):nativeActors.position(slot),statusInputs:{attackerIndex:inputs.statusAttackerIndex,
           selectedDefenseIndex:inputs.statusDefenderIndex,
           defenseIndex0x9C:defenceLevelsOf(defenderCreature)[0x9c],
@@ -435,15 +456,26 @@ export function createBattleRuntime(options = {}) {
       if(parameters){contacts.projectileHits++;contacts.history.push({frame:session.frame,moveId:move.recordIndex,slot,targetSlot,
         actor:parameters,sourcePoint:effectActors.position(parameters),hpAfter:defender.currentHp,result:result.code});
         if(contacts.history.length>128)contacts.history.shift();}
+      let contactId=null;
+      if (hpBefore > defender.currentHp && contactOwner) {
+        contactId=++nextContactId;
+        confirmedContacts.push({ id: contactId, frame: session.frame, actionId: origin.actionId,
+          actorId: contactOwner.actorId, slot, targetSlot, moveId: move.recordIndex,
+          critical: resolved.critical === true, resolvedDamage: resolved.damage, resultCode: result.code,
+          sourcePoint: parameters ? effectActors.position(parameters) : nativeActors.position(slot),
+          casterPoint: nativeActors.position(slot), targetPoint: nativeActors.position(targetSlot), hpBefore, hpAfter: defender.currentHp });
+        if (confirmedContacts.length > 128) confirmedContacts.shift();
+      }
       hits.push({ slot: targetSlot, damage: resolved.damage, critical: resolved.critical });
       burst.onHit({attackerSlot:slot,defenderSlot:targetSlot,damage:resolved.damage,defenderMaxHp:defender.maxHp??0,defenderHp:defender.currentHp});
       arenaHazards?.onHit({move,attackerSlot:slot,targetPosition:nativeActors?.position(targetSlot)});
-      state?.launch?.startImpact({targetObject:nativeActors.address(targetSlot),xyz:nativeActors.position(targetSlot),
+      if (state) state.impactContactId=contactId;
+      try { state?.launch?.startImpact({targetObject:nativeActors.address(targetSlot),xyz:nativeActors.position(targetSlot),
         targetBox:nativeActors.box(targetSlot),resultCode:result.code,nativeKind,offset:impactOffset,
         onSpark:kind=>{
           return impactEffects.spawnNative(nativeActors.memory,{owner:state.launch.object,target:nativeActors.address(targetSlot),
-            type:kind==='SECONDARY_3D'?(attacker.speciesId>=72?3:2):(defender.speciesId>=72?1:0),offset:impactOffset});
-        }});
+            contactId, type:kind==='SECONDARY_3D'?(attacker.speciesId>=72?3:2):(defender.speciesId>=72?1:0),offset:impactOffset});
+        }}); } finally { if (state) delete state.impactContactId; }
     }
     return { hits, rejected: walk.rejected };
   }
@@ -906,7 +938,7 @@ export function createBattleRuntime(options = {}) {
           timing:{pause:nativeActors.memory.readU32(nativeActors.worldAddress,0x1f134),slowdown:nativeActors.memory.readU32(nativeActors.worldAddress,0x1f138),issues:[...timingIssues]},
           // No impact has flashed before the first frame (-1 === 0-1 is not a flash).
           flash:{active:!session.ended&&impactFlashFrame>=0&&impactFlashFrame===session.frame-1,frame:impactFlashFrame,source:'0210FC68'},
-          effectPool:effectActors.diagnostics(),effectActors:effectActors.snapshot(),contacts:{...contacts,history:[...contacts.history]},poseWaitAdaptations:poseWaitAdaptations.map(a=>({...a})),reactions:hitRuntime.snapshot(),normalFlow:session.normalFlow.snapshot()}) });
+          effectPool:effectActors.diagnostics(),effectActors:effectActors.snapshot(),contacts:{...contacts,history:[...contacts.history],confirmed:[...confirmedContacts]},neutralReleases:[...neutralReleases],poseWaitAdaptations:poseWaitAdaptations.map(a=>({...a})),reactions:hitRuntime.snapshot(),normalFlow:session.normalFlow.snapshot()}) });
       // Battle-plan record (TACTIC_PRACTICE_LOOP_20261116): a read-only tap on every published view.
       tacticTap = createBattleRecordTap({ localTeamIndex });
       tacticTap.observe(source.getView());
@@ -987,7 +1019,7 @@ export function createBattleRuntime(options = {}) {
       impactEffects.clear();
       soundEvents.clear();
       effectActors?.clear();effectActors=null;
-      contacts.projectileCalls=0;contacts.projectileHits=0;contacts.meleeCalls=0;contacts.history.length=0;
+      contacts.projectileCalls=0;contacts.projectileHits=0;contacts.meleeCalls=0;contacts.history.length=0;confirmedContacts.length=0;neutralReleases.length=0;
       specialPrelude = null;
       completedRound = null;
     }

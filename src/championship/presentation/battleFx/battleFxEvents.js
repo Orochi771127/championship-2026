@@ -9,28 +9,29 @@
 /** History entries are copied per view; key one entry stably. */
 const historyKey = (entry, index) => `${entry.frame}:${entry.slot}:${entry.type}:${index}`;
 
+// Multiple native receipts can be coalesced into a single HP change between render ticks.
+function coversDelta(contacts, before, after) {
+  if (!contacts.length) return false;
+  let hp=before;
+  for (const c of contacts) {
+    if (c.hpBefore !== hp) return false;
+    hp=c.hpAfter;
+  }
+  return hp === after;
+}
+
 export function createBattleFxEventTracker() {
   let previous = null;
   let started = false, ended = false;
   const liveLaunches = new Set();
   const seenHistory = new Set();
   let historyFrame = -1;
-  const lastLaunchBySlot = new Map();
+  let lastContactId = 0, lastTauntId = 0;
+  const seenNeutral = new Set();
 
   function launchesOf(view) {
     return (view.nativeLifecycle?.active ?? [])
       .filter(launch => Number.isInteger(launch?.ownerSlot) && Number.isInteger(launch?.moveId) && launch.phase !== 'DONE');
-  }
-
-  /** The most recent launch by the opposing team, for knockback direction. */
-  function attackerFor(slot, combatants) {
-    const team = combatants[slot]?.team;
-    let best = null;
-    for (const [owner, info] of lastLaunchBySlot) {
-      if (combatants[owner]?.team === team) continue;
-      if (!best || info.frame > best.frame) best = {slot: owner, ...info};
-    }
-    return best;
   }
 
   return Object.freeze({
@@ -50,7 +51,6 @@ export function createBattleFxEventTracker() {
         const key = `${launch.object}:${launch.moveId}:${launch.ownerSlot}`;
         live.add(key);
         if (liveLaunches.has(key)) continue;
-        lastLaunchBySlot.set(launch.ownerSlot, {moveId: launch.moveId, frame});
         events.push(Object.freeze({type: 'LAUNCH', frame, slot: launch.ownerSlot, moveId: launch.moveId}));
       }
       liveLaunches.clear();
@@ -71,14 +71,15 @@ export function createBattleFxEventTracker() {
           const key = historyKey(entry, occurrence);
           if (seenHistory.has(key)) return;
           seenHistory.add(key);
-          if (entry.type === 'STATUS_APPLIED') events.push(Object.freeze({type: 'STATUS', frame, slot: entry.slot, code: entry.code}));
-          else if (entry.type === 'SUPPORT_APPLIED') events.push(Object.freeze({type: 'SUPPORT', frame, slot: entry.slot, statusCode: entry.statusCode}));
+          if (entry.type === 'STATUS_APPLIED') events.push(Object.freeze({type: 'STATUS', frame, slot: entry.slot, code: entry.code, ...(entry.tauntId ? {tauntId:entry.tauntId} : {})}));
+          else if (entry.type === 'SUPPORT_APPLIED') events.push(Object.freeze({type: 'SUPPORT', frame, slot: entry.slot, statusCode: entry.statusCode, ...(entry.receipt ? {receipt:entry.receipt} : {})}));
           else if (entry.type === 'LANDED') events.push(Object.freeze({type: 'LANDED', frame, slot: entry.slot}));
           else if (entry.type === 'HIT_STATE_WRITTEN') {
             const prevMeta = hitMetaBySlot.get(entry.slot);
             hitMetaBySlot.set(entry.slot, {
               critical: Boolean(prevMeta?.critical || entry.critical === true),
-              moveId: Number.isInteger(entry.moveId) ? entry.moveId : (prevMeta?.moveId ?? null)
+              hp: entry.hp, single: !prevMeta, attackerSlot: entry.attackerSlot ?? null,
+              moveId: !prevMeta && Number.isInteger(entry.moveId) ? entry.moveId : null
             });
           }
         });
@@ -88,17 +89,54 @@ export function createBattleFxEventTracker() {
         }
       }
 
+      const releases = view.nativeLifecycle?.neutralReleases ?? [];
+      const current = new Set(releases.map(r => r.actionId));
+      for (const id of seenNeutral) if (!current.has(id)) seenNeutral.delete(id);
+      for (const release of releases) {
+        if (seenNeutral.has(release.actionId)) continue;
+        seenNeutral.add(release.actionId);
+        events.push({type:'NEUTRAL_RELEASE', ...release});
+      }
+
+      for (const item of view.nativeLifecycle?.normalFlow?.history ?? []) {
+        if (item.type!=='TAUNT_RECIPIENT' || item.receipt.id<=lastTauntId) continue;
+        lastTauntId=item.receipt.id;
+        events.push({type:'TAUNT_RECIPIENT',frame:item.frame,receipt:item.receipt});
+      }
+      const freshContacts = [];
+      for (const contact of view.nativeLifecycle?.contacts?.confirmed ?? []) {
+        if (contact.id <= lastContactId) continue;
+        lastContactId = contact.id;
+        if (contact.hpBefore <= contact.hpAfter) continue;
+        freshContacts.push(contact);
+        events.push(Object.freeze({type: 'MOVE_CONTACT', frame: contact.frame, contact}));
+      }
+
       if (previous) {
         combatants.forEach((combatant, slot) => {
           const before = previous[slot];
           if (!combatant?.present || !before?.present) return;
           const hpBefore = before.hp?.current ?? 0, hpAfter = combatant.hp?.current ?? 0, maxHp = Math.max(1, combatant.hp?.maximum ?? 1);
           if (hpAfter < hpBefore) {
-            const attacker = attackerFor(slot, combatants);
             const meta = hitMetaBySlot.get(combatant.slot ?? slot);
-            events.push(Object.freeze({type: 'HIT', frame, slot, damage: hpBefore - hpAfter, hpBefore, hpAfter, maxHp,
-              ratio: (hpBefore - hpAfter) / maxHp, attackerSlot: attacker?.slot ?? null,
-              moveId: meta?.moveId ?? attacker?.moveId ?? null, critical: meta?.critical === true}));
+            const contacts = freshContacts.filter(c => c.targetSlot === slot);
+            const ratio = (hpBefore-hpAfter)/maxHp;
+            if (coversDelta(contacts, hpBefore, hpAfter)) {
+              const anyCritical = contacts.some(c => c.critical === true) || meta?.critical === true;
+              contacts.forEach((c, i) => {
+                const damage = c.hpBefore-c.hpAfter;
+                events.push(Object.freeze({type:'HIT', frame:c.frame, slot, damage, hpBefore:c.hpBefore,
+                  hpAfter:c.hpAfter, maxHp, ratio:damage/maxHp, critical:c.critical ?? (contacts.length === 1 && anyCritical),
+                  contactId:c.id, actionId:c.actionId, actorId:c.actorId, attackerSlot:c.slot, moveId:c.moveId, contact:c,
+                  // The upstream audio and combo count consume one cue per observed target HP delta.
+                  sound: i === contacts.length-1 ? {ratio, critical:anyCritical} : false}));
+              });
+            } else {
+              const single = !contacts.length && meta?.single === true && meta.hp === hpAfter;
+              events.push(Object.freeze({type:'HIT', frame, slot, damage:hpBefore-hpAfter, hpBefore, hpAfter, maxHp, ratio,
+                critical:single && meta.critical === true, contactId:null, attackerSlot:single ? meta.attackerSlot : null,
+                moveId:single ? meta.moveId : null, sound:{ratio, critical:meta?.critical === true}}));
+            }
           } else if (hpAfter > hpBefore) {
             events.push(Object.freeze({type: 'HEAL', frame, slot, amount: hpAfter - hpBefore, maxHp}));
           }

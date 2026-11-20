@@ -141,7 +141,7 @@ test('the tracker turns successive views into launch, hit, status, knockout and 
     history: [{frame: 4, slot: 3, type: 'STATUS_APPLIED', code: 3}]}));
   assert.deepEqual(types(events), ['STATUS', 'HIT', 'FLASH']);
   const hit = events.find(e => e.type === 'HIT');
-  assert.deepEqual([hit.slot, hit.damage, hit.attackerSlot, hit.moveId], [3, 240, 0, 61]);
+  assert.deepEqual([hit.slot, hit.damage, hit.attackerSlot, hit.moveId], [3, 240, null, null]);
   assert.equal(hit.ratio, 0.24);
   // The same history entry is not reported again on the next view.
   assert.deepEqual(types(tracker.consume(fakeView({frame: 5, hps: [1000, null, null, 760, null, null],
@@ -295,4 +295,60 @@ test('the approved public playtest URL plays the selected remade shared effects 
   assert.equal(originalSharedVfxManifestFor(publicUrl + '?vfxOriginal=shared-v1&vfxRevision=157-baseline'), 'assets/production/public-runtime/shared-vfx.render.v1.json');
   for (const url of ['https://orochi771127.github.io/other/?vfxOriginal=shared-v1', 'https://example.org/championship-2026/?vfxOriginal=shared-v1'])
     assert.equal(originalSharedVfxReviewRequested(url), false, url);
+});
+
+test('a confirmed older Auto projectile keeps its owner and move after a new launch by the same slot', () => {
+  const tracker = createBattleFxEventTracker();
+  const launch = moveId => ({ object: moveId, ownerSlot: 0, moveId, phase: 'PRIMARY' });
+  const hps = [900, null, null, 800];
+  tracker.consume(fakeView({ frame: 10, hps, active: [launch(76)] }));
+  tracker.consume(fakeView({ frame: 12, hps, active: [launch(76), launch(143)] }));
+  const view = fakeView({ frame: 14, hps: [900, null, null, 731], active: [launch(143)] });
+  const contact = { id: 1, actionId: 4, actorId: 18, frame: 13, moveId: 76, slot: 0, targetSlot: 3,
+    hpBefore: 800, hpAfter: 731, sourcePoint: [68, 88, 10], targetPoint: [76, 90, 0] };
+  view.nativeLifecycle.contacts = { confirmed: [contact] };
+  const events = tracker.consume(view);
+  assert.deepEqual(events.find(e => e.type === 'MOVE_CONTACT').contact, contact);
+  assert.equal(events.find(e => e.type === 'HIT').moveId, 76);
+  assert.equal(tracker.consume(view).filter(e => e.type === 'MOVE_CONTACT').length, 0);
+});
+
+
+test('coalesced damage identifies all and only the receipts for that target, once', () => {
+  const tracker=createBattleFxEventTracker();
+  tracker.consume(fakeView({frame:10,hps:[900,null,null,800]}));
+  const view=fakeView({frame:14,hps:[900,null,null,700]});
+  const receipt=(id,slot,before,after)=>({id,actionId:8,actorId:40,slot:0,targetSlot:slot,frame:12,
+    moveId:76,hpBefore:before,hpAfter:after,sourcePoint:[40,80,0],targetPoint:[50,90,0]});
+  view.nativeLifecycle.contacts={confirmed:[receipt(1,3,800,750),receipt(2,4,150,90),receipt(3,3,750,700)]};
+  const events=tracker.consume(view);
+  assert.deepEqual(events.filter(e=>e.type==='HIT').map(e=>e.contactId),[1,3]);
+  assert.equal(events.filter(e=>e.type==='MOVE_CONTACT').length,3);
+  assert.equal(tracker.consume(view).filter(e=>e.type==='MOVE_CONTACT').length,0);
+});
+
+test('neutral native releases are reported once per confirmed action', () => {
+  const tracker=createBattleFxEventTracker(),view=fakeView({frame:10,hps:[900,null,null,800]});
+  view.nativeLifecycle.neutralReleases=[{actionId:7,moveId:28,slot:0,frame:8},{actionId:8,moveId:30,slot:0,frame:10}];
+  assert.deepEqual(tracker.consume(view).filter(e=>e.type==='NEUTRAL_RELEASE').map(e=>e.moveId),[28,30]);
+  assert.equal(tracker.consume(view).filter(e=>e.type==='NEUTRAL_RELEASE').length,0);
+});
+
+
+test('two casters retain independent hit details after a late projectile, with one upstream sound cue', () => {
+  const tracker=createBattleFxEventTracker();
+  const cast=(slot,moveId,object)=>({object,ownerSlot:slot,moveId,phase:'PRIMARY'});
+  const hp=[900,800,850,500],old=cast(1,76,7),newer=cast(2,143,8);
+  tracker.consume(fakeView({frame:10,hps:hp,active:[old]}));
+  tracker.consume(fakeView({frame:11,hps:hp,active:[newer]}));
+  const view=fakeView({frame:12,hps:[900,800,850,455],active:[newer]});
+  const first={id:10,frame:12,actionId:7,actorId:21,slot:1,targetSlot:3,moveId:76,critical:true,hpBefore:500,hpAfter:480};
+  const second={id:11,frame:12,actionId:8,actorId:22,slot:2,targetSlot:3,moveId:143,critical:false,hpBefore:480,hpAfter:455};
+  view.nativeLifecycle.contacts={confirmed:[first,second]};
+  const events=tracker.consume(view),hits=events.filter(e=>e.type==='HIT');
+  assert.deepEqual(hits.map(e=>[e.attackerSlot,e.moveId,e.actionId,e.actorId,e.slot,e.contactId,e.damage,e.critical]),
+    [[1,76,7,21,3,10,20,true],[2,143,8,22,3,11,25,false]]);
+  assert.deepEqual(hits.map(e=>e.sound),[false,{ratio:45/hits[0].maxHp,critical:true}]);
+  assert.deepEqual(events.filter(e=>e.type==='MOVE_CONTACT').map(e=>e.contact),[first,second]);
+  assert.equal(tracker.consume(view).filter(e=>e.type==='HIT'||e.type==='MOVE_CONTACT').length,0);
 });

@@ -879,7 +879,7 @@ test('arena scene construction rolls back owned resources and preserves the orig
   const calls = [];
   const root = { parent: { removeChild() { calls.push('remove'); } }, destroy(options) { assert.equal(options.texture, false); calls.push('root'); } };
   const error = new Error('mount marker failed');
-  const env = { T: { STANDS: 1 }, createDataArenaTextures: () => ({ destroy() { calls.push('textures'); } }), console };
+  const env = { createArenaMoveAtlas: () => ({ dispose() { calls.push('moveAtlas'); } }), T: { STANDS: 1 }, createDataArenaTextures: () => ({ destroy() { calls.push('textures'); } }), console };
   arenaRunSource(functionSource, env);
   assert.throws(() => env.mountDataArenaScene({ stage: { PIXI: {}, createSceneRoot: () => root, markScene() { throw error; } },
     sim: { grid: { map: { rects: [] }, cols: 2, rows: 2, cell: 64 } }, cast: {} }), (actual) => actual === error);
@@ -902,10 +902,60 @@ test('arena scene failed ground bake releases render textures, root and canvas m
   const error = new Error('GPU bake failed');
   const PIXI = { Container: Display, Graphics, Sprite: Display, RenderTexture: { create: () => ({ destroy() { calls.push('renderTexture'); } }) }, Matrix: class { translate() { return this; } } };
   // The burst shell (2026-11-02) is created with the scene and released with it.
-  const env = { T: { STANDS: 1 }, createDataArenaTextures: () => ({ destroy() { calls.push('textures'); } }), createDataArenaCamera: () => ({}), console,
+  const env = { createArenaMoveAtlas: () => ({ dispose() { calls.push('moveAtlas'); } }), T: { STANDS: 1 }, createDataArenaTextures: () => ({ destroy() { calls.push('textures'); } }), createDataArenaCamera: () => ({}), console,
     createBattleBurstShell: () => ({ update() { return null; }, retire() {}, dispose() { calls.push('burstShell'); } }) };
   arenaRunSource(functionSource, env);
   assert.throws(() => env.mountDataArenaScene({ stage: { PIXI, createSceneRoot: () => root, markScene: () => () => calls.push('unmark'), app: { renderer: { render() { throw error; } } } },
     sim: { getState: () => ({}), grid: { map: { rects: [], flammable: [], pylons: [], gates: [], beacons: [], playerSpawn: [0, 0], rivalSpawn: [1, 1] }, cols: 2, rows: 2, cell: 64 } }, cast: {} }), (actual) => actual === error);
-  assert.deepEqual(calls, ['renderTexture', 'burstShell', 'unmark', 'remove', 'textures']);
+  assert.deepEqual(calls, ['renderTexture', 'moveAtlas', 'burstShell', 'unmark', 'remove', 'textures']);
+});
+
+test('pilot impacts retain the actual action, projectile or lunge, caster and recipient', () => {
+  for (const key of ['emberBolt', 'fangRush']) {
+    const { sim, s, rival } = liveDuel();
+    place(s.player, 12, 13); place(rival, 12, 11);
+    rival.invulnerable = 0;
+    assert.ok(sim.internals.beginCast(s.player, key, rival.x, rival.y));
+    const actionId = s.player.cast.actionId;
+    const events = run(sim, 1);
+    const hits = events.filter(e => e.type === 'MOVE_CONTACT' && e.contact.actionId === actionId);
+    assert.equal(hits.length, 1, key);
+    const c = hits[0].contact;
+    assert.equal(c.moveId, key); assert.equal(c.targetId, rival.id); assert.equal(c.casterId, s.player.id);
+    assert.ok(Number.isInteger(c.instanceId));
+    assert.strictEqual(events.find(e => e.type === 'RIVAL_HIT' && e.contact)?.contact, c);
+    if (key === 'emberBolt') assert.strictEqual(events.find(e => e.type === 'SKILL_HIT')?.contact, c);
+  }
+});
+
+test('a blocked pilot bolt cannot produce a move contact', () => {
+  const { sim, s, rival } = liveDuel();
+  place(s.player, 10, 7); place(rival, 10, 3);
+  assert.ok(sim.internals.beginCast(s.player, 'emberBolt', rival.x, rival.y));
+  const events = run(sim, 1.2);
+  assert.ok(events.some(e => e.type === 'SHOT_BLOCKED'));
+  assert.equal(events.some(e => e.type === 'MOVE_CONTACT'), false);
+});
+
+test('a fire zone ends on its burst tick and only ignited cells persist to their actual expiry', () => {
+  const {sim,s}=quietArena();
+  const x=(30.5)*64, y=(25.5)*64, cell=sim.grid.index(30,25);
+  assert.ok(sim.grid.flammable[cell]);
+  assert.ok(sim.internals.beginCast(s.player,'flameRing',x,y));
+  const id=s.player.cast.actionId;
+  let warning=false, burst=false, expired=false;
+  for (let frame=0;frame<60*27;frame++) {
+    const before=sim.grid.fire[cell]; sim.step({}); const events=sim.drainEvents();
+    const z=s.zones.find(v=>v.actionId===id);
+    if (z) { warning=true; assert.equal(z.x,x); assert.equal(z.y,y); assert.equal(z.radius,110); assert.ok(z.t<z.delay); }
+    if (events.some(e=>e.type==='ZONE_BURST' && e.actionId===id)) {
+      burst=true;assert.ok(warning);assert.equal(z,undefined);
+      assert.ok(events.some(e=>e.type==='FIRE_IGNITE' && e.cell===cell));assert.ok(sim.grid.fire[cell]>0);
+    }
+    if(before>0 && sim.grid.fire[cell]===0) {
+      assert.ok(events.some(e=>['FIRE_BURNT_OUT','FIRE_OUT'].includes(e.type)&&e.cell===cell));
+      expired=true;break;
+    }
+  }
+  assert.ok(warning && burst && expired);
 });

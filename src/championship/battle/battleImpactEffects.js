@@ -13,16 +13,16 @@ export function createBattleImpactEffects() {
   let serial=0,created=0,released=0;
   const api={
     // 0211AF20 keys off the TARGET species; AF60 keys off the OWNER species.
-    spawn({owner,target,targetSpeciesId,ownerSpeciesId,secondary=false,point,type:explicitType=null,nativeCopy=null,offset=[0,0,0]}) {
+    spawn({owner,target,targetSpeciesId,ownerSpeciesId,secondary=false,point,type:explicitType=null,nativeCopy=null,contactId=null,offset=[0,0,0]}) {
       if(!owner||!target)return null;
       const type=explicitType??(secondary ? (ownerSpeciesId>=0x48?3:2) : (targetSpeciesId>=0x48?1:0));
       if(!pools[type])throw new RangeError('BATTLE_IMPACT_TYPE');
       const slot=pools[type].indexOf(null);if(slot<0)return null;
-      const effect={id:++serial,type,slot,owner,target,frame:0,point:{...point},nativeCopy,offset:[...offset],...BATTLE_IMPACT_FAMILIES[type]};
+      const effect={id:++serial,type,slot,owner,target,frame:0,point:{...point},...(contactId ? {contactId} : {}),nativeCopy,offset:[...offset],...BATTLE_IMPACT_FAMILIES[type]};
       pools[type][slot]=effect;created++;return effect.id;
     },
     // Called from the existing normal battle step, never from a render clock.
-    spawnNative(memory,{owner,target,type,offset=[0,0,0]}){
+    spawnNative(memory,{owner,target,type,contactId=null,offset=[0,0,0]}){
       if(!owner||!target)return null;
       const actor=memory.readU32(target,4),box=readSpriteCellBox(memory,actor,0)?.box;
       if(!actor||!box)throw Error('BATTLE_IMPACT_SOURCE_ACTOR_REQUIRED');
@@ -31,7 +31,7 @@ export function createBattleImpactEffects() {
       const height=(box.highY-box.lowY)<<12;
       const copy=[0x24,0x28,0x2c].map(o=>memory.readU32(actor,o)|0);
       copy[1]=(copy[1]+height)|0;copy[2]=(copy[2]+height)|0;
-      return api.spawn({owner,target,type,nativeCopy:copy,offset,
+      return api.spawn({owner,target,type,nativeCopy:copy,offset,contactId,
         point:{x:(copy[0]+offset[0])|0,y:(copy[1]-copy[2]+offset[1])|0,z:0}});
     },
     call(memory,routine,args){

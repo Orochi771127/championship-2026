@@ -68,25 +68,31 @@ export function createBattleHitRuntime({session,actors,onSound=null,onImpactFeed
   }
   function writePoint(h){[0,4,8].forEach((o,i)=>m.writeU32(h.world,o,h.point[i]));}
   return {
-    status(slot,code){const h=host(slot);applyBattleHitStatus(session.slots[slot],code,h);writePoint(h);actors.syncCombatants();
-      record(slot,'STATUS_APPLIED',{code,state:session.slots[slot].state});},
+    status(slot,code,tauntId){const h=host(slot);applyBattleHitStatus(session.slots[slot],code,h);writePoint(h);actors.syncCombatants();
+      record(slot,'STATUS_APPLIED',{code,state:session.slots[slot].state,...(tauntId ? {tauntId} : {})});},
     notify(slot,code){const h=host(slot);notifyBattleHitState(session.slots[slot],code,h);writePoint(h);},
     apply(slot,input){
       const c=session.slots[slot],h=host(slot);
       const result=applyBattleHitResult({...input,c,h,rng:session.rng});writePoint(h);actors.syncCombatants();
-      record(slot,'HIT_STATE_WRITTEN',{hp:c.currentHp,reaction:c.field84,notification:c.field17C,result:result.code,critical:input.critical===true,moveId:input.move?.recordIndex??null});
+      record(slot,'HIT_STATE_WRITTEN',{...input.contactOwner,hp:c.currentHp,reaction:c.field84,notification:c.field17C,result:result.code,critical:input.critical===true,moveId:input.move?.recordIndex??null});
       return result;
     },
-    support(slot,move){
+    support(slot,move,identity=null){
       const c=session.slots[slot];if(!c||c.currentHp<=0)return;
       const h=host(slot),code=move.statusCode;
+      const hpBefore=c.currentHp, statusBefore=c.statusCode, effectBefore=c.field160, durationBefore=c.field164;
       if(move.kind===2){
         if(code>=14&&code<=19)c.currentHp=applyBattleHeal({currentHp:c.currentHp,maxHp:c.maxHp,field5C:code});
         else if(code===20)clearBattleHitStatus(c,h);
         else if(code>=21&&code<=29){const value=applyPositiveEffect(positiveEffectCodeForField5C(code));c.field160=value.effectCode;c.field164=value.remainingDuration;}
       }
       c.currentHp=Math.min(c.currentHp,c.maxHp);writePoint(h);actors.syncCombatants();
-      record(slot,'SUPPORT_APPLIED',{kind:move.kind,statusCode:code,hp:c.currentHp});
+      const result = c.currentHp > hpBefore ? 'heal'
+        : code === 20 && statusBefore > 0 && c.statusCode === 0 ? 'clear'
+        : code >= 21 && code <= 29 && c.field164 > 0 && (effectBefore !== c.field160 || durationBefore !== c.field164) ? 'buff'
+        : null;
+      record(slot,'SUPPORT_APPLIED',{kind:move.kind,statusCode:code,hp:c.currentHp,
+        ...(identity ? {receipt:{...identity, targetSlot:slot, result, hpBefore, hpAfter:c.currentHp}} : {})});
     },
     step(slot){
       const c=session.slots[slot];if(!c)return;
