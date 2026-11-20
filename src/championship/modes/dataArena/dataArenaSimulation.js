@@ -735,15 +735,15 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         break;
       case "BARRIER":
         caster.barrier = move.duration; caster.barrierAngle = angle; caster.barrierArc = move.arc; caster.barrierRadius = move.radius;
-        emit({ type: "BARRIER_UP", x: caster.x, y: caster.y, angle });
+        emit({ type: "BARRIER_UP", actionId, casterId: caster.id, moveId, x: caster.x, y: caster.y, angle });
         break;
-      case "BLINK": blink(caster, move, angle); break;
+      case "BLINK": blink(caster, move, angle, moveId, actionId); break;
       case "NOVA": nova(caster, move, damageScale, moveId, isBasic, actionId); break;
       default: break;
     }
   }
 
-  function blink(caster, move, angle) {
+  function blink(caster, move, angle, moveId, actionId) {
     const dx = Math.cos(angle), dy = Math.sin(angle);
     const fromX = caster.x, fromY = caster.y;
     let travelled = 0;
@@ -763,7 +763,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     }
     caster.x = fromX + dx * travelled; caster.y = fromY + dy * travelled;
     if (caster === player) { player.invulnerable = Math.max(player.invulnerable, 0.18); player.dashGrace = Math.max(player.dashGrace, 0.18); player.perfectThisDash = false; }
-    emit({ type: "BLINK", fromX, fromY, x: caster.x, y: caster.y });
+    emit({ type: "BLINK", actionId, casterId: caster.id, moveId, angle, fromX, fromY, x: caster.x, y: caster.y });
   }
 
   // RELAY stage three: the element a caster's hit carries against cover.

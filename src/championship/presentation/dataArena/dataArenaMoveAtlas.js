@@ -1,17 +1,21 @@
 const records = new Map([
   ['arcBolt', 623], ['arcFan', 624], ['arcField', 625],
-  ['arcStorm', 626], ['boltDash', 628], ['brutalCharge', 629],
-  ['clawSweep', 631], ['coreNova', 632], ['dawnLance', 633],
+  ['arcStorm', 626], ['barkGuard', 627], ['boltDash', 628],
+  ['brutalCharge', 629], ['cinderGuard', 630], ['clawSweep', 631],
+  ['coreNova', 632], ['dawnLance', 633], ['duskGuard', 634],
   ['emberBolt', 635], ['fangRush', 636], ['flameRing', 637],
-  ['foamZone', 638], ['frostFan', 639], ['grovePulse', 642],
-  ['haloPulse', 643], ['iceCage', 644], ['iceShard', 645],
-  ['impactNova', 646], ['impactShot', 647], ['leafFan', 649],
+  ['foamZone', 638], ['frostFan', 639], ['frostStep', 640],
+  ['glacierGuard', 641], ['grovePulse', 642], ['haloPulse', 643],
+  ['iceCage', 644], ['iceShard', 645], ['impactNova', 646],
+  ['impactShot', 647], ['ironGuard', 648], ['leafFan', 649],
   ['nightPulse', 650], ['quakeSlam', 651], ['radiantDash', 652],
-  ['scatterLight', 654], ['seedBolt', 655], ['shadeBolt', 656],
-  ['shadeField', 657], ['shardStorm', 659], ['shardVolley', 660],
-  ['sunSpear', 663], ['surfRush', 664], ['thornRush', 665],
-  ['tideBolt', 666], ['tideWave', 668], ['vineSnare', 669],
-  ['vortex', 670], ['whiteout', 671]
+  ['rockGuard', 653], ['scatterLight', 654], ['seedBolt', 655],
+  ['shadeBolt', 656], ['shadeField', 657], ['shadeStep', 658],
+  ['shardStorm', 659], ['shardVolley', 660], ['stormGuard', 661],
+  ['sunShield', 662], ['sunSpear', 663], ['surfRush', 664],
+  ['thornRush', 665], ['tideBolt', 666], ['tideGuard', 667],
+  ['tideWave', 668], ['vineSnare', 669], ['vortex', 670],
+  ['whiteout', 671]
 ]);
 // Painted extents in source pixels, measured separately for each clip from its pivot.
 const groundRadii = new Map([
@@ -92,7 +96,7 @@ export function createArenaMoveAtlas({ PIXI, ground, front, reducedMotion }) {
     actor.sprite.rotation = angle;
     actor.sprite.scale.set(onGround ? scale / groundRadii.get(key + '/' + phase) : scale);
     // Warning progress follows the live countdown; travelling art loops on its own instance clock.
-    const ms = phase === 'warning' ? age * clip.duration : phase === 'travel' ? age % clip.duration : age;
+    const ms = phase === 'warning' ? age * clip.duration : (phase === 'travel' || phase === 'active') ? age % clip.duration : age;
     paint(actor, ms);
     return true;
   }

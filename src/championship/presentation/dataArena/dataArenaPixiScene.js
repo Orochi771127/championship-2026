@@ -182,6 +182,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const atlas = createArenaMoveAtlas({ PIXI, ground: zoneSigils, front: shots, reducedMotion });
   rollback.push(() => atlas.dispose());
   const atlasLunges = new Map();
+  // Only the player's active directional barrier participates in barrierBlocks().
+  let activeGuard = null;
+  const guardRadii = new Map([
+    ['barkGuard', 28], ['cinderGuard', 28], ['duskGuard', 28], ['glacierGuard', 28], ['ironGuard', 28],
+    ['rockGuard', 28], ['stormGuard', 30], ['sunShield', 31], ['tideGuard', 30]
+  ]);
   const warningOwners = new WeakMap();
   const kitShots = Boolean(elementFx?.drawsShots?.());
   if (elementFx) rollback.push(() => elementFx.dispose());
@@ -967,7 +973,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   function handleEvents(events) {
     for (const event of events) {
       if (event.type === 'CAST' || event.type === 'ULT_CAST') atlas.request(event.moveId);
-        if (event.type === 'ROUND_INTRO') {atlas.clear(); atlasLunges.clear(); actionEvents.clear();playerView.resetAction();mateView.resetAction();bossView?.resetAction();for(const view of rivalViews.values())view.resetAction();}
+        if (event.type === 'ROUND_INTRO') {atlas.clear(); activeGuard = null; atlasLunges.clear(); actionEvents.clear();playerView.resetAction();mateView.resetAction();bossView?.resetAction();for(const view of rivalViews.values())view.resetAction();}
       else if (['PLAYER_DOWN', 'PLAYER_RESPAWN'].includes(event.type)) actionEvents.delete(state.player.id);
       else if (['CAST', 'ULT_CAST', 'CAST_RELEASE'].includes(event.type)) actionEvents.set(event.casterId, event);
     }
@@ -1147,7 +1153,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           ring(event.x, event.y, event.radius, event.team === "player" ? 0x6ff7ff : 0xff5a3c, 0.35);
           burst(event.x, event.y, { count: 12, speed: 260, tint: state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xd8f6ff : event.effect === "IGNITE" ? 0xff9a3c : 0xbff4ff, gravity: 260, life: 0.5 }); camera.addTrauma(0.18);
           if (state.gameMode === 'RELAY') relayImpact(event.x, event.y, relayLook(event.moveId, event.team)); break;
-        case "BARRIER_UP": ring(event.x, event.y - 16, 70, 0xffe066, 0.3); break;
+        case "BARRIER_UP":
+          if (event.casterId === state.player.id) {
+            activeGuard = atlas.ready(event.moveId, 'active') ? event : null;
+            if (activeGuard) break;
+          }
+          ring(event.x, event.y - 16, 70, 0xffe066, 0.3); break;
         case "ARENA_WARNING": for (const zone of event.zones) ring(zone.x, zone.y, zone.radius, ZONE_TINT[event.kind] ?? 0xffffff, 0.5); break;
         case "ARENA_ACTIVE": for (const zone of state.relay?.arena?.zones ?? []) { ring(zone.x, zone.y, zone.radius * 1.3, ZONE_TINT[event.kind] ?? 0xffffff, 0.45); burst(zone.x, zone.y, { count: 10, speed: 160, tint: ZONE_TINT[event.kind] ?? 0xffffff, life: 0.5 }); } break;
         case "ARENA_CLAIM": ring(event.x, event.y, 80, ZONE_TINT[event.kind] ?? 0xffffff, 0.4); burst(event.x, event.y - 20, { count: 14, speed: 240, tint: ZONE_TINT[event.kind] ?? 0xffffff, life: 0.55 });
@@ -1156,7 +1167,15 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         case "EFFECTIVE": ring(event.x, event.y - 30, event.mult > 1 ? 52 : 40, event.mult > 1 ? 0xffd34d : 0x9aa4b0, 0.32);
           if (event.mult > 1) burst(event.x, event.y - 34, { count: 6, speed: 200, tint: 0xffd34d, life: 0.35 }); break;
         case "STATUS_CLEARED": burst(event.x, event.y - 24, { count: 8, speed: 180, tint: 0xd8f6ff, texture: textures.shard, gravity: 300, life: 0.45 }); puff(event.x, event.y - 10, 0xeef7ff, 3, 1); break;
-        case "BLINK": afterimage(event.fromX, event.fromY, event.x - event.fromX); burst(event.x, event.y - 20, { count: 10, speed: 200, tint: 0xd8f6ff, texture: textures.shard }); break;
+        case "BLINK":
+          if (atlas.ready(event.moveId, 'origin') && atlas.ready(event.moveId, 'arrival')) {
+            if (Math.hypot(event.x - event.fromX, event.y - event.fromY) > 0) {
+              atlas.place({}, event.moveId, 'origin', event.fromX, event.fromY - BEAM_ELEVATION, event.angle, 1, 0, false, true);
+            }
+            atlas.place(event, event.moveId, 'arrival', event.x, event.y - BEAM_ELEVATION, event.angle, 1, 0, false, true);
+            break;
+          }
+          afterimage(event.fromX, event.fromY, event.x - event.fromX); burst(event.x, event.y - 20, { count: 10, speed: 200, tint: 0xd8f6ff, texture: textures.shard }); break;
         case "RIVAL_HIT": if (!atlasContact && event.cause !== "LASER" && !(kitShots && relayMode)) { burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); contact(event.x, event.y - 30, 0xffb070); }
           damageNumber(event.x, event.y - 56, event.amount, 0xffffff); heavyHit(event.amount); break;
         case "RIVAL_DODGE": puff(event.x, event.y, 0xa89580, 3, 0.9); break;
@@ -1670,7 +1689,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     }
     for (const [zone, pair] of sigilSprites) if (!sigilSeen.has(zone)) { pair.body.destroy(); pair.light?.destroy(); sigilSprites.delete(zone); }
     const self = state.player;
-    if (self.barrier > 0) {
+    if (self.barrier <= 0) activeGuard = null;
+    const paintedGuard = activeGuard && atlas.place(activeGuard, activeGuard.moveId, 'active',
+      self.x, self.y - 16, self.barrierAngle, self.barrierRadius / guardRadii.get(activeGuard.moveId),
+      (state.time - activeGuard.t) * 1000, false);
+    if (self.barrier > 0 && !paintedGuard) {
       const half = (self.barrierArc ?? 2) / 2;
       arcPath(g, self.x, self.y - 16, self.barrierRadius ?? 64, self.barrierAngle - half, self.barrierAngle + half).stroke({ width: 7, color: 0xffe066, alpha: 0.85 });
     }

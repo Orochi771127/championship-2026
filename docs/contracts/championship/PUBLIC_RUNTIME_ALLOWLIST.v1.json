@@ -123018,7 +123018,7 @@
     },
     {
       "path": "src/championship/modes/dataArena/dataArenaSimulation.js",
-      "sha256": "89b01425e1d3ad654923e93d91d4a3387cd112396c96b5c57e8ad1a76a62af61"
+      "sha256": "d637c960d0ef23db0274ad6b7cf98eec1495e3d602c2a4b79ca992ca17115910"
     },
     {
       "path": "src/championship/modes/dataArena/dataArenaUpgrades.js",
@@ -123214,7 +123214,7 @@
     },
     {
       "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
-      "sha256": "800076177bd0a89b3e1b9c764e18034ec0547b4b8d1c554304ccc6eb0e5d085c"
+      "sha256": "638a2f4afad0ce602f1421bc765f4033fc9b7b411455f200e6c30233e87778f7"
     },
     {
       "path": "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
@@ -126252,7 +126252,7 @@
     },
     {
       "path": "src/championship/presentation/dataArena/dataArenaMoveAtlas.js",
-      "sha256": "be38e4e4b6fc4baf7d62003efd3e82342543d153519b9308960df96b9f917fc4"
+      "sha256": "7fccdd87f94604cbcdaa2e61e8414cfb7e3b4e251eae115ddc7052eaec5df4e3"
     },
     {
       "path": "assets/production/vfx/arena-moves/arcBolt.json",
@@ -126967,6 +126967,237 @@
     {
       "path": "assets/production/vfx/arena-moves/tideWave.png",
       "sha256": "e647a362470b11c537591f814e2ec8dace3f3fdca56a46ef7460f5cb42b60b1c"
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/barkGuard.json",
+      "sha256": "51536cea7d4247a0e8b435da257495612d3ec3cac57f6ab1c33b7200c3c7ab7f",
+      "jsonFields": [
+        "battleRecord",
+        "durationMs",
+        "frames",
+        "h",
+        "key",
+        "mode",
+        "phases",
+        "pivot",
+        "w",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/barkGuard.png",
+      "sha256": "44a2f643439c88a05d667eca66cc4d53094991ee626c90edbac3fe7fd6bd6b1a"
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/cinderGuard.json",
+      "sha256": "5b9cd0997be2b2b972e35722c8cd386f581bfd751b17578457e3b9436d3f5aaf",
+      "jsonFields": [
+        "battleRecord",
+        "durationMs",
+        "frames",
+        "h",
+        "key",
+        "mode",
+        "phases",
+        "pivot",
+        "w",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/cinderGuard.png",
+      "sha256": "64d7c915959079c892ead9ad4f427f058d869ff92353d3f3e611a2b8f616bb29"
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/duskGuard.json",
+      "sha256": "62699ea68b9be2563483af09a4a3a4ea2b6fb8e44abe1ee3436b09576aabeb84",
+      "jsonFields": [
+        "battleRecord",
+        "durationMs",
+        "frames",
+        "h",
+        "key",
+        "mode",
+        "phases",
+        "pivot",
+        "w",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/duskGuard.png",
+      "sha256": "a6156d09cc3524e7e7cb3719594886bc1102c3913f20e40224335cac8a83fb3a"
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/glacierGuard.json",
+      "sha256": "1974e8345cfdeaba1b9fdd3e846080f96b5f4bf15f96166474f2eaf59c283317",
+      "jsonFields": [
+        "battleRecord",
+        "durationMs",
+        "frames",
+        "h",
+        "key",
+        "mode",
+        "phases",
+        "pivot",
+        "w",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/glacierGuard.png",
+      "sha256": "573743a69a9a118f2241f24ca0d8a3a1955327ebdeea732464a797f175466ea9"
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/ironGuard.json",
+      "sha256": "e11331ff9d07094e940ec8166ebd89cfe02294f4c87dd119926483ee837355b2",
+      "jsonFields": [
+        "battleRecord",
+        "durationMs",
+        "frames",
+        "h",
+        "key",
+        "mode",
+        "phases",
+        "pivot",
+        "w",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/ironGuard.png",
+      "sha256": "d8ac2fe097420c95f86a953292ffb49c32d6733ab76b26167a79495d0dd5e8a8"
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/rockGuard.json",
+      "sha256": "d6513852b5e4c74651448b208c37add02de0f585121ed8c30e6840ebaf97107c",
+      "jsonFields": [
+        "battleRecord",
+        "durationMs",
+        "frames",
+        "h",
+        "key",
+        "mode",
+        "phases",
+        "pivot",
+        "w",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/rockGuard.png",
+      "sha256": "2992312fa7102c04a0a4ff4e26b11f15b55721497cbbb27cf8bc773564860968"
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/stormGuard.json",
+      "sha256": "a10e8f7f04a23a94138e9b0907eacaa51944699884beff88f1d13bd423679917",
+      "jsonFields": [
+        "battleRecord",
+        "durationMs",
+        "frames",
+        "h",
+        "key",
+        "mode",
+        "phases",
+        "pivot",
+        "w",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/stormGuard.png",
+      "sha256": "8142032bd9f6356ec6978d92b0f7f36ba6948580ca230fdda6ffe42649728a63"
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/sunShield.json",
+      "sha256": "c4a4dfdae232fc6b8b310a4bb8e33a96ac1e4a4bbd811a2747011bb0198347b3",
+      "jsonFields": [
+        "battleRecord",
+        "durationMs",
+        "frames",
+        "h",
+        "key",
+        "mode",
+        "phases",
+        "pivot",
+        "w",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/sunShield.png",
+      "sha256": "fb78ccf631f1fd45711c13785c884ae8439f2786b24505681a13ff7173019cee"
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/tideGuard.json",
+      "sha256": "fa9acde988cccd262ff0a60fa3f359eb10b93df94b85eff85c7bd5934e72573c",
+      "jsonFields": [
+        "battleRecord",
+        "durationMs",
+        "frames",
+        "h",
+        "key",
+        "mode",
+        "phases",
+        "pivot",
+        "w",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/tideGuard.png",
+      "sha256": "958778cd9dfe298624dea79aac4e6aea82c0736afedcc5941197606ba2d097e8"
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/frostStep.json",
+      "sha256": "34b52d02ce61dac9bcc824b01a2cc166f5944ad89d9dd17271845eb0742dada6",
+      "jsonFields": [
+        "battleRecord",
+        "durationMs",
+        "frames",
+        "h",
+        "key",
+        "mode",
+        "phases",
+        "pivot",
+        "w",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/frostStep.png",
+      "sha256": "149d805633062a3d37a99fe5dd4a8e472c216f3e0a66d41b0708eba54c75ea48"
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/shadeStep.json",
+      "sha256": "8e20f6cc0bd3cc00f2316cd7c9d8eba03628fddc6520b100e5bc4c25db16560c",
+      "jsonFields": [
+        "battleRecord",
+        "durationMs",
+        "frames",
+        "h",
+        "key",
+        "mode",
+        "phases",
+        "pivot",
+        "w",
+        "x",
+        "y"
+      ]
+    },
+    {
+      "path": "assets/production/vfx/arena-moves/shadeStep.png",
+      "sha256": "d668ca63700719305ebe0d2714a102ad61ba539f723d8c888649bfa08296731b"
     }
   ],
   "assets": [
