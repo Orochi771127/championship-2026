@@ -17,7 +17,7 @@ import { parseCharacterAssetManifest } from "../scripts/lib/external-character-a
 import { createCharacterAssetResolver } from "../src/championship/presentation/characterAssetDelivery.js";
 import { reviewedCharacterSelections } from "../src/championship/presentation/reviewedSelection.js";
 import { growthBranchHistoryIndex } from "../src/championship/contracts/productGrowthRules.js";
-import { buildBattleResultDiagnosis } from "../src/championship/app/battleResultDiagnosis.js";
+import { buildBattleResultDiagnosis, findEvolutionGateCrossings } from "../src/championship/app/battleResultDiagnosis.js";
 import { createPvpRoomSession, PVP_COUNTDOWN_MS } from "../src/championship/online/pvpRoomSession.js";
 import { createChampionshipStandaloneApp } from "../src/championship/app/championshipStandaloneApp.js";
 import { createBattleRuntime } from "../src/championship/app/battleRuntime.js";
@@ -344,9 +344,28 @@ test("battle diagnosis is strictly telemetry-backed and never fabricates causes"
   // Victory with 2 same-faction partners DOES report active resonance
   const victoryRes = buildBattleResultDiagnosis({
     outcome: { winningTeam: 0, verdict: "WIN", reason: "KNOCKOUT" },
-    participants: [{ team: 0, speciesId: "species-053" }, { team: 0, speciesId: "species-053" }]
+    participants: [
+      { team: 0, speciesId: "species-053", maxHp: 500, currentHp: 460 },
+      { team: 0, speciesId: "species-053", maxHp: 500, currentHp: 450 }
+    ]
   });
   assert.ok(victoryRes?.items.some((item) => item.kind === "resonance"));
+  assert.ok(victoryRes?.items.some((item) => item.kind === "dominant"), "high-HP spotless win highlights dominant victory");
+
+  // Clutch low-HP win + crossing evolution level gate (species-034 gen=3 gate Lv.10) surfaces both vivid highlights
+  const clutchEvo = buildBattleResultDiagnosis({
+    outcome: { winningTeam: 0, verdict: "WIN", reason: "KNOCKOUT" },
+    participants: [{ team: 0, instanceId: "p-rookie", displayName: "熔岩龍", speciesId: "species-034", maxHp: 500, currentHp: 80 }],
+    syncGains: { gains: [{ instanceId: "p-rookie", before: { level: 9 }, after: { level: 10 }, amount: 50 }] }
+  });
+  assert.ok(clutchEvo?.items.some((item) => item.kind === "clutch"), "low-HP win highlights clutch comeback");
+  assert.ok(clutchEvo?.items.some((item) => item.kind === "evo-gate"), "crossing evolution gate surfaces celebration");
+  const crossings = findEvolutionGateCrossings({
+    syncGains: { gains: [{ instanceId: "p-rookie", before: { level: 9 }, after: { level: 10 } }] },
+    participants: [{ instanceId: "p-rookie", displayName: "熔岩龍", speciesId: "species-034" }]
+  });
+  assert.equal(crossings.length, 1);
+  assert.equal(crossings[0].level, 10);
 });
 
 test("two independent PvP clients complete room handshake, simulate identical deterministic battle, agree on winner, and dedupe duplicate reports", async () => {

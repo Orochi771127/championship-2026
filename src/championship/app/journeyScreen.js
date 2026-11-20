@@ -17,6 +17,7 @@ import { talentIcon } from "../presentation/talentIconArt.js";
 import { playCeremony } from "../presentation/ceremony/ceremonyRunner.js";
 import { buildCapture } from "../presentation/ceremony/ceremonyScenes.js";
 import { requestArcadeFx } from "./ui/arcadeFx.js";
+import { findEvolutionGateCrossings } from "./battleResultDiagnosis.js";
 import { tamerRankName } from "../text/zhHant.js";
 import { RANK_UNLOCKS } from "./rankUnlocks.js";
 
@@ -655,6 +656,13 @@ export function createJourneyScreen(host) {
           } else if (g.capped) {
             notes.push(uiText("WAVE_DEBRIEF_CAPPED", { name }));
           }
+        }
+        const evoHits = findEvolutionGateCrossings({
+          syncGains,
+          participants: candidates.map((c) => ({ ...c, displayName: host.describe(c).name }))
+        });
+        for (const hit of evoHits) {
+          notes.push(uiText("DIAG_EVO_GATE_CROSSED", { name: hit.name, level: hit.level }));
         }
         if (notes.length > 0) debrief.append(el("p", "cm-journey__wave-debrief-sync", notes.join(" · ")));
       }

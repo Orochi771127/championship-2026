@@ -1105,7 +1105,11 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 .cm-vs5-result__diagnosis[data-won="false"] { border-color: rgba(255, 180, 90, 0.45); }
 .cm-vs5-result__diagnosis-title { margin: 0 0 6px; font-size: calc(13px * var(--text-scale, 1)); font-weight: 900; color: #ffe27a; letter-spacing: 0.04em; }
 .cm-vs5-result__diagnosis[data-won="true"] .cm-vs5-result__diagnosis-title { color: #6ff7ff; }
-.cm-vs5-result__diagnosis-list { margin: 0; padding: 0 0 0 16px; display: grid; gap: 4px; font-size: var(--fs-label, 12px); line-height: 1.45; color: #eef2ff; }
+.cm-vs5-result__diagnosis-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: var(--fs-label, 12px); line-height: 1.5; color: #eef2ff; }
+.cm-vs5-result__diagnosis-item { padding: 6px 9px; border-radius: 8px; background: rgba(255, 255, 255, 0.06); }
+.cm-vs5-result__diagnosis-item[data-kind="evo-gate"] { background: linear-gradient(90deg, rgba(255, 210, 63, 0.24), rgba(111, 247, 255, 0.14)); border: 1px solid rgba(255, 210, 63, 0.55); color: #fff7cc; font-weight: 800; }
+.cm-vs5-result__diagnosis-item[data-kind="clutch"],
+.cm-vs5-result__diagnosis-item[data-kind="dominant"] { background: rgba(111, 247, 255, 0.14); border: 1px solid rgba(111, 247, 255, 0.35); font-weight: 700; }
 .cm-vs5-result__pvp { margin: 8px 0 0; padding: 9px 12px; border-radius: 12px; background: rgba(14, 16, 26, 0.84); border: 1px solid rgba(57, 215, 255, 0.55); text-align: left; }
 .cm-vs5-result__pvp-title { display: block; font-size: var(--fs-label, 12px); font-weight: 900; color: #6ff7ff; }
 .cm-vs5-result__pvp-status { margin: 3px 0 0; font-size: var(--fs-label, 12px); font-weight: 700; color: #f3f0ff; }

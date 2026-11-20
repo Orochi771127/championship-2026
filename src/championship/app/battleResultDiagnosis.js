@@ -1,8 +1,49 @@
 import { factionResonance, speciesTaxonomyForId } from "../contracts/speciesTaxonomy.js";
+import { evolutionLevelShort } from "../contracts/productSyncLevel.js";
+import { nativeHuntSpeciesByIndex } from "../hunt/capture/nativeHuntSources.js";
 import { uiText } from "../text/uiText.js";
 
+function speciesIndexFromId(speciesId) {
+  const m = /(?:^|:)species-(\d+)$/.exec(String(speciesId ?? ""));
+  return m ? Number(m[1]) : null;
+}
+
 /**
- * Computes strictly telemetry-backed post-battle diagnosis lines from the
+ * Check whether any partner in `syncGains` just crossed its stage's evolution
+ * Sync Level gate during this match/run.
+ */
+export function findEvolutionGateCrossings({ syncGains = null, participants = [] } = {}) {
+  const gains = Array.isArray(syncGains?.gains) ? syncGains.gains : [];
+  if (!gains.length) return [];
+  const byId = new Map();
+  for (const p of participants ?? []) {
+    if (p?.instanceId) byId.set(p.instanceId, p);
+  }
+  const crossed = [];
+  for (const g of gains) {
+    const beforeLv = g?.before?.level ?? 0;
+    const afterLv = g?.after?.level ?? 0;
+    if (!(afterLv > beforeLv)) continue;
+    const p = byId.get(g.instanceId);
+    const idx = speciesIndexFromId(p?.speciesId ?? g.speciesId);
+    if (!Number.isInteger(idx) || idx < 8) continue;
+    let species = null;
+    try { species = nativeHuntSpeciesByIndex(idx); } catch { continue; }
+    if (!species || species.generation === 0 || species.generation >= 4) continue;
+    if (evolutionLevelShort(species.generation, beforeLv) !== null
+      && evolutionLevelShort(species.generation, afterLv) === null) {
+      crossed.push({
+        instanceId: g.instanceId,
+        name: p?.displayName ?? g.displayName ?? "",
+        level: afterLv
+      });
+    }
+  }
+  return crossed;
+}
+
+/**
+ * Computes strictly telemetry-backed post-battle highlights & comeback cues from the
  * settled match record. Every item corresponds to an observed metric from this
  * battle (never fabricated causes).
  *
@@ -13,6 +54,7 @@ import { uiText } from "../text/uiText.js";
  * @param {Array<object>} [input.participants] battle participants (team 0 = player)
  * @param {(id: string) => object|null} [input.syncOf]
  * @param {object|null} [input.skillCardState] { hand: string[], playedIds: string[] }
+ * @param {object|null} [input.syncGains]     last settled sync gains for evolution-gate breakthrough detection
  * @returns {{ title: string, items: Array<{ kind: string, text: string }>, won: boolean } | null}
  */
 export function buildBattleResultDiagnosis({
@@ -21,7 +63,8 @@ export function buildBattleResultDiagnosis({
   summary = null,
   participants = [],
   syncOf = null,
-  skillCardState = null
+  skillCardState = null,
+  syncGains = null
 } = {}) {
   if (!outcome || typeof outcome !== "object") return null;
   const won = outcome.winningTeam === 0;
@@ -33,7 +76,25 @@ export function buildBattleResultDiagnosis({
   const hasResonance = activeResonances.length > 0;
   const items = [];
 
+  for (const hit of findEvolutionGateCrossings({ syncGains, participants: playerTeam })) {
+    items.push({
+      kind: "evo-gate",
+      text: uiText("DIAG_EVO_GATE_CROSSED", { name: hit.name, level: hit.level })
+    });
+  }
+
   if (won) {
+    const teamMaxHp = playerTeam.reduce((s, p) => s + (Number.isFinite(p.maxHp) && p.maxHp > 0 ? p.maxHp : 0), 0);
+    const teamCurHp = playerTeam.reduce((s, p) => s + (Number.isFinite(p.currentHp) && p.currentHp > 0 ? p.currentHp : 0), 0);
+    const anyDown = playerTeam.some((p) => Number.isFinite(p.maxHp) && p.maxHp > 0 && (p.currentHp ?? 0) <= 0);
+    if (teamMaxHp > 0) {
+      const hpRatio = Math.max(0, Math.min(1, teamCurHp / teamMaxHp));
+      if (hpRatio <= 0.30 || (anyDown && hpRatio <= 0.40)) {
+        items.push({ kind: "clutch", text: uiText("DIAG_WIN_CLUTCH") });
+      } else if (!anyDown && hpRatio >= 0.85) {
+        items.push({ kind: "dominant", text: uiText("DIAG_WIN_DOMINANT") });
+      }
+    }
     if (hasResonance) {
       items.push({ kind: "resonance", text: uiText("DIAG_WIN_RESONANCE") });
     }
@@ -49,7 +110,7 @@ export function buildBattleResultDiagnosis({
     if (playedCount > 0) {
       items.push({ kind: "cards", text: uiText("DIAG_WIN_CARDS", { n: playedCount }) });
     }
-    return items.length ? Object.freeze({ title: uiText("DIAG_WIN_TITLE"), items: Object.freeze(items), won: true }) : null;
+    return items.length ? Object.freeze({ title: uiText("DIAG_WIN_TITLE"), items: Object.freeze(items.slice(0, 3)), won: true }) : null;
   }
 
   // Defeat or draw: surface up to 3 concrete, observed levers the player can change next match.

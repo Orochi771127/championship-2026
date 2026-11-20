@@ -2604,7 +2604,8 @@ async function mountBattleResult() {
     summary,
     participants,
     syncOf: (id) => app.getSyncLevel?.(id) ?? null,
-    skillCardState: battleRuntime?.getSkillCardCarryState?.() ?? null
+    skillCardState: battleRuntime?.getSkillCardCarryState?.() ?? null,
+    syncGains
   });
   const leaveAndOpen = (openNext) => {
     if (typeof clearActivePvpBattle === 'function') clearActivePvpBattle();
