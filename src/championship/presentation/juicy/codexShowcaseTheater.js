@@ -266,6 +266,7 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     theater.timers.clear();
     theater.moveAtlas?.dispose();
     theater.moveAtlas = null;
+    theater.moveBinding = null;
     theater.run?.dispose();
     theater.run = null;
     theater.cutIn?.dispose();
@@ -296,7 +297,8 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     view.payload = payload;
     const record = payload?.move?.recordIndex;
     const key = productArenaMoveRecord(record)?.productDonorRecord ?? record;
-    if (kind === "special" && autoMoveBindings.has(key)) view.moveAtlas = createShowcaseMoveAtlas({doc, key, fetchImpl});
+    view.moveBinding = autoMoveBindings.get(key);
+    if (kind === "special" && view.moveBinding) view.moveAtlas = createShowcaseMoveAtlas({doc, key, fetchImpl});
     view.runId = (view.runId ?? 0) + 1; // a replay is a new run, even with the same payload
     view.root.hidden = false;
     view.root.dataset.kind = kind;
@@ -601,7 +603,7 @@ export function createCodexShowcase({ doc = globalThis.document, overlayHost = d
     function impact() {
       const to = dummyPoint();
       playCeremonySound("impact", doc);
-      const binding = autoMoveBindings.get(payload.move?.recordIndex);
+      const binding = theater.moveBinding;
       const at = binding?.anchor.startsWith('caster_') ? casterPoint() : binding?.anchor === 'target_ground' ? point(dummy.body, 1) : to;
       if (!theater.moveAtlas?.play(['contact', 'target_single'], {layer:fx, from:at, width:Math.max(48, to.h), reduced:!full})) {
         const core = spawn("cm-showcase__impact", to.x, to.y);

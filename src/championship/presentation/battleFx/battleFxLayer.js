@@ -549,7 +549,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const look = owner ? describeMove(owner.ownerSlot, owner.moveId) : null;
         const vfx = owner ? vfxOf(owner.ownerSlot, owner.moveId) : null;
         const palette = vfx?.palette ?? BATTLE_FX_PALETTES[look?.palette ?? battleFxFamilyPalette(family) ?? 'neutral'] ?? BATTLE_FX_PALETTES.neutral;
-        entry = {form, palette, confirmedEndOnly: ctx.autoMoveAtlas?.supports(actor.origin?.moveId), owner: owner?.ownerSlot ?? null, tier: look?.tier ?? 'skill', points: [], ageMs: 0, origin: {x: at.x, y: at.y},
+        entry = {form, palette, confirmedEndOnly: Number.isInteger(owner?.moveId), owner: owner?.ownerSlot ?? null, tier: look?.tier ?? 'skill', points: [], ageMs: 0, origin: {x: at.x, y: at.y},
           element: vfx?.element ?? PALETTE_ELEMENT[look?.palette ?? battleFxFamilyPalette(family)] ?? 'NEUTRAL'};
         tracked.set(actor.id, entry);
         // The real launch point: where the move's own effect first appears.
