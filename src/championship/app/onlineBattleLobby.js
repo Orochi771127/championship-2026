@@ -72,7 +72,7 @@ export function mountRoomLobby(panel, { service, game, codeLength = 4, start, on
   const input = el("input", "cm-online__input cm-online__input--code"); input.inputMode = "numeric"; input.placeholder = onlineText("roomPlaceholder"); input.maxLength = 6; input.setAttribute("aria-label", onlineText("roomPlaceholder"));
   const cancel = button("leaveRoom", "cm-online__button--ghost"); cancel.hidden = true;
   row.append(create, input, join, cancel);
-  let picker = null, session = null, countdownTimer = null, reported = false;
+  let picker = null, session = null, countdownTimer = null, handedOff = false;
   const say = (text, tone = "info") => { status.hidden = !text; status.textContent = text ?? ""; status.dataset.tone = tone; };
   // While the host waits, the brag card carries the room code to the friend who will type it in.
   const bragKey = typeof brag?.onOpen === "function" ? el("button", "cm-brag-cta cm-arcade-key", brag.label ?? "") : null;
@@ -134,10 +134,13 @@ export function mountRoomLobby(panel, { service, game, codeLength = 4, start, on
       }
       case "playing":
         say(onlineText("starting"), "ok");
-        // The battle result is not tracked yet: settle the room as started-but-unreported so a finished match never keeps its slot
-        // (both sides report the same empty winner, which the server records as finished). Dropping the lobby afterwards is then safe.
-        if (!reported) { reported = true; void session?.report({ winnerId: null, outcome: "UNREPORTED" }); }
-        void start(state.prepared); break;
+        // Hand ownership of the active room session to the battle lifecycle so the real post-battle
+        // winner is reported once the deterministic battle settles (never pre-reported before play).
+        if (!handedOff) {
+          handedOff = true;
+          void start(state.prepared, { session, state });
+        }
+        break;
       case "failed": say(onlineText("roomFailed", { reason: onlineReasonText(state.reason) }), "error"); break;
       case "cancelled": say(onlineText("roomCancelled")); break;
       default: say("");
@@ -147,7 +150,7 @@ export function mountRoomLobby(panel, { service, game, codeLength = 4, start, on
     const ids = picker?.selected ?? [];
     if (!ids.length) { say(onlineText("ownTeamNeeded"), "error"); return; }
     const adapter = await service.roomAdapter();
-    session?.dispose(); reported = false;
+    session?.dispose(); handedOff = false;
     session = createPvpRoomSession({ adapter, game, codeLength, setTimer, clearTimer });
     session.subscribe(paint);
     if (role === "host") await session.host({ instanceIds: ids });
@@ -156,7 +159,7 @@ export function mountRoomLobby(panel, { service, game, codeLength = 4, start, on
   create.addEventListener("click", () => { void begin("host"); });
   join.addEventListener("click", () => { if (!/^[0-9]{4,6}$/.test(input.value.trim())) { say(onlineReasonText("INVALID"), "error"); return; } void begin("guest"); });
   cancel.addEventListener("click", () => { void session?.cancel(); });
-  return Object.freeze({ element: root, get session() { return session; }, dispose() { clearTimer(countdownTimer); session?.dispose(); service.setActiveRoom?.(null); root.remove(); } });
+  return Object.freeze({ element: root, get session() { return session; }, dispose() { clearTimer(countdownTimer); if (!handedOff) session?.dispose(); service.setActiveRoom?.(null); root.remove(); } });
 }
 
 export function mountQuickMatchLobby(panel, { service, game, start, doc = globalThis.document } = {}) {

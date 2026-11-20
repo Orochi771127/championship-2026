@@ -213,7 +213,9 @@ export async function createGateSelectView({ root, source, mountWorld }) {
   const fee = element("dd", "", "—");
   const wallet = element("dd", "", "—");
   costs.append(element("dt", "", "入場費"), fee, element("dt", "", "持有金額"), wallet);
-  preview.append(previewImage, previewCopy, costs);
+  const previewHabitat = element("div", "cm-vs2-preview__habitat");
+  previewHabitat.hidden = true;
+  preview.append(previewImage, previewCopy, costs, previewHabitat);
   const admissionStatus = element("span", "cm-vs2-status cm-vs2-gate-admission");
   admissionStatus.setAttribute("role", "status");
 
@@ -372,6 +374,21 @@ export async function createGateSelectView({ root, source, mountWorld }) {
         buttons.set(gate.gateId, button);
         list.append(button);
       }
+      const fusionCount = gate.habitat?.fusionMatches?.length ?? 0;
+      button.dataset.hasFusionMatch = String(fusionCount > 0);
+      const apertureNode = button.querySelector?.(".cm-vs2-gate__aperture");
+      if (apertureNode) {
+        let fusionBadge = apertureNode.querySelector?.(".cm-vs2-gate__fusion");
+        if (fusionCount > 0) {
+          if (!fusionBadge) {
+            fusionBadge = element("span", "cm-vs2-gate__fusion");
+            apertureNode.append(fusionBadge);
+          }
+          fusionBadge.textContent = uiText("GATE_FUSION_MATCH_COUNT", { count: fusionCount });
+        } else {
+          fusionBadge?.remove?.();
+        }
+      }
       button.setAttribute("aria-selected", String(gate.selected));
       button.dataset.selected = String(gate.selected);
       const feeLabel = button.querySelector?.(".cm-vs2-gate__fee");
@@ -390,6 +407,31 @@ export async function createGateSelectView({ root, source, mountWorld }) {
           if (previewImage.getAttribute('src') !== thumbnail.src) previewImage.src = thumbnail.src;
           previewImage.alt = uiText("{gate}・日間場地預覽", { gate: gate.displayName });
         } else previewImage.removeAttribute('src');
+        const habitat = gate.habitat;
+        if (habitat?.sampleSpecies?.length) {
+          previewHabitat.hidden = false;
+          previewHabitat.replaceChildren();
+          const labelText = habitat.fusionMatches.length > 0
+            ? uiText("GATE_FUSION_TARGETS", { partners: habitat.partnerTargets.slice(0, 3).join("、") })
+            : uiText("GATE_WILD_HABITAT", { count: habitat.totalSpecies });
+          const heading = element("span", "cm-vs2-preview__habitat-label", labelText);
+          heading.dataset.fusion = String(habitat.fusionMatches.length > 0);
+          const chips = element("div", "cm-vs2-preview__chips");
+          for (const sp of habitat.sampleSpecies) {
+            const chip = element("span", "cm-vs2-preview__chip", sp.displayName);
+            if (sp.isFusionMatch) {
+              chip.dataset.fusion = "true";
+              chip.title = uiText("GATE_FUSION_TARGETS", { partners: sp.forPartners.join("、") });
+            }
+            chips.append(chip);
+          }
+          const extra = habitat.totalSpecies - habitat.sampleSpecies.length;
+          if (extra > 0) chips.append(element("span", "cm-vs2-preview__chip cm-vs2-preview__chip--more", uiText("GATE_WILD_MORE", { count: extra })));
+          previewHabitat.append(heading, chips);
+        } else {
+          previewHabitat.hidden = true;
+          previewHabitat.replaceChildren();
+        }
       }
     }
     // Globe and carousel follow each other: a new choice centres its card with a
@@ -414,6 +456,8 @@ export async function createGateSelectView({ root, source, mountWorld }) {
       previewImage.removeAttribute('src');
       fee.textContent = uiText("—");
       delete fee.dataset.free;
+      previewHabitat.hidden = true;
+      previewHabitat.replaceChildren();
     }
     wallet.textContent = Number.isSafeInteger(block.walletBits) ? uiText("{bits} 位元幣", { bits: block.walletBits }) : "—";
     confirm.disabled = !block.canConfirm;

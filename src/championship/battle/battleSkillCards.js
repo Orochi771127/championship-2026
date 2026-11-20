@@ -16,10 +16,11 @@ const REGEN_EVERY_FRAMES = 2 * SKILL_CARD_FPS;
  * @param {number} [options.team]     the local team index
  * @param {(slot:number)=>number} options.teamOf
  */
-export function createBattleSkillCards({hand = [], team = 0, teamOf} = {}) {
+export function createBattleSkillCards({hand = [], playedIds = [], team = 0, teamOf} = {}) {
   const cards = (Array.isArray(hand) ? hand : []).map(getSkillCard).filter(Boolean).slice(0, 3);
   const on = cards.length > 0 && typeof teamOf === 'function';
-  const played = new Map(); // id -> frame it landed
+  const priorPlayed = new Set((Array.isArray(playedIds) ? playedIds : []).filter(id => cards.some(c => c.id === id)));
+  const played = new Map([...priorPlayed].map(id => [id, -1])); // id -> frame it landed (-1 = earlier wave)
   const queue = [];
   const effects = []; // {card, until, slot?}
   let signatureBoost = 0, guts = false;
@@ -27,6 +28,8 @@ export function createBattleSkillCards({hand = [], team = 0, teamOf} = {}) {
   const alive = c => c && c.currentHp > 0;
   const active = (kind, frame) => effects.filter(e => e.card.kind === kind && e.until > frame);
   let lastFrame = 0;
+  const usedThisWave = () => (played.size - priorPlayed.size) + queue.length;
+  const remainingCount = () => Math.max(0, cards.length - priorPlayed.size);
 
   function land(card, frame, slots) {
     let changed = false;
@@ -64,7 +67,7 @@ export function createBattleSkillCards({hand = [], team = 0, teamOf} = {}) {
       const card = cards.find(entry => entry.id === id);
       if (!card) return Object.freeze({ok: false, reason: 'NOT_IN_HAND'});
       if (played.has(id) || queue.includes(card)) return Object.freeze({ok: false, reason: 'ALREADY_PLAYED'});
-      if (played.size + queue.length >= skillCardsAllowedAt(frame, cards.length)) return Object.freeze({ok: false, reason: 'NOT_READY'});
+      if (usedThisWave() >= skillCardsAllowedAt(frame, remainingCount())) return Object.freeze({ok: false, reason: 'NOT_READY'});
       queue.push(card);
       return Object.freeze({ok: true, id});
     },
@@ -114,10 +117,28 @@ export function createBattleSkillCards({hand = [], team = 0, teamOf} = {}) {
     },
     /** For the hand on screen: each card's state and when the next one becomes playable. */
     snapshot(frame = lastFrame) {
-      const allowed = skillCardsAllowedAt(frame, cards.length), used = played.size + queue.length;
-      return Object.freeze({on, frame, nextFrame: used < cards.length ? skillCardNextFrame(used) : null, allowed, used,
+      const rem = remainingCount(), waveUsed = usedThisWave(), allowed = skillCardsAllowedAt(frame, rem);
+      const totalUsed = played.size + queue.length;
+      return Object.freeze({on, frame, nextFrame: waveUsed < rem ? skillCardNextFrame(waveUsed) : null, allowed, used: totalUsed,
         cards: Object.freeze(cards.map(card => Object.freeze({id: card.id, line: card.line, kind: card.kind,
-          state: played.has(card.id) || queue.includes(card) ? 'PLAYED' : used < allowed ? 'READY' : 'WAIT'})))});
+          state: played.has(card.id) || queue.includes(card) ? 'PLAYED' : waveUsed < allowed ? 'READY' : 'WAIT'})))});
+    },
+    /** Cross-wave carry-over state: restore cards already played in earlier waves of the same run. */
+    restorePlayed(ids = []) {
+      if (!on || !Array.isArray(ids)) return;
+      for (const id of ids) {
+        if (cards.some(card => card.id === id) && !played.has(id)) {
+          priorPlayed.add(id);
+          played.set(id, -1);
+        }
+      }
+    },
+    /** Cross-wave carry-over state: exact drawn hand and which cards are already spent (never redrawn or refilled). */
+    exportState() {
+      return Object.freeze({
+        hand: Object.freeze(cards.map(card => card.id)),
+        playedIds: Object.freeze([...new Set([...played.keys(), ...queue.map(card => card.id)])])
+      });
     },
     /** The reward cards played this battle, for a won settlement: {bitsPercent, syncPercent, crystals, ticketPercent}. */
     rewards() {

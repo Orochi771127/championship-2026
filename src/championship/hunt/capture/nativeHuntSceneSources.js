@@ -60,6 +60,11 @@ export function createNativeHuntEnvironment(data) {
   });
 }
 
+export function nativeHuntBiomeIndexForGate(biomeId) {
+  const gate = source.gates.find(row => row.biomeId === biomeId);
+  return gate ? (gate.dayIndex >> 1) : null;
+}
+
 export function resolveNativeHuntSceneSources({ biomeId, hour, season, expansion = null } = {}) {
   const gate = source.gates.find(row => row.biomeId === biomeId);
   if (!gate) throw Error("HUNT_SCENE_GATE_REQUIRED");

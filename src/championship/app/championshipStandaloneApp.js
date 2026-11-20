@@ -109,6 +109,7 @@ import { gateAdmission, isGateUnlocked } from "../gate/gateAdmission.js";
 import { createHuntWorld } from "../hunt/huntWorld.js";
 import { applyNativeHuntReturn } from "../hunt/capture/nativeHuntHistory.js";
 import { productHuntCatalogForBiome, resolveProductHuntPoolSources, nativeHuntSpeciesByIndex } from "../hunt/capture/nativeHuntSources.js";
+import { nativeHuntBiomeIndexForGate } from "../hunt/capture/nativeHuntSceneSources.js";
 import { nativeIndividualProfile, projectNativeIndividualStats } from "../raising/nativeIndividualProfile.js";
 import { createNativeRaisingStarter } from "../raising/nativeRaisingStarter.js";
 import {createNativeHuntIndividual} from '../hunt/capture/nativeHuntIndividual.js';
@@ -830,8 +831,20 @@ export function createChampionshipStandaloneApp({
       // Owner 2026-11-04: its next form would overfill the cage for this tamer rank.
       crowded:Boolean(actor.capacityBlocked),
       star:syncOf(syncLevels,id).star, // R3: the star emblem on the ranch card
+      starCapped:Boolean(syncOf(syncLevels,id).capped),
+      fusionCount:fusionFodderCountOf(id),
       // R2: its conditions already choose a next form, but its Sync Level is under the stage's gate.
       evolveLevel:actor.levelBlocked?evolutionLevelNeed(id,fields['000']):null});
+  }
+  function fusionFodderCountOf(baseId){
+    if(!raising?.collection?.length||fusionSpeciesOf(baseId)===null)return 0;
+    let count=0;
+    for(const entry of raising.collection){
+      if(entry.instanceId===baseId)continue;
+      if(fusionHomeFodderRefusal(entry.instanceId)!==null)continue;
+      if(fusionLineOf(baseId,fusionSpeciesOf(entry.instanceId))>0)count+=1;
+    }
+    return count;
   }
   /** R2: `{need, level}` while this partner is too low to evolve out of its stage (null in the playtest and above the gate). */
   function evolutionLevelNeed(instanceId,speciesIndex){
@@ -1272,10 +1285,11 @@ export function createChampionshipStandaloneApp({
     savePort.markDirty();
   }
 
-  function enterPreparedLocalBattle({mode,attemptId,playerInstanceIds=[],passwords=null,linkKey=null,rngPreparation}){
+  function enterPreparedLocalBattle({mode,attemptId,playerInstanceIds=[],passwords=null,linkKey=null,rngPreparation,stayInField=false}){
     requireSession();
     if(battleTransactionActive)return {ok:false,reason:'TRANSACTION_ACTIVE'};
-    if(screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return {ok:false,reason:'BATTLE_SELECT_NOT_ACTIVE'};
+    const inFieldWave=stayInField&&mode===2&&screens.current()===CHAMPIONSHIP_SCREENS.BATTLE_FIELD&&!battleEconomy.active;
+    if(!inFieldWave&&screens.current()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT)return {ok:false,reason:'BATTLE_SELECT_NOT_ACTIVE'};
     const prepared=battleRngPreparations.get(rngPreparation);
     const passwordMode=mode===4,linkMode=mode===3,transientMode=passwordMode||linkMode;
     if(!prepared||prepared.localMode!==mode||prepared.session!==session||prepared.base!==JSON.stringify(gameplayRngSnapshot())
@@ -1292,7 +1306,8 @@ export function createChampionshipStandaloneApp({
       mode===2&&prepared.freeMatch.kind!=='SPAR'&&prepared.freeMatch.kind!=='WAVE'?{begin:attemptId,kind:'FREE'}:null);
     if(!result.ok||result.duplicate)return result;
     battleRngPreparations.delete(rngPreparation);battlePartyIds=transientMode?null:[...playerInstanceIds];
-    screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);publishScreens();return result;
+    if(!inFieldWave)screens.enter(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);
+    publishScreens();return result;
   }
 
   function restoreCandidate(save) {
@@ -3805,6 +3820,60 @@ export function createChampionshipStandaloneApp({
         state: isGateUnlocked(gate, progressionContext()) ? "AVAILABLE" : "LOCKED" })));
     },
 
+    getGateHabitatSummary(biomeId) {
+      if (tutorialBaseline || typeof biomeId !== "string") return null;
+      const biomeIndex = nativeHuntBiomeIndexForGate(biomeId);
+      if (biomeIndex === null) return null;
+      const catalog = productHuntCatalogForBiome(biomeIndex);
+      const homes = listRaisingInstances(instanceSources());
+      const fusionMatches = [];
+      const others = [];
+      const seen = new Set();
+      for (const entry of catalog) {
+        const idx = entry.speciesIndex;
+        if (seen.has(idx)) continue;
+        seen.add(idx);
+        const speciesId = `species-${String(idx).padStart(3, "0")}`;
+        const displayName = speciesDisplayName(speciesId);
+        const forPartners = [];
+        for (const home of homes) {
+          if (fusionLineOf(home.instanceId, idx) > 0) {
+            const name = home.displayName ?? speciesDisplayName(home.speciesId);
+            if (!forPartners.includes(name)) forPartners.push(name);
+          }
+        }
+        if (forPartners.length > 0) {
+          fusionMatches.push(Object.freeze({
+            speciesIndex: idx,
+            speciesId,
+            displayName,
+            isFusionMatch: true,
+            forPartners: Object.freeze(forPartners)
+          }));
+        } else {
+          others.push(Object.freeze({
+            speciesIndex: idx,
+            speciesId,
+            displayName,
+            isFusionMatch: false,
+            forPartners: Object.freeze([])
+          }));
+        }
+      }
+      const partnerTargets = [];
+      for (const m of fusionMatches) {
+        for (const p of m.forPartners) if (!partnerTargets.includes(p)) partnerTargets.push(p);
+      }
+      const sampleSpecies = [...fusionMatches, ...others].slice(0, 6);
+      return Object.freeze({
+        biomeIndex,
+        totalSpecies: seen.size,
+        fusionMatches: Object.freeze(fusionMatches),
+        partnerTargets: Object.freeze(partnerTargets),
+        sampleSpecies: Object.freeze(sampleSpecies)
+      });
+    },
+
     getGateAdmission(gateId = confirmedGateId ?? selectedGateId) {
       if(tutorialBaseline)return Object.freeze({canConfigure:gateId===TUTORIAL_GATE.gateId&&!tutorialPendingOpening&&!tutorialTransitionActive&&nativeOpening.checkpoint.stage==='gate-select',
         canEnter:false,chargeBits:0,walletBits:requireShop().getBits(),reason:gateId===TUTORIAL_GATE.gateId?'AVAILABLE':'NO_GATE_SELECTED'});
@@ -4971,10 +5040,10 @@ export function createChampionshipStandaloneApp({
       return {ok:true,presetIndices:[...foes.presets],arenaIndex,foeBoostPercent:foes.foeBoostPercent,boss:foes.boss,wave:waveRun.wave,
         individuals:party.individuals,rngPreparation,playerInstanceIds:standing};
     },
-    enterWaveBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation}={}){
+    enterWaveBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation,stayInField=false}={}){
       const prepared=battleRngPreparations.get(rngPreparation),wave=prepared?.wave;
       if(!wave||!waveRun||waveRun.status!=='FIGHTING')return {ok:false,reason:'NO_WAVE_TO_FIGHT'};
-      const result=enterPreparedLocalBattle({mode:2,attemptId,playerInstanceIds,rngPreparation});
+      const result=enterPreparedLocalBattle({mode:2,attemptId,playerInstanceIds,rngPreparation,stayInField});
       if(result.ok&&!result.duplicate)pendingWave=Object.freeze({attemptId,wave:wave.wave,presets:wave.presets});
       return result;
     },

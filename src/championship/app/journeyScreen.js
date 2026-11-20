@@ -8,6 +8,9 @@
 
 import { journeyText as t } from "../text/journeyText.js";
 import { syncText } from "../text/syncLevelText.js";
+import { uiText } from "../text/uiText.js";
+import { taxonomyText } from "../text/taxonomyText.js";
+import { factionResonance, speciesTaxonomyForId } from "../contracts/speciesTaxonomy.js";
 import { createActionPortrait } from "../presentation/juicy/actionPortrait.js";
 import { tamerEmblem, tamerLevelBadge, flyEmblems } from "../presentation/tamerEmblemArt.js";
 import { talentIcon } from "../presentation/talentIconArt.js";
@@ -68,7 +71,7 @@ export function createJourneyScreen(host) {
   root.setAttribute("role", "dialog");
   root.setAttribute("aria-label", t("title"));
   let tab = host.prefill?.tab ?? "TOWER", candidates = [], selectedFloor = null, team = [], busy = false, disposed = false;
-  let selectedZone = host.prefill?.zone ?? null, selectedStage = null;
+  let selectedZone = host.prefill?.zone ?? null, selectedStage = null, dismissedWaveRunId = null;
 
   const head = el("header", "cm-journey__head");
   const back = button("cm-journey__back cm-arcade-key", t("close"), () => close());
@@ -131,6 +134,11 @@ export function createJourneyScreen(host) {
     quick.disabled = !patrol.quickAvailable;
     quick.dataset.journeyAction = "quick";
     actions.append(claim, quick);
+    if (host.tamer && frame.crystals > 0 && tab !== "FEED") {
+      const upgrade = button("cm-journey__key cm-arcade-key cm-journey__key--tamer", uiText("TAMER_UPGRADE_SHORT"), () => { tab = "FEED"; paint(); });
+      upgrade.dataset.journeyAction = "open-feed";
+      actions.append(upgrade);
+    }
     pod.append(top, held, actions);
   }
 
@@ -170,6 +178,65 @@ export function createJourneyScreen(host) {
     return row;
   }
 
+  function teamResonanceBanner(selectedIds) {
+    const picked = selectedIds.map((id) => candidates.find((c) => c.instanceId === id)).filter(Boolean);
+    const factions = picked.map((entry) => speciesTaxonomyForId(entry.speciesId)?.faction);
+    const active = factionResonance(factions);
+    const bar = el("p", "cm-journey__resonance");
+    bar.dataset.active = String(active.length > 0);
+    if (active.length > 0) {
+      bar.textContent = active.map((id) => `${uiText("CHALLENGE_TEAM_RESONANCE", { label: taxonomyText(`resonance.${id}`) })} · ${taxonomyText(`resonance.${id}.desc`)}`).join(" ／ ");
+    } else {
+      bar.textContent = `${taxonomyText("resonance.title")}：${taxonomyText("resonance.none")}`;
+    }
+    return bar;
+  }
+
+  function squadTacticsStrip(selectedIds) {
+    if (!host.practice || !selectedIds.length) return null;
+    const p = host.practice, pt = p.text;
+    const wrap = el("div", "cm-journey__squad-tactics");
+    for (const id of selectedIds) {
+      const entry = candidates.find((c) => c.instanceId === id);
+      if (!entry) continue;
+      const look = host.describe(entry), current = p.tacticOf(id);
+      const row = el("div", "cm-journey__squad-tactic");
+      row.dataset.instanceId = id;
+      row.append(el("span", "cm-journey__squad-tactic-name", look.name));
+      const keys = el("div", "cm-journey__squad-tactic-keys");
+      for (const value of [0, 1, 2]) {
+        const key = button("cm-journey__tactic-pill", pt(`plan.${value}`), () => {
+          if (!busy) { p.setTactic(id, value); paint(); }
+        });
+        key.setAttribute("aria-pressed", String(value === current));
+        key.dataset.plan = String(value);
+        keys.append(key);
+      }
+      row.append(keys);
+      wrap.append(row);
+    }
+    return wrap;
+  }
+
+  function emptyTeamCard() {
+    const box = el("div", "cm-journey__empty-team");
+    box.append(el("p", "cm-journey__empty-hint", uiText("JOURNEY_NO_TEAM_HINT")));
+    const reasons = candidates
+      .filter((c) => c.admission && !c.admission.ok)
+      .slice(0, 3)
+      .map((c) => {
+        const look = host.describe(c);
+        return c.admission?.message ? `${look.name}：${c.admission.message}` : look.name;
+      });
+    for (const line of reasons) box.append(el("p", "cm-journey__empty-reason", line));
+    if (typeof host.onGoHunt === "function") {
+      const goHunt = button("cm-journey__go cm-arcade-key cm-journey__hunt-cta", uiText("JOURNEY_NO_TEAM_CTA"), () => host.onGoHunt());
+      goHunt.dataset.journeyAction = "go-hunt";
+      box.append(goHunt);
+    }
+    return box;
+  }
+
   function paintTower() {
     const frame = host.frame();
     if (selectedFloor === null || selectedFloor > frame.next) selectedFloor = frame.next;
@@ -190,7 +257,8 @@ export function createJourneyScreen(host) {
     if (info.cleared) rewards.dataset.claimed = "true";
     detail.append(rewards, el("p", "cm-journey__team-title", t("tower.team")));
     const roster = el("div", "cm-journey__team");
-    for (const entry of candidates.filter((c) => c.admission?.ok)) {
+    const eligible = candidates.filter((c) => c.admission?.ok);
+    for (const entry of eligible) {
       const look = host.describe(entry), sync = host.syncOf(entry.instanceId);
       const chip = button("cm-journey__member", "", () => {
         team = team.includes(entry.instanceId) ? team.filter((id) => id !== entry.instanceId) : team.length < 3 ? [...team, entry.instanceId] : team;
@@ -205,7 +273,9 @@ export function createJourneyScreen(host) {
     const go = button("cm-journey__go cm-arcade-key", t("tower.challenge", { floor: selectedFloor }), () => void start(selectedFloor));
     go.dataset.journeyAction = "challenge";
     go.disabled = busy || team.length === 0 || !info.open;
-    detail.append(roster, go);
+    const tactics = squadTacticsStrip(team);
+    if (eligible.length === 0) detail.append(emptyTeamCard(), go);
+    else detail.append(roster, teamResonanceBanner(team), ...(tactics ? [tactics] : []), go);
     panel.append(detail);
     body.replaceChildren(panel);
   }
@@ -302,6 +372,7 @@ export function createJourneyScreen(host) {
     const zone = frame.zones[selectedZone - 1];
     if (selectedStage === null || !zone.stages[selectedStage - 1]?.open) selectedStage = [...zone.stages].reverse().find((st) => st.open)?.stage ?? 1;
     const panel = el("div", "cm-journey__zones");
+    panel.append(el("p", "cm-journey__side-tag", uiText("DATA_ARENA_SIDE_TAG")));
     const strip = el("div", "cm-journey__zone-strip");
     strip.setAttribute("role", "tablist");
     for (const z of frame.zones) {
@@ -388,7 +459,8 @@ export function createJourneyScreen(host) {
     const partnerId = series?.instanceId ?? practicePick;
     panel.append(el("p", "cm-journey__team-title", pt("practice.partner")));
     const roster = el("div", "cm-journey__team");
-    for (const entry of candidates.filter((c) => c.admission?.ok)) {
+    const eligible = candidates.filter((c) => c.admission?.ok);
+    for (const entry of eligible) {
       const look = host.describe(entry);
       const chip = button("cm-journey__member", "", () => {
         if (busy) return;
@@ -400,6 +472,7 @@ export function createJourneyScreen(host) {
       chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name), ...(look.styleChip ? [look.styleChip] : []));
       roster.append(chip);
     }
+    if (eligible.length === 0) { panel.append(emptyTeamCard()); body.replaceChildren(panel); return; }
     panel.append(roster);
     if (!partnerId) { body.replaceChildren(panel); return; }
     // P2: the TP this partner carries into the next bout (what a skill-heavy plan spends).
@@ -501,6 +574,12 @@ export function createJourneyScreen(host) {
     card.append(waveArt("threat", "cm-journey__wave-art"), el("strong", "cm-journey__wave-title", w.text("mode.challenge")));
     if (w.best?.() > 0) card.append(el("span", "cm-journey__wave-chip", w.text("best", { n: w.best() })));
     panel.append(card);
+    const meta = el("div", "cm-journey__wave-meta");
+    meta.append(
+      el("span", "cm-journey__wave-brief", uiText("CHALLENGE_THREAT_LINE")),
+      el("span", "cm-journey__wave-safe", uiText("CHALLENGE_RULE_SAFE"))
+    );
+    panel.append(meta);
     if (run) {
       // A run saved between waves (a reload or the field's back): its loot, and the same two keys as the rest.
       const loot = el("div", "cm-journey__wave-loot");
@@ -522,23 +601,83 @@ export function createJourneyScreen(host) {
       body.replaceChildren(panel);
       return;
     }
+    const finished = frame?.finished?.mode === "CHALLENGE" && frame.finished.runId !== dismissedWaveRunId ? frame.finished : null;
+    if (finished) {
+      const debrief = el("section", "cm-journey__wave-debrief");
+      debrief.dataset.status = String(finished.status ?? "");
+      const headRow = el("div", "cm-journey__wave-debrief-head");
+      const heading = el("strong", "cm-journey__wave-debrief-title", uiText("WAVE_DEBRIEF_TITLE"));
+      headRow.append(heading);
+      if (finished.waves > 0 && finished.waves >= (w.best?.() ?? 0)) {
+        headRow.append(el("span", "cm-journey__wave-debrief-best", uiText("WAVE_DEBRIEF_NEW_BEST")));
+      }
+      const dismiss = button("cm-journey__wave-debrief-close", "✕", () => {
+        dismissedWaveRunId = finished.runId;
+        paint();
+      });
+      dismiss.setAttribute("aria-label", uiText("WAVE_DEBRIEF_DISMISS"));
+      headRow.append(dismiss);
+      const outcomeLine = el("p", "cm-journey__wave-debrief-status", w.text(`over.${finished.status}`));
+      const statsRow = el("div", "cm-journey__wave-debrief-stats");
+      statsRow.append(el("span", "cm-journey__wave-debrief-pill", w.text("cleared", { n: finished.waves })));
+      statsRow.append(el("span", "cm-journey__wave-debrief-pill cm-journey__wave-debrief-pill--bits", uiText("WAVE_DEBRIEF_BITS", { bits: (finished.bits ?? 0).toLocaleString() })));
+      const itemTotal = Object.values(finished.items ?? {}).reduce((sum, n) => sum + (Number(n) || 0), 0);
+      if (itemTotal > 0) {
+        statsRow.append(el("span", "cm-journey__wave-debrief-pill", uiText("WAVE_DEBRIEF_ITEMS", { count: itemTotal })));
+      }
+      debrief.append(headRow, outcomeLine, statsRow);
+      const syncGains = w.lastSyncGains?.();
+      if (finished.waves > 0 && syncGains?.gains?.length) {
+        const totalExp = syncGains.gains.reduce((sum, g) => sum + (g.amount ?? 0), 0);
+        const notes = [];
+        if (totalExp > 0) notes.push(uiText("WAVE_DEBRIEF_SYNC_EXP", { exp: totalExp.toLocaleString() }));
+        for (const g of syncGains.gains) {
+          const entry = candidates.find((c) => c.instanceId === g.instanceId);
+          const name = entry ? host.describe(entry).name : g.instanceId;
+          if ((g.after?.level ?? 0) > (g.before?.level ?? 0)) {
+            notes.push(uiText("WAVE_DEBRIEF_LEVEL_UP", { name, before: g.before.level, after: g.after.level }));
+          } else if (g.capped) {
+            notes.push(uiText("WAVE_DEBRIEF_CAPPED", { name }));
+          }
+        }
+        if (notes.length > 0) debrief.append(el("p", "cm-journey__wave-debrief-sync", notes.join(" · ")));
+      }
+      const nextActions = el("div", "cm-journey__wave-debrief-actions");
+      if (typeof host.onGoRoster === "function") {
+        const rosterBtn = button("cm-journey__key cm-arcade-key", uiText("LOOP_GO_ROSTER"), () => host.onGoRoster());
+        rosterBtn.dataset.journeyAction = "debrief-roster";
+        nextActions.append(rosterBtn);
+      }
+      if (typeof host.onGoHunt === "function") {
+        const huntBtn = button("cm-journey__key cm-arcade-key", uiText("LOOP_GO_HUNT"), () => host.onGoHunt());
+        huntBtn.dataset.journeyAction = "debrief-hunt";
+        nextActions.append(huntBtn);
+      }
+      if (nextActions.childElementCount > 0) debrief.append(nextActions);
+      panel.append(debrief);
+    }
     panel.append(el("p", "cm-journey__team-title", w.text("team", { n: `${team.length}/3` })));
     const roster = el("div", "cm-journey__team");
-    for (const entry of candidates.filter((c) => c.admission?.ok)) {
-      const look = host.describe(entry);
+    const eligible = candidates.filter((c) => c.admission?.ok);
+    for (const entry of eligible) {
+      const look = host.describe(entry), sync = host.syncOf(entry.instanceId);
       const chip = button("cm-journey__member", "", () => {
         team = team.includes(entry.instanceId) ? team.filter((id) => id !== entry.instanceId) : team.length < 3 ? [...team, entry.instanceId] : team;
         paint();
       });
       chip.dataset.instanceId = entry.instanceId;
       chip.setAttribute("aria-pressed", String(team.includes(entry.instanceId)));
-      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name));
+      const lvLabel = sync.next > 0 ? `★${sync.star ?? 1} ${syncText("level", { level: sync.level })}` : `★${sync.star ?? 1} ${syncText("level.max")}`;
+      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name), ...(look.styleChip ? [look.styleChip] : []),
+        el("span", "cm-journey__member-lv", lvLabel));
       roster.append(chip);
     }
     const go = button("cm-journey__go cm-arcade-key", w.text("start"), () => void startChallenge([...team]));
     go.dataset.journeyAction = "wave-start";
     go.disabled = busy || team.length === 0;
-    panel.append(roster, go);
+    const tactics = squadTacticsStrip(team);
+    if (eligible.length === 0) panel.append(emptyTeamCard(), go);
+    else panel.append(roster, teamResonanceBanner(team), ...(tactics ? [tactics] : []), go);
     body.replaceChildren(panel);
   }
   async function startChallenge(ids) {
@@ -589,6 +728,7 @@ export function createJourneyScreen(host) {
     try { candidates = await host.candidates(); } catch { candidates = []; }
     const frame = host.frame(), usable = new Set(candidates.filter((c) => c.admission?.ok).map((c) => c.instanceId));
     team = (host.prefill?.team ?? frame.team).filter((id) => usable.has(id)).slice(0, 3);
+    if (team.length === 0) team = [...usable].slice(0, 3);
     if (Number.isInteger(host.prefill?.floor)) selectedFloor = host.prefill.floor;
     paint();
     if (host.prefill?.autoStart && team.length) void start(selectedFloor ?? frame.next);

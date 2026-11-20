@@ -207,7 +207,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
   const starsChip = node('span', 'int-rh2-companion__stars'); starsChip.hidden = true;
   // ROADMAP_R2_20261118: ready to evolve, but its Sync Level is under the stage's gate.
   const levelChip = node('span', 'int-rh2-companion__evolve-level'); levelChip.hidden = true;
-  placeRow.append(placeChip, starsChip, moodChip, habitatChip, levelChip, crowdedChip);
+  const fusionChip = node('span', 'int-rh2-companion__fusion'); fusionChip.hidden = true;
+  placeRow.append(placeChip, starsChip, fusionChip, moodChip, habitatChip, levelChip, crowdedChip);
   const more = node("span", "int-rh2-companion__more", "詳細");
   more.setAttribute("aria-hidden", "true");
 
@@ -569,6 +570,20 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
       const count = node('b', 'int-rh2-companion__stars-count', String(partner.star));
       starsChip.replaceChildren(starEmblem({ on: true, size: 16 }), count);
       starsChip.setAttribute('aria-label', `★${partner.star}`);
+    }
+    const fusionCount = Number(partner?.fusionCount) || 0;
+    const starCapped = Boolean(partner?.starCapped);
+    const showFusion = fusionCount > 0 || starCapped;
+    writeHidden(fusionChip, !showFusion);
+    if (showFusion) {
+      const mode = fusionCount > 0 && starCapped ? 'star-up' : fusionCount > 0 ? 'fuse' : 'capped';
+      writeData(fusionChip, 'mode', mode);
+      const label = mode === 'star-up'
+        ? uiText('RANCH_FUSION_STAR_UP', { count: fusionCount })
+        : mode === 'fuse'
+          ? uiText('RANCH_FUSION_AVAILABLE', { count: fusionCount })
+          : uiText('RANCH_STAR_CAPPED');
+      writeText(fusionChip, label);
     }
     writeHidden(levelChip, !partner?.evolveLevel);
     if (partner?.evolveLevel && levelChip.dataset.need !== `${partner.evolveLevel.need}:${partner.evolveLevel.level}`) {

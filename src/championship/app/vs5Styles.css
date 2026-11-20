@@ -1098,3 +1098,25 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
   .cm-vs5-hub__option { min-height: 40px; padding: 6px 12px; }
   .cm-vs5-hub__option > span { display: none; }
 }
+/* Gameplay convergence: side-mode Data Arena, telemetry-backed result diagnosis, PvP sync status & next-step row */
+.cm-vs5-data-arena--side { margin-top: 4px; padding: 8px 12px; min-height: 44px; opacity: 0.94; }
+.cm-vs5-data-arena__side-tag { display: inline-block; margin-right: 6px; padding: 1px 7px; border-radius: 999px; background: rgba(255, 111, 181, 0.25); color: #ffc2e0; font-size: calc(11px * var(--text-scale, 1)); font-weight: 900; vertical-align: middle; }
+.cm-vs5-result__diagnosis { margin: 10px 0 0; padding: 10px 12px; border-radius: 12px; background: rgba(14, 16, 26, 0.65); border: 1px solid rgba(111, 247, 255, 0.3); text-align: left; }
+.cm-vs5-result__diagnosis[data-won="false"] { border-color: rgba(255, 180, 90, 0.45); }
+.cm-vs5-result__diagnosis-title { margin: 0 0 6px; font-size: calc(13px * var(--text-scale, 1)); font-weight: 900; color: #ffe27a; letter-spacing: 0.04em; }
+.cm-vs5-result__diagnosis[data-won="true"] .cm-vs5-result__diagnosis-title { color: #6ff7ff; }
+.cm-vs5-result__diagnosis-list { margin: 0; padding: 0 0 0 16px; display: grid; gap: 4px; font-size: var(--fs-label, 12px); line-height: 1.45; color: #eef2ff; }
+.cm-vs5-result__pvp { margin: 8px 0 0; padding: 9px 12px; border-radius: 12px; background: rgba(14, 16, 26, 0.84); border: 1px solid rgba(57, 215, 255, 0.55); text-align: left; }
+.cm-vs5-result__pvp-title { display: block; font-size: var(--fs-label, 12px); font-weight: 900; color: #6ff7ff; }
+.cm-vs5-result__pvp-status { margin: 3px 0 0; font-size: var(--fs-label, 12px); font-weight: 700; color: #f3f0ff; }
+.cm-vs5-result__next-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; width: 100%; }
+.cm-vs5-result__next-row[hidden] { display: none; }
+.cm-vs5-result__next-btn { flex: 1 1 110px; }
+/* In-battle skill-card feedback pulse on affected side HUD row */
+.cm-vs5-fighters[data-card-pulse="player"] .cm-vs5-fighter { box-shadow: 0 0 0 2px #6ff7ff, 0 0 16px rgba(111, 247, 255, 0.55); transition: box-shadow 180ms ease; }
+.cm-vs5-fighters[data-card-pulse="opponent"] .cm-vs5-fighter { box-shadow: 0 0 0 2px #ff8a5c, 0 0 16px rgba(255, 138, 92, 0.55); transition: box-shadow 180ms ease; }
+@media (prefers-reduced-motion: reduce) { .cm-vs5-fighters[data-card-pulse] .cm-vs5-fighter { transition: none; } }
+/* Collapsible legacy manual code exchange below online PvP lobbies */
+.cm-vs5-manual-exchange { margin-top: 10px; padding: 8px 10px; border-radius: 12px; background: rgba(14, 16, 26, 0.45); border: 1px dashed rgba(255, 255, 255, 0.2); }
+.cm-vs5-manual-exchange__summary { cursor: pointer; font-size: var(--fs-label, 12px); font-weight: 800; color: #c9c3ff; list-style-position: inside; padding: 4px 2px; }
+.cm-vs5-manual-exchange[open] > .cm-vs5-manual-exchange__summary { margin-bottom: 8px; color: #fff; }

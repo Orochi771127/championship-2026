@@ -968,6 +968,9 @@ img.cm-star[data-on="false"] { filter: brightness(1.9) saturate(0.6); opacity: 0
 /* The ranch card: small stars beside the name. */
 .int-rh2-companion__stars:not([hidden]) { display: inline-flex; align-items: center; gap: 1px; flex: 0 0 auto; color: #0e101a; font-weight: 900; font-size: var(--fs-label, 12px); line-height: 16px;
   font-variant-numeric: tabular-nums; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75); }
+.int-rh2-companion__fusion:not([hidden]) { display: inline-flex; align-items: center; flex: 0 0 auto; padding: 1px 7px; border-radius: 999px; font-size: var(--fs-label, 12px); font-weight: 900; line-height: 1.35; background: #10b981; color: #052e16; box-shadow: 0 1px 0 rgba(14, 16, 26, 0.25); }
+.int-rh2-companion__fusion[data-mode="star-up"] { background: #ffc531; color: #14141f; }
+.int-rh2-companion__fusion[data-mode="capped"] { background: rgba(255, 197, 49, 0.26); color: #7a4a00; border: 1px solid rgba(196, 122, 0, 0.45); }
 
 :root[data-motion="reduced"] :is(.cm-stars__cell, .cm-star-meter__ahead, .cm-star-gauge) { animation: none; }
 :root[data-motion="reduced"] .cm-stars__burst { display: none; }
@@ -1691,7 +1694,7 @@ body[data-day-period="NIGHT"] .int-rh2-field-host::after { background-color: rgb
 /* ---- Tamer skill-card hand (ROADMAP_R4_20261118): three cards fanned in the hand, drag up to throw ---- */
 .cm-skill-hand { position: absolute; left: 0; right: 0; bottom: 0; height: 0; z-index: 40; pointer-events: none; }
 .cm-skill-hand[hidden] { display: none; }
-.cm-skill-card { --fan: 0; --drag: 0px; --wait: 1; position: absolute; left: calc(58% - 32px + var(--fan) * 46px); bottom: calc(-30px + env(safe-area-inset-bottom, 0px));
+.cm-skill-card { --fan: 0; --drag: 0px; --wait: 1; position: absolute; left: calc(42% - 32px + var(--fan) * 44px); bottom: calc(-28px + env(safe-area-inset-bottom, 0px));
   width: 64px; height: 92px; padding: 0; border: 3px solid #0e101a; border-radius: 12px; background: linear-gradient(180deg, #fffaf0, #f1e6c9); color: #0e101a; font: inherit;
   box-shadow: 0 5px 0 #0e101a; transform-origin: 50% 120%; transform: translateY(var(--drag)) rotate(calc(var(--fan) * 9deg)); pointer-events: auto; cursor: grab;
   touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
@@ -1791,3 +1794,13 @@ body[data-day-period="NIGHT"] .int-rh2-field-host::after { background-color: rgb
 .cm-wave-banner__art { width: 44px; height: 44px; object-fit: contain; }
 .cm-wave-banner__boss { padding: 2px 8px; border: 2px solid #fff; border-radius: 8px; background: #e2344f; font-size: var(--fs-label, 12px); }
 @media (prefers-reduced-motion: reduce) { .cm-wave-drop__art { animation: none; } }
+
+/* Gameplay convergence loop polish: roster fusion prominence & hunt result tags */
+.cm-digimon-control[data-ready="true"] { background: linear-gradient(180deg, #ffd23f, #f59e0b); color: #1a1200; border-color: #0e101a; font-weight: 900; }
+.cm-vs2-result__value-tag { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 999px; font-size: var(--fs-label, 12px); font-weight: 800; white-space: nowrap; }
+.cm-vs2-result__value-tag[data-role="fusable"] { background: rgba(255, 210, 63, 0.25); color: #ffe27a; border: 1px solid rgba(255, 210, 63, 0.6); }
+.cm-vs2-result__value-tag[data-role="new"] { background: rgba(111, 247, 255, 0.18); color: #b9fbff; border: 1px solid rgba(111, 247, 255, 0.5); }
+.cm-vs2-footer { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.cm-vs2-action--jump { flex: 1 1 auto; }
+.cm-screen-footer { display: flex; flex-wrap: wrap; gap: 8px; }
+.cm-digimon-jump { flex: 1 1 auto; }

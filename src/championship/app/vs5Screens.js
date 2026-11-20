@@ -195,7 +195,7 @@ export function createSponsorContractStrip(source, busy = () => false) {
   return strip;
 }
 
-export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, onOpenJourney=null, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null, describeMember=null, speciesBody=null, sponsorContracts=null }) {
+export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenChampionship, onOpenDataArena, onOpenJourney=null, onGoHunt=null, mountCube, menuCopy, getPartySelection, getModeMatches, getPracticeSelection, getPasswordSelection, getLinkSelection, setBattleTactic=null, arenaChoices=[], tutorial=null, onlineLobby=null, prefill=null, gachaBeacons=null, describeMember=null, speciesBody=null, sponsorContracts=null }) {
   if (!Array.isArray(matches)) throw new TypeError("The Battle menu requires a resolved match list");
   if (typeof onEnter !== "function") throw new TypeError("The Battle menu requires an onEnter intent");
 
@@ -270,16 +270,18 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   const dropLobby=()=>{lobbyMount?.dispose?.();lobbyMount=null;};
   const matchOnlyNodes = [];
   let arenaLabels = null;
+  let arenaNode = null;
   if (typeof onOpenDataArena === 'function') {
     const arena = actionButton('');
     arena.id = 'cm-data-arena';
-    arena.classList.add('cm-vs5-data-arena');
+    arena.classList.add('cm-vs5-data-arena', 'cm-vs5-data-arena--side');
     arenaLabels = [element('span', '', arenaText('entry'), false), element('span', 'cm-vs5-match__fee', arenaText('entry.description'), false)];
-    arena.append(...arenaLabels);
+    arena.append(element('span', 'cm-vs5-data-arena__side-tag', uiText('DATA_ARENA_SIDE_TAG'), false), ...arenaLabels);
     // The LIVE badge is drawn from this attribute, so the label text stays as is.
     arena.dataset.badge = arenaText('entry.badge');
     arena.addEventListener('click', () => { if (!entering) void onOpenDataArena(arena); });
-    header.append(arena);
+    arenaNode = arena;
+    if (typeof mountCube !== 'function') header.append(arena);
     matchOnlyNodes.push(arena);
   }
   // Cyber Gachapon bounty beacons (Owner 2026-11-02): one rides the next won AI
@@ -365,6 +367,7 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       menuCopy.faceNotice);
     section.append(note);
     matchOnlyNodes.push(stage, note);
+    if (arenaNode) section.append(arenaNode);
   }
 
   const list = element("ul", "cm-vs5-matches");
@@ -504,7 +507,15 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
       card.append(button,plan);
       controls.push([entry,button,card,plan]);partyPanel.append(card);
     }
-    if(!candidates.some(c=>c.admission.ok))partyPanel.append(element('p','cm-vs5-entry-notice','目前沒有符合這場比賽條件的拍檔。'));
+    if(!candidates.some(c=>c.admission.ok)){
+      partyPanel.append(element('p','cm-vs5-entry-notice','目前沒有符合這場比賽條件的拍檔。'));
+      if(typeof onGoHunt==='function'){
+        const goHunt=actionButton('JOURNEY_NO_TEAM_CTA',{primary:true});
+        goHunt.dataset.loopAction='hunt';
+        goHunt.addEventListener('click',()=>{if(!entering)onGoHunt();});
+        partyPanel.append(goHunt);
+      }
+    }
     confirm.addEventListener('click',async()=>{if(confirm.disabled||entering)return;confirm.disabled=true;entering=true;back.disabled=true;
       try{showRefusal(await onEnter(match.recordIndex,[...selectedIds],mode,...(arena?[arena.value()]:[])),match);}
       catch(error){if(!cubeDisposed)showRefusal({ok:false,message:'對戰準備失敗，請再試一次。'},match);}
@@ -645,6 +656,10 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     // Room-code connection (Owner 2026-10-28): the room carries the existing link
     // invite / reply codes and starts the same deterministic LINK_BATTLE.
     if(onlineLobby?.room){
+      const manualBox=element('details','cm-vs5-manual-exchange');
+      if(prefill?.codes)manualBox.open=true;
+      manualBox.append(element('summary','cm-vs5-manual-exchange__summary','PVP_ADVANCED_MANUAL'),...Array.from(partyPanel.childNodes));
+      partyPanel.append(manualBox);
       const startLink=async prepared=>{
         if(entering||!prepared?.ok||cubeDisposed||request!==partyRequest)return;
         entering=true;refresh();entryNotice.hidden=true;
@@ -780,6 +795,9 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     // Quick match / ladder mirror (Owner 2026-10-28): another player's defense
     // team code against the player's own, as the existing PASSWORD_BATTLE.
     if(onlineLobby?.quick){
+      const manualBox=element('details','cm-vs5-manual-exchange');
+      manualBox.append(element('summary','cm-vs5-manual-exchange__summary','PVP_ADVANCED_MANUAL'),...Array.from(partyPanel.childNodes));
+      partyPanel.append(manualBox);
       const startPassword=async codes=>{
         if(entering||!Array.isArray(codes)||cubeDisposed||request!==partyRequest)return;
         entering=true;host.disabled=true;guest.disabled=true;back.disabled=true;entryNotice.hidden=true;
@@ -841,6 +859,11 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
     }
   }
   renderMatches(matches);
+  // When the 3-face hub prism opens on 征途 (Journey), keep the Title Match list hidden
+  // until the player explicitly opens 頭銜賽 or 自由對戰, avoiding a stray list under Journey.
+  if (typeof onOpenJourney === "function" && typeof mountCube === "function" && !prefill?.mode) {
+    list.hidden = true;
+  }
   section.append(list, partyPanel, entryNotice);
 
   // The multi-round tournaments sit in this menu in the original too:
@@ -1141,13 +1164,21 @@ export function createBattleFieldView({ root, frame, mountField, onExit,onLoadEr
   const opponents = element("ul", "cm-vs5-roster cm-vs5-roster--opponent");
   const players = element("ul", "cm-vs5-roster cm-vs5-roster--player");
   const cards = new Map();
-  for (const combatant of frame.combatants) {
-    const compact = combatant.team !== localTeamIndex;
-    const built = combatantCard(combatant, compact,hudArt,dynamicFx,next=>burstCall(next),
-      dynamicFx && typeof fighterBadge === "function" && combatant.present ? fighterBadge(combatant) : null);
-    cards.set(combatant.slot, built);
-    (compact ? opponents : players).append(built.card);
+  let activeFrame = frame;
+  function buildRosterCards(nextFrame) {
+    for (const card of cards.values()) card.dispose?.();
+    cards.clear();
+    opponents.replaceChildren();
+    players.replaceChildren();
+    for (const combatant of nextFrame.combatants) {
+      const compact = combatant.team !== localTeamIndex;
+      const built = combatantCard(combatant, compact, hudArt, dynamicFx, next => burstCall(next),
+        dynamicFx && typeof fighterBadge === "function" && combatant.present ? fighterBadge(combatant) : null);
+      cards.set(combatant.slot, built);
+      (compact ? opponents : players).append(built.card);
+    }
   }
+  buildRosterCards(frame);
 
   const host = element("div", "cm-vs5-field");
   host.setAttribute("aria-label", uiText("Battle field. The match runs on its own."));
@@ -1346,12 +1377,39 @@ export function createBattleFieldView({ root, frame, mountField, onExit,onLoadEr
       loadingText.textContent=uiText(recover.hidden?'對戰場地載入失敗，請返回牧場後再試。':'BATTLE_LOAD_ERROR_TUTORIAL');}
   });
 
+  let cardPulseTimer = null;
   return Object.freeze({
     /** A line for the record band from the dynamic presentation. */
     feed(text, cue = null) {
       if (viewDisposed) return;
-      const team = cue ? frame.combatants.find((c) => c.slot === cue.slot)?.team : undefined;
+      const team = cue ? activeFrame.combatants.find((c) => c.slot === cue.slot)?.team : undefined;
       log.feed(text, cue && { tier: cue.tier, side: team === undefined ? "" : team === localTeamIndex ? "player" : "opponent" });
+    },
+    /** Highlight a thrown tamer skill card in the live ticker and pulse the affected side's HUD cards. */
+    announceSkillCard({ name = "", effect = "", side = "player" } = {}) {
+      if (viewDisposed || !name) return;
+      log.feed(uiText("BATTLE_CARD_LOG", { name, effect }), { tier: "special", side });
+      const row = side === "opponent" ? opponents : players;
+      if (row?.dataset) {
+        delete players.dataset.cardPulse;
+        delete opponents.dataset.cardPulse;
+        row.dataset.cardPulse = side;
+        if (cardPulseTimer) clearTimeout(cardPulseTimer);
+        cardPulseTimer = setTimeout(() => {
+          cardPulseTimer = null;
+          if (!viewDisposed) { delete players.dataset.cardPulse; delete opponents.dataset.cardPulse; }
+        }, 700);
+      }
+    },
+    /** WAVE_RUN: refresh HUD roster cards in place when the next wave spawns on the same field. */
+    setWaveFrame(nextFrame) {
+      if (viewDisposed || !nextFrame?.combatants) return;
+      activeFrame = nextFrame;
+      buildRosterCards(nextFrame);
+      section.dataset.ended = "false";
+      delete section.dataset.verdict;
+      delete section.dataset.endReason;
+      measureSafe();
     },
     /** Called with each view the presentation source publishes. */
     render(view) {
@@ -1405,6 +1463,7 @@ export function createBattleFieldView({ root, frame, mountField, onExit,onLoadEr
     },
     dispose() {
       viewDisposed = true;
+      if (cardPulseTimer) { clearTimeout(cardPulseTimer); cardPulseTimer = null; }
       for (const card of cards.values()) card.dispose?.();
       safeObserver?.disconnect();
       versus?.dispose();
@@ -1472,7 +1531,7 @@ function resultSummary(summary, winningTeam) {
   return box;
 }
 
-export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, syncPanel=null, followUp=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null, sponsor=null, tacticRecord=null }) {
+export function createBattleResultView({ root, outcome, receipt = null, matchTitle = null, progression=null, statistics=null, unlocks=[], gachaDrop=null, syncPanel=null, followUp=null, hudArt=null, onExit, exitLabel="返回牧場", feedback = null, highlight = null, tutorial=false, responsiveLayout=false, ceremonies=null, brag=null, summary=null, sponsor=null, tacticRecord=null, diagnosis=null, loopActions=null, pvpMeta=null }) {
   if (!outcome || typeof outcome !== "object") throw new TypeError("The Battle result requires an outcome");
   let disposed=false;
 
@@ -1519,6 +1578,29 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
         frag.append(line);
       }
       if (summary?.rows?.length) frag.append(resultSummary(summary, outcome.winningTeam));
+      if (pvpMeta?.label) {
+        const pvpBox = element("section", "cm-vs5-result__pvp");
+        pvpBox.dataset.pvpKind = pvpMeta.kind ?? "";
+        pvpBox.append(element("strong", "cm-vs5-result__pvp-title", pvpMeta.label, false));
+        const statusEl = element("p", "cm-vs5-result__pvp-status", pvpMeta.statusText ?? "", false);
+        statusEl.setAttribute("role", "status");
+        pvpBox.append(statusEl);
+        pvpMeta.bindStatus?.(statusEl);
+        frag.append(pvpBox);
+      }
+      if (diagnosis?.items?.length) {
+        const diagBox = element("section", "cm-vs5-result__diagnosis");
+        diagBox.dataset.won = String(Boolean(diagnosis.won));
+        diagBox.append(element("h2", "cm-vs5-result__diagnosis-title", diagnosis.title, false));
+        const ul = element("ul", "cm-vs5-result__diagnosis-list");
+        for (const item of diagnosis.items) {
+          const li = element("li", "cm-vs5-result__diagnosis-item", item.text, false);
+          li.dataset.kind = item.kind ?? "";
+          ul.append(li);
+        }
+        diagBox.append(ul);
+        frag.append(diagBox);
+      }
       return frag;
     }
   });
@@ -1657,6 +1739,19 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
   }
   exit.classList.add("cm-vs5-exit");
   if (typeof onExit === "function") exit.addEventListener("click", () => onExit());
+  const nextRow = !tutorial && Array.isArray(loopActions) && loopActions.length
+    ? element("div", "cm-vs5-result__next-row")
+    : null;
+  if (nextRow) {
+    for (const action of loopActions) {
+      if (!action || typeof action.onClick !== "function") continue;
+      const btn = actionButton(action.label, { primary: Boolean(action.primary) });
+      btn.classList.add("cm-vs5-result__next-btn");
+      if (action.id) btn.dataset.loopAction = action.id;
+      btn.addEventListener("click", () => { if (!disposed) action.onClick(); });
+      nextRow.append(btn);
+    }
+  }
 
   const body = element("div", "cm-vs5-result__body");
   const characterHost=element('div','cm-vs5-result__characters');
@@ -1693,6 +1788,7 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     advance.hidden = last;
     exit.hidden = !last;
     if (follow) follow.hidden = !last;
+    if (nextRow) nextRow.hidden = !last;
   }
 
   let entrance = null;
@@ -1706,7 +1802,7 @@ export function createBattleResultView({ root, outcome, receipt = null, matchTit
     if (index < panels.length - 1) { index += 1; paint(); }
   });
 
-  section.append(resultStage, advance, exit, ...(follow ? [follow] : []));
+  section.append(resultStage, advance, ...(follow ? [follow] : []), ...(nextRow ? [nextRow] : []), exit);
   // Owner 2026-10-29: a won battle can be shared as a brag card (product-authored; not a result scene).
   if (!tutorial && outcome.winningTeam === 0 && typeof brag?.onOpen === "function") {
     const share = document.createElement("button");

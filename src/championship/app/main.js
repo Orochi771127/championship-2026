@@ -67,6 +67,7 @@ import { createDigimonListView, appendCreatureDetail } from "./digimonListScreen
 import { createTamerTalentPanel } from "./tamerTalentPanel.js";
 import { mountBattleSkillHand } from "./battleSkillHand.js";
 import { mountWaveRunField, showWaveBanner, WAVE_RUN_ART_BASE } from './waveRunField.js';
+import { buildBattleResultDiagnosis } from './battleResultDiagnosis.js';
 import { waveRunText } from '../text/waveRunText.js';
 import { talentText } from "../text/tamerTalentText.js";
 import { createScheduleView } from "./scheduleScreen.js";
@@ -1713,6 +1714,13 @@ function buildTacticRecordPanel(runtime, { attemptId, matchTitle, context = null
 
 let battleRuntime = null;
 let battleAttemptId = null;
+// Active PvP battle metadata & room session (transferred from onlineBattleLobby on battle start,
+// reported once on BATTLE_RESULT, and disposed on exit).
+let activePvpBattle = null;
+function clearActivePvpBattle() {
+  activePvpBattle?.session?.dispose?.();
+  activePvpBattle = null;
+}
 // Owner 2026-11-03: what each partner did in the presented match (damage dealt,
 // knockouts), tallied from the dynamic layer's HIT / KO events for the result's
 // summary. Presentation record only; the settlement never reads it.
@@ -1881,6 +1889,7 @@ async function mountBattleSelect() {
     onOpenChampionship() { app.openChampionship(); },
     onOpenDataArena: enterDataArena,
     onOpenJourney: () => void openJourney(),
+    onGoHunt: () => { if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen(); expeditionSource?.intents.openGate(); },
     async onEnter(recordIndex,playerInstanceIds,mode,selectedArena=null) {
       // Battle simulation uses this existing Application's ticker. Do not
       // charge for a session that cannot start advancing on the shared stage.
@@ -1993,6 +2002,7 @@ async function openJourney(prefill = null) {
         start: (ids) => { closeJourney(); return runWaveRun({ mode: 'CHALLENGE', encounterId: 'challenge', partyIds: ids }); },
         leave: () => { const done = app.finishWaveRun('LEAVE'); if (done?.ok) autosave?.request('wave-run'); return done; },
         best: () => app.getWaveRunBest?.() ?? 0,
+        lastSyncGains: () => app.getLastSyncGains?.() ?? null,
         text: waveRunText, artBase: WAVE_RUN_ART_BASE
       },
       practice: {
@@ -2008,7 +2018,17 @@ async function openJourney(prefill = null) {
         variant: TACTIC_RECORD_VARIANT,
         downloadLog: new URLSearchParams(location.search).get('playtest') === '1' ? downloadTacticPlaytestLog : null
       },
-      onClose: closeJourney
+      onClose: closeJourney,
+      onGoHunt: () => {
+        closeJourney();
+        if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen();
+        expeditionSource?.intents.openGate();
+      },
+      onGoRoster: () => {
+        closeJourney();
+        if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen();
+        app.openDigimonList?.();
+      }
     });
     if (app) recordSessionScreenMounted(app.getScreen());
   } catch (error) { console.warn('Journey unavailable', error); closeJourney(); }
@@ -2109,12 +2129,27 @@ async function startTowerFloor(floor, ids) {
 async function mountBattleField() {
   const tutorial=app.getInteractiveTutorialBattle();
   if(tutorial)battleRuntime=tutorial.runtime;
-  const activeRuntime = battleRuntime;
-  const activeAttemptId = battleAttemptId;
-  const source = activeRuntime.startMatch();
+  let activeRuntime = battleRuntime;
+  let activeAttemptId = battleAttemptId;
+  let currentSource = activeRuntime.startMatch();
+  const sourceListeners = new Set();
+  let unsubSource = currentSource.subscribe?.(() => { for (const fn of [...sourceListeners]) fn(); }) ?? null;
+  const source = {
+    getFrame: () => currentSource.getFrame(),
+    getView: () => currentSource.getView(),
+    tick: () => currentSource.tick?.(),
+    subscribe: fn => { sourceListeners.add(fn); return () => sourceListeners.delete(fn); },
+    dispose: () => { unsubSource?.(); unsubSource = null; sourceListeners.clear(); },
+    swap(next) {
+      unsubSource?.();
+      currentSource = next;
+      unsubSource = currentSource.subscribe?.(() => { for (const fn of [...sourceListeners]) fn(); }) ?? null;
+      for (const fn of [...sourceListeners]) fn();
+    }
+  };
   startBattleSummaryTally(activeAttemptId);
   activeRuntime.prepareOpening();
-  let hudArt=null,viewDisposed=false;
+  let hudArt=null,viewDisposed=false,loadWaveSprites=null,resetSceneWave=null;
   // Optional portraits must not hold the screen/navigation owner hostage.
   // Cards already read their art on render, so this proxy can fill in later.
   const hudProxy={getBattleFrame:(...args)=>hudArt?.getBattleFrame?.(...args)??null,
@@ -2227,8 +2262,24 @@ async function mountBattleField() {
           // that owns them. Do not destroy them under an in-flight mount;
           // rejection returns cleanup to the catch below, late success to scene.
           for(const resource of [fieldArt,characterRoster,effectArt])loadingArt.delete(resource);
-          scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster, effectArt,onView:frame=>view.render(frame),
+          // Single-entry wave runs reuse the live arena/VFX and swap only newly arriving enemy species sprites.
+          let extraWaveRoster = null;
+          const liveRoster = {
+            createActor: args => extraWaveRoster?.createActor?.(args) ?? characterRoster?.createActor?.(args) ?? null,
+            getDiagnostics: () => characterRoster?.getDiagnostics?.() ?? null,
+            dispose: async () => { await Promise.allSettled([extraWaveRoster?.dispose?.(), characterRoster?.dispose?.()]); extraWaveRoster = null; }
+          };
+          loadWaveSprites = async speciesIds => {
+            if (disposed || !speciesIds?.length) return;
+            const loadedExtra = await loadOptionalCharacterReview(stage, speciesIds, ['main'], { signal: characters.signal, battleAtlas: true }).catch(() => null);
+            if (disposed) { void release(loadedExtra); return; }
+            const previousExtra = extraWaveRoster;
+            extraWaveRoster = loadedExtra;
+            if (previousExtra && previousExtra !== loadedExtra) void release(previousExtra);
+          };
+          scene = await mountBattleFieldPixiPresentation({ stage, source, fieldArt, characterRoster: liveRoster, effectArt,onView:frame=>view.render(frame),
             dynamicFx:BATTLE_DYNAMIC_FX, responsiveLayout:RESPONSIVE_BATTLE_CANDIDATE, fx:fxLookups, localTeam:activeRuntime.localTeamIndex(), juicy, safeInsets });
+          resetSceneWave = () => { if (!disposed) scene?.resetWaveState?.(); };
           if (disposed) {
             await Promise.all([release(vfxOverlay),release(scene)]);
             return;
@@ -2317,33 +2368,74 @@ async function mountBattleField() {
     partners: () => app.getWaveRun()?.team ?? [], localTeam: activeRuntime.localTeamIndex(),
     choose: choice => waveDriver?.attemptId === activeAttemptId && waveDriver.resolve(choice) });
   let waveSettled = false;
-  activeRuntime.observe((observed) => {
-    if (viewDisposed || battleRuntime !== activeRuntime || battleAttemptId !== activeAttemptId) return;
-    if (waveSettled) return;
-    waveField?.update(observed);
-    if (typeof recordSessionScreenMounted === "function" && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
-      recordSessionScreenMounted(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);
-    }
-    view.render(observed);
-    if (showPersonality) root.dataset.battlePersonality = battlePersonalityReadout(activeRuntime);
-    if (observed.outcome.ended && battleSummaryTally?.attemptId === activeAttemptId && !battleSummaryTally.final)
-      battleSummaryTally.final = {combatants: observed.combatants.map(c => ({slot: c.slot, present: c.present, speciesId: c.speciesId,
-        displayName: c.displayName, team: c.team, down: c.down})), localTeam: activeRuntime.localTeamIndex()};
-    if (observed.outcome.ended && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
-      if(tutorial){app.finishInteractiveTutorialBattle(app.getInteractiveTutorial().checkpoint);return;}
-      const settledMatch = app.finishMatch({ ...activeRuntime.getSettlementResult(), attemptId: activeAttemptId });
-      // A wave stays on its field: the drops fall where the foes stood (the run itself is already saved).
-      if (waveField && settledMatch?.ok && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) { waveSettled = true; waveField.settled(observed); }
-      // The settlement (prize, rank, titles) is committed in the session; the
-      // result screen is a safe place to write it.
-      autosave?.request('settlement');
-    }
-  });
+  let stopObserveRuntime = null;
+  const handListeners = new Set();
+  function bindRuntimeObserver(runtime, attemptId) {
+    stopObserveRuntime?.();
+    stopObserveRuntime = runtime.observe((observed) => {
+      if (viewDisposed || battleRuntime !== runtime || battleAttemptId !== attemptId) return;
+      for (const listener of [...handListeners]) { try { listener(); } catch { /* hand listener */ } }
+      if (waveSettled) return;
+      waveField?.update(observed);
+      if (typeof recordSessionScreenMounted === "function" && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
+        recordSessionScreenMounted(CHAMPIONSHIP_SCREENS.BATTLE_FIELD);
+      }
+      view.render(observed);
+      if (showPersonality) root.dataset.battlePersonality = battlePersonalityReadout(runtime);
+      if (observed.outcome.ended && battleSummaryTally?.attemptId === attemptId && !battleSummaryTally.final)
+        battleSummaryTally.final = {combatants: observed.combatants.map(c => ({slot: c.slot, present: c.present, speciesId: c.speciesId,
+          displayName: c.displayName, team: c.team, down: c.down})), localTeam: runtime.localTeamIndex()};
+      if (observed.outcome.ended && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) {
+        if(tutorial){app.finishInteractiveTutorialBattle(app.getInteractiveTutorial().checkpoint);return;}
+        const settledMatch = app.finishMatch({ ...runtime.getSettlementResult(), attemptId });
+        // A wave stays on its field: the drops fall where the foes stood (the run itself is already saved).
+        if (waveField && settledMatch?.ok && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD) { waveSettled = true; waveField.settled(observed); }
+        // The settlement (prize, rank, titles) is committed in the session; the
+        // result screen is a safe place to write it.
+        autosave?.request('settlement');
+      }
+    });
+  }
+  bindRuntimeObserver(activeRuntime, activeAttemptId);
   // The tamer's skill-card hand (ROADMAP_R4_20261118): over the field, gone with the battle screen.
   const skillHand = tutorial ? null : mountBattleSkillHand({ host: root, snapshot: () => activeRuntime.getSkillCards?.() ?? null,
     play: id => activeRuntime.requestSkillCard?.(id) ?? { ok: false, reason: 'NO_HAND' },
-    subscribe: listener => activeRuntime.observe(() => { if (!viewDisposed) listener(); }) });
+    onPlayed: (card, info) => view.announceSkillCard?.({ ...info, side: /^FOE|MARK/.test(card?.kind ?? '') ? 'opponent' : 'player' }),
+    subscribe: listener => { handListeners.add(listener); return () => handListeners.delete(listener); } });
+  // Single-entry wave controller: swaps in Wave N+1 on the same battlefield without leaving BATTLE_FIELD or redrawing the skill hand.
+  if (typeof activeWaveController !== 'undefined') activeWaveController = waveField ? {
+    async swapWave({ prepared, attemptId, choose }) {
+      if (viewDisposed) return { ok: false, reason: 'BATTLE_DISPOSED' };
+      const nextSource = prepared.startMatch();
+      prepared.prepareOpening();
+      const needed = [...new Set(nextSource.getFrame().combatants.filter(entry => entry.present && entry.speciesId)
+        .flatMap(entry => [entry.speciesId, ...(entry.burst ? [entry.burst.form, ...(Number.isInteger(entry.burst.via) ? [entry.burst.via] : [])]
+          .map(form => `species-${String(form).padStart(3, '0')}`) : [])]))];
+      warmActionPortraits(needed);
+      if (loadWaveSprites) await loadWaveSprites(needed);
+      if (viewDisposed) return { ok: false, reason: 'BATTLE_DISPOSED' };
+      const previousRuntime = activeRuntime;
+      activeRuntime = prepared;
+      activeAttemptId = attemptId;
+      battleRuntime = prepared;
+      battleAttemptId = attemptId;
+      waveDriver = { attemptId, resolve: choose };
+      waveSettled = false;
+      startBattleSummaryTally(attemptId);
+      source.swap(nextSource);
+      view.setWaveFrame({ ...nextSource.getFrame(), rosterEvidence: prepared.rosterEvidence() });
+      waveField.beginWave();
+      resetSceneWave?.();
+      bindRuntimeObserver(prepared, attemptId);
+      skillHand?.render?.(true);
+      prepared.markOpeningReady();
+      previousRuntime?.dispose?.();
+      return { ok: true, attemptId };
+    }
+  } : null;
   return {...view,dispose(){if(viewDisposed)return;viewDisposed=true;skillHand?.dispose();
+    if(typeof activeWaveController!=='undefined')activeWaveController=null;loadWaveSprites=null;resetSceneWave=null;
+    stopObserveRuntime?.();stopObserveRuntime=null;handListeners.clear();source.dispose();
     // The field went away under a wave: left mid-fight (no result), or from the rest by the screen's own back.
     waveField?.dispose();if(waveField&&waveDriver?.attemptId===activeAttemptId)waveDriver.resolve(waveSettled?'BACK':'LEFT_FIELD');
     hudLoad.cancel();hudArt=null;view.dispose();}};
@@ -2364,7 +2456,16 @@ async function mountHuntResult() {
   // demand and the same way: a bank that fails to load must not take the
   // screen down with it, because this is where the catch is named and saved.
   const hudArt = await loadRegisteredCharacterHudArt({ baseUrl: location.href,speciesIds:[expeditionSource.getFrame().huntResult?.speciesId] }).catch(() => null);
-  return createHuntResultView({ root, source: expeditionSource, hudArt });
+  return createHuntResultView({
+    root,
+    source: expeditionSource,
+    hudArt,
+    onAfterConfirm(target) {
+      if (app.getScreen?.() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) return;
+      if (target === "roster") app.openDigimonList?.();
+      else if (target === "battle") app.openBattle?.();
+    }
+  });
 }
 
 /**
@@ -2485,9 +2586,71 @@ async function mountBattleResult() {
     :chosen?.championship?uiText('{event} 第 {round} 戰',{event:uiText(chosen.recordIndex===0?'冠軍大會':'世界大會'),round:chosen.cursor+1})
     :chosen?titleEventText(chosen.recordIndex,"name",chosen.title):null;
   const tactic=tutorial?null:tacticRecordPanelFor(battleRuntime,{attemptId:battleAttemptId,matchTitle,context:sparSettled?{series:'PRACTICE',bout:sparSettled.bout,tactic:sparSettled.tactic,won:sparSettled.won}:null});
+  const diagnosis = tutorial || typeof buildBattleResultDiagnosis !== 'function' ? null : buildBattleResultDiagnosis({
+    outcome,
+    tacticRecord: tactic?.record ?? null,
+    summary,
+    participants,
+    syncOf: (id) => app.getSyncLevel?.(id) ?? null,
+    skillCardState: battleRuntime?.getSkillCardCarryState?.() ?? null
+  });
+  const leaveAndOpen = (openNext) => {
+    if (typeof clearActivePvpBattle === 'function') clearActivePvpBattle();
+    battleRuntime?.dispose();
+    battleRuntime = null;
+    battleAttemptId = null;
+    app.leaveScreen();
+    if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen();
+    openNext();
+  };
+  let pvpMeta = null;
+  if (!tutorial && typeof activePvpBattle !== 'undefined' && activePvpBattle && (chosen?.link || chosen?.password)) {
+    const pvp = activePvpBattle;
+    if (pvp.kind === 'ROOM_SYNC') {
+      let statusNode = null;
+      let statusText = pvp.simulated ? onlineText('pvpReportSimulated') : onlineText('pvpReportPending');
+      const applyStatus = (text) => { statusText = text; if (statusNode) statusNode.textContent = text; };
+      if (pvp.session && typeof pvp.session.reportOutcome === 'function') {
+        const localIndex = battleRuntime?.localTeamIndex?.() ?? (pvp.role === 'guest' ? 1 : 0);
+        // battleRuntime.outcome() maps winningTeam to local-relative (0 = me, 1 = foe);
+        // convert back to canonical host-relative (0 = host, 1 = guest) before reporting to room.
+        const canonicalWinningTeam = outcome.winningTeam === null ? null : (localIndex === 1 ? 1 - outcome.winningTeam : outcome.winningTeam);
+        const updateFromSession = (s) => {
+          if (pvp.simulated) { applyStatus(onlineText('pvpReportSimulated')); return; }
+          if (s?.reportStatus === 'AGREED') applyStatus(onlineText('pvpReportAgreed'));
+          else if (s?.reportStatus === 'DISPUTED') applyStatus(onlineText('pvpReportDisputed'));
+          else if (s?.reportStatus === 'WAITING_PEER') applyStatus(onlineText('pvpReportWaiting'));
+        };
+        pvp.session.subscribe?.(updateFromSession);
+        void pvp.session.reportOutcome({ winningTeam: canonicalWinningTeam, verdict: outcome.verdict, reason: outcome.reason })
+          .then(() => updateFromSession(pvp.session.state)).catch(() => {});
+      }
+      pvpMeta = {
+        kind: 'ROOM_SYNC',
+        label: onlineText('pvpRoomBattleLabel', { code: pvp.roomCode ?? '—' }),
+        statusText,
+        bindStatus(node) { statusNode = node; node.textContent = statusText; }
+      };
+    } else if (pvp.kind === 'ASYNC_DEFENSE') {
+      pvpMeta = {
+        kind: 'ASYNC_DEFENSE',
+        label: onlineText('pvpAsyncDefenseLabel', { name: pvp.opponentName ?? onlineText('unknown') }),
+        statusText: pvp.simulated ? onlineText('pvpReportSimulated') : ''
+      };
+    }
+  }
+  const loopActions = tutorial || (chosen?.championship && app.getChampionshipRun()?.continues) ? null : [
+    ...(!followUp ? [{ id: 'battle', label: uiText(outcome.winningTeam === 0 ? 'LOOP_GO_BATTLE' : 'LOOP_RETRY_BATTLE'), primary: outcome.winningTeam !== 0,
+      onClick: () => leaveAndOpen(() => app.openBattle?.()) }] : []),
+    { id: 'roster', label: uiText('LOOP_GO_ROSTER'), onClick: () => leaveAndOpen(() => app.openDigimonList?.()) },
+    { id: 'hunt', label: uiText('LOOP_GO_HUNT'), onClick: () => leaveAndOpen(() => expeditionSource?.intents.openGate()) }
+  ];
   const resultView=createBattleResultView({
     ceremonies: battleCeremonies,
     tacticRecord: tactic?.panel ?? null,
+    diagnosis,
+    loopActions,
+    pvpMeta,
     summary,
     responsiveLayout: RESPONSIVE_BATTLE_CANDIDATE,
     root,
@@ -2516,6 +2679,7 @@ async function mountBattleResult() {
     sponsor:tutorial?null:sponsorResultLines(app.getLastSponsorSettlement?.(),receipt),
     onExit() {
       if(tutorial){app.endInteractiveTutorialBattle(app.getInteractiveTutorial().checkpoint);return;}
+      if (typeof clearActivePvpBattle === 'function') clearActivePvpBattle();
       battleRuntime?.dispose();
       battleRuntime = null;
       battleAttemptId = null;
@@ -2664,7 +2828,9 @@ async function mountCurrentScreen() {
         if (result?.ok) autosave?.request(`awakening-${action}`);
         return { ...result, entries: projectRoster() };
       },
-      onExit() { app.leaveScreen(); }
+      onExit() { app.leaveScreen(); },
+      onGoHunt() { app.leaveScreen(); expeditionSource?.intents.openGate(); },
+      onGoBattle() { app.leaveScreen(); app.openBattle(); }
     });
     else if (target === CHAMPIONSHIP_SCREENS.CHAMPIONSHIP) {
       view = createChampionshipView({
@@ -3546,19 +3712,30 @@ function followStoryBattle() {
 // short banner; between waves the field stays with its drops (the run is saved there). Story waves go on by
 // themselves; a challenge waits for 「帶著戰利品離場」 or 「繼續挑戰」. Resolves {ok, won} for the story director, or
 // {ok:false, reason, abandon} when a wave could not be fought (the director offers retry or back).
-let waveDriver = null, battleStandProjector = null;
-async function fightWaveRunWave(choose) {
+let waveDriver = null, battleStandProjector = null, activeWaveController = null;
+async function fightWaveRunWave(choose, { carrySkillCards = null } = {}) {
   if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started) return { ok: false, reason: 'BATTLE_NOT_READY' };
-  if (app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD || app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_RESULT) app.exitBattle();
-  if (app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) { if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen(); app.openBattle(); }
-  if (!(await waitForScreen(CHAMPIONSHIP_SCREENS.BATTLE_SELECT))) return { ok: false, reason: 'BATTLE_SELECT_NOT_READY' };
+  const inPlace = Boolean(activeWaveController && app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD && mountedScreen === CHAMPIONSHIP_SCREENS.BATTLE_FIELD);
+  if (!inPlace) {
+    if (app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_FIELD || app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_RESULT) app.exitBattle();
+    if (app.getScreen() !== CHAMPIONSHIP_SCREENS.BATTLE_SELECT) { if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen(); app.openBattle(); }
+    if (!(await waitForScreen(CHAMPIONSHIP_SCREENS.BATTLE_SELECT))) return { ok: false, reason: 'BATTLE_SELECT_NOT_READY' };
+  }
   const party = await app.prepareWaveBattle();
   if (!party.ok) return party;
   const prepared = (await loadBattleRuntime())({ mode: 2, battleType: 0, playerIndividuals: party.individuals, rng: party.rngPreparation.rng,
-    personalityPolicy: FREE_PRACTICE_PERSONALITY_POLICY, arenaHazards: await loadArenaHazards() });
+    personalityPolicy: FREE_PRACTICE_PERSONALITY_POLICY, arenaHazards: await loadArenaHazards(),
+    ...(carrySkillCards ? { skillCards: carrySkillCards.hand, skillCardsPlayed: carrySkillCards.playedIds } : {}) });
   try { prepared.chooseFreeBattle({ presetIndices: party.presetIndices, arenaIndex: party.arenaIndex }); prepared.setFoeBoostPercent?.(party.foeBoostPercent); prepared.startMatch(); }
   catch (error) { prepared.dispose(); return { ok: false, reason: error?.message ?? 'BATTLE_NOT_READY' }; }
   const attemptId = `battle:${app.getBattleEconomyState().nextSequence}`;
+  if (inPlace) {
+    const entered = app.enterWaveBattle({ attemptId, playerInstanceIds: party.playerInstanceIds, rngPreparation: party.rngPreparation, stayInField: true });
+    if (!entered?.ok) { prepared.dispose(); return { ok: false, reason: entered?.reason ?? 'BATTLE_NOT_READY' }; }
+    const swapped = await activeWaveController.swapWave({ prepared, attemptId, choose });
+    if (!swapped?.ok) { prepared.dispose(); return { ok: false, reason: swapped?.reason ?? 'BATTLE_NOT_READY' }; }
+    return { ok: true, attemptId, wave: party.wave, boss: party.boss };
+  }
   // The field reads this to mount its wave layer; the decision it sends resolves `choose`.
   waveDriver = { attemptId, resolve: choose };
   const entered = await enterPreparedBattle(prepared, attemptId, () => app.enterWaveBattle({ attemptId, playerInstanceIds: party.playerInstanceIds, rngPreparation: party.rngPreparation }));
@@ -3585,6 +3762,7 @@ async function runWaveRun({ mode, encounterId = null, bossPresets = [], waves = 
       const started = app.startWaveRun({ mode, encounterId, party: ids, bossPresets, waves });
       if (!started.ok) return { ...started, abandon };
     }
+    let carrySkillCards = null;
     for (;;) {
       if (signal?.aborted) { app.finishWaveRun('ABANDONED'); return { ok: false, reason: 'STORY_ABORTED' }; }
       frame = app.getWaveRun();
@@ -3597,10 +3775,11 @@ async function runWaveRun({ mode, encounterId = null, bossPresets = [], waves = 
       const decided = new Promise(resolve => { choose = resolve; });
       const onAbort = () => choose('ABORT');
       signal?.addEventListener?.('abort', onAbort, { once: true });
-      const fought = await fightWaveRunWave(choose);
+      const fought = await fightWaveRunWave(choose, { carrySkillCards });
       if (!fought.ok) { signal?.removeEventListener?.('abort', onAbort); return { ok: false, reason: fought.reason, abandon }; }
       const choice = await decided;
       signal?.removeEventListener?.('abort', onAbort);
+      carrySkillCards = battleRuntime?.getSkillCardCarryState?.() ?? carrySkillCards;
       waveDriver = null;
       frame = app.getWaveRun();
       if (choice === 'ABORT') { if (frame?.run) app.finishWaveRun('ABANDONED'); return { ok: false, reason: 'STORY_ABORTED' }; }
@@ -3928,6 +4107,8 @@ async function startFriendSpar({ friend, defense }) {
   if (!ids.length) return Object.freeze({ ok: false, reason: 'TEAM_REQUIRED' });
   const made = await app.createTeamPassword(ids);
   if (!made?.ok) return Object.freeze({ ok: false, reason: made?.reason ?? 'TEAM_REQUIRED' });
+  clearActivePvpBattle();
+  activePvpBattle = { kind: 'ASYNC_DEFENSE', opponentName: friend?.tamerName || friend?.tamerCode || onlineText('unknown'), simulated: Boolean(friend?.simulated) };
   pendingSpar = Object.freeze({ mode: 'PASSWORD_BATTLE', codes: [made.password, defense.passwordCode], autoStart: true, opponent: friend?.tamerName ?? null });
   try {
     if (app.getScreen() === CHAMPIONSHIP_SCREENS.BATTLE_SELECT) await mountCurrentScreen();
@@ -3941,13 +4122,27 @@ function ensureFriendsDrawer() {
 }
 function onlineLobbies() {
   return Object.freeze({
-    room: (panel, { start }) => mountRoomLobby(panel, { service: onlineService(), codeLength: onlineConfig.roomCodeLength, start, onFriendSpar: startFriendSpar,
+    room: (panel, { start }) => mountRoomLobby(panel, { service: onlineService(), codeLength: onlineConfig.roomCodeLength,
+      start: async (prepared, meta = null) => {
+        clearActivePvpBattle();
+        if (meta?.session) {
+          activePvpBattle = { kind: 'ROOM_SYNC', session: meta.session, roomCode: meta.state?.roomCode ?? '—', role: meta.state?.role ?? null, simulated: Boolean(meta.state?.simulated) };
+        }
+        return start(prepared);
+      },
+      onFriendSpar: startFriendSpar,
       brag: { label: socialText('bragButton'), onOpen: button => openTamerBragCard({ trigger: button }) }, game: {
       candidates: () => app.getBattlePartyCandidates(null),
       createInvite: (ids, options) => app.createLinkBattleInvite(ids, options),
       prepareGuest: (inviteCode, ids) => app.prepareLinkBattle({ role: 'GUEST', inviteCode, instanceIds: ids }),
       prepareHost: (inviteCode, replyCode) => app.prepareLinkBattle({ role: 'HOST', inviteCode, replyCode }) } }),
-    quick: (panel, { start }) => mountQuickMatchLobby(panel, { service: onlineService(), start, game: {
+    quick: (panel, { start }) => mountQuickMatchLobby(panel, { service: onlineService(),
+      start: async (codes, opponent = null) => {
+        clearActivePvpBattle();
+        activePvpBattle = { kind: 'ASYNC_DEFENSE', opponentName: opponent?.tamerName || opponent?.tamerCode || onlineText('unknown'), simulated: Boolean(opponent?.simulated) };
+        return start(codes);
+      },
+      game: {
       candidates: () => app.getPasswordTeamCandidates(),
       createPassword: ids => app.createTeamPassword(ids) } })
   });

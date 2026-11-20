@@ -151,7 +151,7 @@ export function createLocalSimulationAdapter({
         else { again.status = "cancelled"; again.reason = "SIMULATED_GUEST_UNAVAILABLE"; }
         notify(matchId);
       }, 1500);
-      return result(true, { matchId, roomCode, seed: match.seed, status: "open", expiresAt: match.expiresAt, simulated: true });
+      return result(true, { matchId, roomCode, seed: match.seed, hostId: userId, status: "open", expiresAt: match.expiresAt, simulated: true });
     },
     async joinRoom(roomCode) {
       const match = [...matches.values()].find(m => m.roomCode === String(roomCode).trim() && m.status === "open");
@@ -168,6 +168,9 @@ export function createLocalSimulationAdapter({
     async getMatch(matchId) { const m = matches.get(matchId); return m ? { ...m } : null; },
     async reportResult(matchId, report) {
       const m = matches.get(matchId); if (!m) return result(false, { reason: "MATCH_NOT_FOUND" });
+      if (m.status === "finished" || m.status === "disputed") {
+        return result(true, { status: m.status, winnerId: m.winnerId, duplicate: true });
+      }
       m.hostResult = report; m.guestResult = report; m.winnerId = report?.winnerId ?? null; m.status = "finished"; notify(matchId);
       return result(true, { status: "finished", winnerId: m.winnerId });
     },

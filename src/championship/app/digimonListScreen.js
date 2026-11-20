@@ -17,6 +17,7 @@ import { requestArcadeFx } from "./ui/arcadeFx.js";
 import {battleStyleOf,isSpecialSkillId,SPECIAL_SKILL_GLYPHS} from '../contracts/productBattleStyle.js';
 import {battleStyleText,specialSkillEffect} from '../text/battleStyleText.js';
 import {battleGlyph,STYLE_GLYPHS} from './battleGlyphs.js';
+import { syncVitalPercent, syncBreakthroughsAt } from "../contracts/productSyncLevel.js";
 // The Digimon roster -- the original's ui/digimon_list_* scenes.
 //
 // STRUCTURE COMES FROM THE ROM SCENES, NOT FROM TASTE
@@ -425,7 +426,7 @@ export function appendCreatureDetail(detail, entry, { onBurstForm = null, onAwak
  * @param {(instanceId: string, name: string) => ({ok: boolean, entries?: Array<object>})} [options.onRename]
  * @param {(instanceId: string) => ({ok: boolean, reason?: string, entries?: Array<object>})} [options.onRebirth]
  */
-export function createDigimonListView({ root, entries = [], onExit, onRename = null, onRebirth = null, onBurstForm = null, onAwakening = null, fusion = null, initialInstanceId = null, arenaMoves = null } = {}) {
+export function createDigimonListView({ root, entries = [], onExit, onRename = null, onRebirth = null, onBurstForm = null, onAwakening = null, fusion = null, initialInstanceId = null, arenaMoves = null, onGoBattle = null, onGoHunt = null } = {}) {
   if (!root) throw new TypeError("The Digimon list requires a root element");
 
   root.replaceChildren();
@@ -510,6 +511,7 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     button.dataset.control = id;
     if (id === "name_edit_button") { nameEdit = button; continue; }
     button.disabled = true;
+    button.hidden = true;
     button.dataset.state = "NOT_IMPLEMENTED";
     button.title = uiText("In the original, not yet in this build");
     controls.append(button);
@@ -555,6 +557,7 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
   }
   // Say why two of the three stay grey instead of leaving a silent row.
   const controlsNote = element("p", "cm-digimon-controls-note", "移除與報名尚未開放。");
+  controlsNote.hidden = true;
 
   // Name edit opens in place under the controls and writes through the
   // existing rename; the starter's name comes from the opening and is fixed.
@@ -663,8 +666,16 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
         gained ? meterGroup(0, stars.after.need, stars.after.points) : meterGroup(stars.before.points, stars.before.need, stars.after.points - stars.before.points));
       fusionViz.dataset.gained = String(stars.gained);
     }
+    const unlockedBreakthroughs = preview
+      ? syncBreakthroughsAt(preview.after.level).filter((entry) => entry.level > preview.before.level)
+      : [];
+    const vitalDelta = preview && preview.after.level > preview.before.level
+      ? uiText("FUSION_COMBAT_VITAL", { before: syncVitalPercent(preview.before.level), after: syncVitalPercent(preview.after.level) })
+      : null;
     fusionPreview.textContent = !preview ? ""
       : [`Lv.${preview.before.level} → Lv.${preview.after.level}`, `+${number(preview.amount)} EXP`,
+        vitalDelta,
+        ...unlockedBreakthroughs.map((entry) => uiText("FUSION_BREAKTHROUGH_UNLOCK", { level: entry.level })),
         fusionStarText(preview.stars),
         preview.after.capped ? uiText("FUSION_CAPPED") : preview.after.next > 0 ? uiText("FUSION_LEFT", { exp: number(preview.after.next - preview.after.exp) }) : null,
         preview.overflow > 0 ? uiText("FUSION_CRYSTALS", { count: number(preview.overflow) }) : null,
@@ -684,11 +695,14 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     rebirth.dataset.state = onRebirth ? "READY" : "NOT_IMPLEMENTED";
     rebirth.title = onRebirth && !mature ? uiText("只有成熟期的拍檔可以轉生。") : "";
     const fodders = entry && fusion ? fusion.candidates?.(entry.instanceId)?.fodders ?? [] : [];
+    const usableCount = fodders.filter((fodder) => !fodder.refusal).length;
     const sync = entry && fusion?.sync ? fusion.sync(entry.instanceId) : null;
     starLine.hidden = !sync;
     if (sync) { paintStarStrip(sync, { gained: starUpGained }); starUpGained = 0; }
     fuse.hidden = !fusion;
-    fuse.disabled = !fodders.some((fodder) => !fodder.refusal);
+    fuse.disabled = usableCount === 0;
+    fuse.dataset.ready = String(usableCount > 0);
+    fuse.textContent = usableCount > 0 ? uiText("FUSION_READY_COUNT", { count: usableCount }) : uiText("FUSE");
     fuse.title = fusion && fuse.disabled ? uiText("FUSION_NO_FODDER") : "";
   }
   fuse.addEventListener("click", () => {
@@ -799,8 +813,22 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
   back.type = "button";
   back.addEventListener("click", () => { onExit?.(); });
   footer.append(back);
+  if (typeof onGoHunt === "function") {
+    const goHunt = element("button", "cm-screen-back cm-digimon-jump", "LOOP_GO_HUNT");
+    goHunt.type = "button";
+    goHunt.dataset.loopAction = "hunt";
+    goHunt.addEventListener("click", () => { onGoHunt(); });
+    footer.append(goHunt);
+  }
+  if (typeof onGoBattle === "function") {
+    const goBattle = element("button", "cm-screen-primary cm-digimon-jump", "LOOP_GO_BATTLE");
+    goBattle.type = "button";
+    goBattle.dataset.loopAction = "battle";
+    goBattle.addEventListener("click", () => { onGoBattle(); });
+    footer.append(goBattle);
+  }
 
-  shell.append(list, detail, controls, controlsNote, editor, rebirthPanel, rebirthMessage, fusionPanel, fusionMessage, footer);
+  shell.append(list, controls, controlsNote, editor, rebirthPanel, rebirthMessage, fusionPanel, fusionMessage, detail, footer);
   root.append(shell);
   renderList();
   renderDetail();

@@ -1534,6 +1534,9 @@
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs dd { margin: 0; color: #fff; font-weight: 900; }
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs dd:first-of-type { padding: 1px 8px; border-radius: 999px; background: #ffd23f; color: #14141f; }
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__costs dd[data-free="true"] { background: #3ddc84; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__habitat { grid-column: 1 / -1; grid-row: 2; }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__habitat-label { color: rgba(255, 255, 255, 0.8); }
+:root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-preview__habitat-label[data-fusion="true"] { color: #6ee7b7; }
 
 /* The cartridge carousel. */
 :root body .cm-vs2-root[data-screen][data-gate-layout="HOLO_NAV_R1"] .cm-vs2-body--gate > .cm-vs2-gate-fallback { grid-area: carousel; min-height: 0; overflow: visible; }
