@@ -761,7 +761,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const hit = battleFxHitPoint({target, impacts: freshImpacts, endings: endings.filter(e => !e.used), attacker});
         anchors[hit.source]++;
         for (const end of endings) if (Math.abs(end.x - hit.x) < 1 && Math.abs(end.y - hit.y) < 1) end.used = true;
-        const hasAtlasContact = ctx.autoMoveAtlas?.ownsContact(event.contactId) === true;
+        const hasAtlasContact = ctx.autoMoveAtlas?.ownsContact(event.contactId) === true
+          || (event.contactIds?.length > 0 && event.contactIds.every(id => ctx.autoMoveAtlas?.ownsContact(id)));
         const fx = fxFor(event.slot);
         fx.flash = 1; fx.squash = tier === 'heavy' ? 1 : tier === 'medium' ? 0.7 : 0.4;
         fx.knock = tier === 'heavy' ? 1 : 0.6; fx.knockDir = attacker ? Math.sign(target.x - attacker.x) || -target.facing : -target.facing;

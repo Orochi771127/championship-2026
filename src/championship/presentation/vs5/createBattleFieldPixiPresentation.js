@@ -818,6 +818,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
     consumeVfxCues:()=>fxLayer?.consumeCues?.() ?? [],
     /** True while the dynamic layer draws a pixel hit burst at every contact (SPECIAL_HEX_DECLUTTER_20261111). */
     pixelHitsOwnSparks:()=>Boolean(fxLayer?.ownsHitSparks?.()),
+    atlasOwnsImpact:id=>autoMoveAtlas?.ownsNativeImpact(id) === true,
 
     getDiagnostics() {
       return Object.freeze({

@@ -46,7 +46,8 @@ export async function mountBattleVfxThreeOverlay({
   // SPECIAL_HEX_DECLUTTER_20261111 (Owner chose plan B): while the 2D layer's pixel hit bursts mark every contact
   // in the move's element colour, the two hit-spark families (fixed cyan hex shards) are not drawn over them.
   // The native pools, their timing and the impact and ground-impact families are unchanged.
-  pixelHitsOwnSparks = () => false
+  pixelHitsOwnSparks = () => false,
+  atlasOwnsImpact = () => false
 }) {
   if (!host || typeof host.appendChild !== "function") fail("HOST_REQUIRED");
   if (!stage?.app?.ticker || typeof stage.onResize !== "function") fail("PIXI_STAGE_TICKER_REQUIRED");
@@ -231,7 +232,7 @@ export async function mountBattleVfxThreeOverlay({
         // record lingers in the published view (Owner 2026-11-03: orphan bar).
         if(!effect||item.effectId!==effect.id){item.effectId=effect?.id??null;item.shownMs=0;}
         else item.shownMs=(item.shownMs??0)+effectiveDeltaMS;
-        item.container.visible=Boolean(effect&&field&&item.shownMs<IMPACT_MAX_MS)&&!(HIT_SPARK_TYPES.has(item.type)&&pixelHitsOwnSparks());
+        item.container.visible=Boolean(effect&&field&&item.shownMs<IMPACT_MAX_MS)&&!atlasOwnsImpact(effect?.contactId)&&!(HIT_SPARK_TYPES.has(item.type)&&pixelHitsOwnSparks());
         if(effect&&!item.container.visible&&HIT_SPARK_TYPES.has(item.type))handedSparks++;
         if(!item.container.visible)continue;
         visibleImpacts++;

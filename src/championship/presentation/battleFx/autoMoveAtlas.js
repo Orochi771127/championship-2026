@@ -26,7 +26,7 @@ function placeContact(atlas, binding, c, rect, scale, bodies) {
   const facing = Math.sign(c.targetPoint[0] - (c.casterPoint ?? c.sourcePoint)[0]) || 1;
   if (offset) {
     if (!body) return false;
-    at.x += body.width * offset[0] * facing;
+    at.x += (body.spread ?? 0) + body.width * offset[0] * facing;
     at.y -= body.height * offset[1];
   } else if (binding.anchor === 'target_ground') {
     at.y = rect.y + c.targetPoint[1]/4096*scale;
@@ -51,21 +51,27 @@ export function createAutoMoveAtlas({PIXI, front, ground, reducedMotion}) {
   const atlas = createMoveAtlas({PIXI, front, ground, reducedMotion, records, maxSheets:12, mode:'auto',
     assetRoot:'assets/production/vfx/auto-moves/', labelPrefix:'auto-move'});
   const flights = new Map(), owned = new Set(), contactIds = new Set();
-  const cues = new Set();
+  const cues = new Set(), claimedContacts = new Set(), claimedSupport = new Set();
+  function remember(set, key) {
+    set.add(key);
+    if (set.size > 256) set.delete(set.values().next().value);
+  }
   const recipients = new Map(), ownedSupport = new Set(), heals = new Set();
   function update(view, rect, scale, dt, events, bodies) {
     owned.clear(); contactIds.clear(); ownedSupport.clear(); heals.clear(); atlas.beginFrame();
     for (const event of events) {
       const neutral = event.type === 'NEUTRAL_RELEASE';
       const r = neutral ? event : event.type === 'SUPPORT' ? event.receipt : null;
-      if (!r || (!neutral && !r.result)) continue;
+      if (!r) continue;
+      const supportKey=r.actionId+'/'+r.targetSlot;
+      if (!neutral && !r.result) { remember(claimedSupport,supportKey); continue; }
       const phase = neutral ? 'release' : 'recipient';
       if (!atlas.ready(r.moveId, phase)) continue;
       const slot = neutral ? r.slot : r.targetSlot;
       if (!bodies?.get(slot)) continue;
       recipients.set(r, {key:r.moveId,phase,slot,age:0});
       if (!neutral) {
-        ownedSupport.add(r);
+        ownedSupport.add(r); remember(claimedSupport,supportKey);
         if (r.result === 'heal') heals.add(slot + '/' + (r.hpAfter-r.hpBefore));
       }
     }
@@ -91,7 +97,7 @@ export function createAutoMoveAtlas({PIXI, front, ground, reducedMotion}) {
         if (shot.key === 122 && shot.draw && !cues.has(o.actionId)) {
           const body=bodies?.get(o.slot);
           if (body && atlas.place(o,122,'cue',body.x+body.width*0.30*body.facing,body.top+body.height*0.5,
-            0,scale,0,false,true)) cues.add(o.actionId);
+            0,scale,0,false,true)) remember(cues,o.actionId);
         }
       }
       if (!shot.draw) continue;
@@ -145,12 +151,16 @@ export function createAutoMoveAtlas({PIXI, front, ground, reducedMotion}) {
       if (shot.ended) shot.ended.age += dt;
       shot.age += dt;
     }
-    const liveCueActions = new Set([...flights.values()].filter(s => s.key===122).map(s => s.actionId));
-    for (const id of cues) if (!liveCueActions.has(id)) cues.delete(id);
+    for (const id of contactIds) remember(claimedContacts,id);
+    for (const actor of view.nativeLifecycle?.effectActors ?? []) {
+      const o=actor.origin;
+      if (o && (claimedContacts.has(o.contactId) || (o.supportTarget !== undefined && claimedSupport.has(o.actionId+'/'+o.supportTarget)))) owned.add(actor.id);
+    }
     atlas.endFrame(dt);
   }
   return {update, supports:key=>records.has(key), ownsActor:id=>owned.has(id), ownsContact:id=>contactIds.has(id),
+    ownsNativeImpact:id=>claimedContacts.has(id),
     ownsSupport:r=>ownedSupport.has(r), ownsHeal:(slot,amount)=>heals.has(slot+"/"+amount),
     diagnostics:()=>({...atlas.diagnostics(),flightIds:[...owned],contactIds:[...contactIds]}),
-    dispose(){cues.clear();recipients.clear();ownedSupport.clear();heals.clear();flights.clear();owned.clear();contactIds.clear();atlas.dispose();}};
+    dispose(){claimedContacts.clear();claimedSupport.clear();cues.clear();recipients.clear();ownedSupport.clear();heals.clear();flights.clear();owned.clear();contactIds.clear();atlas.dispose();}};
 }

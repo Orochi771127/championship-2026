@@ -312,3 +312,24 @@ test('a confirmed older Auto projectile keeps its owner and move after a new lau
   assert.equal(events.find(e => e.type === 'HIT').moveId, 76);
   assert.equal(tracker.consume(view).filter(e => e.type === 'MOVE_CONTACT').length, 0);
 });
+
+
+test('coalesced damage identifies all and only the receipts for that target, once', () => {
+  const tracker=createBattleFxEventTracker();
+  tracker.consume(fakeView({frame:10,hps:[900,null,null,800]}));
+  const view=fakeView({frame:14,hps:[900,null,null,700]});
+  const receipt=(id,slot,before,after)=>({id,actionId:8,actorId:40,slot:0,targetSlot:slot,frame:12,
+    moveId:76,hpBefore:before,hpAfter:after,sourcePoint:[40,80,0],targetPoint:[50,90,0]});
+  view.nativeLifecycle.contacts={confirmed:[receipt(1,3,800,750),receipt(2,4,150,90),receipt(3,3,750,700)]};
+  const events=tracker.consume(view);
+  assert.deepEqual(events.find(e=>e.type==='HIT').contactIds,[1,3]);
+  assert.equal(events.filter(e=>e.type==='MOVE_CONTACT').length,3);
+  assert.equal(tracker.consume(view).filter(e=>e.type==='MOVE_CONTACT').length,0);
+});
+
+test('neutral native releases are reported once per confirmed action', () => {
+  const tracker=createBattleFxEventTracker(),view=fakeView({frame:10,hps:[900,null,null,800]});
+  view.nativeLifecycle.neutralReleases=[{actionId:7,moveId:28,slot:0,frame:8},{actionId:8,moveId:30,slot:0,frame:10}];
+  assert.deepEqual(tracker.consume(view).filter(e=>e.type==='NEUTRAL_RELEASE').map(e=>e.moveId),[28,30]);
+  assert.equal(tracker.consume(view).filter(e=>e.type==='NEUTRAL_RELEASE').length,0);
+});

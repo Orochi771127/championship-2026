@@ -9,6 +9,17 @@
 /** History entries are copied per view; key one entry stably. */
 const historyKey = (entry, index) => `${entry.frame}:${entry.slot}:${entry.type}:${index}`;
 
+// Multiple native receipts can be coalesced into a single HP change between render ticks.
+function coversDelta(contacts, before, after) {
+  if (contacts.length < 2) return {};
+  let hp=before;
+  for (const c of contacts) {
+    if (c.hpBefore !== hp) return {};
+    hp=c.hpAfter;
+  }
+  return hp===after ? {contactIds:contacts.map(c=>c.id)} : {};
+}
+
 export function createBattleFxEventTracker() {
   let previous = null;
   let started = false, ended = false;
@@ -96,7 +107,8 @@ export function createBattleFxEventTracker() {
             const matches = freshContacts.filter(c => c.targetSlot === slot && c.hpBefore === hpBefore && c.hpAfter === hpAfter);
             const contact = matches.length === 1 ? matches[0] : null;
             events.push(Object.freeze({type: 'HIT', frame, slot, damage: hpBefore - hpAfter, hpBefore, hpAfter, maxHp,
-              ratio: (hpBefore - hpAfter) / maxHp, contactId: contact?.id ?? null, attackerSlot: contact?.slot ?? null, moveId: contact?.moveId ?? null}));
+              ratio: (hpBefore - hpAfter) / maxHp, contactId: contact?.id ?? null,
+              ...(!contact && coversDelta(freshContacts.filter(c=>c.targetSlot===slot),hpBefore,hpAfter)), attackerSlot: contact?.slot ?? null, moveId: contact?.moveId ?? null}));
           } else if (hpAfter > hpBefore) {
             events.push(Object.freeze({type: 'HEAL', frame, slot, amount: hpAfter - hpBefore, maxHp}));
           }

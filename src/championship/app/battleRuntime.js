@@ -336,7 +336,11 @@ export function createBattleRuntime(options = {}) {
         const actorResult=nativeActors.call(routine,args);
         if(engaged&&(routine===0x02047904||routine===0x020479a4))state.scriptPose=nativeActors.animationRequestOf(slot)?.sequenceRequestId;
         if(actorResult!==undefined)return actorResult;
-        const origin = routine === 0x0211b264 ? { actionId: state.actionId, moveId: move.recordIndex, slot } : null;
+        const origin = routine === 0x0211b264 ? {
+          actionId:state.actionId, moveId:move.recordIndex, slot,
+          ...(state.impactContactId ? {contactId:state.impactContactId} : {}),
+          ...(state.supportTarget !== undefined ? {supportTarget:state.supportTarget} : {})
+        } : null;
         const effectResult=effectActors.call(routine,args,origin);if(effectResult!==undefined)return effectResult;
         const soundResult=soundEvents.call(routine,args,session.frame,move.recordIndex);if(soundResult!==undefined)return soundResult;
         const impactResult=impactEffects.call(nativeActors.memory,routine,args);if(impactResult!==undefined)return impactResult;
@@ -372,7 +376,9 @@ export function createBattleRuntime(options = {}) {
     for(const visit of plan.visits){
       if(visit.outcome!==BATTLE_CONTACT_ACCEPTED)continue;
       const targetSlot=isSingleTargetSelector(move.targetMode)?action.targetSlot:targetSlots[visit.slot].slot;
-      state.launch.startImpact({targetObject:nativeActors.address(targetSlot),xyz:nativeActors.position(targetSlot)});
+      state.supportTarget = targetSlot;
+      try { state.launch.startImpact({targetObject:nativeActors.address(targetSlot),xyz:nativeActors.position(targetSlot)}); }
+      finally { delete state.supportTarget; }
       hitRuntime.support(targetSlot, move, {actionId:state.actionId, moveId:move.recordIndex, casterSlot:slot});
     }
   }
@@ -441,9 +447,11 @@ export function createBattleRuntime(options = {}) {
         actor:parameters,sourcePoint:effectActors.position(parameters),hpAfter:defender.currentHp,result:result.code});
         if(contacts.history.length>128)contacts.history.shift();}
       const origin = parameters ? effectActors.originOf(parameters) : state;
+      let contactId=null;
       if (hpBefore > defender.currentHp && origin && origin.actionId === state?.actionId
         && (!parameters || (origin.moveId === move.recordIndex && origin.slot === slot))) {
-        confirmedContacts.push({ id: ++nextContactId, frame: session.frame, actionId: origin.actionId,
+        contactId=++nextContactId;
+        confirmedContacts.push({ id: contactId, frame: session.frame, actionId: origin.actionId,
           actorId: parameters ? effectActors.instanceOf(parameters) : null, slot, targetSlot, moveId: move.recordIndex,
           sourcePoint: parameters ? effectActors.position(parameters) : nativeActors.position(slot),
           casterPoint: nativeActors.position(slot), targetPoint: nativeActors.position(targetSlot), hpBefore, hpAfter: defender.currentHp });
@@ -452,12 +460,13 @@ export function createBattleRuntime(options = {}) {
       hits.push({ slot: targetSlot, damage: resolved.damage, critical: resolved.critical });
       burst.onHit({attackerSlot:slot,defenderSlot:targetSlot,damage:resolved.damage,defenderMaxHp:defender.maxHp??0,defenderHp:defender.currentHp});
       arenaHazards?.onHit({move,attackerSlot:slot,targetPosition:nativeActors?.position(targetSlot)});
-      state?.launch?.startImpact({targetObject:nativeActors.address(targetSlot),xyz:nativeActors.position(targetSlot),
+      if (state) state.impactContactId=contactId;
+      try { state?.launch?.startImpact({targetObject:nativeActors.address(targetSlot),xyz:nativeActors.position(targetSlot),
         targetBox:nativeActors.box(targetSlot),resultCode:result.code,nativeKind,offset:impactOffset,
         onSpark:kind=>{
           return impactEffects.spawnNative(nativeActors.memory,{owner:state.launch.object,target:nativeActors.address(targetSlot),
-            type:kind==='SECONDARY_3D'?(attacker.speciesId>=72?3:2):(defender.speciesId>=72?1:0),offset:impactOffset});
-        }});
+            contactId, type:kind==='SECONDARY_3D'?(attacker.speciesId>=72?3:2):(defender.speciesId>=72?1:0),offset:impactOffset});
+        }}); } finally { if (state) delete state.impactContactId; }
     }
     return { hits, rejected: walk.rejected };
   }
