@@ -61,6 +61,7 @@ import {createBattleEffectSprites} from '../battleEffectSprites.js';
 import {createBattleStatusAilmentFx, multiplyTint} from '../battleFx/battleStatusAilmentFx.js';
 import {createBm03GroundShadows} from '../bm03GroundShadows.js';
 import {createBattleFxCamera,clampBattleCameraToMap,battleFxFreezePace,battleFxApproach,createBattleFxSteadyInsets} from '../battleFx/battleFxCamera.js';
+import {createAutoMoveAtlas} from '../battleFx/autoMoveAtlas.js';
 import {createBattleFxEventTracker} from '../battleFx/battleFxEvents.js';
 import {createBattleFxLayer, battleFxStasisTint} from '../battleFx/battleFxLayer.js';
 import {createRemadeEffectArt} from '../vfx/remadeEffectCells.js';
@@ -325,6 +326,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
   // Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): the hex shell that wraps and bursts a partner.
   const burstShell = createBattleBurstShell({PIXI:stage.PIXI, layer:actorLayer, reducedMotion});
   const shellSlots = new Set();
+  const autoMoveAtlas = fxLayer ? createAutoMoveAtlas({PIXI:stage.PIXI, ground:fxBack, front:fxFront, reducedMotion}) : null;
   const tracker = fxLayer ? createBattleFxEventTracker() : null;
   // One authored map only. The camera covers the viewport and stays within
   // the real arena throughout tracking, zoom and shake; no duplicated terrain.
@@ -683,7 +685,8 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       const events = [...tracker.consume(view), ...motionEvents, ...moveQaEvents(view, dtMs)];
       camera = director.update({dtMs, viewport:{width:rect.width, height:rect.height}, art:artRect,
         subjects:[...slotInfos.values()], points:fxLayer.projectilePoints(), insets, prelude:Boolean(view.specialPrelude)});
-      fxContext = {artRect, nativeScale, localTeam, opening:view.opening, viewport:{width:rect.width, height:rect.height}, insets,
+      autoMoveAtlas.update(view, artRect, nativeScale, dtMs, events);
+      fxContext = {autoMoveAtlas, artRect, nativeScale, localTeam, opening:view.opening, viewport:{width:rect.width, height:rect.height}, insets,
         slotInfo:slot => slotInfos.get(slot) ?? null,
         opponentsOf:slot => view.combatants.filter(c => c.present && !c.down && c.team !== view.combatants[slot]?.team).map(c => c.slot),
         camera:{...camera, director}};
@@ -692,7 +695,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       for (const event of events) fx?.onEvent?.(event);
     }
     // During a juicy hit-stop the move's own effect cells hold their frame too.
-    if (!fxLayer?.hitStopActive?.()) effectSprites?.update(view.nativeLifecycle?.effectActors ?? [], artRect,
+    if (!fxLayer?.hitStopActive?.()) effectSprites?.update((view.nativeLifecycle?.effectActors ?? []).filter(a => !autoMoveAtlas?.ownsActor(a.id)), artRect,
       nativeScale, view.specialPrelude?.brightnessQ12 ?? 4096, effectLooks(view));
     const focus=view.specialPrelude;
     const actor=focus ? view.combatants[focus.slot] : null;
@@ -828,7 +831,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
         outcome: source.getFrame().outcome,
         viewport: Object.freeze({ ...lastViewport }),
         effectSprites:effectSprites?.getDiagnostics() ?? null,
-        dynamicFx:fxLayer ? Object.freeze({...fxLayer.getDiagnostics(), camera:lastCamera,
+        dynamicFx:fxLayer ? Object.freeze({...fxLayer.getDiagnostics(), moveAtlas:autoMoveAtlas.diagnostics(), camera:lastCamera,
           bodies:[...slotInfos.values()].map(b=>Object.freeze({slot:b.slot,x:Math.round(b.x),groundY:Math.round(b.groundY),top:Math.round(b.top),width:Math.round(b.width),down:Boolean(b.down),
             // The declared display separation; the body is otherwise on its stand.
             spread:Math.round((b.spread ?? 0)*100)/100})),
@@ -868,6 +871,7 @@ export async function mountBattleFieldPixiPresentation({ stage, source, fieldArt
       }
       if (fieldArt?.foregroundObject?.parent === world) world.removeChild(fieldArt.foregroundObject);
       if (scene.parent) scene.parent.removeChild(scene);
+      autoMoveAtlas?.dispose();
       effectSprites?.dispose();
       fxLayer?.dispose();
       statusFx?.dispose();

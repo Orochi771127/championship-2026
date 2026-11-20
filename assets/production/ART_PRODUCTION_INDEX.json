@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 102,
+    "registeredRuntimeBundles": 104,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -1157,6 +1157,26 @@
     {
       "assetId": "art:vfx:arena:shadeStep",
       "manifestPath": "assets/production/vfx/arena-moves/shadeStep.json",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "LOCAL_PLAYABLE_PILOT",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "runtimeEligible": true,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:vfx:auto:76",
+      "manifestPath": "assets/production/vfx/auto-moves/76.json",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "LOCAL_PLAYABLE_PILOT",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "runtimeEligible": true,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:vfx:auto:143",
+      "manifestPath": "assets/production/vfx/auto-moves/143.json",
       "rightsStatus": "ORIGINAL_GENERATED",
       "productionStatus": "LOCAL_PLAYABLE_PILOT",
       "shippingStatus": "NOT_SHIPPING_READY",

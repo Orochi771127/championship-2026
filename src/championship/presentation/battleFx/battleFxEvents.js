@@ -86,7 +86,7 @@ export function createBattleFxEventTracker() {
             const matches = freshContacts.filter(c => c.targetSlot === slot && c.hpBefore === hpBefore && c.hpAfter === hpAfter);
             const contact = matches.length === 1 ? matches[0] : null;
             events.push(Object.freeze({type: 'HIT', frame, slot, damage: hpBefore - hpAfter, hpBefore, hpAfter, maxHp,
-              ratio: (hpBefore - hpAfter) / maxHp, attackerSlot: contact?.slot ?? null, moveId: contact?.moveId ?? null}));
+              ratio: (hpBefore - hpAfter) / maxHp, contactId: contact?.id ?? null, attackerSlot: contact?.slot ?? null, moveId: contact?.moveId ?? null}));
           } else if (hpAfter > hpBefore) {
             events.push(Object.freeze({type: 'HEAL', frame, slot, amount: hpAfter - hpBefore, maxHp}));
           }

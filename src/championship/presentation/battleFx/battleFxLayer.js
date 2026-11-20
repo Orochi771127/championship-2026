@@ -526,6 +526,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     const live = new Set();
     const launches = (view.nativeLifecycle?.active ?? []).filter(l => Number.isInteger(l.ownerSlot));
     for (const actor of view.nativeLifecycle?.effectActors ?? []) {
+      if (ctx.autoMoveAtlas?.ownsActor(actor.id)) continue;
       const family = String(actor.name ?? '').replace(/^e003_/, '');
       const form = battleFxFamilyForm(family);
       if (!form || form === 'common' || form === 'support' || form === 'character' || form === 'smoke') continue;
@@ -584,6 +585,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     const live = new Set(), size = ctx.nativeScale * 4.5;
     kitStats.size = Math.round(size);
     for (const actor of view.nativeLifecycle?.effectActors ?? []) {
+      if (ctx.autoMoveAtlas?.ownsActor(actor.id)) continue;
       live.add(actor.id);
       const at = battleFxProject(actor.point, ctx.artRect, ctx.nativeScale);
       let entry = standIns.get(actor.id);
@@ -775,9 +777,11 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           const p = toScreen(ctx, hit.x, target.top);
           spawnNumber({x: p.x, y: p.y, value: event.damage, critical, dir: fx.knockDir || 1,
             tint: target.team === ctx.localTeam ? 0xffd0c8 : 0xffffff});
+          if (ctx.autoMoveAtlas?.ownsContact(event.contactId)) continue;
           // Knockback slide: dust kicks up behind the struck feet along the blow.
           dust({x: target.x, groundY: target.groundY, count: rich ? 4 : 2, spread: target.width * 0.3, push: fx.knockDir, life: 520, scale: 0.9});
         }
+        if (ctx.autoMoveAtlas?.ownsContact(event.contactId)) continue;
         // Original cells drawn by this layer: a fallback record's own hit set, the
         // element accent on a bank-less melee hit, and the struck body's overlay.
         if (vfx) {
