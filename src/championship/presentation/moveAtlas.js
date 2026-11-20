@@ -92,6 +92,7 @@ export function createMoveAtlas({ PIXI, ground, front, reducedMotion, records, m
     request,
     supports: key => records.has(key),
     ready: (key, phase) => sheets.get(key)?.clips.has(phase) ?? false,
+    duration: (key, phase) => sheets.get(key)?.clips.get(phase)?.duration ?? 0,
     beginFrame() { frame++; },
     place,
     endFrame(deltaMs) {

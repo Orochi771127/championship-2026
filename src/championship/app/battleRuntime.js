@@ -230,6 +230,7 @@ export function createBattleRuntime(options = {}) {
   const scriptStates = new WeakMap();
   let nextActionId = 0, nextContactId = 0;
   const confirmedContacts = [];
+  const neutralReleases = [];
   let nativeActors=null,effectActors=null;
   const nativeLaunches=new Set(), nativeHistory=[];
   const impactEffects=createBattleImpactEffects();
@@ -361,6 +362,10 @@ export function createBattleRuntime(options = {}) {
 
   function applySupportFromLaunch(slot,action,state) {
     const move=action.move,slots=session.slots,ownTeam=battleTeamOfSlot(slot);
+    if (move.recordIndex >= 28 && move.recordIndex <= 30) {
+      neutralReleases.push({actionId:state.actionId, moveId:move.recordIndex, slot, frame:session.frame});
+      if (neutralReleases.length > 32) neutralReleases.shift();
+    }
     const targetSlots=slots.flatMap((c,i)=>c&&battleTeamOfSlot(i)===ownTeam?[{slot:i,currentHp:c.currentHp}]:[]);
     const singleTarget=slots[action.targetSlot]?{slot:action.targetSlot,currentHp:slots[action.targetSlot].currentHp}:null;
     const plan=planBattleContactTargets({actionField50:move.kind,actionField54:move.targetMode,singleTarget,targetSlots});
@@ -368,7 +373,7 @@ export function createBattleRuntime(options = {}) {
       if(visit.outcome!==BATTLE_CONTACT_ACCEPTED)continue;
       const targetSlot=isSingleTargetSelector(move.targetMode)?action.targetSlot:targetSlots[visit.slot].slot;
       state.launch.startImpact({targetObject:nativeActors.address(targetSlot),xyz:nativeActors.position(targetSlot)});
-      hitRuntime.support(targetSlot,move);
+      hitRuntime.support(targetSlot, move, {actionId:state.actionId, moveId:move.recordIndex, casterSlot:slot});
     }
   }
 
@@ -892,7 +897,7 @@ export function createBattleRuntime(options = {}) {
           timing:{pause:nativeActors.memory.readU32(nativeActors.worldAddress,0x1f134),slowdown:nativeActors.memory.readU32(nativeActors.worldAddress,0x1f138),issues:[...timingIssues]},
           // No impact has flashed before the first frame (-1 === 0-1 is not a flash).
           flash:{active:!session.ended&&impactFlashFrame>=0&&impactFlashFrame===session.frame-1,frame:impactFlashFrame,source:'0210FC68'},
-          effectPool:effectActors.diagnostics(),effectActors:effectActors.snapshot(),contacts:{...contacts,history:[...contacts.history],confirmed:[...confirmedContacts]},poseWaitAdaptations:poseWaitAdaptations.map(a=>({...a})),reactions:hitRuntime.snapshot(),normalFlow:session.normalFlow.snapshot()}) });
+          effectPool:effectActors.diagnostics(),effectActors:effectActors.snapshot(),contacts:{...contacts,history:[...contacts.history],confirmed:[...confirmedContacts]},neutralReleases:[...neutralReleases],poseWaitAdaptations:poseWaitAdaptations.map(a=>({...a})),reactions:hitRuntime.snapshot(),normalFlow:session.normalFlow.snapshot()}) });
       unsubscribe = source.subscribe(() => {
         const view = source.getView();
         for (const observer of [...observers]) {
@@ -962,7 +967,7 @@ export function createBattleRuntime(options = {}) {
       impactEffects.clear();
       soundEvents.clear();
       effectActors?.clear();effectActors=null;
-      contacts.projectileCalls=0;contacts.projectileHits=0;contacts.meleeCalls=0;contacts.history.length=0;confirmedContacts.length=0;
+      contacts.projectileCalls=0;contacts.projectileHits=0;contacts.meleeCalls=0;contacts.history.length=0;confirmedContacts.length=0;neutralReleases.length=0;
       specialPrelude = null;
       completedRound = null;
     }

@@ -16,6 +16,7 @@ export function createBattleFxEventTracker() {
   const seenHistory = new Set();
   let historyFrame = -1;
   let lastContactId = 0;
+  const seenNeutral = new Set();
 
   function launchesOf(view) {
     return (view.nativeLifecycle?.active ?? [])
@@ -59,13 +60,22 @@ export function createBattleFxEventTracker() {
           if (seenHistory.has(key)) return;
           seenHistory.add(key);
           if (entry.type === 'STATUS_APPLIED') events.push(Object.freeze({type: 'STATUS', frame, slot: entry.slot, code: entry.code}));
-          else if (entry.type === 'SUPPORT_APPLIED') events.push(Object.freeze({type: 'SUPPORT', frame, slot: entry.slot, statusCode: entry.statusCode}));
+          else if (entry.type === 'SUPPORT_APPLIED') events.push(Object.freeze({type: 'SUPPORT', frame, slot: entry.slot, statusCode: entry.statusCode, ...(entry.receipt ? {receipt:entry.receipt} : {})}));
           else if (entry.type === 'LANDED') events.push(Object.freeze({type: 'LANDED', frame, slot: entry.slot}));
         });
         if (latest > historyFrame) {
           for (const key of [...seenHistory]) if (Number(key.split(':')[0]) < latest) seenHistory.delete(key);
           historyFrame = latest;
         }
+      }
+
+      const releases = view.nativeLifecycle?.neutralReleases ?? [];
+      const current = new Set(releases.map(r => r.actionId));
+      for (const id of seenNeutral) if (!current.has(id)) seenNeutral.delete(id);
+      for (const release of releases) {
+        if (seenNeutral.has(release.actionId)) continue;
+        seenNeutral.add(release.actionId);
+        events.push({type:'NEUTRAL_RELEASE', ...release});
       }
 
       const freshContacts = [];

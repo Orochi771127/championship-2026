@@ -9902,7 +9902,65 @@
     "assets/production/vfx/auto-moves/620.json",
     "assets/production/vfx/auto-moves/620.png",
     "assets/production/vfx/auto-moves/621.json",
-    "assets/production/vfx/auto-moves/621.png"
+    "assets/production/vfx/auto-moves/621.png",
+    "assets/production/vfx/auto-moves/2.json",
+    "assets/production/vfx/auto-moves/2.png",
+    "assets/production/vfx/auto-moves/3.json",
+    "assets/production/vfx/auto-moves/3.png",
+    "assets/production/vfx/auto-moves/4.json",
+    "assets/production/vfx/auto-moves/4.png",
+    "assets/production/vfx/auto-moves/5.json",
+    "assets/production/vfx/auto-moves/5.png",
+    "assets/production/vfx/auto-moves/6.json",
+    "assets/production/vfx/auto-moves/6.png",
+    "assets/production/vfx/auto-moves/7.json",
+    "assets/production/vfx/auto-moves/7.png",
+    "assets/production/vfx/auto-moves/8.json",
+    "assets/production/vfx/auto-moves/8.png",
+    "assets/production/vfx/auto-moves/9.json",
+    "assets/production/vfx/auto-moves/9.png",
+    "assets/production/vfx/auto-moves/10.json",
+    "assets/production/vfx/auto-moves/10.png",
+    "assets/production/vfx/auto-moves/11.json",
+    "assets/production/vfx/auto-moves/11.png",
+    "assets/production/vfx/auto-moves/12.json",
+    "assets/production/vfx/auto-moves/12.png",
+    "assets/production/vfx/auto-moves/13.json",
+    "assets/production/vfx/auto-moves/13.png",
+    "assets/production/vfx/auto-moves/14.json",
+    "assets/production/vfx/auto-moves/14.png",
+    "assets/production/vfx/auto-moves/15.json",
+    "assets/production/vfx/auto-moves/15.png",
+    "assets/production/vfx/auto-moves/16.json",
+    "assets/production/vfx/auto-moves/16.png",
+    "assets/production/vfx/auto-moves/17.json",
+    "assets/production/vfx/auto-moves/17.png",
+    "assets/production/vfx/auto-moves/18.json",
+    "assets/production/vfx/auto-moves/18.png",
+    "assets/production/vfx/auto-moves/19.json",
+    "assets/production/vfx/auto-moves/19.png",
+    "assets/production/vfx/auto-moves/20.json",
+    "assets/production/vfx/auto-moves/20.png",
+    "assets/production/vfx/auto-moves/21.json",
+    "assets/production/vfx/auto-moves/21.png",
+    "assets/production/vfx/auto-moves/22.json",
+    "assets/production/vfx/auto-moves/22.png",
+    "assets/production/vfx/auto-moves/23.json",
+    "assets/production/vfx/auto-moves/23.png",
+    "assets/production/vfx/auto-moves/24.json",
+    "assets/production/vfx/auto-moves/24.png",
+    "assets/production/vfx/auto-moves/25.json",
+    "assets/production/vfx/auto-moves/25.png",
+    "assets/production/vfx/auto-moves/26.json",
+    "assets/production/vfx/auto-moves/26.png",
+    "assets/production/vfx/auto-moves/27.json",
+    "assets/production/vfx/auto-moves/27.png",
+    "assets/production/vfx/auto-moves/28.json",
+    "assets/production/vfx/auto-moves/28.png",
+    "assets/production/vfx/auto-moves/29.json",
+    "assets/production/vfx/auto-moves/29.png",
+    "assets/production/vfx/auto-moves/30.json",
+    "assets/production/vfx/auto-moves/30.png"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -40630,7 +40688,7 @@
       },
       {
         "path": "src/championship/app/battleRuntime.js",
-        "sha256": "5e5388d374c3c74555625226f228e4b794a2d31849eab708a5a1736a77b15786"
+        "sha256": "8b1a2664e961404193ae3f5f31acb478c356e7e30de390021827c6ed744d1eae"
       },
       {
         "path": "src/championship/app/bindRewardPopup.js",
@@ -41230,7 +41288,7 @@
       },
       {
         "path": "src/championship/battle/battleHitRuntime.js",
-        "sha256": "b995abf4457f4a2961f8ddfeed57d6723a1763fc6164405af0d5b0b985c2e985"
+        "sha256": "0a44cd8479601b31f99c9e53e02b418734373e22c5fb6cea110f9134e4ebdd2f"
       },
       {
         "path": "src/championship/battle/battleHitState.js",
@@ -41970,11 +42028,11 @@
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxEvents.js",
-        "sha256": "7605d888f01876020242739a2047e59e603bc2ae5088c93130d711fd5c766552"
+        "sha256": "76c0e75b49b63829d783e345d08e9d9a60621fc56aa8ee20e5fcd2ccb5c4ad43"
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxLayer.js",
-        "sha256": "688f029d8ceb1057739b41ddcf8aa2cb33bc829ab44f020db24e28623e1d634c"
+        "sha256": "90dbd36883e44fdd021ba0027c448f3bfcceea8c7eff8943a6b32a6e27280315"
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxPalettes.js",
@@ -43806,11 +43864,11 @@
       },
       {
         "path": "src/championship/presentation/moveAtlas.js",
-        "sha256": "6b00b61ccf782da59697167fa175773457bc8f2a2297c36a5aac1b8fbf6cf31f"
+        "sha256": "eae866b8004b9d55315ce545e58e7485b5019e67f6d3e4504cbb12865a3d7ac6"
       },
       {
         "path": "src/championship/presentation/battleFx/autoMoveAtlas.js",
-        "sha256": "f730c527f9f14050ed81fe82cb611e376dfdebb7a4e087f03b72b30bfe7da8b4"
+        "sha256": "3ff26be14c72a369950c8e607c9d6f5a5a044d97d91cced36a5d0e81125499e8"
       },
       {
         "path": "assets/production/vfx/auto-moves/76.json",
@@ -43830,7 +43888,7 @@
       },
       {
         "path": "src/championship/presentation/battleFx/autoMoveBindings.js",
-        "sha256": "15f105924549b708bcfe88af02a8e29d7bdd8e24b85fc9921537d1a82652c330"
+        "sha256": "5ca7da4f985279e0ad15e4fec644d7e4b1e0cff7b28a29994ee4c4f15765b6ef"
       },
       {
         "path": "assets/production/vfx/auto-moves/31.json",
@@ -47015,6 +47073,238 @@
       {
         "path": "assets/production/vfx/auto-moves/621.png",
         "sha256": "705ea9190eff2e42d5dcb7a02f47165f253d08fb5136524607eefff08983f8dd"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/2.json",
+        "sha256": "177e5bcd98743b44540f210659011e85ca93a7ac3646d856fcadc45bf5f71d26"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/2.png",
+        "sha256": "a1f78112181047754d720fabf966bc7f9d32ca23a0a02f27705860c7f0257a02"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/3.json",
+        "sha256": "a2d3c36f0ae30cd5636e842397b123e7e90d40ed75d9ce63b29e00434b38e2a9"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/3.png",
+        "sha256": "c9be92605bd1f5e3dd246d26c3f8dbf98ac6000f4b80bfaa8c101a33a4a232ab"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/4.json",
+        "sha256": "d033965a9660ec16aae0a9d5dd7b7acedeaf939a34d63783f6f7d651fd3a996f"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/4.png",
+        "sha256": "7fb4fc7b4f43422ca7e151dc77b059070877f576d2d67a60cff9e28d990b69a3"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/5.json",
+        "sha256": "91fd4251d5a85a89ec93d0d79ecab8fbdad7a29a11b238e5eeed949a3def0a5e"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/5.png",
+        "sha256": "7a6a35fb1e2b49ccdcdb73f45e3f4c4df54380e9e7ad964f778f8a98ffee96e5"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/6.json",
+        "sha256": "d5105c66f29055b3cb3ba6c6cb6cd0853f2ec7a3f3c9319c91d8954e4f11e2f8"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/6.png",
+        "sha256": "148f3cee5166b0ba502b391a5e2bb1231bdbae5a45eeedd2d8d09942638699c3"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/7.json",
+        "sha256": "0516966e7a89dc47a84ad2d1871386d0f84154b7aae5748b34e48e8985362ca4"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/7.png",
+        "sha256": "8fde131257669926af22e34af9beed28c661bc3fb2dc95c59ff16305f10dad3b"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/8.json",
+        "sha256": "23d3c44aa4c10e4c201edfcf337ddd28027f93f3f1f6ded6a6c94ce65407fbcf"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/8.png",
+        "sha256": "814bb369e2d5546a0818f100afcecd247080829fd93e2f512b66edfeacb3651f"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/9.json",
+        "sha256": "46b039910d7dcefb0cb5a88122edd6e4c56057f9b2030530939b238b16bceaa0"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/9.png",
+        "sha256": "cbdd0b5ebdb539c56677da9e9aad68fb5a15385d191392dceeb0689cd23ef8a2"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/10.json",
+        "sha256": "a0620b49ae67804f771a63583d205bec175bb483496496080a0517f0e5f9c498"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/10.png",
+        "sha256": "39b25d1b50ee4a485ef86c0ef1a675272a4ae5f6f89def1edc4dd66ddcf39761"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/11.json",
+        "sha256": "bdc65af55ee08d6503523b82c9cdc5c963bc9293d767fea897e78bf50fbcf7c4"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/11.png",
+        "sha256": "6ea34eafcfbd6f37b9187a0b113ab719b184e643638edf0eaa6fd000c12e0d9c"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/12.json",
+        "sha256": "c6ef96b66e6f93252cb8745042f059b35b78c6303d4218041c3fab76c9ebb095"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/12.png",
+        "sha256": "cccb2c40f2b49b870c9c7887a66b119614271cc354a6d813a827404c4f6b764a"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/13.json",
+        "sha256": "1065d80b8e1b838b6c0eee79cb87d7ce53447797e329efa5c14fc5e9f00ada21"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/13.png",
+        "sha256": "90015068503612fda3a0e8f94224332dbc49ab9c91222faf9608a74b8ac95e6f"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/14.json",
+        "sha256": "7b9c0e4cfe954fbc7e77221e1df25bf90130b7733006c3168bba90d666f1d6f4"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/14.png",
+        "sha256": "d4eabc3ee1351f2908072d7b80854157c4b901455da2a54fac9ca28aa9941c3b"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/15.json",
+        "sha256": "171a8753976574f355aa1fce4c43d20a05d1cd9337c9cc682b08712ccca04567"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/15.png",
+        "sha256": "41ae848041a06d1a79b0a2eeb9f2e790b24f73206ecc4640108d53f8f0a0c58c"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/16.json",
+        "sha256": "8a8f9f152269ad4c87ebd54aec89f2da356408e030eac72ebb33cba1fa6caa82"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/16.png",
+        "sha256": "d2bf4fa933aa017a41f6c71dce2f210f4668bdec085ccada0ce2d22e1e728c52"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/17.json",
+        "sha256": "fd00c59c21ada10cb2af8939dfc8a9e3f34de4d1b330cbdd40618bba8baa43d8"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/17.png",
+        "sha256": "912742a992d3eb1e3dd6ea653040fea986fa842d1ae573641934bc9918711b2e"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/18.json",
+        "sha256": "c0aaa240588713d69c29941b7073791cbf6d459e1907fcdb1801259f27de5548"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/18.png",
+        "sha256": "8eebe16509a2713a41498ce0fe3212ed7f4b2e7f7227a03f584444470edb9d80"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/19.json",
+        "sha256": "cb1c9e0688595af0da4a0256cc2940f8ea039bf2a1c7b732098e4fb9a2065437"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/19.png",
+        "sha256": "e23c903c10403397ac9df1b91b038e115ad32ba676f9563eabe41606952f38e7"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/20.json",
+        "sha256": "2ab0ba04259b6269a9fb01dcb0f257da9debafc80eb3c967542e4469c821ff41"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/20.png",
+        "sha256": "8ec1e1cabca7faa692b15966cf7c3fe9f70339815bdbb78d7a1c83e80cddab13"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/21.json",
+        "sha256": "72a9d188e28f22e2518d13121d53c4410d087b8cd4d553924dae1770cae95e43"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/21.png",
+        "sha256": "0c021129de2af16d25a868ef06a6fb659100a8f2f78df87b8019c914ed8b38e1"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/22.json",
+        "sha256": "fcc4d0f87a70537534539f6d5b4b8700f754c420c5b98239d1e8a8639f1776c8"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/22.png",
+        "sha256": "4bf17a55eb9bfa36adca5c8cbb83d0a048d34253d18723c7c97ab77ffd105b74"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/23.json",
+        "sha256": "3271b6a4091a5b8680c992f65057ab582cf232deb8d922461bfecbea6012719d"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/23.png",
+        "sha256": "a8f017cdefbd3c47c9588fb8208cf08a14b3588cecf8b1d98ffed0f11fc14b60"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/24.json",
+        "sha256": "2e39c177c633521af59abf2a6865bcd1e8e6d5d81f0f60c522c6e200906c178e"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/24.png",
+        "sha256": "cf11d8eea45e7bc2413408b41d94e71d8f3d2e2a59cdb85628e068d722074326"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/25.json",
+        "sha256": "4f52ce9390f72006f7de03bf5cc2489399b80b10344b6abe78ad8d42985eb176"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/25.png",
+        "sha256": "e0cfd2c61da22dd1869bf8f5ca628cceb62abd01bbe330f2dcf9f2b973391c9e"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/26.json",
+        "sha256": "26fc590e4911688146b8b53fc02a4fed9655f15daed71e95369c3d1eed1cef1a"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/26.png",
+        "sha256": "9186d111868ef465449baa20d08f855f3951487c374934d91c29545e31ed278a"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/27.json",
+        "sha256": "3185b5e202ee26093312ddd06fc8a9bbe1c98c02f17390061fd4228078b4673f"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/27.png",
+        "sha256": "df4ff8d4fcf04b3d4406480c44e26f93d946e493f805060e76efe96eb8155bf8"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/28.json",
+        "sha256": "6433745ed218370bd172430f416d1b27d4efa38f9dac175f26c2088108ae0356"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/28.png",
+        "sha256": "68aa877ad8f5e797d5651ea637519bbb8cffe95a906c934f9a7edd1817e7305d"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/29.json",
+        "sha256": "dc444d984788f7680b57ac68b525a4eb56828b0861e01dcadbe5afd618ea27f4"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/29.png",
+        "sha256": "ebb151f674ef75ba909a465f989bc6e3cd10337d1405a86da4bab41e184f6319"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/30.json",
+        "sha256": "23d867956fa67c834f34835886dd71e1e818b87bf6c1083649a47be530786fba"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/30.png",
+        "sha256": "b66fbca9293c3fefe3bf22f5c7a5af21a21faf01a542d75d9aef16028e121d85"
       }
     ],
     "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",

@@ -50,6 +50,13 @@ bind('melee', 'impact_world', [
 bind('melee', 'target_ground', [
   112
 ]);
+bind('recipient', 'target_body', [
+  2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+  16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
+]);
+bind('release', 'caster_body', [
+  28, 29, 30
+]);
 bind('target_single', 'target_body', [
   189, 252, 305, 308, 329, 337, 365, 392, 394, 429, 524, 525, 534
 ]);

@@ -41,8 +41,29 @@ export function createAutoMoveAtlas({PIXI, front, ground, reducedMotion}) {
   const atlas = createMoveAtlas({PIXI, front, ground, reducedMotion, records, maxSheets:12, mode:'auto',
     assetRoot:'assets/production/vfx/auto-moves/', labelPrefix:'auto-move'});
   const flights = new Map(), owned = new Set(), contactIds = new Set();
+  const recipients = new Map(), ownedSupport = new Set(), heals = new Set();
   function update(view, rect, scale, dt, events, bodies) {
-    owned.clear(); contactIds.clear(); atlas.beginFrame();
+    owned.clear(); contactIds.clear(); ownedSupport.clear(); heals.clear(); atlas.beginFrame();
+    for (const event of events) {
+      const neutral = event.type === 'NEUTRAL_RELEASE';
+      const r = neutral ? event : event.type === 'SUPPORT' ? event.receipt : null;
+      if (!r || (!neutral && !r.result)) continue;
+      const phase = neutral ? 'release' : 'recipient';
+      if (!atlas.ready(r.moveId, phase)) continue;
+      const slot = neutral ? r.slot : r.targetSlot;
+      if (!bodies?.get(slot)) continue;
+      recipients.set(r, {key:r.moveId,phase,slot,age:0});
+      if (!neutral) {
+        ownedSupport.add(r);
+        if (r.result === 'heal') heals.add(slot + '/' + (r.hpAfter-r.hpBefore));
+      }
+    }
+    for (const [id, recipient] of recipients) {
+      const {key,phase,slot,age} = recipient, body=bodies?.get(slot);
+      if (!body || body.down || age >= atlas.duration(key,phase)) { recipients.delete(id); continue; }
+      atlas.place(id,key,phase,body.x,body.top+body.height*0.5,0,scale,age,false);
+      recipient.age += dt;
+    }
     const live = new Set();
     for (const event of events) if (event.type === 'LAUNCH') atlas.request(event.moveId);
     for (const a of view.nativeLifecycle?.effectActors ?? []) {
@@ -87,6 +108,7 @@ export function createAutoMoveAtlas({PIXI, front, ground, reducedMotion}) {
     atlas.endFrame(dt);
   }
   return {update, supports:key=>records.has(key), ownsActor:id=>owned.has(id), ownsContact:id=>contactIds.has(id),
+    ownsSupport:r=>ownedSupport.has(r), ownsHeal:(slot,amount)=>heals.has(slot+"/"+amount),
     diagnostics:()=>({...atlas.diagnostics(),flightIds:[...owned],contactIds:[...contactIds]}),
-    dispose(){flights.clear();owned.clear();contactIds.clear();atlas.dispose();}};
+    dispose(){recipients.clear();ownedSupport.clear();heals.clear();flights.clear();owned.clear();contactIds.clear();atlas.dispose();}};
 }

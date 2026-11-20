@@ -674,6 +674,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       eventsHandled++;
       if (event.type === 'START') { if(!ctx.opening?.armed)showBanner(text('對戰開始！'), {size: 34, fill: 0xffffff, life: 1000}); continue; }
       if (event.type === 'LAUNCH') {
+        // These native support records release without changing any combatant.
+        if (event.moveId >= 28 && event.moveId <= 30) continue;
         const info = slot(event.slot), look = describeMove(event.slot, event.moveId);
         const vfx = vfxOf(event.slot, event.moveId);
         // A record that names no bank still leaves the hand on an original cell.
@@ -849,6 +851,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       if (event.type === 'LANDED') { land(event.slot, ctx, 1); continue; }
       if (event.type === 'STEP') { footstep(event.slot, ctx, event.direction ?? 0); continue; }
       if (event.type === 'HEAL' || event.type === 'SUPPORT') {
+        if (event.receipt && (!event.receipt.result || ctx.autoMoveAtlas?.ownsSupport(event.receipt))) continue;
+        if (event.type === 'HEAL' && ctx.autoMoveAtlas?.ownsHeal(event.slot, event.amount)) continue;
         const info = slot(event.slot);
         if (!info) continue;
         if (event.type === 'SUPPORT') cue({type: 'BUFF', system: supportVfxSystem(event.statusCode), slot: event.slot, x: info.x, y: info.groundY});
