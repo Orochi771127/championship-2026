@@ -55,7 +55,7 @@ export function createAutoMoveAtlas({PIXI, front, ground, reducedMotion}) {
     }
     atlas.endFrame(dt);
   }
-  return {update, ownsActor:id=>owned.has(id), ownsContact:id=>contactIds.has(id),
+  return {update, supports:key=>records.has(key), ownsActor:id=>owned.has(id), ownsContact:id=>contactIds.has(id),
     diagnostics:()=>({...atlas.diagnostics(),flightIds:[...owned],contactIds:[...contactIds]}),
     dispose(){flights.clear();owned.clear();contactIds.clear();atlas.dispose();}};
 }

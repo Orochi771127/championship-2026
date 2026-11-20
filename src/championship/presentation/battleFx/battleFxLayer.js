@@ -524,7 +524,6 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   // --------------------------------------------------- live effect actors (moves)
   function observe(view, ctx, dtMs) {
     const live = new Set();
-    const launches = (view.nativeLifecycle?.active ?? []).filter(l => Number.isInteger(l.ownerSlot));
     for (const actor of view.nativeLifecycle?.effectActors ?? []) {
       if (ctx.autoMoveAtlas?.ownsActor(actor.id)) continue;
       const family = String(actor.name ?? '').replace(/^e003_/, '');
@@ -534,11 +533,11 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       const at = battleFxProject(actor.point, ctx.artRect, ctx.nativeScale);
       let entry = tracked.get(actor.id);
       if (!entry) {
-        const owner = launches.find(l => describeMove(l.ownerSlot, l.moveId)?.bankIds.includes(actor.bankId));
+        const owner = actor.origin ? { ownerSlot: actor.origin.slot, moveId: actor.origin.moveId } : null;
         const look = owner ? describeMove(owner.ownerSlot, owner.moveId) : null;
         const vfx = owner ? vfxOf(owner.ownerSlot, owner.moveId) : null;
         const palette = vfx?.palette ?? BATTLE_FX_PALETTES[look?.palette ?? battleFxFamilyPalette(family) ?? 'neutral'] ?? BATTLE_FX_PALETTES.neutral;
-        entry = {form, palette, owner: owner?.ownerSlot ?? null, tier: look?.tier ?? 'skill', points: [], ageMs: 0, origin: {x: at.x, y: at.y},
+        entry = {form, palette, confirmedEndOnly: ctx.autoMoveAtlas?.supports(actor.origin?.moveId), owner: owner?.ownerSlot ?? null, tier: look?.tier ?? 'skill', points: [], ageMs: 0, origin: {x: at.x, y: at.y},
           element: vfx?.element ?? PALETTE_ELEMENT[look?.palette ?? battleFxFamilyPalette(family)] ?? 'NEUTRAL'};
         tracked.set(actor.id, entry);
         // The real launch point: where the move's own effect first appears.
@@ -562,7 +561,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     endings = [];
     for (const [id, entry] of tracked) {
       if (live.has(id)) continue;
-      if (entry.last && MOVING_FORMS.has(entry.form)) endings.push({...entry.last, palette: entry.palette, element: entry.element, form: entry.form, tier: entry.tier, used: false});
+      if (!entry.confirmedEndOnly && entry.last && MOVING_FORMS.has(entry.form)) endings.push({...entry.last, palette: entry.palette, element: entry.element, form: entry.form, tier: entry.tier, used: false});
       tracked.delete(id);
     }
     // Native impact sparks that appeared since the last view: real contact points.
@@ -576,11 +575,11 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     }
     seenImpacts.clear();
     for (const id of nowImpacts) seenImpacts.add(id);
-    if (kit) drawStandIns(view, ctx, launches);
+    if (kit) drawStandIns(view, ctx);
   }
 
   /** The kit over live effect actors: a whole stand-in for a retired cell, a trail along an original shot. */
-  function drawStandIns(view, ctx, launches) {
+  function drawStandIns(view, ctx) {
     // About a quarter of a fighter: a stand-in replaces one 16-32 px cell, and the camera pushes in on specials.
     const live = new Set(), size = ctx.nativeScale * 4.5;
     kitStats.size = Math.round(size);
@@ -591,7 +590,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       let entry = standIns.get(actor.id);
       if (!entry) {
         const family = String(actor.name ?? '').replace(/^e003_/, '');
-        const owner = launches.find(l => describeMove(l.ownerSlot, l.moveId)?.bankIds.includes(actor.bankId));
+        const owner = actor.origin ? { ownerSlot: actor.origin.slot, moveId: actor.origin.moveId } : null;
         const vfx = owner ? vfxOf(owner.ownerSlot, owner.moveId) : null;
         const signature = owner ? signatureOf(owner.moveId) : null;
         // moveId: the owning move, kept on the entry. The hit stage below read a block-scoped `owner` that no longer
@@ -760,6 +759,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const hit = battleFxHitPoint({target, impacts: freshImpacts, endings: endings.filter(e => !e.used), attacker});
         anchors[hit.source]++;
         for (const end of endings) if (Math.abs(end.x - hit.x) < 1 && Math.abs(end.y - hit.y) < 1) end.used = true;
+        const hasAtlasContact = ctx.autoMoveAtlas?.ownsContact(event.contactId) === true;
         const fx = fxFor(event.slot);
         fx.flash = 1; fx.squash = tier === 'heavy' ? 1 : tier === 'medium' ? 0.7 : 0.4;
         fx.knock = tier === 'heavy' ? 1 : 0.6; fx.knockDir = attacker ? Math.sign(target.x - attacker.x) || -target.facing : -target.facing;
@@ -767,7 +767,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           // White first, then the move's element on the rim; the knock follows the hit.
           fx.flashTint = palette.main; fx.knock = 1; fx.knockPx = choreo?.knockPx ?? BATTLE_FX_JUICY.knockPx[tier];
           // Contact: a saturated halo under a white-hot core (additive), readable on dark and pale floors.
-          spawnFlash({x: hit.x, y: hit.y, tint: palette.main, size: (tier === 'heavy' ? 46 : 30) * 1.9, life: tier === 'heavy' ? 210 : 150});
+          if (!hasAtlasContact) spawnFlash({x: hit.x, y: hit.y, tint: palette.main, size: (tier === 'heavy' ? 46 : 30) * 1.9, life: tier === 'heavy' ? 210 : 150});
           const holdMs = choreo?.hitStopMs ?? BATTLE_FX_JUICY.hitStopByTier[critical || look?.tier === 'ultimate' ? (tier === 'light' ? 'medium' : 'ultimate') : tier] ?? 0;
           if (holdMs > 0 && !reducedMotion) {
             hitStop = {ms: holdMs, slots: new Set([event.slot, event.attackerSlot].filter(s => s !== null && s !== undefined))};
@@ -777,11 +777,10 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           const p = toScreen(ctx, hit.x, target.top);
           spawnNumber({x: p.x, y: p.y, value: event.damage, critical, dir: fx.knockDir || 1,
             tint: target.team === ctx.localTeam ? 0xffd0c8 : 0xffffff});
-          if (ctx.autoMoveAtlas?.ownsContact(event.contactId)) continue;
-          // Knockback slide: dust kicks up behind the struck feet along the blow.
-          dust({x: target.x, groundY: target.groundY, count: rich ? 4 : 2, spread: target.width * 0.3, push: fx.knockDir, life: 520, scale: 0.9});
+          // The atlas owns the impact phase, including its ground accent.
+          if (!hasAtlasContact) dust({x: target.x, groundY: target.groundY, count: rich ? 4 : 2, spread: target.width * 0.3, push: fx.knockDir, life: 520, scale: 0.9});
         }
-        if (ctx.autoMoveAtlas?.ownsContact(event.contactId)) continue;
+        if (hasAtlasContact) continue;
         // Original cells drawn by this layer: a fallback record's own hit set, the
         // element accent on a bank-less melee hit, and the struck body's overlay.
         if (vfx) {
