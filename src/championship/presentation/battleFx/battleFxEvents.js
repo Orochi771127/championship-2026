@@ -11,13 +11,13 @@ const historyKey = (entry, index) => `${entry.frame}:${entry.slot}:${entry.type}
 
 // Multiple native receipts can be coalesced into a single HP change between render ticks.
 function coversDelta(contacts, before, after) {
-  if (contacts.length < 2) return {};
+  if (!contacts.length) return false;
   let hp=before;
   for (const c of contacts) {
-    if (c.hpBefore !== hp) return {};
+    if (c.hpBefore !== hp) return false;
     hp=c.hpAfter;
   }
-  return hp===after ? {contactIds:contacts.map(c=>c.id)} : {};
+  return hp === after;
 }
 
 export function createBattleFxEventTracker() {
@@ -78,7 +78,7 @@ export function createBattleFxEventTracker() {
             const prevMeta = hitMetaBySlot.get(entry.slot);
             hitMetaBySlot.set(entry.slot, {
               critical: Boolean(prevMeta?.critical || entry.critical === true),
-              hp: entry.hp,
+              hp: entry.hp, single: !prevMeta, attackerSlot: entry.attackerSlot ?? null,
               moveId: !prevMeta && Number.isInteger(entry.moveId) ? entry.moveId : null
             });
           }
@@ -119,11 +119,24 @@ export function createBattleFxEventTracker() {
           const hpBefore = before.hp?.current ?? 0, hpAfter = combatant.hp?.current ?? 0, maxHp = Math.max(1, combatant.hp?.maximum ?? 1);
           if (hpAfter < hpBefore) {
             const meta = hitMetaBySlot.get(combatant.slot ?? slot);
-            const matches = freshContacts.filter(c => c.targetSlot === slot && c.hpBefore === hpBefore && c.hpAfter === hpAfter);
-            const contact = matches.length === 1 ? matches[0] : null;
-            events.push(Object.freeze({type: 'HIT', frame, slot, damage: hpBefore - hpAfter, hpBefore, hpAfter, maxHp,
-              ratio: (hpBefore - hpAfter) / maxHp, critical: meta?.critical === true, contactId: contact?.id ?? null,
-              ...(!contact && coversDelta(freshContacts.filter(c=>c.targetSlot===slot),hpBefore,hpAfter)), attackerSlot: contact?.slot ?? null, moveId: contact?.moveId ?? (meta?.hp === hpAfter && !freshContacts.some(c => c.targetSlot === slot) ? meta.moveId : null)}));
+            const contacts = freshContacts.filter(c => c.targetSlot === slot);
+            const ratio = (hpBefore-hpAfter)/maxHp;
+            if (coversDelta(contacts, hpBefore, hpAfter)) {
+              const anyCritical = contacts.some(c => c.critical === true) || meta?.critical === true;
+              contacts.forEach((c, i) => {
+                const damage = c.hpBefore-c.hpAfter;
+                events.push(Object.freeze({type:'HIT', frame:c.frame, slot, damage, hpBefore:c.hpBefore,
+                  hpAfter:c.hpAfter, maxHp, ratio:damage/maxHp, critical:c.critical ?? (contacts.length === 1 && anyCritical),
+                  contactId:c.id, actionId:c.actionId, actorId:c.actorId, attackerSlot:c.slot, moveId:c.moveId, contact:c,
+                  // The upstream audio and combo count consume one cue per observed target HP delta.
+                  sound: i === contacts.length-1 ? {ratio, critical:anyCritical} : false}));
+              });
+            } else {
+              const single = !contacts.length && meta?.single === true && meta.hp === hpAfter;
+              events.push(Object.freeze({type:'HIT', frame, slot, damage:hpBefore-hpAfter, hpBefore, hpAfter, maxHp, ratio,
+                critical:single && meta.critical === true, contactId:null, attackerSlot:single ? meta.attackerSlot : null,
+                moveId:single ? meta.moveId : null, sound:{ratio, critical:meta?.critical === true}}));
+            }
           } else if (hpAfter > hpBefore) {
             events.push(Object.freeze({type: 'HEAL', frame, slot, amount: hpAfter - hpBefore, maxHp}));
           }

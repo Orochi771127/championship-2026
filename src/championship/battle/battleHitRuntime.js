@@ -74,7 +74,7 @@ export function createBattleHitRuntime({session,actors,onSound=null,onImpactFeed
     apply(slot,input){
       const c=session.slots[slot],h=host(slot);
       const result=applyBattleHitResult({...input,c,h,rng:session.rng});writePoint(h);actors.syncCombatants();
-      record(slot,'HIT_STATE_WRITTEN',{hp:c.currentHp,reaction:c.field84,notification:c.field17C,result:result.code,critical:input.critical===true,moveId:input.move?.recordIndex??null});
+      record(slot,'HIT_STATE_WRITTEN',{...input.contactOwner,hp:c.currentHp,reaction:c.field84,notification:c.field17C,result:result.code,critical:input.critical===true,moveId:input.move?.recordIndex??null});
       return result;
     },
     support(slot,move,identity=null){

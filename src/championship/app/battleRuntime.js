@@ -443,7 +443,11 @@ export function createBattleRuntime(options = {}) {
           elementSelector: move.elementSelect ?? 0, damage: resolvedNative.damage, signature: signatureMoves[slot] === move.recordIndex,
           defenderHpPercent: defender?.maxHp > 0 ? defender.currentHp * 100 / defender.maxHp : 100})})}))};
       const hpBefore = defender.currentHp;
-      const result=hitRuntime.apply(targetSlot,{move,damage:resolved.damage,critical:resolved.critical,nativeKind,
+      const origin = parameters ? effectActors.originOf(parameters) : state;
+      const contactOwner = origin && origin.actionId === state?.actionId
+        && (!parameters || (origin.moveId === move.recordIndex && origin.slot === slot))
+        ? {actionId:origin.actionId, actorId:parameters ? effectActors.instanceOf(parameters) : null, attackerSlot:slot} : null;
+      const result=hitRuntime.apply(targetSlot,{move,damage:resolved.damage,critical:resolved.critical,nativeKind,contactOwner,
         sourcePoint:parameters?effectActors.position(parameters):nativeActors.position(slot),statusInputs:{attackerIndex:inputs.statusAttackerIndex,
           selectedDefenseIndex:inputs.statusDefenderIndex,
           defenseIndex0x9C:defenceLevelsOf(defenderCreature)[0x9c],
@@ -452,13 +456,12 @@ export function createBattleRuntime(options = {}) {
       if(parameters){contacts.projectileHits++;contacts.history.push({frame:session.frame,moveId:move.recordIndex,slot,targetSlot,
         actor:parameters,sourcePoint:effectActors.position(parameters),hpAfter:defender.currentHp,result:result.code});
         if(contacts.history.length>128)contacts.history.shift();}
-      const origin = parameters ? effectActors.originOf(parameters) : state;
       let contactId=null;
-      if (hpBefore > defender.currentHp && origin && origin.actionId === state?.actionId
-        && (!parameters || (origin.moveId === move.recordIndex && origin.slot === slot))) {
+      if (hpBefore > defender.currentHp && contactOwner) {
         contactId=++nextContactId;
         confirmedContacts.push({ id: contactId, frame: session.frame, actionId: origin.actionId,
-          actorId: parameters ? effectActors.instanceOf(parameters) : null, slot, targetSlot, moveId: move.recordIndex,
+          actorId: contactOwner.actorId, slot, targetSlot, moveId: move.recordIndex,
+          critical: resolved.critical === true, resolvedDamage: resolved.damage, resultCode: result.code,
           sourcePoint: parameters ? effectActors.position(parameters) : nativeActors.position(slot),
           casterPoint: nativeActors.position(slot), targetPoint: nativeActors.position(targetSlot), hpBefore, hpAfter: defender.currentHp });
         if (confirmedContacts.length > 128) confirmedContacts.shift();

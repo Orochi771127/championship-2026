@@ -771,11 +771,12 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const choreo = moveVfxChoreography(event.moveId);
         const critical = event.critical === true;
         const tier = battleFxHitTier({ratio: event.ratio, ultimate: look?.tier === 'ultimate', critical});
-        const hit = battleFxHitPoint({target, impacts: freshImpacts, endings: endings.filter(e => !e.used), attacker});
+        const point = event.contact?.actorId != null ? event.contact.sourcePoint : null;
+        const hit = point ? {...battleFxProject(point, ctx.artRect, ctx.nativeScale), source:'NATIVE_IMPACT'}
+          : battleFxHitPoint({target, impacts: freshImpacts, endings: endings.filter(e => !e.used), attacker});
         anchors[hit.source]++;
         for (const end of endings) if (Math.abs(end.x - hit.x) < 1 && Math.abs(end.y - hit.y) < 1) end.used = true;
-        const hasAtlasContact = ctx.autoMoveAtlas?.ownsContact(event.contactId) === true
-          || (event.contactIds?.length > 0 && event.contactIds.every(id => ctx.autoMoveAtlas?.ownsContact(id)));
+        const hasAtlasContact = ctx.autoMoveAtlas?.ownsContact(event.contactId) === true;
         const fx = fxFor(event.slot);
         fx.flash = 1; fx.squash = tier === 'heavy' ? 1 : tier === 'medium' ? 0.7 : 0.4;
         fx.knock = tier === 'heavy' ? 1 : 0.6; fx.knockDir = attacker ? Math.sign(target.x - attacker.x) || -target.facing : -target.facing;
@@ -786,12 +787,16 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         }
         const strikerTeam = attacker?.team ?? (target.team === 0 ? 1 : 0);
         const streak = comboByTeam[strikerTeam];
-        if (streak) {
+        if (streak && event.sound !== false) {
           streak.count = elapsed - streak.at <= 2000 ? streak.count + 1 : 1;
           streak.at = elapsed;
         }
         const comboCount = streak?.count ?? 1;
-        impactAudio?.playHit?.({tier, critical, combo: comboCount});
+        if (event.sound !== false) {
+          const soundCritical = event.sound?.critical ?? critical;
+          const soundTier = battleFxHitTier({ratio:event.sound?.ratio ?? event.ratio, ultimate:look?.tier === 'ultimate', critical:soundCritical});
+          impactAudio?.playHit?.({tier:soundTier, critical:soundCritical, combo:comboCount});
+        }
         if (juicy) {
           // White first, then the move's element on the rim; the knock follows the hit.
           fx.flashTint = palette.main; fx.knock = 1; fx.knockPx = choreo?.knockPx ?? BATTLE_FX_JUICY.knockPx[tier];

@@ -322,7 +322,7 @@ test('coalesced damage identifies all and only the receipts for that target, onc
     moveId:76,hpBefore:before,hpAfter:after,sourcePoint:[40,80,0],targetPoint:[50,90,0]});
   view.nativeLifecycle.contacts={confirmed:[receipt(1,3,800,750),receipt(2,4,150,90),receipt(3,3,750,700)]};
   const events=tracker.consume(view);
-  assert.deepEqual(events.find(e=>e.type==='HIT').contactIds,[1,3]);
+  assert.deepEqual(events.filter(e=>e.type==='HIT').map(e=>e.contactId),[1,3]);
   assert.equal(events.filter(e=>e.type==='MOVE_CONTACT').length,3);
   assert.equal(tracker.consume(view).filter(e=>e.type==='MOVE_CONTACT').length,0);
 });
@@ -332,4 +332,23 @@ test('neutral native releases are reported once per confirmed action', () => {
   view.nativeLifecycle.neutralReleases=[{actionId:7,moveId:28,slot:0,frame:8},{actionId:8,moveId:30,slot:0,frame:10}];
   assert.deepEqual(tracker.consume(view).filter(e=>e.type==='NEUTRAL_RELEASE').map(e=>e.moveId),[28,30]);
   assert.equal(tracker.consume(view).filter(e=>e.type==='NEUTRAL_RELEASE').length,0);
+});
+
+
+test('two casters retain independent hit details after a late projectile, with one upstream sound cue', () => {
+  const tracker=createBattleFxEventTracker();
+  const cast=(slot,moveId,object)=>({object,ownerSlot:slot,moveId,phase:'PRIMARY'});
+  const hp=[900,800,850,500],old=cast(1,76,7),newer=cast(2,143,8);
+  tracker.consume(fakeView({frame:10,hps:hp,active:[old]}));
+  tracker.consume(fakeView({frame:11,hps:hp,active:[newer]}));
+  const view=fakeView({frame:12,hps:[900,800,850,455],active:[newer]});
+  const first={id:10,frame:12,actionId:7,actorId:21,slot:1,targetSlot:3,moveId:76,critical:true,hpBefore:500,hpAfter:480};
+  const second={id:11,frame:12,actionId:8,actorId:22,slot:2,targetSlot:3,moveId:143,critical:false,hpBefore:480,hpAfter:455};
+  view.nativeLifecycle.contacts={confirmed:[first,second]};
+  const events=tracker.consume(view),hits=events.filter(e=>e.type==='HIT');
+  assert.deepEqual(hits.map(e=>[e.attackerSlot,e.moveId,e.actionId,e.actorId,e.slot,e.contactId,e.damage,e.critical]),
+    [[1,76,7,21,3,10,20,true],[2,143,8,22,3,11,25,false]]);
+  assert.deepEqual(hits.map(e=>e.sound),[false,{ratio:45/hits[0].maxHp,critical:true}]);
+  assert.deepEqual(events.filter(e=>e.type==='MOVE_CONTACT').map(e=>e.contact),[first,second]);
+  assert.equal(tracker.consume(view).filter(e=>e.type==='HIT'||e.type==='MOVE_CONTACT').length,0);
 });
