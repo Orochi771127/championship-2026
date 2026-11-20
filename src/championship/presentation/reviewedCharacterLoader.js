@@ -2,7 +2,7 @@ import {createPixiAssetScope} from './pixiCharacterRuntimeBundle.js';
 import {reviewedNumericClip,sampleReviewedCharacterClip,createReviewedArenaPlayback,reviewedHuntMotionClip,HUNT_RUN_SEQUENCES,HUNT_RUN_RATE} from './reviewedCharacterAnimation.js';
 import {reviewedCharacterSelection,reviewedCharacterSelections,reviewedGeneralDisplayScale} from './reviewedSelection.js';
 import {reviewedDocumentRef,handoffOnlyArenaEntry} from './animationHandoff.js';
-import {characterAssetUrl} from './characterAssetDelivery.js';
+import {characterAssetUrl,characterRelativeAssetUrl} from './characterAssetDelivery.js';
 
 export {reviewedCharacterSelection,reviewedCharacterSelections};
 // The original atlas pages of these species are retired; only timing/geometry remain.
@@ -58,7 +58,7 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
       while(next<assets.length){
         signal?.throwIfAborted();const frame=assets[next++];
         if(!/^(images|web-atlas-v1|web-atlas-v2)\/[a-f0-9]{64}\.(png|webp)$/.test(frame.image))throw Error('REVIEWED_IMAGE_PATH');
-        const imageUrl=new URL(frame.image,url).href;
+        const imageUrl=characterRelativeAssetUrl(frame.image,ref.path,baseUrl);
         // Check immutable reviewed bytes before decoding. Pixi owns decoding/cache.
         const result=await fetchImpl(imageUrl,{signal});if(!result.ok)throw Error('REVIEWED_IMAGE_HTTP_'+result.status);
         if(await digest(await result.arrayBuffer())!==frame.sha256)throw Error('REVIEWED_IMAGE_HASH');
@@ -81,7 +81,7 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
     // larger or smaller in native units by changing its effective density only.
     const displayScale=usage==='general'?reviewedGeneralDisplayScale(entry):1;
     for(const [key,f] of frameEntries){
-      const image=images.get(new URL(f.image,url).href),size=f.sourceSize;
+      const image=images.get(characterRelativeAssetUrl(f.image,ref.path,baseUrl)),size=f.sourceSize;
       if(!size?.every(v=>Number.isFinite(v)&&v>0)||!f.origin?.every(Number.isFinite)||!(f.density>0))throw Error('REVIEWED_FRAME_GEOMETRY');
       const density=f.density/displayScale;
       const crop=f.frame??[0,0,...size],stored=f.trim??[0,0,...size],mirrorGeneral=mirrorOf(key);

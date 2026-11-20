@@ -1,6 +1,6 @@
 import selection from '../../data/championship/ranch-render-selection.v1.json' with {type:'json'};
 import reviewed from '../../data/championship/reviewed-animation-selection.v1.json' with {type:'json'};
-import {characterAssetUrl} from '../presentation/characterAssetDelivery.js';
+import {characterAssetUrl,characterRelativeAssetUrl} from '../presentation/characterAssetDelivery.js';
 
 // Species drawn with reviewed artwork no longer have original atlas pages
 // (retired 2026-10-28), so there is nothing of theirs to prefetch here.
@@ -42,13 +42,13 @@ export function createRanchTitlePreloader({baseUrl,characters=selection.characte
           const idle=runtime.sides.main.animations.find(a=>a.id===0);
           const first=[...new Set((idle?.frames??[]).map(f=>runtime.streaming.texturePages[f.texture]))];
           const next=pages.findIndex((p,i)=>!first.includes(i));
-          groups.push({url,pages,first,next});
+          groups.push({runtimePath:c.runtimePath,pages,first,next});
         }
         // Every current resident gets its idle before any speculative next page.
         let planned=0;const urls=[];
         for(const phase of ['first','next'])for(const g of groups)for(const i of phase==='first'?g.first:(g.next<0?[]:[g.next])){
           const page=g.pages[i];if(!page||!/^main-[a-f0-9]{16}\.webp$/.test(page.image)||!Number.isSafeInteger(page.bytes)||page.bytes<0)continue;
-          const url=new URL(page.image,g.url).href;if(urls.includes(url)||planned+page.bytes>maxImageBytes)continue;
+          const url=characterRelativeAssetUrl(page.image,g.runtimePath,baseUrl);if(urls.includes(url)||planned+page.bytes>maxImageBytes)continue;
           planned+=page.bytes;urls.push(url);
         }
         signal.throwIfAborted();owner.urls=urls;retained=urls;owner.phase='downloading';report();

@@ -1834,19 +1834,22 @@ export async function mountRaisingFieldPixiPresentation({
 
     retryResidentAssets(){
       if(disposed||!characterBundle?.ensureSpecies)return false;
-      for(const resident of source.getFrame().residents){
+      let retried=0;
+      for(const rawResident of source.getFrame().residents){
+        const resident=shownResident(rawResident);
         const entry=actors.get(resident.creatureId);
         if(entry?.evolutionAssetState==='error'){
           const evolution=source.getActorFrame?.(resident.creatureId)?.evolution;
-          if(evolution&&entry.evolutionPresenter&&entry.evolutionPendingFrame)evolutionFrameReady(entry,entry.evolutionPendingFrame,{retry:true});
-          else if(evolution)loadEvolutionTarget(entry,evolution);
+          if(evolution&&entry.evolutionPresenter&&entry.evolutionPendingFrame){evolutionFrameReady(entry,entry.evolutionPendingFrame,{retry:true});retried++;}
+          else if(evolution){loadEvolutionTarget(entry,evolution);retried++;}
         }
         if(entry?.assetState==='error'){
-          if(entry.pendingAnimationFrame)residentFrameReady(entry,entry.pendingAnimationFrame,{retry:true});
-          else void loadActorTextures(entry,resident);
+          const frame=entry.pendingAnimationFrame??actorFrameFor(resident.creatureId);
+          if(entry.sprite&&entry.nativeFramePresenter&&frame){residentFrameReady(entry,frame,{retry:true});retried++;}
+          else if(!entry.sprite){void loadActorTextures(entry,resident);retried++;}
         }
       }
-      return true;
+      return retried>0;
     },
 
     /** Story theater puppet (presentation only). `action` picks a native
