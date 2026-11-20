@@ -17,7 +17,7 @@ import { isOriginalRuntimeLocation } from "../presentation/originalRuntimeLocati
 import { speciesNameForId } from "../text/zhHant.js";
 import { loadReviewedDomFrames } from "../presentation/reviewedSelection.js";
 import { stageBodyScale } from "../presentation/stageBodySize.js";
-import {characterAssetUrl} from '../presentation/characterAssetDelivery.js';
+import {characterAssetUrl,characterRelativeAssetUrl} from '../presentation/characterAssetDelivery.js';
 import { raisingNativeScreenPixels, initialRaisingReferenceViewport } from "../presentation/intRh2/raisingFieldViewport.js";
 
 /** The in-game walk request (Data Arena and Battle sequence id 2). */
@@ -86,10 +86,10 @@ export async function loadParadeWalker(speciesId, { href, fetchImpl = globalThis
     const pageIndex = runtime.streaming?.texturePages?.[frame.texture] ?? 0;
     if (!pages.has(pageIndex)) {
       const atlas = runtime.sides.main.atlases[pageIndex];
-      const dataResponse = await fetchImpl(new URL(atlas.data, runtimeUrl).href, { signal });
+      const dataResponse = await fetchImpl(characterRelativeAssetUrl(atlas.data, config.runtimePath, href), { signal });
       if (!dataResponse.ok) return null;
       const data = await dataResponse.json();
-      const image = await loadImage(new URL(atlas.image, runtimeUrl).href, signal);
+      const image = await loadImage(characterRelativeAssetUrl(atlas.image, config.runtimePath, href), signal);
       pages.set(pageIndex, { data, image });
     }
     const page = pages.get(pageIndex);

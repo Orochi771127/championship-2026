@@ -6,7 +6,7 @@ import {isOriginalLoopbackLocation} from './originalRuntimeLocation.js';
 import {reviewedNumericClip} from './reviewedCharacterAnimation.js';
 import {stageBodyScale} from './stageBodySize.js';
 import {reviewedDocumentRef} from './animationHandoff.js';
-import {characterAssetUrl} from './characterAssetDelivery.js';
+import {characterAssetUrl,characterRelativeAssetUrl} from './characterAssetDelivery.js';
 
 const selected=new Map(selection.characters.map(c=>[c.speciesId,c]));
 export function reviewedCharacterSelection(speciesId,href=globalThis.location?.href){
@@ -49,7 +49,7 @@ export async function loadReviewedDomFrames(speciesId,{href=globalThis.location?
     out.set(id,clip.frames.map(step=>{
       const f=document.frames[step.assetId],t=f.trim??[0,0,...f.sourceSize],o=step.offset??[0,0],mirror=mirrorFrames.has(step.assetId);
       density??=f.density;
-      return Object.freeze({url:new URL(f.image,url).href,rect:f.frame,
+      return Object.freeze({url:characterRelativeAssetUrl(f.image,ref.path,href),rect:f.frame,
         place:[(mirror?f.origin[0]-t[0]-f.frame[2]:t[0]-f.origin[0])+o[0],t[1]-f.origin[1]+o[1]],
         ticks:Math.max(1,Math.round(step.durationMs*60/1000)),mirror});
     }));

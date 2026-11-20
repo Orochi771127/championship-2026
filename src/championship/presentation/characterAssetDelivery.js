@@ -56,3 +56,6 @@ export function createCharacterAssetResolver(value) {
 export const characterAssetSrc = createCharacterAssetResolver(compiledDelivery);
 export const characterAssetUrl = (src, pageUrl = globalThis.location?.href) =>
   new URL(characterAssetSrc(src, pageUrl), pageUrl).href;
+/** Resolve a relative asset referenced by a character manifest against its logical path so local/external splits resolve independently. */
+export const characterRelativeAssetUrl = (relativePath, logicalDocumentPath, pageUrl = globalThis.location?.href) =>
+  characterAssetUrl(new URL(relativePath, new URL(logicalDocumentPath, pageUrl)).href, pageUrl);

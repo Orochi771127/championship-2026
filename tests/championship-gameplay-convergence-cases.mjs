@@ -13,6 +13,9 @@ import {
   togglePinnedEvolutionBranch
 } from "../src/championship/app/partnerEvolutionCompass.js";
 import { createFullQaSaveText } from "../scripts/lib/championshipFullQaSave.mjs";
+import { parseCharacterAssetManifest } from "../scripts/lib/external-character-assets.mjs";
+import { createCharacterAssetResolver } from "../src/championship/presentation/characterAssetDelivery.js";
+import { reviewedCharacterSelections } from "../src/championship/presentation/reviewedSelection.js";
 import { growthBranchHistoryIndex } from "../src/championship/contracts/productGrowthRules.js";
 import { buildBattleResultDiagnosis } from "../src/championship/app/battleResultDiagnosis.js";
 import { createPvpRoomSession, PVP_COUNTDOWN_MS } from "../src/championship/online/pvpRoomSession.js";
@@ -728,6 +731,45 @@ test("evolution pin storage toggles, elevates pinned branch in compass, and auto
   // Toggling the same branch again unpins cleanly
   assert.equal(togglePinnedEvolutionBranch(storage, "p-1", 25, 1), null);
   assert.equal(getPinnedEvolutionBranch(storage, "p-1", 25), null);
+});
+
+test("split local manifest + external webp character assets resolve to the exact published host with zero 404 splits", () => {
+  const ext = readJson("docs/contracts/championship/EXTERNAL_CHARACTER_ASSETS.v1.json");
+  const localSet = new Set(ext.localPaths ?? []);
+  const hostedSet = new Set(parseCharacterAssetManifest(readFileSync(new URL("../" + ext.manifestPath, import.meta.url))).files.map((r) => r.path));
+  const pageUrl = "https://orochi771127.github.io/championship-2026/championship.html";
+  const resolve = createCharacterAssetResolver({
+    schemaVersion: 1,
+    assetPrefix: "assets/production/characters/",
+    assetBaseUrl: ext.assetBaseUrl,
+    localPaths: ext.localPaths
+  });
+  const resolveRel = (rel, docPath) => resolve(new URL(rel, new URL(docPath, pageUrl)).href, pageUrl);
+
+  let checkedSplitCases = 0;
+  for (const sel of reviewedCharacterSelections(pageUrl)) {
+    if (!localSet.has(sel.path) && !hostedSet.has(sel.path)) continue;
+    const doc = readJson(sel.path);
+    const frames = Array.isArray(doc.frames) ? doc.frames : Object.values(doc.frames);
+    const dir = sel.path.slice(0, sel.path.lastIndexOf("/") + 1);
+    for (const img of new Set(frames.map((f) => f.image))) {
+      const relImg = dir + img;
+      const resolved = resolveRel(img, sel.path);
+      if (localSet.has(sel.path) && hostedSet.has(relImg)) checkedSplitCases += 1;
+      if (localSet.has(relImg)) {
+        assert.ok(resolved.startsWith("https://orochi771127.github.io/championship-2026/"), `local image ${relImg} -> ${resolved}`);
+      } else {
+        assert.ok(hostedSet.has(relImg), `image ${relImg} must exist in localPaths or external manifest`);
+        assert.ok(resolved.startsWith(ext.assetBaseUrl), `external image ${relImg} -> ${resolved}`);
+      }
+    }
+  }
+  assert.ok(checkedSplitCases >= 100, `expected split local-json/external-webp cases to be guarded, saw ${checkedSplitCases}`);
+  // Guard loaders so relative frame images are never resolved directly against the local-only document URL again.
+  const loaderSrc = readFileSync(new URL("../src/championship/presentation/reviewedCharacterLoader.js", import.meta.url), "utf8");
+  const selSrc = readFileSync(new URL("../src/championship/presentation/reviewedSelection.js", import.meta.url), "utf8");
+  assert.match(loaderSrc, /characterRelativeAssetUrl\(frame\.image,ref\.path,baseUrl\)/);
+  assert.match(selSrc, /characterRelativeAssetUrl\(f\.image,ref\.path,href\)/);
 });
 
 test("app.getRanchGlanceAction surfaces actionable fusion opportunities with localized names", async () => {
