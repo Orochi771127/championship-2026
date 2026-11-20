@@ -93,7 +93,8 @@ export function createShowcaseMoveAtlas({doc, key, fetchImpl = globalThis.fetch}
       let t = reduced ? clip / 2 : elapsed * clip / span;
       const f = frames.find(f => (t -= f.durationMs) < 0) ?? frames.at(-1);
       canvas.width = f.w; canvas.height = f.h; ctx.drawImage(bitmap, f.x, f.y, f.w, f.h, 0, 0, f.w, f.h);
-      const scale = width / f.w, dx = to.x-from.x, dy = to.y-from.y, progress = elapsed/span;
+      const scale = width / f.w, dx = to.x-from.x, dy = to.y-from.y;
+      const progress = reduced ? Math.min(2, Math.round(3*elapsed/span))/2 : elapsed/span;
       const beam = phase.key === 'beam', travel = phase.key === 'travel';
       canvas.style.width = width + 'px'; canvas.style.height = f.h*scale + 'px';
       canvas.style.left = (from.x + (travel ? dx*progress : 0) - f.pivot.x*scale) + 'px';
@@ -109,7 +110,8 @@ export function createShowcaseMoveAtlas({doc, key, fetchImpl = globalThis.fetch}
         canvas.style.transform = 'rotate('+Math.atan2(dy,dx)+'rad)';
       }
       const remaining = span-elapsed;
-      const delay = reduced ? remaining : Math.min(remaining, Math.max(1, -t*span/clip));
+      const interval = reduced ? (travel ? span/3 : span) : Math.max(1, -t*span/clip);
+      const delay = Math.min(remaining, interval);
       later(delay, () => draw(view.performance.now()));
     }
     draw(start); return true;
