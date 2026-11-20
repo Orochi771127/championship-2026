@@ -10334,7 +10334,9 @@
     "assets/production/vfx/auto-moves/618.json",
     "assets/production/vfx/auto-moves/618.png",
     "assets/production/vfx/auto-moves/622.json",
-    "assets/production/vfx/auto-moves/622.png"
+    "assets/production/vfx/auto-moves/622.png",
+    "assets/production/vfx/auto-moves/1.json",
+    "assets/production/vfx/auto-moves/1.png"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -41662,7 +41664,7 @@
       },
       {
         "path": "src/championship/battle/battleHitRuntime.js",
-        "sha256": "0a44cd8479601b31f99c9e53e02b418734373e22c5fb6cea110f9134e4ebdd2f"
+        "sha256": "972ba81f2e47b27a7e0e0805c5f037996e26a8dc9547eac65a3633be054cdb5d"
       },
       {
         "path": "src/championship/battle/battleHitState.js",
@@ -41718,7 +41720,7 @@
       },
       {
         "path": "src/championship/battle/battleNormalRuntime.js",
-        "sha256": "ae534f87a94e37895f2186e0d7f39e6a44d3e08dc0fb8fa9b712dc3e2c4c0630"
+        "sha256": "cfcd493914f5d0e447b49c523cc2ccadeede477aaed84bd11dc03e4ac6e48250"
       },
       {
         "path": "src/championship/battle/battleOpeningPhase.js",
@@ -42402,11 +42404,11 @@
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxEvents.js",
-        "sha256": "9069f4cb376b969b7aedb4db78ddbe69b52089a254e05305c7807687f8ce0db5"
+        "sha256": "e9716adf310542fe330227a79e0a939b1b6e6c8c7eb2f93e38d386282c486004"
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxLayer.js",
-        "sha256": "beb219528b79cd857d150e723880fe11f951a7a00262407a7afa35ff7ea9ddc0"
+        "sha256": "c33bdec20705b90e9ae089d65417d070eb45487825c46c6b788eb6ba1a05c8b8"
       },
       {
         "path": "src/championship/presentation/battleFx/battleFxPalettes.js",
@@ -44242,7 +44244,7 @@
       },
       {
         "path": "src/championship/presentation/battleFx/autoMoveAtlas.js",
-        "sha256": "f22d26ab568a9bd16fe4b6a4beaa9e9413a7c99d81af0d9e429d19b5cdea2e79"
+        "sha256": "a9edb6aea3139fa87ead05b477aaf1364f707caef941cd4165bc5fe55f04ac00"
       },
       {
         "path": "assets/production/vfx/auto-moves/76.json",
@@ -44262,7 +44264,7 @@
       },
       {
         "path": "src/championship/presentation/battleFx/autoMoveBindings.js",
-        "sha256": "6df80b009b588204e33bf3c46bed943f3a03cc0c15da792d97d5838f9cb6f9f3"
+        "sha256": "538ac5be6e3282e4209f70ce211808e269a40026875947e74b7a0fba53af9a61"
       },
       {
         "path": "assets/production/vfx/auto-moves/31.json",
@@ -49175,6 +49177,14 @@
       {
         "path": "assets/production/vfx/auto-moves/622.png",
         "sha256": "bc4b344d9f9838d4378c9d40e8bcb4509aa0ec5467a85acc9c7180f483011668"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/1.json",
+        "sha256": "1036fa1350630831d9e5397e00fc7acc60d2df3ed47822d24c2c26d3b2106d0c"
+      },
+      {
+        "path": "assets/production/vfx/auto-moves/1.png",
+        "sha256": "3f5fc2b16ec54d308c88ac1db133834c4959280507aeb6eec4faecc0fabff4bc"
       }
     ],
     "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",

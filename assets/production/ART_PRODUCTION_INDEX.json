@@ -11,7 +11,7 @@
     "researchPack": "NOT_RUNTIME_READABLE"
   },
   "summary": {
-    "registeredRuntimeBundles": 718,
+    "registeredRuntimeBundles": 719,
     "shippingReadyBundles": 0
   },
   "entries": [
@@ -7317,6 +7317,16 @@
     {
       "assetId": "art:vfx:auto:622",
       "manifestPath": "assets/production/vfx/auto-moves/622.json",
+      "rightsStatus": "ORIGINAL_GENERATED",
+      "productionStatus": "LOCAL_PLAYABLE_PILOT",
+      "shippingStatus": "NOT_SHIPPING_READY",
+      "humanApproved": false,
+      "runtimeEligible": true,
+      "shippingReady": false
+    },
+    {
+      "assetId": "art:vfx:auto:1",
+      "manifestPath": "assets/production/vfx/auto-moves/1.json",
       "rightsStatus": "ORIGINAL_GENERATED",
       "productionStatus": "LOCAL_PLAYABLE_PILOT",
       "shippingStatus": "NOT_SHIPPING_READY",

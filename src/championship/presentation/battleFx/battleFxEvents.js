@@ -26,7 +26,7 @@ export function createBattleFxEventTracker() {
   const liveLaunches = new Set();
   const seenHistory = new Set();
   let historyFrame = -1;
-  let lastContactId = 0;
+  let lastContactId = 0, lastTauntId = 0;
   const seenNeutral = new Set();
 
   function launchesOf(view) {
@@ -70,7 +70,7 @@ export function createBattleFxEventTracker() {
           const key = historyKey(entry, occurrence);
           if (seenHistory.has(key)) return;
           seenHistory.add(key);
-          if (entry.type === 'STATUS_APPLIED') events.push(Object.freeze({type: 'STATUS', frame, slot: entry.slot, code: entry.code}));
+          if (entry.type === 'STATUS_APPLIED') events.push(Object.freeze({type: 'STATUS', frame, slot: entry.slot, code: entry.code, ...(entry.tauntId ? {tauntId:entry.tauntId} : {})}));
           else if (entry.type === 'SUPPORT_APPLIED') events.push(Object.freeze({type: 'SUPPORT', frame, slot: entry.slot, statusCode: entry.statusCode, ...(entry.receipt ? {receipt:entry.receipt} : {})}));
           else if (entry.type === 'LANDED') events.push(Object.freeze({type: 'LANDED', frame, slot: entry.slot}));
         });
@@ -89,6 +89,11 @@ export function createBattleFxEventTracker() {
         events.push({type:'NEUTRAL_RELEASE', ...release});
       }
 
+      for (const item of view.nativeLifecycle?.normalFlow?.history ?? []) {
+        if (item.type!=='TAUNT_RECIPIENT' || item.receipt.id<=lastTauntId) continue;
+        lastTauntId=item.receipt.id;
+        events.push({type:'TAUNT_RECIPIENT',frame:item.frame,receipt:item.receipt});
+      }
       const freshContacts = [];
       for (const contact of view.nativeLifecycle?.contacts?.confirmed ?? []) {
         if (contact.id <= lastContactId) continue;

@@ -878,6 +878,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         continue;
       }
       if (event.type === 'STATUS') {
+        if (event.tauntId && ctx.autoMoveAtlas?.ownsTaunt(event.tauntId)) continue;
         const info = slot(event.slot);
         if (info) spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 0.7, tint: BATTLE_FX_PALETTES.dark.main, life: 420});
         continue;

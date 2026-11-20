@@ -14,24 +14,25 @@ function project(point, rect, scale) {
   return {x:rect.x+point[0]/4096*scale, y:rect.y+(point[1]-point[2])/4096*scale};
 }
 
-function placeContact(atlas, binding, c, rect, scale, bodies) {
+function placeContact(atlas, binding, c, rect, scale, bodies, age=0) {
   const phase = binding.family === 'target_single' ? 'target_single' : 'contact';
   if (!atlas.ready(c.moveId, phase)) return false;
   const onCaster = binding.anchor.startsWith('caster_');
-  const point = onCaster ? c.casterPoint : c.targetPoint;
+  const impact = binding.family === 'contact' && binding.anchor === 'impact_world' && c.actorId != null;
+  const point = onCaster ? c.casterPoint : impact ? c.sourcePoint : c.targetPoint;
   if (!point) return false;
   const at = project(point, rect, scale);
   const body = bodies?.get(onCaster ? c.slot : c.targetSlot);
   const offset = bodyAnchors.get(binding.anchor);
   const facing = Math.sign(c.targetPoint[0] - (c.casterPoint ?? c.sourcePoint)[0]) || 1;
   if (offset) {
-    if (!body) return false;
-    at.x += (body.spread ?? 0) + body.width * offset[0] * facing;
-    at.y -= body.height * offset[1];
+    if (!body || (onCaster && body.down)) return false;
+    at.x = body.x + body.width * offset[0] * facing;
+    at.y = body.top + body.height * (1-offset[1]);
   } else if (binding.anchor === 'target_ground') {
     at.y = rect.y + c.targetPoint[1]/4096*scale;
   }
-  return atlas.place(c, c.moveId, phase, at.x, at.y, 0, scale, 0, false, true,
+  return atlas.place(c, c.moveId, phase, at.x, at.y, 0, scale, age, false, !offset,
     binding.family === 'melee' ? facing : 1);
 }
 const pilotFlightSelector = 0x0702;
@@ -51,6 +52,7 @@ export function createAutoMoveAtlas({PIXI, front, ground, reducedMotion}) {
   const atlas = createMoveAtlas({PIXI, front, ground, reducedMotion, records, maxSheets:12, mode:'auto',
     assetRoot:'assets/production/vfx/auto-moves/', labelPrefix:'auto-move'});
   const flights = new Map(), owned = new Set(), contactIds = new Set();
+  const attachedContacts = new Map(), ownedTaunts = new Set();
   const cues = new Set(), claimedContacts = new Set(), claimedSupport = new Set();
   function remember(set, key) {
     set.add(key);
@@ -58,10 +60,11 @@ export function createAutoMoveAtlas({PIXI, front, ground, reducedMotion}) {
   }
   const recipients = new Map(), ownedSupport = new Set(), heals = new Set();
   function update(view, rect, scale, dt, events, bodies) {
-    owned.clear(); contactIds.clear(); ownedSupport.clear(); heals.clear(); atlas.beginFrame();
+    ownedTaunts.clear(); owned.clear(); contactIds.clear(); ownedSupport.clear(); heals.clear(); atlas.beginFrame();
     for (const event of events) {
       const neutral = event.type === 'NEUTRAL_RELEASE';
-      const r = neutral ? event : event.type === 'SUPPORT' ? event.receipt : null;
+      const taunt=event.type==='TAUNT_RECIPIENT';
+      const r = neutral ? event : (taunt || event.type === 'SUPPORT') ? event.receipt : null;
       if (!r) continue;
       const supportKey=r.actionId+'/'+r.targetSlot;
       if (!neutral && !r.result) { remember(claimedSupport,supportKey); continue; }
@@ -70,7 +73,8 @@ export function createAutoMoveAtlas({PIXI, front, ground, reducedMotion}) {
       const slot = neutral ? r.slot : r.targetSlot;
       if (!bodies?.get(slot)) continue;
       recipients.set(r, {key:r.moveId,phase,slot,age:0});
-      if (!neutral) {
+      if (taunt) ownedTaunts.add(r.id);
+      else if (!neutral) {
         ownedSupport.add(r); remember(claimedSupport,supportKey);
         if (r.result === 'heal') heals.add(slot + '/' + (r.hpAfter-r.hpBefore));
       }
@@ -80,6 +84,13 @@ export function createAutoMoveAtlas({PIXI, front, ground, reducedMotion}) {
       if (!body || body.down || age >= atlas.duration(key,phase)) { recipients.delete(id); continue; }
       atlas.place(id,key,phase,body.x,body.top+body.height*0.5,0,scale,age,false);
       recipient.age += dt;
+    }
+    for (const [id,attached] of attachedContacts) {
+      const {binding,c,phase}=attached;
+      if (attached.age>=atlas.duration(c.moveId,phase) || !placeContact(atlas,binding,c,rect,scale,bodies,attached.age)) {
+        attachedContacts.delete(id);continue;
+      }
+      attached.age+=dt;
     }
     const live = new Set();
     for (const event of events) if (event.type === 'LAUNCH') atlas.request(event.moveId);
@@ -119,7 +130,10 @@ export function createAutoMoveAtlas({PIXI, front, ground, reducedMotion}) {
       const c = event.contact;
       const binding = autoMoveBindings.get(c.moveId);
       if (binding && ['melee','target_single','contact'].includes(binding.family)) {
-        if (placeContact(atlas, binding, c, rect, scale, bodies)) contactIds.add(c.id);
+        if (placeContact(atlas, binding, c, rect, scale, bodies)) {
+          contactIds.add(c.id);
+          if(bodyAnchors.has(binding.anchor))attachedContacts.set(c.id,{binding,c,phase:binding.family==='target_single'?'target_single':'contact',age:dt});
+        }
       } else if (binding?.family === 'beam' || binding?.family === 'travel') {
         const shot = flights.get(c.actorId);
         const same = shot?.actionId === c.actionId && shot.slot === c.slot && shot.key === c.moveId;
@@ -159,8 +173,9 @@ export function createAutoMoveAtlas({PIXI, front, ground, reducedMotion}) {
     atlas.endFrame(dt);
   }
   return {update, supports:key=>records.has(key), ownsActor:id=>owned.has(id), ownsContact:id=>contactIds.has(id),
+    ownsTaunt:id=>ownedTaunts.has(id),
     ownsNativeImpact:id=>claimedContacts.has(id),
     ownsSupport:r=>ownedSupport.has(r), ownsHeal:(slot,amount)=>heals.has(slot+"/"+amount),
     diagnostics:()=>({...atlas.diagnostics(),flightIds:[...owned],contactIds:[...contactIds]}),
-    dispose(){claimedContacts.clear();claimedSupport.clear();cues.clear();recipients.clear();ownedSupport.clear();heals.clear();flights.clear();owned.clear();contactIds.clear();atlas.dispose();}};
+    dispose(){attachedContacts.clear();ownedTaunts.clear();claimedContacts.clear();claimedSupport.clear();cues.clear();recipients.clear();ownedSupport.clear();heals.clear();flights.clear();owned.clear();contactIds.clear();atlas.dispose();}};
 }

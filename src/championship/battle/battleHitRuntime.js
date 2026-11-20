@@ -68,8 +68,8 @@ export function createBattleHitRuntime({session,actors,onSound=null,onImpactFeed
   }
   function writePoint(h){[0,4,8].forEach((o,i)=>m.writeU32(h.world,o,h.point[i]));}
   return {
-    status(slot,code){const h=host(slot);applyBattleHitStatus(session.slots[slot],code,h);writePoint(h);actors.syncCombatants();
-      record(slot,'STATUS_APPLIED',{code,state:session.slots[slot].state});},
+    status(slot,code,tauntId){const h=host(slot);applyBattleHitStatus(session.slots[slot],code,h);writePoint(h);actors.syncCombatants();
+      record(slot,'STATUS_APPLIED',{code,state:session.slots[slot].state,...(tauntId ? {tauntId} : {})});},
     notify(slot,code){const h=host(slot);notifyBattleHitState(session.slots[slot],code,h);writePoint(h);},
     apply(slot,input){
       const c=session.slots[slot],h=host(slot);

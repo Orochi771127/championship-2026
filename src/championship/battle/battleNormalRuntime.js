@@ -13,6 +13,8 @@ import {BATTLE_SPECIES_MOVEMENT} from '../../data/championship/battleCharacterPr
 
 export function createBattleNormalRuntime({session,actors,creatures,initialize,applyStatus,globalAbort=()=>!!(actors.worldFlags()&2)}){
   const m=actors.memory,history=[];
+  const targetedActions = new Map();
+  let targetedSerial = 0, recipientSerial = 0;
   const teamSlots=t=>session.slots.flatMap((c,i)=>c&&Math.floor(i/3)===t?[i]:[]);
   const teams=[0,1].map(t=>({slots:teamSlots(t),metric44:[0,0,0],metric54:[0,0,0],guard40:0,guard50:0}));
   const point=i=>{const p=m.readU32(actors.address(i),0x2c);return [0,4,8].map(o=>m.readU32(p,o)|0);};
@@ -92,7 +94,9 @@ export function createBattleNormalRuntime({session,actors,creatures,initialize,a
       emit(slot,'SELECTED',{state:c.state,targetSlot:next,actionTarget:c.pendingTargetSlot,moveId:decision.action?.actionId??decision.actionId??null,decisionId:c.pendingDecisionId??null});
     },
     stepState(slot,gate){
-      const c=session.slots[slot];if(![3,4,5,6,7,8,14,15,16].includes(c.state))return false;
+      const c=session.slots[slot];
+      if(c.state!==16 || c.stateCounter===0)targetedActions.delete(slot);
+      if(![3,4,5,6,7,8,14,15,16].includes(c.state))return false;
       if(c.state===8&&c.stateCounter===0){
         const opponents=teams[1-Math.floor(slot/3)].slots;
         const pick=selectBattlePursuitTarget(opponents.map(i=>session.slots[i]),opponents.map(i=>geometry.distances[slot][i]));
@@ -121,15 +125,31 @@ export function createBattleNormalRuntime({session,actors,creatures,initialize,a
           if(!(action.targetSlot>=0)){emit(slot,'LAUNCH_REFUSED',{moveId:moveId??null,targetSlot:null,state:c.state,actionIndex:action.index,
             reason:'NULL_TARGET_0211C0A0',resourceBefore:c.metricLimit,resourceAfter:c.metricLimit,decisionId:c.pendingDecisionId??null});return false;}
           const resourceBefore=c.metricLimit,ok=initialize(slot,action);
+          if(ok && c.state===16 && moveId===1)targetedActions.set(slot,{
+            actionId:++targetedSerial,actionIndex:action.index,decisionId:c.pendingDecisionId??null
+          });
           if(ok && move?.kind===1)c.openingSkillLaunched=true;
           emit(slot,ok?'LAUNCHED':'LAUNCH_REFUSED',{moveId:moveId??null,targetSlot:action.targetSlot,state:c.state,actionIndex:action.index,
             resourceBefore,resourceAfter:c.metricLimit,decisionId:c.pendingDecisionId??null});return ok;},
         release(launchIndex,action){action.release();releaseSlot(slot,launchIndex,action);},
         afterTargeted(){
           const opponents=teams[1-Math.floor(slot/3)].slots;
+          const action=targetedActions.get(slot);
+          targetedActions.delete(slot);
+          let receipt=null;
           finishBattleTargetedAction(moveId,opponents.map(i=>session.slots[i]),{
-            status:(i,code)=>applyStatus(opponents[i],code),
-            targetOwner:i=>m.writeU32(actors.address(opponents[i]),0x5c,actors.address(slot)),
+            status(i,code){
+              const targetSlot=opponents[i], recipient=session.slots[targetSlot];
+              receipt=action && (recipient.statusCode!==code || m.readU32(actors.address(targetSlot),0x5c)!==actors.address(slot))
+                ? {...action,id:++recipientSerial,moveId,casterSlot:slot,targetSlot,result:'taunt'} : null;
+              applyStatus(targetSlot,code,receipt?.id);
+            },
+            targetOwner(i){
+              const targetSlot=opponents[i], target=actors.address(targetSlot), caster=actors.address(slot);
+              m.writeU32(target,0x5c,caster);
+              if(receipt && receipt.targetSlot===targetSlot && session.slots[targetSlot].statusCode===1 && m.readU32(target,0x5c)===caster)
+                emit(slot,'TAUNT_RECIPIENT',{receipt});
+            },
             chooseOrdinary:i=>chooseOrdinary(opponents[i]),notifyOwner:n=>session.notify(slot,n)});
           if(moveId===1)emit(slot,'TARGETED_FOLLOWUP',{moveId});
         }};
