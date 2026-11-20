@@ -27,7 +27,7 @@ import {battleEffectCellIsOriginal} from '../battleEffectSprites.js';
 import {createPixelHitBursts} from '../vfx/pixelHitBursts.js';
 import {createPixelMotes} from '../vfx/pixelMotes.js';
 import {productArenaMoveRecord} from '../../contracts/productArenaMoves.js';
-import {moveVfxChoreography, moveVfxSupportChoreography} from '../vfx/moveVfxChoreography.js';
+import {moveVfxChoreography as sharedChoreography, moveVfxSupportChoreography} from '../vfx/moveVfxChoreography.js';
 import {createMoveVfxSetPieces, bakedPieceLook, paintBakedPieceFrames} from '../vfx/moveVfxSetPieces.js';
 /** Palette key -> the element its motes wear (as unifiedMoveVfxResolver reads a bank's family colour). */
 const PALETTE_ELEMENT = Object.freeze({fire: 'FIRE', water: 'WATER', ice: 'ICE', thunder: 'THUNDER', metal: 'METAL', nature: 'WOOD',
@@ -213,6 +213,13 @@ export function battleHyperWrapStreaks({count = 18, phase = 0} = {}) {
   return streaks;
 }
 
+// Learned Arena records use the donor's Auto presentation and native launch/contact points.
+function autoPresentationRecord(key) {
+  return productArenaMoveRecord(key)?.productDonorRecord ?? key;
+}
+function moveVfxChoreography(key) {
+  return sharedChoreography(autoPresentationRecord(key));
+}
 export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, quality = 'balanced', reducedMotion = false, responsiveLayout = false,
   flashScale = 1, describeMove = () => null, nameOfSlot = () => '', moveNameOf = () => '', text = value => value, seed = 0x51ed, juicy = false,
   resolveMove = () => null, effectArt = null, hitFeel = null, impactAudio = null}) {
@@ -314,11 +321,11 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   const motes = typeof createPixelMotes === 'function' ? createPixelMotes({PIXI, layer: worldFront, quality: rich ? 'balanced' : 'saver', reducedMotion, seed: seed ^ 0x6d07}) : null;
   const standIns = new Map(); // live effect actor id -> {at, alive, standIn, trail, ...}
   const kitStats = {standIns: 0, trails: 0, sigils: 0, bursts: 0, size: 0};
-  const signatureOf = moveId => Number.isSafeInteger(moveId) ? moveVfxSignature(moveId) : null;
+  const signatureOf = moveId => Number.isSafeInteger(moveId) ? moveVfxSignature(autoPresentationRecord(moveId)) : null;
   const romCell = actor => { const cell = effectArt?.getCell?.(actor.bankId, actor.cell); return Boolean(cell) && !battleEffectCellIsOriginal(cell); };
   const cues = []; // bounded 3D cues for the Three overlay: buffs, criticals, signature weather
   const cue = value => { cues.push(Object.freeze(value)); if (cues.length > 24) cues.shift(); }; // unread cues never pile up
-  const vfxOf = (slot, moveId) => Number.isSafeInteger(moveId) ? resolveMove(slot, moveId) ?? null : null;
+  const vfxOf = (slot, moveId) => Number.isSafeInteger(moveId) ? resolveMove(slot, autoPresentationRecord(moveId)) ?? null : null;
   const muzzleOf = info => ({x: info.x + Math.sign(info.facing || 1) * info.width * 0.3, y: info.top + info.height * 0.38});
 
   const particles = [], particlePool = [];
@@ -621,11 +628,11 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         if (stage === 'hit' || stage === 'extra') {
           const heavy = form === 'area' || form === 'character' || signature.tier === 'ultimate';
           // the HIT plays this move's own contact piece; the stand-in keeps only its flare and motif (pass 6)
-          kit.impact({x: at.x, y: at.y, groundY: at.groundY, paletteKey, archetype, heavy, size: heavy ? size * 1.1 : size, planted: moveVfxArchetypeIsPlanted(archetype),
-            piece: Boolean(entry.moveId !== null && moveVfxChoreography(productArenaMoveRecord(entry.moveId)?.productDonorRecord ?? entry.moveId)?.contact)});
+          kit.impact({x: at.x, y: at.y, groundY: at.groundY, paletteKey, archetype, heavy, size: heavy ? size * 1.1 : size, planted: !productArenaMoveRecord(entry.moveId) && moveVfxArchetypeIsPlanted(archetype),
+            piece: Boolean(entry.moveId !== null && moveVfxChoreography(entry.moveId)?.contact)});
         } else if (stage === 'body' || form === 'projectile' || form === 'stream' || form === 'beam') {
           // A body that lands and stands (a mushroom, a bomb) is drawn planted where the battle put it.
-          kit.projectile({follow: during, paletteKey, archetype: shot, size, signature, planted: stage === 'body' && moveVfxArchetypeIsPlanted(archetype)});
+          kit.projectile({follow: during, paletteKey, archetype: shot, size, signature, planted: !productArenaMoveRecord(entry.moveId) && stage === 'body' && moveVfxArchetypeIsPlanted(archetype)});
         } else kit.launch({x: at.x, y: at.y, paletteKey, archetype, size, signature});
         continue;
       }
@@ -688,7 +695,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           const launchCell = vfx.cells.find(c => c.role === 'launch' || c.role === 'prepare');
           if (launchCell) element?.cell({...launchCell, ...muzzleOf(info), scale: ctx.nativeScale, flip: info.facing < 0, hue: vfx.cellHue});
         }
-        const choreo = moveVfxChoreography(productArenaMoveRecord(event.moveId)?.productDonorRecord ?? event.moveId);
+        const choreo = moveVfxChoreography(event.moveId);
         if (info && choreo?.release && setPieces) {
           const releasePalette = vfx?.palette ?? BATTLE_FX_PALETTES[look?.palette] ?? BATTLE_FX_PALETTES.neutral;
           setPieces.play(choreo.release.piece, {...muzzleOf(info), angle: info.facing < 0 ? Math.PI : 0, palette: releasePalette,
@@ -761,7 +768,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const palette = vfx?.palette ?? BATTLE_FX_PALETTES[look?.palette] ?? BATTLE_FX_PALETTES.neutral;
         // A native screen flash has no target/critical attribution. Only an
         // explicitly attributed HIT may label itself critical.
-        const choreo = moveVfxChoreography(productArenaMoveRecord(event.moveId)?.productDonorRecord ?? event.moveId);
+        const choreo = moveVfxChoreography(event.moveId);
         const critical = event.critical === true;
         const tier = battleFxHitTier({ratio: event.ratio, ultimate: look?.tier === 'ultimate', critical});
         const hit = battleFxHitPoint({target, impacts: freshImpacts, endings: endings.filter(e => !e.used), attacker});
@@ -809,9 +816,9 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           const cellAt = {x: hit.x, y: hit.y, scale: ctx.nativeScale, flip: (fx.knockDir || 1) < 0, hue: vfx.cellHue};
           if (vfx.fallback) { const hitCell = vfx.cells.find(c => c.role === 'hit'); if (hitCell) element?.cell({...hitCell, ...cellAt}); }
           if (vfx.accent) element?.cell({...vfx.accent, ...cellAt, hue: 0});
-          if (vfx.overlay && tier !== 'light') element?.cell({...vfx.overlay, scale: ctx.nativeScale * 0.85, repeatMs: tier === 'heavy' ? 1000 : 640, overlay: true,
+          if (!productArenaMoveRecord(event.moveId) && vfx.overlay && tier !== 'light') element?.cell({...vfx.overlay, scale: ctx.nativeScale * 0.85, repeatMs: tier === 'heavy' ? 1000 : 640, overlay: true,
             follow: () => { const now = slot(event.slot); return now && !now.down ? {x: now.x, y: now.top + now.height * 0.45} : null; }});
-          if (tier !== 'light' || look?.tier === 'ultimate') element?.decal({x: hit.x, y: hit.groundY, kind: vfx.decal, palette, paletteKey: vfx.paletteKey,
+          if (!productArenaMoveRecord(event.moveId) && (tier !== 'light' || look?.tier === 'ultimate')) element?.decal({x: hit.x, y: hit.groundY, kind: vfx.decal, palette, paletteKey: vfx.paletteKey,
             size: target.width * (tier === 'heavy' ? 1.3 : 0.9), scale: ctx.nativeScale});
         }
         // The move's own closing burst (and a signature move's ground sigil) at the contact.

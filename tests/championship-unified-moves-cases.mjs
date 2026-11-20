@@ -30,16 +30,25 @@ test('every three.js piece a move plays is baked, grouped, and falls back to a s
   for (const name of Object.keys(MOVE_PIECE_3D)) assert.ok(MOVE_VFX_3D_PIECE_GROUP[name], `${name} not baked`);
 });
 
-test('every ultimate (species, originals, Data Arena) plays a three.js piece no other ultimate plays', () => {
-  const ultimates = sig.moves.filter(([key, tier]) => tier === 2).map(([key]) => key);
-  assert.ok(ultimates.length >= 220, `${ultimates.length} ultimates`);
-  const seen = new Map();
-  for (const key of ultimates) {
-    const piece = moveVfxChoreography(key).contact.piece;
-    assert.ok(piece.startsWith('3d-'), `${key} plays ${piece}`);
-    assert.ok(!seen.has(piece), `${key} and ${seen.get(piece)} share ${piece}`);
-    seen.set(piece, key);
+test('each attacking tier selects its own public atlas with a verified contact, travel or beam phase', async () => {
+  const {autoMoveBindings} = await import('../src/championship/presentation/battleFx/autoMoveBindings.js');
+  const {createHash} = await import('node:crypto');
+  const seen = new Set(), tierCounts = [0,0,0];
+  for (const [key,tier] of sig.moves) {
+    if (tier > 2) continue;
+    const mode = typeof key === 'number' ? 'auto' : 'arena';
+    if (mode === 'auto') assert.ok(autoMoveBindings.has(key), String(key));
+    const base = new URL('../assets/production/vfx/'+mode+'-moves/'+key, import.meta.url);
+    const data = JSON.parse(fs.readFileSync(new URL(base.href+'.json')));
+    assert.equal(data.key,key); assert.equal(data.mode,mode);
+    assert.ok(data.phases.some(p=>p.frames.length), String(key));
+    const png = fs.readFileSync(new URL(base.href+'.png'));
+    assert.equal(png.subarray(1,4).toString(), 'PNG');
+    const hash = createHash('sha256').update(png).digest('hex');
+    assert.ok(!seen.has(hash), 'duplicate art '+key);
+    seen.add(hash); tierCounts[tier]++;
   }
+  assert.ok(tierCounts[0]>=200 && tierCounts[1]>=150 && tierCounts[2]>=220);
 });
 
 test('group modules load on demand and carry the MIT notices of 00GameDevs and three.js', async () => {
@@ -64,34 +73,11 @@ test('a ground or contact anchor sits inside its piece (the bake reads the origi
   }
 });
 
-test('every species skill lands a three.js piece no other skill of its element plays, and never an ultimate\'s look', async () => {
-  const {MOVE_PIECE_3D} = await import('../scripts/vfx/move-piece-3d-specs.mjs');
-  const skills = sig.moves.filter(([key, tier]) => tier === 1 && Number.isSafeInteger(key) && key < 596);
-  assert.ok(skills.length >= 150, `${skills.length} skills`);
-  const seen = new Map();
-  for (const [key, , , palette] of skills) {
-    const piece = moveVfxChoreography(key)?.contact?.piece;
-    assert.equal(piece, `3d-s-${key}`, `${key} plays ${piece}`);
-    const spec = MOVE_PIECE_3D[piece], look = `${palette}|${spec.fx}#${spec.variant}`;
-    assert.ok(spec.variant >= 6, `${piece} uses a skill variant`);
-    assert.ok(!seen.has(look), `${key} and ${seen.get(look)} look alike`);
-    seen.set(look, key);
-  }
-});
-
-test('every species basic move lands a three.js piece no other basic of its element plays, from the basics\' own variants', async () => {
-  const {MOVE_PIECE_3D} = await import('../scripts/vfx/move-piece-3d-specs.mjs');
-  const basics = sig.moves.filter(([key, tier]) => tier === 0 && Number.isSafeInteger(key) && key < 596);
-  assert.ok(basics.length >= 200, `${basics.length} basics`);
-  const seen = new Map();
-  for (const [key, , , palette] of basics) {
-    const piece = moveVfxChoreography(key)?.contact?.piece;
-    assert.equal(piece, `3d-b-${key}`, `${key} plays ${piece}`);
-    const spec = MOVE_PIECE_3D[piece], look = `${palette}|${spec.fx}#${spec.variant}`;
-    assert.ok(spec.variant >= 12, `${piece} uses a basic variant`);
-    assert.ok(!seen.has(look), `${key} and ${seen.get(look)} look alike`);
-    seen.set(look, key);
-  }
+test('shared family pieces remain available without any retired per-record module', () => {
+  assert.equal(Object.keys(MOVE_VFX_3D_PIECE_GROUP).length,71);
+  assert.equal(Object.keys(MOVE_VFX_3D_PIECE_GROUPS).length,8);
+  for (const group of Object.keys(MOVE_VFX_3D_PIECE_GROUPS)) assert.doesNotMatch(group,/^[ubs]\\d+$/);
+  assert.ok(MOVE_VFX_PIECE_SPRITES['hyper-ring'] && MOVE_VFX_PIECE_SPRITES['prop-dust']);
 });
 
 test('every move has its own icon, shipped as a 64 px WebP with a manifest (U2)', async () => {
