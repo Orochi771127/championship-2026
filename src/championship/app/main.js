@@ -118,6 +118,15 @@ import { mountAmbience } from './ui/ambienceLayer.js';
 import {mountInteractiveTutorialPreview,isInteractiveTutorialPreviewLocation,shouldOfferInteractiveTutorial} from './interactiveTutorialPreview.js';
 import { assetPrefetcher, createAssetPrefetcher, withPrefetchedTextures } from './assetPrefetch.js';
 import { createLoadWatchdog, createLoadAttempt, LOAD_MAX_MS } from './loadWatchdog.js';
+import {
+  aggregateDungeonChips,
+  chooseDungeonDoor,
+  createCyberDungeonRun,
+  pickDungeonChip,
+  resolveDungeonCombat,
+  resolveDungeonEvent
+} from '../contracts/productCyberDungeon.js';
+import { cyberDungeonText } from '../text/cyberDungeonText.js';
 import { classifyBattleResultFeedback, HIGHLIGHT_DEFAULTS, highlightOverrides } from '../presentation/highlight/highlightTimeline.js';
 import { createHighlightSequence } from '../presentation/highlight/createHighlightSequence.js';
 import { configureCeremonyAudio, playCeremony, playCeremonySound } from '../presentation/ceremony/ceremonyRunner.js';
@@ -511,6 +520,7 @@ let clockDriver = null;
 let dataArenaSession = null;
 // Journey (Owner 2026-11-10): the open 征途 overlay, and the floor to open on after a won/lost tower match.
 let journeyView = null, pendingJourney = null;
+let cyberDungeonRun = null, activeDungeonBattle = null;
 let tutorialPreview = null;
 let unsubscribeTutorialTools = null;
 
@@ -1897,12 +1907,23 @@ async function mountBattleSelect() {
     getModeMatches:async mode=>mode==='TITLE_MATCH'?battleRuntime.listMatches():app.openFreeBattle().map(match=>({
       ...match,recordIndex:match.id,crestSpecies:Number.isSafeInteger(match.speciesIndices?.[0])?match.speciesIndices[0]:null,
       title:uiText('{kind} — {species}',{kind:uiText(match.kind==='SINGLE'?'單隻對戰':'三隻對戰'),species:formatList(match.speciesIndices.map(index=>speciesName(index)))})})),
-    menuCopy: battleMenuLabels(),
+    menuCopy: {
+      ...battleMenuLabels(),
+      pillars: {
+        heading: cyberDungeonText('pillar.heading'),
+        autoTitle: cyberDungeonText('pillar.auto.title'),
+        autoSub: cyberDungeonText('pillar.auto.sub'),
+        arenaTitle: cyberDungeonText('pillar.arena.title'),
+        arenaSub: cyberDungeonText('pillar.arena.sub'),
+        dungeonTitle: cyberDungeonText('pillar.dungeon.title'),
+        dungeonSub: cyberDungeonText('pillar.dungeon.sub')
+      }
+    },
     onlineLobby: onlineLobbies(),
     prefill: (() => { const spar = pendingSpar; pendingSpar = null; return spar; })(),
     onOpenChampionship() { app.openChampionship(); },
     onOpenDataArena: enterDataArena,
-    onOpenJourney: () => void openJourney(),
+    onOpenJourney: (prefill = null) => void openJourney(prefill),
     onGoHunt: () => { if (app.getScreen() !== CHAMPIONSHIP_SCREENS.RAISING_HOME) app.leaveScreen(); expeditionSource?.intents.openGate(); },
     async onEnter(recordIndex,playerInstanceIds,mode,selectedArena=null) {
       // Battle simulation uses this existing Application's ticker. Do not
@@ -2035,6 +2056,44 @@ async function openJourney(prefill = null) {
         variant: TACTIC_RECORD_VARIANT,
         downloadLog: new URLSearchParams(location.search).get('playtest') === '1' ? downloadTacticPlaytestLog : null
       },
+      dungeon: {
+        frame: () => cyberDungeonRun,
+        start: (sectorId, partyIds) => {
+          const seed = (Date.now() ^ ((partyIds?.length ?? 1) * 2654435761)) >>> 0;
+          cyberDungeonRun = createCyberDungeonRun({ sectorId, party: partyIds, seed, runId: `dg-${Date.now()}` });
+          return cyberDungeonRun;
+        },
+        fight: () => startDungeonCombat(),
+        pickChip: (chipId) => {
+          cyberDungeonRun = pickDungeonChip(cyberDungeonRun, chipId);
+          return cyberDungeonRun;
+        },
+        chooseDoor: (doorIndex) => {
+          cyberDungeonRun = chooseDungeonDoor(cyberDungeonRun, doorIndex);
+          return cyberDungeonRun;
+        },
+        resolveEvent: (optionId) => {
+          const prev = cyberDungeonRun;
+          const res = resolveDungeonEvent(prev, optionId);
+          cyberDungeonRun = res.run;
+          if (res.reward?.kind === 'ALTAR' && res.reward.blessing) {
+            app.grantCyberDungeonRewards({ altarBlessing: res.reward.blessing, leadInstanceId: prev?.party?.[0] ?? null });
+            autosave?.request('cyber-dungeon');
+          } else if (res.reward?.kind === 'SIGNAL_SUPPLY' || res.reward?.kind === 'SIGNAL_HUNT') {
+            app.grantCyberDungeonRewards({ crystals: res.reward.crystals, bits: res.reward.bits });
+            autosave?.request('cyber-dungeon');
+          }
+          return res;
+        },
+        abandon: () => {
+          if (!cyberDungeonRun) return;
+          cyberDungeonRun = { ...cyberDungeonRun, status: 'DEFEATED' };
+        },
+        reset: () => {
+          cyberDungeonRun = null;
+          activeDungeonBattle = null;
+        }
+      },
       onClose: closeJourney,
       onGoHunt: () => {
         closeJourney();
@@ -2127,6 +2186,31 @@ function downloadTacticPlaytestLog() {
   document.body.append(link); link.click(); link.remove();
   setTimeout(() => URL.revokeObjectURL(link.href), 1000);
 }
+/** Launch a real combat or boss room inside Cyber Dungeon Phase 1. */
+async function startDungeonCombat() {
+  if (!cyberDungeonRun || !cyberDungeonRun.activeRoom?.presets?.length) return { ok: false, reason: 'DUNGEON_ROOM_NOT_READY' };
+  if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started)
+    return { ok: false, reason: "BATTLE_NOT_READY", message: "遊戲場景尚未就緒，請返回牧場後重試。" };
+  const mods = aggregateDungeonChips(cyberDungeonRun.chips);
+  const party = await app.prepareDungeonBattle({
+    presetIndices: cyberDungeonRun.activeRoom.presets,
+    partyIds: cyberDungeonRun.party,
+    arenaIndex: cyberDungeonRun.activeRoom.arenaIndex,
+    carryRatioById: cyberDungeonRun.carryRatioById,
+    startTpBonusPct: mods.startTpBonusPct
+  });
+  if (!party.ok) return party;
+  const prepared = (await loadBattleRuntime())({ mode: 2, battleType: 0, playerIndividuals: party.individuals, rng: party.rngPreparation.rng,
+    personalityPolicy: FREE_PRACTICE_PERSONALITY_POLICY, arenaHazards: await loadArenaHazards() });
+  try {
+    prepared.chooseFreeBattle({ presetIndices: party.presetIndices, arenaIndex: party.arenaIndex }); prepared.startMatch(); exposeArenaHazardsQa(prepared);
+    const attemptId = `battle:${app.getBattleEconomyState().nextSequence}`;
+    activeDungeonBattle = Object.freeze({ attemptId, runId: cyberDungeonRun.runId, partyIds: [...cyberDungeonRun.party] });
+    closeJourney();
+    return await enterPreparedBattle(prepared, attemptId, () => app.enterDungeonBattle({ attemptId, playerInstanceIds: cyberDungeonRun.party, rngPreparation: party.rngPreparation }));
+  } catch (error) { activeDungeonBattle = null; prepared.dispose(); console.warn(`DUNGEON_BATTLE_PREPARE: ${error.message}`); return { ok: false, reason: 'BATTLE_NOT_READY' }; }
+}
+
 /** A tower floor, fought like a Free Battle against that floor's original presets. */
 async function startTowerFloor(floor, ids) {
   if (!pixiStage || pixiStage.contextLost || !pixiStage.app.ticker.started)
@@ -2600,7 +2684,29 @@ async function mountBattleResult() {
     app.leaveScreen();
     if(app.getScreen()!==CHAMPIONSHIP_SCREENS.BATTLE_SELECT){if(app.getScreen()!==CHAMPIONSHIP_SCREENS.RAISING_HOME)app.leaveScreen();app.openBattle();}
   };
-  const followUp=sparSettled?{label:sparRecord?.next?tacticRecordText('practice.next',{n:sparRecord.next}):tacticRecordText(sparRecord?.result?.clear?'practice.cleared':'practice.done'),
+  // Cyber Dungeon Roguelike Phase 1 (2026-11-21): settle room combat outcome and pay real room rewards.
+  let dungeonSettled = null;
+  if (!tutorial && typeof activeDungeonBattle !== 'undefined' && activeDungeonBattle && receipt && activeDungeonBattle.attemptId === (receipt.attemptId ?? null) && cyberDungeonRun?.runId === activeDungeonBattle.runId) {
+    const won = outcome?.winningTeam === 0;
+    const ratios = {};
+    const localSlotFighters = Array.isArray(participants) ? participants.filter((p) => p?.teamIndex === 0) : [];
+    activeDungeonBattle.partyIds.forEach((id, idx) => {
+      const f = localSlotFighters[idx];
+      const maxHp = Math.max(1, f?.maxHp ?? 100);
+      const maxTp = Math.max(1, f?.maxTp ?? 100);
+      ratios[id] = { hp: Math.max(0, (f?.hp ?? (won ? maxHp : 0)) / maxHp), tp: Math.max(0, (f?.tp ?? 0) / maxTp) };
+    });
+    const resolved = resolveDungeonCombat(cyberDungeonRun, { attemptId: activeDungeonBattle.attemptId, won, partyRatios: ratios });
+    cyberDungeonRun = resolved.run;
+    if (resolved.delta && (resolved.delta.crystals > 0 || resolved.delta.bits > 0)) {
+      app.grantCyberDungeonRewards({ crystals: resolved.delta.crystals, bits: resolved.delta.bits });
+      autosave?.request('cyber-dungeon');
+    }
+    dungeonSettled = Object.freeze({ won, status: cyberDungeonRun.status, delta: resolved.delta });
+    activeDungeonBattle = null;
+  }
+  const followUp=dungeonSettled?{label:cyberDungeonText('battle.returnCta'),onClick:()=>leaveToJourney({tab:'DUNGEON'})}
+    :sparSettled?{label:sparRecord?.next?tacticRecordText('practice.next',{n:sparRecord.next}):tacticRecordText(sparRecord?.result?.clear?'practice.cleared':'practice.done'),
       onClick:()=>leaveToJourney({tab:'PRACTICE'})}
     :!tower?null:tower.won&&tower.next?{label:journeyText('result.next',{floor:tower.next}),onClick:()=>leaveToJourney({floor:tower.next,team:tower.team,autoStart:true})}
     :!tower.won?{label:journeyText('result.retry',{floor:tower.floor}),onClick:()=>leaveToJourney({floor:tower.floor,team:tower.team,autoStart:true})}:null;
