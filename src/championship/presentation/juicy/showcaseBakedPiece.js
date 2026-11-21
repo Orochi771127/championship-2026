@@ -56,3 +56,69 @@ export function playShowcaseBakedPiece({doc = globalThis.document, layer, name, 
   tick();
   return true;
 }
+
+/** A Dex preview owns exactly one selected Auto atlas, including its outstanding requests. */
+export function createShowcaseMoveAtlas({doc, key, fetchImpl = globalThis.fetch}) {
+  const controller = new AbortController();
+  let bitmap = null, phases = [];
+  const canvases = new Set();
+  async function load() {
+    const base = new URL('assets/production/vfx/auto-moves/' + key, doc.baseURI);
+    const read = async (ext, mime) => {
+      const res = await fetchImpl(base.href + ext, {signal: controller.signal});
+      if (!res.ok || res.headers.get('content-type')?.split(';')[0] !== mime) throw Error('SHOWCASE_ATLAS_RESPONSE');
+      return res;
+    };
+    const data = await (await read('.json', 'application/json')).json();
+    if (data.mode !== 'auto' || data.key !== key || data.battleRecord !== key) return;
+    const image = await createImageBitmap(await (await read('.png', 'image/png')).blob());
+    if (controller.signal.aborted) { image.close(); return; }
+    bitmap = image;
+    phases = data.phases;
+  }
+  if (doc?.baseURI && typeof fetchImpl === 'function') load().catch(() => {});
+  function play(keys, {layer, from, to = from, width, duration, reduced, later}) {
+    const phase = phases.find(p => keys.includes(p.key));
+    if (!bitmap || !phase) return false;
+    const canvas = doc.createElement('canvas'), ctx = canvas.getContext('2d');
+    if (!ctx) return false;
+    const frames = phase.frames, clip = frames.reduce((ms,f) => ms + f.durationMs, 0);
+    const span = duration ?? clip, view = doc.defaultView, start = view.performance.now();
+    canvas.style.position = 'absolute'; canvas.style.pointerEvents = 'none'; canvas.style.imageRendering = 'pixelated';
+    canvas.dataset.movePhase = phase.key;
+    layer.append(canvas); canvases.add(canvas);
+    function draw(now) {
+      const elapsed = now - start;
+      if (!bitmap || !canvas.isConnected || elapsed >= span) { canvas.remove(); canvases.delete(canvas); return; }
+      let t = reduced ? clip / 2 : elapsed * clip / span;
+      const f = frames.find(f => (t -= f.durationMs) < 0) ?? frames.at(-1);
+      canvas.width = f.w; canvas.height = f.h; ctx.drawImage(bitmap, f.x, f.y, f.w, f.h, 0, 0, f.w, f.h);
+      const scale = width / f.w, dx = to.x-from.x, dy = to.y-from.y;
+      const progress = reduced ? Math.min(2, Math.round(3*elapsed/span))/2 : elapsed/span;
+      const beam = phase.key === 'beam', travel = phase.key === 'travel';
+      canvas.style.width = width + 'px'; canvas.style.height = f.h*scale + 'px';
+      canvas.style.left = (from.x + (travel ? dx*progress : 0) - f.pivot.x*scale) + 'px';
+      canvas.style.top = (from.y + (travel ? dy*progress : 0) - f.pivot.y*scale) + 'px';
+      if (beam && phase.span) {
+        const length = Math.hypot(dx,dy);
+        const offset = (phase.span.left - f.pivot.x)*scale;
+        canvas.style.transformOrigin = (f.pivot.x*scale)+'px '+(f.pivot.y*scale)+'px';
+        const stretch = length/(phase.span.width*scale);
+        canvas.style.transform = 'rotate('+Math.atan2(dy,dx)+'rad) scaleX('+stretch+') translateX('+(-offset)+'px)';
+      } else if (travel) {
+        canvas.style.transformOrigin = (f.pivot.x*scale)+'px '+(f.pivot.y*scale)+'px';
+        canvas.style.transform = 'rotate('+Math.atan2(dy,dx)+'rad)';
+      }
+      const remaining = span-elapsed;
+      const interval = reduced ? (travel ? span/3 : span) : Math.max(1, -t*span/clip);
+      const delay = Math.min(remaining, interval);
+      later(delay, () => draw(view.performance.now()));
+    }
+    draw(start); return true;
+  }
+  return {play, dispose() {
+    controller.abort(); bitmap?.close(); bitmap = null; phases = [];
+    for (const canvas of canvases) canvas.remove();
+    canvases.clear();
+  }};
+}

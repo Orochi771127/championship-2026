@@ -83,3 +83,25 @@ test('R10 all 151 numeric banks initialize their sequence and preserve original 
  }
  assert.equal(sequences,484);assert.equal(pool.diagnostics().created,pool.diagnostics().released);
 });
+
+test('one caster can retain the original 076 projectile identity across a newer 143 allocation', () => {
+ const memory=createBattleNativeMemory();
+ const pool=createBattleEffectActors({memory,worldAddress:0x20000000,loadedBankIds:[7,68]});
+ const m76=getBattleCatalogRecord('moves',76),m143=getBattleCatalogRecord('moves',143);
+ const old=pool.call(0x0211b264,[pool.base,m76.field30,1],{actionId:11,slot:0,moveId:76});
+ const target={lowX:-8,lowY:-12,highX:8,highY:12},point=[100*4096,90*4096,0];
+ memory.writeU32(old,0x24,0);memory.writeU32(old,0x28,point[1]);memory.writeU32(old,0x3c,100*4096);
+ const touches=()=>battleNativeProjectileContact(pool.box(old),pool.position(old),0,4096,target,point);
+ assert.equal(touches(),false);
+ const newer=pool.call(0x0211b264,[pool.base,m143.field30,1],{actionId:12,slot:0,moveId:143});
+ assert.ok(newer&&newer!==old);
+ pool.call(0x0204819c,[old,4096]);
+ assert.equal(touches(),true);
+ assert.deepEqual(pool.originOf(old),{actionId:11,slot:0,moveId:76,selector:m76.field30});
+ assert.equal(pool.originOf(newer).moveId,143);
+ const prior=pool.instanceOf(old);pool.release(old);
+ assert.equal(pool.originOf(old),null);
+ const reused=pool.allocate(m143.field30,1,{actionId:13,slot:0,moveId:143});
+ assert.equal(reused,old);assert.notEqual(pool.instanceOf(reused),prior);
+ assert.equal(pool.originOf(reused).moveId,143);
+});

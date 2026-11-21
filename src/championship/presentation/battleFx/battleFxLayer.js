@@ -26,8 +26,9 @@ import {moveVfxSignature} from '../vfx/moveVfxSignatures.js';
 import {battleEffectCellIsOriginal} from '../battleEffectSprites.js';
 import {createPixelHitBursts} from '../vfx/pixelHitBursts.js';
 import {createPixelMotes} from '../vfx/pixelMotes.js';
-import {moveVfxChoreography, moveVfxSupportChoreography} from '../vfx/moveVfxChoreography.js';
-import {createMoveVfxSetPieces, bakedPieceLook, paintBakedPieceFrames, loadMoveVfx3dPieces} from '../vfx/moveVfxSetPieces.js';
+import {productArenaMoveRecord} from '../../contracts/productArenaMoves.js';
+import {moveVfxChoreography as sharedChoreography, moveVfxSupportChoreography} from '../vfx/moveVfxChoreography.js';
+import {createMoveVfxSetPieces, bakedPieceLook, paintBakedPieceFrames} from '../vfx/moveVfxSetPieces.js';
 /** Palette key -> the element its motes wear (as unifiedMoveVfxResolver reads a bank's family colour). */
 const PALETTE_ELEMENT = Object.freeze({fire: 'FIRE', water: 'WATER', ice: 'ICE', thunder: 'THUNDER', metal: 'METAL', nature: 'WOOD',
   earth: 'EARTH', wind: 'WIND', light: 'SUN', dark: 'MOON'});
@@ -212,6 +213,13 @@ export function battleHyperWrapStreaks({count = 18, phase = 0} = {}) {
   return streaks;
 }
 
+// Learned Arena records use the donor's Auto presentation and native launch/contact points.
+function autoPresentationRecord(key) {
+  return productArenaMoveRecord(key)?.productDonorRecord ?? key;
+}
+function moveVfxChoreography(key) {
+  return sharedChoreography(autoPresentationRecord(key));
+}
 export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, quality = 'balanced', reducedMotion = false, responsiveLayout = false,
   flashScale = 1, describeMove = () => null, nameOfSlot = () => '', moveNameOf = () => '', text = value => value, seed = 0x51ed, juicy = false,
   resolveMove = () => null, effectArt = null, hitFeel = null, impactAudio = null}) {
@@ -313,11 +321,11 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   const motes = typeof createPixelMotes === 'function' ? createPixelMotes({PIXI, layer: worldFront, quality: rich ? 'balanced' : 'saver', reducedMotion, seed: seed ^ 0x6d07}) : null;
   const standIns = new Map(); // live effect actor id -> {at, alive, standIn, trail, ...}
   const kitStats = {standIns: 0, trails: 0, sigils: 0, bursts: 0, size: 0};
-  const signatureOf = moveId => Number.isSafeInteger(moveId) ? moveVfxSignature(moveId) : null;
+  const signatureOf = moveId => Number.isSafeInteger(moveId) ? moveVfxSignature(autoPresentationRecord(moveId)) : null;
   const romCell = actor => { const cell = effectArt?.getCell?.(actor.bankId, actor.cell); return Boolean(cell) && !battleEffectCellIsOriginal(cell); };
   const cues = []; // bounded 3D cues for the Three overlay: buffs, criticals, signature weather
   const cue = value => { cues.push(Object.freeze(value)); if (cues.length > 24) cues.shift(); }; // unread cues never pile up
-  const vfxOf = (slot, moveId) => Number.isSafeInteger(moveId) ? resolveMove(slot, moveId) ?? null : null;
+  const vfxOf = (slot, moveId) => Number.isSafeInteger(moveId) ? resolveMove(slot, autoPresentationRecord(moveId)) ?? null : null;
   const muzzleOf = info => ({x: info.x + Math.sign(info.facing || 1) * info.width * 0.3, y: info.top + info.height * 0.38});
 
   const particles = [], particlePool = [];
@@ -526,17 +534,10 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   }
 
   // --------------------------------------------------- live effect actors (moves)
-  const preloaded = new Set();
   function observe(view, ctx, dtMs) {
     const live = new Set();
-    const launches = (view.nativeLifecycle?.active ?? []).filter(l => Number.isInteger(l.ownerSlot));
-    // a move whose piece is a three.js one starts loading its group as it launches, ahead of the contact
-    for (const l of launches) if (!preloaded.has(l.moveId)) {
-      preloaded.add(l.moveId);
-      const c = moveVfxChoreography(l.moveId);
-      if (c && typeof loadMoveVfx3dPieces === 'function') loadMoveVfx3dPieces([c.contact?.piece, c.release?.piece]);
-    }
     for (const actor of view.nativeLifecycle?.effectActors ?? []) {
+      if (ctx.autoMoveAtlas?.ownsActor(actor.id)) continue;
       const family = String(actor.name ?? '').replace(/^e003_/, '');
       const form = battleFxFamilyForm(family);
       if (!form || form === 'common' || form === 'support' || form === 'character' || form === 'smoke') continue;
@@ -544,11 +545,11 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       const at = battleFxProject(actor.point, ctx.artRect, ctx.nativeScale);
       let entry = tracked.get(actor.id);
       if (!entry) {
-        const owner = launches.find(l => describeMove(l.ownerSlot, l.moveId)?.bankIds.includes(actor.bankId));
+        const owner = actor.origin ? { ownerSlot: actor.origin.slot, moveId: actor.origin.moveId } : null;
         const look = owner ? describeMove(owner.ownerSlot, owner.moveId) : null;
         const vfx = owner ? vfxOf(owner.ownerSlot, owner.moveId) : null;
         const palette = vfx?.palette ?? BATTLE_FX_PALETTES[look?.palette ?? battleFxFamilyPalette(family) ?? 'neutral'] ?? BATTLE_FX_PALETTES.neutral;
-        entry = {form, palette, owner: owner?.ownerSlot ?? null, tier: look?.tier ?? 'skill', points: [], ageMs: 0, origin: {x: at.x, y: at.y},
+        entry = {form, palette, confirmedEndOnly: Number.isInteger(owner?.moveId), owner: owner?.ownerSlot ?? null, tier: look?.tier ?? 'skill', points: [], ageMs: 0, origin: {x: at.x, y: at.y},
           element: vfx?.element ?? PALETTE_ELEMENT[look?.palette ?? battleFxFamilyPalette(family)] ?? 'NEUTRAL'};
         tracked.set(actor.id, entry);
         // The real launch point: where the move's own effect first appears.
@@ -572,7 +573,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     endings = [];
     for (const [id, entry] of tracked) {
       if (live.has(id)) continue;
-      if (entry.last && MOVING_FORMS.has(entry.form)) endings.push({...entry.last, palette: entry.palette, element: entry.element, form: entry.form, tier: entry.tier, used: false});
+      if (!entry.confirmedEndOnly && entry.last && MOVING_FORMS.has(entry.form)) endings.push({...entry.last, palette: entry.palette, element: entry.element, form: entry.form, tier: entry.tier, used: false});
       tracked.delete(id);
     }
     // Native impact sparks that appeared since the last view: real contact points.
@@ -586,21 +587,22 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
     }
     seenImpacts.clear();
     for (const id of nowImpacts) seenImpacts.add(id);
-    if (kit) drawStandIns(view, ctx, launches);
+    if (kit) drawStandIns(view, ctx);
   }
 
   /** The kit over live effect actors: a whole stand-in for a retired cell, a trail along an original shot. */
-  function drawStandIns(view, ctx, launches) {
+  function drawStandIns(view, ctx) {
     // About a quarter of a fighter: a stand-in replaces one 16-32 px cell, and the camera pushes in on specials.
     const live = new Set(), size = ctx.nativeScale * 4.5;
     kitStats.size = Math.round(size);
     for (const actor of view.nativeLifecycle?.effectActors ?? []) {
+      if (ctx.autoMoveAtlas?.ownsActor(actor.id)) continue;
       live.add(actor.id);
       const at = battleFxProject(actor.point, ctx.artRect, ctx.nativeScale);
       let entry = standIns.get(actor.id);
       if (!entry) {
         const family = String(actor.name ?? '').replace(/^e003_/, '');
-        const owner = launches.find(l => describeMove(l.ownerSlot, l.moveId)?.bankIds.includes(actor.bankId));
+        const owner = actor.origin ? { ownerSlot: actor.origin.slot, moveId: actor.origin.moveId } : null;
         const vfx = owner ? vfxOf(owner.ownerSlot, owner.moveId) : null;
         const signature = owner ? signatureOf(owner.moveId) : null;
         // moveId: the owning move, kept on the entry. The hit stage below read a block-scoped `owner` that no longer
@@ -626,11 +628,11 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         if (stage === 'hit' || stage === 'extra') {
           const heavy = form === 'area' || form === 'character' || signature.tier === 'ultimate';
           // the HIT plays this move's own contact piece; the stand-in keeps only its flare and motif (pass 6)
-          kit.impact({x: at.x, y: at.y, groundY: at.groundY, paletteKey, archetype, heavy, size: heavy ? size * 1.1 : size, planted: moveVfxArchetypeIsPlanted(archetype),
+          kit.impact({x: at.x, y: at.y, groundY: at.groundY, paletteKey, archetype, heavy, size: heavy ? size * 1.1 : size, planted: !productArenaMoveRecord(entry.moveId) && moveVfxArchetypeIsPlanted(archetype),
             piece: Boolean(entry.moveId !== null && moveVfxChoreography(entry.moveId)?.contact)});
         } else if (stage === 'body' || form === 'projectile' || form === 'stream' || form === 'beam') {
           // A body that lands and stands (a mushroom, a bomb) is drawn planted where the battle put it.
-          kit.projectile({follow: during, paletteKey, archetype: shot, size, signature, planted: stage === 'body' && moveVfxArchetypeIsPlanted(archetype)});
+          kit.projectile({follow: during, paletteKey, archetype: shot, size, signature, planted: stage === 'body' && moveVfxArchetypeIsPlanted(archetype) && !productArenaMoveRecord(entry.moveId)});
         } else kit.launch({x: at.x, y: at.y, paletteKey, archetype, size, signature});
         continue;
       }
@@ -684,6 +686,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       eventsHandled++;
       if (event.type === 'START') { if(!ctx.opening?.armed)showBanner(text('對戰開始！'), {size: 34, fill: 0xffffff, life: 1000}); continue; }
       if (event.type === 'LAUNCH') {
+        // These native support records release without changing any combatant.
+        if (event.moveId >= 28 && event.moveId <= 30) continue;
         const info = slot(event.slot), look = describeMove(event.slot, event.moveId);
         const vfx = vfxOf(event.slot, event.moveId);
         // A record that names no bank still leaves the hand on an original cell.
@@ -767,9 +771,12 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         const choreo = moveVfxChoreography(event.moveId);
         const critical = event.critical === true;
         const tier = battleFxHitTier({ratio: event.ratio, ultimate: look?.tier === 'ultimate', critical});
-        const hit = battleFxHitPoint({target, impacts: freshImpacts, endings: endings.filter(e => !e.used), attacker});
+        const point = event.contact?.actorId != null ? event.contact.sourcePoint : null;
+        const hit = point ? {...battleFxProject(point, ctx.artRect, ctx.nativeScale), source:'NATIVE_IMPACT'}
+          : battleFxHitPoint({target, impacts: freshImpacts, endings: endings.filter(e => !e.used), attacker});
         anchors[hit.source]++;
         for (const end of endings) if (Math.abs(end.x - hit.x) < 1 && Math.abs(end.y - hit.y) < 1) end.used = true;
+        const hasAtlasContact = ctx.autoMoveAtlas?.ownsContact(event.contactId) === true;
         const fx = fxFor(event.slot);
         fx.flash = 1; fx.squash = tier === 'heavy' ? 1 : tier === 'medium' ? 0.7 : 0.4;
         fx.knock = tier === 'heavy' ? 1 : 0.6; fx.knockDir = attacker ? Math.sign(target.x - attacker.x) || -target.facing : -target.facing;
@@ -780,17 +787,21 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         }
         const strikerTeam = attacker?.team ?? (target.team === 0 ? 1 : 0);
         const streak = comboByTeam[strikerTeam];
-        if (streak) {
+        if (streak && event.sound !== false) {
           streak.count = elapsed - streak.at <= 2000 ? streak.count + 1 : 1;
           streak.at = elapsed;
         }
         const comboCount = streak?.count ?? 1;
-        impactAudio?.playHit?.({tier, critical, combo: comboCount});
+        if (event.sound !== false) {
+          const soundCritical = event.sound?.critical ?? critical;
+          const soundTier = battleFxHitTier({ratio:event.sound?.ratio ?? event.ratio, ultimate:look?.tier === 'ultimate', critical:soundCritical});
+          impactAudio?.playHit?.({tier:soundTier, critical:soundCritical, combo:comboCount});
+        }
         if (juicy) {
           // White first, then the move's element on the rim; the knock follows the hit.
           fx.flashTint = palette.main; fx.knock = 1; fx.knockPx = choreo?.knockPx ?? BATTLE_FX_JUICY.knockPx[tier];
           // Contact: a saturated halo under a white-hot core (additive), readable on dark and pale floors.
-          spawnFlash({x: hit.x, y: hit.y, tint: palette.main, size: (tier === 'heavy' ? 46 : 30) * 1.9, life: tier === 'heavy' ? 210 : 150});
+          if (!hasAtlasContact) spawnFlash({x: hit.x, y: hit.y, tint: palette.main, size: (tier === 'heavy' ? 46 : 30) * 1.9, life: tier === 'heavy' ? 210 : 150});
           const holdMs = choreo?.hitStopMs ?? BATTLE_FX_JUICY.hitStopByTier[critical || look?.tier === 'ultimate' ? (tier === 'light' ? 'medium' : 'ultimate') : tier] ?? 0;
           if (holdMs > 0 && !reducedMotion) {
             hitStop = {ms: holdMs, slots: new Set([event.slot, event.attackerSlot].filter(s => s !== null && s !== undefined))};
@@ -800,18 +811,19 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           const p = toScreen(ctx, hit.x, target.top);
           spawnNumber({x: p.x, y: p.y, value: event.damage, critical, dir: fx.knockDir || 1,
             tint: target.team === ctx.localTeam ? 0xffd0c8 : 0xffffff});
-          // Knockback slide: dust kicks up behind the struck feet along the blow.
-          dust({x: target.x, groundY: target.groundY, count: rich ? 4 : 2, spread: target.width * 0.3, push: fx.knockDir, life: 520, scale: 0.9});
+          // The atlas owns the impact phase, including its ground accent.
+          if (!hasAtlasContact) dust({x: target.x, groundY: target.groundY, count: rich ? 4 : 2, spread: target.width * 0.3, push: fx.knockDir, life: 520, scale: 0.9});
         }
+        if (hasAtlasContact) continue;
         // Original cells drawn by this layer: a fallback record's own hit set, the
         // element accent on a bank-less melee hit, and the struck body's overlay.
         if (vfx) {
           const cellAt = {x: hit.x, y: hit.y, scale: ctx.nativeScale, flip: (fx.knockDir || 1) < 0, hue: vfx.cellHue};
           if (vfx.fallback) { const hitCell = vfx.cells.find(c => c.role === 'hit'); if (hitCell) element?.cell({...hitCell, ...cellAt}); }
           if (vfx.accent) element?.cell({...vfx.accent, ...cellAt, hue: 0});
-          if (vfx.overlay && tier !== 'light') element?.cell({...vfx.overlay, scale: ctx.nativeScale * 0.85, repeatMs: tier === 'heavy' ? 1000 : 640, overlay: true,
+          if (!productArenaMoveRecord(event.moveId) && vfx.overlay && tier !== 'light') element?.cell({...vfx.overlay, scale: ctx.nativeScale * 0.85, repeatMs: tier === 'heavy' ? 1000 : 640, overlay: true,
             follow: () => { const now = slot(event.slot); return now && !now.down ? {x: now.x, y: now.top + now.height * 0.45} : null; }});
-          if (tier !== 'light' || look?.tier === 'ultimate') element?.decal({x: hit.x, y: hit.groundY, kind: vfx.decal, palette, paletteKey: vfx.paletteKey,
+          if (!productArenaMoveRecord(event.moveId) && (tier !== 'light' || look?.tier === 'ultimate')) element?.decal({x: hit.x, y: hit.groundY, kind: vfx.decal, palette, paletteKey: vfx.paletteKey,
             size: target.width * (tier === 'heavy' ? 1.3 : 0.9), scale: ctx.nativeScale});
         }
         // The move's own closing burst (and a signature move's ground sigil) at the contact.
@@ -878,6 +890,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       if (event.type === 'LANDED') { land(event.slot, ctx, 1); continue; }
       if (event.type === 'STEP') { footstep(event.slot, ctx, event.direction ?? 0); continue; }
       if (event.type === 'HEAL' || event.type === 'SUPPORT') {
+        if (event.receipt && (!event.receipt.result || ctx.autoMoveAtlas?.ownsSupport(event.receipt))) continue;
+        if (event.type === 'HEAL' && ctx.autoMoveAtlas?.ownsHeal(event.slot, event.amount)) continue;
         const info = slot(event.slot);
         if (!info) continue;
         impactAudio?.playSupport?.('support');
@@ -903,6 +917,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         continue;
       }
       if (event.type === 'STATUS') {
+        if (event.tauntId && ctx.autoMoveAtlas?.ownsTaunt(event.tauntId)) continue;
         const info = slot(event.slot);
         if (info) spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 0.7, tint: BATTLE_FX_PALETTES.dark.main, life: 420});
         continue;

@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createBattleRuntime} from '../src/championship/app/battleRuntime.js';
+import {getBattleCatalogRecord} from '../src/championship/battle/battleCatalogs.js';
 import {createBattleHitRuntime} from '../src/championship/battle/battleHitRuntime.js';
 import {createBattleNativeActors} from '../src/championship/battle/battleNativeActors.js';
 import {createSessionCombatant} from '../src/championship/battle/battleSession.js';
@@ -81,4 +82,26 @@ test('runtime ending cancels pending notification20 before recovery HP/resource 
  assert.equal(runtime.snapshot().battleEnding,true);runtime.step(0);
  assert.equal(c.field17C,21);assert.equal(c.currentHp,0);assert.equal(c.metricLimit,resource);
  assert.ok(runtime.snapshot().history.some(e=>e.type==='NOTIFICATION_CHANGED'&&e.from===20&&e.to===21));
+});
+
+
+test('reports support visuals only for recipients whose native HP or status actually changed', () => {
+  const slots = [createSessionCombatant({speciesId:81}), createSessionCombatant({speciesId:82}), null, null, null, null];
+  const session = {slots, rng:{next:()=>0}, downed:[0,0], clock:0, frame:0};
+  const actors = createBattleNativeActors({slots, stands:slots.map((_,i)=>battleStandPosition(i))});
+  const hits = createBattleHitRuntime({session,actors});
+  for (let id=1;id<=30;id++) {
+    const move=getBattleCatalogRecord('moves',id);
+    const recipient=slots[1], code=move.statusCode;
+    Object.assign(recipient,{currentHp:10,maxHp:1000,statusCode:code===20?3:0,field160:0,field164:0});
+    const origin={moveId:id,actionId:200+id,casterSlot:0};
+    hits.support(1,move,origin);
+    const receipt=hits.snapshot().history.at(-1).receipt;
+    assert.deepEqual([receipt.moveId,receipt.actionId,receipt.casterSlot,receipt.targetSlot],[id,200+id,0,1]);
+    const expected = code>=14 && code<=19 ? 'heal' : code===20 ? 'clear' : code>=21 && code<=29 ? 'buff' : null;
+    assert.equal(receipt.result,expected,String(id));
+    recipient.currentHp=recipient.maxHp;
+    hits.support(1,move,origin);
+    assert.equal(hits.snapshot().history.at(-1).receipt.result,null,String(id));
+  }
 });

@@ -619,6 +619,12 @@ test("battleFxEvents propagates real critical and moveId attribution from HIT_ST
   const normalHit = normalEvents.find((e) => e.type === "HIT");
   assert.equal(normalHit.critical, false);
   assert.equal(normalHit.moveId, 59);
+
+  const combined = tracker.consume(baseView(310, [
+    { frame: 12, slot: 3, type: "HIT_STATE_WRITTEN", hp: 330, moveId: 61 },
+    { frame: 12, slot: 3, type: "HIT_STATE_WRITTEN", hp: 310, moveId: 59 }
+  ])).find(e => e.type === "HIT");
+  assert.equal(combined.moveId, null, "coalesced reactions cannot identify a single move");
 });
 
 test("procedural battle impact audio synthesizes cues, throttles bursts, and handles absent output safely", () => {

@@ -1,8 +1,4 @@
 // Three.js move pieces to bake (UNIFIED_MOVES_20261118, U3): see bake-3d-move-vfx.mjs.
-import ultimates from './move-piece-3d-ultimates.json' with {type: 'json'};
-import skills from './move-piece-3d-skills.json' with {type: 'json'};
-import basics from './move-piece-3d-basics.json' with {type: 'json'};
-import {MOVE_VFX_CHOREOGRAPHY} from '../../src/championship/presentation/vfx/moveVfxChoreography.js';
 // Names start with `3d-`; `group` picks the module the game loads on demand; `base`
 // is the shared piece it replaces (played until the group is in).
 //
@@ -98,75 +94,4 @@ const HAND = Object.freeze({
   '3d-wind-vortex-b': field('wind-vortex', {o: {size: 0.7}, cam: {el: 0.3, d: 9, az: 0.5}, until: 1.5, stop: 0.8, fit: 1.4, group: 'earth', base: 'slash'}),
 });
 
-// ---- Every species ultimate's own piece (U3, second batch). move-piece-3d-ultimates.json picks
-// for each ultimate an effect that fits its palette and archetype and a variant no other
-// ultimate plays (scripts: the assignment is made once and kept, so a piece never moves).
-// One shape per effect (how it is filmed and cut), six variants (size, pace and angle).
-const SHAPES = Object.freeze({
-  'thunder-strike': burst('thunder-strike', {cam: {el: 0.3, d: 8.5, ly: 1.2}, until: 1.4}),
-  'energy-burst': burst('energy-burst', {until: 0.9, fit: 1.4, anchor: 'contact'}),
-  'arc-ray': beam('arc-ray'), 'sustained-arc': beam('sustained-arc', {opaque: true}),
-  'charged-beam': beam('charged-beam', {hit: 1.5, from: 1.9, until: 2.8, stop: 2.4}), 'radiant-beam': beam('radiant-beam'),
-  'arcane-matrix': field('arcane-matrix'),
-  'fire-explosion': burst('fire-explosion', {cam: {el: 0.3, d: 8.5}, from: 0.12, until: 0.8, noSmoke: true, fit: 1.4}),
-  'rolling-fireburst': burst('rolling-fireburst', {anchor: 'contact'}), fireball: shot('fireball', {opaque: true}),
-  'flame-surge': burst('flame-surge', {until: 1.1}), 'burning-ground': field('burning-ground'),
-  'magma-fissure': burst('magma-fissure', {cam: {el: 0.4, d: 8}, until: 1.4, fit: 2.2}),
-  'fire-vortex': field('fire-vortex', {cam: {el: 0.42, d: 15}, until: 1.8, stop: 1.1}),
-  'billowing-airburst': burst('billowing-airburst', {until: 0.8, noSmoke: true, fit: 1.4, anchor: 'contact'}),
-  'ice-shatter': burst('ice-shatter', {cam: {el: 0.3, d: 6}}),
-  'frost-lance-rain': burst('frost-lance-rain', {cam: {el: 0.35, d: 8}, until: 1.5, fit: 1.8}),
-  'ground-freeze-study': burst('ground-freeze-study', {opaque: true, cam: {el: 0.35, d: 8.5}, until: 1.6, fit: 2.0}),
-  'ice-lance-study': burst('ice-lance-study', {opaque: true, from: 0.25, until: 1.3, anchor: 'contact'}),
-  'ice-shield-study': burst('ice-shield-study', {opaque: true, until: 1.4, fit: 1.4, anchor: 'contact'}),
-  'frost-wheel': shot('frost-wheel'),
-  'tidal-surge': burst('tidal-surge', {cam: {el: 0.35, d: 8, ly: 0.9}, until: 1.6, bloom: 0.92, fit: 2.0}),
-  'steam-jet': field('steam-jet', {cam: {el: 0.25, d: 7}, fit: 1.4}),
-  'wind-vortex': field('wind-vortex', {cam: {el: 0.42, d: 15}, until: 1.8, stop: 1.1}),
-  'venom-pool': field('venom-pool'),
-  'astral-convergence': burst('astral-convergence', {until: 1.4, fit: 1.8, anchor: 'contact'}),
-  'sacred-relic-descent': burst('sacred-relic-descent', {cam: {el: 0.32, d: 8, ly: 1}, until: 2.0, fit: 2.0}),
-  'golden-chain-rain': burst('golden-chain-rain', {cam: {el: 0.3, d: 9}, until: 2.0, fit: 2.0}),
-  'starblade-cataclysm': burst('starblade-cataclysm', {cam: {el: 0.3, d: 7, ly: 0.9}, until: 1.8}),
-  'prism-parry': burst('prism-parry', {until: 0.7, fit: 1.3, anchor: 'contact'}),
-  'prism-guard': field('prism-guard', {cam: C, fit: 1.4, anchor: 'contact'}),
-  'energy-vortex': field('energy-vortex', {cam: {el: 0.42, d: 15}, until: 1.8, stop: 1.1}),
-  'thorn-crown': field('thorn-crown'), 'verdant-restoration': field('verdant-restoration', {opaque: true, cam: C, fit: 1.5}),
-  'binding-curse': field('binding-curse'), 'plasma-bolt': shot('plasma-bolt'),
-  'darkchain-detonation': burst('darkchain-detonation', {cam: {el: 0.35, d: 8}, until: 1.8, fit: 2.2}),
-  'smoke-column': field('smoke-column', {fit: 1.4}),
-  shockwave: burst('shockwave', {until: 1.0}), 'quicksand-seal': field('quicksand-seal'),
-  'dust-devil': field('dust-devil', {cam: {el: 0.42, d: 15}, until: 1.6, stop: 0.9}),
-  'smoke-puff': burst('smoke-puff', {until: 1.0, fit: 1.3, anchor: 'contact'})
-});
-const VARIANTS = Object.freeze([
-  {o: {}, cam: {}}, {o: {size: 1.3}, cam: {el: 0.45, az: 0.5}}, {o: {size: 0.85, speed: 1.25}, cam: {el: 0.2, az: -0.5}},
-  {o: {density: 0.9, detail: 1.4}, cam: {el: 0.55, az: 0.9}}, {o: {size: 1.15, speed: 0.8}, cam: {el: 0.35, az: -0.9}},
-  {o: {size: 1.5, density: 0.3}, cam: {el: 0.25, az: 0.25}},
-  // 6..11: the skills' variants (a little smaller and quicker; never an ultimate's look)
-  {o: {size: 0.9}, cam: {el: 0.3, az: 0.3}}, {o: {size: 0.8, speed: 1.3}, cam: {el: 0.45, az: -0.3}},
-  {o: {size: 1.0, density: 0.7}, cam: {el: 0.2, az: 0.7}}, {o: {size: 0.95, detail: 1.3, speed: 1.1}, cam: {el: 0.5, az: -0.7}},
-  {o: {size: 0.85, density: 0.4}, cam: {el: 0.35, az: 1.1}}, {o: {size: 1.05, speed: 0.9}, cam: {el: 0.25, az: -1.1}},
-  // 12..17: the basic moves' variants (the smallest and quickest; never a skill's or an ultimate's look)
-  {o: {size: 0.75, speed: 1.35}, cam: {el: 0.3, az: 0.15}}, {o: {size: 0.7, speed: 1.2, density: 0.6}, cam: {el: 0.4, az: -0.6}},
-  {o: {size: 0.8, speed: 1.45}, cam: {el: 0.2, az: 0.9}}, {o: {size: 0.72, detail: 0.8, speed: 1.3}, cam: {el: 0.55, az: -0.2}},
-  {o: {size: 0.78, density: 0.5, speed: 1.25}, cam: {el: 0.3, az: 1.3}}, {o: {size: 0.82, speed: 1.4}, cam: {el: 0.45, az: -1.3}}
-]);
-/** The three.js piece name of a species ultimate. */
-export const ultimatePieceName = record => `3d-u-${record}`;
-/** The three.js piece name of a species skill (unique within its element). */
-export const skillPieceName = record => `3d-s-${record}`;
-const generated = (table, nameOf, prefix, fitScale) => Object.fromEntries(Object.entries(table).map(([record, [fx, v]]) => {
-  const shape = SHAPES[fx], variant = VARIANTS[v];
-  if (!shape || !variant) throw new Error(`${prefix} ${record}: no shape for ${fx} #${v}`);
-  const base = MOVE_VFX_CHOREOGRAPHY[record]?.contact?.piece ?? 'rush';
-  return [nameOf(record), {...shape, o: {...(shape.o ?? {}), ...variant.o}, cam: {...(shape.cam ?? C), ...variant.cam},
-    fit: (shape.fit ?? 1.6) * ((variant.o.size ?? 1) > 1.2 ? 1.12 : 1) * fitScale, group: `${prefix}${record}`, base, variant: v}];
-}));
-const ULTIMATE = generated(ultimates, ultimatePieceName, 'u', 1);
-const SKILL = generated(skills, skillPieceName, 's', 0.9);
-/** The three.js piece name of a species basic move (unique within its element). */
-export const basicPieceName = record => `3d-b-${record}`;
-const BASIC = generated(basics, basicPieceName, 'b', 0.8);
-
-export const MOVE_PIECE_3D = Object.freeze({...HAND, ...ULTIMATE, ...SKILL, ...BASIC});
+export const MOVE_PIECE_3D = HAND;

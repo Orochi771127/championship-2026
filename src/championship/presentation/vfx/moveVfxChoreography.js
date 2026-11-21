@@ -21,7 +21,6 @@
 // Batches are listed by record; the comment names the move.
 
 import {moveVfxSignature} from './moveVfxSignatures.js';
-import {MOVE_VFX_3D_PIECE_GROUP} from './moveVfxPieceSprites3dIndex.js';
 import {arenaMoveIdOfRecord} from '../../contracts/productArenaMoves.js';
 
 const entry = value => Object.freeze({...value, release: value.release ? Object.freeze(value.release) : null,
@@ -1324,14 +1323,8 @@ export function moveVfxChoreography(moveId) {
   let key = typeof moveId === 'string' && moveId.startsWith('own-') ? Number(moveId.slice(4)) : moveId;
   // a learned arena move in the auto battle (records 623+) plays as that arena move (UNIFIED_MOVES_20261118)
   key = arenaMoveIdOfRecord(key) ?? key;
-  let raw = MOVE_VFX_CHOREOGRAPHY[key] ?? null;
+  const raw = MOVE_VFX_CHOREOGRAPHY[key] ?? null;
   if (!raw) return null;
-  // UNIFIED_MOVES_20261118 U3: every species ultimate lands its own three.js piece (scripts/vfx/move-piece-3d-specs.mjs);
-  // the table's shared piece stays as the fallback it plays while that piece loads.
-  // (a species skill likewise lands its own, unique within its element)
-  // (and a basic move too)
-  const own = [`3d-u-${key}`, `3d-s-${key}`, `3d-b-${key}`].find(name => MOVE_VFX_3D_PIECE_GROUP[name]) ?? null;
-  if (raw.contact && MOVE_VFX_3D_PIECE_GROUP[own]) raw = Object.freeze({...raw, contact: Object.freeze({...raw.contact, piece: own, sprite: null})});
   if (!presence.has(key)) presence.set(key, withPresence(raw, moveVfxSignature(key)?.tier));
   return presence.get(key);
 }
