@@ -448,7 +448,7 @@ export function beginNativeRaisingEvolution(actor,selection,rng,foods=[]) {
   if(choices.length>1){actor.state=12;actor.evolution={oldSpecies:actor.speciesIndex,target:selection.target,
     choices:[...choices],choicePending:true,pendingSelection:structuredClone(selection),targetActor:null,phase:'choice',elapsed:0,reveal:false};return;}
   actor.state=selection.target<0?21:12;actor.evolution={oldSpecies:actor.speciesIndex,target:selection.target,index:selection.actor?.['1f4']??0,
-    productRouteId:selection.productRouteId??null,last:selection.actor?.['1f0']??1,inherited:selection.actor?.['464']??0,phase:0,elapsed:0,period:20,reveal:false,totalFrames:0,targetActor:null};
+    productRouteId:selection.productRouteId??null,openEvolution:selection.openEvolution??null,last:selection.actor?.['1f0']??1,inherited:selection.actor?.['464']??0,phase:0,elapsed:0,period:20,reveal:false,totalFrames:0,targetActor:null};
   if(selection.target>=0){const targetActor={speciesIndex:selection.target,sequenceId:null,animator:null,nativeFrame:0};
     request(targetActor,selection.target<8?0:39,true);actor.evolution.targetActor=targetActor;}
   request(actor,39,true);
@@ -485,7 +485,7 @@ export function stepNativeRaisingEvolution(actor,profile,rng) {
   else if(e.phase===5&&e.elapsed>7){e.phase=6;e.elapsed=0;}
   else if(e.phase===6&&e.elapsed>=60){e.phase=7;e.elapsed=0;}
   else if(e.phase===7&&e.elapsed>=30){
-    const event={oldSpecies:e.oldSpecies,target:e.target,index:e.index,inherited:e.inherited,productRouteId:e.productRouteId??null};
+    const event={oldSpecies:e.oldSpecies,target:e.target,index:e.index,inherited:e.inherited,productRouteId:e.productRouteId??null,openEvolution:e.openEvolution??null};
     let next=structuredClone(constructNativeIndividualForm(profile,e.target,rng));
     if(e.target<8){next.fields['024']=0;next.fields['028']=0;next.fields['01c']=0;next.narrowFields['03d']=0;}
     else if(!e.last)next.fields['020']=Math.min(100,(next.fields['020']+10)|0);
@@ -529,7 +529,7 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
       if(actor.training.phase===2){actor.training=null;react(actor,0,30);}
       else{
         update()['020']=Math.min(100,next.fields['020']+1);
-        const selection=evaluateProductEvolution(next,{rank:context.rank,roster:context.roster,lifetime:false,lifeThreshold:a['428'],capacityBonusG:context.capacityBonusG,syncLevel:context.syncLevel?context.syncLevel():null},rng);
+        const selection=evaluateProductEvolution(next,{rank:context.rank,roster:context.roster,lifetime:false,lifeThreshold:a['428'],capacityBonusG:context.capacityBonusG,openEvolution:context.openEvolution??null,syncLevel:context.syncLevel?context.syncLevel():null},rng);
         next=selection.profile;a['428']=selection.actor['428'];actor.training=null;
         // Owner 2026-11-04: a cage too full for the next form is shown on the partner card, never silent.
         actor.capacityBlocked=Boolean(selection.capacityBlocked);actor.levelBlocked=selection.levelBlocked??null; // R2: ready, but its level is short
@@ -572,7 +572,7 @@ function stepLifecycle(actor,profile,ageDelta,rng,feeding,context) {
     if(actor.state===1&&context.minute<1290){
       const lifetime=next.fields['18c']>a['428'];
       if(lifetime||!actor.evolutionChecked){if(!lifetime)actor.evolutionChecked=true;
-        let selection=evaluateProductEvolution(next,{rank:context.rank,roster:context.roster,lifetime,lifeThreshold:a['428'],capacityBonusG:context.capacityBonusG,syncLevel:context.syncLevel?context.syncLevel():null},rng);
+        let selection=evaluateProductEvolution(next,{rank:context.rank,roster:context.roster,lifetime,lifeThreshold:a['428'],capacityBonusG:context.capacityBonusG,openEvolution:context.openEvolution??null,syncLevel:context.syncLevel?context.syncLevel():null},rng);
         next=selection.profile;a['428']=selection.actor['428'];result.changed=true;actor.capacityBlocked=Boolean(selection.capacityBlocked);actor.levelBlocked=selection.levelBlocked??null;
         if(lifetime&&selection.code!==1&&selection.code!==2){const rebirth=evaluateNativeRebirth(next,selection.code!==0);next=rebirth.profile;
           selection={target:rebirth.target,code:1};}
