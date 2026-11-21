@@ -1709,7 +1709,16 @@ function buildTacticRecordPanel(runtime, { attemptId, matchTitle, context = null
   const lines = tacticRecordLines(record, { nameOf: (slot, speciesId) => record.local.find(e => e.slot === slot)?.displayName ?? '',
     moveName: id => (id >= 1 && id <= 30 ? specialSkillName(id) : null) ?? battleMoveName(id) ?? `#${id}`, previous });
   for (const entry of record.local) if (entry.instanceId && Number.isInteger(entry.tactic))
-    tacticRecordHistory.set(entry.instanceId, { tactic: entry.tactic, total: entry.total, counts: { ...entry.counts }, seconds: record.seconds });
+    tacticRecordHistory.set(entry.instanceId, {
+      tactic: entry.tactic,
+      total: entry.total,
+      counts: { ...entry.counts },
+      firstSkillAt: entry.firstSkillAt ?? null,
+      spEmptyAt: entry.spEmptyAt ?? null,
+      spSpent: entry.spSpent ?? 0,
+      tpLeft: entry.tpLeft ?? null,
+      seconds: record.seconds
+    });
   tacticPlaytestLog.push({ at: new Date().toISOString(), attemptId, matchTitle, variant: TACTIC_RECORD_VARIANT, context,
     outcome: record.outcome, seconds: record.seconds, local: record.local, shownLines: TACTIC_RECORD_VARIANT === 'B' ? lines : [] });
   if (tacticPlaytestLog.length > 200) tacticPlaytestLog.shift();
@@ -1983,7 +1992,8 @@ async function openJourney(prefill = null) {
     const describe = (entry) => {
       const index = juicySpeciesIndex(entry?.speciesId);
       const mood = entry?.instanceId ? app.getPartnerMoodBadge?.(entry.instanceId) ?? null : null;
-      return { name: entry?.displayName || (index === null ? '' : speciesName(index)), portrait: index === null ? null : { species: index },
+      const speciesLabel = index === null ? '' : speciesName(index);
+      return { name: entry?.displayName || speciesLabel, speciesLabel, portrait: index === null ? null : { species: index },
         styleChip: battleStyleChip(entry?.battleStyle), mood };
     };
     root.inert = true;
@@ -2016,6 +2026,7 @@ async function openJourney(prefill = null) {
         start: (id) => app.startTacticPractice(id),
         end: () => app.endTacticPractice(),
         tacticOf: (id) => app.getBattleTactic(id),
+        tendencyOf: (id) => app.getPartnerTrainingTendency?.(id) ?? null,
         tpOf: (id) => app.getTacticPracticeTp(id),
         setTactic: (id, value) => app.setBattleTactic(id, value),
         challenge: () => startSparBout(),
@@ -2836,6 +2847,16 @@ async function mountCurrentScreen() {
         }
         return { ok: true, entries: projectRoster() };
       },
+      onSetTrainingTendency(instanceId, kind) {
+        const result = kind ? app.setPartnerTrainingTendency(instanceId, kind, { source: 'RANCH_DRILL' }) : app.clearPartnerTrainingTendency(instanceId);
+        if (result?.ok) autosave?.request('training-tendency');
+        return result?.ok ? { ...result, entries: projectRoster() } : result;
+      },
+      onOpenPracticeFor(instanceId) {
+        pendingJourney = { tab: 'PRACTICE', practiceInstanceId: instanceId };
+        app.leaveScreen();
+        app.openBattle();
+      },
       // Awakening raising (2026-11-02): goal, energy items, core transcendence, battle form and ranch look.
       onAwakening(action, instanceId, value) {
         const result = action === 'target' ? app.setAwakeningTarget(instanceId, value)
@@ -3368,6 +3389,7 @@ function projectRoster() {
           : null
       }) ?? null,
       identityCard: app.getPartnerIdentityCard?.(instanceId) ?? null,
+      trainingTendency: app.getPartnerTrainingTendency?.(instanceId) ?? null,
       renameable: source?.kind !== "STARTER"
         && Boolean(app.getRaisingState()?.collection?.some((entry) => entry.instanceId === instanceId)),
       stats: profile,

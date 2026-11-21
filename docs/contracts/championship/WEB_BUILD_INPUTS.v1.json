@@ -11686,7 +11686,9 @@
     "assets/production/vfx/auto-moves/615.json",
     "assets/production/vfx/auto-moves/615.png",
     "assets/production/vfx/auto-moves/616.json",
-    "assets/production/vfx/auto-moves/616.png"
+    "assets/production/vfx/auto-moves/616.png",
+    "src/championship/contracts/productPartnerTendency.js",
+    "src/championship/text/partnerTendencyText.js"
   ],
   "publicPlaytest": {
     "policyId": "CHAMPIONSHIP_OWNER_PUBLIC_PLAYTEST_2026_09_10",
@@ -45530,7 +45532,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "01a972a0fd41102d446dcb0f67e667b7d971737b565ba6525eb896b001ce12c2"
+        "sha256": "4852a038a5f64ffa82de098a510fb6db55e8cf06e1ec0290efd87577a02df118"
       },
       {
         "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -45650,7 +45652,7 @@
       },
       {
         "path": "src/championship/app/ChampionshipPersistentSavePort.js",
-        "sha256": "19f4089f1ca80dc172fccf2442995ca6ed8b91153ecdd55d9f045549ee488ffe"
+        "sha256": "23b2c7f8a10d3b9b7e0505b2321e4d32da76597736b3d2158537f56a67709d96"
       },
       {
         "path": "src/championship/app/championshipRaisingProduction.js",
@@ -45666,7 +45668,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "e6314a447e079ce4494122516f84b99a4d656f664a1d83f90c9b7ce8add51911"
+        "sha256": "fce5a8ecf6b4a50d0488a2f7541cf8119fd7689e4d8e43d76e3e799d76dda0f5"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -45674,7 +45676,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneSave.js",
-        "sha256": "a732ddb063bd0f77dd87324416d0aca637621f809c7b95e989e6c692c07bde9d"
+        "sha256": "8108888fd1ed2dd5f2aecb84838b101aecf99bd158fd53c27981b9bfa1b3fe28"
       },
       {
         "path": "src/championship/app/championshipStatusBar.js",
@@ -45710,11 +45712,11 @@
       },
       {
         "path": "src/championship/app/dataArena.css",
-        "sha256": "6f7b4fd7826e6356d7c7748072691b32fc6df66d85520d9736a3271f3491b2c3"
+        "sha256": "a618c63e3ce2d9d0bad3f9001fcb330603184ce8121426738cdfff003c8678bf"
       },
       {
         "path": "src/championship/app/dataArenaScreen.js",
-        "sha256": "d1b07bf04228103c32e7745597d14933ca8fad0527772ebd9142530f7aa7864a"
+        "sha256": "bd156fafa8a24df9d20ce9c46f8369eec0989ecc81e5f1b74b21707ce641a904"
       },
       {
         "path": "src/championship/app/daylightSkin.css",
@@ -45722,7 +45724,7 @@
       },
       {
         "path": "src/championship/app/digimonListScreen.js",
-        "sha256": "8b25aa14364695672cbec6c082df60915c17d4fa7ac89fdf6ed02d44af89dfed"
+        "sha256": "d193f2c00c0330bde9a079bbf556faca6d7b708a4bf8933157864ba5a2a63ce9"
       },
       {
         "path": "src/championship/app/downloadSaveBackup.js",
@@ -45810,7 +45812,7 @@
       },
       {
         "path": "src/championship/app/journeyScreen.js",
-        "sha256": "43c30510451fded05cad48eb68d10e66dad4c495dbe3d974a9d6ccd9cbc2b456"
+        "sha256": "98c9d5a392c2c6ffc840da517cc7a1ab7cb766afe250cbdd64fcf521aa4d340a"
       },
       {
         "path": "src/championship/app/loadProgress.js",
@@ -45826,7 +45828,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "e084510c665eee12e43427595a91f3e6f44cd9a7fc71a426eef34d7179e97dc9"
+        "sha256": "edf67299e1b7a34d0a33c9eb6e417466a74eca4f7bbb6644a8eea63062c30850"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -46022,7 +46024,7 @@
       },
       {
         "path": "src/championship/app/styles.css",
-        "sha256": "d0f03abc7c3ff61d5677750fc4cedf5b2b2322d575f14fd7c1337b95ef7155bf"
+        "sha256": "4a66d4e5f86b0472ef1b522ea3454df11c922ef13634107130d2ceec897ce737"
       },
       {
         "path": "src/championship/app/tamerInfoScreen.js",
@@ -46086,7 +46088,7 @@
       },
       {
         "path": "src/championship/app/ui/journey.css",
-        "sha256": "624e025c3d97dd5476a62d412042316c8881c56dfec9354dfca4cb1d56aa0a14"
+        "sha256": "fd7f9ae236f8129fa2203329ef26bc25d90e854616d6a5b6d5b1a71fe03abaa3"
       },
       {
         "path": "src/championship/app/ui/juicyShowcase.css",
@@ -46906,7 +46908,7 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaEligibility.js",
-        "sha256": "947d4bae17d6dafc5ed38740ab6456044509f898a4e33b2fc54533d44369f4e4"
+        "sha256": "8c45db22399d1254ae12577c8c79cf491e5a0e6fb8f2de13d993b2699be0b906"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaGrid.js",
@@ -48186,7 +48188,7 @@
       },
       {
         "path": "src/championship/text/tacticRecordText.js",
-        "sha256": "4b31b43adbc0fd6490f29f7aa0cc8eefa34f1d33719a06e3291ae4cf8a12246d"
+        "sha256": "65c1f4d709536a4feb4473762c992f86de3ff4dc7e39ff58326d2900e21af05e"
       },
       {
         "path": "src/championship/text/tamerTalentText.js",
@@ -55771,6 +55773,14 @@
       {
         "path": "assets/production/vfx/auto-moves/616.png",
         "sha256": "6f4de2cdfd41d4f3d86ad691d6417b5ca91ae56c5be6816d9e2f315c6dc1163d"
+      },
+      {
+        "path": "src/championship/contracts/productPartnerTendency.js",
+        "sha256": "57e57e225863c701b36bef83639afaf6ccd3055838a6895adee1a78d855c25f8"
+      },
+      {
+        "path": "src/championship/text/partnerTendencyText.js",
+        "sha256": "27c1685d8bc215d5197bbff7d806ce1a36053f5fad83fbd1e239ce9d6f6ca452"
       }
     ],
     "selectionId": "RANCH_TRUE_3D_PUBLIC_20261021",

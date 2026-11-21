@@ -10,6 +10,7 @@ import { journeyText as t } from "../text/journeyText.js";
 import { syncText } from "../text/syncLevelText.js";
 import { uiText } from "../text/uiText.js";
 import { taxonomyText } from "../text/taxonomyText.js";
+import { partnerTendencyText } from "../contracts/productPartnerTendency.js";
 import { factionResonance, speciesTaxonomyForId } from "../contracts/speciesTaxonomy.js";
 import { createActionPortrait } from "../presentation/juicy/actionPortrait.js";
 import { tamerEmblem, tamerLevelBadge, flyEmblems } from "../presentation/tamerEmblemArt.js";
@@ -455,7 +456,7 @@ export function createJourneyScreen(host) {
   }
 
   // Practice series: one partner, three rivals, the battle plan chosen (or kept) between bouts.
-  let practicePick = null, practiceRulesOpen = false;
+  let practicePick = host.prefill?.practiceInstanceId ?? null, practiceRulesOpen = false;
   function paintPractice() {
     const p = host.practice, pt = p.text, current = p.frame();
     const panel = el("div", "cm-journey__practice");
@@ -473,6 +474,8 @@ export function createJourneyScreen(host) {
     panel.append(el("p", "cm-journey__team-title", pt("practice.partner")));
     const roster = el("div", "cm-journey__team");
     const eligible = candidates.filter((c) => c.admission?.ok);
+    const speciesCount = new Map();
+    for (const entry of eligible) speciesCount.set(entry.speciesId, (speciesCount.get(entry.speciesId) ?? 0) + 1);
     for (const entry of eligible) {
       const look = host.describe(entry);
       const chip = button("cm-journey__member", "", () => {
@@ -483,7 +486,11 @@ export function createJourneyScreen(host) {
       chip.dataset.instanceId = entry.instanceId;
       chip.setAttribute("aria-pressed", String(entry.instanceId === partnerId));
       const moodTag = moodBadge(look.mood);
-      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name), ...(look.styleChip ? [look.styleChip] : []), ...(moodTag ? [moodTag] : []));
+      const tendency = p.tendencyOf?.(entry.instanceId)?.kind ?? null;
+      const tendencyTag = tendency ? el("span", "cm-journey__tendency", partnerTendencyText(`tag.${tendency}`)) : null;
+      const twin = (speciesCount.get(entry.speciesId) ?? 0) > 1;
+      const label = twin && look.speciesLabel && look.name !== look.speciesLabel ? `${look.name} (${look.speciesLabel})` : look.name;
+      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", label), ...(tendencyTag ? [tendencyTag] : []), ...(look.styleChip ? [look.styleChip] : []), ...(moodTag ? [moodTag] : []));
       roster.append(chip);
     }
     if (eligible.length === 0) { panel.append(emptyTeamCard()); body.replaceChildren(panel); return; }

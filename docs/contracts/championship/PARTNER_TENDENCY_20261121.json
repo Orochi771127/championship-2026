@@ -1,0 +1,36 @@
+{
+  "id": "PARTNER_TENDENCY_20261121",
+  "classification": "OWNER_APPROVED_ADAPTATION: P0 persistent instanceId isolation for twin same-species partners + P1 reversible ranch battle tendency (ENDURANCE / SKILL) and cage ecology shaping mapped onto verified ROM battle policies without modifying stats, TP or cooldowns (Owner 2026-11-21)",
+  "supersedes": {
+    "contract": "docs/contracts/championship/WAVE_RUN_20261118.json",
+    "sourceLock": "src/championship/app/championshipStandaloneSave.js"
+  },
+  "saveField": {
+    "path": "progression.trainingTendencies = { [instanceId]: { kind: 'ENDURANCE'|'SKILL', source: 'RANCH_DRILL'|'CAGE_ECO', cageEcology?: string } } (omitted when empty)",
+    "migration": "none: legacy saves without trainingTendencies normalize safely to {} (productPartnerTendency.normalizePartnerTendencies); no stats, species, moves or unrelated progression are modified"
+  },
+  "rules": {
+    "precedence": "match manual override > ranch training tendency (ENDURANCE -> tactic 1, SKILL -> tactic 0) > legacy battleTactics[instanceId] > default tactic (1)",
+    "identity": "persistent instanceId is preserved across selection, ranch drill, Data Arena selection & settlement, and Sparring; non-owned (RENTAL/REGISTERED) Data Arena entries keep instanceId = null"
+  },
+  "notChanged": [
+    "the battle engine, its RNG, AI weights, damage formulas, TP costs and cooldowns",
+    "native raising lifecycle and species evolution tables",
+    "the save key and schemaVersion"
+  ],
+  "sourceLocks": {
+    "src/championship/app/championshipStandaloneSave.js": "8108888fd1ed2dd5f2aecb84838b101aecf99bd158fd53c27981b9bfa1b3fe28"
+  },
+  "historicalSourceLocks": {
+    "WAVE_RUN_20261118": {
+      "src/championship/app/championshipStandaloneSave.js": "a732ddb063bd0f77dd87324416d0aca637621f809c7b95e989e6c692c07bde9d"
+    }
+  },
+  "authorization": "Owner 2026-11-21: P0 instanceId isolation + P1 reversible ranch battle tendency & honest sparring battle report",
+  "tests": [
+    "tests/championship-p0-p1-tendency-and-identity-cases.mjs",
+    "tests/championship-tactic-practice-cases.mjs",
+    "tests/championship-data-arena-cases.mjs"
+  ],
+  "physicalDeviceAccepted": false
+}
