@@ -47,6 +47,7 @@ import { taxonomyBadgeRow, resonanceStrip, taxonomyGlyph, TAXONOMY_COLORS, svgEl
 import { elementChartButton } from './elementChartModal.js';
 import { loadOriginalVfxCellArt } from '../presentation/vfx/originalVfxCellArt.js';
 import { dataArenaEntries, dataArenaEntryUsable, dataArenaPartnerPower } from '../modes/dataArena/dataArenaEligibility.js';
+import { partnerTendencyText } from '../contracts/productPartnerTendency.js';
 import { createActionPortrait, setActionPortrait, warmActionPortraits } from "../presentation/juicy/actionPortrait.js";
 
 const STEP_MS = DATA_ARENA_STEP_SECONDS * 1000;
@@ -178,12 +179,22 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   // Entry rights (Owner 2026-11-02): partners raised on the ranch or lit in the
   // Dex fight; a thin save is lent practice partners. Tournament and harbor share three kits.
   const roster = (list) => list.map(({ id, speciesId }) => ({ id, speciesId }));
-  // Owner 2026-11-08: of several held individuals of one species, the one that learned a burst form fights for it.
+  // P0 (2026-11-21): explicit per-species instanceId selection when the player owns
+  // multiple individuals of the same species (never silently overwrite or mix twins).
+  const selectedInstancesBySpecies = {};
+  // Owner 2026-11-08: of several held individuals of one species, default to one that learned a burst form unless player explicitly picked another.
   const learnedFirst = progress?.ownedInstances && typeof burstPlanOf === "function"
     ? { ...progress, ownedInstances: [...progress.ownedInstances].sort((x, y) => Number(!burstPlanOf(x.instanceId)) - Number(!burstPlanOf(y.instanceId))) }
     : progress;
-  const entryLists = { TOURNAMENT: dataArenaEntries(roster(DATA_ARENA_PARTNERS), learnedFirst), RELAY: dataArenaEntries(roster(RELAY_ROSTER.filter((p) => !relayBurstOnly(p))), learnedFirst) };
-  entryLists.HARBOR = entryLists.TOURNAMENT;
+  const tournamentRoster = roster(DATA_ARENA_PARTNERS);
+  const relayRoster = roster(RELAY_ROSTER.filter((p) => !relayBurstOnly(p)));
+  let entryLists = {};
+  const rebuildEntryLists = () => {
+    const tList = dataArenaEntries(tournamentRoster, learnedFirst, selectedInstancesBySpecies);
+    const rList = dataArenaEntries(relayRoster, learnedFirst, selectedInstancesBySpecies);
+    entryLists = { TOURNAMENT: tList, HARBOR: tList, RELAY: rList };
+  };
+  rebuildEntryLists();
   const entriesFor = (mode) => entryLists[mode] ?? entryLists.TOURNAMENT;
   const entryOf = (mode, id) => entriesFor(mode).find((row) => row.id === id) ?? null;
   let partnerPower = {};
@@ -1483,9 +1494,35 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       art.append(portrait(id), el("span", "da-partner__seat"));
       const taxonomy = speciesTaxonomyForId(partner.speciesId);
       const head = el("span", "da-partner__head");
-      head.append(el("strong", "da-partner__name", usable ? partnerName(id) : t("entry.unknownName")), entryTag(row.entry));
+      const chosenInst = row.selectedInstance ?? null;
+      const titleText = usable
+        ? (chosenInst?.displayName && chosenInst.displayName !== partnerName(id) ? `${chosenInst.displayName} · ${partnerName(id)}` : partnerName(id))
+        : t("entry.unknownName");
+      head.append(el("strong", "da-partner__name", titleText), entryTag(row.entry));
+      if (usable && chosenInst?.trainingTendency) {
+        head.append(el("span", "da-entry da-entry--tendency", partnerTendencyText(`tag.${chosenInst.trainingTendency}`)));
+      }
       card.append(art, head);
       if (!usable) { card.append(el("span", "da-partner__perk", t("entry.lockedHint"))); return card; }
+      if (row.ownedInstances?.length > 1) {
+        const picker = el("span", "da-instance-picker");
+        picker.setAttribute("aria-label", partnerTendencyText("arena.pickIndividual"));
+        for (let idx = 0; idx < row.ownedInstances.length; idx++) {
+          const inst = row.ownedInstances[idx];
+          const labelParts = [inst.displayName || `${partnerName(id)} #${idx + 1}`];
+          if (inst.trainingTendency) labelParts.push(partnerTendencyText(`tag.${inst.trainingTendency}`));
+          const pill = button("da-instance-pill", labelParts.join(" · "), (ev) => {
+            ev?.stopPropagation?.();
+            selectedInstancesBySpecies[row.speciesId] = inst.instanceId;
+            rebuildEntryLists();
+            pickFromList(entryOf(gameMode, row.id) ?? row);
+          }, signal);
+          pill.dataset.instanceId = inst.instanceId;
+          pill.setAttribute("aria-pressed", String(inst.instanceId === row.instanceId));
+          picker.appendChild(pill);
+        }
+        card.append(picker);
+      }
       card.append(taxonomyBadgeRow(taxonomy));
       if (harborLike(gameMode) && partner.canSwim) card.append(el("span", "da-entry da-entry--swim", t("harbor.swim")));
       if (partner.perk) card.append(el("span", "da-partner__perk", t(`perk.${partner.perk}`)));
@@ -1833,10 +1870,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     releaseInputs();
     audio?.suspend();
     const { newBest, saved } = records.recordResult(result);
-    // The ranch partners behind the relay seats (by species): a beacon's and a contract's rewards land on them.
+    // P0 (2026-11-21): settle rewards onto the exact selected owned instanceIds (never silently fall back to first-of-species).
     const snap = sim.getSnapshot?.() ?? null;
-    const held = progress?.ownedInstances ?? [];
-    const partyIds = [...new Set((snap?.relay?.team ?? [{ speciesId: partnerId }]).map((member) => held.find((entry) => entry.speciesId === String(member.speciesId ?? '').replace(/^relay-/, ''))?.instanceId).filter(Boolean))];
+    const partyIds = fighterInstances();
     // Cyber Gachapon: the host settles a win like an AI match (a ticket 60% of the time, a cup 2-4 more) and
     // spends an armed bounty beacon on it (Owner 2026-11-10).
     let gachaTickets = 0;

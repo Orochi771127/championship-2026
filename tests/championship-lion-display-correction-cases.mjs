@@ -101,9 +101,9 @@ test('native data stays pinned, separately authorized savev7 is reviewed, the or
   // diamond economy's royal-cage stock check (both 2026-11-02), then the hunt tool tiers and the royal
   // maps' save migration (both 2026-11-03), then the Sync Level record (2026-11-09), then Journey (2026-11-10),
   // then the tamer talents record (2026-11-17), then the save's own fixed id (system sweep 2026-11-08, landed
-  // 2026-11-17), then the supplement bag (2026-11-18), then the wave run (2026-11-18) supersede this one source pin only.
-  const followup=JSON.parse(fs.readFileSync("docs/contracts/championship/WAVE_RUN_20261118.json","utf8"));
-  assert.equal(followup.supersedes.contract,"docs/contracts/championship/SUPPLEMENTS_20261118.json");
+  // 2026-11-17), then the supplement bag (2026-11-18), then the wave run (2026-11-18), then the partner tendency (2026-11-21) supersede this one source pin only.
+  const followup=JSON.parse(fs.readFileSync("docs/contracts/championship/PARTNER_TENDENCY_20261121.json","utf8"));
+  assert.equal(followup.supersedes.contract,"docs/contracts/championship/WAVE_RUN_20261118.json");
   assert.deepEqual(Object.keys(followup.sourceLocks),["src/championship/app/championshipStandaloneSave.js"]);
   // Owner-authorized MA05 replacement preserves the deployed AW40/GR01 trial and all other221 selections;
   // all unrelated native/gameplay pins remain exact. This pins the entire reviewed new file.

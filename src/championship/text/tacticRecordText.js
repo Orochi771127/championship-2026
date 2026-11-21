@@ -13,7 +13,7 @@ export const TACTIC_RECORD_COPY = deepFreeze({
     kicker: '作戰紀錄', title: '這場打法',
     'plan.0': '必殺優先', 'plan.1': '普通攻擊', 'plan.2': '支援優先',
     head: '{name}・{plan}', stats: '出手 {total}　招式 {skill}　走位 {pct}%', support: '　支援 {n}',
-    moves: '{moves}', move: '{name} ×{n}', spEmpty: 'TP 用光：{t} 秒', down: '倒下：{t} 秒',
+    moves: '{moves}', move: '{name} ×{n}', firstSkill: '首次開招：{t} 秒', spEmpty: 'TP 用光：{t} 秒', down: '倒下：{t} 秒',
     previous: '上次「{plan}」：出手 {total}　招式 {skill}',
     'practice.title': '陪練三連戰', 'practice.tab': '陪練', 'practice.hint': '同一隻拍檔連打 3 場，每場可換方針。',
     'practice.partner': '拍檔', 'practice.pick': '先選一隻拍檔', 'practice.plan': '方針', 'practice.keep': '同上一場',
@@ -31,9 +31,9 @@ export const TACTIC_RECORD_COPY = deepFreeze({
     'practice.tp': 'TP {n}/{max}',
     kicker: 'Battle log', title: 'How it fought',
     'plan.0': 'Special first', 'plan.1': 'Normal attack', 'plan.2': 'Support',
-    head: '{name} · {plan}', stats: 'Hits {total}  Skills {skill}  Moving {pct}%', support: '  Support {n}',
-    moves: '{moves}', move: '{name} ×{n}', spEmpty: 'Out of TP: {t}s', down: 'Down: {t}s',
-    previous: 'Last time ({plan}): Hits {total}  Skills {skill}',
+    head: '{name} · {plan}', stats: 'Hits {total}  Skills {skill}  Move {pct}%', support: '  Support {n}',
+    moves: '{moves}', move: '{name} ×{n}', firstSkill: 'First skill: {t}s', spEmpty: 'Out of TP: {t}s', down: 'Down: {t}s',
+    previous: 'Last ({plan}): {total} hits · {skill} skills',
     'practice.title': 'Sparring trio', 'practice.tab': 'Sparring', 'practice.hint': 'One partner, 3 bouts. Change the plan between bouts.',
     'practice.partner': 'Partner', 'practice.pick': 'Pick a partner first', 'practice.plan': 'Plan', 'practice.keep': 'Same as last',
     'practice.round': 'Bout {n} · {foe}', 'practice.start': 'Start bout {n}', 'practice.done': 'All 3 done', 'practice.cleared': 'Cleared!', 'practice.clearTag': 'Clear +{clear}',
@@ -51,7 +51,7 @@ export const TACTIC_RECORD_COPY = deepFreeze({
     kicker: 'さくせん記録', title: 'この試合の戦い方',
     'plan.0': 'ひっさつ優先', 'plan.1': 'ノーマルアタック', 'plan.2': 'サポート',
     head: '{name}・{plan}', stats: '行動 {total}　技 {skill}　移動 {pct}%', support: '　サポート {n}',
-    moves: '{moves}', move: '{name} ×{n}', spEmpty: 'TP切れ：{t} 秒', down: 'ダウン：{t} 秒',
+    moves: '{moves}', move: '{name} ×{n}', firstSkill: '初回技：{t} 秒', spEmpty: 'TP切れ：{t} 秒', down: 'ダウン：{t} 秒',
     previous: '前回「{plan}」：行動 {total}　技 {skill}',
     'practice.title': 'スパーリング三連戦', 'practice.tab': 'スパー', 'practice.hint': '同じパートナーで3連戦。試合ごとにさくせんを変えられる。',
     'practice.partner': 'パートナー', 'practice.pick': '先にパートナーを選ぶ', 'practice.plan': 'さくせん', 'practice.keep': '前と同じ',
@@ -70,8 +70,8 @@ export const TACTIC_RECORD_COPY = deepFreeze({
     kicker: 'บันทึกการรบ', title: 'สไตล์การสู้รอบนี้',
     'plan.0': 'เน้นท่าไม้ตาย', 'plan.1': 'โจมตีปกติ', 'plan.2': 'เน้นสนับสนุน',
     head: '{name} · {plan}', stats: 'โจมตี {total}  ท่า {skill}  เดิน {pct}%', support: '  สนับสนุน {n}',
-    moves: '{moves}', move: '{name} ×{n}', spEmpty: 'TP หมด: {t} วิ', down: 'ล้ม: {t} วิ',
-    previous: 'ครั้งก่อน ({plan}): โจมตี {total}  ท่า {skill}',
+    moves: '{moves}', move: '{name} ×{n}', firstSkill: 'ออกท่าแรก: {t} วิ', spEmpty: 'TP หมด: {t} วิ', down: 'ล้ม: {t} วิ',
+    previous: 'รอบก่อน「{plan}」: โจมตี {total} ท่า {skill}',
     'practice.title': 'ซ้อมสามแมตช์', 'practice.tab': 'ซ้อม', 'practice.hint': 'คู่หูตัวเดียวสู้ 3 แมตช์ เปลี่ยนแผนได้ทุกแมตช์',
     'practice.partner': 'คู่หู', 'practice.pick': 'เลือกคู่หูก่อน', 'practice.plan': 'แผน', 'practice.keep': 'เหมือนเดิม',
     'practice.round': 'แมตช์ {n} · {foe}', 'practice.start': 'เริ่มแมตช์ {n}', 'practice.done': 'ครบ 3 แมตช์', 'practice.cleared': 'ผ่านครบ!', 'practice.clearTag': 'ผ่าน +{clear}',
@@ -89,8 +89,8 @@ export const TACTIC_RECORD_COPY = deepFreeze({
     kicker: 'Nhật ký trận', title: 'Cách nó đánh',
     'plan.0': 'Ưu tiên tuyệt chiêu', 'plan.1': 'Tấn công thường', 'plan.2': 'Ưu tiên hỗ trợ',
     head: '{name} · {plan}', stats: 'Ra đòn {total}  Chiêu {skill}  Di chuyển {pct}%', support: '  Hỗ trợ {n}',
-    moves: '{moves}', move: '{name} ×{n}', spEmpty: 'Hết TP: {t}s', down: 'Gục: {t}s',
-    previous: 'Lần trước ({plan}): Ra đòn {total}  Chiêu {skill}',
+    moves: '{moves}', move: '{name} ×{n}', firstSkill: 'Tung chiêu đầu: {t}s', spEmpty: 'Hết TP: {t}s', down: 'Gục: {t}s',
+    previous: 'Lần trước ({plan}): {total} đòn · {skill} chiêu',
     'practice.title': 'Ba trận tập', 'practice.tab': 'Đấu tập', 'practice.hint': 'Một cộng sự, 3 trận. Đổi chiến thuật giữa các trận.',
     'practice.partner': 'Cộng sự', 'practice.pick': 'Chọn cộng sự trước', 'practice.plan': 'Chiến thuật', 'practice.keep': 'Như trận trước',
     'practice.round': 'Trận {n} · {foe}', 'practice.start': 'Đấu trận {n}', 'practice.done': 'Xong 3 trận', 'practice.cleared': 'Qua ải!', 'practice.clearTag': 'Qua ải +{clear}',
@@ -128,15 +128,23 @@ export function tacticRecordLines(record, { nameOf, moveName, previous = () => n
     const plan = t(`plan.${entry.tactic}`);
     lines.push(t('head', { name: nameOf?.(entry.slot, entry.speciesId) ?? entry.displayName ?? '', plan }));
     const pct = entry.decisions?.total ? Math.round((entry.decisions.reposition / entry.decisions.total) * 100) : 0;
-    lines.push(t('stats', { total: entry.total, skill: entry.counts.skill, pct }) + (entry.counts.support ? t('support', { n: entry.counts.support }) : ''));
+    const normal = entry.counts?.normal ?? Math.max(0, (entry.total ?? 0) - (entry.counts?.skill ?? 0) - (entry.counts?.support ?? 0));
+    lines.push(t('stats', { total: entry.total, normal, skill: entry.counts.skill, pct }) + (entry.counts.support ? t('support', { n: entry.counts.support }) : ''));
     const moves = entry.moves.slice(0, 3).map(m => t('move', { name: moveName?.(m.moveId) ?? `#${m.moveId}`, n: m.count }));
     if (moves.length) lines.push(t('moves', { moves: moves.join('　') }));
+    if (entry.firstSkillAt !== null && entry.firstSkillAt !== undefined) lines.push(t('firstSkill', { t: entry.firstSkillAt }));
     if (entry.spEmptyAt !== null) lines.push(t('spEmpty', { t: Math.round(entry.spEmptyAt) }));
     if (entry.downAt !== null) lines.push(t('down', { t: Math.round(entry.downAt) }));
     // P2: what the plan left for the next battle (TP carries over as the original writes it).
     if (Number.isFinite(entry.tpLeft) && Number.isFinite(entry.tpMax) && entry.tpMax > 0) lines.push(t('tpLeft', { n: entry.tpLeft, max: entry.tpMax }));
     const before = previous(entry);
-    if (before && before.tactic !== entry.tactic) lines.push(t('previous', { plan: t(`plan.${before.tactic}`), total: before.total, skill: before.counts.skill }));
+    if (before && before.tactic !== entry.tactic) {
+      lines.push(t('previous', {
+        plan: t(`plan.${before.tactic}`),
+        total: before.total,
+        skill: before.counts?.skill ?? 0
+      }));
+    }
   }
   // BATTLE_STYLE_V1: the statuses that landed on the other team, e.g. 對手：中毒 ×2　麻痺 ×1.
   if (lines.length && record.foeStatuses?.length) {

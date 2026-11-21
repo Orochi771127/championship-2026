@@ -255,3 +255,13 @@
 .cm-journey__wave-debrief-pill--streak { background: rgba(16, 185, 129, 0.24); color: #a7f3d0; }
 .cm-journey__wave-debrief-sync { margin: 0; color: #a6f5c6; font-size: var(--fs-label, 12px); font-weight: 800; line-height: 1.45; }
 .cm-journey__wave-debrief-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+/* P1 (2026-11-21): Training tendency badge on Practice partner chip */
+.cm-journey__tendency {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #1d273b;
+  color: #ffe28a;
+}

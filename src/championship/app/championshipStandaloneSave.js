@@ -1,5 +1,6 @@
 import { normalizeFriendsPlaytestState } from './friendsPlaytestPolicy.js';
 import { normalizeOnlineBindReward } from './onlineBindRewardPolicy.js';
+import { normalizePartnerTendencies } from '../contracts/productPartnerTendency.js';
 import {requiresProductSaveVersion} from '../contracts/productSpeciesData.js';
 // Championship Modern -- standalone player save envelope.
 //
@@ -65,7 +66,7 @@ const ALLOWED_TOP_LEVEL_KEYS_V4 = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V3, "
 const ALLOWED_TOP_LEVEL_KEYS = Object.freeze([...ALLOWED_TOP_LEVEL_KEYS_V4, "huntHistory"]);
 
 const ALLOWED_CREATURE_KEYS = Object.freeze(["creatureId", "speciesId", "displayName", "nativeProfile"]);
-const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank", "battleBadges", "registeredSpecies", "nativeTitles", "nativeMessages", "nativeOpening", "championshipRun", "freeBattleMenu", "battleTactics", "cyberGacha", "burstEvolution", "syncLevels", "journey", "tamerTalents", "tamerSupplies", "waveRun"]);
+const ALLOWED_PROGRESSION_KEYS = Object.freeze(["interactionCount", "revision", "tamerRank", "battleBadges", "registeredSpecies", "nativeTitles", "nativeMessages", "nativeOpening", "championshipRun", "freeBattleMenu", "battleTactics", "trainingTendencies", "cyberGacha", "burstEvolution", "syncLevels", "journey", "tamerTalents", "tamerSupplies", "waveRun"]);
 // toolTiers / ropeWear: hunt tool families (HUNT_TOOL_TIERS_20261103); a save without them is migrated by the shop.
 const ALLOWED_SHOP_KEYS = Object.freeze(["bits", "visibility", "quantities", "cageOwned", "cageQuantities", "toolTiers", "ropeWear"]);
 // `expansion` exists only beside layoutVersion NATIVE_DECKS_V1 (2026-10-05):
@@ -464,6 +465,7 @@ export function createChampionshipModernSave({
     progression: {
       ...(progression.freeBattleMenu!==undefined?{freeBattleMenu:normalizeFreeBattleMenu(progression.freeBattleMenu)}:{}),
       ...(progression.battleTactics!==undefined?{battleTactics:normalizeBattleTactics(progression.battleTactics)}:{}),
+      ...(progression.trainingTendencies!==undefined&&Object.keys(normalizePartnerTendencies(progression.trainingTendencies)).length?{trainingTendencies:normalizePartnerTendencies(progression.trainingTendencies)}:{}),
       // OWNER_APPROVED_ADAPTATION 2026-10-29: Cyber Gachapon tickets, chips, metals and bloodlines.
       ...(progression.cyberGacha!==undefined?{cyberGacha:normalizeCyberGacha(progression.cyberGacha)}:{}),
       // OWNER_APPROVED_ADAPTATION 2026-11-02: burst evolution unlocks per partner.
