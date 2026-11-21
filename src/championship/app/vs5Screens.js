@@ -271,6 +271,44 @@ export function createBattleSelectView({ root, matches, onEnter, onExit, onOpenC
   const matchOnlyNodes = [];
   let arenaLabels = null;
   let arenaNode = null;
+  if (menuCopy?.pillars && (typeof onOpenDataArena === 'function' || typeof onOpenJourney === 'function')) {
+    const pCopy = menuCopy.pillars;
+    const pillars = element('div', 'cm-vs5-pillars');
+    pillars.setAttribute('role', 'group');
+    pillars.setAttribute('aria-label', pCopy.heading);
+    const mkPillar = (kind, titleText, subText, onClick, active = false) => {
+      const btn = element('button', `cm-vs5-pillar cm-vs5-pillar--${kind}`);
+      btn.type = 'button';
+      btn.dataset.pillar = kind;
+      btn.setAttribute('aria-pressed', String(active));
+      btn.append(
+        element('span', 'cm-vs5-pillar__title', titleText, false),
+        element('span', 'cm-vs5-pillar__sub', subText, false)
+      );
+      btn.addEventListener('click', onClick);
+      return btn;
+    };
+    pillars.append(
+      mkPillar('auto', pCopy.autoTitle, pCopy.autoSub, () => {
+        if (!entering) {
+          if (typeof onOpenChampionship === 'function') onOpenChampionship();
+          else void selectMode('TITLE_MATCH');
+        }
+      }, true)
+    );
+    if (typeof onOpenDataArena === 'function') {
+      pillars.append(mkPillar('arena', pCopy.arenaTitle, pCopy.arenaSub, (ev) => {
+        if (!entering) void onOpenDataArena(arenaNode ?? ev.currentTarget);
+      }));
+    }
+    if (typeof onOpenJourney === 'function') {
+      pillars.append(mkPillar('dungeon', pCopy.dungeonTitle, pCopy.dungeonSub, () => {
+        if (!entering) onOpenJourney({ tab: 'DUNGEON' });
+      }));
+    }
+    header.append(pillars);
+    matchOnlyNodes.push(pillars);
+  }
   if (typeof onOpenDataArena === 'function') {
     const arena = actionButton('');
     arena.id = 'cm-data-arena';

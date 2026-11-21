@@ -5076,6 +5076,63 @@ export function createChampionshipStandaloneApp({
       const arenaIndex=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
       return {ok:true,floor:value,presetIndices,arenaIndex,individuals:party.individuals,rngPreparation};
     },
+    /** Prepare a Cyber Dungeon Roguelike combat/boss room with HP/TP carry-over and run-only Data Chip start TP. */
+    async prepareDungeonBattle({presetIndices,partyIds,arenaIndex=2,carryRatioById=null,startTpBonusPct=0}={}){
+      if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
+      const presets=(Array.isArray(presetIndices)?presetIndices:[]).filter(Number.isSafeInteger);
+      if(!presets.length)return {ok:false,reason:'DUNGEON_PRESETS_REQUIRED'};
+      const party=withBattleTactics(await this.prepareBattleParty(null,partyIds,{sync:{capped:false}}));
+      if(!party.ok)return party;
+      if(!freeBattleMenu)rebuildFreeBattleMenu();
+      const individuals=party.individuals.map(individual=>{
+        const profile=structuredClone(individual.nativeProfile);
+        const maxHp=Math.max(1,profile.fields['058']|0);
+        const maxTp=Math.max(1,profile.fields['05c']|0);
+        const carry=carryRatioById?.[individual.instanceId];
+        if(carry){
+          const hpRatio=Math.max(0.15,Math.min(1,Number.isFinite(carry.hp)?carry.hp:1));
+          const tpRatio=Math.max(0,Math.min(1,Number.isFinite(carry.tp)?carry.tp:1));
+          profile.fields['050']=Math.max(1,Math.min(maxHp,Math.round(maxHp*hpRatio)))>>>0;
+          profile.fields['054']=Math.max(0,Math.min(maxTp,Math.round(maxTp*tpRatio)))>>>0;
+        }
+        if(startTpBonusPct>0){
+          const bonusTp=Math.round(maxTp*(startTpBonusPct/100));
+          profile.fields['054']=Math.min(maxTp,(profile.fields['054']|0)+bonusTp)>>>0;
+        }
+        return {...individual,nativeProfile:normalizeNativeIndividualProfile(profile,individual.speciesId)};
+      });
+      const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
+      prepared.localMode=2;prepared.freeMenu=freeBattleMenu;prepared.individuals=individuals;
+      prepared.freeMatch=Object.freeze({id:`dungeon:${presets.join('-')}`,kind:'WAVE',presetIndices:presets,slots:3,entryFee:0,payout:0});
+      const safeArena=FREE_BATTLE_ARENAS.includes(arenaIndex)?arenaIndex:FREE_BATTLE_ARENAS[0];
+      return {ok:true,presetIndices:presets,arenaIndex:safeArena,individuals,rngPreparation};
+    },
+    enterDungeonBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation}={}){
+      return enterPreparedLocalBattle({mode:2,attemptId,playerInstanceIds,rngPreparation});
+    },
+    /** Settle Cyber Dungeon room rewards (crystals, Bits, and Resonance Altar race/faction points into the leader). */
+    grantCyberDungeonRewards({crystals=0,bits=0,altarBlessing=null,leadInstanceId=null}={}){
+      if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
+      let paidCrystals=0,paidBits=0,altarApplied=false;
+      if(Number.isSafeInteger(crystals)&&crystals>0) paidCrystals=addSyncCrystals(crystals);
+      if(Number.isSafeInteger(bits)&&bits>0){
+        const shop=requireShop();
+        const room=Math.max(0,BITS_WALLET_CAP-shop.getBits());
+        const credit=Math.min(room,bits);
+        if(credit>0){shop.creditBits(credit,{evidence:'OWNER_APPROVED_ADAPTATION'});paidBits=credit;}
+      }
+      if(altarBlessing&&typeof altarBlessing.field==='string'&&Number.isSafeInteger(altarBlessing.points)&&altarBlessing.points>0&&leadInstanceId){
+        const profile=raisingNativeProfile(leadInstanceId);
+        if(profile&&Object.hasOwn(profile.fields,altarBlessing.field)){
+          const updated=structuredClone(profile);
+          updated.fields[altarBlessing.field]=Math.min(999,((updated.fields[altarBlessing.field]|0)+altarBlessing.points))>>>0;
+          writeRaisingNativeProfile(leadInstanceId,normalizeNativeIndividualProfile(updated));
+          altarApplied=true;
+        }
+      }
+      if(paidCrystals||paidBits||altarApplied)savePort.markDirty();
+      return Object.freeze({ok:true,crystals:paidCrystals,bits:paidBits,altarApplied});
+    },
     /**
      * Story battle (OWNER_APPROVED_ADAPTATION 2026-11-11): an ordinary free battle against
      * fixed native presets (the chapter's opponent), no entry fee and no purse -- the
