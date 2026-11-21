@@ -18,8 +18,8 @@ import {setLocale} from '../src/championship/text/locale.js';
 const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const ids=[231,232,233,234,235,236,237,238,239,240,241,242];
-// Owner 2026-11-03: the eight with motion art are playable book entries; the rest stay art-only.
-const PLAYABLE=[231,232,234,235,236,237,239,240],artOnly=ids.filter(id=>!PLAYABLE.includes(id));
+// Owner 2026-11-03 & 2026-11-20: the nine with motion art (including B215) are playable book entries; the rest stay art-only.
+const PLAYABLE=[231,232,234,235,236,237,238,239,240],artOnly=ids.filter(id=>!PLAYABLE.includes(id));
 const rexmon=[243,244]; // art only, no authored story yet (tests/championship-rexmon-two-forms-cases.mjs)
 const manifest=read('docs/art/production/characters/approved-six-illustrations-20261018/manifest.json');
 
@@ -33,16 +33,26 @@ test('gallery locale coverage recognizes only the exact complete five-language d
   assert.equal(databaseIllustrationText('constructor'), '');
 });
 
-test('every art-only detail shows its selected full illustration and authored story in five locales while omitting playable controls',()=>{
+test('art-only entries stay masked as silhouettes in normal player view and reveal full planned detail only under fullView (Owner 2026-11-20 方案 A)',()=>{
   try{for(const locale of ['zh-Hant','en','ja','th','vi'])for(const id of artOnly){
-    const f=makeView({locale,selectedSpeciesIndex:id,registeredSpecies:[],collection:[]});
+    const masked=makeView({locale,selectedSpeciesIndex:id,registeredSpecies:[],collection:[]});
+    try{
+      assert.equal(masked.root.querySelector('.cm-dex-hero'),null,'no unowned hero leaked');
+      assert.ok(masked.root.querySelector('.cm-dex-shadow__image'),'black silhouette shown like regular unowned species');
+      assert.equal(masked.root.querySelector('.cm-dex-profile__text'),null,'story stays masked');
+      assert.equal(masked.root.querySelector('.cm-dex-data'),null,'moves stay masked');
+      masked.assertUnchanged();
+    }finally{masked.dispose();}
+    const f=makeView({locale,fullView:true,selectedSpeciesIndex:id,registeredSpecies:[],collection:[]});
     try{
       const hero=f.root.querySelector('.cm-dex-hero__image'),art=databaseHeroPortrait(id);
       assert.equal(hero.src,art.src);hero.naturalWidth=art.width;hero.naturalHeight=art.height;hero.onload();
       assert.equal(f.root.querySelector('.cm-dex-hero').dataset.art,'ready');
       assert.equal(f.root.querySelector('.cm-dex-profile__text')?.textContent,databaseStory(id,locale));
-      // Owner 2026-11-03: planned data and links are shown; nothing playable is.
-      assert.ok(f.root.querySelector('.cm-dex-data'),'planned data shown (Owner 2026-11-03)');assert.equal(Boolean(f.root.querySelector('[data-showcase]')),false,'no previews without motion art');
+      // Planned data and links are shown in fullView; move icons are omitted so 623..636 never hijack Data Arena icons.
+      assert.ok(f.root.querySelector('.cm-dex-data'),'planned data shown under fullView');
+      assert.equal(f.root.querySelector('.cm-dex-move-card__icon'),null,'planned moves never render hijacked Data Arena icons');
+      assert.equal(Boolean(f.root.querySelector('[data-showcase]')),false,'no previews without motion art');
       for(const selector of ['.cm-dex-conditions__toggle','input','.cm-dex-routes__target','.cm-dex-burst'])assert.equal(f.root.querySelector(selector),null);
       assert.equal(Boolean(f.root.querySelector('.cm-dex-planned')),databaseIllustrationLinks(id).length>0);
       assert.ok(f.root.textContent.includes(databaseIllustrationText('status',locale)));
@@ -74,11 +84,12 @@ test('twelve storied encyclopedia identities, then the two Rexmon forms, are cla
   assert.equal(new Set(DATABASE_DISPLAY_CATALOG.entries.map(e=>e.speciesIndex)).size,240);
   assert.equal(new Set(DATABASE_DISPLAY_CATALOG.entries.map(e=>e.displayCode)).size,240);
   const book=projectDatabase(),rows=databaseDisplayRows(book,'ART');
-  assert.deepEqual(rows.map(e=>e.speciesIndex),[238, 233, 241, 242, 243, 244]);
+  assert.deepEqual(rows.map(e=>e.speciesIndex),[233, 241, 242, 243, 244]);
   for(const row of rows){
-    assert.equal(row.kind,'ILLUSTRATION');assert.equal(row.state,'NOT_TRACKED');assert.equal(row.viewable,true);
+    assert.equal(row.kind,'ILLUSTRATION');assert.equal(row.state,'NOT_TRACKED');assert.equal(row.viewable,false);
     assert.equal(typeof row.numberingStageIndex,'number');assert.equal(row.legacyBookOrdinal,null);assert.equal(row.instanceCount,0);
   }
+  assert.ok(databaseDisplayRows(projectDatabase({fullView:true}),'ART').every(row=>row.viewable===true));
   const stageSpecies=[
     [],
     [],
@@ -101,7 +112,7 @@ test('twelve storied encyclopedia identities, then the two Rexmon forms, are cla
 });
 
 test('art-only browsing cannot register, instantiate or invent gameplay/evolution data',()=>{
-  assert.equal(listDatabaseSlots().length,226);
+  assert.equal(listDatabaseSlots().length,227);
   for(const id of [...artOnly,...rexmon]){
     assert.throws(()=>getDatabaseSlot(id),/UNKNOWN_DATABASE_SLOT/);
     assert.throws(()=>normalizeRegisteredSpecies([id]));
@@ -110,8 +121,8 @@ test('art-only browsing cannot register, instantiate or invent gameplay/evolutio
     // Planned data is display only (Owner 2026-11-03): moves come from the data file, not the battle catalog.
     assert.ok(databaseVerifiedData(id).moves.every(m=>m.recordIndex>=596&&m.name&&m.name!=='????'));
     const book=projectDatabase({selectedSpeciesIndex:id,registeredSpecies:[id],starterSpeciesId:`species-${id}`,collection:[{speciesId:`species-${id}`,instanceId:'invalid-art-instance'}]});
-    assert.equal(book.slotCount,226);assert.equal(book.regularCount,226);assert.equal(book.registeredCount,0);
-    assert.equal(book.entries.length,226);assert.equal(book.selected.state,'NOT_TRACKED');assert.equal(book.selected.source,null);
+    assert.equal(book.slotCount,227);assert.equal(book.regularCount,227);assert.equal(book.registeredCount,0);
+    assert.equal(book.entries.length,227);assert.equal(book.selected.state,'NOT_TRACKED');assert.equal(book.selected.source,null);
     assert.deepEqual(book.selected.instances,[]);assert.deepEqual(book.selected.evolutionRoutes,[]);
   }
   assert.throws(()=>projectDatabase({selectedSpeciesIndex:245}),/UNKNOWN_DATABASE_SLOT/);

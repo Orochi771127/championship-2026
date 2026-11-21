@@ -13,14 +13,14 @@ const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 import {PRODUCT_GROWTH_RULES,growthBranchHistoryIndex} from '../src/championship/contracts/productGrowthRules.js';
 // Playable originals (Owner 2026-11-03) add nine growth branches; every branch keeps a history slot (native
 // branches their native slot), so saved completion flags never move.
-const PLAYABLE=[231,232,234,235,236,237,239,240];
+const PLAYABLE=[231,232,234,235,236,237,238,239,240];
 const lifecycle=JSON.parse(JSON.stringify(PRODUCT_GROWTH_RULES)),registeredSpecies=[...Array.from({length:216},(_,i)=>i+8),...PLAYABLE];
-const GROWTH_BRANCHES=260;
+const GROWTH_BRANCHES=262;
 const slot=(source,branch)=>(source-8)*5+growthBranchHistoryIndex(source,branch);
 
-test('all 244 growth candidate identities retain exact source/branch history offsets and live display identities',()=>{
+test('all growth candidate identities retain exact source/branch history offsets and live display identities',()=>{
   const before=JSON.stringify(lifecycle);let count=0;
-  assert.equal(lifecycle.rules.length,233);assert.equal(lifecycle.rules.filter(r=>r.length).length,67);
+  assert.equal(lifecycle.rules.length,233);assert.equal(lifecycle.rules.filter(r=>r.length).length,68);
   for(let source=8;source<=240;source++){
     const rules=lifecycle.rules[source-8],flags=rules.map((_,i)=>slot(source,i));
     const routes=projectDatabaseEvolutionRoutes(source,{sourceRegistered:true,registeredSpecies,evolutionBranches:flags}).filter(route=>!route.productRouteId);
@@ -64,7 +64,7 @@ test('unknown source, eggs, empty group and final stages expose no invented bran
   for(const index of [0,7,72,93,136,160,187,211,222,228,229,230])assert.deepEqual(projectDatabaseEvolutionRoutes(index,{sourceRegistered:true,registeredSpecies,evolutionBranches:[0]}),[]);
   const book=projectDatabase({registeredSpecies:[8,20],selectedSpeciesIndex:8});
   assert.equal(book.selected.instanceCount,0);assert.equal(book.selected.state,'REGISTERED');assert.equal(book.selected.evolutionRoutes[0].historyState,'NOT_RECORDED');
-  assert.equal(book.slotCount,226);
+  assert.equal(book.slotCount,227);
 });
 
 test('all 216 ordinary public portraits preserve exact selected HUD hashes and aliases96/97',()=>{

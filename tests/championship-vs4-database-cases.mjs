@@ -63,17 +63,17 @@ function drawClosedLoop(host, cx, cy, radius = 36) {
 test("the production encyclopedia preserves 216 native rows and appends two forms, with no egg rows", () => {
   const slots = listDatabaseSlots();
   assert.equal(slots.length, DATABASE_SLOT_COUNT);
-  // 216 native rows, the two product forms, then the eight playable originals (Owner 2026-11-03).
-  assert.equal(DATABASE_SLOT_COUNT, 226);
+  // 216 native rows, the two product forms, then the nine playable originals (Owner 2026-11-03 & 2026-11-20 B215).
+  assert.equal(DATABASE_SLOT_COUNT, 227);
   assert.equal(slots.slice(0,216).length,216);
   assert.ok(slots.slice(0,216).every(s=>s.identityEvidence==='VERIFIED_BINARY'));
   assert.deepEqual(slots.slice(216,218).map(s=>[s.speciesIndex,s.bookOrdinal,s.identityEvidence]),[[229,216,'PRODUCT_EXTENSION_EXPLICIT'],[230,217,'PRODUCT_EXTENSION_EXPLICIT']]);
-  assert.deepEqual(slots.slice(218).map(s=>[s.speciesIndex,s.bookOrdinal,s.identityEvidence]),[231,232,234,235,236,237,239,240].map((id,i)=>[id,218+i,'PRODUCT_ORIGINAL_EXPLICIT']));
+  assert.deepEqual(slots.slice(218).map(s=>[s.speciesIndex,s.bookOrdinal,s.identityEvidence]),[231,232,234,235,236,237,238,239,240].map((id,i)=>[id,218+i,'PRODUCT_ORIGINAL_EXPLICIT']));
   assert.equal(slots.filter((slot) => slot.kind === "EGG").length, DATABASE_EGG_COUNT);
   assert.equal(slots.filter((slot) => slot.kind === "REGULAR").length, DATABASE_REGULAR_COUNT);
   assert.equal(slots.slice(0,216).some((slot) => /[\u3040-\u30ff]/.test(slot.displayName)), false);
   assert.deepEqual(slots.slice(216,218).map(slot=>slot.displayName),["王銅獼王","天穹帝龍・戰鬥型態"]);
-  assert.deepEqual(slots.slice(218).map(slot=>slot.displayName),["星塵豬","隕甲豬","星海母","極光鯊","天穹螳","星核豆獸","迅雷貓狼","雷霆戰狼"]);
+  assert.deepEqual(slots.slice(218).map(slot=>slot.displayName),["星塵豬","隕甲豬","星海母","極光鯊","天穹螳","星核豆獸","閃電崽","迅雷貓狼","雷霆戰狼"]);
   assert.equal(DATABASE_UNLOCK_EVIDENCE, "ROM_VERIFIED_02116A20_REGISTRATION");
 });
 
@@ -96,7 +96,7 @@ test("New Game exposes an empty book; selectors use species IDs independent of r
   await app.newGame();
   assert.equal(app.openDatabase(), CHAMPIONSHIP_SCREENS.DATABASE);
   const frame = app.getDatabaseFrame();
-  assert.equal(frame.slotCount, 226);
+  assert.equal(frame.slotCount, 227);
   assert.equal(frame.registeredCount, 0);
   for(const id of [229,230]){
     app.selectDatabaseSpecies(id);const selected=app.getDatabaseFrame().selected;
@@ -160,7 +160,7 @@ test("the presentation source opens Database without a second router", async () 
   const source = createGateHuntPresentationSource(app);
   source.intents.openDatabase();
   assert.equal(source.getFrame().screen, CHAMPIONSHIP_SCREENS.DATABASE);
-  assert.equal(source.getFrame().database.slotCount, 226);
+  assert.equal(source.getFrame().database.slotCount, 227);
   source.intents.leaveScreen();
   assert.equal(source.getFrame().screen, CHAMPIONSHIP_SCREENS.RAISING_HOME);
   await app.dispose();

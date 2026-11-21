@@ -20,12 +20,12 @@ const candidateScreen=new URL('../../src/championship/app/vs4Screens.js',import.
 const inDocument=(doc,fn)=>(...args)=>{const previous=globalThis.document;globalThis.document=doc;try{return fn(...args);}finally{globalThis.document=previous;}};
 const fixtureCollection=()=>[{speciesId:'species-008',instanceId:'fixture-individual-8',displayName:'Unsubmitted name',originGateId:'fixture-gate'}];
 
-export function makeView({locale='zh-Hant',selectedSpeciesIndex=8,registeredSpecies=[8,20],evolutionBranches=[0],collection=fixtureCollection(),screenUrl=candidateScreen,projection=projectDatabase,width=390,height=844,wideLayout=null}={}) {
+export function makeView({locale='zh-Hant',fullView=false,selectedSpeciesIndex=8,registeredSpecies=[8,20],evolutionBranches=[0],collection=fixtureCollection(),screenUrl=candidateScreen,projection=projectDatabase,width=390,height=844,wideLayout=null}={}) {
   setLocale(locale);
   const input=deepFreeze({registeredSpecies:[...registeredSpecies],evolutionBranches:[...evolutionBranches],collection});
   const inputSnapshot=JSON.stringify(input);
   let selected=selectedSpeciesIndex;
-  let frame={screen:'DATABASE',database:projection({...input,selectedSpeciesIndex:selected})};
+  let frame={screen:'DATABASE',database:projection({...input,fullView,selectedSpeciesIndex:selected})};
   const document=createControlledDocument(locale),root=document.createElement('main');document.body.append(root);
   const calls={select:[],rename:[],leave:0,art:[],forbidden:[]};
   const forbidden=name=>()=>{calls.forbidden.push(name);throw new Error(`FORBIDDEN_${name}`);};
@@ -34,7 +34,7 @@ export function makeView({locale='zh-Hant',selectedSpeciesIndex=8,registeredSpec
   const listeners=new Map();
   let view;
   const source={getFrame:()=>frame,intents:{
-    selectDatabaseSpecies(value){calls.select.push(value);selected=value;frame={screen:'DATABASE',database:projection({...input,selectedSpeciesIndex:selected})};view?.render(frame);},
+    selectDatabaseSpecies(value){calls.select.push(value);selected=value;frame={screen:'DATABASE',database:projection({...input,fullView,selectedSpeciesIndex:selected})};view?.render(frame);},
     renameDatabaseInstance(...args){calls.rename.push(args);},leaveScreen(){calls.leave++;},
     save:forbidden('SAVE'),saveGame:forbidden('SAVE'),next:forbidden('RNG')
   }};

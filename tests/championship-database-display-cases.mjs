@@ -6,8 +6,8 @@ import {DATABASE_DISPLAY_CATALOG as dex,databaseDisplayRows,getDatabaseDisplayEn
 import {listDatabaseSlots,getDatabaseSlot} from '../src/championship/database/databaseCatalog.js';
 import {projectDatabase} from '../src/championship/database/databaseRuntime.js';
 import {productSpeciesRecord} from '../src/championship/contracts/productSpeciesData.js';
-// Playable original characters (Owner 2026-11-03): regular book entries after the two product forms.
-const PLAYABLE=[231,232,234,235,236,237,239,240];
+// Playable original characters (Owner 2026-11-03 & 2026-11-20 B215): regular book entries after the two product forms.
+const PLAYABLE=[231,232,234,235,236,237,238,239,240];
 import {openingEggChoices} from '../src/championship/app/openingEggChoices.js';
 import {setLocale} from '../src/championship/text/locale.js';
 import {generationName} from '../src/championship/text/zhHant.js';
@@ -61,7 +61,7 @@ test('archived revision-one identity receipt stays immutable while the explicit 
 test('eggs stay an untracked content index outside normal registration and selectors',()=>{
   const book=projectDatabase({starterSpeciesId:'species-000'}),before=JSON.stringify(book);
   const rows=databaseDisplayRows(book);
-  assert.equal(rows.length,240);assert.equal(book.slotCount,226);assert.equal(book.registeredCount,0);
+  assert.equal(rows.length,240);assert.equal(book.slotCount,227);assert.equal(book.registeredCount,0);
   assert.ok(rows.filter(e=>e.kind==='EGG').every(e=>e.state==='NOT_TRACKED'&&e.legacyBookOrdinal===null));
   assert.ok(rows.filter(e=>e.kind==='REGULAR').every(e=>e.state==='UNDISCOVERED'));
   assert.throws(()=>getDatabaseSlot(0),/UNKNOWN_DATABASE_SLOT/);

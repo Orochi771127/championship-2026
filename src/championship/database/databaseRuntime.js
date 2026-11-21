@@ -86,8 +86,9 @@ export function projectDatabase({
   }
 
   let selected = null;
-  if (databaseIllustrationRow(selectedSpeciesIndex)) {
-    selected = databaseIllustrationRow(selectedSpeciesIndex);
+  const illustrationSelected = databaseIllustrationRow(selectedSpeciesIndex, { fullView });
+  if (illustrationSelected) {
+    selected = illustrationSelected;
   } else if (selectedSpeciesIndex !== null) {
     const slot = getDatabaseSlot(selectedSpeciesIndex);
     const row = entries[slot.bookOrdinal];

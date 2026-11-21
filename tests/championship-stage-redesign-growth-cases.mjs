@@ -44,7 +44,7 @@ test('growth tables: native branches up to 成長期, none from 成熟期 on, th
     [63, 76], [64, 121], [65, 81], [67, 82], [67, 83]
   ];
   // Playable originals are checked first where the 10-29 proposal placed them; history keeps native slots.
-  const inserted = new Map([[23, 231], [30, 237], [37, 234], [42, 235], [49, 236]]);
+  const inserted = new Map([[18, 238], [23, 231], [30, 237], [37, 234], [42, 235], [49, 236]]);
   PRODUCT_GROWTH_RULES.rules.forEach((list, i) => {
     const source = i + 8, native = lifecycle.rules[i] ?? [];
     if (generation(source) >= 4) { assert.deepEqual([...list], [], `species ${source}`); return; }
@@ -60,7 +60,7 @@ test('growth tables: native branches up to 成長期, none from 成熟期 on, th
     native.forEach((rule, k) => assert.equal(slots[list.findIndex(r => r.target === rule.target && r.kind === rule.kind
       && r.thresholds.every((v, t) => v === rule.thresholds[t]))], k));
   });
-  assert.deepEqual([231, 237, 239].map(s => PRODUCT_GROWTH_RULES.rules[s - 8].map(r => r.target)), [[232], [94, 88], [240]]);
+  assert.deepEqual([231, 237, 238, 239].map(s => PRODUCT_GROWTH_RULES.rules[s - 8].map(r => r.target)), [[232], [94, 88], [239], [240]]);
   // Every species that could only wait for its lifetime can now evolve early.
   for (const [source] of appended.slice(0, 2)) assert.ok(PRODUCT_GROWTH_RULES.rules[source - 8].some(r => r.kind === 0));
   // MA30 has a source.

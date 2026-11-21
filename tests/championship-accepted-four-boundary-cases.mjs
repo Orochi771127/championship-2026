@@ -9,7 +9,8 @@ const aw14Release=read('docs/reports/aw14-release-20261110/SELECTION.json');
 // Two-set intake 2026-11-12: each pinned entry replaces or adds exactly one role (AW23 moves to its two-set release).
 const twoSetReleases=read('docs/reports/two-set-intake-20261112/SELECTION.json');
 const aw02Release=read('docs/reports/aw02-release-20261110/SELECTION.json');
-const releases={AW02:aw02Release,AW14:aw14Release,AW23:aw23Release,UL14:ul14Release,AW12:aw12Release,AW32:aw32Release,...twoSetReleases};
+const b215Release=read('docs/reports/b215-release-20261120/SELECTION.json');
+const releases={AW02:aw02Release,AW14:aw14Release,AW23:aw23Release,UL14:ul14Release,AW12:aw12Release,AW32:aw32Release,B215:b215Release,...twoSetReleases};
 // Owner 2026-11-03 「Fix now with existing art」: a role may leave the baseline only through its named patch, whose
 // recorded parents are exactly the baseline entry; only the clips it lists change, from frames the role already has.
 const PATCH_FILE='animation.web-patch-20261103.json';

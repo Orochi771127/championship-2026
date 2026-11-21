@@ -1198,6 +1198,10 @@ export const MOVE_VFX_CHOREOGRAPHY = Object.freeze({
   613: entry({contact: {piece: '3d-airburst', scale: 1}, hitStopMs: 42, shake: 'light', knockPx: 14}),
   // 星能壓縮彈
   614: entry({contact: {piece: '3d-energy-vortex', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
+  // 靜電撲咬
+  615: entry({contact: {piece: '3d-energy-burst', scale: 1}, hitStopMs: 42, shake: 'light', knockPx: 14}),
+  // 劈啪電團
+  616: entry({contact: {piece: '3d-plasma-bolt', scale: 1}, hitStopMs: 95, shake: 'heavy', knockPx: 32}),
   // 電爪撲擊
   617: entry({contact: {piece: '3d-energy-burst-b', scale: 1}, hitStopMs: 42, shake: 'light', knockPx: 14}),
   // 金光迅雷

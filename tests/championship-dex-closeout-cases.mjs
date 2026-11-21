@@ -59,16 +59,22 @@ test('the nine explicitly approved equipped versions use their own identity and 
   }}finally{setLocale('zh-Hant');}
 });
 
-test('new art browses in five locales without exposing gameplay data or changing player state',()=>{
-  // A playable original (Owner 2026-11-03) is a regular entry: hidden until registered, like every partner.
+test('new art stays masked in normal view and browses in five locales under fullView without exposing gameplay data or changing player state',()=>{
+  // Playable originals are regular entries (hidden until registered); unplayable planned originals also stay masked unless fullView is enabled (Owner 2026-11-20 方案 A).
   try{for(const locale of ['zh-Hant','en','ja','th','vi'])for(const row of manifest.entries.filter(r=>!isPlayableProductOriginal(r.speciesIndex))){
-    const view=makeView({locale,selectedSpeciesIndex:row.speciesIndex,registeredSpecies:[],collection:[]});
+    const masked=makeView({locale,selectedSpeciesIndex:row.speciesIndex,registeredSpecies:[],collection:[]});
+    try{
+      assert.equal(masked.root.querySelector('.cm-dex-hero__image'),null);
+      assert.ok(masked.root.querySelector('.cm-dex-shadow__image'));
+      masked.assertUnchanged();
+    }finally{masked.dispose();}
+    const view=makeView({locale,fullView:true,selectedSpeciesIndex:row.speciesIndex,registeredSpecies:[],collection:[]});
     try{
       const image=view.root.querySelector('.cm-dex-hero__image');
       assert.equal(image.src,row.display.src);
       image.naturalWidth=row.display.width;image.naturalHeight=row.display.height;image.onload();
       assert.equal(view.root.querySelector('.cm-dex-hero').dataset.art,'ready');
-      assert.ok(view.root.querySelector('.cm-dex-data'),'planned data shown (Owner 2026-11-03)');assert.equal(Boolean(view.root.querySelector('[data-showcase]')),false,'no previews without motion art');
+      assert.ok(view.root.querySelector('.cm-dex-data'),'planned data shown under fullView');assert.equal(Boolean(view.root.querySelector('[data-showcase]')),false,'no previews without motion art');
       assert.equal(view.root.querySelector('.cm-dex-conditions__toggle'),null);
       view.assertUnchanged();
     }finally{view.dispose();}
