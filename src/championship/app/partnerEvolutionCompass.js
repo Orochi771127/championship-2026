@@ -10,6 +10,7 @@ import { evolutionLevelShort } from "../contracts/productSyncLevel.js";
 import { nativeHuntSpeciesByIndex } from "../hunt/capture/nativeHuntSources.js";
 import { nativeEvolutionRequirements } from "../raising/nativeRaisingLifecycle.js";
 import { DATABASE_EVOLUTION_CONDITION_DESCRIPTORS } from "../database/databaseEvolutionConditions.js";
+import { buildOpenEvolutionAura } from "../raising/productOpenEvolution.js";
 import { speciesName } from "../text/zhHant.js";
 
 const hex = (n) => n.toString(16).padStart(3, "0");
@@ -41,7 +42,8 @@ export function buildPartnerEvolutionCompass({
   const speciesIndex = fields["000"] | 0;
   if (!Number.isInteger(speciesIndex) || speciesIndex < 8) return null;
   const rules = growthRules.rules[speciesIndex - 8];
-  if (!Array.isArray(rules) || !rules.length) return null;
+  const openAura = buildOpenEvolutionAura(profile, { registeredSpecies });
+  if ((!Array.isArray(rules) || !rules.length) && !openAura) return null;
 
   let species = null;
   try { species = nativeHuntSpeciesByIndex(speciesIndex); } catch { return null; }
@@ -55,7 +57,7 @@ export function buildPartnerEvolutionCompass({
   const careMistakes = narrow["03d"] ?? 0;
 
   const evaluated = [];
-  for (let branchIndex = 0; branchIndex < rules.length; branchIndex++) {
+  for (let branchIndex = 0; branchIndex < (Array.isArray(rules) ? rules.length : 0); branchIndex++) {
     const rule = rules[branchIndex];
     if (!rule || rule.kind !== 0 || !Array.isArray(rule.thresholds)) continue;
     const req = nativeEvolutionRequirements(rule);
@@ -114,7 +116,7 @@ export function buildPartnerEvolutionCompass({
     });
   }
 
-  if (!evaluated.length) return null;
+  if (!evaluated.length && !openAura) return null;
   evaluated.sort((a, b) => {
     if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
     if (a.ready !== b.ready) return a.ready ? -1 : 1;
@@ -131,6 +133,7 @@ export function buildPartnerEvolutionCompass({
     speciesIndex,
     totalBranches: evaluated.length,
     syncGate: syncGate ? { need: syncGate.need, level: syncGate.level } : null,
+    openAura,
     pinnedGoal: pinnedBranch ? {
       branchIndex: pinnedBranch.branchIndex,
       revealed: pinnedBranch.revealed,

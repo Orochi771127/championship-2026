@@ -127,6 +127,7 @@ import {TUTORIAL_STEP_COUNT,createTutorialCursor, tutorialFinished, tutorialStep
 import {tutorialLine, tutorialPrompt} from '../text/tutorialMessages.zhHant.js';
 import { uiText } from '../text/uiText.js';
 import { buildPartnerEvolutionCompass, buildPartnerIdentityCard } from './partnerEvolutionCompass.js';
+import { formatEvolutionCausalLine } from '../raising/productOpenEvolution.js';
 import {nativeTreatmentAdmission} from '../raising/nativeRaisingTreatment.js';
 import {treatNativeRaisingActor,notifyNativeRaisingResidentAdded,beginNativeRaisingCarry,releaseNativeRaisingCarry,cancelNativeRaisingCarry,beginNativeRaisingStroke,releaseNativeRaisingStroke,touchNativeRaisingActor} from '../raising/nativeRaisingActor.js';
 import {classifyNativeRaisingHand,stepNativeRaisingStrokeInput,nativeRaisingHandAdmission} from '../raising/nativeRaisingHand.js';
@@ -1138,6 +1139,8 @@ export function createChampionshipStandaloneApp({
             // ROADMAP_R2_20261118: evolution also asks for the partner's Sync Level; the playtest lifts it like the licence.
             // Read only when an evolution is really asked (a function, not a value: this context is built every step).
             syncLevel:playtestPolicy?.enabled===true?null:()=>syncLevelOf(id).level,
+            // Open Blind-Box Evolution v1 (2026-11-21): active in live realtime ranch, off in native/tutorial baseline.
+            openEvolution:realtime&&!tutorialBaseline?{enabled:true,registeredSpecies:()=>registeredSpeciesValue}:null,
             overdrive:realtime?training=>{shapePartnerTendencyFromCage(id,actor.cageDefinitionIndex);return overdriveTraining(id,training);}:null,
             cageEffects:realtime&&REALTIME_RECOVERY_CAGES.includes(actor.cageDefinitionIndex)?[]:undefined,
             // The breeder talent 精心照料: +4 % training growth a rank.
@@ -2996,8 +2999,10 @@ export function createChampionshipStandaloneApp({
         if(result.evolved&&result.event.target>=8)realtimeWake.set(id,realNowMs()+REALTIME_WAKE_SECONDS*1000);
         if(result.evolved)settleCatalystReservation(id);
         if(result.evolved){const event=result.event;raisingLifecycleMessage={kind:event.target<8?'REBORN':'EVOLVED',instanceId:id,target:event.target,
-            // Display only: the persistent stats before and after the form write.
-            oldSpecies:event.oldSpecies,stats:evolutionStatChange(profileBefore,result.profile)};
+            // Display only: the persistent stats before and after the form write, plus open-evolution causal summary.
+            oldSpecies:event.oldSpecies,stats:evolutionStatChange(profileBefore,result.profile),
+            openEvolution:event.openEvolution??null,
+            causalLine:event.openEvolution?formatEvolutionCausalLine(event.openEvolution):null};
           if(event.productRouteId){const productEvolutionBranches=[...new Set([...(raising.nativeHome?.productEvolutionBranches??[]),event.productRouteId])];
             raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,productEvolutionBranches})});}
           else if(event.target>=8&&!event.inherited){const branches=[...new Set([...(raising.nativeHome?.evolutionBranches??[]),(event.oldSpecies-8)*5+growthBranchHistoryIndex(event.oldSpecies,event.index)])];

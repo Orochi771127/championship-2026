@@ -10,6 +10,7 @@ import {normalizeNativeIndividualProfile} from './nativeIndividualProfile.js';
 import {selectNativeHatchSpecies} from './nativeIndividualEvolution.js';
 import {evaluateNativeEvolution,evaluateNativeRebirth} from './nativeRaisingLifecycle.js';
 import {evolutionLevelShort,EVOLUTION_LEVEL_RECHECK_MINUTES} from '../contracts/productSyncLevel.js';
+import {selectOpenEvolutionTarget} from './productOpenEvolution.js';
 
 export {PRODUCT_FINAL_NATURAL_GENERATION,PRODUCT_GROWTH_RULES};
 export const PRODUCT_NO_LIFE_LIMIT = 0xffffffff;
@@ -48,16 +49,61 @@ function growthTableWithBonus(bonus) {
 // and is asked again an hour later, so waiting for a level never costs the partner its life. Every other native
 // result -- no route, a full cage, a licence too low, a rebirth -- passes through untouched. Without
 // `syncLevel` (the tutorial, the friends playtest) the gate is off.
-export function evaluateProductEvolution(profile, {capacityBonusG = 0, syncLevel = null, ...context}, rng) {
-  const result = evaluateNativeEvolution(profile, {...context, table: growthTableWithBonus(capacityBonusG)}, rng);
-  if (syncLevel === null || result.code !== 1) return result;
+function targetFitsRanch(table, rank, roster, currentSpecies, targetSpecies) {
+  const rankRow = table.ranks[Math.max(0, Math.min(table.ranks.length - 1, rank | 0))];
+  const targetRow = table.species[targetSpecies];
+  if (!rankRow || !targetRow) return false;
+  if (productGeneration(targetSpecies) > rankRow.generation) return false;
+  if (!Array.isArray(roster) || !roster.length) return true;
+  const currentRow = table.species[currentSpecies];
+  const currentG = currentRow?.capacity ?? 0;
+  const totalG = roster.reduce((sum, idx) => sum + (table.species[idx]?.capacity ?? 0), 0);
+  return totalG - currentG + targetRow.capacity <= rankRow.capacity;
+}
+
+export function evaluateProductEvolution(profile, {capacityBonusG = 0, syncLevel = null, openEvolution = null, ...context}, rng) {
+  const table = growthTableWithBonus(capacityBonusG);
+  const result = evaluateNativeEvolution(profile, {...context, table}, rng);
   const waiting = normalizeNativeIndividualProfile(profile);
-  const short = evolutionLevelShort(productGeneration(waiting.fields['000']), syncLevel);
-  if (!short) return result;
+  const currentSpecies = waiting.fields['000'];
+  const currentGen = productGeneration(currentSpecies);
   const lifetime = context.lifetime === true;
+  const openEnabled = openEvolution?.enabled === true && Number.isInteger(currentGen) && currentGen >= 1 && currentGen < PRODUCT_FINAL_NATURAL_GENERATION;
+
+  // Open Blind-Box Evolution v1 (2026-11-21): if the partner reached its natural age window
+  // (lifetime) without matching a narrow native corridor, open evolution still grants a
+  // 3-axis blind-box evolution (subject to syncLevel, rank and ranch capacity).
+  let effectiveResult = result;
+  let openPick = null;
+  if (openEnabled && (result.code === 1 || (lifetime && (result.code === 0 || result.code === 2) && !result.capacityBlocked))) {
+    const registered = typeof openEvolution.registeredSpecies === 'function'
+      ? openEvolution.registeredSpecies()
+      : openEvolution.registeredSpecies ?? [];
+    const candidate = selectOpenEvolutionTarget(waiting, {
+      registeredSpecies: registered,
+      nativeTarget: result.code === 1 ? result.target : null,
+      rng
+    });
+    if (candidate && targetFitsRanch(table, context.rank ?? 0, context.roster, currentSpecies, candidate.target)) {
+      openPick = candidate;
+      effectiveResult = {
+        ...result,
+        code: 1,
+        target: candidate.target,
+        openEvolution: candidate
+      };
+    } else if (result.code === 1 && candidate) {
+      // If the blind-box target exceeds current capacity/rank, keep the native target safely.
+      effectiveResult = result;
+    }
+  }
+
+  if (syncLevel === null || effectiveResult.code !== 1) return effectiveResult;
+  const short = evolutionLevelShort(currentGen, syncLevel);
+  if (!short) return effectiveResult;
   return {profile: waiting, code: lifetime ? 2 : 0, target: null, levelBlocked: short,
-    actor: {...result.actor, '1e8': 0, '1f0': 0, '1f4': 0,
-      '428': lifetime ? (waiting.fields['18c'] + EVOLUTION_LEVEL_RECHECK_MINUTES) >>> 0 : context.lifeThreshold ?? result.actor['428']}};
+    actor: {...effectiveResult.actor, '1e8': 0, '1f0': 0, '1f4': 0,
+      '428': lifetime ? (waiting.fields['18c'] + EVOLUTION_LEVEL_RECHECK_MINUTES) >>> 0 : context.lifeThreshold ?? effectiveResult.actor['428']}};
 }
 
 /**

@@ -17,6 +17,7 @@ import { requestArcadeFx } from "./ui/arcadeFx.js";
 import {battleStyleOf,isSpecialSkillId,SPECIAL_SKILL_GLYPHS} from '../contracts/productBattleStyle.js';
 import {battleStyleText,specialSkillEffect} from '../text/battleStyleText.js';
 import {partnerTendencyText} from '../contracts/productPartnerTendency.js';
+import {openEvolutionText} from '../text/openEvolutionText.js';
 import {battleGlyph,STYLE_GLYPHS} from './battleGlyphs.js';
 import { syncVitalPercent, syncBreakthroughsAt } from "../contracts/productSyncLevel.js";
 // The Digimon roster -- the original's ui/digimon_list_* scenes.
@@ -347,9 +348,43 @@ function appendPartnerIdentityCard(detail, entry) {
   detail.append(wrap);
 }
 
+function appendOpenEvolutionAura(wrap, aura) {
+  if (!aura) return;
+  const card = element("div", "cm-evolution-aura");
+  card.dataset.careTier = aura.careTier;
+  card.dataset.hasUnknown = String(Boolean(aura.hasUnknown));
+  const head = element("div", "cm-evolution-aura__head");
+  head.append(element("span", "cm-evolution-aura__title", openEvolutionText("aura.title"), false));
+  const signalText = aura.hasUnknown
+    ? openEvolutionText("aura.unknownBadge", { count: aura.unknownCount })
+    : openEvolutionText("aura.allKnown");
+  head.append(element("span", "cm-evolution-aura__signal", signalText, false));
+  const raceLabel = aura.dominantRace
+    ? openEvolutionText("aura.raceValue", { race: taxonomyText(`race.${aura.dominantRace}`), points: aura.dominantRacePoints })
+    : openEvolutionText("aura.raceNone");
+  const factionLabel = aura.dominantFaction
+    ? openEvolutionText("aura.factionValue", { faction: taxonomyText(`faction.${aura.dominantFaction}`) })
+    : openEvolutionText("aura.factionNone");
+  const careLabel = openEvolutionText(`care.${aura.careTier}`);
+  const summary = element("p", "cm-evolution-aura__summary", openEvolutionText("aura.summary", {
+    race: raceLabel,
+    faction: factionLabel,
+    care: careLabel
+  }), false);
+  const poolLine = element("p", "cm-evolution-aura__pool", openEvolutionText("aura.pool", { count: aura.poolSize }), false);
+  card.append(head, summary, poolLine);
+  if (aura.knownPreviewNames?.length) {
+    card.append(element("p", "cm-evolution-aura__echoes", openEvolutionText("aura.knownEchoes", {
+      names: formatList(aura.knownPreviewNames)
+    }), false));
+  }
+  card.append(element("p", "cm-evolution-aura__tip", openEvolutionText("aura.tip"), false));
+  wrap.append(card);
+}
+
 function appendEvolutionCompass(detail, entry, { onToggleEvolutionPin = null } = {}) {
   const compass = entry?.evolutionCompass;
-  if (!compass?.branches?.length) return;
+  if (!compass?.branches?.length && !compass?.openAura) return;
   const wrap = element("div", "cm-evolution-compass");
   wrap.dataset.species = String(compass.speciesIndex);
   const head = element("div", "cm-evolution-compass__head");
@@ -358,6 +393,7 @@ function appendEvolutionCompass(detail, entry, { onToggleEvolutionPin = null } =
     head.append(element("span", "cm-evolution-compass__gate", uiText("EVOLUTION_COMPASS_SYNC_GATE", compass.syncGate), false));
   }
   wrap.append(head);
+  appendOpenEvolutionAura(wrap, compass.openAura);
   for (let i = 0; i < compass.branches.length; i++) {
     const branch = compass.branches[i];
     const row = element("div", "cm-evolution-compass__branch");
