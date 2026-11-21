@@ -36,8 +36,8 @@ for(const eid of ['m104_tunomon','m006_punimon','m203_elecmon']){
  }
 }
 const approved=catalog.characters.filter(c=>contact.getPublicReviewedRaisingContactArt(c));assert.equal(approved.length,3);
-// 226 published characters plus the eight playable original characters' entities (Owner 2026-11-03).
-assert.equal(catalog.characters.length,234);assertions+=2;
+// 226 published characters plus the nine playable original characters' entities (Owner 2026-11-03 & 2026-11-20 B215).
+assert.equal(catalog.characters.length,235);assertions+=2;
 // Exercise actual public loader validation and actual new wrapper, mocking only
 // GPU bundle/core dependencies. No hash validation or helper is replaced.
 let source=read('src/championship/presentation/publicCharacterRoster.js').replace(/^import .*;\n/gm,'').replace(/^export \{.*;\n/gm,'');

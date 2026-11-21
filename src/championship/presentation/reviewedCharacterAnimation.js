@@ -31,7 +31,7 @@ const semanticVariants=Object.freeze({
   weak_walk:['weak_walk','weak_move','weak_step','weak_glide','weak_locomotion','weakened_locomotion','weak_short_shuffle','weakened_idle_walk'],
   melee:['melee','melee_body_lunge','melee_horn_ram','tackle','melee_body_shove','melee_claw_swipe'],
   ranged:['ranged','ranged_release','shoot_pollen','shoot_gem_palm','shoot_mouth_release','shared_body_forward_release'],
-  eat:['eat','eat_mime','eat_context'], down:['down','down_ko'],
+  eat:['eat','eat_mime','eat_context'], down:['down','down_ko','faint'],
   bound_fast_move:['bound_fast_move','bound_run','bound_fast_shuffle','bound_spring_dash','bound_fast_step','bound_short_shuffle','bound_move'],
   bound_weak_walk:['bound_weak_walk','bound_weak_shuffle','bound_weak_move','weak_bound_move','weak_bound_walk','weak_bound_short_shuffle'],
   bound_walk:['bound_walk','bound_move','bound_shuffle','bound_short_shuffle'],

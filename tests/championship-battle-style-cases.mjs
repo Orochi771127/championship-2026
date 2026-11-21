@@ -17,7 +17,7 @@ import {createBattleFieldView} from '../src/championship/app/vs5Screens.js';
 const root = new URL('../', import.meta.url);
 const source = p => readFileSync(new URL(p, root), 'utf8');
 
-test('styles over every species x personality pair: 191 attack, 266 skill, 179 support', () => {
+test('styles over every species x personality pair: 194 attack, 266 skill, 179 support', () => {
   const tally = {ATTACK: 0, SKILL: 0, SUPPORT: 0};
   for (let s = 0; s < 260; s++) {
     let species; try { species = nativeHuntSpeciesByIndex(s); } catch { continue; }
@@ -26,7 +26,7 @@ test('styles over every species x personality pair: 191 attack, 266 skill, 179 s
       if (style) tally[style]++;
     }
   }
-  assert.deepEqual(tally, {ATTACK: 191, SKILL: 266, SUPPORT: 179}, 'the two egg species (six pairs, generation 0) have no style');
+  assert.deepEqual(tally, {ATTACK: 194, SKILL: 266, SUPPORT: 179}, 'the two egg species (six pairs, generation 0) have no style');
 });
 
 test('the rule: heal or revival makes a supporter; otherwise two SP moves make a skill user', () => {

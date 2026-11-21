@@ -13,8 +13,8 @@ import {projectDatabaseEvolutionRoutes} from '../src/championship/database/datab
 import {DATABASE_EVOLUTION_CONDITION_DESCRIPTORS as descriptors,
   projectDatabaseEvolutionConditions as project} from '../src/championship/database/databaseEvolutionConditions.js';
 
-// Native species and the playable originals (Owner 2026-11-03), whose branches keep native history slots.
-const registeredSpecies=[...Array.from({length:216},(_,i)=>i+8),231,232,234,235,236,237,239,240];
+// Native species and the playable originals (Owner 2026-11-03 & 2026-11-20 B215), whose branches keep native history slots.
+const registeredSpecies=[...Array.from({length:216},(_,i)=>i+8),231,232,234,235,236,237,238,239,240];
 const options=(source,branch)=>({sourceRegistered:true,registeredSpecies,evolutionBranches:[(source-8)*5+growthBranchHistoryIndex(source,branch)]});
 const before=JSON.stringify(lifecycle);
 deepFreeze(lifecycle);
@@ -35,7 +35,7 @@ test('all 244 growth branches (235 native-era plus nine to and from the playable
   let count=0,rows=0;
   const active=new Set(),kinds={ORDINARY:0,LIFETIME_ONLY:0};
   assert.equal(lifecycle.rules.length,233);
-  assert.equal(lifecycle.rules.filter(group=>group.length).length,67);
+  assert.equal(lifecycle.rules.filter(group=>group.length).length,68);
   assert.equal(Math.max(...lifecycle.rules.map(group=>group.length)),5);
   lifecycle.rules.forEach((group,i)=>group.forEach((rule,branch)=>{
     const source=i+8,context=deepFreeze(options(source,branch)),snapshot=JSON.stringify(context);
@@ -54,8 +54,8 @@ test('all 244 growth branches (235 native-era plus nine to and from the playable
     assert.deepEqual(project(source,branch,context),result);
     assert.equal(JSON.stringify(context),snapshot);
   }));
-  assert.equal(count,260);assert.equal(rows,210);assert.equal(active.size,15);
-  assert.deepEqual(kinds,{ORDINARY:181,LIFETIME_ONLY:79});
+  assert.equal(count,262);assert.equal(rows,211);assert.equal(active.size,15);
+  assert.deepEqual(kinds,{ORDINARY:182,LIFETIME_ONLY:80});
   assert.equal(JSON.stringify(lifecycle),before);
 });
 
@@ -111,7 +111,7 @@ test('zero disables rows; all-zero lifetime routes retain their lifetime-only co
       allZero++;const result=project(i+8,branch,options(i+8,branch));
       assert.deepEqual(result.conditions,[]);assert.equal(result.lifetimeOnly,true);
     }
-  }));assert.equal(allZero,67);
+  }));assert.equal(allZero,68);
 });
 
 test('real lifetime care uses a lower bound; synthetic ordinary care uses an upper bound',()=>{
@@ -159,7 +159,7 @@ test('output contains no species/profile/name/raw rule fields and never reports 
 });
 
 test('pure import and all 244 projections do not invoke resolver/normalizer/constructor, RNG, timers, storage or network',()=>{
-  assert.deepEqual(isolated('purity'),{count:260,importAndProjectionSideEffects:0,forbiddenProjectionCalls:0,functionTrapsVerified:5,globalTrapsVerified:8});
+  assert.deepEqual(isolated('purity'),{count:262,importAndProjectionSideEffects:0,forbiddenProjectionCalls:0,functionTrapsVerified:5,globalTrapsVerified:8});
   const text=readFileSync(new URL('../src/championship/database/databaseEvolutionConditions.js',import.meta.url),'utf8');
   for(const forbidden of [/evaluateNativeEvolution\s*\(/,/evaluateNativeRebirth\s*\(/,/Math\.random\s*\(/,/localStorage/,/setTimeout\s*\(/,/\.next\s*\(/])assert.doesNotMatch(text,forbidden);
 });

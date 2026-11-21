@@ -1,25 +1,25 @@
 {
  "generatedBy": "scripts/calibrate-218-visual-anchors.mjs",
  "summary": {
-  "species": 226,
-  "withMotion": 226,
-  "withHead": 226,
+  "species": 227,
+  "withMotion": 227,
+  "withHead": 227,
   "motionErrors": [],
   "art": {
    "atlas": 33,
-   "reviewed": 146,
+   "reviewed": 147,
    "reviewed-right": 47
   },
   "maxCellAspect": 2.1,
-  "multiCellPages": 226,
-  "muzzleInUpperBody": 226,
+  "multiCellPages": 227,
+  "muzzleInUpperBody": 227,
   "stances": {
-   "grounded": 210,
+   "grounded": 211,
    "hovering": 3,
    "tail-below": 13
   },
-  "headsOnBody": 223,
-  "headsMostlyDrawn": 226
+  "headsOnBody": 224,
+  "headsMostlyDrawn": 227
  },
  "rows": [
   {
@@ -20627,6 +20627,98 @@
      389
     ],
     "opaqueInHead": 0.79,
+    "focusOnBody": true
+   }
+  },
+  {
+   "speciesIndex": 238,
+   "speciesId": "species-238",
+   "motion": {
+    "entityId": "oc_thunder_pup",
+    "art": "reviewed",
+    "density": 2.380952380952381,
+    "bounds": {
+     "left": -32,
+     "top": -54,
+     "right": 32,
+     "bottom": 10
+    },
+    "actions": {
+     "stand": {
+      "sequence": 0,
+      "frameCount": 4,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "cellAspect": 1,
+      "pageWidth": 1024,
+      "pageHeight": 704,
+      "cellsPerPage": 176,
+      "durationMs": 717
+     },
+     "walk": {
+      "sequence": 2,
+      "frameCount": 3,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "cellAspect": 1,
+      "pageWidth": 1024,
+      "pageHeight": 704,
+      "cellsPerPage": 176,
+      "durationMs": 333
+     },
+     "attack": {
+      "sequence": 7,
+      "frameCount": 3,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "cellAspect": 1,
+      "pageWidth": 1024,
+      "pageHeight": 704,
+      "cellsPerPage": 176,
+      "durationMs": 383
+     },
+     "cheer": {
+      "sequence": 33,
+      "frameCount": 4,
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "cellAspect": 1,
+      "pageWidth": 1024,
+      "pageHeight": 704,
+      "cellsPerPage": 176,
+      "durationMs": 700
+     }
+    },
+    "footAnchor": {
+     "x": 0,
+     "y": 0,
+     "stance": "grounded",
+     "lowestPixel": 0,
+     "lowestPixelX": -3.1,
+     "visualHeight": 54
+    },
+    "muzzleSocket": {
+     "x": -15,
+     "y": -30,
+     "heightRatio": 0.79,
+     "releaseIndex": 2,
+     "releaseMs": 233
+    }
+   },
+   "cutinHeadFrame": {
+    "src": "assets/production/database-closeout-20261019/species-238.display.3a1cf1e01ee71252.webp",
+    "sha256": "3a1cf1e01ee712528d99871a5a0650d0710c0097e7b51b5e0b57f67e070a38bd",
+    "width": 715,
+    "height": 768,
+    "headFocusX": 0.5804,
+    "headFocusY": 0.474,
+    "headSafeScale": 0.5208,
+    "face": [
+     415,
+     364,
+     400
+    ],
+    "opaqueInHead": 0.941,
     "focusOnBody": true
    }
   },

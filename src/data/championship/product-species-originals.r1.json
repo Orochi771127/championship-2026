@@ -988,7 +988,7 @@
       "familyBits": 1,
       "huntClassByte": 2,
       "generationScaledByte": 8,
-      "behaviorDonor": null,
+      "behaviorDonor": 25,
       "lifecycle": {
         "sleepMin": 30,
         "sleepMax": 60,
@@ -1006,7 +1006,7 @@
           "statusCode": 0,
           "targetMode": 1,
           "battleMoveRecord": 615,
-          "donorMoveRecord": null,
+          "donorMoveRecord": 41,
           "nameByLocale": {
             "zh-Hant": "靜電撲咬",
             "en": "Static Pounce",
@@ -1024,7 +1024,7 @@
           "statusCode": 0,
           "targetMode": 1,
           "battleMoveRecord": 616,
-          "donorMoveRecord": null,
+          "donorMoveRecord": 210,
           "nameByLocale": {
             "zh-Hant": "劈啪電團",
             "en": "Crackle Orb",
@@ -1068,8 +1068,8 @@
           ]
         }
       ],
-      "runtimeReady": false,
-      "evolutionReady": false
+      "runtimeReady": true,
+      "evolutionReady": true
     },
     {
       "speciesIndex": 239,

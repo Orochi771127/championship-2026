@@ -36,6 +36,7 @@ export function databaseDisplayRows(book, stageIndex = null) {
   return displayCatalog.entries.filter(entry=>entry.contentStatus!=='RETIRED' &&
     (stageIndex===null || (stageIndex==='ART'?entry.kind==='ILLUSTRATION':entry.numberingStageIndex===stageIndex))).map(entry=>({
       ...(regular.get(entry.speciesIndex) ?? {kind:entry.numberingStageIndex===0?'EGG':'REGULAR',state:entry.numberingStageIndex===0?'NOT_TRACKED':'UNDISCOVERED',instanceCount:0}),
-      ...entry
+      ...entry,
+      ...(entry.kind==='ILLUSTRATION'?{viewable:Boolean(book.fullView)}:{})
     }));
 }

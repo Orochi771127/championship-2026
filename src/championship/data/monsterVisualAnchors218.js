@@ -14,7 +14,7 @@
 //   muzzle  [x, y, heightRatio, releaseIndex, releaseMs]
 //   head    [headFocusX, headFocusY, headSafeScale, opaqueInHead]
 export const MONSTER_VISUAL_ANCHORS_SCHEMA = 1;
-export const MONSTER_VISUAL_ANCHORS_SUMMARY = Object.freeze({"species":226,"withMotion":226,"withHead":226,"motionErrors":[],"art":{"atlas":33,"reviewed":146,"reviewed-right":47},"maxCellAspect":2.1,"multiCellPages":226,"muzzleInUpperBody":226,"stances":{"grounded":210,"hovering":3,"tail-below":13},"headsOnBody":223,"headsMostlyDrawn":226});
+export const MONSTER_VISUAL_ANCHORS_SUMMARY = Object.freeze({"species":227,"withMotion":227,"withHead":227,"motionErrors":[],"art":{"atlas":33,"reviewed":147,"reviewed-right":47},"maxCellAspect":2.1,"multiCellPages":227,"muzzleInUpperBody":227,"stances":{"grounded":211,"hovering":3,"tail-below":13},"headsOnBody":224,"headsMostlyDrawn":227});
 const ACTION_IDS = Object.freeze(["stand","walk","attack","cheer"]);
 const ROWS = {
   "species-008": [["m001_zurumon",4,[-22,-56,27,1],[[2,41,37,10.1],[2,41,36,10.4],[2,33,35,7.3],[2,42,32,7.4]],["grounded",0,37],[-20,-25,0.71,1,250],"atlas"],[0.4942,0.6412,0.5718,0.743]],
@@ -241,6 +241,7 @@ const ROWS = {
   "species-235": [["oc_aurora_shark",2.6666666666666665,[-77,-99,81,6],[[4,144,75,4.3],[4,158,85,69],[4,143,101,64.1],[2,144,93,69.2]],["grounded",0,74],[55,-48,0.67,3,500],"reviewed-right"],[0.2214,0.5785,0.3359,0.768]],
   "species-236": [["oc_celestial_mantis",2.9895366218236172,[-72,-137,97,2],[[4,136,111,74],[4,137,97,84.1],[4,169,137,48.3],[2,141,113,70.1]],["grounded",1,109],[-53,-85,0.82,2,333],"reviewed"],[0.293,0.4844,0.6029,0.422]],
   "species-237": [["oc_star_core_bean",6.7025251763601945,[-119,-134,93,2],[[4,158,130,48.6],[4,179,130,42.9],[4,212,127,37.1],[3,165,131,46.2]],["grounded",-1,130],[-75,-109,0.88,2,267],"reviewed"],[0.3633,0.3616,0.5065,0.79]],
+  "species-238": [["oc_thunder_pup",2.380952380952381,[-32,-54,32,10],[[4,64,64,176],[3,64,64,176],[3,64,64,176],[4,64,64,176]],["grounded",0,54],[-15,-30,0.79,2,233],"reviewed"],[0.5804,0.474,0.5208,0.941]],
   "species-239": [["oc_thunder_catwolf",7.073386383731211,[-120,-137,82,2],[[3,165,137,46],[2,172,129,46.8],[4,197,125,42.2],[3,175,133,44.7]],["grounded",-2,135],[-96,-90,0.72,2,267],"reviewed"],[0.2852,0.4846,0.2904,0.848]],
   "species-240": [["oc_thunder_warwolf",3.430531732418525,[-81,-139,87,4],[[4,146,140,65.2],[4,159,123,68.1],[4,158,140,60.2],[2,140,140,68]],["grounded",0,139],[-52,-75,0.55,2,333],"reviewed"],[0.1927,0.3267,0.3294,0.655]]
 };

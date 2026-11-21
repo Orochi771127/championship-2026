@@ -884,7 +884,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
     if (!alive) return;
     const book = nextFrame?.database;
     if (!book) { clearConditionState(); paintedDetail = null; return; }
-    const selected = selectedEgg ?? (book.selected ? {...book.selected, ...getDatabaseDisplayEntry(book.selected.speciesIndex)} : null);
+    const selected = selectedEgg ?? (book.selected ? {...getDatabaseDisplayEntry(book.selected.speciesIndex), ...book.selected} : null);
     census.textContent = uiText("已登錄 {count} / {total}", { count: book.registeredCount, total: book.slotCount });
     body.dataset.mode = selected ? "detail" : "list";
     // The grid stays behind the detail sheet at every width.
@@ -932,7 +932,7 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
         const visibleName = row.kind === 'EGG' ? eggs.get(row.speciesIndex).formalName : (row.viewable || row.state === 'REGISTERED') ? speciesName(row.speciesIndex, row.displayName) : uiText('Undiscovered');
         item.setAttribute("aria-label", `${row.displayCode} · ${row.numberingStageIndex !== null ? generationName(row.numberingStageIndex) : databaseIllustrationText('label')} · ${visibleName}`);
         const name = element("div", "cm-vs2-shop__name");
-        name.append(element("strong", "", (!row.viewable && row.state === 'UNDISCOVERED') ? '????' : visibleName));
+        name.append(element("strong", "", (row.kind !== 'EGG' && !row.viewable && row.state !== 'REGISTERED') ? '????' : visibleName));
         name.append(element("span", "cm-vs2-shop__meta", row.displayCode));
         // Owner 2026-11-04: a partner not yet raised or caught shows as a black silhouette with "?".
         const known = row.viewable || row.state === 'REGISTERED';
@@ -1004,8 +1004,8 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
       detail.append(element("p", "cm-vs2-evidence", `${selected.speciesId} · ${book.unlockEvidence}`));
     }
     if (!selected.viewable && selected.state !== "REGISTERED") {
-      // Its body reads only as a black silhouette (Owner 2026-11-04).
-      const shadowHero = selected.kind !== 'ILLUSTRATION' ? databaseHeroPortrait(selected.speciesIndex) : null;
+      // Its body reads only as a black silhouette (Owner 2026-11-04; Owner 2026-11-20 方案 A: planned originals match).
+      const shadowHero = databaseHeroPortrait(selected.speciesIndex);
       if (shadowHero) {
         // Its own classes: the registered portrait stage (.cm-dex-hero) stays absent, as the masking contracts expect.
         const holder = element('div','cm-dex-shadow');
@@ -1120,8 +1120,9 @@ export function createDatabaseView({ root, source, isWideLayout = () => isDeskto
           const moveCard = element('div', 'cm-dex-move-card');
           const header = element('div', 'cm-dex-move-card__header');
           const nameSpan = element('span', 'cm-dex-move-card__name', m.name);
-          // UNIFIED_MOVES_20261118: the move's own icon before its name
-          const icon = typeof moveIcon === 'function' ? moveIcon(m.recordIndex, 'cm-move-icon cm-dex-move-card__icon') : null;
+          // UNIFIED_MOVES_20261118: the move's own icon before its name. Pass own-<record> so a
+          // species' own move record (e.g. planned 623..636) is never hijacked by Data Arena 623+.
+          const icon = !illustration && typeof moveIcon === 'function' ? moveIcon(`own-${m.recordIndex}`, 'cm-move-icon cm-dex-move-card__icon') : null;
           if (icon) header.append(icon);
           // BATTLE_STYLE_V1 (2026-11-16): the move's class — 攻擊 (no SP) or 技能 (SP) — drawn as a glyph by vs2Styles.css.
           const typeSpan = element('span', 'cm-dex-move-card__type', m.kindName);

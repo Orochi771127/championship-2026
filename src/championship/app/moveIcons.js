@@ -10,7 +10,7 @@ export const MOVE_ICON_BASE = 'assets/production/ui/move-icons-r1/';
 
 /** The icon key of a move id: a record index, an `own-<record>` arena id, or an arena move id. */
 export function moveIconKey(id) {
-  if (typeof id === 'string' && id.startsWith('own-')) return Number(id.slice(4));
+  if (typeof id === 'string' && /^own-\d+$/.test(id)) return Number(id.slice(4));
   // a learned arena move's auto-battle record (623+) shows that arena move's icon
   const arena = Number.isSafeInteger(id) ? arenaMoveIdOfRecord(id) : null;
   if (arena) return arena;

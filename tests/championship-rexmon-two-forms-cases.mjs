@@ -58,7 +58,7 @@ test('the form link joins exactly the two Rexmon forms at one stage and rejects 
 });
 
 test('both forms are browsable ultimate art only: no slot, registration, extension, stats, story or evolution',()=>{
-  assert.equal(listDatabaseSlots().length,226,'native, alternate forms and the eight playable originals');
+  assert.equal(listDatabaseSlots().length,227,'native, alternate forms and the nine playable originals');
   const book=projectDatabase();
   assert.deepEqual(databaseDisplayRows(book,6).filter(e=>e.kind==='ILLUSTRATION').map(e=>e.speciesIndex),[242,243,244]);
   for(const id of ids){
@@ -74,15 +74,24 @@ test('both forms are browsable ultimate art only: no slot, registration, extensi
   }
 });
 
-test('the Dex detail loads each selected main image with its silhouette and head, and no playable controls',()=>{
+test('the Dex detail masks both forms in normal view and loads each selected main image with its silhouette and head under fullView, with no hijacked move icons',()=>{
   try{for(const locale of ['zh-Hant','en','ja','th','vi'])for(const [id,,name] of FORMS){
-    const f=makeView({locale,selectedSpeciesIndex:id,registeredSpecies:[],collection:[]});
+    const masked=makeView({locale,selectedSpeciesIndex:id,registeredSpecies:[],collection:[]});
+    try{
+      assert.equal(masked.root.querySelector('.cm-dex-hero'),null,'masked in normal player view');
+      assert.ok(masked.root.querySelector('.cm-dex-shadow__image'));
+      assert.equal(masked.root.querySelector('.cm-dex-data'),null);
+      masked.assertUnchanged();
+    }finally{masked.dispose();}
+    const f=makeView({locale,fullView:true,selectedSpeciesIndex:id,registeredSpecies:[],collection:[]});
     try{
       const hero=f.root.querySelector('.cm-dex-hero__image'),art=databaseHeroPortrait(id);
       assert.equal(hero.src,art.src);hero.naturalWidth=art.width;hero.naturalHeight=art.height;hero.onload();
       assert.equal(f.root.querySelector('.cm-dex-hero').dataset.art,'ready');
       assert.ok(f.root.querySelector('.cm-vs2-database__detail-title').textContent.includes(name));
-      assert.ok(f.root.querySelector('.cm-dex-data'),'planned data shown (Owner 2026-11-03)');assert.equal(Boolean(f.root.querySelector('[data-showcase]')),false,'no previews without motion art');
+      assert.ok(f.root.querySelector('.cm-dex-data'),'planned data shown under fullView');
+      assert.equal(f.root.querySelector('.cm-dex-move-card__icon'),null,'planned moves 630..636 never render hijacked Data Arena icons');
+      assert.equal(Boolean(f.root.querySelector('[data-showcase]')),false,'no previews without motion art');
       for(const selector of ['.cm-dex-conditions__toggle','input','.cm-dex-profile__text','.cm-dex-routes__target'])assert.equal(f.root.querySelector(selector),null);
       assert.ok(f.root.querySelector('.cm-dex-planned'),'AW45 awakens into both forms');
       f.assertUnchanged();

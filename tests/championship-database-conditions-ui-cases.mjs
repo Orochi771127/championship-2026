@@ -19,8 +19,8 @@ import {ControlledEvent,simulateButtonKeyActivation,serializeControlledNode} fro
 // pixels, native keyboard default actions, screen reader or visual layout is
 // exercised. Only unrelated screen dependencies and art delivery are stubbed.
 import {makeView} from './helpers/dex-conditions-ui-fixture.mjs';
-// Native species plus the playable originals (Owner 2026-11-03); offsets are history slots, native ones unchanged.
-const allRegistered = [...Array.from({length:216},(_,i)=>i+8),231,232,234,235,236,237,239,240];
+// Native species plus the playable originals (Owner 2026-11-03 & 2026-11-20 B215); offsets are history slots, native ones unchanged.
+const allRegistered = [...Array.from({length:216},(_,i)=>i+8),231,232,234,235,236,237,238,239,240];
 const allOffsets=lifecycle.rules.flatMap((group,i)=>group.map((_,branch)=>i*5+growthBranchHistoryIndex(i+8,branch)));
 const plain = value=>JSON.parse(JSON.stringify(value));
 const frozen=value=>{if(value&&typeof value==='object'){assert.ok(Object.isFrozen(value));for(const child of Object.values(value))frozen(child);}};
@@ -45,7 +45,7 @@ test('real projectDatabase joins all 244 growth branches; original route and boo
     const source=i+8;const options=deepFreeze({registeredSpecies:[...allRegistered],evolutionBranches:[...allOffsets],selectedSpeciesIndex:source});
     const result=projectDatabase(options),originalRoutes=projectDatabaseEvolutionRoutes(source,{sourceRegistered:true,registeredSpecies:allRegistered,evolutionBranches:allOffsets});frozen(result);
     assert.deepEqual(Object.keys(result).sort(),['slotCount','eggCount','regularCount','registeredCount','unlockEvidence','entries','selected'].sort());
-    assert.equal(result.slotCount,226);assert.equal(result.eggCount,0);assert.equal(result.regularCount,226);assert.equal(result.registeredCount,224);assert.equal(result.entries.length,226);
+    assert.equal(result.slotCount,227);assert.equal(result.eggCount,0);assert.equal(result.regularCount,227);assert.equal(result.registeredCount,225);assert.equal(result.entries.length,227);
     assert.ok(result.entries.filter(e=>[229,230].includes(e.speciesIndex)).every(e=>e.state==='UNDISCOVERED'));
     assert.equal(result.selected.speciesIndex,source);assert.equal(result.selected.state,'REGISTERED');assert.deepEqual(plain(result.selected.instances),[]);
     assert.deepEqual(Object.keys(result.selected).sort(),['bookOrdinal','speciesIndex','speciesId','displayName','kind','state','source','instanceCount','identityEvidence','instances','evolutionRoutes','burst'].sort());
@@ -62,7 +62,7 @@ test('real projectDatabase joins all 244 growth branches; original route and boo
       frozen(conditions);count++;
     });
   }
-  assert.equal(count,260);assert.equal(JSON.stringify(lifecycle),snapshot);
+  assert.equal(count,262);assert.equal(JSON.stringify(lifecycle),snapshot);
 });
 
 test('exact source8/history0/registered target20 is required; unknown, target-only and contradictory histories emit no condition DOM or aria',()=>{

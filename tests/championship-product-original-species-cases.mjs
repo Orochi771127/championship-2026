@@ -16,7 +16,7 @@ const catalog=read('src/data/championship/product-species-originals.r1.json');
 const proposal=read('docs/planning/roster14-stats-skills-evolution-20261029/PROPOSAL.v1.json');
 const lifecycle=read('src/data/championship/catalogs/raising-lifecycle.r1.json');
 const ids=[231,232,233,234,235,236,237,238,239,240,241,242,243,244];
-const PLAYABLE=[231,232,234,235,236,237,239,240],ART_ONLY=ids.filter(id=>!PLAYABLE.includes(id));
+const PLAYABLE=[231,232,234,235,236,237,238,239,240],ART_ONLY=ids.filter(id=>!PLAYABLE.includes(id));
 // Owner 2026-11-03 dropped the 豆豆 nickname from GR40, its first move included.
 const RENAMED_MOVES={'豆豆彈跳':'星豆彈跳'};
 const ATTR=['無','疫苗','病毒','資料','自由'],FAM=['無','獸','機械','昆蟲植物','鳥','龍','水','聖','暗黑'];
@@ -116,7 +116,7 @@ test('the catalog refuses identities, numbers or branches the engine cannot carr
   assert.throws(bad(c=>{c.entries[0].evolution[0].thresholds.pop();}),/PRODUCT_ORIGINAL_EVOLUTION/);
   assert.throws(bad(c=>{c.nativeInserts[0].position=9;}),/PRODUCT_ORIGINAL_INSERT/);
   assert.throws(bad(c=>{c.nativeInserts.push({...c.nativeInserts[6],position:5},{...c.nativeInserts[6],position:1,target:244});}),/PRODUCT_ORIGINAL_INSERT/);
-  const art=c=>c.entries.find(e=>e.speciesIndex===238);
+  const art=c=>c.entries.find(e=>e.speciesIndex===233);
   assert.throws(bad(c=>{art(c).evolutionReady=true;}),/PRODUCT_ORIGINAL_READINESS/);
   assert.throws(bad(c=>{art(c).runtimeReady=true;}),/PRODUCT_ORIGINAL_NOT_BOUND/,'ready needs donor-bound battle moves and five-locale names');
   assert.throws(bad(c=>{c.entries[0].moves[1].battleMoveRecord=c.entries[0].moves[0].battleMoveRecord;}),/PRODUCT_ORIGINAL_MOVE_RECORD/,'move ids are unique');

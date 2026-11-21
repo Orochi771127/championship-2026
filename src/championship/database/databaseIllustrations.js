@@ -42,9 +42,10 @@ export function getDatabaseIllustrationStory(speciesIndex, locale = getLocale())
   return entry?.profileByLocale?.[locale] ?? null;
 }
 // A playable original (Owner 2026-11-03) is a regular registrable Dex entry; only art-only identities are rows here.
-export function databaseIllustrationRow(speciesIndex){
+// Owner 2026-11-20 (方案 A): unplayable planned originals follow regular unowned silhouette masking unless fullView is enabled.
+export function databaseIllustrationRow(speciesIndex,{fullView=false}={}){
   const entry=isPlayableProductOriginal(speciesIndex)?null:getDatabaseIllustration(speciesIndex);
-  return entry?deepFreeze({...entry,kind:'ILLUSTRATION',state:'NOT_TRACKED',viewable:true,
+  return entry?deepFreeze({...entry,kind:'ILLUSTRATION',state:'NOT_TRACKED',viewable:Boolean(fullView),
     source:null,instanceCount:0,instances:[],evolutionRoutes:[]}):null;
 }
 export const DATABASE_ILLUSTRATION_COPY=deepFreeze({
