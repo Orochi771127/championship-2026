@@ -1983,6 +1983,10 @@ body[data-day-period="NIGHT"] .int-rh2-field-host::after { background-color: rgb
 
 /* P1 (2026-11-21): Ranch reversible battle tendency drill card */
 .cm-partner-tendency {
+  grid-column: 1 / -1;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
   margin: 8px 0;
   padding: 10px 12px;
   border-radius: 12px;
