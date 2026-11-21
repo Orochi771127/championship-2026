@@ -1171,7 +1171,7 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 /* Wave 3 (2026-11-21): 3-Pillar Battle Hub quick switcher */
 .cm-vs5-pillars {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
   gap: 8px;
   margin: 8px 0 10px;
 }
