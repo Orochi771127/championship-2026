@@ -994,3 +994,86 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 .da-partner__body { position: relative; flex: none; overflow: visible; }
 .da-tbtn__avatar { overflow: hidden; }
 .da-tbtn__avatar > .cm-action-portrait { width: 100%; height: 100%; }
+
+/* UNIFIED_DATA_ARENA_COMBAT_20261121: Guard, Auto/Commander/Manual toggle, Matchup/Range badges, Sudden Death & Inline VFX Preview */
+.da-hud__sd { display: inline-flex; align-items: center; justify-content: center; margin-top: 2px; padding: 2px 9px; border-radius: 999px;
+  font-size: calc(11px * var(--text-scale-hud, 1)); font-weight: 900; letter-spacing: .04em; color: #fff;
+  background: linear-gradient(90deg, #991b1b, #ef4444, #991b1b); box-shadow: 0 0 12px rgba(239, 68, 68, .75); }
+.da-hud__sd[hidden] { display: none; }
+.da-hud__hit { display: inline-flex; align-items: center; justify-content: center; margin-top: 3px; padding: 2px 8px; border-radius: 999px;
+  font-size: calc(11px * var(--text-scale-hud, 1)); font-weight: 800; color: #fde68a; background: rgba(15, 23, 42, .82);
+  border: 1px solid rgba(251, 191, 36, .45); pointer-events: none; }
+.da-hud__hit[hidden] { display: none; }
+
+.da-chip--guard, .da-chip--mode { pointer-events: auto; cursor: pointer; font-weight: 800; border: 1px solid rgba(148, 163, 184, .45);
+  background: rgba(15, 23, 42, .85); color: #e2e8f0; transition: transform .12s ease, box-shadow .16s ease, border-color .16s ease; }
+.da-chip--guard:hover, .da-chip--mode:hover { border-color: #fbbf24; }
+.da-chip--guard.is-active { background: linear-gradient(135deg, #d97706, #fbbf24); color: #0f172a; border-color: #fef08a;
+  box-shadow: 0 0 14px rgba(251, 191, 36, .85); transform: scale(1.04); }
+.da-chip--guard.is-cooling { opacity: .62; }
+.da-chip--mode[data-control-mode="AUTO"] { background: linear-gradient(135deg, #0ea5e9, #22d3ee); color: #082f49; border-color: #bae6fd; box-shadow: 0 0 10px rgba(34, 211, 238, .65); }
+.da-chip--mode[data-control-mode="COMMANDER"] { background: linear-gradient(135deg, #7c3aed, #a78bfa); color: #fff; border-color: #ddd6fe; }
+
+.da-slot { padding-top: 15px !important; padding-bottom: 4px !important; min-height: 58px; justify-content: center; gap: 1px; }
+.da-slot__key { top: 3px !important; }
+.da-slot__eff, .da-slot__range { display: block; font-size: calc(9.5px * var(--text-scale-hud, 1)); line-height: 1.05; font-weight: 800; letter-spacing: .02em; pointer-events: none; white-space: nowrap; }
+.da-slot__eff[data-eff="SUPER"] { color: #fde047; text-shadow: 0 1px 4px rgba(0, 0, 0, .9); }
+.da-slot__eff[data-eff="RESIST"] { color: #94a3b8; }
+.da-slot__eff:empty, .da-slot__range:empty { display: none; }
+.da-slot__range { color: #fca5a5; }
+.da-slot.is-out-of-range { opacity: .72; filter: saturate(.75); }
+.da-slot.is-inrange-ready { box-shadow: 0 0 0 2px rgba(250, 204, 21, .75), 0 0 14px rgba(56, 189, 248, .45); }
+
+.da-skill__preview { margin-left: auto; padding: 2px 7px; border-radius: 999px; font-size: calc(11px * var(--text-scale-hud, 1)); font-weight: 800; cursor: pointer;
+  background: rgba(14, 165, 233, .22); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, .55); }
+.da-skill__preview:hover { background: rgba(14, 165, 233, .42); color: #fff; }
+.da-vfx-preview { margin-top: 8px; padding: 10px; border-radius: 12px; background: rgba(10, 16, 30, .94);
+  border: 1px solid rgba(56, 189, 248, .45); display: flex; flex-direction: column; gap: 6px; }
+.da-vfx-preview__head { display: flex; align-items: center; gap: 8px; }
+.da-vfx-preview__title { font-size: calc(13px * var(--text-scale-hud, 1)); color: #f8fafc; margin-right: auto; }
+.da-vfx-preview__slow.is-active { background: #f59e0b; color: #0f172a; border-color: #fde68a; }
+.da-vfx-preview__canvas { width: 100%; max-width: 340px; height: auto; aspect-ratio: 340 / 160; border-radius: 8px; border: 1px solid rgba(148, 163, 184, .32);
+  align-self: center; image-rendering: pixelated; }
+.da-vfx-preview__meta { margin: 0; font-size: calc(11.5px * var(--text-scale-hud, 1)); color: #94a3b8; }
+
+/* Phase 2: Tactical Art slot (F), Stat-Stage pills, Select-screen Tactical Art & AI toggles */
+.da-chip--tactical { pointer-events: auto; cursor: pointer; font-weight: 800; border: 1px solid rgba(167, 139, 250, .55);
+  background: rgba(30, 27, 75, .86); color: #ede9fe; transition: transform .12s ease, box-shadow .16s ease; }
+.da-chip--tactical.is-ready { border-color: #c4b5fd; box-shadow: 0 0 10px rgba(167, 139, 250, .45); }
+.da-chip--tactical.is-active { background: linear-gradient(135deg, #7c3aed, #f59e0b); color: #fff; border-color: #fef08a; box-shadow: 0 0 14px rgba(196, 181, 253, .85); transform: scale(1.04); }
+.da-chip--tactical.is-cooling { opacity: .6; }
+.da-hud__stages { display: inline-flex; align-items: center; gap: 4px; margin-top: 2px; padding: 1px 7px; border-radius: 999px;
+  font-size: calc(10.5px * var(--text-scale-hud, 1)); font-weight: 900; color: #fde047; background: rgba(15, 23, 42, .82); border: 1px solid rgba(250, 204, 21, .45); width: fit-content; }
+.da-hud__stages[hidden] { display: none; }
+
+.da-tactical-bar { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-top: 4px; padding: 8px 10px; border-radius: 12px;
+  background: rgba(15, 23, 42, .08); border: 1px solid rgba(15, 23, 42, .16); box-sizing: border-box; }
+.da-tactical-bar__row { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
+.da-tactical-bar__label { font-size: calc(11.5px * var(--text-scale-hud, 1)); font-weight: 900; color: #1e293b; margin-right: 4px; }
+.da-tactical-bar__art.is-active { background: #4f46e5; color: #fff; border-color: #312e81; }
+.da-tactical-bar__toggle.is-active { background: #0284c7; color: #fff; border-color: #075985; }
+.da-tactical-bar__sys.is-active { background: #059669; color: #fff; border-color: #065f46; }
+.da-skill__arch { display: inline-flex; align-items: center; padding: 1px 5px; border-radius: 999px; font-size: calc(9.5px * var(--text-scale-hud, 1)); font-weight: 900;
+  background: rgba(16, 185, 129, .2); color: #047857; border: 1px solid rgba(16, 185, 129, .45); line-height: 1.15; white-space: nowrap; width: fit-content; }
+
+/* Phase 3: Weather HUD Pill, Replay Control Bar, Touch Guard & Tactical Buttons */
+.da-hud__weather { display: inline-flex; align-items: center; justify-content: center; margin-top: 2px; padding: 2px 9px; border-radius: 999px;
+  font-size: calc(11px * var(--text-scale-hud, 1)); font-weight: 900; color: #fff; background: rgba(15, 23, 42, .85);
+  border: 1px solid rgba(253, 224, 71, .6); }
+.da-hud__weather[data-weather="RAIN"] { border-color: rgba(96, 165, 250, .85); color: #bfdbfe; }
+.da-hud__weather[data-weather="HAIL"] { border-color: rgba(186, 230, 253, .85); color: #e0f2fe; }
+.da-hud__weather[data-weather="SAND"] { border-color: rgba(245, 158, 11, .85); color: #fde68a; }
+.da-hud__weather[hidden] { display: none; }
+
+.da-replay-bar { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 12; pointer-events: auto;
+  display: flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 999px; max-width: calc(calc(100 * var(--cm-vw, 1vw)) - 24px);
+  background: rgba(15, 23, 42, .92); border: 1px solid rgba(56, 189, 248, .55); box-shadow: 0 8px 24px rgba(0, 0, 0, .55); }
+.da-replay-bar__tag { font-size: calc(12px * var(--text-scale-hud, 1)); font-weight: 900; color: #38bdf8; white-space: nowrap; }
+.da-replay-bar__spd.is-active { background: #0ea5e9; color: #082f49; border-color: #bae6fd; }
+.da-replay-bar__track { width: 110px; height: 6px; border-radius: 999px; background: rgba(148, 163, 184, .3); overflow: hidden; }
+.da-replay-bar__fill { display: block; width: 100%; height: 100%; background: #38bdf8; transform-origin: left center; transform: scaleX(0); }
+.da-btn--replay { background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; border-color: #7dd3fc; }
+
+.da-root:not([data-mode="RELAY"]) .da-tbtn--guard, .da-root:not([data-mode="RELAY"]) .da-tbtn--tactical { display: none; }
+.da-root[data-mode="RELAY"] .da-tbtn--guard { position: absolute; right: 174px; bottom: 12px; width: 52px; height: 52px; border-color: rgba(251, 191, 36, .8); }
+.da-root[data-mode="RELAY"] .da-tbtn--tactical { position: absolute; right: 174px; bottom: 72px; width: 52px; height: 52px; border-color: rgba(167, 139, 250, .8); }

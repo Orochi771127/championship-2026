@@ -84,6 +84,13 @@ export const MOVE_VFX_PIECE_DRAWINGS = Object.freeze(Object.keys({...FLURRY, ...
  */
 export const MOVE_VFX_CONTACT_FRAME = Object.freeze({drop: 7, bolt: 4, rain: 4, splat: 2, wave: 8});
 
+/** Pieces whose artwork travels or cuts along a heading in mid-air and rotates across 360 degrees.
+ * Ground-anchored pieces with a flat waterline (`wave`, `quake`) stay upright on the arena floor. */
+const DIRECTIONAL_PIECES = new Set([
+  'slash', 'claws', 'iai', 'cross', 'scissor', 'horn', 'rush', 'lance', 'stream',
+  'knives', 'vines', 'muzzle', 'flurry-leaf', 'flurry-feather', 'flurry-shard', 'flurry-bubble'
+]);
+
 /** The bloom's strength over the colour (pixelfx adds its light at full; a bright arena takes a little less). */
 export const GLOW_ALPHA = 0.85;
 
@@ -135,11 +142,27 @@ export function loadMoveVfxPieceSprites() {
 
 /** A baked look once the sheets are in (null before): the kit reads its floor circles from here. */
 export function bakedPieceLook(name) { return lookOf(name); }
+function applyDarkPixelRim(data, w, h, edgeHex) {
+  const [er, eg, eb] = mix(rgb(edgeHex), [12, 16, 28], 0.58);
+  const mask = new Uint8Array(w * h);
+  for (let i = 0; i < w * h; i++) if (data[i * 4 + 3] >= 120) mask[i] = 1;
+  for (let y = 1; y < h - 1; y++) {
+    for (let x = 1; x < w - 1; x++) {
+      const idx = y * w + x;
+      if (mask[idx]) continue;
+      if (mask[idx - 1] || mask[idx + 1] || mask[idx - w] || mask[idx + w]) {
+        const o = idx * 4;
+        data[o] = er; data[o + 1] = eg; data[o + 2] = eb; data[o + 3] = 240;
+      }
+    }
+  }
+}
+
 /**
  * One baked look as canvases in a palette: `glow` false gives the colour
  * frames (w x h), true the light layer (gw x gh, to be drawn 2x and added).
  */
-export function paintBakedPieceFrames(name, palette, {doc = globalThis.document, glow = false} = {}) {
+export function paintBakedPieceFrames(name, palette, {doc = globalThis.document, glow = false, outline = false} = {}) {
   const look = lookOf(name);
   if (!look || (glow && !look.glow?.length)) return null;
   const tinted = glow ? null : {...look, palette: recolourPiecePalette(look.palette, palette)};
@@ -150,8 +173,10 @@ export function paintBakedPieceFrames(name, palette, {doc = globalThis.document,
     if (typeof context?.createImageData !== 'function' || typeof context.putImageData !== 'function') return null;
     canvas.width = w; canvas.height = h;
     const image = context.createImageData(w, h);
-    if (!glow) image.data.set(decodeStatusAilmentFrame(tinted, i));
-    else {
+    if (!glow) {
+      image.data.set(decodeStatusAilmentFrame(tinted, i));
+      if (outline && !palette.flat) applyDarkPixelRim(image.data, w, h, palette.edge);
+    } else {
       const rows = look.glow[i].split('/');
       for (let y = 0; y < h; y++) {
         let x = 0;
@@ -168,7 +193,7 @@ export function paintBakedPieceFrames(name, palette, {doc = globalThis.document,
   return {frames, w, h, ox: glow ? look.ox / 2 : look.ox, oy: glow ? look.oy / 2 : look.oy};
 }
 
-export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc = globalThis.document, sprites: given = null}) {
+export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc = globalThis.document, sprites: given = null, outline = false}) {
   if (given) baked = given; else loadMoveVfxPieceSprites();
   const sheets = new Map(), live = [], pool = [];
   const stats = {played: 0, peak: 0, skipped: 0};
@@ -176,7 +201,7 @@ export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc 
   function sheet(name, palette) {
     const look = lookOf(name);
     if (!look) return null;
-    const key = `${name}:${palette.main}:${palette.core}:${palette.edge}:${palette.flat ? 1 : 0}`;
+    const key = `${name}:${palette.main}:${palette.core}:${palette.edge}:${palette.flat ? 1 : 0}:${outline ? 1 : 0}`;
     if (sheets.has(key)) return sheets.get(key);
     const tinted = {...look, palette: recolourPiecePalette(look.palette, palette)};
     const n = look.frames.length, canvas = doc?.createElement?.('canvas');
@@ -187,6 +212,7 @@ export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc 
     for (let i = 0; i < n; i++) {
       const image = context.createImageData(look.w, look.h);
       image.data.set(decodeStatusAilmentFrame(tinted, i));
+      if (outline && !palette.flat) applyDarkPixelRim(image.data, look.w, look.h, palette.edge);
       context.putImageData(image, i * look.w, 0);
     }
     const base = PIXI.Texture.from(canvas);
@@ -249,7 +275,7 @@ export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc 
      */
     play(piece, {x, y, groundY = null, angle = 0, palette, size = 80, unit = null, scale = 1, fast = false, sprite: drawing = null, at = null}) {
       // a three.js piece plays as one layer; until its group is in, the shared piece it replaces plays
-      const layers = LAYERS[piece] ?? (is3d(piece) && MOVE_VFX_3D_PIECE_GROUP[piece] ? [{look: piece}] : null);
+      const layers = LAYERS[piece] ?? (is3d(piece) && MOVE_VFX_3D_PIECE_GROUP[piece] ? [{look: piece}] : (baked?.[piece] ? [{look: piece}] : null));
       if (!layers || !palette) return false;
       if (is3d(piece) && !lookOf(piece)) {
         loadMoveVfx3dPieces([piece]);
@@ -257,18 +283,29 @@ export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc 
         return base ? this.play(base, arguments[1]) : false;
       }
       const facing = Math.cos(angle) < 0 ? -1 : 1, u = unit > 0 ? unit : size / 64;
+      const directional = DIRECTIONAL_PIECES.has(piece);
+      const cosA = Math.cos(angle), sinA = Math.sin(angle);
       const parts = [];
       for (const l of layers) {
         const name = lookName(l, drawing, piece), art = sheet(name, palette);
         if (!art) { parts.forEach(p => { release(p.sprite); release(p.glow); }); stats.skipped++; return false; }
         const look = art.look;
+        const rotLayer = directional || DIRECTIONAL_PIECES.has(name);
         // the look spans `fit` body widths, kept between half and 1.25 of a fighter's pixel per texel
         const texel = Math.min(u * 1.25, Math.max(u * 0.5, size * look.fit / look.w)) * scale;
         const s = take(art.textures[0]);
         s.anchor.set(look.ox / look.w, look.oy / look.h);
-        s.scale.set(texel * facing, texel * (l.flipY ? -1 : 1));
-        const ground = look.anchor === 'ground';
-        const px = x + facing * (l.dx ?? 0) * size, py = (ground ? (groundY ?? y + size * 0.6) : y) + (l.dy ?? 0) * size;
+        // Directional pixel art (waves, slashes, beams, streams, claws) rotates smoothly in 360 deg
+        // while keeping its top silhouette right-side-up when aiming left (cos(angle) < 0)!
+        const sx = rotLayer ? texel : texel * facing;
+        const sy = texel * (rotLayer && facing < 0 ? -1 : 1) * (l.flipY ? -1 : 1);
+        s.scale.set(sx, sy);
+        s.rotation = rotLayer ? angle : 0;
+        const ground = look.anchor === 'ground' && !rotLayer;
+        const ldx = (l.dx ?? 0) * size, ldy = (l.dy ?? 0) * size;
+        const ox = rotLayer ? (cosA * ldx - sinA * ldy) : facing * ldx;
+        const oy = rotLayer ? (sinA * ldx + cosA * ldy) : ldy;
+        const px = x + ox, py = (ground ? (groundY ?? y + size * 0.6) : y) + oy;
         s.position.set(Math.round(px), Math.round(py));
         const fps = look.fps * (fast ? 1.28 : 1), start = at === 'contact' ? (MOVE_VFX_CONTACT_FRAME[name] ?? 0) : 0;
         s.visible = !(l.delayMs > 0);
@@ -279,7 +316,8 @@ export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc 
           glow = take(g.textures[0]);
           glow.blendMode = 'add'; glow.alpha = GLOW_ALPHA;
           glow.anchor.set(look.ox / 2 / look.gw, look.oy / 2 / look.gh);
-          glow.scale.set(texel * 2 * facing, texel * 2 * (l.flipY ? -1 : 1));
+          glow.scale.set(sx * 2, sy * 2);
+          glow.rotation = s.rotation;
           glow.position.set(s.position.x, s.position.y);
           glow.visible = s.visible;
         }

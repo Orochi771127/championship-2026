@@ -1,0 +1,758 @@
+// UNIFIED_DATA_ARENA_COMBAT_20261121: unified 666-move choreography, shared fighter AI
+// (MANUAL / COMMANDER / AUTO + Trainer Callout), Precision 0.5 s Guard, Lunge/Shot Clash,
+// Sudden Death 4x pacing, Dynamic Cover Pillars, and live Matchup/Range HUD telemetry.
+import test from "node:test";
+import assert from "node:assert/strict";
+import { createDataArenaSimulation } from "../src/championship/modes/dataArena/dataArenaSimulation.js";
+import { createRelayReplayRecorder, createRelayReplayPlayer } from "../src/championship/modes/dataArena/dataArenaReplay.js";
+import { GUARD_RULES, suddenDeathMultiplier } from "../src/championship/modes/dataArena/dataArenaUnifiedAI.js";
+import { weatherDamageMultiplier } from "../src/championship/modes/dataArena/dataArenaTacticalArts.js";
+import { DATA_ARENA_RELAY } from "../src/championship/modes/dataArena/dataArenaRelay.js";
+import { RELAY_ROSTER } from "../src/championship/modes/dataArena/dataArenaRelayRoster.js";
+import { RELAY_POOL_MOVE_ELEMENT } from "../src/championship/modes/dataArena/dataArenaRelayKits.js";
+import { listProductOriginalMoveRecords } from "../src/championship/contracts/productOriginalSpecies.js";
+import { moveVfxChoreography } from "../src/championship/presentation/vfx/moveVfxChoreography.js";
+import { MOVE_VFX_SET_PIECES, MOVE_VFX_PIECE_DRAWINGS, MOVE_VFX_SUPPORT_PIECES, createMoveVfxSetPieces } from "../src/championship/presentation/vfx/moveVfxSetPieces.js";
+import { MOVE_VFX_3D_PIECE_GROUP } from "../src/championship/presentation/vfx/moveVfxPieceSprites3dIndex.js";
+import { MOVE_VFX_PIECE_SPRITES } from "../src/championship/presentation/vfx/moveVfxPieceSprites.js";
+import { V2_ARCHETYPES, resolveMoveSpecV2 } from "../src/championship/modes/dataArena/dataArenaMoveCatalogV2.js";
+import { createDataArenaPixelFxV2 } from "../src/championship/presentation/dataArena/dataArenaPixelFxV2.js";
+import { readFileSync } from "node:fs";
+
+function startRelayFight(opts = {}) {
+  const partnerId = opts.partnerId ?? RELAY_ROSTER[0].id;
+  const sim = createDataArenaSimulation({ mode: "RELAY", seed: 20261121, partnerId, ...opts });
+  // Step past 2.0 s INTRO
+  for (let i = 0; i < 130; i++) sim.step({});
+  sim.drainEvents();
+  return sim;
+}
+
+test("unified 666-move VFX: all 49 Data Arena pool moves and all 22 original-species moves have valid choreography", () => {
+  const validPiece = (name) => MOVE_VFX_SET_PIECES.includes(name) || Boolean(MOVE_VFX_3D_PIECE_GROUP[name]);
+  for (const id of Object.keys(RELAY_POOL_MOVE_ELEMENT)) {
+    const c = moveVfxChoreography(id);
+    assert.ok(c && c.contact, `pool move ${id} has contact choreography`);
+    for (const phase of ["release", "contact"]) {
+      if (!c[phase]) continue;
+      assert.ok(validPiece(c[phase].piece), `pool ${id} ${phase} piece ${c[phase].piece}`);
+      if (c[phase].sprite) assert.ok(MOVE_VFX_PIECE_DRAWINGS.includes(c[phase].sprite), `pool ${id} sprite ${c[phase].sprite}`);
+    }
+  }
+  for (const rec of listProductOriginalMoveRecords()) {
+    const c = moveVfxChoreography(rec.recordIndex);
+    assert.ok(c && c.contact, `original move ${rec.recordIndex} has contact choreography`);
+    assert.ok(validPiece(c.contact.piece), `original ${rec.recordIndex} piece ${c.contact.piece}`);
+  }
+});
+
+test("unified AI: AUTO mode moves and casts autonomously; COMMANDER moves without auto-casting", () => {
+  const autoSim = startRelayFight({ controlMode: "AUTO" });
+  const startPos = { ...autoSim.getSnapshot().player };
+  for (let i = 0; i < 240; i++) autoSim.step({});
+  const autoSnap = autoSim.getSnapshot();
+  assert.equal(autoSnap.controlMode, "AUTO");
+  assert.ok(Math.hypot(autoSnap.player.x - startPos.x, autoSnap.player.y - startPos.y) > 20, "AUTO fighter repositions");
+  assert.ok(autoSnap.stats.movesCast >= 1, `AUTO fighter casts autonomously (${autoSnap.stats.movesCast})`);
+
+  const cmdSim = startRelayFight({ controlMode: "COMMANDER" });
+  const cmdStart = { ...cmdSim.getSnapshot().player };
+  for (let i = 0; i < 180; i++) cmdSim.step({});
+  const cmdSnap = cmdSim.getSnapshot();
+  assert.equal(cmdSnap.controlMode, "COMMANDER");
+  assert.ok(Math.hypot(cmdSnap.player.x - cmdStart.x, cmdSnap.player.y - cmdStart.y) > 20, "COMMANDER fighter moves/repositions");
+  assert.equal(cmdSnap.stats.movesCast, 0, "COMMANDER never casts without player command");
+});
+
+test("trainer priority callout in AUTO mode emits TRAINER_CALLOUT and executes the called move", () => {
+  const sim = startRelayFight({ controlMode: "AUTO" });
+  sim.step({ cast: 0 });
+  const ev = sim.drainEvents();
+  const callout = ev.find((e) => e.type === "TRAINER_CALLOUT");
+  assert.ok(callout, "pressing a skill in AUTO emits TRAINER_CALLOUT");
+  let sawCast = ev.some((e) => e.type === "CAST" && e.team === "player" && e.moveId === callout.moveId);
+  for (let i = 0; i < 40 && !sawCast; i++) {
+    sim.step({});
+    if (sim.drainEvents().some((e) => e.type === "CAST" && e.team === "player" && e.moveId === callout.moveId)) sawCast = true;
+  }
+  assert.ok(sawCast, "called move executes cleanly");
+});
+
+test("precision 0.5 s Guard reduces damage by 65%, suppresses knockback, blocks during hitstun, and applies 3.0 s miss cooldown", () => {
+  const sim = startRelayFight({ controlMode: "MANUAL" });
+  const st = sim.getState();
+  // Unhit guard -> expires after 0.5 s -> 3.0 s miss cooldown
+  sim.step({ guard: true });
+  let ev = sim.drainEvents();
+  assert.ok(ev.some((e) => e.type === "GUARD_START" && e.side === "player"), "GUARD_START emitted");
+  assert.equal(sim.getSnapshot().player.guard.active, true);
+  for (let i = 0; i < 35; i++) sim.step({});
+  ev = sim.drainEvents();
+  assert.ok(ev.some((e) => e.type === "GUARD_MISS" && e.side === "player"), "unhit guard emits GUARD_MISS");
+  assert.ok(sim.getSnapshot().player.guard.cooldown > 2.5, "miss cooldown is ~3.0 s");
+
+  // Fresh sim: compare unguarded vs guarded hit damage
+  const simA = startRelayFight({ controlMode: "MANUAL" });
+  const hpBeforeA = simA.getState().player.hp;
+  simA.internals.hurtPlayer(100, "RBOLT", 0, 0);
+  const unguardedDmg = hpBeforeA - simA.getState().player.hp;
+
+  const simB = startRelayFight({ controlMode: "MANUAL" });
+  const hpBeforeB = simB.getState().player.hp;
+  simB.step({ guard: true });
+  simB.drainEvents();
+  simB.internals.hurtPlayer(100, "RBOLT", 0, 0);
+  const guardedDmg = hpBeforeB - simB.getState().player.hp;
+  const blockEv = simB.drainEvents();
+  assert.ok(blockEv.some((e) => e.type === "GUARD_BLOCK" && e.side === "player"), "GUARD_BLOCK emitted");
+  assert.ok(Math.abs(guardedDmg / unguardedDmg - GUARD_RULES.damageScale) < 0.05, `guarded damage is ~35% (${guardedDmg} vs ${unguardedDmg})`);
+
+  // Guard cannot start while in hitstun
+  st.player.guardCooldown = 0;
+  st.player.guardTimer = 0;
+  st.player.hitstun = 0.2;
+  assert.equal(sim.internals.tryStartGuard(st.player), false, "cannot start Guard during hitstun");
+});
+
+test("lunge-vs-lunge clash bounces both fighters and emits LUNGE_CLASH", () => {
+  const sim = startRelayFight({ controlMode: "MANUAL" });
+  const st = sim.getState();
+  const rival = st.rivals[0];
+  st.player.x = 500; st.player.y = 400;
+  rival.x = 530; rival.y = 400;
+  st.player.lunge = { actionId: 1, moveId: "fangRush", dirX: 1, dirY: 0, left: 200, speed: 600, width: 48, damage: 25, hits: new Set() };
+  rival.lunge = { actionId: 2, moveId: "surfRush", dirX: -1, dirY: 0, left: 200, speed: 600, width: 48, damage: 25, hits: new Set() };
+  sim.step({});
+  const ev = sim.drainEvents();
+  assert.ok(ev.some((e) => e.type === "CLASH" && e.kind === "LUNGE_CLASH"), "LUNGE_CLASH emitted");
+  assert.equal(st.player.lunge, null, "player lunge cancelled on bounce");
+  assert.equal(rival.lunge, null, "rival lunge cancelled on bounce");
+});
+
+test("sudden death scales damage up to 4x in the final 25% of the Relay match", () => {
+  assert.equal(suddenDeathMultiplier(100, 180), 1);
+  assert.equal(suddenDeathMultiplier(135, 180), 1);
+  assert.ok(suddenDeathMultiplier(157.5, 180) > 2.4 && suddenDeathMultiplier(157.5, 180) < 2.6);
+  assert.equal(suddenDeathMultiplier(180, 180), 4);
+
+  const sim = startRelayFight({ controlMode: "MANUAL" });
+  sim.getState().tournament.roundTime = DATA_ARENA_RELAY.seconds - 1;
+  sim.step({});
+  const snap = sim.getSnapshot();
+  assert.equal(snap.suddenDeath.active, true);
+  assert.ok(snap.suddenDeath.multiplier > 3.8, `near-end Sudden Death multiplier near 4x (${snap.suddenDeath.multiplier})`);
+});
+
+test("dynamic cover pillars spawn cleanly, block raycast, and expire after TTL", () => {
+  const sim = startRelayFight({ controlMode: "MANUAL" });
+  const st = sim.getState();
+  const rival = st.rivals[0];
+  // Put player & rival far from center target tile
+  const px = 640, py = 440;
+  st.player.x = 300; st.player.y = 440;
+  rival.x = 960; rival.y = 440;
+  const prop = sim.internals.tryRaiseTempPillar(px, py, "iceCage", "frost");
+  assert.ok(prop && prop.temporary && prop.material === "ICE", "temporary ICE pillar spawned");
+  const cx = (prop.col + 0.5) * sim.grid.cell;
+  const cy = (prop.row + 0.5) * sim.grid.cell;
+  assert.equal(sim.grid.surfaceAt(cx, cy), "SOLID", "temporary pillar is SOLID");
+  // Fast-forward past 12 s TTL
+  prop.ttl = 0.01;
+  sim.step({});
+  assert.equal(prop.destroyed, true, "temporary pillar expires after TTL");
+  assert.notEqual(sim.grid.surfaceAt(cx, cy), "SOLID", "tile reopens after expiry");
+});
+
+test("relay.matchups reports real-time effectiveness, range and ready state for HUD badges", () => {
+  const sim = startRelayFight({ controlMode: "MANUAL" });
+  const snap = sim.getSnapshot();
+  assert.ok(snap.relay?.matchups, "matchups present in relay snapshot");
+  assert.equal(snap.relay.matchups.moves.length, snap.kit.moves.length);
+  for (const m of snap.relay.matchups.moves) {
+    assert.ok(["SUPER", "NEUTRAL", "RESIST"].includes(m.effectiveness), `valid effectiveness ${m.effectiveness}`);
+    assert.equal(typeof m.inRange, "boolean");
+    assert.equal(typeof m.ready, "boolean");
+    assert.ok(m.reach > 0);
+  }
+});
+
+test("phase 2: rallyCry boosts ATK/SPD stages (capped at 2 per stay) and vitalPulse heals 30% (capped at 2 per battle)", () => {
+  const sim = startRelayFight({ controlMode: "MANUAL", tacticalArt: "rallyCry" });
+  sim.step({ tactical: true });
+  let ev = sim.drainEvents();
+  assert.ok(ev.some((e) => e.type === "STAT_BUFF" && e.atkStage === 1 && e.spdStage === 1), "first rallyCry raises ATK+1 SPD+1");
+  sim.getState().player.tacticalCooldown = 0; sim.getState().player.recovery = 0; sim.getState().player.energy = 100;
+  sim.step({ tactical: true });
+  ev = sim.drainEvents();
+  assert.ok(ev.some((e) => e.type === "STAT_BUFF" && e.atkStage === 2 && e.buffsUsed === 2), "second rallyCry raises ATK+2");
+  sim.getState().player.tacticalCooldown = 0; sim.getState().player.recovery = 0; sim.getState().player.energy = 100;
+  sim.step({ tactical: true });
+  assert.equal(sim.getState().player.buffsUsed, 2, "third rallyCry blocked by 2-per-stay cap");
+
+  // vitalPulse 30% heal cap (2 per battle)
+  const healSim = startRelayFight({ controlMode: "MANUAL", tacticalArt: "vitalPulse" });
+  const p = healSim.getState().player;
+  p.hp = Math.round(p.maxHp * 0.25);
+  const before = p.hp;
+  healSim.step({ tactical: true });
+  assert.ok(p.hp >= before + Math.round(p.maxHp * 0.29), "vitalPulse restores ~30% max HP");
+  p.tacticalCooldown = 0; p.recovery = 0; p.energy = 100;
+  healSim.step({ tactical: true });
+  assert.equal(p.healsUsed, 2);
+  const hpAfterTwo = p.hp;
+  p.tacticalCooldown = 0; p.recovery = 0; p.energy = 100;
+  healSim.step({ tactical: true });
+  assert.equal(p.hp, hpAfterTwo, "third heal blocked by 2-per-battle cap");
+});
+
+test("phase 2: rapidFlurry auto-approaches into contact and lands a 4-hit combo", () => {
+  const sim = startRelayFight({ controlMode: "MANUAL", tacticalArt: "rapidFlurry" });
+  const st = sim.getState();
+  const rival = st.rivals[0];
+  st.player.x = 460; st.player.y = 420;
+  rival.x = 620; rival.y = 420; // 160 px away -> triggers Auto-Approach sprint!
+  sim.step({ tactical: true });
+  let ev = sim.drainEvents();
+  assert.ok(ev.some((e) => e.type === "APPROACH_START"), "out-of-reach flurry triggers Auto-Approach");
+  let hits = 0;
+  for (let i = 0; i < 80; i++) {
+    sim.step({});
+    hits += sim.drainEvents().filter((e) => e.type === "FLURRY_HIT").length;
+  }
+  assert.ok(hits >= 3, `rapidFlurry landed multi-hit combo (${hits} hits)`);
+  assert.equal(st.player.defStage, -1, "rapidFlurry applies DEF -1 tradeoff");
+});
+
+test("phase 2: ironCounter reflects 1.6x damage and shadowAmbush teleports behind rival", () => {
+  const cSim = startRelayFight({ controlMode: "MANUAL", tacticalArt: "ironCounter" });
+  const st = cSim.getState();
+  const rival = st.rivals[0];
+  st.player.x = 500; st.player.y = 420;
+  rival.x = 620; rival.y = 420;
+  const rivalHpBefore = rival.hp;
+  cSim.step({ tactical: true });
+  assert.equal(cSim.getSnapshot().player.tactical.counterActive, true);
+  cSim.internals.hurtPlayer(50, "RBOLT", rival.x, rival.y);
+  const ev = cSim.drainEvents();
+  assert.ok(ev.some((e) => e.type === "COUNTER_RIPOSTE" && e.side === "player"), "COUNTER_RIPOSTE emitted");
+  assert.ok(rival.hp < rivalHpBefore - 40, "rival took 1.6x reflected counter damage");
+
+  const bSim = startRelayFight({ controlMode: "MANUAL", tacticalArt: "shadowAmbush" });
+  const bst = bSim.getState();
+  const br = bst.rivals[0];
+  bst.player.x = 420; bst.player.y = 420;
+  br.x = 620; br.y = 420; br.facing = -1;
+  bSim.step({ tactical: true });
+  let sawBackstab = false;
+  for (let i = 0; i < 30; i++) {
+    bSim.step({});
+    if (bSim.drainEvents().some((e) => e.type === "BACKSTAB_HIT")) sawBackstab = true;
+  }
+  assert.ok(sawBackstab, "shadowAmbush landed BACKSTAB_HIT after vanish");
+  assert.ok(bst.player.x > br.x, "shadowAmbush blinked behind rival");
+});
+
+test("phase 2: spikeTrap lays hazards that chip on switch-in and clear cleanly", () => {
+  const sim = startRelayFight({ controlMode: "MANUAL", tacticalArt: "spikeTrap" });
+  sim.step({ tactical: true });
+  assert.equal(sim.getSnapshot().hazards.rival, 1);
+  const rival = sim.getState().rivals[0];
+  const hpBefore = rival.hp;
+  sim.internals.triggerSwitchHazard(rival, "rival");
+  assert.ok(rival.hp < hpBefore, "entry hazard chipped switching fighter");
+});
+
+test("phase 2: manual Guard Parry resets cooldown to 0s, Guard-Break shatters active Guard, and AI autoAttack=false disables auto-casting", () => {
+  // Manual Guard Parry Reset
+  const pSim = startRelayFight({ controlMode: "MANUAL" });
+  pSim.step({ guard: true });
+  pSim.internals.hurtPlayer(60, "RBOLT", 0, 0);
+  for (let i = 0; i < 35; i++) pSim.step({});
+  const pEv = pSim.drainEvents();
+  assert.ok(pEv.some((e) => e.type === "GUARD_PARRY"), "manual Guard catch emits GUARD_PARRY");
+  assert.equal(pSim.getSnapshot().player.guard.cooldown, 0, "manual Parry resets Guard cooldown to 0s");
+
+  // Guard-Break smashes Guard
+  const gbSim = startRelayFight({ controlMode: "MANUAL" });
+  gbSim.step({ guard: true });
+  gbSim.drainEvents();
+  gbSim.internals.hurtPlayer(80, "LUNGE", 0, 0, { guardBreak: true });
+  const gbEv = gbSim.drainEvents();
+  assert.ok(gbEv.some((e) => e.type === "GUARD_BROKEN"), "guardBreak shatters active Guard");
+  assert.equal(gbSim.getSnapshot().player.guard.active, false);
+
+  // Granular AI toggle: AUTO with autoAttack=false moves without casting
+  const aiSim = startRelayFight({ controlMode: "AUTO", aiSettings: { autoAttack: false, autoGuard: true, inputBuffer: true } });
+  const p0 = { ...aiSim.getSnapshot().player };
+  for (let i = 0; i < 160; i++) aiSim.step({});
+  const aiSnap = aiSim.getSnapshot();
+  assert.ok(Math.hypot(aiSnap.player.x - p0.x, aiSnap.player.y - p0.y) > 20, "AUTO with autoAttack=false still moves");
+  assert.equal(aiSnap.stats.movesCast, 0, "AUTO with autoAttack=false never auto-casts");
+});
+
+test("phase 3: weatherShift applies 18s weather (1.5x/0.5x Fire/Water) and decoyShell absorbs hits until broken", () => {
+  assert.equal(weatherDamageMultiplier("SUN", "fire"), 1.5);
+  assert.equal(weatherDamageMultiplier("SUN", "water"), 0.5);
+  assert.equal(weatherDamageMultiplier("RAIN", "water"), 1.5);
+  assert.equal(weatherDamageMultiplier("RAIN", "fire"), 0.5);
+
+  const wSim = startRelayFight({ controlMode: "MANUAL", tacticalArt: "weatherShift" });
+  wSim.step({ tactical: true });
+  const wSnap = wSim.getSnapshot();
+  assert.ok(["SUN", "RAIN", "SAND", "HAIL"].includes(wSnap.weather.kind), "weatherShift activates arena weather");
+  assert.ok(wSnap.weather.remaining > 17 && wSnap.weather.remaining <= 18, "weather lasts 18s");
+
+  const dSim = startRelayFight({ controlMode: "MANUAL", tacticalArt: "decoyShell" });
+  const hp0 = dSim.getState().player.hp;
+  dSim.step({ tactical: true });
+  const hpAfterSpawn = dSim.getState().player.hp;
+  assert.ok(hpAfterSpawn < hp0, "decoyShell spends 25% HP");
+  assert.ok(dSim.getSnapshot().player.decoy?.hp > 0, "decoy active in snapshot");
+  dSim.internals.hurtPlayer(25, "RBOLT", 0, 0);
+  assert.equal(dSim.getState().player.hp, hpAfterSpawn, "decoy absorbs hit protecting real HP");
+  dSim.internals.hurtPlayer(999, "RBOLT", 0, 0);
+  const dEv = dSim.drainEvents();
+  assert.ok(dEv.some((e) => e.type === "DECOY_BREAK"), "lethal hit breaks decoy cleanly");
+  assert.equal(dSim.getSnapshot().player.decoy, null);
+});
+
+test("phase 3: deterministic replay recorder & playback reproduce identical match state", () => {
+  const cfg = { mode: "RELAY", seed: 20261121, partnerId: RELAY_ROSTER[0].id, controlMode: "AUTO", tacticalArt: "rallyCry" };
+  const sim1 = createDataArenaSimulation(cfg);
+  const rec = createRelayReplayRecorder(cfg);
+  for (let i = 0; i < 240; i++) {
+    const inp = i === 145 ? { cast: 0 } : i === 170 ? { guard: true } : {};
+    rec.record(inp);
+    sim1.step(inp);
+  }
+  const replay = rec.finalize(sim1.getSnapshot());
+  assert.ok(replay.frames.length < 20, `RLE compressed 240 steps into ${replay.frames.length} frames`);
+
+  const sim2 = createDataArenaSimulation(replay.config);
+  const player = createRelayReplayPlayer(replay);
+  while (!player.isDone()) sim2.step(player.nextInput());
+  assert.deepEqual(
+    { hp: sim2.getSnapshot().player.hp, x: sim2.getSnapshot().player.x, movesCast: sim2.getSnapshot().stats.movesCast, rivalHp: sim2.getSnapshot().rivals[0]?.hp },
+    { hp: sim1.getSnapshot().player.hp, x: sim1.getSnapshot().player.x, movesCast: sim1.getSnapshot().stats.movesCast, rivalHp: sim1.getSnapshot().rivals[0]?.hp }
+  );
+});
+
+test("phase 4 / V2: all 666 moves resolve to valid V2 archetypes and baked patch-gg/pixelfx sprite keys", () => {
+  const allIds = [...Object.keys(RELAY_POOL_MOVE_ELEMENT)];
+  for (let i = 31; i <= 622; i++) allIds.push(`own-${i}`);
+  assert.ok(allIds.length >= 640, `expected >= 640 moves, got ${allIds.length}`);
+  const validPieces = new Set([...MOVE_VFX_SET_PIECES, ...MOVE_VFX_SUPPORT_PIECES, ...Object.keys(MOVE_VFX_PIECE_SPRITES)]);
+  const archetypeCounts = new Map();
+  for (const id of allIds) {
+    const spec = resolveMoveSpecV2(id);
+    assert.ok(V2_ARCHETYPES.includes(spec.v2Archetype), `${id} archetype ${spec.v2Archetype}`);
+    assert.ok(MOVE_VFX_PIECE_SPRITES[spec.flightLook], `${id} flightLook ${spec.flightLook} exists in MOVE_VFX_PIECE_SPRITES`);
+    assert.ok(validPieces.has(spec.contactLook), `${id} contactLook ${spec.contactLook} is playable`);
+    assert.ok(validPieces.has(spec.releaseLook), `${id} releaseLook ${spec.releaseLook} is playable`);
+    assert.ok(validPieces.has(spec.groundLook), `${id} groundLook ${spec.groundLook} is playable`);
+    archetypeCounts.set(spec.v2Archetype, (archetypeCounts.get(spec.v2Archetype) ?? 0) + 1);
+  }
+  assert.ok(archetypeCounts.size >= 14, `diverse coverage across V2 archetypes (${archetypeCounts.size}/18)`);
+});
+
+test("phase 4 / V2: shield moves raise physical destructible elemental cover walls on the battlefield", () => {
+  const partnerId = RELAY_ROSTER[0].id;
+  const sim = startRelayFight({ partnerId, moveSystem: "v2", controlMode: "MANUAL" });
+  const s = sim.getState();
+  s.player.kit = { ...s.player.kit, moves: ["rockGuard", "glacierGuard", "barkGuard"] };
+  s.player.energy = 100;
+  s.player.x = 640; s.player.y = 480;
+  const rival = s.rivals[0];
+  rival.x = 960; rival.y = 480;
+  // Cast rockGuard -> raises physical STONE wall right in front of caster!
+  sim.step({ cast: 0, aimX: rival.x, aimY: rival.y });
+  for (let i = 0; i < 25; i++) sim.step({});
+  const evs = sim.drainEvents();
+  const wallEv = evs.find((e) => e.type === "TEMP_PROP_SPAWN");
+  assert.ok(wallEv, "casting rockGuard spawns a physical temporary barrier prop on the field");
+  assert.equal(wallEv.material, "STONE", "rockGuard spawns a STONE barrier wall");
+  const liveWall = sim.grid.props.find((p) => p.id === wallEv.id && !p.destroyed);
+  assert.ok(liveWall, "spawned barrier wall exists on grid and blocks projectiles/movement");
+  assert.ok(sim.grid.isSolid(liveWall.cells[0]), "barrier cell is physically solid on the grid");
+
+  // Cast glacierGuard -> raises ICE wall
+  s.player.energy = 100; s.player.recovery = 0;
+  sim.step({ cast: 1, aimX: rival.x, aimY: rival.y + 80 });
+  for (let i = 0; i < 25; i++) sim.step({});
+  const evs2 = sim.drainEvents();
+  assert.ok(evs2.some((e) => e.type === "TEMP_PROP_SPAWN" && e.material === "ICE"), "glacierGuard spawns an ICE barrier wall");
+
+  // Verify enemy projectile is physically stopped by the raised wall!
+  const wallProp = sim.grid.props.find((p) => p.temporary && !p.destroyed && p.owner === s.player.id);
+  const beforeHp = wallProp.hp;
+  sim.grid.damageProp(wallProp, 40, [], "PROJECTILE", "fire");
+  assert.ok(wallProp.hp < beforeHp, "barrier wall absorbs projectile damage");
+});
+
+test("phase 4 / V2: V2 combat archetypes execute flurry, backstab, homing, vortex pull, and pure PixelFX engine lifecycle", () => {
+  const partnerId = RELAY_ROSTER[0].id;
+  const sim = startRelayFight({ partnerId, moveSystem: "v2", controlMode: "MANUAL" });
+  const s = sim.getState();
+  s.player.kit = { ...s.player.kit, moves: ["fangRush", "shadeStep", "emberBolt"] };
+  const rival = s.rivals[0];
+  s.player.x = 640; s.player.y = 480;
+  rival.x = 750; rival.y = 480;
+  s.player.energy = 100;
+
+  // Slot 0: fangRush -> V2 FLURRY_COMBO (3-hit martial-arts flurry)
+  sim.step({ cast: 0, aimX: rival.x, aimY: rival.y });
+  const events = [];
+  for (let i = 0; i < 45; i++) { sim.step({}); events.push(...sim.drainEvents()); }
+  assert.ok(events.some((e) => e.type === "FLURRY_START"), "V2 fangRush triggers FLURRY_COMBO");
+  assert.ok(events.filter((e) => e.type === "FLURRY_HIT").length >= 2, "V2 FLURRY_COMBO lands multi-hit strikes");
+
+  // Slot 1: shadeStep -> V2 SHADOW_BACKSTAB
+  s.player.energy = 100; s.player.recovery = 0;
+  sim.step({ cast: 1, aimX: rival.x, aimY: rival.y });
+  const bsEvents = [];
+  for (let i = 0; i < 35; i++) { sim.step({}); bsEvents.push(...sim.drainEvents()); }
+  assert.ok(bsEvents.some((e) => e.type === "BACKSTAB_VANISH"), "V2 shadeStep vanishes");
+  assert.ok(bsEvents.some((e) => e.type === "BACKSTAB_HIT"), "V2 shadeStep strikes from behind");
+
+  // Slot 2: emberBolt -> V2 HOMING_ORB
+  s.player.energy = 100; s.player.recovery = 0;
+  rival.x = 980; rival.y = 540;
+  sim.step({ cast: 2, aimX: rival.x, aimY: 420 });
+  let sawHoming = false;
+  for (let i = 0; i < 30; i++) {
+    sim.step({});
+    if (s.projectiles.some((p) => p.moveId === "emberBolt" && p.homing > 0)) sawHoming = true;
+  }
+  assert.ok(sawHoming, "V2 emberBolt spawns a gently homing projectile");
+
+  // Pure PixelFX V2 presentation engine lifecycle smoke test (headless mock PIXI)
+  class MockNode {
+    constructor() { this.children = []; this.anchor = { set() {} }; this.scale = { set() {} }; this.position = { set() {} }; this.visible = true; this.alpha = 1; }
+    addChild(c) { this.children.push(c); return c; }
+    removeChild(c) { const i = this.children.indexOf(c); if (i >= 0) this.children.splice(i, 1); }
+    destroy() { this.destroyed = true; }
+  }
+  const MockPIXI = { Container: MockNode, Sprite: MockNode, Texture: { from: () => ({ source: {}, destroy() {} }) } };
+  const fx = createDataArenaPixelFxV2({ PIXI: MockPIXI, ground: new MockNode(), front: new MockNode(), quality: "high" });
+  assert.ok(fx && fx.isPixelFxV2, "createDataArenaPixelFxV2 mounts cleanly");
+  fx.cast({ x: 100, y: 100, moveId: "coreNova", windup: 0.4 });
+  fx.release({ x: 100, y: 100, angle: 0, moveId: "fangRush", melee: true });
+  fx.hit({ x: 200, y: 100, groundY: 120, moveId: "fangRush", heavy: true });
+  fx.area({ x: 200, y: 120, radius: 110, moveId: "flameRing" });
+  fx.ult({ moveId: "coreNova", center: { x: 200, y: 120 } });
+  fx.buff({ x: 100, y: 100 });
+  fx.heal({ x: 100, y: 100 });
+  fx.parry({ x: 100, y: 100 });
+  fx.clash({ x: 150, y: 100 });
+  fx.prop({ x: 160, y: 110, material: "ICE", broken: true });
+  assert.equal(fx.eventRing({ x: 100, y: 100, radius: 50, tint: 0xffe066 }), true);
+  fx.update(16.67);
+  const diag = fx.getDiagnostics();
+  assert.equal(diag.engine, "pixelfx-v2");
+  assert.ok(diag.hits >= 2 && diag.ults >= 1 && diag.props >= 1 && diag.clashes >= 1);
+  fx.dispose();
+});
+
+test("phase 4 / V2: leap-slam, shockwave-ring, grab-slam, telekinesis-slam physics & pure pixelfx visual hygiene", () => {
+  // 1. Verify NO move in V2 maps to mismatched custom cartoon props OR wrong-element VFX!
+  const allIds = [...Object.keys(RELAY_POOL_MOVE_ELEMENT)];
+  for (let i = 31; i <= 622; i++) allIds.push(`own-${i}`);
+  const banned = new Set(["flurry-spore", "flurry-heart", "flurry-note", "drop-bomb", "drop-rock", "shot-fish", "shot-heart", "shot-xp"]);
+  for (const id of allIds) {
+    const spec = resolveMoveSpecV2(id);
+    assert.ok(!banned.has(spec.contactLook), `${id} contactLook must not be mismatched prop ${spec.contactLook}`);
+    assert.ok(!banned.has(spec.flightLook), `${id} flightLook must not be mismatched prop ${spec.flightLook}`);
+    if (["flurry-leaf", "vines"].includes(spec.contactLook) || spec.flightLook === "shot-leaf") {
+      assert.ok(["nature", "wind"].includes(spec.paletteKey), `${id} leaf/vine VFX matches nature/wind palette (got ${spec.paletteKey})`);
+    }
+    if (["flurry-bubble", "wave"].includes(spec.contactLook) || spec.flightLook === "shot-water") {
+      assert.ok(["water", "ice"].includes(spec.paletteKey), `${id} water/bubble VFX matches water/ice palette (got ${spec.paletteKey})`);
+    }
+  }
+
+  // 2. Verify live physics: LEAP_SLAM (brutalCharge), SHOCKWAVE_RING (quakeSlam), GRAB_SLAM (thornRush), TELEKINESIS_SLAM (shadeField)
+  const partnerId = RELAY_ROSTER[0].id;
+  const sim = startRelayFight({ partnerId, moveSystem: "v2", controlMode: "MANUAL" });
+  const s = sim.getState();
+  s.player.kit = { ...s.player.kit, moves: ["brutalCharge", "quakeSlam", "thornRush"] };
+  const rival = s.rivals[0];
+  s.player.x = 640; s.player.y = 480;
+  rival.x = 760; rival.y = 480;
+  s.player.energy = 100;
+
+  // Slot 0: brutalCharge -> LEAP_SLAM (character leaps up airZ > 40, then slams down with shockwave)
+  sim.step({ cast: 0, aimX: rival.x, aimY: rival.y });
+  let peakPlayerAirZ = 0;
+  const leapEvs = [];
+  for (let i = 0; i < 65; i++) {
+    sim.step({});
+    peakPlayerAirZ = Math.max(peakPlayerAirZ, s.player.airZ ?? 0);
+    leapEvs.push(...sim.drainEvents());
+  }
+  assert.ok(peakPlayerAirZ >= 50, `LEAP_SLAM lifted fighter into mid-air (peak airZ=${peakPlayerAirZ})`);
+  assert.ok(leapEvs.some((e) => e.type === "LEAP_SLAM_HIT"), "LEAP_SLAM triggers ground slam impact");
+
+  // Slot 1: quakeSlam -> SHOCKWAVE_RING (expanding floor shockwave)
+  s.player.energy = 100; s.player.recovery = 0;
+  sim.step({ cast: 1, aimX: rival.x, aimY: rival.y });
+  let sawShockwave = false;
+  for (let i = 0; i < 35; i++) {
+    sim.step({});
+    if (s.shockwaves.length > 0) sawShockwave = true;
+  }
+  const swEvs = sim.drainEvents();
+  assert.ok(sawShockwave && swEvs.some((e) => e.type === "SHOCKWAVE_START"), "SHOCKWAVE_RING spawns expanding floor shockwave");
+
+  // Slot 2: thornRush -> GRAB_SLAM (rushes in, lifts rival airZ > 30, slams into floor!)
+  s.player.energy = 100; s.player.recovery = 0;
+  rival.x = s.player.x + 80; rival.y = s.player.y;
+  sim.step({ cast: 2, aimX: rival.x, aimY: rival.y });
+  let peakGrabRivalZ = 0;
+  const grabEvs = [];
+  for (let i = 0; i < 75; i++) {
+    sim.step({});
+    peakGrabRivalZ = Math.max(peakGrabRivalZ, rival.airZ ?? 0);
+    grabEvs.push(...sim.drainEvents());
+  }
+  assert.ok(peakGrabRivalZ >= 35, `GRAB_SLAM lifted rival overhead (peak airZ=${peakGrabRivalZ})`);
+  assert.ok(grabEvs.some((e) => e.type === "GRAB_SLAM_HIT"), "GRAB_SLAM slams rival onto the floor");
+
+  // TELEKINESIS_SLAM (shadeField): levitates rival from range (airZ >= 60, tkHeld = 1) then slams down!
+  const tkSim = startRelayFight({ partnerId, moveSystem: "v2", controlMode: "MANUAL" });
+  const ts = tkSim.getState();
+  ts.player.kit = { ...ts.player.kit, moves: ["shadeField", "emberBolt", "rockGuard"] };
+  const tr = ts.rivals[0];
+  ts.player.x = 560; ts.player.y = 480;
+  tr.x = 800; tr.y = 480;
+  ts.player.energy = 100;
+  tkSim.step({ cast: 0, aimX: tr.x, aimY: tr.y });
+  let peakTkZ = 0;
+  const tkEvs = [];
+  for (let i = 0; i < 85; i++) {
+    tkSim.step({});
+    peakTkZ = Math.max(peakTkZ, tr.airZ ?? 0);
+    tkEvs.push(...tkSim.drainEvents());
+  }
+  assert.ok(peakTkZ >= 60, `TELEKINESIS_SLAM levitated rival from range (peak airZ=${peakTkZ})`);
+  assert.ok(tkEvs.some((e) => e.type === "TK_SLAM_HIT"), "TELEKINESIS_SLAM slams rival onto floor");
+});
+
+test("phase 4 / V2: directional PixelFX pieces (wave, slash, lance, stream) rotate in 360 deg without flipping upside-down", () => {
+  const sprites = [];
+  class MockScale { constructor() { this.x = 1; this.y = 1; } set(x, y = x) { this.x = x; this.y = y; } }
+  class MockNode {
+    constructor() { this.children = []; this.anchor = { set() {} }; this.scale = new MockScale(); this.position = { set() {} }; this.visible = true; this.alpha = 1; this.rotation = 0; }
+    addChild(c) { this.children.push(c); return c; }
+    removeChild(c) { const i = this.children.indexOf(c); if (i >= 0) this.children.splice(i, 1); }
+    destroy() { this.destroyed = true; }
+  }
+  const MockPIXI = {
+    Container: MockNode,
+    Rectangle: class { constructor(x, y, w, h) { this.x = x; this.y = y; this.w = w; this.h = h; } },
+    Texture: class {
+      constructor(opts) { this.source = opts?.source ?? {}; }
+      static from() { return { source: {}, destroy() {} }; }
+      destroy() {}
+    },
+    Sprite: class extends MockNode { constructor(t) { super(); this.texture = t; sprites.push(this); } }
+  };
+  const fakeDoc = {
+    createElement: () => ({
+      width: 0, height: 0,
+      getContext: () => ({ createImageData: (w, h) => ({ data: new Uint8ClampedArray(w * h * 4) }), putImageData() {} })
+    })
+  };
+  const layer = new MockNode();
+  const pal = { core: 0xffffff, main: 0x38bdf8, edge: 0x0369a1 };
+  const pieces = createMoveVfxSetPieces({ PIXI: MockPIXI, layer, doc: fakeDoc, sprites: MOVE_VFX_PIECE_SPRITES });
+
+  // Cast slash DOWN (+PI/2) -> rotates to +PI/2!
+  assert.equal(pieces.play("slash", { x: 100, y: 100, angle: Math.PI / 2, palette: pal }), true);
+  const slashDown = sprites.at(-1);
+  assert.ok(Math.abs(slashDown.rotation - Math.PI / 2) < 1e-6, "directional slash rotates to downward heading (+PI/2)");
+
+  // Cast slash LEFT (PI) -> rotates to PI and flips scale.y < 0 so arc stays right-side-up!
+  assert.equal(pieces.play("slash", { x: 100, y: 100, angle: Math.PI, palette: pal }), true);
+  const slashLeft = sprites.at(-1);
+  assert.ok(Math.abs(slashLeft.rotation - Math.PI) < 1e-6, "directional slash rotates to leftward heading (PI)");
+  assert.ok(slashLeft.scale.x > 0 && slashLeft.scale.y < 0, "leftward slash stays right-side-up via scale.y < 0");
+
+  // Cast wave diagonally LEFT (3*PI/4) -> stays upright on floor (rotation === 0) and mirrors horizontally!
+  assert.equal(pieces.play("wave", { x: 100, y: 100, angle: (3 * Math.PI) / 4, palette: pal }), true);
+  const waveLeft = sprites.at(-1);
+  assert.equal(waveLeft.rotation, 0, "wave never tilts diagonally like a flat sticker");
+  assert.ok(waveLeft.scale.x < 0 && waveLeft.scale.y > 0, "leftward wave mirrors horizontally while staying upright");
+
+  // Cast quake at diagonal angle -> stays upright (rotation === 0)!
+  assert.equal(pieces.play("quake", { x: 100, y: 100, angle: 1.1, palette: pal }), true);
+  const quakeDiag = sprites.at(-1);
+  assert.equal(quakeDiag.rotation, 0, "ground-anchored quake stays upright");
+  pieces.dispose();
+});
+
+test("move #1 & #2: surfRush carries surfRider wave & 3D tornado vortex lifts and spirals enemies midair", () => {
+  assert.equal(resolveMoveSpecV2("surfRush").surfRider, true, "surfRush carries a 3D surf wave under the rider");
+  for (const stormId of ["vortex", "whiteout", "shardStorm", "own-94", "own-167", "own-380"]) {
+    assert.equal(resolveMoveSpecV2(stormId).v2Archetype, "VORTEX_PULL", `${stormId} resolves to lifting 3D VORTEX_PULL`);
+  }
+
+  const partnerId = RELAY_ROSTER[0].id;
+  const sim = startRelayFight({ partnerId, moveSystem: "v2", controlMode: "MANUAL" });
+  const s = sim.getState();
+  s.player.kit = { ...s.player.kit, moves: ["foamZone", "surfRush", "tideWave"], ultimate: "vortex" };
+  const rival = s.rivals[0];
+  s.player.x = 560; s.player.y = 480;
+  rival.x = 640; rival.y = 480;
+  rival.guardTimer = 0;
+  s.player.energy = 100;
+
+  sim.step({ cast: 0, aimX: rival.x, aimY: rival.y });
+  let maxAirZ = 0;
+  let sawPlaced = false;
+  let sawOrbitMotion = false;
+  const startY = rival.y;
+  for (let i = 0; i < 85; i++) {
+    sim.step({});
+    const evs = sim.drainEvents();
+    if (evs.some((e) => e.type === "ZONE_PLACED" && e.vortexLift)) sawPlaced = true;
+    if ((rival.airZ ?? 0) > maxAirZ) maxAirZ = rival.airZ;
+    if (Math.abs(rival.y - startY) > 12) sawOrbitMotion = true;
+  }
+  assert.ok(sawPlaced, "casting storm/vortex emits ZONE_PLACED with vortexLift: true");
+  assert.ok(maxAirZ >= 55, `tornado lifts caught rival into midair (maxAirZ=${maxAirZ})`);
+  assert.ok(sawOrbitMotion, "tornado spirals caught rival tangentially around the funnel eye");
+});
+
+test("move #3 & #4: organic shield wall angle, BURROW_AMBUSH tunnel+erupt launch, GROUND_SPIKES chain & 2x quake counterplay", () => {
+  assert.equal(resolveMoveSpecV2("own-63").v2Archetype, "BURROW_AMBUSH", "穿地三爪 resolves to BURROW_AMBUSH");
+  assert.equal(resolveMoveSpecV2("shardVolley").v2Archetype, "GROUND_SPIKES", "碎晶連射 resolves to GROUND_SPIKES");
+
+  const partnerId = RELAY_ROSTER[0].id;
+  const sim = startRelayFight({ partnerId, moveSystem: "v2", controlMode: "MANUAL" });
+  const s = sim.getState();
+  s.player.kit = { ...s.player.kit, moves: ["own-63", "shardVolley", "rockGuard"] };
+  const rival = s.rivals[0];
+  s.player.x = 560; s.player.y = 480;
+  rival.x = 740; rival.y = 480;
+  rival.guardTimer = 0;
+  s.player.energy = 100;
+
+  // 1. BURROW_AMBUSH: dives underground, rushes, erupts launching rival midair!
+  sim.step({ cast: 0, aimX: rival.x, aimY: rival.y });
+  let sawBurrowed = false, sawErupt = false, maxRivalAirZ = 0;
+  for (let i = 0; i < 65; i++) {
+    sim.step({});
+    const evs = sim.drainEvents();
+    if (s.player.burrowed) sawBurrowed = true;
+    if (evs.some((e) => e.type === "BURROW_ERUPT")) sawErupt = true;
+    if ((rival.airZ ?? 0) > maxRivalAirZ) maxRivalAirZ = rival.airZ;
+  }
+  assert.ok(sawBurrowed, "BURROW_AMBUSH submerges caster underground");
+  assert.ok(sawErupt, "BURROW_AMBUSH erupts violently underneath target");
+  assert.ok(maxRivalAirZ >= 60, `BURROW_AMBUSH launches target into midair (maxAirZ=${maxRivalAirZ})`);
+
+  // 2. GROUND_SPIKES: sequential traveling 3D spires erupting along attack vector!
+  s.player.x = 500; s.player.y = 480; s.player.energy = 100; s.player.recovery = 0;
+  rival.x = 640; rival.y = 480; rival.airZ = 0;
+  sim.step({ cast: 1, aimX: rival.x, aimY: rival.y });
+  let spikeCount = 0;
+  for (let i = 0; i < 55; i++) {
+    sim.step({});
+    const evs = sim.drainEvents();
+    spikeCount += evs.filter((e) => e.type === "GROUND_SPIKE_ERUPT").length;
+  }
+  assert.ok(spikeCount >= 3, `GROUND_SPIKES erupts sequential chain of spires (count=${spikeCount})`);
+});
+
+test("move #5-#8: Batch 2 3D volumetric crater shockwave, spiral beam, meteor/thunder drop, and psychic cage mount cleanly", async () => {
+  const {
+    createVolumetricCraterShockwaveSprite,
+    createVolumetricBeamSprite,
+    createVolumetricMeteorSprite,
+    createVolumetricPsychicCageSprite
+  } = await import("../src/championship/presentation/dataArena/dataArenaVolumetricCombat3D.js");
+  const noop = () => {};
+  const fakeCtx = {
+    clearRect: noop, save: noop, restore: noop, beginPath: noop, closePath: noop,
+    moveTo: noop, lineTo: noop, ellipse: noop, fill: noop, stroke: noop, fillRect: noop
+  };
+  const fakeDoc = { createElement: () => ({ width: 0, height: 0, getContext: () => fakeCtx }) };
+  class Node {
+    constructor() { this.children = []; this.anchor = { set: noop }; this.scale = { set: noop }; this.position = { set: noop }; }
+    addChild(c) { c.parent = this; this.children.push(c); return c; }
+    removeChild(c) { const i = this.children.indexOf(c); if (i >= 0) this.children.splice(i, 1); }
+    destroy() { this.destroyed = true; }
+  }
+  const MockPIXI = {
+    Texture: { from: () => ({ source: { update: noop }, destroy: noop }) },
+    Sprite: class extends Node { constructor(t) { super(); this.texture = t; } }
+  };
+  const layer = new Node();
+  const fxList = [
+    createVolumetricCraterShockwaveSprite({ PIXI: MockPIXI, layer, x: 100, y: 100, paletteKey: "earth", durationSec: 0.4, doc: fakeDoc }),
+    createVolumetricBeamSprite({ PIXI: MockPIXI, layer, x: 100, y: 100, angle: 0.7, paletteKey: "light", durationSec: 0.4, doc: fakeDoc }),
+    createVolumetricMeteorSprite({ PIXI: MockPIXI, layer, x: 100, y: 100, paletteKey: "thunder", variant: "thunder", durationSec: 0.4, doc: fakeDoc }),
+    createVolumetricPsychicCageSprite({ PIXI: MockPIXI, layer, x: 100, y: 100, paletteKey: "dark", mode: "telekinesis", durationSec: 0.4, doc: fakeDoc })
+  ];
+  assert.equal(fxList.every(Boolean), true, "all 4 Batch 2 3D volumetric FX instantiate cleanly");
+  assert.equal(layer.children.length, 4, "all 4 sprites mounted onto Pixi layer");
+  for (const fx of fxList) {
+    assert.equal(fx.update(0.15), true);
+    assert.equal(fx.update(0.45), false, "disposes cleanly after duration");
+  }
+  assert.equal(layer.children.length, 0, "all 4 sprites removed and disposed with zero leaks");
+});
+
+test("web crash-proof LRU GPU sheet cache: zero per-frame re-bakes, strict VRAM & concurrency caps, and 100% dispose", async () => {
+  const { createVolumetricSheetCache } = await import("../src/championship/presentation/dataArena/dataArenaVolumetricCache.js");
+  const noop = () => {};
+  const fakeCtx = { clearRect: noop, drawImage: noop };
+  const fakeDoc = { createElement: () => ({ width: 0, height: 0, getContext: () => fakeCtx }) };
+  let destroyedBases = 0;
+  class Node {
+    constructor() { this.children = []; this.anchor = { set: noop }; this.scale = { set: noop }; this.position = { set: noop }; }
+    addChild(c) { c.parent = this; this.children.push(c); return c; }
+    removeChild(c) { const i = this.children.indexOf(c); if (i >= 0) this.children.splice(i, 1); }
+    destroy() { this.destroyed = true; }
+  }
+  const MockPIXI = {
+    Rectangle: class { constructor(x, y, w, h) { this.x = x; this.y = y; this.w = w; this.h = h; } },
+    Texture: class {
+      constructor(opts) { this.source = opts?.source ?? {}; }
+      static from() { return { source: { scaleMode: "linear" }, destroy() { destroyedBases++; } }; }
+      destroy() {}
+    },
+    Sprite: class extends Node { constructor(t) { super(); this.texture = t; } }
+  };
+  const layer = new Node();
+  const cache = createVolumetricSheetCache({ PIXI: MockPIXI, maxSheets: 4, maxLive: 3, doc: fakeDoc });
+
+  let renderCalls = 0;
+  // Spawn same 3D move 10 times at same direction -> MUST bake ONLY ONCE (8 frames) and hit cache 9 times!
+  for (let i = 0; i < 10; i++) {
+    cache.spawn({
+      layer, keyPrefix: "wave|water", width: 64, height: 64, frameCount: 8, directional: true, angle: 0,
+      durationSec: 0.5, renderForAngle: () => { renderCalls++; }
+    });
+  }
+  assert.equal(renderCalls, 8, "identical 3D move bakes 8 frames ONCE, zero per-cast or per-frame re-bakes");
+  assert.equal(cache.getDiagnostics().cacheHits, 9, "subsequent casts hit GPU cache");
+  assert.ok(cache.getDiagnostics().liveSprites <= 3, "strict concurrent sprite cap enforced (<= 3)");
+
+  // Spawn 8 distinct sheets -> LRU evicts oldest so cachedSheets never exceeds maxSheets (4)!
+  for (let i = 0; i < 8; i++) {
+    cache.spawn({
+      layer, keyPrefix: `test|${i}`, width: 64, height: 64, frameCount: 6, directional: false,
+      durationSec: 0.2, renderForAngle: noop
+    });
+    cache.update(0.3); // expire live sprite so eviction can immediately free GPU memory
+  }
+  const d = cache.getDiagnostics();
+  assert.ok(d.cachedSheets <= 4, `LRU cache strictly capped at maxSheets=4 (got ${d.cachedSheets})`);
+  assert.ok(destroyedBases >= 4, `evicted GPU base textures cleanly destroyed (${destroyedBases})`);
+
+  cache.dispose();
+  assert.equal(cache.getDiagnostics().cachedSheets, 0, "dispose releases 100% of cached GPU sheets");
+  assert.equal(cache.getDiagnostics().estimatedVramMb, 0, "dispose zeroes VRAM estimate");
+  assert.equal(layer.children.length, 0, "dispose removes all live sprites");
+});

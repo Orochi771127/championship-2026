@@ -243,6 +243,80 @@ export function createDataArenaElementFx({PIXI, ground, front, art = null, quali
       if (ok) ringRecent.push({x, y, at: now});
       return ok;
     },
+    /**
+     * Burn a persistent scorch/frost/energy trench along a heavy beam or lance path on the ground layer.
+     */
+    scorchTrench({x1, y1, x2, y2, moveId, speciesId, width = 34, durationMs = 5200}) {
+      if (reducedMotion || !ground) return false;
+      const v = look(moveId, speciesId);
+      const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy);
+      if (len < 24) return false;
+      const steps = Math.max(2, Math.min(7, Math.floor(len / 95)));
+      for (let i = 1; i <= steps; i++) {
+        const t = i / (steps + 1);
+        layer.decal({
+          x: x1 + dx * t,
+          y: y1 + dy * t,
+          kind: v.decal,
+          palette: v.palette,
+          paletteKey: v.paletteKey,
+          size: Math.max(64, width * 2.2),
+          scale: SCALE * 0.85,
+          ms: durationMs
+        });
+      }
+      stats.trenches = (stats.trenches ?? 0) + 1;
+      return true;
+    },
+    /**
+     * Directional cone stream burst (e.g. flamethrower/blizzard/fan/cone attacks):
+     * emits a multi-lane burst of pixel motes and ground marks down the cone.
+     */
+    coneStorm({x, y, angle = 0, spread = 0.55, range = 260, moveId, speciesId}) {
+      const v = look(moveId, speciesId);
+      if (!reducedMotion && motes) {
+        const lanes = 5;
+        for (let i = 0; i < lanes; i++) {
+          const frac = lanes > 1 ? i / (lanes - 1) - 0.5 : 0;
+          const a = angle + frac * spread;
+          const dist = range * (0.35 + (i % 2) * 0.3);
+          motes.burst({
+            element: v.element,
+            x: x + Math.cos(a) * dist,
+            y: y + Math.sin(a) * dist,
+            groundY: y + Math.sin(a) * dist + 14,
+            unit: SCALE * 0.5,
+            weight: 'medium',
+            dir: Math.sign(Math.cos(a)) || 1
+          });
+        }
+      }
+      if (!reducedMotion) {
+        layer.decal({
+          x: x + Math.cos(angle) * (range * 0.55),
+          y: y + Math.sin(angle) * (range * 0.55),
+          kind: v.decal,
+          palette: v.palette,
+          paletteKey: v.paletteKey,
+          size: Math.min(130, Math.max(72, range * 0.38)),
+          scale: SCALE * 0.9
+        });
+      }
+      stats.cones = (stats.cones ?? 0) + 1;
+      return true;
+    },
+    /**
+     * Clash burst when two opposing projectiles, beams, or lunges collide mid-arena.
+     */
+    clash({x, y, tint = 0xfff2a6}) {
+      const palette = {core: 0xffffff, main: tint, edge: 0xff8a24};
+      setPieces?.play('impact-frame', {x, y, palette: {core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true}, size: BODY * 0.95, unit: SCALE * 0.5, groundY: y + 24, scale: 0.85});
+      setPieces?.play('roar', {x, y, palette, size: BODY * 1.05, unit: SCALE * 0.5, groundY: y + 24, scale: 0.95});
+      motes?.burst({element: 'THUNDER', x, y, groundY: y + 24, unit: SCALE * 0.5, weight: 'heavy', dir: 1});
+      layer.hold(50);
+      stats.clashes = (stats.clashes ?? 0) + 1;
+      return true;
+    },
     /** True when the kit draws the shots, so the scene hides its own vector heads. */
     drawsShots: () => Boolean(kit),
     update(dtMs) {

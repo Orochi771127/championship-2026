@@ -48,11 +48,19 @@ import { elementChartButton } from './elementChartModal.js';
 import { loadOriginalVfxCellArt } from '../presentation/vfx/originalVfxCellArt.js';
 import { dataArenaEntries, dataArenaEntryUsable, dataArenaPartnerPower } from '../modes/dataArena/dataArenaEligibility.js';
 import { createActionPortrait, setActionPortrait, warmActionPortraits } from "../presentation/juicy/actionPortrait.js";
+import { CONTROL_MODES, DEFAULT_AI_SETTINGS } from "../modes/dataArena/dataArenaUnifiedAI.js";
+import { DATA_ARENA_TACTICAL_ARTS, TACTICAL_ART_IDS, tacticalArtById } from "../modes/dataArena/dataArenaTacticalArts.js";
+import { createRelayReplayRecorder, createRelayReplayPlayer } from "../modes/dataArena/dataArenaReplay.js";
+import { resolveMoveSpecV2 } from "../modes/dataArena/dataArenaMoveCatalogV2.js";
+import { moveVfxChoreography } from "../presentation/vfx/moveVfxChoreography.js";
+import { moveVfxSignature } from "../presentation/vfx/moveVfxSignatures.js";
+import { loadMoveVfxPieceSprites, paintBakedPieceFrames } from "../presentation/vfx/moveVfxSetPieces.js";
+import { BATTLE_FX_PALETTES } from "../presentation/battleFx/battleFxPalettes.js";
 
 const STEP_MS = DATA_ARENA_STEP_SECONDS * 1000;
 const MOVE_KEYS = Object.freeze({ KeyW: [0, -1], ArrowUp: [0, -1], KeyS: [0, 1], ArrowDown: [0, 1], KeyA: [-1, 0], ArrowLeft: [-1, 0], KeyD: [1, 0], ArrowRight: [1, 0] });
 const GAME_KEYS = new Set([...Object.keys(MOVE_KEYS), "Space", "ShiftLeft", "ShiftRight", "Tab", "KeyQ", "KeyE", "KeyR", "KeyF", "KeyC", "KeyB",
-  "KeyJ", "KeyK", "KeyL", "KeyX", "Escape", "KeyP", "Digit1", "Digit2", "Digit3", "Digit4"]);
+  "KeyG", "KeyT", "KeyJ", "KeyK", "KeyL", "KeyX", "Escape", "KeyP", "Digit1", "Digit2", "Digit3", "Digit4"]);
 // Skill keys -> kit slot (moves 2-4). Slot 1 (the beam) is held: left mouse, 1 or J.
 const SKILL_KEYS = Object.freeze({ Digit2: 0, KeyK: 0, Digit3: 1, KeyL: 1, KeyQ: 1, Digit4: 2, KeyE: 2 });
 const BEAM_KEYS = new Set(["Digit1", "KeyJ"]);
@@ -239,7 +247,23 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
 
   // ------------------------------------------------------------------ input
   const keys = new Set();
-  const latch = { dash: false, surge: false, ride: false, cast: null, ult: false, castAuto: false, castAim: null, switchPartner: false, burst: false, overLimit: false };
+  const latch = { dash: false, guard: false, tactical: false, surge: false, ride: false, cast: null, ult: false, castAuto: false, castAim: null, switchPartner: false, burst: false, overLimit: false };
+  let controlModePref = "MANUAL";
+  let tacticalArtPref = "rallyCry";
+  let aiSettingsPref = { ...DEFAULT_AI_SETTINGS };
+  let moveSystemPref = (() => {
+    try {
+      const search = href ? (href.includes("?") ? href.slice(href.indexOf("?")) : "") : (globalThis.location?.search ?? "");
+      const raw = new URLSearchParams(search).get("moveSystem");
+      return raw === "legacy" ? "legacy" : "v2";
+    } catch { return "v2"; }
+  })();
+  function cycleControlMode() {
+    const idx = CONTROL_MODES.indexOf(sim?.getControlMode?.() ?? controlModePref);
+    controlModePref = CONTROL_MODES[(idx + 1) % CONTROL_MODES.length];
+    sim?.setControlMode?.(controlModePref);
+    tactical(t(`relay.control.${controlModePref}`), { tone: "good", key: "control-mode", ms: 1600 });
+  }
   const pointer = { x: null, y: null, fire: false };
   const sticks = { move: null, aim: null };
   let aimVector = { x: 1, y: 0 };
@@ -289,8 +313,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     // Without a mouse (keyboard, or a tapped touch button) skills auto-aim; the aim stick or mouse aims by hand.
     const manualTouch = touchActive && (pointed || (sticks.aim?.vector && Math.hypot(sticks.aim.vector.x, sticks.aim.vector.y) > 0.28));
     const autoAim = latch.castAuto || (!pointer.mouse && !manualTouch);
-    const input = { moveX: mx, moveY: my, aimX, aimY, fire, dash: latch.dash, surge: latch.surge, ride: latch.ride, cast: latch.cast, ult: latch.ult, autoAim, switchPartner: latch.switchPartner, burst: latch.burst, overLimit: latch.overLimit };
-    latch.dash = latch.surge = latch.ride = latch.ult = latch.castAuto = false;
+    const input = { moveX: mx, moveY: my, aimX, aimY, fire, dash: latch.dash, guard: latch.guard, tactical: latch.tactical, surge: latch.surge, ride: latch.ride, cast: latch.cast, ult: latch.ult, autoAim, switchPartner: latch.switchPartner, burst: latch.burst, overLimit: latch.overLimit };
+    latch.dash = latch.guard = latch.tactical = latch.surge = latch.ride = latch.ult = latch.castAuto = false;
     latch.cast = null; latch.castAim = null; latch.switchPartner = false; latch.burst = false; latch.overLimit = false;
     return input;
   }
@@ -313,12 +337,14 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     if (event.repeat) return;
     keys.add(event.code);
     if (event.code === "Space" || event.code.startsWith("Shift") || event.code === "Tab") latch.dash = true;
+    if (event.code === "KeyG") latch.guard = true;
+    if (event.code === "KeyT" && gameMode === "RELAY") cycleControlMode();
     if (event.code in SKILL_KEYS) latch.cast = SKILL_KEYS[event.code];
     if (event.code === "KeyR") latch.ult = true;
     if (event.code === "KeyX") latch.switchPartner = gameMode === "RELAY" ? "first" : true;
     // B taps the burst; holding it for the over-limit time calls the over-limit burst (AWAKENING_OVERDRIVE_20261109).
     if (event.code === "KeyB") { clearTimeout(burstKeyTimer); burstKeyTimer = setTimeout(() => { burstKeyTimer = null; latch.overLimit = true; }, OVER_LIMIT_RULES.holdMs); }
-    if (event.code === "KeyF") latch.surge = true;
+    if (event.code === "KeyF") { if (gameMode === "RELAY") latch.tactical = true; else latch.surge = true; }
     if (event.code === "KeyC") { if (gameMode === "RELAY") latch.switchPartner = "second"; else latch.ride = true; }
   }, { signal, capture: true });
   let burstKeyTimer = null;
@@ -328,7 +354,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   }, { signal, capture: true });
   window.addEventListener("blur", releaseInputs, { signal });
   function releaseInputs() {
-    keys.clear(); clearTimeout(burstKeyTimer); burstKeyTimer = null; Object.assign(latch, { dash:false, surge:false, ride:false, cast:null, ult:false, castAuto:false, castAim:null, switchPartner:false, burst:false, overLimit:false }); held = basicOrigin = basicAim = null; pointer.fire = false; sticks.move = sticks.aim = null;
+    keys.clear(); clearTimeout(burstKeyTimer); burstKeyTimer = null; Object.assign(latch, { dash:false, guard:false, tactical:false, surge:false, ride:false, cast:null, ult:false, castAuto:false, castAim:null, switchPartner:false, burst:false, overLimit:false }); held = basicOrigin = basicAim = null; pointer.fire = false; sticks.move = sticks.aim = null;
     basicPointerId = null;
     for (const node of touch.querySelectorAll('.is-pressed')) node.classList.remove('is-pressed');
     for (const knob of touch.querySelectorAll(".da-stick")) knob.hidden = true;
@@ -377,6 +403,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   }, {signal});
   basicButton.addEventListener('pointermove', event => { if (basicPointerId === event.pointerId && basicOrigin) basicAim = aimOf(basicOrigin, event); }, {signal});
   const dashButton = button("da-tbtn da-tbtn--dash", t("touch.dash"), () => {}, signal);
+  const guardTouchButton = button("da-tbtn da-tbtn--guard", t("relay.touch.guard"), () => {}, signal);
+  const tacticalTouchButton = button("da-tbtn da-tbtn--tactical", t("relay.touch.tactical"), () => {}, signal);
   const surgeButton = button("da-tbtn da-tbtn--surge", t("touch.surge"), () => {}, signal);
   const rideButton = button("da-tbtn da-tbtn--ride", t("touch.ride"), () => {}, signal);
   const switchButton = button("da-tbtn da-tbtn--switch", t("relay.switch"), () => {}, signal);
@@ -394,7 +422,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     else latch[key] = true;
     if (key === "ult" || typeof key === "number") latch.castAuto = true;
   };
-  for (const [node, key] of [[switchButton, "switch1"], [switchButton2, "switch2"], [burstButton, "burst"], [dashButton, "dash"], [surgeButton, "surge"], [rideButton, "ride"], [ultButton, "ult"], ...skillButtons.map((node, slot) => [node, slot])]) {
+  for (const [node, key] of [[switchButton, "switch1"], [switchButton2, "switch2"], [burstButton, "burst"], [guardTouchButton, "guard"], [tacticalTouchButton, "tactical"], [dashButton, "dash"], [surgeButton, "surge"], [rideButton, "ride"], [ultButton, "ult"], ...skillButtons.map((node, slot) => [node, slot])]) {
     const fire = press(key), aimed = key === "ult" || typeof key === "number";
     // The burst key: a tap bursts, a long press or a double tap goes over the limit (AWAKENING_OVERDRIVE_20261109).
     if (key === "burst") bindOverLimitPress(node, { holdMs: OVER_LIMIT_RULES.holdMs, doubleTapMs: OVER_LIMIT_RULES.doubleTapMs,
@@ -502,9 +530,15 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     left.append(hpBar, mateBar, hudRefs.revives);
     const center = el("div", "da-hud__center");
     hudRefs.timer = el("div", "da-hud__timer");
+    hudRefs.suddenDeath = el("div", "da-hud__sd");
+    hudRefs.suddenDeath.hidden = true;
+    hudRefs.weather = el("div", "da-hud__weather");
+    hudRefs.weather.hidden = true;
     hudRefs.phase = el("div", "da-hud__phase");
     hudRefs.objective = el("div", "da-hud__objective");
-    center.append(hudRefs.timer, hudRefs.phase, hudRefs.objective);
+    hudRefs.hitTelemetry = el("div", "da-hud__hit");
+    hudRefs.hitTelemetry.hidden = true;
+    center.append(hudRefs.timer, hudRefs.suddenDeath, hudRefs.phase, hudRefs.objective);
     const right = el("div", "da-hud__right");
     hudRefs.score = el("div", "da-hud__score");
     hudRefs.level = el("div", "da-hud__level");
@@ -514,7 +548,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const hype = el("div", "da-bar da-bar--hype"); hype.append(el("span", "da-bar__label", t("hud.hype")), hudRefs.hypeFill);
     const pause = button("da-hud__pause", "Ⅱ", () => togglePause(), signal);
     pause.setAttribute("aria-label", t("hud.pause"));
-    right.append(hudRefs.score, hudRefs.level, xp, hype);
+    right.append(hudRefs.score, hudRefs.level, xp, hype, hudRefs.weather, hudRefs.hitTelemetry);
     hudRefs.combo = el("div", "da-hud__combo");
     hudRefs.combo.hidden = true;
     top.append(left, center, right, pause, hudRefs.combo);
@@ -555,17 +589,29 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     kitMoves.forEach((id, slot) => {
       const node = button("da-slot", "", () => { if (root.dataset.state === "PLAY") { latch.cast = slot; latch.castAuto = !pointer.mouse; } }, signal);
       const cool = el("span", "da-slot__cool");
-      node.append(el("span", "da-slot__key", SLOT_KEYS[slot]), ...arenaMoveIcon(id), el("span", "da-slot__name", moveName(id)), cool);
+      const eff = el("span", "da-slot__eff");
+      const rangeTag = el("span", "da-slot__range");
+      node.append(el("span", "da-slot__key", SLOT_KEYS[slot]), ...arenaMoveIcon(id), el("span", "da-slot__name", moveName(id)), eff, rangeTag, cool);
       node.title = `${moveName(id)} — ${moveEffect(id)}`;
       hudRefs.slots.push(node);
       kit.appendChild(node);
     });
     hudRefs.ult = button("da-slot da-slot--ult", "", () => { if (root.dataset.state === "PLAY") { latch.ult = true; latch.castAuto = !pointer.mouse; } }, signal);
-    hudRefs.ult.append(el("span", "da-slot__key", "R"), ...arenaMoveIcon(activeKit?.ultimate), el("span", "da-slot__name", moveName(activeKit?.ultimate ?? "")), el("span", "da-slot__charge"), el('span', 'da-slot__meta'));
+    hudRefs.ult.append(el("span", "da-slot__key", "R"), ...arenaMoveIcon(activeKit?.ultimate), el("span", "da-slot__name", moveName(activeKit?.ultimate ?? "")), el("span", "da-slot__eff"), el("span", "da-slot__range"), el("span", "da-slot__charge"), el('span', 'da-slot__meta'));
     kit.appendChild(hudRefs.ult);
     for (const [slot, node] of skillButtons.entries()) node.firstChild.textContent = kitMoves[slot] ? moveName(kitMoves[slot]) : "";
     ultButton.firstChild.textContent = t(gameMode === 'RELAY' ? 'relay.touch.ult' : 'touch.ult');
     hudRefs.dash = el("div", "da-chip", t("hud.dash"));
+    hudRefs.guard = button("da-chip da-chip--guard", t("relay.guard"), () => { if (root.dataset.state === "PLAY") latch.guard = true; }, signal);
+    hudRefs.guard.hidden = gameMode !== "RELAY";
+    hudRefs.tacticalArt = button("da-chip da-chip--tactical", "", () => { if (root.dataset.state === "PLAY") latch.tactical = true; }, signal);
+    hudRefs.tacticalArt.hidden = gameMode !== "RELAY";
+    hudRefs.controlMode = button("da-chip da-chip--mode", t(`relay.control.${sim?.getControlMode?.() ?? controlModePref}`), () => { if (root.dataset.state === "PLAY") cycleControlMode(); }, signal);
+    hudRefs.controlMode.title = t("relay.control.hint");
+    hudRefs.controlMode.hidden = gameMode !== "RELAY";
+    hudRefs.statStages = el("div", "da-hud__stages");
+    hudRefs.statStages.hidden = true;
+    left.appendChild(hudRefs.statStages);
     hudRefs.surge = el("div", "da-chip da-chip--harbor", t("hud.surge"));
     hudRefs.ride = el("div", "da-chip da-chip--harbor", t("hud.ride"));
     hudRefs.switch = button('da-relay-switch', t('relay.switch'), () => { if (root.dataset.state === 'PLAY') latch.switchPartner = true; }, signal);
@@ -587,7 +633,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const resonance = sim?.getState().relay?.resonance ?? [];
     if (resonance.length) { hudRefs.resonance = resonanceStrip(resonance, {hint: false}); hudRefs.resonance.classList.add('da-hud__resonance'); hudRefs.team.appendChild(hudRefs.resonance); }
     left.appendChild(hudRefs.team);
-    bottom.append(hudRefs.switch, hudRefs.burst, gauges, kit, hudRefs.dash, hudRefs.surge, hudRefs.ride);
+    bottom.append(hudRefs.switch, hudRefs.burst, hudRefs.controlMode, hudRefs.guard, hudRefs.tacticalArt, gauges, kit, hudRefs.dash, hudRefs.surge, hudRefs.ride);
     hudRefs.banner = el("div", "da-banner");
     hudRefs.banner.hidden = true;
     // Track three: one tactical line under the rival strip (see tactical()).
@@ -633,8 +679,76 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     }, comboCount);
     if (objective.id === 'RELAY') {
       put('timer', hudRefs.timer, text, formatTime(objective.timeLeft));
-      put('timerLow', hudRefs.timer, (node, v) => node.classList.toggle('is-low', v), objective.timeLeft <= 30);
-      put('lowTimeVignette', hudRefs.vignette, (node, v) => node.classList.toggle('is-final30', v), objective.timeLeft <= 30);
+      put('timerLow', hudRefs.timer, (node, v) => node.classList.toggle('is-low', v), objective.timeLeft <= 30 || snap.suddenDeath?.active);
+      put('lowTimeVignette', hudRefs.vignette, (node, v) => node.classList.toggle('is-final30', v), objective.timeLeft <= 30 || snap.suddenDeath?.active);
+      if (hudRefs.suddenDeath) {
+        const sdActive = Boolean(snap.suddenDeath?.active);
+        const sdMult = snap.suddenDeath?.multiplier ? snap.suddenDeath.multiplier.toFixed(1) : '1.0';
+        put('suddenDeath', hudRefs.suddenDeath, (node, val) => {
+          const [on, mult] = val.split('|');
+          node.hidden = on !== '1';
+          if (on === '1') node.textContent = t('relay.suddenDeathBanner', { mult });
+        }, `${sdActive ? 1 : 0}|${sdMult}`);
+      }
+      if (hudRefs.weather) {
+        const w = snap.weather;
+        const wStr = w?.kind ? `${t(`weather.${w.kind}`)} ${Math.ceil(w.remaining)}s` : '';
+        put('weatherPill', hudRefs.weather, (node, val) => {
+          node.hidden = !val;
+          node.dataset.weather = w?.kind ?? '';
+          if (val) node.textContent = val;
+        }, wStr);
+      }
+      if (hudRefs.hitTelemetry) {
+        const lh = snap.lastHit;
+        const fresh = Boolean(lh && snap.time - lh.at < 1.8 && lh.amount > 0);
+        const hitStr = fresh ? `${lh.target === 'rival' ? '▶' : '◀'} -${lh.amount}${lh.guarded ? ` · ${t('fct.blocked')}` : lh.hitstun ? ' · STUN' : ''}` : '';
+        put('hitTelemetry', hudRefs.hitTelemetry, (node, val) => {
+          node.hidden = !val;
+          if (val) node.textContent = val;
+        }, hitStr);
+      }
+      if (hudRefs.controlMode) {
+        const cm = snap.controlMode ?? controlModePref;
+        put('controlMode', hudRefs.controlMode, (node, mode) => {
+          node.textContent = t(`relay.control.${mode}`);
+          node.dataset.controlMode = mode;
+        }, cm);
+      }
+      if (hudRefs.guard) {
+        const g = p.guard ?? { active: false, cooldown: 0 };
+        const gKey = g.active ? 'active' : g.cooldown > 0 ? `cd|${Math.ceil(g.cooldown * 10) / 10}` : 'ready';
+        put('guardBtn', hudRefs.guard, (node, val) => {
+          node.classList.toggle('is-active', val === 'active');
+          node.classList.toggle('is-cooling', val.startsWith('cd|'));
+          node.textContent = val === 'active' ? t('relay.guard.active') : val.startsWith('cd|') ? `${t('relay.guard')} ${Number(val.slice(3)).toFixed(1)}s` : t('relay.guard');
+        }, gKey);
+      }
+      if (hudRefs.tacticalArt && p.tactical) {
+        const tac = p.tactical;
+        const tName = t(`tactical.${tac.artId}`);
+        const tState = tac.counterActive || tac.flurryActive ? 'active' : tac.cooldown > 0 ? `cd|${tac.cooldown}` : tac.ready ? 'ready' : 'spent';
+        put('tacticalBtn', hudRefs.tacticalArt, (node, val) => {
+          const [artLabel, st, cdStr] = val.split('|');
+          node.classList.toggle('is-active', st === 'active');
+          node.classList.toggle('is-cooling', st === 'cd' || st === 'spent');
+          node.classList.toggle('is-ready', st === 'ready');
+          node.textContent = st === 'cd' ? `${artLabel} ${Number(cdStr).toFixed(0)}s` : `${artLabel} F`;
+          node.title = t(`tactical.${tac.artId}.desc`);
+        }, `${tName}|${tState.startsWith('cd|') ? `cd|${tac.cooldown}` : `${tState}|0`}`);
+      }
+      if (hudRefs.statStages && p.statStages) {
+        const st = p.statStages;
+        const parts = [];
+        if (st.atk) parts.push(`${t("stat.atk")}${st.atk > 0 ? '+' : ''}${st.atk}`);
+        if (st.def) parts.push(`${t("stat.def")}${st.def > 0 ? '+' : ''}${st.def}`);
+        if (st.spd) parts.push(`${t("stat.spd")}${st.spd > 0 ? '+' : ''}${st.spd}`);
+        const stageText = parts.join(' ');
+        put('statStages', hudRefs.statStages, (node, val) => {
+          node.hidden = !val;
+          if (val) node.textContent = val;
+        }, stageText);
+      }
       put('phase', hudRefs.phase, text, t('mode.RELAY'));
       const rivalsAlive = snap.relay.rivalsAlive ?? (3 - snap.relay.enemyIndex);
       put('objective', hudRefs.objective, text, t('relay.remaining', { count: rivalsAlive }));
@@ -768,15 +882,37 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     put("energy", hudRefs.energyFill, width, Math.round((kit.energy / kit.energyMax) * 100) / 100);
     kit.moves.forEach((move, slot) => {
       const cool = move.cooldownMax > 0 ? Math.round((move.cooldown / move.cooldownMax) * 40) / 40 : 0;
-      const value = `${cool}|${move.ready ? 1 : 0}|${kit.energy >= move.energy ? 1 : 0}|${kit.casting === move.id ? 1 : 0}`;
-      const apply = (node, v) => { const [c, ready, energy, casting] = v.split("|"); setCool(node, c); node.classList.toggle("is-cooling", Number(c) > 0);
-        node.classList.toggle("is-noenergy", energy === "0"); node.classList.toggle("is-ready", ready === "1"); node.classList.toggle("is-casting", casting === "1"); };
+      const mu = gameMode === 'RELAY' ? snap.relay?.matchups?.moves?.[slot] ?? null : null;
+      const effCode = mu?.effectiveness ?? 'NEUTRAL';
+      const inRange = mu ? mu.inRange : true;
+      const value = `${cool}|${move.ready ? 1 : 0}|${kit.energy >= move.energy ? 1 : 0}|${kit.casting === move.id ? 1 : 0}|${effCode}|${inRange ? 1 : 0}`;
+      const apply = (node, v) => {
+        const [c, ready, energy, casting, eff, rng] = v.split("|");
+        setCool(node, c);
+        node.classList.toggle("is-cooling", Number(c) > 0);
+        node.classList.toggle("is-noenergy", energy === "0");
+        node.classList.toggle("is-ready", ready === "1");
+        node.classList.toggle("is-casting", casting === "1");
+        node.classList.toggle("is-out-of-range", gameMode === "RELAY" && rng === "0");
+        node.classList.toggle("is-inrange-ready", gameMode === "RELAY" && ready === "1" && rng === "1");
+        const effEl = node.querySelector(".da-slot__eff");
+        if (effEl) {
+          effEl.dataset.eff = eff;
+          effEl.textContent = eff === "SUPER" ? t("relay.eff.SUPER") : eff === "RESIST" ? t("relay.eff.RESIST") : "";
+        }
+        const rangeEl = node.querySelector(".da-slot__range");
+        if (rangeEl) rangeEl.textContent = gameMode === "RELAY" && rng === "0" ? t("relay.eff.OOR") : "";
+        if (effEl && rangeEl && rng === "0") effEl.textContent = ""; // show one clean bottom badge (OOR beats matchup to prevent crowding)
+      };
       if (hudRefs.slots[slot]) put(`slot${slot}`, hudRefs.slots[slot], apply, value);
       if (touchActive && skillButtons[slot]) put(`tslot${slot}`, skillButtons[slot], apply, value);
       if (gameMode === 'RELAY' && touchActive) put(`tslotMeta${slot}`, skillButtons[slot].querySelector('.da-tbtn__meta'), text, move.cooldown > 0 ? `${(Math.ceil(move.cooldown * 10) / 10).toFixed(1)}s` : `${move.energy} TP`);
     });
     const ultReady = gameMode === 'RELAY' ? kit.energy >= DATA_ARENA_RELAY.ultimateTp && kit.ultimateCooldown <= 0 : kit.ult >= kit.ultMax;
-    const ultValue = `${gameMode === 'RELAY' ? Math.min(1, kit.energy / DATA_ARENA_RELAY.ultimateTp) : Math.round((kit.ult / kit.ultMax) * 40) / 40}|${ultReady ? 1 : 0}`;
+    const ultMu = gameMode === 'RELAY' ? snap.relay?.matchups?.ultimate ?? null : null;
+    const ultEff = ultMu?.effectiveness ?? 'NEUTRAL';
+    const ultInRange = ultMu ? ultMu.inRange : true;
+    const ultValue = `${gameMode === 'RELAY' ? Math.min(1, kit.energy / DATA_ARENA_RELAY.ultimateTp) : Math.round((kit.ult / kit.ultMax) * 40) / 40}|${ultReady ? 1 : 0}|${ultEff}|${ultInRange ? 1 : 0}`;
     if (gameMode === 'RELAY') {
       const meta = kit.ultimateCooldown > 0 ? `${Math.ceil(kit.ultimateCooldown)}s` : '80 TP';
       put('ultMeta', hudRefs.ult.querySelector('.da-slot__meta'), text, meta);
@@ -784,7 +920,18 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       put('tultLabel', ultButton.firstChild, text, t('relay.touch.ult'));
       put('tultCooldown', ultButton, (node, value) => { setCool(node, value); node.classList.toggle('is-cooling', value > 0); }, Math.round(kit.ultimateCooldown / 12 * 50) / 50);
     }
-    const applyUlt = (node, v) => { const [charge, ready] = v.split("|"); node.style.setProperty("--charge", charge); node.classList.toggle("is-ready", ready === "1"); };
+    const applyUlt = (node, v) => {
+      const [charge, ready, eff, rng] = v.split("|");
+      node.style.setProperty("--charge", charge);
+      node.classList.toggle("is-ready", ready === "1");
+      node.classList.toggle("is-out-of-range", gameMode === "RELAY" && rng === "0");
+      node.classList.toggle("is-inrange-ready", gameMode === "RELAY" && ready === "1" && rng === "1");
+      const effEl = node.querySelector(".da-slot__eff");
+      if (effEl) { effEl.dataset.eff = eff; effEl.textContent = eff === "SUPER" ? t("relay.eff.SUPER") : eff === "RESIST" ? t("relay.eff.RESIST") : ""; }
+      const rangeEl = node.querySelector(".da-slot__range");
+      if (rangeEl) rangeEl.textContent = gameMode === "RELAY" && rng === "0" ? t("relay.eff.OOR") : "";
+      if (effEl && rangeEl && rng === "0") effEl.textContent = "";
+    };
     put("ult", hudRefs.ult, applyUlt, ultValue);
     if (touchActive) put("tult", ultButton, applyUlt, ultValue);
     const boss = snap.boss;
@@ -902,6 +1049,17 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       switch (event.type) {
         case 'RELAY_SWITCH': releaseInputs(); buildHud(); audio?.play('capture'); toast(t('relay.switched'), { x: event.x, y: event.y - 70, tone: 'good', key: 'relay-switch' }); break;
         case 'RELAY_TAG_BURST': audio?.play('slam'); break;
+        case 'GUARD_BLOCK': audio?.play('perfect'); break;
+        case 'GUARD_PARRY': audio?.play('perfect'); break;
+        case 'GUARD_BROKEN': audio?.play('slam'); break;
+        case 'STAT_BUFF': audio?.play('pickup'); break;
+        case 'TACTICAL_HEAL': audio?.play('pickup'); break;
+        case 'COUNTER_RIPOSTE': audio?.play('slam'); break;
+        case 'FLURRY_HIT': audio?.play('hit'); break;
+        case 'BACKSTAB_HIT': audio?.play('slam'); break;
+        case 'CLASH': audio?.play('slam'); break;
+        case 'SUDDEN_DEATH': audio?.play('warn'); banner(t('relay.suddenDeathShort'), 'warn', 2000); break;
+        case 'TRAINER_CALLOUT': tactical(t('relay.callout', { move: moveName(event.moveId) }), { tone: 'good', key: `callout-${event.moveId}`, ms: 1300 }); break;
         case 'RELAY_PERFECT_SWITCH': audio?.play('perfect'); toast(t('relay.perfectSwitch'), { x: event.x, y: event.y - 84, tone: 'crit', key: 'perfect-switch', gap: 400 }); break;
         case 'TRI_LINK_RUSH': audio?.play('roar'); banner(t('relay.triLink'), 'good', 1800); break;
         case 'SUPER_CORE_WARNING': audio?.play('warn'); tactical(t('arena.SUPER_CORE.warn'), { tone: 'warn', ms: 2400 }); break;
@@ -1013,7 +1171,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         case "RIVAL_HIT": case "SKILL_HIT": audio?.play("hit"); break;
         case "RIVAL_DODGE": toast(t("fct.dodge"), { x: event.x, y: event.y - 64, tone: "dodge", key: "rival-dodge", gap: 450 }); break;
         case "OFFER": showLevelUp(event.options); break;
-        case "RESULT": showResult(); break;
+        case "RESULT": if (root.dataset.state === "REPLAY") { replayPaused = true; if (replayPauseBtn) replayPauseBtn.textContent = t("replay.play"); } else showResult(); break;
         default: break;
       }
     }
@@ -1048,6 +1206,52 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   // ------------------------------------------------------------------ loop
   const frameCost = [];
   let frameFault = null;
+  let replayRecorder = null, lastReplay = null, replayPlayer = null, replaySpeed = 1, replayPaused = false, replayBar = null, replayProgressFill = null, replayPauseBtn = null, replayConfig = null;
+  function clearReplayUi() {
+    replayBar?.remove(); replayBar = null; replayProgressFill = null; replayPauseBtn = null;
+  }
+  function startReplay(replay) {
+    if (!replay?.config || !stage) return;
+    clearReplayUi();
+    replayPlayer = createRelayReplayPlayer(replay);
+    replaySpeed = 1;
+    replayPaused = false;
+    sim = createDataArenaSimulation(replay.config);
+    scene?.dispose(); scene = null;
+    mountScene();
+    releaseInputs();
+    buildHud();
+    hideOverlay();
+    root.dataset.state = "REPLAY";
+    accumulator = 0;
+    // Floating replay control bar
+    replayBar = el("div", "da-replay-bar");
+    const tag = el("span", "da-replay-bar__tag", t("replay.label"));
+    replayPauseBtn = button("da-chip-btn", t("replay.pause"), () => {
+      replayPaused = !replayPaused;
+      replayPauseBtn.textContent = t(replayPaused ? "replay.play" : "replay.pause");
+    }, signal);
+    const speedBtns = [0.5, 1, 2].map((spd) => {
+      const b = button("da-chip-btn da-replay-bar__spd", `${spd}×`, () => {
+        replaySpeed = spd;
+        for (const sb of speedBtns) sb.classList.toggle("is-active", Number(sb.dataset.spd) === replaySpeed);
+      }, signal);
+      b.dataset.spd = String(spd);
+      b.classList.toggle("is-active", spd === 1);
+      return b;
+    });
+    const track = el("div", "da-replay-bar__track");
+    replayProgressFill = el("span", "da-replay-bar__fill");
+    track.appendChild(replayProgressFill);
+    const exitBtn = button("da-chip-btn da-replay-bar__exit", t("replay.exit"), () => {
+      replayPlayer = null;
+      clearReplayUi();
+      showResult(true);
+    }, signal);
+    replayBar.append(tag, replayPauseBtn, ...speedBtns, track, exitBtn);
+    hud.appendChild(replayBar);
+    handleEvents(sim.drainEvents());
+  }
   // The ticker is the product's shared one: an exception thrown from a listener
   // would stop its loop for everything. Contain it, report it once, keep going.
   function frame(ticker) {
@@ -1064,12 +1268,31 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       accumulator += dtMs;
       let steps = 0;
       while (accumulator >= STEP_MS && steps < DATA_ARENA_MAX_STEPS_PER_FRAME) {
-        sim.step(buildInput());
+        const inp = buildInput();
+        replayRecorder?.record(inp);
+        sim.step(inp);
         accumulator -= STEP_MS;
         steps++;
         if (sim.getState().mode === "LEVEL_UP" || sim.getState().mode === "ENDED") { accumulator = 0; break; }
       }
       if (steps >= DATA_ARENA_MAX_STEPS_PER_FRAME) accumulator = 0; // drop time instead of spiralling
+    } else if (root.dataset.state === "REPLAY" && replayPlayer && !replayPaused && !document.hidden) {
+      accumulator += dtMs * replaySpeed;
+      let steps = 0;
+      const maxSteps = Math.max(DATA_ARENA_MAX_STEPS_PER_FRAME, Math.ceil(DATA_ARENA_MAX_STEPS_PER_FRAME * replaySpeed));
+      while (accumulator >= STEP_MS && steps < maxSteps) {
+        const nextInp = replayPlayer.nextInput();
+        if (!nextInp || sim.getState().mode === "ENDED") {
+          replayPaused = true;
+          if (replayPauseBtn) replayPauseBtn.textContent = t("replay.play");
+          accumulator = 0;
+          break;
+        }
+        sim.step(nextInp);
+        accumulator -= STEP_MS;
+        steps++;
+      }
+      if (replayProgressFill) replayProgressFill.style.transform = `scaleX(${replayPlayer.getProgress().ratio.toFixed(3)})`;
     } else accumulator = 0;
     const events = sim.drainEvents();
     if(qa&&events.length){qaRecentEvents.push(...events.map(e=>({...e,matchId})));if(qaRecentEvents.length>128)qaRecentEvents.splice(0,qaRecentEvents.length-128);}
@@ -1077,7 +1300,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const state = sim.getState();
     audio?.setLaser(state.laser.firing && root.dataset.state === "PLAY" && !paused, state.laser.heat / sim.stats.heatCapacity);
     scene.setAimGuide?.(touchActive && root.dataset.state === "PLAY" ? aimGuide() : null);
-    scene.render(dtMs, paused || document.hidden);
+    scene.render(dtMs, paused || replayPaused || document.hidden);
     if (root.dataset.state !== "SELECT") updateHud();
     frameCost.push(performance.now() - started);
     if (frameCost.length > 240) frameCost.shift();
@@ -1236,17 +1459,38 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const relayBurstPlans = gameMode === "RELAY" ? Object.fromEntries(relayTeamIds(partnerId, relayReserveId, relayThirdId).map(id => [id, relayBurstPlanOf(id)]).filter(([, plan]) => plan !== undefined)) : {};
     // A Journey zone stage carries no contract: it pays its own stars and prizes.
     // A sponsor contract armed in the battle menu takes its stake as a tournament or relay starts (AWAKENING_OVERDRIVE_20261109).
-    const makeSim = (rivalBoostPercent) => createDataArenaSimulation({ seed: matchSeed, partnerId, quality, mode: gameMode, partnerPower, rivalBoostPercent,
+    const makeConfig = (rivalBoostPercent) => ({ seed: matchSeed, partnerId, quality, mode: gameMode,
+      controlMode: gameMode === "RELAY" && typeof controlModePref !== "undefined" ? controlModePref : "MANUAL",
+      aiSettings: gameMode === "RELAY" && typeof aiSettingsPref !== "undefined" ? { ...aiSettingsPref } : null,
+      tacticalArt: gameMode === "RELAY" && typeof tacticalArtPref !== "undefined" ? tacticalArtPref : null,
+      moveSystem: gameMode === "RELAY" && typeof moveSystemPref !== "undefined" ? moveSystemPref : "legacy",
+      partnerPower, rivalBoostPercent,
       ...(gameMode==="RELAY"?{relayLoadouts,relayReserveId,relayThirdId,relayArenaId,portrait:globalThis.innerHeight>globalThis.innerWidth,
       relayBurstPlans, relayManualBurst: true, relayRivals: campaign?.rivals ?? null, relayBuffPicks: Boolean(campaign)}:{}) });
+    const makeSim = (rivalBoostPercent) => {
+      const cfg = makeConfig(rivalBoostPercent);
+      if (typeof replayConfig !== "undefined") replayConfig = cfg;
+      return createDataArenaSimulation(cfg);
+    };
     sim = makeSim(0);
+    if (typeof replayPlayer !== "undefined") replayPlayer = null;
+    if (typeof clearReplayUi === "function") clearReplayUi();
+    if (typeof replayRecorder !== "undefined" && typeof createRelayReplayRecorder === "function") {
+      replayRecorder = gameMode === "RELAY" ? createRelayReplayRecorder(makeConfig(0)) : null;
+    }
+    if (typeof lastReplay !== "undefined") lastReplay = null;
     staked = null;
     // A Journey zone stage carries no contract: it pays its own stars and prizes.
     if (!campaign && (gameMode === "RELAY" || gameMode === "TOURNAMENT") && sponsor?.begin) {
       // Arena rivals are a fixed bracket built tougher than any seat, so the sponsor keeps plain odds here; the stake
       // cap and the daily limit still hold (Owner 2026-11-10).
       staked = sponsor.begin({});
-      if (staked?.ok && staked.foeBoostPercent > 0) sim = makeSim(staked.foeBoostPercent);
+      if (staked?.ok && staked.foeBoostPercent > 0) {
+        sim = makeSim(staked.foeBoostPercent);
+        if (typeof replayRecorder !== "undefined" && typeof createRelayReplayRecorder === "function") {
+          replayRecorder = gameMode === "RELAY" ? createRelayReplayRecorder(makeConfig(staked.foeBoostPercent)) : null;
+        }
+      }
     }
     // Harbor art is loaded on entry only; a failed pack keeps the playable
     // geometry and existing presentation available. No character texture changes.
@@ -1389,6 +1633,224 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     summary.append(note, best, goal);
     let openChips = null; // `${partnerId}:${slot}` of the skill slot showing its choices
     let fillSeat = 0;     // relay list taps fill the first seat, then the second
+    let previewMoveId = null;
+    let previewSlow = false;
+    let previewStop = null;
+    const stopMovePreview = () => { if (previewStop) { previewStop(); previewStop = null; } };
+    signal.addEventListener("abort", stopMovePreview, { once: true });
+
+    function buildMovePreviewBox(moveId, partnerIdForMove) {
+      stopMovePreview();
+      const box = el("div", "da-vfx-preview");
+      const headRow = el("div", "da-vfx-preview__head");
+      const tacArt = DATA_ARENA_TACTICAL_ARTS[moveId] ?? null;
+      const displayName = tacArt ? t(`tactical.${tacArt.id}`) : moveName(moveId);
+      const displayEffect = tacArt ? t(`tactical.${tacArt.id}.desc`) : moveEffect(moveId);
+      const title = el("strong", "da-vfx-preview__title", displayName);
+      let acc = 0;
+      const replayBtn = button("da-chip-btn da-vfx-preview__replay", t("relay.previewReplay"), () => { acc = 0; }, signal);
+      const slowBtn = button("da-chip-btn da-vfx-preview__slow", t("relay.previewSlow"), () => { previewSlow = !previewSlow; slowBtn.classList.toggle("is-active", previewSlow); }, signal);
+      slowBtn.classList.toggle("is-active", previewSlow);
+      const closeBtn = button("da-chip-btn da-vfx-preview__close", t("relay.previewClose"), () => { previewMoveId = null; stopMovePreview(); refresh(); }, signal);
+      headRow.append(title, replayBtn, slowBtn, closeBtn);
+      const canvas = document.createElement("canvas");
+      canvas.className = "da-vfx-preview__canvas";
+      canvas.width = 340; canvas.height = 160;
+      const move = tacArt ?? relayMove(moveId);
+      const sig = tacArt ? null : moveVfxSignature(moveId);
+      const choreo = tacArt ? null : moveVfxChoreography(moveId);
+      const v2Spec = !tacArt && moveSystemPref === "v2" ? resolveMoveSpecV2(moveId, move) : null;
+      const archLabel = v2Spec ? t(`v2.arch.${v2Spec.v2Archetype}`) : (sig?.archetype ?? "");
+      const meta = el("p", "da-vfx-preview__meta", `${displayEffect} · ${move?.energy ?? 0} TP${move?.cooldown ? ` · ${move.cooldown}s` : ""}${archLabel ? ` · ${archLabel}` : ""}`);
+      box.append(headRow, canvas, meta);
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        const palKey = tacArt?.palette ?? v2Spec?.paletteKey ?? sig?.paletteKey ?? "fire";
+        const pal = BATTLE_FX_PALETTES[palKey] ?? BATTLE_FX_PALETTES.fire;
+        const pieceName = tacArt?.piece ?? v2Spec?.contactLook ?? choreo?.contact?.piece ?? "core";
+        const moveKind = tacArt ? tacArt.kind : (v2Spec?.v2Archetype === "SHADOW_BACKSTAB" ? "BACKSTAB" : v2Spec?.v2Archetype === "FLURRY_COMBO" ? "FLURRY" : v2Spec?.v2Archetype === "PROTECT_COUNTER" ? "BARRIER" : v2Spec?.v2Archetype === "SELF_BUFF" ? "BUFF" : v2Spec?.v2Archetype === "RECOVERY_SUPPORT" ? "HEAL" : (move?.type ?? "BOLT"));
+        const isMelee = moveKind === "LUNGE" || moveKind === "FLURRY" || moveKind === "BACKSTAB";
+        const isSelf = moveKind === "BUFF" || moveKind === "HEAL" || moveKind === "COUNTER" || moveKind === "BARRIER" || moveKind === "HAZARD";
+        let frames = null;
+        loadMoveVfxPieceSprites().then(() => {
+          const painted = paintBakedPieceFrames(pieceName, pal, { doc: document });
+          frames = painted?.frames ?? null;
+        }).catch(() => {});
+        // Load real partner portrait sprite thumbnail if available
+        let actorImg = null;
+        const pArt = partnerArt(partnerIdForMove);
+        if (pArt?.portraitUrl) {
+          const img = new Image();
+          img.onload = () => { actorImg = img; };
+          img.src = pArt.portraitUrl;
+        }
+        let last = performance.now();
+        const hexStr = (c) => `#${(c >>> 0).toString(16).padStart(6, "0")}`;
+        const draw = () => {
+          if (!box.isConnected) { stopMovePreview(); return; }
+          const now = performance.now();
+          const dt = Math.min(0.08, (now - last) / 1000) * (previewSlow ? 0.5 : 1);
+          last = now; acc += dt;
+          const loopSec = 2.0;
+          const phase = (acc % loopSec) / loopSec;
+          const W = canvas.width, H = canvas.height;
+          ctx.clearRect(0, 0, W, H);
+          // Mini-arena floor + chalk lines + center circle
+          ctx.fillStyle = "#141e30";
+          ctx.fillRect(0, 0, W, H);
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+          ctx.lineWidth = 1;
+          for (let gx = 34; gx < W; gx += 34) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke(); }
+          for (let gy = 32; gy < H; gy += 32) { ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke(); }
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
+          ctx.strokeRect(32, 16, W - 64, H - 32);
+          ctx.beginPath(); ctx.arc(W / 2, H / 2, 30, 0, Math.PI * 2); ctx.stroke();
+          // Sideline Tamers (left & right) + calling speech bubble
+          const drawMiniTamer = (tx, ty, col, capCol) => {
+            ctx.fillStyle = col; ctx.fillRect(tx - 5, ty - 6, 10, 14);
+            ctx.fillStyle = "#fde0c4"; ctx.beginPath(); ctx.arc(tx, ty - 11, 5, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = capCol; ctx.fillRect(tx - 6, ty - 17, 12, 4);
+          };
+          drawMiniTamer(16, H / 2 + 8, "#0ea5e9", "#fde047");
+          drawMiniTamer(W - 16, H / 2 + 8, "#dc2626", "#c79bff");
+          if (phase < 0.72) {
+            ctx.fillStyle = "rgba(15, 23, 42, 0.88)";
+            ctx.strokeStyle = "#fde047";
+            ctx.lineWidth = 1.5;
+            ctx.font = "bold 10px sans-serif";
+            const bubbleText = `${displayName}!`;
+            const bw = Math.min(132, ctx.measureText(bubbleText).width + 14);
+            ctx.fillRect(26, H / 2 - 36, bw, 18);
+            ctx.strokeRect(26, H / 2 - 36, bw, 18);
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText(bubbleText, 33, H / 2 - 23);
+          }
+          // Compute fighter & dummy positions (melee auto-sprints into contact!)
+          let fx = 96, fy = H / 2 + 12, fAlpha = 1;
+          let tx = 248, ty = H / 2 + 12;
+          let hitShake = 0, popLabel = "";
+          if (moveKind === "BACKSTAB") {
+            if (phase < 0.25) { fx = 96 + phase * 120; }
+            else if (phase < 0.45) { fAlpha = 0.22; fx = 126 + ((phase - 0.25) / 0.2) * 150; }
+            else if (phase < 0.78) { fx = 282; hitShake = Math.sin(phase * 90) * 4; popLabel = t("fct.backstab"); }
+            else { fx = 282 - ((phase - 0.78) / 0.22) * 186; }
+          } else if (isMelee) {
+            if (phase < 0.36) {
+              const k = phase / 0.36;
+              fx = 96 + (tx - 38 - 96) * k;
+              // Sprint dust puffs
+              ctx.fillStyle = "rgba(226, 232, 240, 0.45)";
+              ctx.beginPath(); ctx.arc(fx - 14, fy + 10, 5, 0, Math.PI * 2); ctx.fill();
+            } else if (phase < 0.76) {
+              fx = tx - 36 + Math.sin(phase * 65) * 6;
+              hitShake = Math.sin(phase * 110) * 5;
+              popLabel = moveKind === "FLURRY" ? "4 HIT!" : "HIT!";
+            } else {
+              fx = tx - 36 - ((phase - 0.76) / 0.24) * (tx - 36 - 96);
+            }
+          }
+          // White range ring around fighter
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.45)";
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.ellipse(fx, fy + 12, isSelf ? 28 : isMelee ? 42 : 74, isSelf ? 12 : isMelee ? 18 : 30, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          // Target dummy (original cyber-drone dummy)
+          const dtx = tx + hitShake;
+          ctx.fillStyle = "rgba(255, 92, 138, 0.26)";
+          ctx.beginPath(); ctx.ellipse(dtx, ty + 14, 18, 7, 0, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = hitShake !== 0 ? "#fca5a5" : "#475569";
+          ctx.strokeStyle = "#f8fafc"; ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.arc(dtx, ty - 4, 15, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+          ctx.fillStyle = "#38bdf8"; ctx.fillRect(dtx - 8, ty - 8, 16, 5);
+          // Fighter marker / real sprite
+          ctx.save();
+          ctx.globalAlpha = fAlpha;
+          ctx.fillStyle = "rgba(56, 189, 248, 0.3)";
+          ctx.beginPath(); ctx.ellipse(fx, fy + 14, 18, 7, 0, 0, Math.PI * 2); ctx.fill();
+          if (actorImg) {
+            ctx.drawImage(actorImg, fx - 20, fy - 28, 40, 40);
+          } else {
+            ctx.fillStyle = hexStr(pal.main);
+            ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.arc(fx, fy - 5, 14, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+          }
+          ctx.restore();
+          // Archetype-specific VFX
+          if (moveKind === "BUFF" || moveKind === "HEAL") {
+            const k = Math.min(1, phase / 0.75);
+            const col = moveKind === "HEAL" ? "#5aff9c" : "#fde047";
+            ctx.strokeStyle = col; ctx.lineWidth = 3;
+            ctx.globalAlpha = 1 - k * 0.8;
+            ctx.beginPath(); ctx.ellipse(fx, fy + 8, 16 + k * 46, 8 + k * 20, 0, 0, Math.PI * 2); ctx.stroke();
+            ctx.globalAlpha = 1;
+            for (let i = 0; i < 6; i++) {
+              const a = acc * 5 + (i * Math.PI) / 3;
+              ctx.fillStyle = col;
+              ctx.beginPath(); ctx.arc(fx + Math.cos(a) * 20, fy - 6 - ((k * 34 + i * 7) % 34), 3, 0, Math.PI * 2); ctx.fill();
+            }
+            popLabel = moveKind === "HEAL" ? "+30% HP" : t("fct.statBuff");
+          } else if (moveKind === "BARRIER" || moveKind === "COUNTER") {
+            const col = moveKind === "COUNTER" ? "#c79bff" : "#7fe9ff";
+            ctx.fillStyle = moveKind === "COUNTER" ? "rgba(199,155,255,0.22)" : "rgba(127,233,255,0.22)";
+            ctx.strokeStyle = col; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.arc(fx, fy - 6, 26, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            if (moveKind === "BARRIER") {
+              // Elemental barrier pillar rising in front of the fighter!
+              const rise = Math.min(1, phase * 3.5);
+              const bh = Math.round(32 * rise);
+              ctx.fillStyle = hexStr(pal.main);
+              ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 2;
+              ctx.fillRect(fx + 32, fy + 12 - bh, 18, bh);
+              ctx.strokeRect(fx + 32, fy + 12 - bh, 18, bh);
+            }
+            popLabel = moveKind === "COUNTER" ? t("fct.counter") : "WALL!";
+          } else if (moveKind === "HAZARD") {
+            for (let i = 0; i < 5; i++) {
+              const hx = tx - 26 + i * 13, hy = ty + 8 + (i % 2 ? 8 : -6);
+              ctx.fillStyle = "#c79bff";
+              ctx.beginPath(); ctx.moveTo(hx, hy - 12); ctx.lineTo(hx + 6, hy + 4); ctx.lineTo(hx - 6, hy + 4); ctx.closePath(); ctx.fill();
+            }
+            popLabel = "SPIKES!";
+          } else if (!isMelee && phase < 0.48) {
+            const k = phase / 0.48;
+            const px = fx + (tx - fx) * k, py = fy - 6 - Math.sin(k * Math.PI) * 14;
+            ctx.strokeStyle = hexStr(pal.main); ctx.lineWidth = 6;
+            ctx.beginPath(); ctx.moveTo(fx + 10, fy - 6); ctx.lineTo(px, py); ctx.stroke();
+            ctx.fillStyle = hexStr(pal.core);
+            ctx.beginPath(); ctx.arc(px, py, 8, 0, Math.PI * 2); ctx.fill();
+          } else if (phase >= 0.36 && phase < 0.82) {
+            const k = (phase - 0.36) / 0.46;
+            if (frames?.length) {
+              const f = frames[Math.min(frames.length - 1, Math.floor(k * frames.length))];
+              ctx.imageSmoothingEnabled = false;
+              const size = 104;
+              ctx.drawImage(f, dtx - size / 2, ty - 8 - size / 2, size, size);
+            } else {
+              ctx.strokeStyle = hexStr(pal.core); ctx.lineWidth = 3;
+              ctx.beginPath(); ctx.arc(dtx, ty - 6, 12 + k * 36, 0, Math.PI * 2); ctx.stroke();
+            }
+            if (!popLabel) popLabel = "HIT!";
+          }
+          if (popLabel && phase > 0.36 && phase < 0.88) {
+            ctx.font = "900 12px sans-serif";
+            ctx.fillStyle = "#0f172a";
+            ctx.fillText(popLabel, (isSelf ? fx : dtx) - 21, ty - 31);
+            ctx.fillStyle = "#fde047";
+            ctx.fillText(popLabel, (isSelf ? fx : dtx) - 22, ty - 32);
+          }
+        };
+        draw();
+        if (stage?.app?.ticker) {
+          stage.app.ticker.add(draw);
+          previewStop = () => stage.app.ticker.remove(draw);
+        } else {
+          const timer = setInterval(draw, 33);
+          previewStop = () => clearInterval(timer);
+        }
+      }
+      return box;
+    }
 
     function seatCard(id, seat) {
       const row = entryOf(gameMode, id);
@@ -1437,7 +1899,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         chip.dataset.slot = String(slot);
         chip.setAttribute("aria-expanded", String(openChips === `${id}:${slot}`));
         chip.setAttribute("aria-label", `${partnerName(id)} ${kitKey(true, slot)} ${moveName(moveId)}`);
-        chip.append(el("span", "da-skill__key", kitKey(touchActive, slot)), ...arenaMoveIcon(moveId), el("strong", "da-skill__name", moveName(moveId)), cost(move));
+        const archBadge = moveSystemPref === "v2" ? [el("span", "da-skill__arch", t(`v2.arch.${resolveMoveSpecV2(moveId, move).v2Archetype}`))] : [];
+        chip.append(el("span", "da-skill__key", kitKey(touchActive, slot)), ...arenaMoveIcon(moveId), el("strong", "da-skill__name", moveName(moveId)), ...archBadge, cost(move));
         slots.appendChild(chip);
       });
       const ult = el("div", "da-skill da-skill--ult");
@@ -1464,11 +1927,21 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           choice.setAttribute("aria-selected", String(at === slot));
           choice.dataset.element = relayMoveElement(moveId, partnerElement(id));
           choice.dataset.move = moveId;
-          choice.append(...arenaMoveIcon(moveId), el("strong", "da-skill__name", moveName(moveId)), cost(move),
+          const choiceArch = moveSystemPref === "v2" ? [el("span", "da-skill__arch", t(`v2.arch.${resolveMoveSpecV2(moveId, move).v2Archetype}`))] : [];
+          choice.append(...arenaMoveIcon(moveId), el("strong", "da-skill__name", moveName(moveId)), ...choiceArch, cost(move),
             el("span", "da-skill__effect", moveEffect(moveId)), ...(at >= 0 && at !== slot ? [el("span", "da-skill__key", kitKey(touchActive, at))] : []));
+          const pv = button("da-skill__preview", t("relay.preview"), (ev) => {
+            ev.stopPropagation();
+            previewMoveId = previewMoveId === moveId ? null : moveId;
+            refresh();
+          }, signal);
+          choice.appendChild(pv);
           choices.appendChild(choice);
         }
         wrap.appendChild(choices);
+        if (previewMoveId && RELAY_LOADOUTS[id]?.includes(previewMoveId)) {
+          wrap.appendChild(buildMovePreviewBox(previewMoveId, id));
+        }
       }
       return wrap;
     }
@@ -1632,7 +2105,55 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         seats.insertBefore(swap, seats.children[1]);
       }
       const side = el("div", "da-dock__side");
-      if (gameMode === "RELAY") side.append(resonanceStrip(factionResonance(teamIds().map((id) => speciesTaxonomyForId(relayPartner(id)?.speciesId)?.faction))));
+      if (gameMode === "RELAY") {
+        side.append(resonanceStrip(factionResonance(teamIds().map((id) => speciesTaxonomyForId(relayPartner(id)?.speciesId)?.faction))));
+        // Phase 2: Tactical Art picker (F key) + Granular AI toggles
+        const tacWrap = el("div", "da-tactical-bar");
+        const tacRow = el("div", "da-tactical-bar__row");
+        tacRow.append(el("span", "da-tactical-bar__label", t("tactical.heading")));
+        for (const artId of TACTICAL_ART_IDS) {
+          const btn = button("da-chip-btn da-tactical-bar__art", t(`tactical.${artId}`), () => {
+            tacticalArtPref = artId;
+            previewMoveId = artId;
+            tick(); refresh();
+          }, signal);
+          btn.dataset.art = artId;
+          btn.title = t(`tactical.${artId}.desc`);
+          btn.setAttribute("aria-checked", String(tacticalArtPref === artId));
+          btn.classList.toggle("is-active", tacticalArtPref === artId);
+          tacRow.appendChild(btn);
+        }
+        const aiRow = el("div", "da-tactical-bar__row");
+        aiRow.append(el("span", "da-tactical-bar__label", t("ai.settings.heading")));
+        for (const key of ["autoAttack", "autoGuard", "inputBuffer"]) {
+          const tog = button("da-chip-btn da-tactical-bar__toggle", t(`ai.settings.${key}`), () => {
+            aiSettingsPref = { ...aiSettingsPref, [key]: !aiSettingsPref[key] };
+            tick(); refresh();
+          }, signal);
+          tog.dataset.aiKey = key;
+          tog.classList.toggle("is-active", aiSettingsPref[key] !== false);
+          tog.setAttribute("aria-pressed", String(aiSettingsPref[key] !== false));
+          aiRow.appendChild(tog);
+        }
+        const sysRow = el("div", "da-tactical-bar__row");
+        sysRow.append(el("span", "da-tactical-bar__label", t("v2.system.heading")));
+        for (const sys of ["v2", "legacy"]) {
+          const sbtn = button("da-chip-btn da-tactical-bar__sys", t(`v2.system.${sys}`), () => {
+            if (moveSystemPref === sys) return;
+            moveSystemPref = sys;
+            tick(); refresh();
+          }, signal);
+          sbtn.dataset.moveSystem = sys;
+          sbtn.classList.toggle("is-active", moveSystemPref === sys);
+          sbtn.setAttribute("aria-pressed", String(moveSystemPref === sys));
+          sysRow.appendChild(sbtn);
+        }
+        tacWrap.append(sysRow, tacRow, aiRow);
+        if (previewMoveId && DATA_ARENA_TACTICAL_ARTS[previewMoveId]) {
+          tacWrap.appendChild(buildMovePreviewBox(previewMoveId, partnerId));
+        }
+        side.appendChild(tacWrap);
+      }
       const rental = teamIds().some((id) => entryOf(gameMode, id)?.entry === "RENTAL");
       if (rental) side.append(el("p", "da-rental-note", t("entry.rentalHint")));
       dock.replaceChildren(seats, side);
@@ -1826,13 +2347,18 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     showOverlay(panel);
   }
 
-  function showResult() {
-    result = sim.getState().result;
+  function showResult(fromReplay = false) {
+    if (!fromReplay) {
+      result = sim.getState().result;
+      if (replayRecorder) { lastReplay = replayRecorder.finalize(result); replayRecorder = null; }
+    }
+    clearReplayUi();
+    replayPlayer = null;
     root.dataset.state = "RESULT";
     root.dataset.outcome = result.outcome;
     releaseInputs();
     audio?.suspend();
-    const { newBest, saved } = records.recordResult(result);
+    const { newBest, saved } = fromReplay ? { newBest: false, saved: null } : records.recordResult(result);
     // The ranch partners behind the relay seats (by species): a beacon's and a contract's rewards land on them.
     const snap = sim.getSnapshot?.() ?? null;
     const held = progress?.ownedInstances ?? [];
@@ -1841,15 +2367,15 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     // spends an armed bounty beacon on it (Owner 2026-11-10).
     let gachaTickets = 0;
     let campaignOutcome = null;
-    if (campaign && typeof onCampaignResult === "function") {
+    if (!fromReplay && campaign && typeof onCampaignResult === "function") {
       try { campaignOutcome = onCampaignResult({ outcome: result.outcome, timeSeconds: result.timeSeconds, fainted: result.relayFainted ?? 0 }); } catch { campaignOutcome = null; }
     }
-    if (!campaign && result.outcome === "VICTORY" && typeof onVictory === "function") {
+    if (!fromReplay && !campaign && result.outcome === "VICTORY" && typeof onVictory === "function") {
       try { gachaTickets = onVictory({ tournament: Boolean(result.tournament), partyIds })?.granted ?? 0; } catch { gachaTickets = 0; }
     }
     // Sync EXP for the ranch partners that fought; the host settles it into the save.
     let syncPanel = null;
-    if (typeof onSyncResult === "function") {
+    if (!fromReplay && typeof onSyncResult === "function") {
       try {
         const record = onSyncResult({ instanceIds: fighterInstances(), won: result.outcome === "VICTORY", attemptId: `arena:${matchId}` });
         syncPanel = record && typeof syncPanelFor === "function" ? syncPanelFor(record) : null;
@@ -1910,6 +2436,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const actions = el("div", "da-actions");
     const retry = button("da-btn da-btn--primary", t("result.retry"), () => { syncPanel?.dispose(); void startMatch(); }, signal);
     retry.dataset.autofocus = "1";
+    if (gameMode === "RELAY" && lastReplay?.totalSteps > 0) {
+      actions.appendChild(button("da-btn da-btn--replay", t("replay.watch"), () => { syncPanel?.dispose(); startReplay(lastReplay); }, signal));
+    }
     actions.append(retry, button("da-btn", t("result.change"), () => { void releaseMatch({ keepCast: true, keepEffects: true, keepAudio: true }); showSelect(); }, signal), button("da-btn da-btn--quiet", t("result.exit"), () => close(), signal));
     panel.append(actions, el("p", "da-fineprint", t(saved ? "result.recordNote" : "result.recordOff")));
     // A short beat so the crowd reaction and the last hit read before the panel.

@@ -164,11 +164,71 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
     if (prop.hits===1 || crossedDamageStep || prop.hp===0 || weak) events?.push({type:"PROP_HIT",id:prop.id,x,y,hp:prop.hp,maxHp:prop.maxHp,cause,material:prop.material,weak});
     if (prop.hp===0) {
       prop.destroyed=true;
-      for(const i of prop.cells) {terrain[i]=T.GROUND;if(prop.charred)scorch[i]=255;}
+      for(const i of prop.cells) {terrain[i]=T.GROUND;if(prop.temporary)propIndex[i]=-1;if(prop.charred)scorch[i]=255;}
       navRevision++;
-      events?.push({type:"PROP_DESTROYED",id:prop.id,x,y,charred:prop.charred,material:prop.material});
+      events?.push({type:"PROP_DESTROYED",id:prop.id,x,y,charred:prop.charred,material:prop.material,temporary:Boolean(prop.temporary)});
     }
     return true;
+  }
+  const TEMP_PROP_MATERIALS = Object.freeze({
+    STONE: { weak: ["water", "nature"], combustible: false, burnDps: 0 },
+    ICE: { weak: ["fire", "earth"], combustible: false, burnDps: 0 },
+    WOOD: { weak: ["fire", "frost"], combustible: true, burnDps: 14 },
+    METAL: { weak: ["fire", "earth"], combustible: false, burnDps: 0 },
+    CRYSTAL: { weak: ["shadow", "earth"], combustible: false, burnDps: 0 },
+    BASALT: { weak: ["water", "earth"], combustible: false, burnDps: 0 }
+  });
+  let nextTempPropId = 1;
+  /**
+   * Raise a temporary 1x1 destructible cover pillar / elemental shield wall.
+   * Blocks movement, line-of-sight and projectiles until destroyed or its TTL expires.
+   */
+  function spawnTemporaryProp({ col, row, material = "STONE", hp = 110, ttl = 12, weak = null, weakScale = 1.4, owner = null, element = null, maxPerOwner = 2, events = null } = {}) {
+    if (!inBounds(col, row)) return null;
+    const i = index(col, row);
+    if ((terrain[i] !== T.GROUND && terrain[i] !== T.STAGE) || propIndex[i] >= 0) return null;
+    if (owner && maxPerOwner > 0) {
+      const owned = props.filter((p) => p.temporary && !p.destroyed && p.owner === owner);
+      while (owned.length >= maxPerOwner) {
+        const oldest = owned.shift();
+        oldest.destroyed = true;
+        oldest.ttl = 0;
+        for (const ci of oldest.cells) { terrain[ci] = T.GROUND; propIndex[ci] = -1; }
+        navRevision++;
+        const ox = (oldest.col + oldest.width / 2) * cell, oy = (oldest.row + oldest.height / 2) * cell;
+        events?.push({ type: "TEMP_PROP_EXPIRE", id: oldest.id, x: ox, y: oy, material: oldest.material });
+      }
+    }
+    const mat = TEMP_PROP_MATERIALS[material] ? material : "STONE";
+    const matCfg = TEMP_PROP_MATERIALS[mat];
+    const resolvedWeak = weak ?? matCfg.weak;
+    const prop = {
+      id: `temp-${nextTempPropId++}`,
+      col, row, width: 1, height: 1,
+      material: mat,
+      element: element ?? null,
+      owner: owner ?? null,
+      maxHp: hp, hp,
+      weak: resolvedWeak,
+      weakScale,
+      burnDps: matCfg.burnDps,
+      combustible: matCfg.combustible,
+      temporary: true,
+      ttl,
+      maxTtl: ttl,
+      cells: [i],
+      destroyed: false,
+      charred: false,
+      hits: 0
+    };
+    const pi = props.length;
+    props.push(prop);
+    propIndex[i] = pi;
+    terrain[i] = T.SOLID;
+    navRevision++;
+    const x = (col + 0.5) * cell, y = (row + 0.5) * cell;
+    events?.push({ type: "TEMP_PROP_SPAWN", id: prop.id, col, row, x, y, material: mat, element: prop.element, owner: prop.owner, ttl });
+    return prop;
   }
   function damagePropsInRadius(x,y,radius,amount,events,cause="IMPACT",element=null) {
     let hit=0;
@@ -458,6 +518,19 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
       if (wet[i] > 0) wet[i] = Math.max(0, wet[i] - dt);
       if (ash[i] > 0) ash[i] = Math.max(0, ash[i] - dt);
     }
+    // Temporary tactical pillars expire after their TTL and reopen the tile cleanly.
+    for (const prop of props) {
+      if (!prop.temporary || prop.destroyed) continue;
+      prop.ttl -= dt;
+      if (prop.ttl <= 0) {
+        prop.destroyed = true;
+        prop.ttl = 0;
+        for (const ci of prop.cells) { terrain[ci] = T.GROUND; propIndex[ci] = -1; }
+        navRevision++;
+        const x = (prop.col + prop.width / 2) * cell, y = (prop.row + prop.height / 2) * cell;
+        events.push({ type: "TEMP_PROP_EXPIRE", id: prop.id, x, y, material: prop.material });
+      }
+    }
     if (burningCount <= 0) { fireTimer = 0; return; }
     for (const prop of props) if (!prop.destroyed && prop.cells.some(i=>fire[i]>0)) damageProp(prop,prop.burnDps*dt,events,"FIRE");
     for (let i = 0; i < count; i++) {
@@ -496,13 +569,19 @@ export function createDataArenaGrid({ map = DATA_ARENA_MAP, rules = DATA_ARENA_G
     burningCount = 0; iceCount = 0; fireTimer = 0; navRevision++;
     restoreNaturalIce(); // authored sheets are terrain, not transient hazards
     cooled.fill(0); cooledWarned.fill(0); cooledCount = 0;
+    for (const prop of props) {
+      if (!prop.temporary || prop.destroyed) continue;
+      prop.destroyed = true;
+      prop.ttl = 0;
+      for (const ci of prop.cells) { terrain[ci] = T.GROUND; propIndex[ci] = -1; }
+    }
   }
 
   return Object.freeze({
     resetDynamic, map,
     cols, rows, cell, count, terrain, flammable, fire, wet, ash, ice, scorch, props, charge, chargeTeam,
     naturalIce, iceIntegrity, refreeze, cooled,
-    propAtCell, propAt, propVisualState, damageProp, damagePropsInRadius,
+    propAtCell, propAt, propVisualState, damageProp, damagePropsInRadius, spawnTemporaryProp,
     index, inBounds, cellOf,
     get navRevision() { return navRevision; },
     get burningCount() { return burningCount; },
