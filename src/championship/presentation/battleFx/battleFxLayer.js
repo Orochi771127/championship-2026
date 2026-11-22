@@ -753,7 +753,11 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           director?.sequence([{slots: [event.slot], durationMs: 650, boost: 0.26}, {slots: [event.slot, ...ctx.opponentsOf(event.slot)], durationMs: 1100, boost: -0.05}]);
           { const s = toScreen(ctx, info.x, info.top + info.height * 0.5); hitFeel?.rush(s.x, s.y); }
           director?.shake(0.18);
-          impactAudio?.playUltimate?.();
+          const uPan = info.team === ctx.localTeam ? -0.22 : 0.22;
+          impactAudio?.playUltimate?.({ element: vfx?.element ?? look?.palette ?? null, moveId: event.moveId, pan: uPan });
+        } else {
+          const mPan = info.team === ctx.localTeam ? -0.22 : 0.22;
+          impactAudio?.playMove?.({ moveId: event.moveId, element: vfx?.element ?? look?.palette ?? null, ultimate: false, pan: mPan });
         }
         // An ordinary attack does not re-aim the shot (calm shot, Owner 2026-11-11): six fighters
         // launching in turn re-aimed it several times a second. The standing framing shows it.
@@ -795,7 +799,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         if (event.sound !== false) {
           const soundCritical = event.sound?.critical ?? critical;
           const soundTier = battleFxHitTier({ratio:event.sound?.ratio ?? event.ratio, ultimate:look?.tier === 'ultimate', critical:soundCritical});
-          impactAudio?.playHit?.({tier:soundTier, critical:soundCritical, combo:comboCount});
+          const hitPan = target.team === ctx.localTeam ? -0.24 : 0.24;
+          impactAudio?.playHit?.({tier:soundTier, critical:soundCritical, combo:comboCount, element:vfx?.element ?? look?.palette ?? null, moveId:event.moveId, pan:hitPan});
         }
         if (juicy) {
           // White first, then the move's element on the rim; the knock follows the hit.
@@ -894,7 +899,7 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         if (event.type === 'HEAL' && ctx.autoMoveAtlas?.ownsHeal(event.slot, event.amount)) continue;
         const info = slot(event.slot);
         if (!info) continue;
-        impactAudio?.playSupport?.('support');
+        impactAudio?.playSupport?.(event.type === 'HEAL' ? 'heal' : 'support', { pan: info.team === ctx.localTeam ? -0.2 : 0.2 });
         if (event.type === 'SUPPORT') cue({type: 'BUFF', system: supportVfxSystem(event.statusCode), slot: event.slot, x: info.x, y: info.groundY});
         // A heal that no support move cast (a regen, an item) shows the baked heal on the body.
         if (event.type === 'HEAL' && piecesBaked()) setPieces.play('heal', {x: info.x, y: info.top + info.height * 0.5, groundY: info.groundY,
@@ -919,13 +924,16 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
       if (event.type === 'STATUS') {
         if (event.tauntId && ctx.autoMoveAtlas?.ownsTaunt(event.tauntId)) continue;
         const info = slot(event.slot);
-        if (info) spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 0.7, tint: BATTLE_FX_PALETTES.dark.main, life: 420});
+        if (info) {
+          impactAudio?.playStatus?.({ status: event.status ?? event.statusCode ?? null, pan: info.team === ctx.localTeam ? -0.2 : 0.2 });
+          spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 0.7, tint: BATTLE_FX_PALETTES.dark.main, life: 420});
+        }
         continue;
       }
       if (event.type === 'KO') {
         const info = slot(event.slot);
         if (!info) continue;
-        impactAudio?.playKo?.();
+        impactAudio?.playKo?.({ pan: info.team === ctx.localTeam ? -0.22 : 0.22 });
         // The fall: a dust burst, two rings, debris and scorch where it lands.
         dust({x: info.x, groundY: info.groundY, count: rich ? 10 : 5, spread: info.width * 0.7, scale: 1.3, life: 900});
         if (piecesBaked()) setPieces.play('prop-dust', {x: info.x, y: info.groundY, groundY: info.groundY, palette: BATTLE_FX_PALETTES.earth,

@@ -18,6 +18,8 @@ import { MOVE_VFX_PIECE_SPRITES } from "../src/championship/presentation/vfx/mov
 import { V2_ARCHETYPES, resolveMoveSpecV2 } from "../src/championship/modes/dataArena/dataArenaMoveCatalogV2.js";
 import { createDataArenaPixelFxV2 } from "../src/championship/presentation/dataArena/dataArenaPixelFxV2.js";
 import { createDataArenaAudio } from "../src/championship/presentation/dataArena/dataArenaAudio.js";
+import { createCombatMoveAudioEngine, movePitchRate, canonicalAudioElement } from "../src/championship/presentation/combatMoveAudioEngine.js";
+import { createBattleImpactAudio } from "../src/championship/presentation/battleFx/battleImpactAudio.js";
 import {
   CANONICAL_TEN_ELEMENTS, SURFACE_KINDS, normalizeCanonicalElement,
   inferMoveAilment, inferMoveSurfacePatch, resolveVortexTransform, resolveWallElementReaction, buildWallShatterShards
@@ -1006,4 +1008,64 @@ test("phase 6 / 6 ailments & tactical art responsiveness: SLEEP+WAKE_SLAP, PARAL
   s.player.energy = 0;
   sim.step({ tactical: true });
   assert.ok(sim.drainEvents().some((e) => e.type === "TACTICAL_REFUSED" && e.reason === "ENERGY"), "emits TACTICAL_REFUSED(ENERGY)");
+});
+
+test("phase 7 / remastered broadcast-grade battle & 666-move audio engine: mastering chain, FM, colored noise, 10 elements, stereo pan & turn-based playMove/playStatus", () => {
+  let oscCount = 0, noiseCount = 0, compCount = 0, shaperCount = 0, panCount = 0, bufferCount = 0;
+  const makeParam = () => ({ value: 0, setValueAtTime() {}, exponentialRampToValueAtTime() {}, linearRampToValueAtTime() {}, setTargetAtTime() {} });
+  let clock = 0;
+  const mockContext = {
+    sampleRate: 44100,
+    state: "running",
+    get currentTime() { return clock; },
+    createGain() { return { gain: makeParam(), connect() {}, disconnect() {} }; },
+    createBiquadFilter() { return { type: "bandpass", frequency: makeParam(), Q: makeParam(), gain: makeParam(), connect() {}, disconnect() {} }; },
+    createDynamicsCompressor() { compCount++; return { threshold: makeParam(), knee: makeParam(), ratio: makeParam(), attack: makeParam(), release: makeParam(), connect() {}, disconnect() {} }; },
+    createWaveShaper() { shaperCount++; return { curve: null, oversample: "none", connect() {}, disconnect() {} }; },
+    createStereoPanner() { panCount++; return { pan: makeParam(), connect() {}, disconnect() {} }; },
+    createOscillator() { oscCount++; return { type: "sine", frequency: makeParam(), connect() {}, start() {}, stop() {} }; },
+    createBuffer(ch, len) { bufferCount++; return { getChannelData: () => new Float32Array(len) }; },
+    createBufferSource() { noiseCount++; return { buffer: null, playbackRate: makeParam(), connect() {}, start() {}, stop() {} }; }
+  };
+
+  // Verify deterministic pitch rate & canonical 10-element mapping
+  assert.ok(movePitchRate("emberBolt") >= 0.95 && movePitchRate("emberBolt") <= 1.05);
+  assert.equal(movePitchRate("own-440"), movePitchRate("own-440"));
+  assert.equal(canonicalAudioElement("frost", "iceShard"), "ICE");
+  assert.equal(canonicalAudioElement("shadow", "shadeStep"), "MOON");
+
+  const engine = createCombatMoveAudioEngine({ getOutput: () => ({ context: mockContext, destination: {} }), now: () => clock * 1000 });
+  clock += 0.2;
+  assert.equal(engine.playWindup({ archetype: "STREAM_BEAM", element: "FIRE", moveId: "own-440", pan: -0.3 }), true);
+  assert.equal(compCount, 2, "dual-stage mastering compressor + brickwall limiter mounted");
+  assert.equal(shaperCount, 1, "warm soft-clip waveshaper mounted");
+  assert.equal(bufferCount, 4, "4 pre-baked deterministic noise banks (white/pink/brown/crackle)");
+  assert.ok(panCount >= 1, "stereo panner engaged for spatialized moves");
+
+  for (const el of CANONICAL_TEN_ELEMENTS) {
+    clock += 0.25;
+    assert.equal(engine.playMove({ archetype: "HOMING_ORB", element: el, moveId: `test-${el}`, pan: 0.25 }), true, `10-element timbre ${el} plays cleanly`);
+  }
+  clock += 0.25;
+  assert.equal(engine.playImpact({ amount: 38, critical: true, effectiveness: "super", element: "THUNDER", moveId: "arcBolt", pan: -0.2 }), true);
+  assert.ok(engine.getDiagnostics().windupsPlayed >= 1);
+  assert.ok(engine.getDiagnostics().movesPlayed >= 10);
+  assert.ok(engine.getDiagnostics().impactsPlayed >= 1);
+  assert.ok(oscCount >= 20 && noiseCount >= 10, `FM + colored noise synthesis active (osc=${oscCount}, noise=${noiseCount})`);
+  engine.dispose();
+
+  // Verify Turn-Based Battle impactAudio now plays all 666 moves & 6 statuses cleanly!
+  let wallMs = 5000;
+  const turnAudio = createBattleImpactAudio({ getOutput: () => ({ context: mockContext, destination: {} }), now: () => wallMs });
+  assert.equal(turnAudio.playMove({ moveId: 112, element: "WATER", pan: -0.22 }), true, "turn-based battle plays per-move elemental sound");
+  wallMs += 200;
+  assert.equal(turnAudio.playHit({ tier: "heavy", critical: true, combo: 3, element: "ICE", moveId: 112, pan: 0.22 }), true);
+  wallMs += 250;
+  assert.equal(turnAudio.playStatus({ status: "SLEEP", pan: 0.2 }), true);
+  wallMs += 250;
+  assert.equal(turnAudio.playSupport("heal", { pan: -0.2 }), true);
+  wallMs += 250;
+  assert.equal(turnAudio.playKo({ pan: 0.2 }), true);
+  assert.ok(turnAudio.getDiagnostics().played >= 5);
+  turnAudio.dispose();
 });

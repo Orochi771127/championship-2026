@@ -1089,6 +1089,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
 
   // ------------------------------------------------------------------ events -> DOM/audio/music
   let audioComboCount = 0, audioComboAt = 0, spikeAudioStep = 0;
+  function panOf(x) {
+    if (!Number.isFinite(x)) return 0;
+    const width = sim?.map ? (sim.map.cols * sim.map.cell) : 1200;
+    return Math.max(-0.42, Math.min(0.42, ((x / Math.max(1, width)) * 2 - 1) * 0.42));
+  }
   function moveAudioSpec(moveId, team = "player") {
     const state = sim?.getState?.();
     const fallbackEl = team === "player"
@@ -1098,7 +1103,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const spec = moveId != null ? resolveMoveSpecV2(moveId, move) : null;
     return {
       archetype: spec?.v2Archetype ?? "VOLLEY_BARRAGE",
-      element: spec?.paletteKey ?? fallbackEl ?? "neutral"
+      element: spec?.paletteKey ?? fallbackEl ?? "neutral",
+      moveId: moveId ?? null
     };
   }
   function handleEvents(events) {
@@ -1286,21 +1292,22 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         case "CAST":
           if (gameMode === "RELAY" && event.moveId) {
             const spec = moveAudioSpec(event.moveId, event.team);
-            if (spec.archetype === "STREAM_BEAM") audio?.playMove({ ...spec, phase: "cast" });
+            audio?.playWindup?.({ ...spec, duration: event.windup ?? 0.2, pan: panOf(event.x) });
           }
           break;
         case "CAST_RELEASE":
           if (gameMode === "RELAY" && event.moveId) {
             const spec = moveAudioSpec(event.moveId, event.team);
-            audio?.playMove({ ...spec, phase: "release", ultimate: Boolean(event.ultimate) });
+            audio?.playMove({ ...spec, phase: "release", ultimate: Boolean(event.ultimate), pan: panOf(event.x) });
           } else if (event.team === "player") {
-            audio?.play(event.moveType === "LUNGE" ? "dash" : "burst");
+            audio?.play(event.moveType === "LUNGE" ? "dash" : "burst", { pan: panOf(event.x) });
           }
           break;
         case "ULT_CAST": {
           const spec = moveAudioSpec(event.moveId, event.team);
-          audio?.playMove({ ...spec, phase: "cast", ultimate: true });
-          audio?.play("roar");
+          const p = panOf(event.x);
+          audio?.play("ultimate", { pan: p });
+          audio?.playMove({ ...spec, phase: "release", ultimate: true, pan: p });
           ultCutIn(event);
           break;
         }
@@ -1308,20 +1315,26 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         case "ZONE_BURST":
           if (gameMode === "RELAY" && event.moveId) {
             const spec = moveAudioSpec(event.moveId, event.team);
-            audio?.playMove({ archetype: event.type === "ZONE_BURST" ? "METEOR_RAIN" : spec.archetype, element: spec.element, phase: "burst" });
-          } else audio?.play("burst");
+            audio?.playMove({ archetype: event.type === "ZONE_BURST" ? "METEOR_RAIN" : spec.archetype, element: spec.element, moveId: spec.moveId, phase: "burst", pan: panOf(event.x) });
+          } else audio?.play("burst", { pan: panOf(event.x) });
           break;
-        case "CANCEL": if (event.rule === "BARRIER_BLOCKS_SHOT") { audio?.playImpact({ guarded: true }); toast(t("fct.blocked"), { x: event.x, y: event.y - 40, tone: "good", key: "blocked", gap: 1200 }); } break;
+        case "CANCEL": if (event.rule === "BARRIER_BLOCKS_SHOT") { audio?.playImpact({ guarded: true, pan: panOf(event.x) }); toast(t("fct.blocked"), { x: event.x, y: event.y - 40, tone: "good", key: "blocked", gap: 1200 }); } break;
         case "RIVAL_HIT": {
           const nowT = sim?.getState?.()?.time ?? 0;
           audioComboCount = nowT - audioComboAt <= 1.85 ? audioComboCount + 1 : 1;
           audioComboAt = nowT;
-          audio?.playImpact({ amount: event.amount ?? 14, guarded: Boolean(event.guarded), combo: audioComboCount });
+          const mId = event.contact?.moveId ?? null;
+          const spec = mId ? moveAudioSpec(mId, "player") : null;
+          audio?.playImpact({ amount: event.amount ?? 14, guarded: Boolean(event.guarded), combo: audioComboCount, element: spec?.element ?? null, moveId: mId, pan: panOf(event.x) });
           break;
         }
-        case "SKILL_HIT": audio?.playImpact({ amount: event.amount ?? 12 }); break;
+        case "SKILL_HIT": {
+          const spec = event.moveId ? moveAudioSpec(event.moveId, "player") : null;
+          audio?.playImpact({ amount: event.amount ?? 12, element: spec?.element ?? null, moveId: event.moveId ?? null, pan: panOf(event.x) });
+          break;
+        }
         case "EFFECTIVE":
-          if (gameMode === "RELAY") audio?.playImpact({ amount: event.mult > 1 ? 26 : 8, effectiveness: event.mult > 1 ? "super" : "resist" });
+          if (gameMode === "RELAY") audio?.playImpact({ amount: event.mult > 1 ? 26 : 8, effectiveness: event.mult > 1 ? "super" : "resist", element: event.element ?? null, pan: panOf(event.x) });
           break;
         case "RIVAL_DODGE": toast(t("fct.dodge"), { x: event.x, y: event.y - 64, tone: "dodge", key: "rival-dodge", gap: 450 }); break;
         case "OFFER": showLevelUp(event.options); break;

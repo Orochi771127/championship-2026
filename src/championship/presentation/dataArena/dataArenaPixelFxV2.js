@@ -62,9 +62,23 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
 
   const shotSheets = new Map();
   const liveShots = [];
+  const livePuddles = new Map();
   const shotLayer = new PIXI.Container();
   shotLayer.label = "pixelfx v2 shots";
   front.addChild(shotLayer);
+  const puddleLayer = new PIXI.Container();
+  puddleLayer.label = "pixelfx v2 ground surfaces";
+  (ground ?? front).addChild(puddleLayer);
+
+  const PUDDLE_PIXELFX = Object.freeze({
+    WATER_PUDDLE: { piece: "mark-ripple", paletteKey: "water", fps: 12, alpha: 0.78 },
+    POISON_POOL: { piece: "splat", paletteKey: "dark", fps: 10, alpha: 0.82 },
+    ICE_PATCH: { piece: "mark-frost", paletteKey: "ice", fps: 10, alpha: 0.85 },
+    FIRE_PATCH: { piece: "core", paletteKey: "fire", fps: 14, alpha: 0.82 },
+    VINE_PATCH: { piece: "mark-roots", paletteKey: "nature", fps: 10, alpha: 0.84 },
+    ELECTRIFIED_WATER: { piece: "mark-ripple", paletteKey: "thunder", fps: 16, alpha: 0.86 },
+    MUD_PATCH: { piece: "prop-dust", paletteKey: "earth", fps: 8, alpha: 0.78 }
+  });
 
   let holdMs = 0;
   let lastRingAt = 0;
@@ -442,6 +456,42 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       return true;
     },
     drawsShots: () => true,
+    /** Sync persistent ground surface fields using 100% pure patch-gg/pixelfx baked pixel sprites (ZERO cartoon vector circles!). */
+    syncPuddles(puddles = []) {
+      const seen = new Set();
+      for (const p of puddles) {
+        if (!p || p.done) continue;
+        seen.add(p.id);
+        const cfg = PUDDLE_PIXELFX[p.kind] ?? PUDDLE_PIXELFX.WATER_PUDDLE;
+        let entry = livePuddles.get(p.id);
+        if (entry && entry.kind !== p.kind) {
+          entry.sprite.destroy();
+          livePuddles.delete(p.id);
+          entry = null;
+        }
+        if (!entry) {
+          const sheet = shotSheet(cfg.piece, cfg.paletteKey);
+          if (!sheet?.body?.textures?.length) continue;
+          const sprite = new PIXI.Sprite(sheet.body.textures[0]);
+          sprite.anchor.set(0.5, 0.5);
+          puddleLayer.addChild(sprite);
+          entry = { id: p.id, kind: p.kind, sprite, sheet, cfg, age: (p.id % 7) * 0.13 };
+          livePuddles.set(p.id, entry);
+        }
+        const tex = entry.sheet.body.textures[0];
+        const baseW = Math.max(24, tex?.width ?? 64);
+        const sc = Math.max(0.7, Math.min(2.6, (p.radius * 2.05) / baseW));
+        entry.sprite.position.set(Math.round(p.x), Math.round(p.y + 6));
+        entry.sprite.scale.set(sc, sc * 0.64);
+        entry.sprite.alpha = entry.cfg.alpha * Math.min(1, Math.max(0.15, (p.ttl ?? 1) / 1.2));
+      }
+      for (const [id, entry] of livePuddles) {
+        if (!seen.has(id)) {
+          entry.sprite.destroy();
+          livePuddles.delete(id);
+        }
+      }
+    },
     update(dtMs) {
       const dt = Math.min(0.1, dtMs / 1000);
       if (holdMs > 0) holdMs = Math.max(0, holdMs - dtMs);
@@ -449,6 +499,13 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       pieces?.update(stepMs);
       groundPieces?.update(stepMs);
       volCache.update(dt);
+      for (const entry of livePuddles.values()) {
+        entry.age += dt;
+        const frames = entry.sheet.body.textures;
+        if (frames.length) {
+          entry.sprite.texture = frames[Math.floor(entry.age * entry.cfg.fps) % frames.length];
+        }
+      }
       for (let i = liveShots.length - 1; i >= 0; i--) {
         const s = liveShots[i];
         s.age += dt;
@@ -487,6 +544,9 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
     }),
     dispose() {
       volCache.dispose();
+      for (const entry of livePuddles.values()) entry.sprite.destroy();
+      livePuddles.clear();
+      puddleLayer.destroy();
       for (const s of liveShots) { s.bodySprite.destroy(); s.glowSprite?.destroy(); }
       liveShots.length = 0;
       for (const entry of shotSheets.values()) {

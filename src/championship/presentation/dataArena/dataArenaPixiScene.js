@@ -898,6 +898,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     spawn({ x, y, texture: textures.glow, tint: 0xffffff, scale: 0.4, scaleTo: 0.1, life: 0.12 });
   }
   function puff(x, y, tint, count = 4, size = 1.2) {
+    // Pure PixelFX mode: never paint blurry cartoon smoke blobs over crisp 16-bit sprites!
+    if (purePixelFx) return;
     for (let i = 0; i < (rich ? count : 2); i++) {
       spawn({ x: x + (i - count / 2) * 6, y, vx: (i - count / 2) * 18, vy: -50 - i * 10, texture: textures.soft, tint, scale: size * 0.5, scaleTo: size,
         life: 0.7, alpha: 0.55, add: false, drag: 1.5 });
@@ -2280,31 +2282,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         }
       }
     }
-    // Cross-ring physical-chemistry ground surfaces (Poison Pool, Water Puddle, Ice Patch, Fire Patch, Vines, Electrified Water, Mud)
-    const PUDDLE_STYLE = {
-      POISON_POOL: { fill: 0x7a28c8, edge: 0x4ef068, dot: 0xa4ff6e },
-      WATER_PUDDLE: { fill: 0x1ca3ff, edge: 0x92e6ff, dot: 0xe6fbff },
-      ICE_PATCH: { fill: 0x9ceeff, edge: 0xffffff, dot: 0xdff8ff },
-      FIRE_PATCH: { fill: 0xff4c1a, edge: 0xffc83b, dot: 0xfff08a },
-      VINE_PATCH: { fill: 0x1f8a3c, edge: 0x6dff68, dot: 0x3bd458 },
-      ELECTRIFIED_WATER: { fill: 0x1ca3ff, edge: 0xffe44d, dot: 0xffffff },
-      MUD_PATCH: { fill: 0x6b472a, edge: 0xa17648, dot: 0x452b17 }
-    };
-    for (const p of state.puddles ?? []) {
-      const st = PUDDLE_STYLE[p.kind] ?? PUDDLE_STYLE.WATER_PUDDLE;
-      const fade = Math.min(1, p.ttl / 1.2);
-      const pulse = 1 + Math.sin(elapsed * 4.5 + p.id) * 0.03;
-      const rx = p.radius * pulse;
-      const ry = p.radius * 0.62 * pulse;
-      g.ellipse(p.x, p.y + 4, rx, ry).fill({ color: st.fill, alpha: 0.28 * fade }).stroke({ width: 2.2, color: st.edge, alpha: 0.72 * fade });
-      g.ellipse(p.x, p.y + 4, rx * 0.68, ry * 0.65).fill({ color: st.edge, alpha: 0.14 * fade });
-      // Subtle animated bubbles / sparks / frost facets inside the surface patch
-      for (let bi = 0; bi < 3; bi++) {
-        const ang = elapsed * (p.kind === "ELECTRIFIED_WATER" ? 5.2 : 1.4) + p.id * 1.7 + bi * 2.1;
-        const bx = p.x + Math.cos(ang) * rx * 0.45;
-        const by = p.y + 4 + Math.sin(ang) * ry * 0.42;
-        g.circle(bx, by, p.kind === "POISON_POOL" ? 4.5 : 3).fill({ color: st.dot, alpha: 0.65 * fade });
-      }
+    // Ground surface pools: 100% pure patch-gg/pixelfx baked pixel sprites (ZERO cartoon vector circles!)
+    if (purePixelFx) {
+      elementFx.syncPuddles?.(state.puddles ?? []);
     }
     // Delayed zones: additive glowing magic arrays with rotating rune borders instead of flat grey concentric rings.
     const ZONE_COLOR = { IGNITE: 0xff5a1f, ROOT: 0x22e568, SLOW: 0x1ca3ff, NONE: 0xff3b5c };
