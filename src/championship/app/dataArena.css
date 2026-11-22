@@ -1193,3 +1193,7 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
   background: #ffd447;
   color: #141824;
 }
+
+/* Plan A (2026-11-23): Single PB-Rank manual battle mode hides legacy mode cartridges and makes Dodge clickable on desktop */
+.da-modes[hidden] { display: none !important; }
+.da-chip--dash { pointer-events: auto; cursor: pointer; }

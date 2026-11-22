@@ -855,9 +855,10 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     if (!dx && !dy) { dx = Math.cos(laser.angle); dy = Math.sin(laser.angle); }
     const length = Math.hypot(dx, dy) || 1;
     player.dashDirX = dx / length; player.dashDirY = dy / length;
-    player.dashTimer = DATA_ARENA_PLAYER.dash.duration;
-    player.dashGrace = DATA_ARENA_PLAYER.dash.invulnerable;
-    player.invulnerable = Math.max(player.invulnerable, DATA_ARENA_PLAYER.dash.invulnerable);
+    // Plan A (PbRank rhythm): crisp 0.26 s invulnerable evasive roll in unified RELAY V2 mode.
+    player.dashTimer = v2Mode ? 0.20 : DATA_ARENA_PLAYER.dash.duration;
+    player.dashGrace = v2Mode ? 0.26 : DATA_ARENA_PLAYER.dash.invulnerable;
+    player.invulnerable = Math.max(player.invulnerable, player.dashGrace);
     player.dashCharges--;
     if (player.dashRecharge <= 0) player.dashRecharge = dashCooldown;
     player.perfectThisDash = false;
@@ -998,7 +999,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         break;
       }
       case "DASH": {
-        const step = DATA_ARENA_PLAYER.dash.speed * DT;
+        const dashSpeed = v2Mode ? 1050 : DATA_ARENA_PLAYER.dash.speed;
+        const step = dashSpeed * DT;
         moveBody(player, player.dashDirX * step, player.dashDirY * step, movementKind(player));
         player.vx = player.dashDirX * stat.speed; player.vy = player.dashDirY * stat.speed;
         if (stat.dashDamage > 0) {
@@ -2297,8 +2299,13 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       if (caster.hp <= 0) { caster.cast = caster.lunge = caster.action = null; removeTelegraph(`cast:${caster.id}`); return; }
     }
     for (const id in caster.cooldowns) if (caster.cooldowns[id] > 0) caster.cooldowns[id] = Math.max(0, caster.cooldowns[id] - DT);
-    if (state.time - caster.energySpentAt >= DATA_ARENA_ENERGY.regenDelay) {
-      const regen = caster === player ? stat.energyRegen : DATA_ARENA_ENERGY.regen * regenScale;
+    // Plan A (PbRank rhythm): unified RELAY V2 uses rapid low-delay TP recovery so 4 active moves flow cleanly on independent cooldowns.
+    const regenDelay = v2Mode ? 0.2 : DATA_ARENA_ENERGY.regenDelay;
+    if (state.time - caster.energySpentAt >= regenDelay) {
+      const baseRegen = v2Mode ? 26 : DATA_ARENA_ENERGY.regen;
+      const regen = caster === player
+        ? (v2Mode ? Math.max(stat.energyRegen, baseRegen * (1 + upgradeValue(upgrades, "energyRegen"))) : stat.energyRegen)
+        : baseRegen * regenScale;
       caster.energy = Math.min(DATA_ARENA_ENERGY.max, caster.energy + regen * DT);
     }
     if (caster.barrier > 0) caster.barrier = Math.max(0, caster.barrier - DT);

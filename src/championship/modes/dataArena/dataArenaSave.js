@@ -22,7 +22,7 @@ const count = (value) => (Number.isSafeInteger(value) && value >= 0 ? Math.min(v
 export function defaultDataArenaRecords() {
   return {
     schemaVersion: 1, kind: "DATA_ARENA_RECORDS", runs: 0, wins: 0, bestScore: 0, bestVictorySeconds: null,
-    lastPartnerId: DATA_ARENA_PARTNERS[0].id, lastMode: "TOURNAMENT", relayLoadouts: {}, relayReserveId: null, relayThirdId: null, relayArenaId: RELAY_MAP_IDS[0], partners: {}, modes: {}, settings: { shake: true, quality: "auto" }, briefingSeen: false
+    lastPartnerId: DATA_ARENA_PARTNERS[0].id, lastMode: "RELAY", relayLoadouts: {}, relayReserveId: null, relayThirdId: null, relayArenaId: RELAY_MAP_IDS[0], partners: {}, modes: {}, settings: { shake: true, quality: "auto" }, briefingSeen: false
   };
 }
 

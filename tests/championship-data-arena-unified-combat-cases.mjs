@@ -25,6 +25,8 @@ import {
   inferMoveAilment, inferMoveSurfacePatch, resolveVortexTransform, resolveWallElementReaction, buildWallShatterShards
 } from "../src/championship/modes/dataArena/dataArenaCombos.js";
 import { BATTLE_MOVE_NAMES } from "../src/championship/text/battleMoveNames.js";
+import { defaultDataArenaRecords } from "../src/championship/modes/dataArena/dataArenaSave.js";
+import { DATA_ARENA_TEXT } from "../src/championship/text/dataArenaText.js";
 import { readFileSync } from "node:fs";
 
 function startRelayFight(opts = {}) {
@@ -1153,4 +1155,33 @@ test("phase 8 / PbRank overhaul (Batch A+B+C): decluttered lobby/HUD, native ski
   assert.ok(pst.player.hurtTimer > 0.2, "unguarded hit sets 230ms directional hurtTimer");
   assert.ok(pst.player.hitDirX < -0.9, "hitDir points away from attacker");
   assert.ok(pst.player.hitstun >= 0.12 && pst.player.hitstun <= 0.20, "PbRank hitstun clamped in [0.12, 0.20]s");
+});
+
+test("phase 9 / Plan A single PB-Rank manual battle mode: unified RELAY entry, hidden legacy mode bar, 1-tap Manual/Auto toggle, crisp 0.26s dodge & rapid TP flow", () => {
+  // 1) Default records & copy converge cleanly to ONE unified PB-Rank 3v3 real-time arena
+  assert.equal(defaultDataArenaRecords().lastMode, "RELAY", "default Data Arena mode is unified RELAY");
+  assert.ok(!DATA_ARENA_TEXT["zh-Hant"]["entry.description"].includes("數據錦標賽"), "ZH entry description advertises single 3v3 real-time arena");
+  assert.ok(!DATA_ARENA_TEXT.en["entry.description"].includes("Tournament / Harbor"), "EN entry description advertises single 3v3 real-time arena");
+
+  // 2) dataArenaScreen.js locks default player entry to RELAY, hides legacy mode cartridges, uses 1-tap MANUAL/AUTO toggle, and skips repeat briefing
+  const screenSrc = readFileSync(new URL("../src/championship/app/dataArenaScreen.js", import.meta.url), "utf8");
+  const cssSrc = readFileSync(new URL("../src/championship/app/dataArena.css", import.meta.url), "utf8");
+  assert.ok(screenSrc.includes('let gameMode = campaign ? "RELAY" : (urlMode ?? "RELAY");'), "player manual battle always enters unified RELAY unless ?mode= override");
+  assert.ok(screenSrc.includes("if (campaign || !urlMode) modes.hidden = true;"), "legacy 4-mode cartridge bar hidden in single-mode lobby");
+  assert.ok(screenSrc.includes('controlModePref = current === "MANUAL" ? "AUTO" : "MANUAL";'), "in-battle control toggle is 1-tap MANUAL/AUTO");
+  assert.ok(screenSrc.includes("if (records.get().briefingSeen) void startMatch();"), "repeat runs jump straight into combat without modal friction");
+  assert.ok(cssSrc.includes(".da-modes[hidden] { display: none !important; }"), "hidden mode bar takes zero layout space");
+
+  // 3) Unified RELAY V2 combat rhythm: 0.26s PB-Rank dodge invulnerability + rapid 0.20s-delay 26 TP/s recovery
+  const sim = startRelayFight({ moveSystem: "v2", controlMode: "MANUAL" });
+  const st = sim.getState();
+  sim.step({ dash: true, moveX: 1, moveY: 0 });
+  assert.ok(Math.abs(st.player.dashGrace - 0.26) < 0.02, "RELAY V2 dodge grants PB-Rank 0.26 s invulnerability");
+  assert.ok(Math.abs(st.player.dashTimer - 0.20) < 0.02, "RELAY V2 dodge runs 0.20 s crisp evasive roll");
+  for (let i = 0; i < 15; i++) sim.step({});
+
+  st.player.energy = 30;
+  st.player.energySpentAt = st.time;
+  for (let i = 0; i < 60; i++) sim.step({}); // 1.0 s total: 0.20 s delay + 0.80 s * 26 TP/s = +20.8 TP
+  assert.ok(st.player.energy >= 49, `RELAY V2 rapid TP regen prevents mana drought (got ${st.player.energy.toFixed(1)})`);
 });

@@ -177,9 +177,16 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   let partnerId = relayPickable(records.get().lastPartnerId);
   const relayLoadouts = records.get().relayLoadouts ?? {};
   let relayReserveId=relayPickable(records.get().relayReserveId),relayThirdId=relayPickable(records.get().relayThirdId),relayArenaId=records.get().relayArenaId;
-  let gameMode = MODES.includes(records.get().lastMode) ? records.get().lastMode : "TOURNAMENT";
-  // Journey zone stage (Owner 2026-11-10): RELAY on its own field against its own three rivals, with
-  // buff picks between waves; mode and field are fixed and the arena's own records keep their choices.
+  const urlMode = (() => {
+    try {
+      const search = href ? (href.includes("?") ? href.slice(href.indexOf("?")) : "") : (globalThis.location?.search ?? "");
+      const raw = new URLSearchParams(search).get("mode");
+      return raw && MODES.includes(raw.toUpperCase()) ? raw.toUpperCase() : null;
+    } catch { return null; }
+  })();
+  // Plan A (Owner 2026-11-23): Manual Battle converges into ONE unified PB-Rank 3v3 real-time arena (RELAY + V2 PixelFX).
+  // Legacy mode strings stay reachable only via an explicit ?mode= QA override.
+  let gameMode = campaign ? "RELAY" : (urlMode ?? "RELAY");
   if (campaign) { gameMode = "RELAY"; relayArenaId = campaign.field; }
   const campaignCast = campaign ? campaign.rivals.map((r) => cast.partners.find((p) => p.speciesId === r.speciesId) ?? null) : null;
   const rivalName = (rivalId) => cast.rivals.find((rival) => rival.rivalId === rivalId)?.name
@@ -271,8 +278,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     } catch { return "v2"; }
   })();
   function cycleControlMode() {
-    const idx = CONTROL_MODES.indexOf(sim?.getControlMode?.() ?? controlModePref);
-    controlModePref = CONTROL_MODES[(idx + 1) % CONTROL_MODES.length];
+    // Plan A (PbRank): crisp 1-tap toggle between Manual control and AI Auto/Spectator mode.
+    const current = sim?.getControlMode?.() ?? controlModePref;
+    controlModePref = current === "MANUAL" ? "AUTO" : "MANUAL";
     sim?.setControlMode?.(controlModePref);
     tactical(t(`relay.control.${controlModePref}`), { tone: "good", key: "control-mode", ms: 1600 });
   }
@@ -621,7 +629,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     kit.appendChild(hudRefs.ult);
     for (const [slot, node] of skillButtons.entries()) node.firstChild.textContent = kitMoves[slot] ? moveName(kitMoves[slot]) : "";
     ultButton.firstChild.textContent = t(gameMode === 'RELAY' ? 'relay.touch.ult' : 'touch.ult');
-    hudRefs.dash = el("div", "da-chip", t("hud.dash"));
+    hudRefs.dash = button("da-chip da-chip--dash", t("hud.dash"), () => { if (root.dataset.state === "PLAY") latch.dash = true; }, signal);
     hudRefs.guard = button("da-chip da-chip--guard", t("relay.guard"), () => { if (root.dataset.state === "PLAY") latch.guard = true; }, signal);
     hudRefs.guard.hidden = gameMode !== "RELAY";
     hudRefs.tacticalArt = button("da-chip da-chip--tactical", "", () => { if (root.dataset.state === "PLAY") latch.tactical = true; }, signal);
@@ -1777,9 +1785,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const head = el("header", "da-panel__head");
     const eyebrow = el("p", "da-eyebrow");
     head.append(eyebrow, el("h2", "da-title", campaign ? campaign.title : t("mode.title")));
-    // Mode: three cartridges side by side; the picked one names its rules on the intel line below.
+    // Plan A (2026-11-23): Manual Battle is ONE single PB-Rank 3v3 real-time mode; hide legacy mode cartridges unless explicitly requested via ?mode=.
     const modes = el("div", "da-modes");
-    if (campaign) modes.hidden = true;
+    if (campaign || !urlMode) modes.hidden = true;
     modes.setAttribute("role", "radiogroup");
     modes.setAttribute("aria-label", t("mode.heading"));
     for (const id of MODES) {
@@ -2377,7 +2385,10 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const actions = el("div", "da-actions");
     const start = button("da-btn da-btn--primary", t("select.start"), () => {
       partnerPower = withSyncPower(dataArenaPartnerPower(entriesFor(gameMode)));
-      records.setLastPartner(partnerId); if (!campaign) { records.setLastMode(gameMode); if(gameMode==="RELAY")records.setRelayTeam(relayReserveId,relayArenaId,relayThirdId); } audio?.play?.("ui"); showBriefing();
+      records.setLastPartner(partnerId); if (!campaign) { records.setLastMode(gameMode); if(gameMode==="RELAY")records.setRelayTeam(relayReserveId,relayArenaId,relayThirdId); } audio?.play?.("ui");
+      // Plan A (PbRank): jump straight into combat once the player has seen the 10-second controls guide.
+      if (records.get().briefingSeen) void startMatch();
+      else showBriefing();
     }, signal);
     start.dataset.autofocus = "1";
     actions.append(start, button("da-btn", t("select.back"), () => close(), signal));
