@@ -18,6 +18,11 @@ import { MOVE_VFX_PIECE_SPRITES } from "../src/championship/presentation/vfx/mov
 import { V2_ARCHETYPES, resolveMoveSpecV2 } from "../src/championship/modes/dataArena/dataArenaMoveCatalogV2.js";
 import { createDataArenaPixelFxV2 } from "../src/championship/presentation/dataArena/dataArenaPixelFxV2.js";
 import { createDataArenaAudio } from "../src/championship/presentation/dataArena/dataArenaAudio.js";
+import {
+  CANONICAL_TEN_ELEMENTS, SURFACE_KINDS, normalizeCanonicalElement,
+  inferMoveAilment, inferMoveSurfacePatch, resolveVortexTransform, resolveWallElementReaction, buildWallShatterShards
+} from "../src/championship/modes/dataArena/dataArenaCombos.js";
+import { BATTLE_MOVE_NAMES } from "../src/championship/text/battleMoveNames.js";
 import { readFileSync } from "node:fs";
 
 function startRelayFight(opts = {}) {
@@ -801,5 +806,204 @@ test("666-move procedural SFX & fighting-game impact audio: all 20 archetypes, 1
   assert.ok(diag.movesPlayed >= 15, `played procedural move SFX (${diag.movesPlayed})`);
   assert.ok(diag.impactsPlayed >= 5, `played fighting-game impact SFX (${diag.impactsPlayed})`);
   assert.ok(oscCount > 20 && noiseCount > 10, `layered oscillators (${oscCount}) + noise bursts (${noiseCount})`);
+  for (const cue of ["shatter", "combo", "igniteBoom", "freezeSnap", "shockArc", "sleep", "poison", "paralyze", "refused"]) {
+    clock += 0.3;
+    audio.play(cue);
+  }
+  assert.ok(audio.getDiagnostics().played >= diag.played + 9, "all reaction & ailment SFX cues play cleanly");
   audio.dispose();
+});
+
+test("phase 6 / 10-element physical-chemistry: all 638 moves resolve across canonical 10 elements with surface & ailment coverage", () => {
+  const allIds = [...Object.keys(RELAY_POOL_MOVE_ELEMENT), ...Object.keys(BATTLE_MOVE_NAMES).map((n) => `own-${n}`)];
+  assert.ok(allIds.length >= 630, `expected >= 630 catalog moves, got ${allIds.length}`);
+  const elemCounts = Object.fromEntries(CANONICAL_TEN_ELEMENTS.map((e) => [e, 0]));
+  const surfaceCounts = {};
+  const ailmentCounts = {};
+  for (const id of allIds) {
+    const spec = resolveMoveSpecV2(id);
+    const el = normalizeCanonicalElement(RELAY_POOL_MOVE_ELEMENT[id] ?? spec.paletteKey, id);
+    if (el && elemCounts[el] !== undefined) elemCounts[el]++;
+    const surf = inferMoveSurfacePatch(id, spec.paletteKey, el, { v2Archetype: spec.v2Archetype });
+    if (surf) surfaceCounts[surf.kind] = (surfaceCounts[surf.kind] ?? 0) + 1;
+    const ail = inferMoveAilment(id, spec.paletteKey, el, { type: "ZONE" });
+    if (ail) {
+      const k = ail.sleep ? "SLEEP" : ail.root ? "FREEZE" : ail.paralyze ? "PARALYZE" : ail.poison ? "POISON" : ail.burn ? "BURN" : ail.wet ? "WET" : "SLOW";
+      ailmentCounts[k] = (ailmentCounts[k] ?? 0) + 1;
+    }
+  }
+  for (const el of CANONICAL_TEN_ELEMENTS) {
+    assert.ok(elemCounts[el] > 0, `canonical element ${el} has active moves (${elemCounts[el]})`);
+  }
+  assert.ok((surfaceCounts.POISON_POOL ?? 0) >= 8, `poison/sludge moves deposit POISON_POOL (${surfaceCounts.POISON_POOL})`);
+  assert.ok((surfaceCounts.WATER_PUDDLE ?? 0) >= 20, `water moves deposit WATER_PUDDLE (${surfaceCounts.WATER_PUDDLE})`);
+  assert.ok((surfaceCounts.ICE_PATCH ?? 0) >= 10, `ice moves deposit ICE_PATCH (${surfaceCounts.ICE_PATCH})`);
+  assert.ok((surfaceCounts.FIRE_PATCH ?? 0) >= 15, `fire moves deposit FIRE_PATCH (${surfaceCounts.FIRE_PATCH})`);
+  assert.ok((surfaceCounts.VINE_PATCH ?? 0) >= 8, `wood moves deposit VINE_PATCH (${surfaceCounts.VINE_PATCH})`);
+  for (const k of ["SLEEP", "FREEZE", "PARALYZE", "POISON", "BURN"]) {
+    assert.ok((ailmentCounts[k] ?? 0) > 0, `ailment ${k} covered across 666 moves (${ailmentCounts[k]})`);
+  }
+});
+
+test("phase 6 / ground surfaces: poison pool + fire chain-detonates like gasoline; water + ice freezes; water + thunder electrifies; fire + wind spreads", () => {
+  const sim = startRelayFight({ moveSystem: "v2", controlMode: "MANUAL" });
+  const s = sim.getState();
+  const rival = s.rivals[0];
+  rival.x = 700; rival.y = 480;
+  s.player.x = 500; s.player.y = 480;
+
+  // 1) Two touching POISON_POOLs -> FIRE triggers gasoline-like POISON_IGNITE chain detonation!
+  sim.internals.spawnSurfacePatch({ kind: SURFACE_KINDS.POISON_POOL, x: 690, y: 480, radius: 74, ttl: 8, team: "player", moveId: "own-440" });
+  sim.internals.spawnSurfacePatch({ kind: SURFACE_KINDS.POISON_POOL, x: 760, y: 480, radius: 74, ttl: 8, team: "player", moveId: "own-440" });
+  sim.drainEvents();
+  const hpBeforeIgnite = rival.hp;
+  const rxCount = sim.internals.triggerSurfaceReactionAt(690, 480, "FIRE", "emberBolt", "player", 0);
+  const evIgnite = sim.drainEvents();
+  assert.equal(rxCount, 2, "touching poison pools chain-detonate together like gasoline");
+  assert.equal(evIgnite.filter((e) => e.type === "SURFACE_REACT" && e.kind === "POISON_IGNITE").length, 2, "emits POISON_IGNITE for both pools");
+  assert.ok(rival.hp < hpBeforeIgnite, "gasoline poison detonation deals AoE blast damage");
+  assert.ok(rival.burn > 0, "gasoline poison detonation burns targets");
+  assert.ok(s.puddles.every((p) => p.kind === SURFACE_KINDS.FIRE_PATCH), "poison pools transform into lingering FIRE_PATCH");
+
+  // 2) FIRE_PATCH + WIND fans a new forward FIRE_PATCH along wind heading!
+  const beforeCount = s.puddles.length;
+  sim.internals.triggerSurfaceReactionAt(690, 480, "WIND", "relayGust", "player", 0);
+  const evWind = sim.drainEvents();
+  assert.ok(evWind.some((e) => e.type === "SURFACE_REACT" && e.kind === "FIRE_FAN"), "wind fans fire patch");
+  assert.ok(s.puddles.length > beforeCount, "wind spawns forward FIRE_PATCH along wind heading");
+
+  // 3) WATER_PUDDLE + ICE -> WATER_FREEZE transforms to ICE_PATCH & flash-freezes rival inside!
+  s.puddles.length = 0;
+  rival.root = 0; rival.ccImmune = 0;
+  sim.internals.spawnSurfacePatch({ kind: SURFACE_KINDS.WATER_PUDDLE, x: rival.x, y: rival.y, radius: 80, ttl: 8, team: "player" });
+  sim.drainEvents();
+  sim.internals.triggerSurfaceReactionAt(rival.x, rival.y, "ICE", "iceShard", "player", 0);
+  const evFreeze = sim.drainEvents();
+  assert.ok(evFreeze.some((e) => e.type === "SURFACE_REACT" && e.kind === "WATER_FREEZE"), "ice freezes water puddle");
+  assert.equal(s.puddles[0].kind, SURFACE_KINDS.ICE_PATCH, "water puddle becomes ICE_PATCH");
+  assert.ok(rival.root > 0, "rival standing in water puddle is flash-frozen");
+
+  // 4) ICE_PATCH + FIRE -> ICE_MELT turns back into WATER_PUDDLE, then + THUNDER -> WATER_ELECTRIFY!
+  sim.internals.triggerSurfaceReactionAt(rival.x, rival.y, "FIRE", "emberBolt", "player", 0);
+  assert.equal(s.puddles[0].kind, SURFACE_KINDS.WATER_PUDDLE, "fire melts ice patch back to WATER_PUDDLE");
+  sim.internals.triggerSurfaceReactionAt(rival.x, rival.y, "THUNDER", "arcBolt", "player", 0);
+  assert.equal(s.puddles[0].kind, SURFACE_KINDS.ELECTRIFIED_WATER, "thunder electrifies water puddle");
+  assert.ok(rival.paralyze > 0, "rival standing in electrified water is paralyzed");
+});
+
+test("phase 6 / spell-to-spell vortex evolutions: Water Tornado + Ice Ray -> ICE_TORNADO freezing trapped foe", () => {
+  const sim = startRelayFight({ moveSystem: "v2", controlMode: "MANUAL" });
+  const s = sim.getState();
+  const rival = s.rivals[0];
+  s.player.x = 540; s.player.y = 480;
+  rival.x = 720; rival.y = 480;
+  // Cast Water Vortex (`foamZone`) centered on rival
+  s.player.kit = { ...s.player.kit, moves: ["foamZone", "iceShard", "emberBolt"] };
+  s.player.energy = 100;
+  sim.step({ cast: 0, aimX: rival.x, aimY: rival.y });
+  for (let i = 0; i < 35; i++) sim.step({});
+  const vZone = s.zones.find((z) => z.vortexLift);
+  assert.ok(vZone, "active 3D water vortex zone exists");
+
+  // Shoot Ice Shard right into the Water Tornado -> evolves into ICE_TORNADO!
+  sim.drainEvents();
+  const tx = sim.internals.tryTransformVortexAt(vZone.x, vZone.y, "ICE", "iceShard", "player");
+  const evs = sim.drainEvents();
+  assert.equal(tx?.kind, "ICE_TORNADO", "water vortex + ice evolves into ICE_TORNADO");
+  assert.equal(vZone.evolvedKind, "ICE_TORNADO");
+  assert.equal(vZone.paletteKey, "ice");
+  assert.ok(evs.some((e) => e.type === "ZONE_TRANSFORM" && e.kind === "ICE_TORNADO"), "emits ZONE_TRANSFORM");
+  assert.ok(rival.root > 0, "ICE_TORNADO immediately freezes rival trapped inside");
+
+  // Verify remaining 10-element vortex combos directly via pure rules
+  assert.equal(resolveVortexTransform({ vortexLift: true, arenaElement: "wind" }, "FIRE")?.kind, "FIRE_TORNADO");
+  assert.equal(resolveVortexTransform({ vortexLift: true, arenaElement: "water" }, "THUNDER")?.kind, "STORM_TORNADO");
+  assert.equal(resolveVortexTransform({ vortexLift: true, arenaElement: "wind" }, "MOON")?.kind, "MOON_TORNADO");
+  assert.equal(resolveVortexTransform({ vortexLift: true, canonicalElement: "MOON" }, "SUN")?.kind, "ECLIPSE_BURST");
+  assert.equal(resolveVortexTransform({ vortexLift: true, canonicalElement: "ICE" }, "FIRE")?.kind, "STEAM_TORNADO");
+});
+
+test("phase 6 / directional destructible shield walls: melee 2.5x wall-breaker shatters wall into 6 directional shards hitting foe behind it", () => {
+  const sim = startRelayFight({ moveSystem: "v2", controlMode: "MANUAL" });
+  const s = sim.getState();
+  const rival = s.rivals[0];
+  s.player.x = 560; s.player.y = 480;
+  // Spawn temporary ICE shield wall between player and rival
+  const col = sim.grid.cellOf(650), row = sim.grid.cellOf(480);
+  const prop = sim.grid.spawnTemporaryProp({ col, row, material: "ICE", hp: 90, ttl: 12, owner: rival.id, events: [] });
+  assert.ok(prop, "temporary ICE shield wall spawned");
+  const wallX = (prop.col + 0.5) * sim.grid.cell;
+  const wallY = (prop.row + 0.5) * sim.grid.cell;
+  rival.x = wallX + 120; rival.y = wallY;
+  const rivalHpBefore = rival.hp;
+
+  // Melee strike (40 base dmg * 2.5x melee wall-breaker = 100 >= 90 HP -> instant shatter!)
+  sim.drainEvents();
+  sim.internals.reactAndShatterWall(prop, 40, "METAL", "fangRush", "player", 0, { melee: true, cause: "LUNGE" });
+  const evs = sim.drainEvents();
+  assert.equal(prop.destroyed, true, "melee 2.5x wall-breaker shatters 90 HP wall in one blow");
+  assert.ok(evs.some((e) => e.type === "WALL_SHATTER" && e.material === "ICE" && e.count === 6), "emits WALL_SHATTER with 6 shards");
+  const shards = s.projectiles.filter((p) => p.isWallShard);
+  assert.equal(shards.length, 6, "6 directional wall shard projectiles spawned");
+  assert.ok(shards.every((sh) => sh.vx > 0), "all 6 shards fly forward along strikeAngle=0 toward enemy behind wall");
+
+  // Step simulation so flying shards strike rival standing behind the shattered wall!
+  for (let i = 0; i < 30; i++) sim.step({});
+  assert.ok(rival.hp < rivalHpBefore, "directional wall shards hit and damage enemy behind the shattered wall");
+
+  // Verify Metal/Ice + Thunder CONDUCT wall reaction paralyzes nearby rival!
+  const prop2 = sim.grid.spawnTemporaryProp({ col, row, material: "METAL", hp: 160, ttl: 12, owner: rival.id, events: [] });
+  rival.x = wallX + 96; rival.y = wallY;
+  rival.paralyze = 0; rival.invulnerable = 0; rival.guardTimer = 0;
+  sim.internals.reactAndShatterWall(prop2, 20, "THUNDER", "arcBolt", "player", 0, { melee: false });
+  assert.ok(rival.paralyze > 0, "THUNDER hitting METAL shield wall conducts electricity & paralyzes nearby rival");
+  assert.equal(resolveWallElementReaction({ material: "WOOD", destroyed: false }, "FIRE")?.kind, "WOOD_BURN");
+  assert.equal(resolveWallElementReaction({ material: "ICE", destroyed: false }, "FIRE")?.kind, "ICE_MELT_STEAM");
+  assert.equal(resolveWallElementReaction({ material: "BASALT", destroyed: false }, "WATER")?.kind, "QUENCH_BLAST");
+  assert.equal(resolveWallElementReaction({ material: "STONE", destroyed: false }, "WOOD")?.kind, "ROOT_CRACK");
+  assert.equal(buildWallShatterShards({ material: "WOOD" }, 0, "player", 30).shards.length, 6);
+});
+
+test("phase 6 / 6 ailments & tactical art responsiveness: SLEEP+WAKE_SLAP, PARALYZE twitch, POISON stacks, tactical buffer & TACTICAL_REFUSED", () => {
+  const sim = startRelayFight({ moveSystem: "v2", controlMode: "MANUAL", tacticalArt: "rallyCry" });
+  const s = sim.getState();
+  const rival = s.rivals[0];
+  s.player.x = 600; s.player.y = 480;
+  rival.x = 700; rival.y = 480;
+
+  // 1) SLEEP immobilizes rival; direct hit triggers 1.35x WAKE_SLAP & grants ccImmune
+  rival.sleep = 2.4;
+  sim.drainEvents();
+  s.player.kit = { ...s.player.kit, moves: ["emberBolt", "iceShard", "tideBolt"] };
+  s.player.energy = 100;
+  sim.step({ cast: 0, aimX: rival.x, aimY: rival.y });
+  for (let i = 0; i < 35; i++) sim.step({});
+  const wakeEvs = sim.drainEvents();
+  assert.ok(wakeEvs.some((e) => e.type === "STATUS_REACT" && e.kind === "WAKE_SLAP"), "hitting sleeping foe triggers WAKE_SLAP");
+  assert.equal(rival.sleep, 0, "sleeping foe wakes immediately upon taking damage");
+  assert.ok(rival.ccImmune > 2.5, "anti-stunlock ccImmune granted after sleep ends");
+
+  // 2) PARALYZE triggers periodic PARALYZE_TWITCH interrupting cast windup
+  rival.paralyze = 3.0; rival.paralyzeTick = 0.05;
+  for (let i = 0; i < 10; i++) sim.step({});
+  assert.ok(sim.drainEvents().some((e) => e.type === "PARALYZE_TWITCH"), "paralyzed fighter twitches periodically");
+
+  // 3) Tactical Art input buffering during recovery + TACTICAL_REFUSED on cooldown/energy/spent!
+  s.player.energy = 100;
+  s.player.tacticalCooldown = 0;
+  s.player.recovery = 0.12;
+  sim.step({ tactical: true });
+  assert.ok(s.player.tacticalBuffer, "pressing tactical during recovery buffers the press instead of silently dropping it");
+  for (let i = 0; i < 12; i++) sim.step({});
+  assert.ok(sim.drainEvents().some((e) => e.type === "STAT_BUFF"), "buffered tactical art fires automatically once recovery ends");
+
+  // Pressing again immediately while on cooldown emits TACTICAL_REFUSED (never fails silently!)
+  sim.step({ tactical: true });
+  assert.ok(sim.drainEvents().some((e) => e.type === "TACTICAL_REFUSED" && e.reason === "COOLDOWN"), "emits TACTICAL_REFUSED(COOLDOWN)");
+
+  // Pressing with insufficient energy emits TACTICAL_REFUSED(ENERGY)
+  s.player.tacticalCooldown = 0;
+  s.player.energy = 0;
+  sim.step({ tactical: true });
+  assert.ok(sim.drainEvents().some((e) => e.type === "TACTICAL_REFUSED" && e.reason === "ENERGY"), "emits TACTICAL_REFUSED(ENERGY)");
 });

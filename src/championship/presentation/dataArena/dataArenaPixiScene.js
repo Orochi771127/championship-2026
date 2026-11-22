@@ -1213,6 +1213,63 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           puff(event.x, event.y, 0xd8d0c0, 3, 0.85);
           if (event.side === "player") tamerCalloutLeft = 1.0; else tamerCalloutRight = 1.0;
           break;
+        case "ZONE_TRANSFORM":
+          if (purePixelFx) {
+            elementFx.vortex?.({ x: event.x, y: event.y, angle: 0, moveId: "vortex", durationSec: Math.max(0.45, event.delay ?? 0.6), radius: event.radius ?? 130, paletteKey: event.paletteKey ?? "ice" });
+            elementFx.surfaceBurst?.({ x: event.x, y: event.y, radius: event.radius ?? 120, paletteKey: event.paletteKey ?? "ice", kind: event.kind });
+          } else {
+            ring(event.x, event.y, event.radius ?? 120, 0x8ef3ff, 0.45);
+          }
+          floatText(event.x, event.y - 84, t(`react.${event.kind}`), "crit");
+          camera.addTrauma(0.32);
+          break;
+        case "WALL_SHATTER":
+          if (purePixelFx) {
+            elementFx.wallShatter?.({ x: event.x, y: event.y, angle: event.angle ?? 0, material: event.material });
+          } else {
+            burst(event.x, event.y - 16, { count: 16, speed: 320, tint: 0xdff6ff, texture: textures.shard, gravity: 320, life: 0.48 });
+          }
+          floatText(event.x, event.y - 72, t("react.WALL_SHATTER"), "crit");
+          camera.addTrauma(0.36);
+          break;
+        case "WALL_REACT": {
+          const wPal = event.kind === "CONDUCT" ? "thunder" : event.kind === "WOOD_BURN" ? "fire" : event.kind === "ROOT_CRACK" ? "nature" : "water";
+          if (purePixelFx) elementFx.surfaceBurst?.({ x: event.x, y: event.y, radius: event.radius ?? 100, paletteKey: wPal, kind: event.kind });
+          else ring(event.x, event.y, event.radius ?? 100, 0xffd166, 0.38);
+          floatText(event.x, event.y - 76, t(`react.${event.kind}`), "crit");
+          camera.addTrauma(0.26);
+          break;
+        }
+        case "SURFACE_REACT":
+          if (purePixelFx) {
+            elementFx.surfaceBurst?.({ x: event.x, y: event.y, radius: event.radius ?? 110, paletteKey: event.paletteKey ?? "fire", kind: event.kind });
+          } else {
+            ring(event.x, event.y, event.radius ?? 110, 0xff7b2c, 0.42);
+          }
+          floatText(event.x, event.y - 78, t(`react.${event.kind}`), "crit");
+          camera.addTrauma(event.kind === "POISON_IGNITE" || event.kind === "WILDFIRE_IGNITE" ? 0.38 : 0.24);
+          break;
+        case "STATUS_REACT":
+          if (purePixelFx) {
+            elementFx.surfaceBurst?.({ x: event.x, y: event.y - 18, radius: 74, paletteKey: event.paletteKey ?? "fire", kind: event.kind });
+          } else {
+            ring(event.x, event.y - 18, 68, 0xffe066, 0.34);
+          }
+          floatText(event.x, event.y - 82, t(`react.${event.kind}`), "crit");
+          camera.addTrauma(0.24);
+          break;
+        case "PARALYZE_TWITCH":
+          if (purePixelFx) elementFx.surfaceBurst?.({ x: event.x, y: event.y - 18, radius: 44, paletteKey: "thunder", kind: "ELECTRO_CHARGE" });
+          else ring(event.x, event.y - 18, 36, 0xffe066, 0.22);
+          floatText(event.x, event.y - 68, t("status.PARALYZE"), "dodge");
+          break;
+        case "STATUS":
+          if (event.status === "SLEEP" || event.status === "ROOT" || event.status === "PARALYZE" || event.status === "POISON" || event.status === "BURN") {
+            const label = t(`status.${event.status === "ROOT" ? "FREEZE" : event.status}`);
+            const suffix = event.status === "POISON" && (event.stacks ?? 1) > 1 ? ` ×${event.stacks}` : "";
+            floatText(event.x, event.y - 66, `${label}${suffix}`, event.status === "SLEEP" || event.status === "ROOT" ? "crit" : "dodge");
+          }
+          break;
         case "FLURRY_HIT":
           if (purePixelFx) {
             elementFx.hit?.({ x: event.x, y: event.y - 22, groundY: event.y, moveId: event.moveId ?? "clawSweep", heavy: Boolean(event.final), angle: event.angle ?? 0 });
@@ -2221,6 +2278,32 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           const a0 = -elapsed * 2.2 + (i * TAU) / 6;
           arcPath(g, t.x, t.y, t.radius - 5, a0, a0 + 0.28).stroke({ width: 2.2, color: 0xffd0d8, alpha: 0.65 });
         }
+      }
+    }
+    // Cross-ring physical-chemistry ground surfaces (Poison Pool, Water Puddle, Ice Patch, Fire Patch, Vines, Electrified Water, Mud)
+    const PUDDLE_STYLE = {
+      POISON_POOL: { fill: 0x7a28c8, edge: 0x4ef068, dot: 0xa4ff6e },
+      WATER_PUDDLE: { fill: 0x1ca3ff, edge: 0x92e6ff, dot: 0xe6fbff },
+      ICE_PATCH: { fill: 0x9ceeff, edge: 0xffffff, dot: 0xdff8ff },
+      FIRE_PATCH: { fill: 0xff4c1a, edge: 0xffc83b, dot: 0xfff08a },
+      VINE_PATCH: { fill: 0x1f8a3c, edge: 0x6dff68, dot: 0x3bd458 },
+      ELECTRIFIED_WATER: { fill: 0x1ca3ff, edge: 0xffe44d, dot: 0xffffff },
+      MUD_PATCH: { fill: 0x6b472a, edge: 0xa17648, dot: 0x452b17 }
+    };
+    for (const p of state.puddles ?? []) {
+      const st = PUDDLE_STYLE[p.kind] ?? PUDDLE_STYLE.WATER_PUDDLE;
+      const fade = Math.min(1, p.ttl / 1.2);
+      const pulse = 1 + Math.sin(elapsed * 4.5 + p.id) * 0.03;
+      const rx = p.radius * pulse;
+      const ry = p.radius * 0.62 * pulse;
+      g.ellipse(p.x, p.y + 4, rx, ry).fill({ color: st.fill, alpha: 0.28 * fade }).stroke({ width: 2.2, color: st.edge, alpha: 0.72 * fade });
+      g.ellipse(p.x, p.y + 4, rx * 0.68, ry * 0.65).fill({ color: st.edge, alpha: 0.14 * fade });
+      // Subtle animated bubbles / sparks / frost facets inside the surface patch
+      for (let bi = 0; bi < 3; bi++) {
+        const ang = elapsed * (p.kind === "ELECTRIFIED_WATER" ? 5.2 : 1.4) + p.id * 1.7 + bi * 2.1;
+        const bx = p.x + Math.cos(ang) * rx * 0.45;
+        const by = p.y + 4 + Math.sin(ang) * ry * 0.42;
+        g.circle(bx, by, p.kind === "POISON_POOL" ? 4.5 : 3).fill({ color: st.dot, alpha: 0.65 * fade });
       }
     }
     // Delayed zones: additive glowing magic arrays with rotating rune borders instead of flat grey concentric rings.

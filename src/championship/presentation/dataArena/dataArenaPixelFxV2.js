@@ -293,11 +293,12 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       if (fx) { stats.releases++; return true; }
       return false;
     },
-    /** Move #2: True 3D Volumetric Tornado / Storm Vortex (8-dir LRU GPU cached!) */
-    vortex({ x, y, angle = 0, moveId = "vortex", durationSec = 1.05, radius = 118 }) {
+    /** Move #2: True 3D Volumetric Tornado / Storm Vortex (8-dir LRU GPU cached; supports elemental combo evolution!) */
+    vortex({ x, y, angle = 0, moveId = "vortex", durationSec = 1.05, radius = 118, paletteKey = null }) {
       const spec = resolveMoveSpecV2(moveId);
-      const tPal = ["wind", "water", "ice", "nature", "dark", "fire", "earth", "thunder"].includes(spec.paletteKey) ? spec.paletteKey : "wind";
-      const scale = Math.max(1.35, Math.min(1.85, (radius / 118) * 1.55));
+      const rawPal = paletteKey || spec.paletteKey;
+      const tPal = ["wind", "water", "ice", "nature", "dark", "fire", "earth", "thunder", "light"].includes(rawPal) ? rawPal : "wind";
+      const scale = Math.max(1.35, Math.min(2.05, (radius / 118) * 1.55));
       const fx = volCache.spawn({
         layer: shotLayer, keyPrefix: `tornado|${tPal}`, width: 136, height: 136, frameCount: 8,
         directional: true, angle, anchorX: 0.5, anchorY: 0.80, x, y: y + 10, durationSec, scale,
@@ -305,6 +306,42 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       });
       if (fx) { stats.releases++; return true; }
       return false;
+    },
+    /** Directional Shield-Wall Shatter: impact-frame + forward flying debris burst along strikeAngle! */
+    wallShatter({ x, y, angle = 0, material = "STONE" }) {
+      const mat = String(material ?? "STONE").toUpperCase();
+      const palette = COVER_PALETTE[mat] ?? COVER_PALETTE.STONE;
+      playPiece(pieces, "impact-frame", { x, y, palette: { core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true }, scale: 0.92, groundY: y + 18 });
+      playPiece(pieces, "prop-dust", { x, y: y - 10, groundY: y, palette, scale: 1.48 });
+      const shardPiece = mat === "ICE" ? "flurry-shard" : mat === "WOOD" ? "flurry-leaf" : "stream";
+      playPiece(pieces, shardPiece, { x: x + Math.cos(angle) * 26, y: y + Math.sin(angle) * 26, angle, palette, scale: 1.32, groundY: y + 16 });
+      holdMs = Math.max(holdMs, 56);
+      stats.props++;
+      return true;
+    },
+    /** Cross-Ring Surface / Status Reaction burst (e.g. Poison Pool + Fire gasoline blast, Water + Ice flash freeze, Water + Thunder shock!) */
+    surfaceBurst({ x, y, radius = 100, paletteKey = "fire", kind = "POISON_IGNITE" }) {
+      const pal = paletteFor(paletteKey || "fire");
+      const scale = Math.max(1.05, Math.min(1.9, radius / 86));
+      if (kind === "POISON_IGNITE" || kind === "WILDFIRE_IGNITE" || kind === "ECLIPSE_BURST") {
+        volCache.spawn({
+          layer: shotLayer, keyPrefix: `crater|${paletteKey || "fire"}`, width: 160, height: 124, frameCount: 8,
+          directional: false, anchorX: 0.5, anchorY: 0.64, x, y: y + 4, durationSec: 0.56, scale: scale * 1.15,
+          renderForAngle: (ctx, _ang, phase) => renderVolumetricCraterShockwave3D(ctx, { width: 160, height: 124, phase, paletteKey: paletteKey || "fire" })
+        });
+        playPiece(pieces, "impact-frame", { x, y, palette: { core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true }, scale: 0.95, groundY: y + 18 });
+        holdMs = Math.max(holdMs, 55);
+      } else if (kind === "WATER_FREEZE" || kind === "FLASH_FREEZE" || kind === "TOXIC_FROST") {
+        playPiece(pieces, "flurry-shard", { x, y, palette: BATTLE_FX_PALETTES.ice, scale: scale * 1.15, groundY: y + 14 });
+        playPiece(pieces, "ring-burst", { x, y, palette: BATTLE_FX_PALETTES.ice, scale, groundY: y + 14 });
+      } else if (kind === "WATER_ELECTRIFY" || kind === "ELECTRO_CHARGE" || kind === "CONDUCT") {
+        playPiece(pieces, "bolt", { x, y, palette: BATTLE_FX_PALETTES.thunder, scale: scale * 1.15, groundY: y + 14 });
+        playPiece(pieces, "ring-pop", { x, y, palette: BATTLE_FX_PALETTES.thunder, scale, groundY: y + 14 });
+      } else {
+        playPiece(pieces, "ring-burst", { x, y, palette: pal, scale, groundY: y + 14 });
+      }
+      stats.hits++;
+      return true;
     },
     /** Move #4B: True 3D Volumetric Ground Spike (8-dir LRU GPU cached!) */
     groundSpike({ x, y, angle = 0, moveId = "shardVolley", durationSec = 0.68, scale = 1.48 }) {

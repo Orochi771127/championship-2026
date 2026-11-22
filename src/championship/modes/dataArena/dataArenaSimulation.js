@@ -45,6 +45,11 @@ import {
   tacticalArtById, defaultTacticalArtForElement, moveCombatTraits, speedScaledDodgeChance
 } from './dataArenaTacticalArts.js';
 import { normalizeMoveSystem, resolveMoveSpecV2 } from './dataArenaMoveCatalogV2.js';
+import {
+  normalizeCanonicalElement, AILMENT_RULES, SURFACE_KINDS, inferMoveAilment,
+  inferMoveSurfacePatch, resolveSurfaceReaction,
+  resolveVortexTransform, resolveWallElementReaction, buildWallShatterShards
+} from './dataArenaCombos.js';
 import { speciesTaxonomyForId, elementMultiplierPercent, factionResonance, TAXONOMY_RESONANCE } from '../../contracts/speciesTaxonomy.js';
 import { BURST_RULES, BURST_BATTLE_RULES, BLOODLINE_BURST_PERKS, burstFormsFor, burstHpRatio, burstMultiplier } from '../../contracts/productBurstEvolution.js';
 import { OVER_LIMIT_RULES } from '../../contracts/productAwakeningOverdrive.js';
@@ -126,9 +131,9 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     atkStage: 0, defStage: 0, spdStage: 0, buffsUsed: 0, healsUsed: 0,
     decoy: null, decoyUsed: false,
     tacticalArt: tacticalArt ? tacticalArtById(tacticalArt).id : defaultTacticalArtForElement(partner.element),
-    tacticalCooldown: 0, counterTimer: 0, flurry: null, backstab: null, approach: null,
+    tacticalCooldown: 0, tacticalBuffer: null, counterTimer: 0, flurry: null, backstab: null, approach: null,
     ai: { goal: null, goalTimer: 0, strafe: 1, strafeTimer: 1.2, threatSeen: new Set(), attackDelay: 0.35, field: createFlowField(grid, "walker"), wantsCover: false, calledMove: null },
-    slow: 0, slowTimer: 0, root: 0, burn: 0, damageScale: 1, tagShield: 0
+    slow: 0, slowTimer: 0, root: 0, burn: 0, paralyze: 0, paralyzeTick: 0, poison: 0, poisonStacks: 0, sleep: 0, wet: 0, ccImmune: 0, damageScale: 1, tagShield: 0
   };
   if (tournamentMode) { player.maxHp = Math.round(partner.hp * DATA_ARENA_TOURNAMENT.playerHpScale); player.hp = player.maxHp; }
   if (powerOf(partnerId) !== 1) { player.maxHp = Math.round(player.maxHp * powerOf(partnerId)); player.hp = player.maxHp; }
@@ -150,7 +155,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     weather: { kind: null, remaining: 0, tickTimer: 0 },
     suddenDeath: { active: false, multiplier: 1 }, lastHit: null,
     time: 0, mode: "PLAY", phaseIndex: 0, phaseId: tournamentMode ? "DUEL" : survivalMode ? "SURVIVAL" : "WARMUP", warnedPhase: 0,
-    rivals: [], zones: [], shockwaves: [], groundSpikes: [], tournament: null, relay: null,
+    rivals: [], zones: [], puddles: [], shockwaves: [], groundSpikes: [], tournament: null, relay: null,
     player, laser, mate, boss: null, enemies: [], projectiles: [], pickups: [], telegraphs: [], scans: [],
     pods: map.pods.map(([c, r]) => ({ id: nextId++, ...at([c, r]), hp: DATA_ARENA_GRID_RULES.podHp, respawn: 0, radius: 20 })),
     beacons: map.beacons.map(([c, r]) => ({ id: nextId++, ...at([c, r]), active: false, progress: 0, captured: false })),
@@ -255,24 +260,44 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     body.spdStage = clamp((body.spdStage ?? 0) + spd, -2, 4);
   }
 
-  /** Execute one of the 6 universal Tactical Arts (same deterministic rules for BOTH player & rivals). */
-  function canUseTacticalArt(body) {
-    if (!relayMode || !body || body.hp <= 0 || body.cast || body.lunge || body.flurry || body.backstab || (body.recovery ?? 0) > 0) return false;
-    if (body === player && player.state !== "NORMAL") return false;
+  /** Execute one of the 8 universal Tactical Arts (same deterministic rules for BOTH player & rivals). */
+  function tacticalRefusalReason(body) {
+    if (!relayMode || !body || body.hp <= 0) return "BUSY";
     const art = tacticalArtById(body.tacticalArt);
-    if ((body.tacticalCooldown ?? 0) > 0 || body.energy < art.energy) return false;
-    if (art.kind === "BUFF" && (body.buffsUsed ?? 0) >= TACTICAL_CAPS.buffsPerStay) return false;
-    if (art.kind === "HEAL" && (body.healsUsed ?? 0) >= TACTICAL_CAPS.healsPerBattle) return false;
-    if (art.kind === "DECOY" && (body.decoyUsed || body.decoy || body.hp <= Math.ceil(body.maxHp * art.hpShare))) return false;
-    return true;
+    if (art.kind === "BUFF" && (body.buffsUsed ?? 0) >= TACTICAL_CAPS.buffsPerStay) return "SPENT";
+    if (art.kind === "HEAL" && (body.healsUsed ?? 0) >= TACTICAL_CAPS.healsPerBattle) return "SPENT";
+    if (art.kind === "DECOY" && (body.decoyUsed || body.decoy || body.hp <= Math.ceil(body.maxHp * art.hpShare))) return "SPENT";
+    if ((body.tacticalCooldown ?? 0) > 0) return "COOLDOWN";
+    if (body.energy < art.energy) return "ENERGY";
+    if (body.cast || body.lunge || body.flurry || body.backstab || (body.recovery ?? 0) > 0 || (body.sleep ?? 0) > 0 || (body.root ?? 0) > 0) return "BUSY";
+    if (body === player && player.state !== "NORMAL") return "BUSY";
+    return null;
   }
 
-  function tryStartTacticalArt(body, foe = null, { allowApproach = true } = {}) {
-    if (!canUseTacticalArt(body)) return false;
+  function canUseTacticalArt(body) {
+    return tacticalRefusalReason(body) === null;
+  }
+
+  function tryStartTacticalArt(body, foe = null, { allowApproach = true, aimX = null, aimY = null, fromPlayerPress = false } = {}) {
+    const refusal = tacticalRefusalReason(body);
+    if (refusal) {
+      if (fromPlayerPress && body === player) {
+        if (refusal === "BUSY") {
+          player.tacticalBuffer = { ttl: 0.28, aimX, aimY };
+        } else {
+          emit({ type: "TACTICAL_REFUSED", reason: refusal, artId: body.tacticalArt, x: body.x, y: body.y });
+        }
+      }
+      return false;
+    }
     const art = tacticalArtById(body.tacticalArt);
     const side = body === player ? "player" : "rival";
     const target = foe ?? (body === player ? state.rivals[0] : player);
-    if (!art.selfOnly && target && target.hp > 0) {
+    const explicitAim = Number.isFinite(aimX) && Number.isFinite(aimY);
+    const dirAngle = explicitAim
+      ? Math.atan2(aimY - body.y, aimX - body.x)
+      : target && target.hp > 0 ? Math.atan2(target.y - body.y, target.x - body.x) : (body.facing >= 0 ? 0 : Math.PI);
+    if (!art.selfOnly && target && target.hp > 0 && !explicitAim) {
       const dist = distance(body.x, body.y, target.x, target.y);
       if (dist > art.reach + 16) {
         if (!allowApproach) return false;
@@ -309,7 +334,9 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     if (art.kind === "HAZARD") {
       const enemySide = side === "player" ? "rival" : "player";
       state.hazards[enemySide] = Math.min(TACTICAL_CAPS.maxHazardLayers, (state.hazards[enemySide] ?? 0) + 1);
-      emit({ type: "HAZARD_PLACED", side, enemySide, layers: state.hazards[enemySide], x: target ? target.x : body.x, y: target ? target.y : body.y });
+      const hx = explicitAim ? clamp(aimX, 56, worldWidth - 56) : (target ? target.x : body.x + Math.cos(dirAngle) * 140);
+      const hy = explicitAim ? clamp(aimY, 56, worldHeight - 56) : (target ? target.y : body.y + Math.sin(dirAngle) * 140);
+      emit({ type: "HAZARD_PLACED", side, enemySide, layers: state.hazards[enemySide], x: hx, y: hy, angle: dirAngle });
       return true;
     }
     if (art.kind === "DECOY") {
@@ -327,18 +354,19 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       return true;
     }
     if (art.kind === "FLURRY") {
-      const ang = target ? Math.atan2(target.y - body.y, target.x - body.x) : (body.facing >= 0 ? 0 : Math.PI);
-      body.facing = Math.cos(ang) >= 0 ? 1 : -1;
-      body.facing8 = relayFacing8(ang);
-      body.flurry = { artId: art.id, hitsLeft: art.hits, timer: 0, interval: art.interval, damagePerHit: art.damagePerHit, dirX: Math.cos(ang), dirY: Math.sin(ang), target };
+      body.facing = Math.cos(dirAngle) >= 0 ? 1 : -1;
+      body.facing8 = relayFacing8(dirAngle);
+      body.flurry = { artId: art.id, hitsLeft: art.hits, timer: 0, interval: art.interval, damagePerHit: art.damagePerHit, dirX: Math.cos(dirAngle), dirY: Math.sin(dirAngle), target };
       applyStatDelta(body, { def: art.selfDefDelta ?? -1 });
-      emit({ type: "FLURRY_START", side, artId: art.id, x: body.x, y: body.y, angle: ang });
+      emit({ type: "FLURRY_START", side, artId: art.id, x: body.x, y: body.y, angle: dirAngle });
       return true;
     }
     if (art.kind === "BACKSTAB") {
+      body.facing = Math.cos(dirAngle) >= 0 ? 1 : -1;
+      body.facing8 = relayFacing8(dirAngle);
       body.invulnerable = Math.max(body.invulnerable ?? 0, art.vanishSeconds + 0.08);
-      body.backstab = { artId: art.id, timer: art.vanishSeconds, damage: art.damage, target };
-      emit({ type: "BACKSTAB_VANISH", side, artId: art.id, x: body.x, y: body.y });
+      body.backstab = { artId: art.id, timer: art.vanishSeconds, damage: art.damage, target, angle: dirAngle };
+      emit({ type: "BACKSTAB_VANISH", side, artId: art.id, x: body.x, y: body.y, angle: dirAngle });
       return true;
     }
     return false;
@@ -381,9 +409,21 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
             const scale = body === player ? stat.skillDamage * playerDealtScale(false) : (body.damageScale ?? 1);
             const finalHit = body.flurry.hitsLeft <= 0;
             const dmg = body.flurry.damagePerHit * scale * (finalHit ? 1.35 : 1);
-            strike(target, dmg, "FLURRY", null, target.x, target.y, "physical", null, false);
+            strike(target, dmg, "FLURRY", null, target.x, target.y, body.flurry.arenaElement ?? "physical", body.flurry.attackElement ?? null, false, { moveId: body.flurry.moveId ?? body.flurry.artId });
             if (finalHit) launch(target, body.flurry.dirX, body.flurry.dirY, 260);
             emit({ type: "FLURRY_HIT", side, hitIndex: TACTICAL_CAPS.flurryHits - body.flurry.hitsLeft, final: finalHit, x: target.x, y: target.y, angle: Math.atan2(body.flurry.dirY, body.flurry.dirX) });
+          }
+          // Martial-arts flurry punches shatter nearby temporary shield walls directionally (2.5x wall breaker)!
+          if (relayMode) {
+            const fAng = Math.atan2(body.flurry.dirY, body.flurry.dirX);
+            const fScale = body === player ? stat.skillDamage * playerDealtScale(false) : (body.damageScale ?? 1);
+            for (const prop of grid.props) {
+              if (prop.destroyed || !prop.temporary) continue;
+              const px = (prop.col + prop.width / 2) * cell, py = (prop.row + prop.height / 2) * cell;
+              if (distance(body.x, body.y, px, py) <= TACTICAL_CAPS.flurryReach + 48) {
+                reactAndShatterWall(prop, body.flurry.damagePerHit * fScale, body.flurry.attackElement ?? body.flurry.arenaElement ?? "METAL", body.flurry.moveId ?? body.flurry.artId, body.team, fAng, { melee: true, cause: "FLURRY" });
+              }
+            }
           }
           if (body.flurry.hitsLeft <= 0) body.flurry = null;
         }
@@ -459,7 +499,16 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
             const d = distance(target.x, target.y, body.x, body.y) || 1;
             launch(target, (target.x - body.x) / d, (target.y - body.y) / d, 300);
           }
-          grid.damagePropsInRadius(body.x, body.y, radius, ls.damage * 0.7, events, "IMPACT", ls.arenaElement);
+          for (const prop of grid.props) {
+            if (prop.destroyed) continue;
+            const px = (prop.col + prop.width / 2) * cell, py = (prop.row + prop.height / 2) * cell;
+            if (distance(px, py, body.x, body.y) <= radius + cell * 0.6) {
+              const wAng = Math.atan2(py - body.y, px - body.x);
+              reactAndShatterWall(prop, ls.damage * 0.85, ls.attackElement ?? ls.arenaElement, ls.moveId, body.team, wAng, { melee: true, cause: "IMPACT" });
+            }
+          }
+          triggerSurfaceReactionAt(body.x, body.y, ls.attackElement ?? ls.arenaElement, ls.moveId, body.team, Math.atan2(ls.destY - ls.startY, ls.destX - ls.startX));
+          maybeSpawnMoveSurface(body.x, body.y, ls.moveId, ls.arenaElement, ls.attackElement, { v2Archetype: "LEAP_SLAM" }, body.team, false);
           spawnShockwave({ team: body.team, x: body.x, y: body.y, moveId: ls.moveId, maxRadius: radius * 1.45, duration: 0.36, damage: ls.damage * 0.42 * scale, arenaElement: ls.arenaElement, attackElement: ls.attackElement });
           emit({ type: "LEAP_SLAM_HIT", side, moveId: ls.moveId, x: body.x, y: body.y, radius });
         }
@@ -905,7 +954,19 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         moveBody(player, player.vx * DT, player.vy * DT, movementKind(player));
         if (input.ride) { if (tryMount()) break; }
         if (input.guard) tryStartGuard(player);
-        if (input.tactical && relayMode) tryStartTacticalArt(player);
+        if (input.tactical && relayMode) {
+          const explicit = !input.autoAim && Number.isFinite(input.aimX) && Number.isFinite(input.aimY);
+          tryStartTacticalArt(player, null, { aimX: explicit ? input.aimX : null, aimY: explicit ? input.aimY : null, fromPlayerPress: true });
+        } else if (player.tacticalBuffer && relayMode) {
+          player.tacticalBuffer.ttl -= DT;
+          if (canUseTacticalArt(player)) {
+            const buf = player.tacticalBuffer;
+            player.tacticalBuffer = null;
+            tryStartTacticalArt(player, null, { aimX: buf.aimX, aimY: buf.aimY });
+          } else if (player.tacticalBuffer.ttl <= 0) {
+            player.tacticalBuffer = null;
+          }
+        }
         if (input.dash && player.dashCharges > 0 && player.root <= 0 && player.guardTimer <= 0) {
           if (player.cast) { removeTelegraph(`cast:${player.id}`); player.cast = null; } // a dash cancels a windup
           startDash(input); break;
@@ -1020,17 +1081,79 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   }
 
   /** Apply damage from a kit attack to whatever body it struck. */
-  function strike(target, amount, cause, onHit, x = target.x, y = target.y, element = null, attackElement = null, isBasic = false, { guardBreak = false } = {}) {
+  function strike(target, amount, cause, onHit, x = target.x, y = target.y, element = null, attackElement = null, isBasic = false, { guardBreak = false, moveId = null, move = null } = {}) {
     // Owner 2026-10-29: an elemental hit uses the caster's taxonomy element on the dual ring (x1.5 / x0.75).
     const mult = relayMode && element ? taxonomyMultiplier(attackElement, target) : 1;
     amount *= mult;
     if (relayMode && state.weather.kind && element) amount *= weatherDamageMultiplier(state.weather.kind, element);
+    // Burn weakens attacker's outgoing damage by 15%
+    const attackerBody = target === player ? state.rivals[0] : (isRival(target) ? player : null);
+    if (relayMode && attackerBody && (attackerBody.burn ?? 0) > 0) amount *= AILMENT_RULES.burnAtkScale;
+    // Cross-ring physical-chemistry combatant status reactions (6 ailments + wet): follow the move's element first!
+    const canonicalHit = normalizeCanonicalElement(element ?? attackElement, moveId);
+    const reactions = [];
+    if (relayMode && target && target.hp > 0) {
+      if ((target.sleep ?? 0) > 0 && amount > 0) {
+        target.sleep = 0;
+        target.ccImmune = Math.max(target.ccImmune ?? 0, AILMENT_RULES.ccImmunitySeconds);
+        amount *= AILMENT_RULES.wakeSlapMultiplier;
+        reactions.push({ kind: "WAKE_SLAP", bonus: Math.round(amount * 0.26), paletteKey: "light" });
+      }
+      if ((target.root ?? 0) > 0) {
+        if (canonicalHit === "FIRE" || canonicalHit === "SUN") {
+          target.root = 0;
+          target.ccImmune = Math.max(target.ccImmune ?? 0, AILMENT_RULES.ccImmunitySeconds);
+          amount *= AILMENT_RULES.meltMultiplier;
+          reactions.push({ kind: "MELT", bonus: Math.round(amount * 0.26), paletteKey: "fire" });
+        } else if (guardBreak || canonicalHit === "METAL" || canonicalHit === "EARTH") {
+          target.root = 0;
+          target.ccImmune = Math.max(target.ccImmune ?? 0, AILMENT_RULES.ccImmunitySeconds);
+          amount *= AILMENT_RULES.shatterCritMultiplier;
+          reactions.push({ kind: "SHATTER_CRIT", bonus: Math.round(amount * 0.26), paletteKey: "ice" });
+        }
+      }
+      if ((target.burn ?? 0) > 0 && (canonicalHit === "WATER" || canonicalHit === "ICE")) {
+        target.burn = 0;
+        amount += AILMENT_RULES.steamBurstBonus;
+        reactions.push({ kind: "STEAM", bonus: AILMENT_RULES.steamBurstBonus, paletteKey: "water" });
+      }
+      if ((target.poison ?? 0) > 0 && canonicalHit === "FIRE") {
+        const stacks = Math.max(1, target.poisonStacks ?? 1);
+        const blast = AILMENT_RULES.toxicBlastBonus + (stacks - 1) * 10;
+        target.poison = 0;
+        target.poisonStacks = 0;
+        amount += blast;
+        reactions.push({ kind: "TOXIC_BLAST", bonus: blast, paletteKey: "fire" });
+      }
+      if ((target.wet ?? 0) > 0 && canonicalHit === "ICE" && !(target.root > 0)) {
+        target.wet = 0;
+        reactions.push({ kind: "FLASH_FREEZE", bonus: 12, paletteKey: "ice", forceStatus: { root: AILMENT_RULES.freezeSeconds } });
+        amount += 12;
+      }
+      if (((target.paralyze ?? 0) > 0 && (canonicalHit === "WATER" || canonicalHit === "ICE"))
+        || ((target.wet ?? 0) > 0 && canonicalHit === "THUNDER")) {
+        target.wet = 0;
+        amount += AILMENT_RULES.electroChargeBonus;
+        reactions.push({ kind: "ELECTRO_CHARGE", bonus: AILMENT_RULES.electroChargeBonus, paletteKey: "thunder", forceStatus: { paralyze: AILMENT_RULES.paralyzeSeconds } });
+      }
+    }
     // Rift resonance: a player hit on a rival may land critical (x1.5) one time in ten.
     if (relayMode && isRival(target) && resonant('RIFT') && random() < TAXONOMY_RESONANCE.RIFT.critChancePercent / 100) { amount *= 1.5; emit({ type: 'RESONANCE_CRIT', x, y }); }
+    const effectiveOnHit = onHit ?? (relayMode && v2Mode && !isBasic && (moveId || element || attackElement)
+      ? inferMoveAilment(moveId, element, attackElement, move, { isBasic })
+      : null);
     if (target === player) {
       const applied=hurtPlayer(amount, cause, x, y, { guardBreak });
-      if (applied && relayMode) relayAfterHit(player, amount, element, mult, x, y);
-      if (applied && onHit) applyStatus(player, onHit);
+      if (applied && relayMode) {
+        relayAfterHit(player, amount, element, mult, x, y);
+        for (const rx of reactions) {
+          emit({ type: "STATUS_REACT", kind: rx.kind, bonus: rx.bonus, paletteKey: rx.paletteKey, target: "player", x: player.x, y: player.y });
+          if (rx.kind === "MELT") emit({ type: "STATUS_CLEARED", status: "ROOT", by: "fire", x: player.x, y: player.y });
+          if (rx.kind === "STEAM") chain("STEAM", player.x, player.y);
+          if (rx.forceStatus) applyStatus(player, rx.forceStatus);
+        }
+      }
+      if (applied && effectiveOnHit) applyStatus(player, effectiveOnHit);
       return applied;
     }
     if (isRival(target)) {
@@ -1039,11 +1162,17 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       if (relayMode) {
         if (isBasic) player.energy = Math.min(DATA_ARENA_RELAY.tpMax, player.energy + (DATA_ARENA_RELAY.basicTpGain ?? 5));
         relayAfterHit(target, amount, element, mult, x, y);
+        for (const rx of reactions) {
+          emit({ type: "STATUS_REACT", kind: rx.kind, bonus: rx.bonus, paletteKey: rx.paletteKey, target: "rival", x: target.x, y: target.y });
+          if (rx.kind === "MELT") emit({ type: "STATUS_CLEARED", status: "ROOT", by: "fire", x: target.x, y: target.y });
+          if (rx.kind === "STEAM") chain("STEAM", target.x, target.y);
+          if (rx.forceStatus) applyStatus(target, rx.forceStatus);
+        }
       }
     }
     else if (target === state.boss) damageBoss(amount, cause);
     else damageEnemy(target, amount, cause, x, y);
-    if (onHit && !target.dead) applyStatus(target, onHit);
+    if (effectiveOnHit && !target.dead) applyStatus(target, effectiveOnHit);
     state.combo.count++;
     state.combo.timer = 2.6;
     if (state.combo.count > state.combo.max) state.combo.max = state.combo.count;
@@ -1065,32 +1194,110 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   }
 
   function applyStatus(body, effect) {
-    if (effect.slow) { body.slow = Math.max(body.slow ?? 0, effect.slow); body.slowTimer = Math.max(body.slowTimer ?? 0, effect.slowSeconds ?? 1.5); }
-    if (effect.root) body.root = Math.max(body.root ?? 0, effect.root);
-    if (effect.burn) body.burn = Math.max(body.burn ?? 0, effect.burn);
-    emit({ type: "STATUS", status: effect.root ? "ROOT" : effect.slow ? "SLOW" : "BURN", x: body.x, y: body.y, target: body === player ? "PLAYER" : "HOSTILE" });
+    if (!body || !effect) return;
+    let applied = null;
+    if (effect.wet) {
+      body.wet = Math.max(body.wet ?? 0, effect.wet);
+      if ((body.burn ?? 0) > 0) { body.burn = 0; emit({ type: "STATUS_CLEARED", status: "BURN", by: "water", x: body.x, y: body.y }); }
+    }
+    if (effect.slow) {
+      body.slow = Math.max(body.slow ?? 0, effect.slow);
+      body.slowTimer = Math.max(body.slowTimer ?? 0, effect.slowSeconds ?? 1.5);
+      applied = applied ?? "SLOW";
+    }
+    if (effect.sleep) {
+      if ((body.ccImmune ?? 0) <= 0) {
+        body.sleep = Math.max(body.sleep ?? 0, effect.sleep);
+        if (body.cast) { removeTelegraph(`cast:${body.id}`); body.cast = null; }
+        body.lunge = null; body.approach = null;
+        applied = "SLEEP";
+      }
+    }
+    if (effect.root) {
+      if ((body.ccImmune ?? 0) <= 0 || !relayMode) {
+        body.root = Math.max(body.root ?? 0, effect.root);
+        applied = applied ?? "ROOT";
+      }
+    }
+    if (effect.paralyze) {
+      const was = (body.paralyze ?? 0) > 0;
+      body.paralyze = Math.max(body.paralyze ?? 0, effect.paralyze);
+      if (!was) body.paralyzeTick = AILMENT_RULES.paralyzeTwitchInterval * 0.65;
+      applied = applied ?? "PARALYZE";
+    }
+    if (effect.poison) {
+      body.poison = Math.max(body.poison ?? 0, effect.poison);
+      body.poisonStacks = Math.min(AILMENT_RULES.poisonMaxStacks, (body.poisonStacks ?? 0) + (effect.poisonStacks ?? 1));
+      applied = applied ?? "POISON";
+    }
+    if (effect.burn) {
+      if ((body.wet ?? 0) > 0) { body.wet = 0; }
+      body.burn = Math.max(body.burn ?? 0, effect.burn);
+      applied = applied ?? "BURN";
+    }
+    if (applied) {
+      emit({
+        type: "STATUS",
+        status: applied,
+        stacks: applied === "POISON" ? (body.poisonStacks ?? 1) : 1,
+        x: body.x,
+        y: body.y,
+        target: body === player ? "PLAYER" : "HOSTILE"
+      });
+    }
   }
 
   function tickStatus(body) {
     if (body.hitstun > 0) body.hitstun = Math.max(0, body.hitstun - DT);
+    if ((body.ccImmune ?? 0) > 0) body.ccImmune = Math.max(0, body.ccImmune - DT);
+    if ((body.wet ?? 0) > 0) body.wet = Math.max(0, body.wet - DT);
     if (body.slowTimer > 0) { body.slowTimer -= DT; if (body.slowTimer <= 0) body.slow = 0; }
-    if (body.root > 0) body.root = Math.max(0, body.root - DT);
+    if ((body.sleep ?? 0) > 0) {
+      body.sleep = Math.max(0, body.sleep - DT);
+      if (body.sleep <= 0) body.ccImmune = Math.max(body.ccImmune ?? 0, AILMENT_RULES.ccImmunitySeconds);
+    }
+    if (body.root > 0) {
+      body.root = Math.max(0, body.root - DT);
+      if (body.root <= 0 && relayMode) body.ccImmune = Math.max(body.ccImmune ?? 0, AILMENT_RULES.ccImmunitySeconds);
+    }
+    if ((body.paralyze ?? 0) > 0) {
+      body.paralyze = Math.max(0, body.paralyze - DT);
+      body.paralyzeTick = (body.paralyzeTick ?? AILMENT_RULES.paralyzeTwitchInterval) - DT;
+      if (body.paralyzeTick <= 0 && body.paralyze > 0) {
+        body.paralyzeTick = AILMENT_RULES.paralyzeTwitchInterval;
+        body.hitstun = Math.max(body.hitstun ?? 0, AILMENT_RULES.paralyzeTwitchStun);
+        if (body.cast) { removeTelegraph(`cast:${body.id}`); body.cast = null; }
+        emit({ type: "PARALYZE_TWITCH", side: body === player ? "player" : "rival", x: body.x, y: body.y });
+      }
+    }
+    if ((body.poison ?? 0) > 0) {
+      body.poison = Math.max(0, body.poison - DT);
+      const stacks = clamp(body.poisonStacks ?? 1, 1, AILMENT_RULES.poisonMaxStacks);
+      const share = AILMENT_RULES.poisonHpSharePerSec[stacks] ?? 0.014;
+      const dps = Math.max(4, (body.maxHp ?? 200) * share) * DT;
+      if (body === player) { if (player.invulnerable <= 0) { player.hp = Math.max(1, player.hp - dps); state.stats.damageTaken += dps; chargeArenaBurst(player, dps); } }
+      else if (isRival(body)) damageRival(body, dps, "BURN");
+      else if (body !== state.boss) damageEnemy(body, dps, "POISON");
+      if (body.poison <= 0) body.poisonStacks = 0;
+    }
     if (body.burn > 0) {
       body.burn = Math.max(0, body.burn - DT);
-      const dps = 8 * DT;
+      const dps = AILMENT_RULES.burnDps * DT;
       if (body === player) { if (player.invulnerable <= 0) { player.hp = Math.max(1, player.hp - dps); state.stats.damageTaken += dps; chargeArenaBurst(player, dps); } }
       else if (isRival(body)) damageRival(body, dps, "BURN");
       else if (body !== state.boss) damageEnemy(body, dps, "FIRE");
     }
   }
-  const moveScale = (body) => (body.root > 0 ? 0 : 1 - (body.slow ?? 0)) * (body.cast ? (body === player ? DATA_ARENA_ENERGY.playerCastMove : DATA_ARENA_ENERGY.rivalCastMove) : 1)
+  const moveScale = (body) => ((body.root > 0 || (body.sleep ?? 0) > 0) ? 0 : 1 - (body.slow ?? 0))
+    * ((body.paralyze ?? 0) > 0 ? AILMENT_RULES.paralyzeMoveScale : 1)
+    * (body.cast ? (body === player ? DATA_ARENA_ENERGY.playerCastMove : DATA_ARENA_ENERGY.rivalCastMove) : 1)
     * (relayArena?.speedScale(body) ?? 1) * (body.hitstun > 0 ? 0 : 1) * (relayMode ? speedStageMultiplier(body.spdStage ?? 0) : 1);
 
   function kitMoveIds(caster) { return caster.kit.moves; }
 
   function canCast(caster, moveId) {
     const move = moveFor(moveId);
-    if (!move || caster.cast || caster.lunge || (relayMode && caster.recovery > 0)) return false;
+    if (!move || caster.cast || caster.lunge || (caster.sleep ?? 0) > 0 || (relayMode && (caster.root > 0 || caster.recovery > 0))) return false;
     if ((caster.cooldowns[moveId] ?? 0) > 0) return false;
     return caster.energy >= (move.energy ?? 0);
   }
@@ -1238,6 +1445,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         const amt = Math.round(caster.maxHp * TACTICAL_CAPS.healShare);
         caster.hp = Math.min(caster.maxHp, caster.hp + amt);
         caster.burn = 0; caster.slow = 0; caster.slowTimer = 0; caster.root = 0;
+        caster.paralyze = 0; caster.paralyzeTick = 0; caster.poison = 0; caster.poisonStacks = 0; caster.sleep = 0; caster.wet = 0;
         emit({ type: "TACTICAL_HEAL", side, artId: moveId, moveId, amount: amt, healsUsed: caster.healsUsed, x: caster.x, y: caster.y });
         return;
       }
@@ -1490,14 +1698,20 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       if (distance(target.x, target.y, caster.x, caster.y) > move.radius + (target.radius ?? 20)) continue;
       if (target === player && player.dashGrace > 0) { perfectDodge(caster.x, caster.y); continue; }
       if(relayMode&&!hasSight(caster.x,caster.y,target.x,target.y))continue;
-      const hit=strike(target, move.damage * damageScale, move.type, zoneStatus(move), target.x, target.y, relayMode ? coverElement(caster, moveId) : null, relayMode ? attackElementOf(caster, moveId) : null, isBasic);
+      const hit=strike(target, move.damage * damageScale, move.type, zoneStatus(move), target.x, target.y, relayMode ? coverElement(caster, moveId) : null, relayMode ? attackElementOf(caster, moveId) : null, isBasic, { moveId, move });
       if(relayMode&&!hit)continue;
       if (move.effect !== "ROOT") {
         const d = distance(target.x, target.y, caster.x, caster.y) || 1;
         launch(target, (target.x - caster.x) / d, (target.y - caster.y) / d, DATA_ARENA_ENERGY.launch.NOVA);
       }
     }
+    const novaEl = relayMode ? (attackElementOf(caster, moveId) ?? coverElement(caster, moveId)) : null;
     areaElement(caster.x, caster.y, move.radius, move,move.damage*damageScale,relayMode?coverElement(caster,moveId):null);
+    if (relayMode) {
+      tryTransformVortexAt(caster.x, caster.y, novaEl, moveId, team);
+      triggerSurfaceReactionAt(caster.x, caster.y, novaEl, moveId, team, caster.facing >= 0 ? 0 : Math.PI);
+      maybeSpawnMoveSurface(caster.x, caster.y, moveId, coverElement(caster, moveId), attackElementOf(caster, moveId), move, team, isBasic);
+    }
     tryRaiseTempPillar(caster.x, caster.y, moveId, relayMode ? coverElement(caster, moveId) : null);
     emit({ type: "NOVA", actionId, casterId: caster.id, team, moveId, x: caster.x, y: caster.y, radius: move.radius, effect: move.effect });
   }
@@ -1523,6 +1737,267 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       }
     }
     return null;
+  }
+
+  // ------------------------------------------------------------------ 10-element physical-chemistry combos, ground surfaces, vortex evolutions & directional wall shatter
+  const MAX_ACTIVE_PUDDLES = 12;
+
+  function spawnSurfacePatch({ kind, x, y, radius = 72, ttl = 8.0, team = "player", moveId = null } = {}) {
+    if (!relayMode || !kind) return null;
+    const px = clamp(x, 42, worldWidth - 42);
+    const py = clamp(y, 42, worldHeight - 42);
+    // Merge into an overlapping patch of the same kind so fields stay clean & bounded.
+    for (const existing of state.puddles) {
+      if (!existing.done && existing.kind === kind && distance(existing.x, existing.y, px, py) <= existing.radius * 0.6) {
+        existing.ttl = Math.max(existing.ttl, ttl);
+        existing.maxTtl = Math.max(existing.maxTtl, ttl);
+        existing.radius = Math.min(130, Math.max(existing.radius, radius));
+        return existing;
+      }
+    }
+    while (state.puddles.length >= MAX_ACTIVE_PUDDLES) {
+      const oldest = state.puddles.shift();
+      if (oldest && !oldest.done) {
+        oldest.done = true;
+        emit({ type: "SURFACE_EXPIRE", id: oldest.id, kind: oldest.kind, x: oldest.x, y: oldest.y });
+      }
+    }
+    const patch = { id: nextId++, kind, x: px, y: py, radius, ttl, maxTtl: ttl, team, moveId, tickTimer: 0.25, done: false };
+    state.puddles.push(patch);
+    emit({ type: "SURFACE_SPAWN", id: patch.id, kind, x: px, y: py, radius, ttl, team, moveId });
+    return patch;
+  }
+
+  function maybeSpawnMoveSurface(x, y, moveId, arenaElement, attackElement, move, team, isBasic = false) {
+    if (!relayMode || !v2Mode || isBasic) return null;
+    const spec = inferMoveSurfacePatch(moveId, arenaElement, attackElement, move, { isBasic });
+    if (!spec) return null;
+    return spawnSurfacePatch({ kind: spec.kind, x, y, radius: spec.radius, ttl: spec.ttl, team, moveId });
+  }
+
+  function triggerSurfaceReactionAt(x, y, rawElement, moveId, team, strikeAngle = 0, { depth = 0 } = {}) {
+    if (!relayMode || !state.puddles.length || depth > 3) return 0;
+    let triggered = 0;
+    const snapshot = state.puddles.slice();
+    for (const patch of snapshot) {
+      if (patch.done) continue;
+      if (distance(x, y, patch.x, patch.y) > patch.radius + 36) continue;
+      const rx = resolveSurfaceReaction(patch, rawElement, moveId);
+      if (!rx) continue;
+      triggered++;
+      const prevKind = patch.kind;
+      const rxRadius = rx.burstRadius ?? patch.radius;
+      if (rx.consume) {
+        patch.done = true;
+        emit({ type: "SURFACE_EXPIRE", id: patch.id, kind: prevKind, x: patch.x, y: patch.y });
+      } else if (rx.nextKind) {
+        patch.kind = rx.nextKind;
+        patch.ttl = rx.nextTtl ?? 6.0;
+        patch.maxTtl = patch.ttl;
+        patch.radius = Math.min(132, Math.round(patch.radius * (rx.nextRadiusMult ?? 1)));
+        patch.team = team ?? patch.team;
+      } else if (rx.growRadiusMult) {
+        patch.radius = Math.min(138, Math.round(patch.radius * rx.growRadiusMult));
+        patch.ttl = Math.max(patch.ttl, rx.extendTtl ?? 5.0);
+        patch.maxTtl = Math.max(patch.maxTtl, patch.ttl);
+      }
+      if (rx.spreadForward && rx.spawnKind) {
+        const sx = clamp(patch.x + Math.cos(strikeAngle) * (patch.radius * 1.15), 44, worldWidth - 44);
+        const sy = clamp(patch.y + Math.sin(strikeAngle) * (patch.radius * 1.15), 44, worldHeight - 44);
+        spawnSurfacePatch({ kind: rx.spawnKind, x: sx, y: sy, radius: Math.round(patch.radius * 0.92), ttl: rx.spawnTtl ?? 5.5, team, moveId });
+      }
+      if ((rx.burstDamage ?? 0) > 0 || rx.status) {
+        const victims = [player, ...state.rivals.filter((r) => r.active && r.hp > 0)];
+        for (const target of victims) {
+          const isHostile = team ? target.team !== team : true;
+          if (!isHostile && rx.kind !== "POISON_IGNITE") continue;
+          const d = distance(target.x, target.y, patch.x, patch.y);
+          if (d > rxRadius + (target.radius ?? 20)) continue;
+          const dmg = (rx.burstDamage ?? 0) * (isHostile ? 1 : 0.4);
+          if (dmg > 0) {
+            strike(target, dmg, "SURFACE_REACT", rx.status ?? null, patch.x, patch.y, rx.paletteKey, null, false);
+          } else if (rx.status) {
+            applyStatus(target, rx.status);
+          }
+          if (rx.knockback && d > 1) {
+            launch(target, (target.x - patch.x) / d, (target.y - patch.y) / d, rx.knockback);
+          }
+        }
+      }
+      emit({
+        type: "SURFACE_REACT",
+        kind: rx.kind,
+        fromKind: prevKind,
+        nextKind: rx.nextKind ?? (rx.consume ? null : patch.kind),
+        paletteKey: rx.paletteKey,
+        x: patch.x,
+        y: patch.y,
+        radius: rxRadius,
+        team
+      });
+      // Chain-detonate touching puddles of the same kind (e.g. Poison Pool chain explosion like gasoline, Water Freeze/Electrify chain)!
+      if (rx.chainSameKind) {
+        for (const neighbor of state.puddles) {
+          if (neighbor.done || neighbor === patch || neighbor.kind !== prevKind) continue;
+          if (distance(patch.x, patch.y, neighbor.x, neighbor.y) <= patch.radius + neighbor.radius + 28) {
+            triggered += triggerSurfaceReactionAt(neighbor.x, neighbor.y, rawElement, moveId, team, strikeAngle, { depth: depth + 1 });
+          }
+        }
+      }
+    }
+    if (state.puddles.some((p) => p.done)) state.puddles = state.puddles.filter((p) => !p.done);
+    return triggered;
+  }
+
+  function updateSurfacePatches() {
+    if (!state.puddles.length) return;
+    const actors = [player, ...state.rivals.filter((r) => r.active && r.hp > 0)];
+    for (const patch of state.puddles) {
+      if (patch.done) continue;
+      patch.ttl -= DT;
+      if (patch.ttl <= 0) {
+        patch.done = true;
+        emit({ type: "SURFACE_EXPIRE", id: patch.id, kind: patch.kind, x: patch.x, y: patch.y });
+        continue;
+      }
+      patch.tickTimer -= DT;
+      if (patch.tickTimer <= 0) {
+        patch.tickTimer = 0.48;
+        for (const body of actors) {
+          if (body.hp <= 0 || body.burrowed || (body.airZ ?? 0) > 16) continue;
+          if (distance(body.x, body.y, patch.x, patch.y) > patch.radius + (body.radius ?? 18) * 0.45) continue;
+          if (patch.kind === SURFACE_KINDS.POISON_POOL) {
+            applyStatus(body, { poison: AILMENT_RULES.poisonSeconds, poisonStacks: 1, slow: 0.22, slowSeconds: 0.9 });
+          } else if (patch.kind === SURFACE_KINDS.WATER_PUDDLE) {
+            applyStatus(body, { wet: AILMENT_RULES.wetSeconds });
+          } else if (patch.kind === SURFACE_KINDS.ICE_PATCH) {
+            applyStatus(body, { slow: 0.38, slowSeconds: 0.9 });
+          } else if (patch.kind === SURFACE_KINDS.FIRE_PATCH) {
+            applyStatus(body, { burn: 3.0 });
+          } else if (patch.kind === SURFACE_KINDS.VINE_PATCH) {
+            if (body.team !== patch.team) applyStatus(body, { slow: 0.42, slowSeconds: 1.0, poison: AILMENT_RULES.poisonSeconds, poisonStacks: 1 });
+          } else if (patch.kind === SURFACE_KINDS.ELECTRIFIED_WATER) {
+            applyStatus(body, { paralyze: 2.2 });
+            if (body.team !== patch.team) strike(body, 9, "SHOCK", null, patch.x, patch.y, "storm", "THUNDER", false);
+          } else if (patch.kind === SURFACE_KINDS.MUD_PATCH) {
+            applyStatus(body, { slow: 0.52, slowSeconds: 1.0 });
+          }
+        }
+      }
+    }
+    if (state.puddles.some((p) => p.done)) state.puddles = state.puddles.filter((p) => !p.done);
+  }
+
+  function tryTransformVortexAt(x, y, rawElement, moveId, team) {
+    if (!relayMode || !state.zones.length) return null;
+    for (const zone of state.zones) {
+      if (!zone.vortexLift || zone.done || zone.evolvedKind) continue;
+      if (distance(x, y, zone.x, zone.y) > zone.radius + 36) continue;
+      const tx = resolveVortexTransform(zone, rawElement, moveId);
+      if (!tx) continue;
+      zone.evolvedKind = tx.kind;
+      zone.canonicalElement = tx.canonicalElement;
+      zone.paletteKey = tx.paletteKey;
+      zone.radius = Math.round(zone.radius * tx.radiusMult);
+      zone.damage = Math.round(zone.damage * tx.damageMult);
+      zone.delay = Math.max(zone.delay, zone.t + (tx.extraDelay ?? 0.35));
+      zone.evolvedStatus = tx.status ?? null;
+      // Immediately apply evolved status to any enemies trapped inside the tornado!
+      if (tx.status) {
+        for (const target of targetsFor(zone.team)) {
+          if (distance(target.x, target.y, zone.x, zone.y) <= zone.radius * 1.45) {
+            applyStatus(target, tx.status);
+          }
+        }
+      }
+      if (tx.freezeGround) {
+        const before = events.length;
+        for (let r = grid.cellOf(zone.y - zone.radius); r <= grid.cellOf(zone.y + zone.radius); r++) {
+          for (let c = grid.cellOf(zone.x - zone.radius); c <= grid.cellOf(zone.x + zone.radius); c++) {
+            if (grid.inBounds(c, r) && distance((c + 0.5) * cell, (r + 0.5) * cell, zone.x, zone.y) <= zone.radius) {
+              grid.freezeCell(grid.index(c, r), 6 * stat.iceScale, events, "COMBO");
+            }
+          }
+        }
+        for (let k = before; k < events.length; k++) events[k].t = state.time;
+      }
+      if (tx.igniteGround) {
+        const before = events.length;
+        for (let r = grid.cellOf(zone.y - zone.radius); r <= grid.cellOf(zone.y + zone.radius); r++) {
+          for (let c = grid.cellOf(zone.x - zone.radius); c <= grid.cellOf(zone.x + zone.radius); c++) {
+            if (grid.inBounds(c, r) && distance((c + 0.5) * cell, (r + 0.5) * cell, zone.x, zone.y) <= zone.radius) {
+              grid.ignite(grid.index(c, r), events, "COMBO");
+            }
+          }
+        }
+        for (let k = before; k < events.length; k++) events[k].t = state.time;
+      }
+      if (tx.spawnPatch) {
+        spawnSurfacePatch({ kind: tx.spawnPatch, x: zone.x, y: zone.y, radius: Math.round(zone.radius * 0.9), ttl: 7.5, team: team ?? zone.team, moveId });
+      }
+      emit({
+        type: "ZONE_TRANSFORM",
+        id: zone.id,
+        kind: tx.kind,
+        paletteKey: tx.paletteKey,
+        x: zone.x,
+        y: zone.y,
+        radius: zone.radius,
+        delay: Math.max(0.15, zone.delay - zone.t),
+        team: team ?? zone.team
+      });
+      return tx;
+    }
+    return null;
+  }
+
+  function reactAndShatterWall(prop, damage, rawElement, moveId, team, strikeAngle, { melee = false, cause = "IMPACT" } = {}) {
+    if (!prop || prop.destroyed) return false;
+    const wasDestroyed = prop.destroyed;
+    const px = (prop.col + prop.width / 2) * cell;
+    const py = (prop.row + prop.height / 2) * cell;
+    let totalDamage = damage * (melee && prop.temporary ? 2.5 : 1.0);
+    const rx = relayMode ? resolveWallElementReaction(prop, rawElement, moveId) : null;
+    if (rx) {
+      totalDamage *= rx.damageMult ?? 1;
+      if (rx.igniteRadius) {
+        const beforeIgn = events.length;
+        grid.igniteAt(px, py, events, "COMBO");
+        for (let k = beforeIgn; k < events.length; k++) events[k].t = state.time;
+      }
+      if (rx.spawnPatch) {
+        spawnSurfacePatch({ kind: rx.spawnPatch, x: px, y: py, radius: 74, ttl: 7.0, team: team ?? "player", moveId });
+      }
+      const rxRadius = rx.conductRadius ?? rx.steamRadius ?? rx.igniteRadius ?? 100;
+      for (const target of targetsFor(team ?? "player")) {
+        const d = distance(target.x, target.y, px, py);
+        if (d > rxRadius + (target.radius ?? 20)) continue;
+        if (rx.burstDamage) strike(target, rx.burstDamage, "WALL_REACT", rx.status ?? null, px, py, rawElement, null, false);
+        else if (rx.status) applyStatus(target, rx.status);
+        if (rx.knockback && d > 1) launch(target, (target.x - px) / d, (target.y - py) / d, rx.knockback);
+      }
+      emit({ type: "WALL_REACT", kind: rx.kind, material: prop.material, x: px, y: py, radius: rxRadius, team });
+    }
+    const before = events.length;
+    const hit = grid.damageProp(prop, totalDamage, events, cause, rawElement);
+    for (let k = before; k < events.length; k++) events[k].t = state.time;
+    if (!wasDestroyed && prop.destroyed && prop.temporary && relayMode) {
+      const shatter = buildWallShatterShards(prop, strikeAngle, team ?? "player", Math.max(18, damage));
+      for (const s of shatter.shards) {
+        spawnProjectile({
+          casterId: team === "player" ? player.id : (state.rivals[0]?.id ?? 0),
+          kind: s.kind, owner: s.owner, moveId: s.moveId,
+          x: px + Math.cos(s.angle) * 18, y: py + Math.sin(s.angle) * 18,
+          vx: s.vx, vy: s.vy, radius: s.radius, damage: s.damage,
+          range: s.range, travelled: 0, pierce: 0, hits: new Set(),
+          onHit: s.onHit, onTerrain: null, knockback: s.knockback, hp: 0,
+          arenaElement: s.arenaElement, attackElement: s.attackElement,
+          guardBreak: s.guardBreak, isWallShard: true, shardMaterial: s.shardMaterial
+        });
+      }
+      emit({ type: "WALL_SHATTER", material: shatter.material, canonical: shatter.canonical, x: px, y: py, angle: strikeAngle, count: shatter.shards.length, team });
+    }
+    return hit;
   }
 
   function zoneStatus(move) {
@@ -1573,16 +2048,23 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const kind = movementKind(caster);
     const nx = caster.x + lunge.dirX * step, ny = caster.y + lunge.dirY * step;
     if (blocked(nx, ny, caster.radius * 0.8, kind)) {
-      const before=events.length;
+      const strikeAngle = Math.atan2(lunge.dirY, lunge.dirX);
       for(const prop of grid.props) {
         if(prop.destroyed||lunge.hits.has(prop.id))continue;
         const px=clamp(nx,prop.col*cell,(prop.col+prop.width)*cell),py=clamp(ny,prop.row*cell,(prop.row+prop.height)*cell);
-        if(distance(nx,ny,px,py)<=caster.radius*.8+2){grid.damageProp(prop,lunge.damage,events,"LUNGE",lunge.arenaElement);lunge.hits.add(prop.id);}
+        if(distance(nx,ny,px,py)<=caster.radius*.8+4){
+          reactAndShatterWall(prop, lunge.damage, lunge.attackElement ?? lunge.arenaElement, lunge.moveId, caster.team, strikeAngle, { melee: true, cause: "LUNGE" });
+          lunge.hits.add(prop.id);
+        }
       }
-      for(let k=before;k<events.length;k++)events[k].t=state.time;
       lunge.left = 0;
     }
     else { caster.x = nx; caster.y = ny; lunge.left -= step; }
+    if (relayMode) {
+      const strikeAngle = Math.atan2(lunge.dirY, lunge.dirX);
+      tryTransformVortexAt(caster.x, caster.y, lunge.attackElement ?? lunge.arenaElement, lunge.moveId, caster.team);
+      triggerSurfaceReactionAt(caster.x, caster.y, lunge.attackElement ?? lunge.arenaElement, lunge.moveId, caster.team, strikeAngle);
+    }
     for (const target of targetsFor(caster.team)) {
       if (lunge.hits.has(target.id)) continue;
       if (distance(target.x, target.y, caster.x, caster.y) <= lunge.width / 2 + (target.radius ?? 20)) {
@@ -1590,7 +2072,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         if (target === player && player.dashGrace > 0) { perfectDodge(caster.x, caster.y); continue; }
         if(relayMode&&!hasSight(caster.x,caster.y,target.x,target.y))continue;
         const beforeContact = events.length, oldHp = target.hp;
-        const hit=strike(target, lunge.damage, "LUNGE", { slow: 0.3, slowSeconds: 0.6 }, target.x, target.y, lunge.arenaElement, lunge.attackElement, lunge.isBasic, { guardBreak: Boolean(lunge.guardBreak) });
+        const hit=strike(target, lunge.damage, "LUNGE", { slow: 0.3, slowSeconds: 0.6 }, target.x, target.y, lunge.arenaElement, lunge.attackElement, lunge.isBasic, { guardBreak: Boolean(lunge.guardBreak), moveId: lunge.moveId });
         if (hit) confirmMoveContact(beforeContact, oldHp, target, lunge, caster.id, target.x, target.y, Math.atan2(lunge.dirY, lunge.dirX));
         if(relayMode&&!hit)continue;
         launch(target, lunge.dirX, lunge.dirY, DATA_ARENA_ENERGY.launch.LUNGE);
@@ -1658,7 +2140,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         if (d > zone.radius + (target.radius ?? 20) * 0.5) continue;
         if (target === player && player.dashGrace > 0) { perfectDodge(zone.x, zone.y); continue; }
         if(relayMode&&!hasSight(zone.x,zone.y,target.x,target.y))continue;
-        strike(target, zone.damage, "ZONE", zoneStatus(zone.move), zone.x, zone.y, zone.arenaElement, zone.attackElement, false, { guardBreak: Boolean(zone.guardBreak) });
+        strike(target, zone.damage, "ZONE", zone.evolvedStatus ?? zoneStatus(zone.move), zone.x, zone.y, zone.arenaElement, zone.canonicalElement ?? zone.attackElement, false, { guardBreak: Boolean(zone.guardBreak), moveId: zone.moveId, move: zone.move });
         if (zone.vortexLift) {
           target.vortexHeld = 0;
           const ox = d > 1 ? (target.x - zone.x) / d : Math.cos(zone.angle ?? 0);
@@ -1667,6 +2149,10 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         }
       }
       areaElement(zone.x, zone.y, zone.radius, zone.move,zone.damage,zone.arenaElement);
+      if (relayMode) {
+        triggerSurfaceReactionAt(zone.x, zone.y, zone.canonicalElement ?? zone.attackElement ?? zone.arenaElement, zone.moveId, zone.team, zone.angle ?? 0);
+        maybeSpawnMoveSurface(zone.x, zone.y, zone.moveId, zone.arenaElement, zone.canonicalElement ?? zone.attackElement, zone.move, zone.team, false);
+      }
       tryRaiseTempPillar(zone.x, zone.y, zone.moveId, zone.arenaElement);
       emit({ type: "ZONE_BURST", actionId: zone.actionId, instanceId: zone.id, casterId: zone.caster, moveId:zone.moveId, team: zone.team, x: zone.x, y: zone.y, radius: zone.radius, effect: zone.move.effect });
     }
@@ -1699,12 +2185,30 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
           // Authentic Dig vs Earthquake counterplay: ground shockwave hits burrowed foes for 2x damage & pops them out!
           const burrowedMult = target.burrowed ? 2.0 : 1.0;
           if (target.burrowed) { target.burrowed = false; target.burrow = null; target.invulnerable = 0; target.airZ = 52; }
-          strike(target, sw.damage * burrowedMult, "SHOCKWAVE", { slow: 0.25, slowSeconds: 0.7 }, sw.x, sw.y, sw.arenaElement, sw.attackElement, false, { guardBreak: sw.guardBreak || burrowedMult > 1 });
+          strike(target, sw.damage * burrowedMult, "SHOCKWAVE", { slow: 0.25, slowSeconds: 0.7 }, sw.x, sw.y, sw.arenaElement, sw.attackElement, false, { guardBreak: sw.guardBreak || burrowedMult > 1, moveId: sw.moveId });
           const nx = d > 1 ? (target.x - sw.x) / d : 1, ny = d > 1 ? (target.y - sw.y) / d : 0;
           launch(target, nx, ny, 240);
         }
       }
-      if (p >= 1) state.shockwaves.splice(i, 1);
+      // Expanding shockwaves shatter temporary shield walls radially outward!
+      if (relayMode) {
+        for (const prop of grid.props) {
+          if (prop.destroyed || !prop.temporary || sw.hits.has(prop.id)) continue;
+          const px = (prop.col + prop.width / 2) * cell, py = (prop.row + prop.height / 2) * cell;
+          const d = distance(px, py, sw.x, sw.y);
+          if (Math.abs(d - sw.radius) <= band + cell * 0.5) {
+            sw.hits.add(prop.id);
+            reactAndShatterWall(prop, sw.damage, sw.attackElement ?? sw.arenaElement, sw.moveId, sw.team, Math.atan2(py - sw.y, px - sw.x), { melee: true, cause: "SHOCKWAVE" });
+          }
+        }
+      }
+      if (p >= 1) {
+        if (relayMode) {
+          triggerSurfaceReactionAt(sw.x, sw.y, sw.attackElement ?? sw.arenaElement, sw.moveId, sw.team, 0);
+          maybeSpawnMoveSurface(sw.x, sw.y, sw.moveId, sw.arenaElement, sw.attackElement, { v2Archetype: "SHOCKWAVE_RING" }, sw.team, false);
+        }
+        state.shockwaves.splice(i, 1);
+      }
     }
   }
 
@@ -1720,12 +2224,16 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         gs.timer = gs.interval;
         if (blocked(sx, sy, 14, "forced")) { state.groundSpikes.splice(i, 1); continue; }
         emit({ type: "GROUND_SPIKE_ERUPT", moveId: gs.moveId, team: gs.team, x: sx, y: sy, angle: gs.angle, index: gs.stepIndex });
+        if (relayMode) {
+          triggerSurfaceReactionAt(sx, sy, gs.attackElement ?? gs.arenaElement, gs.moveId, gs.team, gs.angle);
+          if (gs.stepIndex === gs.count) maybeSpawnMoveSurface(sx, sy, gs.moveId, gs.arenaElement, gs.attackElement, { v2Archetype: "GROUND_SPIKES" }, gs.team, false);
+        }
         for (const target of targetsFor(gs.team)) {
           if (distance(target.x, target.y, sx, sy) <= 56 + (target.radius ?? 20) * 0.5) {
             if (target === player && player.dashGrace > 0) { perfectDodge(sx, sy); continue; }
             const hitMult = gs.hits.has(target.id) ? 0.45 : 1.0;
             gs.hits.add(target.id);
-            strike(target, gs.damage * hitMult, "GROUND_SPIKE", { slow: 0.25, slowSeconds: 0.65 }, sx, sy, gs.arenaElement, gs.attackElement, false, { guardBreak: gs.stepIndex === gs.count });
+            strike(target, gs.damage * hitMult, "GROUND_SPIKE", { slow: 0.25, slowSeconds: 0.65 }, sx, sy, gs.arenaElement, gs.attackElement, false, { guardBreak: gs.stepIndex === gs.count, moveId: gs.moveId });
             target.airZ = Math.max(target.airZ ?? 0, 36);
             launch(target, Math.cos(gs.angle), Math.sin(gs.angle), 185);
           }
@@ -2137,11 +2645,19 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     return distance(x, y, player.x, player.y) <= radius + player.radius;
   }
 
-  /** Where a skillshot lands or breaks: fire lights oil, frost freezes open water. */
+  /** Where a skillshot lands or breaks: fire lights oil, frost freezes open water, 666 moves deposit/react with surfaces. */
   function terrainEffect(projectile, backStep = 0) {
-    if (!projectile.onTerrain) return;
     const v = Math.hypot(projectile.vx, projectile.vy) || 1;
     const x = projectile.x + (projectile.vx / v) * backStep * 20, y = projectile.y + (projectile.vy / v) * backStep * 20;
+    if (relayMode && !projectile.isWallShard) {
+      const ang = Math.atan2(projectile.vy, projectile.vx);
+      const team = projectile.owner === "player" ? "player" : "rival";
+      const rxCount = triggerSurfaceReactionAt(x, y, projectile.arenaElement ?? projectile.attackElement, projectile.moveId, team, ang);
+      if (rxCount === 0) {
+        maybeSpawnMoveSurface(x, y, projectile.moveId, projectile.arenaElement, projectile.attackElement, { type: projectile.moveType ?? "BOLT" }, team, Boolean(projectile.isBasic));
+      }
+    }
+    if (!projectile.onTerrain) return;
     const c = grid.cellOf(x), r = grid.cellOf(y);
     if (!grid.inBounds(c, r)) return;
     const before = events.length;
@@ -2169,7 +2685,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       if (distance(target.x, target.y, projectile.x, projectile.y) > (target.radius ?? 20) + projectile.radius) continue;
       projectile.hits.add(target.id);
       const beforeContact = events.length, oldHp = target.hp;
-      const applied=strike(target, projectile.damage, "SKILL", projectile.onHit, projectile.x, projectile.y, projectile.arenaElement, projectile.attackElement, projectile.isBasic, { guardBreak: Boolean(projectile.guardBreak) });
+      const applied=strike(target, projectile.damage, "SKILL", projectile.onHit, projectile.x, projectile.y, projectile.arenaElement, projectile.attackElement, projectile.isBasic, { guardBreak: Boolean(projectile.guardBreak), moveId: projectile.moveId });
       if(relayMode&&!applied)return;
       emit({ type: "SKILL_HIT", actionId: projectile.actionId, x: projectile.x, y: projectile.y, moveId: projectile.moveId });
       if (applied) confirmMoveContact(beforeContact, oldHp, target, projectile, projectile.casterId, projectile.x, projectile.y, Math.atan2(projectile.vy, projectile.vx));
@@ -2258,7 +2774,10 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       }
       if (grid.inBounds(c, r) && grid.blocksLaser(grid.index(c, r))) {
         const before=events.length,prop=grid.propAtCell(grid.index(c,r));
-        grid.damageProp(prop,projectile.damage,events,projectile.onTerrain==="IGNITE"||projectile.kind==="EMBER"?"FIRE":"PROJECTILE",projectile.arenaElement);
+        const strikeAngle = Math.atan2(projectile.vy, projectile.vx);
+        const cause = projectile.onTerrain==="IGNITE"||projectile.kind==="EMBER"?"FIRE":"PROJECTILE";
+        const pTeam = projectile.owner === "player" ? "player" : "rival";
+        reactAndShatterWall(prop, projectile.damage, projectile.attackElement ?? projectile.arenaElement, projectile.moveId, pTeam, strikeAngle, { melee: false, cause });
         if(projectile.onTerrain==="IGNITE"||projectile.kind==="EMBER")grid.ignite(grid.index(c,r),events,"PROJECTILE");
         if(projectile.kind==="WAVE"||projectile.kind==="TIDE"||projectile.onTerrain==="FREEZE")grid.applyWater(projectile.x,projectile.y,.8,events);
         for(let k=before;k<events.length;k++)events[k].t=state.time;
@@ -2266,6 +2785,28 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         terrainEffect(projectile, -1);
         emit({ type: "SHOT_BLOCKED", kind: projectile.kind, x: projectile.x, y: projectile.y });
         continue;
+      }
+      // Cross-ring mid-flight combos: evolve active vortexes, detonate/freeze/electrify ground surfaces, & fan flames along wind!
+      if (relayMode && !projectile.isWallShard) {
+        const pTeam = projectile.owner === "player" ? "player" : "rival";
+        const pAngle = Math.atan2(projectile.vy, projectile.vx);
+        const pEl = projectile.arenaElement ?? projectile.attackElement;
+        if (tryTransformVortexAt(projectile.x, projectile.y, pEl, projectile.moveId, pTeam)) {
+          if (projectile.pierce <= 0 && projectile.kind !== "WAVE") { projectile.dead = true; continue; }
+        }
+        if (triggerSurfaceReactionAt(projectile.x, projectile.y, pEl, projectile.moveId, pTeam, pAngle) > 0) {
+          const canon = normalizeCanonicalElement(pEl, projectile.moveId);
+          if (canon !== "WIND" && projectile.pierce <= 0 && projectile.kind !== "WAVE") { projectile.dead = true; continue; }
+        }
+        if (grid.inBounds(c, r) && grid.fire[grid.index(c, r)] > 0 && normalizeCanonicalElement(pEl, projectile.moveId) === "WIND") {
+          const beforeSpread = events.length;
+          for (const stepDist of [cell, cell * 2]) {
+            const fx = projectile.x + Math.cos(pAngle) * stepDist;
+            const fy = projectile.y + Math.sin(pAngle) * stepDist;
+            grid.igniteAt(fx, fy, events, "WIND_SPREAD");
+          }
+          for (let k = beforeSpread; k < events.length; k++) events[k].t = state.time;
+        }
       }
       if (projectile.kind === "WAVE") {
         const before = events.length;
@@ -2326,9 +2867,10 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         if (hurtPlayer(projectile.damage * mult, projectile.kind, projectile.x, projectile.y, { guardBreak: Boolean(projectile.guardBreak) })) {
           confirmMoveContact(beforeContact, oldHp, player, projectile, projectile.casterId, projectile.x, projectile.y, Math.atan2(projectile.vy, projectile.vx));
           if (relayMode) relayAfterHit(player, projectile.damage * mult, projectile.arenaElement, mult, projectile.x, projectile.y);
-          if (projectile.onHit) applyStatus(player, projectile.onHit);
+          const hostileAilment = projectile.onHit ?? (relayMode && v2Mode && !projectile.isBasic ? inferMoveAilment(projectile.moveId, projectile.arenaElement, projectile.attackElement, null, { isBasic: false }) : null);
+          if (hostileAilment) applyStatus(player, hostileAilment);
           if (projectile.knockback) { const v = Math.hypot(projectile.vx, projectile.vy) || 1; launch(player, projectile.vx / v, projectile.vy / v, DATA_ARENA_ENERGY.launch.WAVE); }
-          if (projectile.kind !== "WAVE") projectile.dead = true;
+          if (projectile.kind !== "WAVE") { projectile.dead = true; terrainEffect(projectile); }
         } else if (player.invulnerable > 0 && projectile.kind !== "WAVE") projectile.dead = true;
         continue;
       }
@@ -2780,7 +3322,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       atkStage: 0, defStage: 0, spdStage: 0, buffsUsed: 0, healsUsed: 0, decoy: null, decoyUsed: false,
       tacticalArt: defaultTacticalArtForElement(rosterElement.get(definition.speciesId) ?? "fire"),
       tacticalCooldown: 2.5, counterTimer: 0, flurry: null, backstab: null, approach: null,
-      slow: 0, slowTimer: 0, root: 0, burn: 0, hitFlash: 0, facing: -1, active: false, invulnerable: 0,
+      slow: 0, slowTimer: 0, root: 0, burn: 0, paralyze: 0, paralyzeTick: 0, poison: 0, poisonStacks: 0, sleep: 0, wet: 0, ccImmune: 0, hitFlash: 0, facing: -1, active: false, invulnerable: 0,
       goal: null, goalTimer: 0, strafe: 1, strafeTimer: 1.2, dodge: null, dashTimer: 0, dashCooldown: 0, dashX: 0, dashY: 0,
       threatSeen: new Set(), wantsCover: false, field: createFlowField(grid, "walker"), attackDelay: 0.8 };
   }
@@ -3405,6 +3947,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       atkStage: 0, defStage: 0, spdStage: 0, buffsUsed: 0, healsUsed: entry.healsUsed ?? 0,
       decoy: null, decoyUsed: Boolean(entry.decoyUsed),
       counterTimer: 0, flurry: null, backstab: null, approach: null,
+      slow: 0, slowTimer: 0, root: 0, burn: 0, paralyze: 0, paralyzeTick: 0, poison: 0, poisonStacks: 0, sleep: 0, wet: 0, ccImmune: 0,
       vx: 0, vy: 0, kbx: 0, kby: 0, dashTimer: 0, dashGrace: 0,
       invulnerable: forced ? 0.8 : (perfectSwitch ? 0.55 : 0.35),
       tagShield: forced ? 0 : (DATA_ARENA_RELAY.tagShieldSeconds ?? 1.2) });
@@ -3694,6 +4237,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     updateZones();
     updateShockwaves();
     updateGroundSpikes();
+    updateSurfacePatches();
     updateProjectiles();
     if (relayMode) relayClash();
     updateTelegraphs();
@@ -3824,7 +4368,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     step,
     /** Rule hooks for deterministic unit tests; the screen never calls these. */
     internals: Object.freeze({ spawnEnemy, spawnProjectile, addHype, burstPod, launchSurge, hurtPlayer, hurtMate, enterPhase, beginCast, autoAim,
-      damageRival, chooseRivalGoal, endRound, triggerTriLinkRush, tryStartGuard, tryRaiseTempPillar, tryStartTacticalArt, triggerSwitchHazard }),
+      damageRival, chooseRivalGoal, endRound, triggerTriLinkRush, tryStartGuard, tryRaiseTempPillar, tryStartTacticalArt, triggerSwitchHazard,
+      spawnSurfacePatch, triggerSurfaceReactionAt, tryTransformVortexAt, reactAndShatterWall }),
     choose,
     setControlMode(nextMode) {
       state.controlMode = normalizeControlMode(nextMode);
@@ -3867,7 +4412,9 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
            tactical: {
              artId: player.tacticalArt,
              ready: canUseTacticalArt(player),
+             spent: tacticalRefusalReason(player) === "SPENT",
              cooldown: Math.round((player.tacticalCooldown ?? 0) * 10) / 10,
+             cooldownMax: tacticalArtById(player.tacticalArt).cooldown,
              energy: tacticalArtById(player.tacticalArt).energy,
              buffsUsed: player.buffsUsed ?? 0,
              healsUsed: player.healsUsed ?? 0,
@@ -3875,6 +4422,16 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
              counterActive: (player.counterTimer ?? 0) > 0,
              flurryActive: Boolean(player.flurry),
              approaching: Boolean(player.approach)
+           },
+           ailments: {
+             sleep: Math.round((player.sleep ?? 0) * 10) / 10,
+             freeze: Math.round((player.root ?? 0) * 10) / 10,
+             paralyze: Math.round((player.paralyze ?? 0) * 10) / 10,
+             poison: Math.round((player.poison ?? 0) * 10) / 10,
+             poisonStacks: player.poisonStacks ?? 0,
+             burn: Math.round((player.burn ?? 0) * 10) / 10,
+             slow: Math.round((player.slowTimer ?? 0) * 10) / 10,
+             wet: Math.round((player.wet ?? 0) * 10) / 10
            } },
         controlMode: state.controlMode,
         moveSystem: state.moveSystem,
@@ -3936,7 +4493,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
           sight: hasSight(r.x, r.y, player.x, player.y) })),
         tournament: state.tournament ? { round: state.tournament.round, status: state.tournament.status, timer: state.tournament.timer,
           roundTime: state.tournament.roundTime, order: [...state.tournament.order], results: state.tournament.results.map((r) => ({ ...r })) } : null,
-        zones: state.zones.map((z) => ({ team: z.team, x: z.x, y: z.y, radius: z.radius, left: Math.max(0, z.delay - z.t) })),
+        zones: state.zones.map((z) => ({ team: z.team, x: z.x, y: z.y, radius: z.radius, left: Math.max(0, z.delay - z.t), evolvedKind: z.evolvedKind ?? null })),
+        puddles: state.puddles.map((p) => ({ id: p.id, kind: p.kind, x: Math.round(p.x), y: Math.round(p.y), radius: Math.round(p.radius), ttl: Math.round(p.ttl * 10) / 10 })),
         scans: state.scans.map((scan) => ({ x: scan.x, y: scan.y, angle: scan.angle, spin: scan.spin, active: scan.telegraph <= 0, reach: scan.reach ?? 0 })),
         stats: { ...state.stats }, result: state.result
       };

@@ -117,13 +117,16 @@ export function scale2xRgba(data, w, h) {
 }
 
 /**
- * Data Arena (relay) conditions -> looks, strongest first: a root holds the
- * fighter in ice (fire melts it, dataArenaSimulation.js), burn is damage over
- * time, slow is the movement scale.
+ * Data Arena (relay) conditions -> looks, strongest first:
+ *   sleep (催眠 Zzz), frozen (冰凍), electrified (麻痺), poisoned (中毒),
+ *   burning (燒傷), slowed (緩速).
  */
 export function dataArenaStatusLook(body) {
   if (!body) return null;
+  if (body.sleep > 0) return 'sleep';
   if (body.root > 0) return 'frozen';
+  if (body.paralyze > 0) return 'electrified';
+  if (body.poison > 0) return 'poisoned';
   if (body.burn > 0) return 'burning';
   if (body.slow > 0) return 'slowed';
   return null;

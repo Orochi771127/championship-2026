@@ -500,7 +500,40 @@ export function createDataArenaAudio({ bus }) {
     burst: (t) => Math.max(hiss(t, 0.005, 0.05, 0.4, 0.2, { type: "highpass", from: 1800 }), tone("sine", 1800, 900, t, 0.005, 0.05, 0.3, 0.06)),
     slam: (t) => Math.max(tone("sine", 90, 40, t, 0.005, 0.1, 0.4, 0.3), hiss(t, 0.005, 0.05, 0.35, 0.2, { type: "lowpass", from: 600 })),
     ui: (t) => tone("triangle", 880, null, t, 0.002, 0.02, 0.05, 0.06),
-    capture: (t) => [659, 880, 1318].reduce((end, f, i) => Math.max(end, tone("sine", f, null, t + i * 0.09, 0.005, 0.08, 0.25, 0.1)), t)
+    capture: (t) => [659, 880, 1318].reduce((end, f, i) => Math.max(end, tone("sine", f, null, t + i * 0.09, 0.005, 0.08, 0.25, 0.1)), t),
+    shatter: (t) => Math.max(
+      tone("sine", 145, 34, t, 0.003, 0.06, 0.28, 0.24),
+      hiss(t, 0.003, 0.05, 0.34, 0.22, { type: "bandpass", from: 2800, to: 720, q: 1.4 }),
+      tone("sine", 1920, 1180, t + 0.03, 0.002, 0.03, 0.22, 0.1),
+      tone("sine", 2480, 1520, t + 0.07, 0.002, 0.03, 0.2, 0.08)
+    ),
+    combo: (t) => [523, 784, 1046, 1568].reduce((end, f, i) => Math.max(end, tone("triangle", f, f * 1.04, t + i * 0.045, 0.004, 0.05, 0.2, 0.11)), t),
+    igniteBoom: (t) => Math.max(
+      tone("sine", 118, 26, t, 0.004, 0.12, 0.42, 0.28),
+      tone("sawtooth", 180, 52, t, 0.006, 0.1, 0.34, 0.15, { type: "lowpass", frequency: 480 }),
+      hiss(t, 0.005, 0.12, 0.44, 0.24, { type: "bandpass", from: 920, to: 280, q: 0.9 })
+    ),
+    freezeSnap: (t) => Math.max(
+      tone("sine", 1568, 2637, t, 0.002, 0.04, 0.24, 0.11),
+      tone("triangle", 2093, 3136, t + 0.035, 0.002, 0.04, 0.22, 0.085),
+      hiss(t, 0.002, 0.03, 0.2, 0.14, { type: "highpass", from: 3600 })
+    ),
+    shockArc: (t) => Math.max(
+      tone("sawtooth", 680, 1480, t, 0.002, 0.04, 0.18, 0.12, { type: "bandpass", frequency: 1900, q: 3.2 }),
+      tone("square", 1180, 420, t + 0.04, 0.002, 0.03, 0.14, 0.09, { type: "bandpass", frequency: 2400, q: 2.5 }),
+      hiss(t, 0.002, 0.04, 0.2, 0.16, { type: "highpass", from: 3200 })
+    ),
+    sleep: (t) => [659, 587, 494, 440].reduce((end, f, i) => Math.max(end, tone("sine", f, f * 0.98, t + i * 0.085, 0.015, 0.06, 0.24, 0.085)), t),
+    poison: (t) => Math.max(
+      tone("sine", 240, 420, t, 0.008, 0.04, 0.14, 0.09),
+      tone("sine", 320, 560, t + 0.07, 0.008, 0.04, 0.14, 0.08),
+      hiss(t, 0.01, 0.06, 0.22, 0.11, { type: "bandpass", from: 1300, to: 700, q: 2.2 })
+    ),
+    paralyze: (t) => Math.max(
+      tone("square", 860, 320, t, 0.002, 0.025, 0.1, 0.1, { type: "bandpass", frequency: 2100, q: 3.0 }),
+      tone("square", 940, 360, t + 0.055, 0.002, 0.025, 0.1, 0.09, { type: "bandpass", frequency: 2300, q: 3.0 })
+    ),
+    refused: (t) => Math.max(tone("triangle", 220, 165, t, 0.003, 0.03, 0.09, 0.09), tone("triangle", 165, 130, t + 0.06, 0.003, 0.03, 0.1, 0.08))
   };
 
   // The held laser: two detuned oscillators through a low-pass, pitch by heat.

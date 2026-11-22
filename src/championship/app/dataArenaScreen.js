@@ -275,7 +275,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   let held = null, basicOrigin = null, basicAim = null;
   const aimOf = (origin, event) => { const dx = event.clientX - origin.ox, dy = event.clientY - origin.oy, length = Math.hypot(dx, dy);
     return length < AIM_DEAD ? null : { x: dx / length, y: dy / length, power: Math.min(1, length / AIM_PULL) }; };
-  const heldMove = key => { const kit = sim?.getState().player.kit, id = key === 'ult' ? kit?.ultimate : kit?.moves?.[key]; return id ? sim.moveInfo(id, key === 'ult') : null; };
+  const heldMove = key => {
+    if (key === 'tactical') return { type: 'LUNGE', distance: 260, range: 260 };
+    const kit = sim?.getState().player.kit, id = key === 'ult' ? kit?.ultimate : kit?.moves?.[key];
+    return id ? sim.moveInfo(id, key === 'ult') : null;
+  };
   const aimReach = (move, power) => { const range = move?.range ?? move?.distance ?? 320; return move?.type === 'ZONE' ? Math.max(70, range * power) : range; };
   // The one aim guide drawn while a thumb points a move: its direction and where it lands, nothing else.
   function aimGuide() {
@@ -420,10 +424,10 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     else if (key === "switch1") latch.switchPartner = Number(switchButton.dataset.targetSlot || 0) || "first";
     else if (key === "switch2") latch.switchPartner = Number(switchButton2.dataset.targetSlot || 0) || "second";
     else latch[key] = true;
-    if (key === "ult" || typeof key === "number") latch.castAuto = true;
+    if (key === "ult" || key === "tactical" || typeof key === "number") latch.castAuto = true;
   };
   for (const [node, key] of [[switchButton, "switch1"], [switchButton2, "switch2"], [burstButton, "burst"], [guardTouchButton, "guard"], [tacticalTouchButton, "tactical"], [dashButton, "dash"], [surgeButton, "surge"], [rideButton, "ride"], [ultButton, "ult"], ...skillButtons.map((node, slot) => [node, slot])]) {
-    const fire = press(key), aimed = key === "ult" || typeof key === "number";
+    const fire = press(key), aimed = key === "ult" || key === "tactical" || typeof key === "number";
     // The burst key: a tap bursts, a long press or a double tap goes over the limit (AWAKENING_OVERDRIVE_20261109).
     if (key === "burst") bindOverLimitPress(node, { holdMs: OVER_LIMIT_RULES.holdMs, doubleTapMs: OVER_LIMIT_RULES.doubleTapMs,
       ready: () => root.dataset.state === "PLAY", onStandard: () => { latch.burst = true; tick(); }, onOverLimit: () => { latch.overLimit = true; tick(); } });
@@ -734,19 +738,48 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           node.classList.toggle('is-cooling', val.startsWith('cd|'));
           node.textContent = val === 'active' ? t('relay.guard.active') : val.startsWith('cd|') ? `${t('relay.guard')} ${Number(val.slice(3)).toFixed(1)}s` : t('relay.guard');
         }, gKey);
+        if (touchActive && guardTouchButton) {
+          const gCool = p.guard.cooldown > 0 ? Math.min(1, Math.round((p.guard.cooldown / 3) * 40) / 40) : 0;
+          put('tguardBtn', guardTouchButton, (node, val) => {
+            const [st, cdStr, coolStr] = val.split('|');
+            setCool(node, Number(coolStr));
+            node.classList.toggle('is-active', st === 'active');
+            node.classList.toggle('is-cooling', st === 'cd');
+            node.classList.toggle('is-ready', st === 'ready');
+            const metaEl = node.querySelector('.da-tbtn__meta');
+            if (metaEl) metaEl.textContent = st === 'cd' ? `${Number(cdStr).toFixed(1)}s` : '';
+          }, `${p.guard.active ? 'active' : p.guard.cooldown > 0 ? 'cd' : 'ready'}|${p.guard.cooldown}|${gCool}`);
+        }
       }
       if (hudRefs.tacticalArt && p.tactical) {
         const tac = p.tactical;
         const tName = t(`tactical.${tac.artId}`);
-        const tState = tac.counterActive || tac.flurryActive ? 'active' : tac.cooldown > 0 ? `cd|${tac.cooldown}` : tac.ready ? 'ready' : 'spent';
+        const tShort = t(`tactical.short.${tac.artId}`);
+        const tState = tac.counterActive || tac.flurryActive ? 'active' : tac.spent ? 'spent' : tac.cooldown > 0 ? 'cd' : tac.ready ? 'ready' : 'noenergy';
         put('tacticalBtn', hudRefs.tacticalArt, (node, val) => {
           const [artLabel, st, cdStr] = val.split('|');
           node.classList.toggle('is-active', st === 'active');
-          node.classList.toggle('is-cooling', st === 'cd' || st === 'spent');
+          node.classList.toggle('is-cooling', st === 'cd' || st === 'spent' || st === 'noenergy');
           node.classList.toggle('is-ready', st === 'ready');
-          node.textContent = st === 'cd' ? `${artLabel} ${Number(cdStr).toFixed(0)}s` : `${artLabel} F`;
+          node.textContent = st === 'cd' ? `${artLabel} ${Number(cdStr).toFixed(0)}s` : st === 'spent' ? `${artLabel} ${t('btn.spent')}` : `${artLabel} F`;
           node.title = t(`tactical.${tac.artId}.desc`);
-        }, `${tName}|${tState.startsWith('cd|') ? `cd|${tac.cooldown}` : `${tState}|0`}`);
+        }, `${tName}|${tState}|${tac.cooldown}`);
+        if (touchActive && tacticalTouchButton) {
+          const cdMax = Math.max(1, tac.cooldownMax ?? 10);
+          const tCool = tac.spent ? 1 : tac.cooldown > 0 ? Math.min(1, Math.round((tac.cooldown / cdMax) * 40) / 40) : 0;
+          const tMeta = tac.spent ? t('btn.spent') : tac.cooldown > 0 ? `${Math.ceil(tac.cooldown)}s` : `${tac.energy} TP`;
+          put('ttacticalBtn', tacticalTouchButton, (node, val) => {
+            const [shortLabel, st, metaStr, coolStr] = val.split('|');
+            setCool(node, Number(coolStr));
+            node.classList.toggle('is-active', st === 'active');
+            node.classList.toggle('is-cooling', st === 'cd' || st === 'spent');
+            node.classList.toggle('is-noenergy', st === 'noenergy');
+            node.classList.toggle('is-ready', st === 'ready');
+            if (node.firstChild) node.firstChild.textContent = shortLabel;
+            const metaEl = node.querySelector('.da-tbtn__meta');
+            if (metaEl) metaEl.textContent = metaStr;
+          }, `${tShort}|${tState}|${tMeta}|${tCool}`);
+        }
       }
       if (hudRefs.statStages && p.statStages) {
         const st = p.statStages;
@@ -1015,7 +1048,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   /** Track two: a flag on the skill's own button (desktop slot and touch disc), plus a shake when refused. */
   function buttonFlag(slot, message, { tone = "warn", shake = false } = {}) {
     const nodes = slot === "ult" ? [hudRefs.ult, ultButton] : slot === "switch" ? [hudRefs.switch, switchButton]
-      : slot === "surge" ? [hudRefs.surge, surgeButton] : slot === "ride" ? [hudRefs.ride, rideButton] : [hudRefs.slots?.[slot], skillButtons[slot]];
+      : slot === "tactical" ? [hudRefs.tacticalArt, tacticalTouchButton] : slot === "guard" ? [hudRefs.guardBtn, guardTouchButton]
+        : slot === "surge" ? [hudRefs.surge, surgeButton] : slot === "ride" ? [hudRefs.ride, rideButton] : [hudRefs.slots?.[slot], skillButtons[slot]];
     for (const node of nodes) {
       // Buttons clip their cooldown pie, so the flag sits on the button's positioned parent, just above it.
       const host = node?.offsetParent;
@@ -1079,6 +1113,38 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         case 'GUARD_BROKEN': audio?.playImpact({ guardBreak: true }); break;
         case 'STAT_BUFF': audio?.playMove({ archetype: 'SELF_BUFF', element: 'light' }); break;
         case 'TACTICAL_HEAL': audio?.playMove({ archetype: 'RECOVERY_SUPPORT', element: 'nature' }); break;
+        case 'TACTICAL_REFUSED':
+          audio?.play('refused');
+          buttonFlag('tactical', t(event.reason === 'ENERGY' ? 'btn.noTp' : event.reason === 'SPENT' ? 'btn.spent' : 'btn.cooling'), { shake: true });
+          if (event.reason === 'ENERGY') flashTp();
+          break;
+        case 'ZONE_TRANSFORM':
+          audio?.play('combo');
+          tactical(t(`react.${event.kind}`), { tone: 'chain', key: `combo-${event.kind}` });
+          break;
+        case 'WALL_SHATTER': audio?.play('shatter'); break;
+        case 'WALL_REACT':
+          audio?.play(event.kind === 'CONDUCT' ? 'shockArc' : event.kind === 'WOOD_BURN' ? 'igniteBoom' : 'combo');
+          tactical(t(`react.${event.kind}`), { tone: 'chain', key: `wall-${event.kind}` });
+          break;
+        case 'SURFACE_REACT':
+          audio?.play(event.kind === 'POISON_IGNITE' || event.kind === 'WILDFIRE_IGNITE' ? 'igniteBoom'
+            : event.kind === 'WATER_FREEZE' || event.kind === 'TOXIC_FROST' ? 'freezeSnap'
+              : event.kind === 'WATER_ELECTRIFY' ? 'shockArc' : 'combo');
+          tactical(t(`react.${event.kind}`), { tone: 'chain', key: `surf-${event.kind}` });
+          break;
+        case 'STATUS_REACT':
+          audio?.play(event.kind === 'TOXIC_BLAST' ? 'igniteBoom'
+            : event.kind === 'FLASH_FREEZE' || event.kind === 'SHATTER_CRIT' ? 'freezeSnap'
+              : event.kind === 'ELECTRO_CHARGE' ? 'shockArc' : 'combo');
+          break;
+        case 'PARALYZE_TWITCH': audio?.play('paralyze'); break;
+        case 'STATUS':
+          if (event.status === 'SLEEP') audio?.play('sleep');
+          else if (event.status === 'POISON') audio?.play('poison');
+          else if (event.status === 'PARALYZE') audio?.play('paralyze');
+          else if (event.status === 'ROOT') audio?.play('freezeSnap');
+          break;
         case 'COUNTER_UP': audio?.playMove({ archetype: 'PROTECT_COUNTER', element: 'metal' }); break;
         case 'COUNTER_RIPOSTE': audio?.playImpact({ amount: 34, clash: false }); audio?.playMove({ archetype: 'SHADOW_BACKSTAB', element: 'metal', phase: 'hit' }); break;
         case 'FLURRY_HIT': audio?.playMove({ archetype: 'FLURRY_COMBO', element: moveAudioSpec(event.moveId, event.side).element, step: event.hitIndex ?? 0 }); break;
