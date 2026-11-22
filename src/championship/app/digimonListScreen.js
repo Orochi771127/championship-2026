@@ -16,6 +16,8 @@ import { buildStarUp } from "../presentation/ceremony/ceremonyScenes.js";
 import { requestArcadeFx } from "./ui/arcadeFx.js";
 import {battleStyleOf,isSpecialSkillId,SPECIAL_SKILL_GLYPHS} from '../contracts/productBattleStyle.js';
 import {battleStyleText,specialSkillEffect} from '../text/battleStyleText.js';
+import {partnerTendencyText} from '../contracts/productPartnerTendency.js';
+import {openEvolutionText} from '../text/openEvolutionText.js';
 import {battleGlyph,STYLE_GLYPHS} from './battleGlyphs.js';
 import { syncVitalPercent, syncBreakthroughsAt } from "../contracts/productSyncLevel.js";
 // The Digimon roster -- the original's ui/digimon_list_* scenes.
@@ -346,9 +348,43 @@ function appendPartnerIdentityCard(detail, entry) {
   detail.append(wrap);
 }
 
+function appendOpenEvolutionAura(wrap, aura) {
+  if (!aura) return;
+  const card = element("div", "cm-evolution-aura");
+  card.dataset.careTier = aura.careTier;
+  card.dataset.hasUnknown = String(Boolean(aura.hasUnknown));
+  const head = element("div", "cm-evolution-aura__head");
+  head.append(element("span", "cm-evolution-aura__title", openEvolutionText("aura.title"), false));
+  const signalText = aura.hasUnknown
+    ? openEvolutionText("aura.unknownBadge", { count: aura.unknownCount })
+    : openEvolutionText("aura.allKnown");
+  head.append(element("span", "cm-evolution-aura__signal", signalText, false));
+  const raceLabel = aura.dominantRace
+    ? openEvolutionText("aura.raceValue", { race: taxonomyText(`race.${aura.dominantRace}`), points: aura.dominantRacePoints })
+    : openEvolutionText("aura.raceNone");
+  const factionLabel = aura.dominantFaction
+    ? openEvolutionText("aura.factionValue", { faction: taxonomyText(`faction.${aura.dominantFaction}`) })
+    : openEvolutionText("aura.factionNone");
+  const careLabel = openEvolutionText(`care.${aura.careTier}`);
+  const summary = element("p", "cm-evolution-aura__summary", openEvolutionText("aura.summary", {
+    race: raceLabel,
+    faction: factionLabel,
+    care: careLabel
+  }), false);
+  const poolLine = element("p", "cm-evolution-aura__pool", openEvolutionText("aura.pool", { count: aura.poolSize }), false);
+  card.append(head, summary, poolLine);
+  if (aura.knownPreviewNames?.length) {
+    card.append(element("p", "cm-evolution-aura__echoes", openEvolutionText("aura.knownEchoes", {
+      names: formatList(aura.knownPreviewNames)
+    }), false));
+  }
+  card.append(element("p", "cm-evolution-aura__tip", openEvolutionText("aura.tip"), false));
+  wrap.append(card);
+}
+
 function appendEvolutionCompass(detail, entry, { onToggleEvolutionPin = null } = {}) {
   const compass = entry?.evolutionCompass;
-  if (!compass?.branches?.length) return;
+  if (!compass?.branches?.length && !compass?.openAura) return;
   const wrap = element("div", "cm-evolution-compass");
   wrap.dataset.species = String(compass.speciesIndex);
   const head = element("div", "cm-evolution-compass__head");
@@ -357,6 +393,7 @@ function appendEvolutionCompass(detail, entry, { onToggleEvolutionPin = null } =
     head.append(element("span", "cm-evolution-compass__gate", uiText("EVOLUTION_COMPASS_SYNC_GATE", compass.syncGate), false));
   }
   wrap.append(head);
+  appendOpenEvolutionAura(wrap, compass.openAura);
   for (let i = 0; i < compass.branches.length; i++) {
     const branch = compass.branches[i];
     const row = element("div", "cm-evolution-compass__branch");
@@ -398,8 +435,55 @@ function appendEvolutionCompass(detail, entry, { onToggleEvolutionPin = null } =
   detail.append(wrap);
 }
 
-export function appendCreatureDetail(detail, entry, { onBurstForm = null, onAwakening = null, onToggleEvolutionPin = null } = {}) {
+function appendTrainingTendencyCard(detail, entry, { onSetTrainingTendency = null, onOpenPracticeFor = null } = {}) {
+  if (!entry?.instanceId || (!onSetTrainingTendency && !entry?.trainingTendency)) return;
+  const current = entry.trainingTendency ?? null;
+  const kind = current?.kind ?? null;
+  const wrap = element("div", "cm-partner-tendency");
+  wrap.dataset.tendency = kind ?? "NONE";
+  const head = element("div", "cm-partner-tendency__head");
+  const currentLabel = kind ? partnerTendencyText(`kind.${kind}`) : partnerTendencyText("none");
+  const sourceLabel = current?.source === "CAGE_ECO" ? ` · ${partnerTendencyText("sourceCage")}` : current?.source === "RANCH_DRILL" ? ` · ${partnerTendencyText("sourceDrill")}` : "";
+  head.append(
+    element("span", "cm-partner-tendency__title", partnerTendencyText("title"), false),
+    element("span", "cm-partner-tendency__current", partnerTendencyText("current", { label: `${currentLabel}${sourceLabel}` }), false)
+  );
+  const desc = element("p", "cm-partner-tendency__desc", partnerTendencyText(`desc.${kind ?? "NONE"}`), false);
+  wrap.append(head, desc);
+  if (onSetTrainingTendency) {
+    const actions = element("div", "cm-partner-tendency__actions");
+    actions.setAttribute("role", "radiogroup");
+    actions.setAttribute("aria-label", partnerTendencyText("title"));
+    for (const option of ["ENDURANCE", "SKILL"]) {
+      const btn = element("button", "cm-partner-tendency__btn", partnerTendencyText(`kind.${option}`), false);
+      btn.type = "button";
+      btn.setAttribute("role", "radio");
+      btn.dataset.tendencyOption = option;
+      btn.setAttribute("aria-checked", String(kind === option));
+      btn.addEventListener("click", () => onSetTrainingTendency(entry.instanceId, option));
+      actions.append(btn);
+    }
+    if (kind) {
+      const clearBtn = element("button", "cm-partner-tendency__btn cm-partner-tendency__btn--clear", partnerTendencyText("clear"), false);
+      clearBtn.type = "button";
+      clearBtn.dataset.tendencyOption = "CLEAR";
+      clearBtn.addEventListener("click", () => onSetTrainingTendency(entry.instanceId, null));
+      actions.append(clearBtn);
+    }
+    if (onOpenPracticeFor) {
+      const sparBtn = element("button", "cm-partner-tendency__spar", partnerTendencyText("sparCta"), false);
+      sparBtn.type = "button";
+      sparBtn.addEventListener("click", () => onOpenPracticeFor(entry.instanceId));
+      actions.append(sparBtn);
+    }
+    wrap.append(actions);
+  }
+  detail.append(wrap);
+}
+
+export function appendCreatureDetail(detail, entry, { onBurstForm = null, onAwakening = null, onToggleEvolutionPin = null, onSetTrainingTendency = null, onOpenPracticeFor = null } = {}) {
   appendPartnerIdentityCard(detail, entry);
+  appendTrainingTendencyCard(detail, entry, { onSetTrainingTendency, onOpenPracticeFor });
   appendEvolutionCompass(detail, entry, { onToggleEvolutionPin });
   const style = entryBattleStyle(entry);
   for (const row of TRACED_DETAIL_ROWS) {
@@ -524,7 +608,7 @@ export function appendCreatureDetail(detail, entry, { onBurstForm = null, onAwak
  * @param {(instanceId: string, name: string) => ({ok: boolean, entries?: Array<object>})} [options.onRename]
  * @param {(instanceId: string) => ({ok: boolean, reason?: string, entries?: Array<object>})} [options.onRebirth]
  */
-export function createDigimonListView({ root, entries = [], onExit, onRename = null, onRebirth = null, onBurstForm = null, onAwakening = null, onToggleEvolutionPin = null, fusion = null, initialInstanceId = null, arenaMoves = null, onGoBattle = null, onGoHunt = null } = {}) {
+export function createDigimonListView({ root, entries = [], onExit, onRename = null, onRebirth = null, onBurstForm = null, onAwakening = null, onToggleEvolutionPin = null, onSetTrainingTendency = null, onOpenPracticeFor = null, fusion = null, initialInstanceId = null, arenaMoves = null, onGoBattle = null, onGoHunt = null } = {}) {
   if (!root) throw new TypeError("The Digimon list requires a root element");
 
   root.replaceChildren();
@@ -559,7 +643,10 @@ export function createDigimonListView({ root, entries = [], onExit, onRename = n
     } : null, onToggleEvolutionPin: onToggleEvolutionPin ? (instanceId, speciesIndex, branchIndex) => {
       const result = onToggleEvolutionPin(instanceId, speciesIndex, branchIndex);
       if (result?.ok && Array.isArray(result.entries)) { entries = result.entries; renderDetail(); }
-    } : null });
+    } : null, onSetTrainingTendency: onSetTrainingTendency ? (instanceId, kind) => {
+      const result = onSetTrainingTendency(instanceId, kind);
+      if (result?.ok && Array.isArray(result.entries)) { entries = result.entries; renderDetail(); renderList(); }
+    } : null, onOpenPracticeFor });
     if (arenaMoves) appendArenaMoveLearning(detail, entry, arenaMoves, renderDetail);
     // Say what is missing rather than leaving the panel silently short.
     const note = element("p", "cm-digimon-untraced",

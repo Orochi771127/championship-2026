@@ -1980,3 +1980,135 @@ body[data-day-period="NIGHT"] .int-rh2-field-host::after { background-color: rgb
 .cm-vs2-action--jump { flex: 1 1 auto; }
 .cm-screen-footer { display: flex; flex-wrap: wrap; gap: 8px; }
 .cm-digimon-jump { flex: 1 1 auto; }
+
+/* P1 (2026-11-21): Ranch reversible battle tendency drill card */
+.cm-partner-tendency {
+  grid-column: 1 / -1;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 8px 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 2px solid var(--cm-ink, #141824);
+  background: rgba(255, 250, 238, 0.94);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cm-partner-tendency__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.cm-partner-tendency__title {
+  font-weight: 800;
+  font-size: 0.86rem;
+  color: #141824;
+}
+.cm-partner-tendency__current {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #1d273b;
+  color: #fff6d6;
+}
+.cm-partner-tendency__desc {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: #364152;
+}
+.cm-partner-tendency__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+.cm-partner-tendency__btn,
+.cm-partner-tendency__spar {
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 9px;
+  border: 2px solid #141824;
+  background: #ffffff;
+  color: #141824;
+  cursor: pointer;
+}
+.cm-partner-tendency__btn[aria-checked="true"] {
+  background: #f5b726;
+  color: #141824;
+}
+.cm-partner-tendency__btn--clear {
+  background: #edf1f7;
+  color: #475467;
+}
+.cm-partner-tendency__spar {
+  margin-left: auto;
+  background: #2f6bff;
+  color: #ffffff;
+}
+
+/* Open Blind-Box Evolution v1 aura sense card */
+.cm-evolution-aura {
+  margin: 6px 0 8px;
+  padding: 9px 11px;
+  border-radius: 11px;
+  border: 2px solid #2b234d;
+  background: linear-gradient(135deg, #f3ecff 0%, #eaf6ff 100%);
+  color: #1a1730;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cm-evolution-aura[data-care-tier="WILD"] {
+  background: linear-gradient(135deg, #fbe8f2 0%, #f1ecff 100%);
+  border-color: #6b2152;
+}
+.cm-evolution-aura__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.cm-evolution-aura__title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #362266;
+}
+.cm-evolution-aura__signal {
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #2e1d5c;
+  color: #ffe37a;
+}
+.cm-evolution-aura[data-has-unknown="false"] .cm-evolution-aura__signal {
+  background: #d8e2f0;
+  color: #334155;
+}
+.cm-evolution-aura__summary {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1f2438;
+}
+.cm-evolution-aura__pool,
+.cm-evolution-aura__echoes,
+.cm-evolution-aura__tip {
+  margin: 0;
+  font-size: 0.74rem;
+  line-height: 1.35;
+  color: #464e66;
+}
+.cm-evolution-aura__echoes {
+  font-weight: 600;
+  color: #2f3b5c;
+}

@@ -18,21 +18,42 @@ const speciesIndex = (speciesId) => /^species-\d{3}$/.test(speciesId ?? "") ? Nu
 
 /**
  * `progress` is `{ registeredSpecies: number[], ownedSpecies: string[],
- * ownedInstances?: { speciesId, instanceId }[] }` read from the canonical save,
- * or null in a controlled harness (every partner open). `roster` lists
- * `{ id, speciesId }` in display order. Each row keeps `instanceId`: the ranch
- * individual of that species (the first held one), or null.
+ * ownedInstances?: { speciesId, instanceId, displayName?, trainingTendency?, tactic? }[] }`
+ * read from the canonical save, or null in a controlled harness (every partner open).
+ * `roster` lists `{ id, speciesId }` in display order.
+ * `selectedInstances` (optional `{ [speciesId]: instanceId }` or Map) chooses a
+ * specific owned individual when the player owns several of the same species;
+ * non-owned entries (REGISTERED/RENTAL/LOCKED) always keep `instanceId: null`.
  */
-export function dataArenaEntries(roster, progress) {
-  if (!progress) return Object.freeze(roster.map((member, order) => Object.freeze({ ...member, entry: DATA_ARENA_ENTRY.REGISTERED, instanceId: null, order })));
+export function dataArenaEntries(roster, progress, selectedInstances = null) {
+  if (!progress) return Object.freeze(roster.map((member, order) => Object.freeze({ ...member, entry: DATA_ARENA_ENTRY.REGISTERED, instanceId: null, ownedInstances: Object.freeze([]), selectedInstance: null, order })));
   const registered = new Set(progress.registeredSpecies ?? []);
   const owned = new Set(progress.ownedSpecies ?? []);
-  const instances = new Map();
-  for (const { speciesId, instanceId } of progress.ownedInstances ?? []) if (!instances.has(speciesId)) instances.set(speciesId, instanceId);
+  const instancesBySpecies = new Map();
+  for (const item of progress.ownedInstances ?? []) {
+    if (!item?.speciesId || !item?.instanceId) continue;
+    const list = instancesBySpecies.get(item.speciesId) ?? [];
+    if (!list.some((existing) => existing.instanceId === item.instanceId)) list.push(Object.freeze({ ...item }));
+    instancesBySpecies.set(item.speciesId, list);
+  }
+  const preferredOf = (speciesId) => {
+    if (!selectedInstances) return null;
+    return selectedInstances instanceof Map ? selectedInstances.get(speciesId) ?? null : selectedInstances[speciesId] ?? null;
+  };
   const rows = roster.map((member, order) => {
     const entry = owned.has(member.speciesId) ? DATA_ARENA_ENTRY.BRED
       : registered.has(speciesIndex(member.speciesId)) ? DATA_ARENA_ENTRY.REGISTERED : DATA_ARENA_ENTRY.LOCKED;
-    return { ...member, entry, instanceId: instances.get(member.speciesId) ?? null, order };
+    const ownedList = entry === DATA_ARENA_ENTRY.BRED ? (instancesBySpecies.get(member.speciesId) ?? []) : [];
+    const preferredId = preferredOf(member.speciesId);
+    const picked = (preferredId && ownedList.find((item) => item.instanceId === preferredId)) || ownedList[0] || null;
+    return {
+      ...member,
+      entry,
+      instanceId: picked?.instanceId ?? null,
+      ownedInstances: Object.freeze([...ownedList]),
+      selectedInstance: picked,
+      order
+    };
   });
   let usable = rows.filter((row) => row.entry !== DATA_ARENA_ENTRY.LOCKED).length;
   for (const speciesId of DATA_ARENA_RENTAL_SPECIES) {

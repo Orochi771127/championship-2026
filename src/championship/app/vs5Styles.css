@@ -1167,3 +1167,31 @@ body:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs
 }
 .cm-vs5-speed[data-speed="1.5"] { border-color: #0e101a; background: #145369; color: #b9fbff; }
 .cm-vs5-speed[data-speed="2"] { border-color: #0e101a; background: #ffc531; color: #0e101a; }
+
+/* Wave 3 (2026-11-21): 3-Pillar Battle Hub quick switcher */
+.cm-vs5-pillars {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  margin: 8px 0 10px;
+}
+.cm-vs5-pillar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  border: 2px solid #182033;
+  background: linear-gradient(145deg, #1b2540 0%, #12182b 100%);
+  color: #f4f7ff;
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+.cm-vs5-pillar:hover { transform: translateY(-1px); border-color: #7ee3ff; }
+.cm-vs5-pillar--auto[aria-pressed="true"] { border-color: #ffca45; background: linear-gradient(145deg, #2b2640 0%, #1d1b30 100%); }
+.cm-vs5-pillar--arena { border-color: #38bdf8; }
+.cm-vs5-pillar--dungeon { border-color: #c084fc; background: linear-gradient(145deg, #2d1b4e 0%, #18112d 100%); }
+.cm-vs5-pillar__title { font-size: 0.84rem; font-weight: 900; line-height: 1.2; }
+.cm-vs5-pillar__sub { font-size: 0.68rem; color: #c7d5f0; line-height: 1.25; }

@@ -1163,3 +1163,33 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 @media (orientation: landscape) and (max-height: 520px) {
   .da-root[data-mode="RELAY"][data-input="touch"] .da-hud__mode { top: 52px; }
 }
+
+/* P0 (2026-11-21): Same-species individual picker inside Data Arena */
+.da-entry--tendency {
+  background: #1d273b;
+  color: #ffe28a;
+  font-size: calc(11px * var(--text-scale-hud, 1));
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+.da-instance-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+.da-instance-pill {
+  font: inherit;
+  font-size: calc(11.5px * var(--text-scale-hud, 1));
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 8px;
+  border: 1.5px solid #141824;
+  background: #f4f6fb;
+  color: #141824;
+  cursor: pointer;
+}
+.da-instance-pill[aria-pressed="true"] {
+  background: #ffd447;
+  color: #141824;
+}

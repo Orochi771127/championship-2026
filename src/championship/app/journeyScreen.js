@@ -10,6 +10,9 @@ import { journeyText as t } from "../text/journeyText.js";
 import { syncText } from "../text/syncLevelText.js";
 import { uiText } from "../text/uiText.js";
 import { taxonomyText } from "../text/taxonomyText.js";
+import { partnerTendencyText } from "../contracts/productPartnerTendency.js";
+import { CYBER_DUNGEON_SECTORS } from "../contracts/productCyberDungeon.js";
+import { cyberDungeonText } from "../text/cyberDungeonText.js";
 import { factionResonance, speciesTaxonomyForId } from "../contracts/speciesTaxonomy.js";
 import { createActionPortrait } from "../presentation/juicy/actionPortrait.js";
 import { tamerEmblem, tamerLevelBadge, flyEmblems } from "../presentation/tamerEmblemArt.js";
@@ -72,7 +75,7 @@ export function createJourneyScreen(host) {
   root.setAttribute("role", "dialog");
   root.setAttribute("aria-label", t("title"));
   let tab = host.prefill?.tab ?? "TOWER", candidates = [], selectedFloor = null, team = [], busy = false, disposed = false;
-  let selectedZone = host.prefill?.zone ?? null, selectedStage = null, dismissedWaveRunId = null;
+  let selectedZone = host.prefill?.zone ?? null, selectedStage = null, dismissedWaveRunId = null, selectedDungeonSector = 1;
 
   const head = el("header", "cm-journey__head");
   const back = button("cm-journey__back cm-arcade-key", t("close"), () => close());
@@ -146,6 +149,7 @@ export function createJourneyScreen(host) {
   function paintTabs() {
     // WAVE_RUN_20261118: the two wave modes lead the row; the tower, crystals, zones and sparring stay as they were.
     const entries = [];
+    if (host.dungeon) entries.push(["DUNGEON", cyberDungeonText("tab")]);
     if (host.wave && typeof host.openStory === "function") entries.push(["STORY", host.wave.text("mode.story")]);
     if (host.wave) entries.push(["CHALLENGE", host.wave.text("mode.challenge")]);
     entries.push(["TOWER", t("tower")], ["FEED", t("feed")], ["ZONES", t("zones")]);
@@ -455,7 +459,7 @@ export function createJourneyScreen(host) {
   }
 
   // Practice series: one partner, three rivals, the battle plan chosen (or kept) between bouts.
-  let practicePick = null, practiceRulesOpen = false;
+  let practicePick = host.prefill?.practiceInstanceId ?? null, practiceRulesOpen = false;
   function paintPractice() {
     const p = host.practice, pt = p.text, current = p.frame();
     const panel = el("div", "cm-journey__practice");
@@ -473,6 +477,8 @@ export function createJourneyScreen(host) {
     panel.append(el("p", "cm-journey__team-title", pt("practice.partner")));
     const roster = el("div", "cm-journey__team");
     const eligible = candidates.filter((c) => c.admission?.ok);
+    const speciesCount = new Map();
+    for (const entry of eligible) speciesCount.set(entry.speciesId, (speciesCount.get(entry.speciesId) ?? 0) + 1);
     for (const entry of eligible) {
       const look = host.describe(entry);
       const chip = button("cm-journey__member", "", () => {
@@ -483,7 +489,11 @@ export function createJourneyScreen(host) {
       chip.dataset.instanceId = entry.instanceId;
       chip.setAttribute("aria-pressed", String(entry.instanceId === partnerId));
       const moodTag = moodBadge(look.mood);
-      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", look.name), ...(look.styleChip ? [look.styleChip] : []), ...(moodTag ? [moodTag] : []));
+      const tendency = p.tendencyOf?.(entry.instanceId)?.kind ?? null;
+      const tendencyTag = tendency ? el("span", "cm-journey__tendency", partnerTendencyText(`tag.${tendency}`)) : null;
+      const twin = (speciesCount.get(entry.speciesId) ?? 0) > 1;
+      const label = twin && look.speciesLabel && look.name !== look.speciesLabel ? `${look.name} (${look.speciesLabel})` : look.name;
+      chip.append(portrait(look.portrait), el("span", "cm-journey__member-name", label), ...(tendencyTag ? [tendencyTag] : []), ...(look.styleChip ? [look.styleChip] : []), ...(moodTag ? [moodTag] : []));
       roster.append(chip);
     }
     if (eligible.length === 0) { panel.append(emptyTeamCard()); body.replaceChildren(panel); return; }
@@ -726,12 +736,237 @@ export function createJourneyScreen(host) {
     } finally { busy = false; if (!disposed) paint(); }
   }
 
+  function paintDungeon() {
+    const dg = host.dungeon;
+    const panel = el("section", "cm-journey__panel cm-dungeon");
+    panel.append(
+      el("h2", "cm-dungeon__title", cyberDungeonText("title")),
+      el("p", "cm-dungeon__sub", cyberDungeonText("subtitle"))
+    );
+    const run = dg.frame?.() ?? null;
+    if (!run) {
+      // Sector selector + Party picker + Launch CTA
+      panel.append(el("h3", "cm-dungeon__label", cyberDungeonText("sector.pick")));
+      const sectors = el("div", "cm-dungeon__sectors");
+      for (const sec of CYBER_DUNGEON_SECTORS) {
+        const card = button("cm-dungeon__sector", "", () => { selectedDungeonSector = sec.id; paint(); });
+        card.dataset.sector = String(sec.id);
+        card.setAttribute("aria-pressed", String(selectedDungeonSector === sec.id));
+        card.append(
+          el("b", "cm-dungeon__sector-name", cyberDungeonText(`sector.${sec.id}.name`)),
+          el("span", "cm-dungeon__sector-desc", cyberDungeonText(`sector.${sec.id}.desc`))
+        );
+        sectors.append(card);
+      }
+      panel.append(sectors, el("h3", "cm-dungeon__label", cyberDungeonText("party.pick")));
+      const eligible = candidates.filter((c) => c.admission?.ok);
+      const roster = el("div", "cm-journey__roster");
+      for (const entry of eligible) {
+        const look = host.describe(entry), sync = host.syncOf(entry.instanceId);
+        const chip = button("cm-journey__member", "", () => {
+          const i = team.indexOf(entry.instanceId);
+          if (i >= 0) team.splice(i, 1);
+          else if (team.length < 3) team.push(entry.instanceId);
+          paint();
+        });
+        chip.setAttribute("aria-pressed", String(team.includes(entry.instanceId)));
+        const tendency = host.practice?.tendencyOf?.(entry.instanceId) ?? null;
+        const lvLabel = sync.next > 0 ? `★${sync.star ?? 1} ${syncText("level", { level: sync.level })}` : `★${sync.star ?? 1} ${syncText("level.max")}`;
+        chip.append(
+          portrait(look.portrait),
+          el("span", "cm-journey__member-name", look.name),
+          ...(tendency ? [el("span", "cm-journey__tendency", partnerTendencyText(`tag.${tendency.kind}`))] : []),
+          el("span", "cm-journey__member-lv", lvLabel)
+        );
+        roster.append(chip);
+      }
+      const tactics = squadTacticsStrip(team);
+      const startBtn = button("cm-journey__go cm-arcade-key", cyberDungeonText("start"), () => {
+        if (busy || !team.length) return;
+        dg.start(selectedDungeonSector, [...team]);
+        paint();
+      });
+      startBtn.dataset.dungeonAction = "start";
+      startBtn.disabled = busy || team.length === 0;
+      if (eligible.length === 0) panel.append(emptyTeamCard(), startBtn);
+      else panel.append(roster, teamResonanceBanner(team), ...(tactics ? [tactics] : []), startBtn);
+      body.replaceChildren(panel);
+      return;
+    }
+
+    // Active / Finished Run Stepper (1..5)
+    const stepper = el("div", "cm-dungeon__stepper");
+    for (let i = 0; i < run.totalRooms; i++) {
+      const pip = el("span", "cm-dungeon__step", i === run.totalRooms - 1 ? "👑" : String(i + 1));
+      pip.dataset.state = i < run.roomIndex ? "done" : i === run.roomIndex ? "current" : "locked";
+      stepper.append(pip);
+    }
+    const progressHead = el("div", "cm-dungeon__head");
+    progressHead.append(
+      el("span", "cm-dungeon__progress", cyberDungeonText("room.progress", { n: run.roomIndex + 1, total: run.totalRooms })),
+      el("span", "cm-dungeon__sector-tag", cyberDungeonText(`sector.${run.sectorId}.name`))
+    );
+    panel.append(progressHead, stepper);
+
+    // Equipped Data Chips strip
+    const chipsBox = el("div", "cm-dungeon__chips");
+    chipsBox.append(el("span", "cm-dungeon__chips-title", cyberDungeonText("chips.title", { n: run.chips.length })));
+    if (run.chips.length) {
+      const chipRow = el("div", "cm-dungeon__chip-row");
+      for (const id of run.chips) {
+        const badge = el("span", "cm-dungeon__chip-pill", cyberDungeonText(`chip.${id}.name`));
+        badge.title = cyberDungeonText(`chip.${id}.desc`);
+        chipRow.append(badge);
+      }
+      chipsBox.append(chipRow);
+    } else {
+      chipsBox.append(el("span", "cm-dungeon__chips-empty", cyberDungeonText("chips.empty")));
+    }
+    panel.append(chipsBox);
+
+    // Party HP/TP carry-over strip
+    const squadStrip = el("div", "cm-dungeon__squad");
+    for (const id of run.party) {
+      const entry = candidates.find((c) => c.instanceId === id);
+      const look = entry ? host.describe(entry) : { name: id, portrait: null };
+      const ratio = run.carryRatioById?.[id] ?? { hp: 1, tp: 1 };
+      const card = el("div", "cm-dungeon__ally");
+      card.append(
+        portrait(look.portrait, "cm-journey__face"),
+        el("span", "cm-dungeon__ally-name", look.name),
+        el("span", "cm-dungeon__ally-bars", `HP ${Math.round((ratio.hp ?? 1) * 100)}% · TP ${Math.round((ratio.tp ?? 1) * 100)}%`)
+      );
+      squadStrip.append(card);
+    }
+    panel.append(squadStrip);
+
+    // State-specific interactive card
+    const stage = el("div", "cm-dungeon__stage");
+    if (run.status === "CLEARED" || run.status === "DEFEATED") {
+      stage.dataset.outcome = run.status;
+      stage.append(
+        el("h3", "cm-dungeon__outcome", cyberDungeonText(run.status === "CLEARED" ? "result.cleared" : "result.defeated")),
+        el("p", "cm-dungeon__summary", cyberDungeonText("result.summary", {
+          cleared: run.clearedRooms, total: run.totalRooms, crystals: run.totalCrystals, bits: run.totalBits
+        }))
+      );
+      if (run.altarGains?.length) {
+        stage.append(el("p", "cm-dungeon__altar-note", cyberDungeonText("result.altarNote")));
+      }
+      const again = button("cm-journey__go cm-arcade-key", cyberDungeonText("result.again"), () => {
+        dg.reset();
+        paint();
+      });
+      again.dataset.dungeonAction = "reset";
+      stage.append(again);
+    } else if (run.status === "CHIP_DRAFT") {
+      stage.append(el("h3", "cm-dungeon__stage-title", cyberDungeonText("draft.title")));
+      const grid = el("div", "cm-dungeon__draft");
+      for (const chipId of run.chipDraft) {
+        const card = button("cm-dungeon__draft-card", "", () => {
+          dg.pickChip(chipId);
+          paint();
+        });
+        card.dataset.chipId = chipId;
+        card.append(
+          el("b", "cm-dungeon__draft-name", cyberDungeonText(`chip.${chipId}.name`)),
+          el("span", "cm-dungeon__draft-desc", cyberDungeonText(`chip.${chipId}.desc`))
+        );
+        grid.append(card);
+      }
+      stage.append(grid);
+    } else if (run.status === "DOOR_CHOICE") {
+      stage.append(el("h3", "cm-dungeon__stage-title", cyberDungeonText("door.title")));
+      const doors = el("div", "cm-dungeon__doors");
+      run.doors.forEach((door, index) => {
+        const card = button("cm-dungeon__door", "", () => {
+          dg.chooseDoor(index);
+          paint();
+        });
+        card.dataset.doorIndex = String(index);
+        card.dataset.roomKind = door.kind;
+        const sideLabel = run.doors.length > 1 ? cyberDungeonText(index === 0 ? "door.left" : "door.right") : cyberDungeonText("room.kind.BOSS");
+        card.append(
+          el("span", "cm-dungeon__door-side", sideLabel),
+          el("b", "cm-dungeon__door-kind", cyberDungeonText(`room.kind.${door.kind}`)),
+          el("span", "cm-dungeon__door-cta", cyberDungeonText("door.enter"))
+        );
+        doors.append(card);
+      });
+      stage.append(doors);
+    } else if (run.status === "EVENT" && run.activeRoom) {
+      const room = run.activeRoom;
+      stage.append(el("h3", "cm-dungeon__stage-title", cyberDungeonText(`room.kind.${room.kind}`)));
+      const opts = el("div", "cm-dungeon__events");
+      if (room.kind === "CAMPFIRE") {
+        stage.append(el("p", "cm-dungeon__event-desc", cyberDungeonText("event.campfire.desc")));
+        opts.append(
+          button("cm-dungeon__event-btn", cyberDungeonText("event.campfire.rest"), () => { dg.resolveEvent("REST"); paint(); }),
+          button("cm-dungeon__event-btn", cyberDungeonText("event.campfire.spark"), () => { dg.resolveEvent("SPARK"); paint(); })
+        );
+      } else if (room.kind === "ALTAR") {
+        stage.append(el("p", "cm-dungeon__event-desc", cyberDungeonText("event.altar.desc")));
+        (room.options ?? []).forEach((opt, idx) => {
+          const label = opt.kind === "RACE" ? taxonomyText(`race.${opt.key}`) : taxonomyText(`faction.${opt.key}`);
+          opts.append(button("cm-dungeon__event-btn", cyberDungeonText("event.altar.option", { label, points: opt.points }), () => {
+            dg.resolveEvent(idx);
+            paint();
+          }));
+        });
+      } else {
+        stage.append(el("p", "cm-dungeon__event-desc", cyberDungeonText("event.signal.desc")));
+        opts.append(
+          button("cm-dungeon__event-btn", cyberDungeonText("event.signal.supply", { bits: room.supplyBits ?? 120, crystals: room.supplyCrystals ?? 30 }), () => {
+            dg.resolveEvent("SUPPLY");
+            paint();
+          }),
+          button("cm-dungeon__event-btn", cyberDungeonText("event.signal.hunt"), () => {
+            dg.resolveEvent("HUNT");
+            host.onGoHunt?.();
+          })
+        );
+      }
+      stage.append(opts);
+    } else if (run.activeRoom) {
+      const room = run.activeRoom;
+      const isBoss = room.kind === "BOSS";
+      stage.append(
+        el("h3", "cm-dungeon__stage-title", cyberDungeonText(`room.kind.${room.kind}`)),
+        el("p", "cm-dungeon__foes", cyberDungeonText("room.foes", { count: room.presets?.length ?? 1, tier: room.tier ?? 1 }))
+      );
+      const tactics = squadTacticsStrip(run.party);
+      if (tactics) stage.append(tactics);
+      const fight = button("cm-journey__go cm-arcade-key", cyberDungeonText(isBoss ? "room.enterBoss" : "room.enterCombat"), async () => {
+        if (busy) return;
+        busy = true; paint();
+        try {
+          const res = await dg.fight();
+          if (res?.ok === false && !disposed) say(res.message ?? res.reason ?? "");
+        } finally { busy = false; if (!disposed) paint(); }
+      });
+      fight.dataset.dungeonAction = "fight";
+      fight.disabled = busy;
+      stage.append(fight);
+    }
+
+    if (run.status !== "CLEARED" && run.status !== "DEFEATED") {
+      const abandon = button("cm-dungeon__abandon", cyberDungeonText("abandon"), () => {
+        dg.abandon();
+        paint();
+      });
+      stage.append(abandon);
+    }
+    panel.append(stage);
+    body.replaceChildren(panel);
+  }
+
   function paint() {
     if (disposed) return;
     root.dataset.tab = tab;
     paintPod();
     paintTabs();
-    if (tab === "TOWER") paintTower();
+    if (tab === "DUNGEON" && host.dungeon) paintDungeon();
+    else if (tab === "TOWER") paintTower();
     else if (tab === "FEED") paintFeed();
     else if (tab === "PRACTICE" && host.practice) paintPractice();
     else if (tab === "STORY" && host.wave) paintStoryMode();

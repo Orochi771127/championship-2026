@@ -936,6 +936,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     }
     if(cinematic&&event&&(event.kind==='EVOLVED'||event.kind==='REBORN')&&event.instanceId===cinematic.instanceId&&eventKey!==cinematic.startKey){
       evolutionRun?.setStats(event.stats??null);
+      if(event.kind==='EVOLVED'&&event.causalLine)showNotice(event.causalLine);
       // The runner was this form's reveal; the later ceremony would repeat it.
       if(event.kind==='EVOLVED'&&pendingEvolution?.instanceId===event.instanceId)pendingEvolution=null;
       markAnnounced(event);
@@ -949,14 +950,16 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     if(pendingEvolution&&!lifecycle?.evolution&&!day&&!lifecycle?.confirmation&&!activeMail){
       const member=frame.residents.find(r=>r.creatureId===pendingEvolution.instanceId);
       const species=speciesName(pendingEvolution.target);
+      const causalLine=pendingEvolution.message?.causalLine??null;
       markAnnounced(pendingEvolution.message);
       pendingEvolution=null;
       if(member){
+        const baseMeta=uiText('{name} 進化成了{species}。',{name:member.displayName,species});
         evolutionCeremony?.dispose();
         evolutionCeremony=playCeremony({host:root,kind:'evolve',cue:'evolve',
-          label:uiText('{name} 進化成了{species}。',{name:member.displayName,species}),
+          label:baseMeta,
           build:(stage,env)=>buildEvolve(stage,env,{kicker:uiText('進化'),title:species,
-            meta:uiText('{name} 進化成了{species}。',{name:member.displayName,species}),
+            meta:causalLine?`${baseMeta}\n${causalLine}`:baseMeta,
             species:member.speciesId,hint:uiText('輕觸繼續')}),
           onDone:()=>{evolutionCeremony=null;}});
       }

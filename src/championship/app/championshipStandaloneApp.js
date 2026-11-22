@@ -100,6 +100,8 @@ import {
   renameEnclosedCreature
 } from "./championshipRaisingProduction.js";
 import { deserializeChampionshipModernSave, normalizeBattleTactics, BATTLE_TACTIC_DEFAULT, createChampionshipSaveId } from "./championshipStandaloneSave.js";
+import { normalizePartnerTendencies, resolveEffectiveBattleTactic, tendencyForCageEcology, PARTNER_TENDENCY_KINDS } from "../contracts/productPartnerTendency.js";
+import { ranchEcologyType } from "../cage/ranchEcology.js";
 import { createChampionshipPersistentSavePort } from "./ChampionshipPersistentSavePort.js";
 import {normalizeNativeIndividualProfile} from '../raising/nativeIndividualProfile.js';
 import { selectPhase1FirstCreature } from "./phase1ProductCreatures.js";
@@ -125,6 +127,7 @@ import {TUTORIAL_STEP_COUNT,createTutorialCursor, tutorialFinished, tutorialStep
 import {tutorialLine, tutorialPrompt} from '../text/tutorialMessages.zhHant.js';
 import { uiText } from '../text/uiText.js';
 import { buildPartnerEvolutionCompass, buildPartnerIdentityCard } from './partnerEvolutionCompass.js';
+import { formatEvolutionCausalLine } from '../raising/productOpenEvolution.js';
 import {nativeTreatmentAdmission} from '../raising/nativeRaisingTreatment.js';
 import {treatNativeRaisingActor,notifyNativeRaisingResidentAdded,beginNativeRaisingCarry,releaseNativeRaisingCarry,cancelNativeRaisingCarry,beginNativeRaisingStroke,releaseNativeRaisingStroke,touchNativeRaisingActor} from '../raising/nativeRaisingActor.js';
 import {classifyNativeRaisingHand,stepNativeRaisingStrokeInput,nativeRaisingHandAdmission} from '../raising/nativeRaisingHand.js';
@@ -431,6 +434,27 @@ export function createChampionshipStandaloneApp({
   let freeBattleMenu=null;
   // Each partner's battle plan (作戰方針): instance id -> 0 or 2; absent = 1.
   let battleTactics={};
+  let trainingTendencies={};
+  const matchTacticOverrides=new Map();
+  function effectiveBattleTactic(instanceId){
+    return resolveEffectiveBattleTactic({
+      manualTactic:matchTacticOverrides.has(instanceId)?matchTacticOverrides.get(instanceId):null,
+      trainingTendency:trainingTendencies[instanceId]??null,
+      legacyTactic:Object.hasOwn(battleTactics,instanceId)?battleTactics[instanceId]:null,
+      defaultTactic:BATTLE_TACTIC_DEFAULT
+    });
+  }
+  function shapePartnerTendencyFromCage(instanceId,cageDefinitionIndex){
+    const current=trainingTendencies[instanceId];
+    // Respect an explicit ranch drill chosen by the player; cage habits only guide partners without a manual drill.
+    if(current?.source==='RANCH_DRILL')return;
+    const ecology=ranchEcologyType(cageDefinitionIndex);
+    const kind=tendencyForCageEcology(ecology);
+    if(!kind)return;
+    if(current?.kind===kind&&current?.source==='CAGE_ECO'&&current?.cageEcology===ecology)return;
+    trainingTendencies=normalizePartnerTendencies({...trainingTendencies,[instanceId]:{kind,source:'CAGE_ECO',cageEcology:ecology}});
+    savePort.markDirty();
+  }
   // OWNER_APPROVED_ADAPTATION 2026-10-29: Cyber Gachapon (tickets, chips, metals, bloodlines).
   let cyberGacha=null;
   // A catalyst evolution holds its metal in memory and spends it when the new
@@ -1115,7 +1139,9 @@ export function createChampionshipStandaloneApp({
             // ROADMAP_R2_20261118: evolution also asks for the partner's Sync Level; the playtest lifts it like the licence.
             // Read only when an evolution is really asked (a function, not a value: this context is built every step).
             syncLevel:playtestPolicy?.enabled===true?null:()=>syncLevelOf(id).level,
-            overdrive:realtime?training=>overdriveTraining(id,training):null,
+            // Open Blind-Box Evolution v1 (2026-11-21): active in live realtime ranch, off in native/tutorial baseline.
+            openEvolution:realtime&&!tutorialBaseline?{enabled:true,registeredSpecies:()=>registeredSpeciesValue}:null,
+            overdrive:realtime?training=>{shapePartnerTendencyFromCage(id,actor.cageDefinitionIndex);return overdriveTraining(id,training);}:null,
             cageEffects:realtime&&REALTIME_RECOVERY_CAGES.includes(actor.cageDefinitionIndex)?[]:undefined,
             // The breeder talent 精心照料: +4 % training growth a rank.
             growthBonusPercent:talent('growthPercent')+(realtime?ranchSupplyGrowthPercent(tamerSupplies,realNowMs(),talent('supplementPercent')):0), // + 成長粉 while it runs (藥膳 makes it stronger)
@@ -1585,7 +1611,7 @@ export function createChampionshipStandaloneApp({
   // wiring); the individuals carry it to buildOwnedBattleCreature.
   function withBattleTactics(party) {
     if (!party?.ok) return party;
-    return {...party,individuals:party.individuals.map(individual=>({...individual,tactic:battleTactics[individual.instanceId]??BATTLE_TACTIC_DEFAULT}))};
+    return {...party,individuals:party.individuals.map(individual=>({...individual,tactic:effectiveBattleTactic(individual.instanceId)}))};
   }
 
 
@@ -2209,7 +2235,7 @@ export function createChampionshipStandaloneApp({
     return {
       snapshot:requireSession().getRaisingHomeSnapshot(),creature,sessionId,revision:nextRevision,
       interactionCount,friendsPlaytest,onlineBindReward,saveId,tamerRank:tamerRankValue,battleBadges:battleBadgesValue,nativeTitles,
-      championshipRun,freeBattleMenu,battleTactics,cyberGacha,burstEvolution,syncLevels,tamerTalents,tamerSupplies,waveRun:waveRun&&!WAVE_RUN_FINAL.includes(waveRun.status)?waveRun:null,journey,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
+      championshipRun,freeBattleMenu,battleTactics,trainingTendencies,cyberGacha,burstEvolution,syncLevels,tamerTalents,tamerSupplies,waveRun:waveRun&&!WAVE_RUN_FINAL.includes(waveRun.status)?waveRun:null,journey,nativeMessages,nativeOpening,registeredSpecies:registeredSpeciesValue,
       raising,shop:shop?shop.toSave():null,cageEdit:cageEdit?cageEdit.toSave():null,battleEconomy,
       instanceIdentity,gameplayRng:gameplayRngSnapshot(),huntHistory:projectNativeHuntPersistentSave(huntPersistentState)
     };
@@ -2517,6 +2543,8 @@ export function createChampionshipStandaloneApp({
     cageEdit = loadCageEditor(saved.cageEdit);
     freeBattleMenu=saved.progression.freeBattleMenu??null;
     battleTactics=normalizeBattleTactics(saved.progression.battleTactics);
+    trainingTendencies=normalizePartnerTendencies(saved.progression.trainingTendencies);
+    matchTacticOverrides.clear();
     initializeNativeRaisingHome({tutorialBoundary});
     selectedDatabaseSpeciesIndex = null;
     resetExpedition();
@@ -2718,7 +2746,13 @@ export function createChampionshipStandaloneApp({
     getDataArenaProgress() {
       // Current membership only: a starter that disappeared or was released keeps
       // its save record but is no longer a raising instance, so it earns no bonus.
-      const held = (session ? listRaisingInstances(instanceSources()) : []).map(({ speciesId, instanceId }) => ({ speciesId, instanceId }))
+      const held = (session ? listRaisingInstances(instanceSources()) : []).map(({ speciesId, instanceId, displayName }) => ({
+        speciesId,
+        instanceId,
+        displayName: displayName ?? null,
+        trainingTendency: trainingTendencies[instanceId]?.kind ?? null,
+        tactic: effectiveBattleTactic(instanceId)
+      }))
         .filter((entry) => /^species-\d{3}$/.test(entry.speciesId ?? "")).map((entry) => Object.freeze(entry));
       return Object.freeze({ registeredSpecies: Object.freeze([...registeredSpeciesValue]), ownedSpecies: Object.freeze([...new Set(held.map((entry) => entry.speciesId))]),
         ownedInstances: Object.freeze(held) });
@@ -2767,7 +2801,7 @@ export function createChampionshipStandaloneApp({
       nativeOpening=opening;
       cyberGacha=grantGachaWelcome(null).state;
       burstEvolution=withBurstMigrated(createBurstEvolutionState());
-      syncLevels=null;lastSyncGains=null;tamerTalents=null;lastTamerGain=null;tamerSupplies=null;waveRun=null;pendingWave=null;lastWaveFinish=null;journey=null;pendingTower=null;lastTowerResult=null;tacticPractice=null;pendingSpar=null;lastSparResult=null;
+      syncLevels=null;lastSyncGains=null;tamerTalents=null;lastTamerGain=null;tamerSupplies=null;waveRun=null;pendingWave=null;lastWaveFinish=null;journey=null;pendingTower=null;lastTowerResult=null;tacticPractice=null;pendingSpar=null;lastSparResult=null;battleTactics={};trainingTendencies={};matchTacticOverrides.clear();
       tutorialBaseline=null;tutorialPendingOpening=null;tutorialOfferEligible=opening!==null;
       registeredSpeciesValue = Object.freeze([]);
       battleEconomy = createBattleEconomyState();
@@ -2965,8 +2999,10 @@ export function createChampionshipStandaloneApp({
         if(result.evolved&&result.event.target>=8)realtimeWake.set(id,realNowMs()+REALTIME_WAKE_SECONDS*1000);
         if(result.evolved)settleCatalystReservation(id);
         if(result.evolved){const event=result.event;raisingLifecycleMessage={kind:event.target<8?'REBORN':'EVOLVED',instanceId:id,target:event.target,
-            // Display only: the persistent stats before and after the form write.
-            oldSpecies:event.oldSpecies,stats:evolutionStatChange(profileBefore,result.profile)};
+            // Display only: the persistent stats before and after the form write, plus open-evolution causal summary.
+            oldSpecies:event.oldSpecies,stats:evolutionStatChange(profileBefore,result.profile),
+            openEvolution:event.openEvolution??null,
+            causalLine:event.openEvolution?formatEvolutionCausalLine(event.openEvolution):null};
           if(event.productRouteId){const productEvolutionBranches=[...new Set([...(raising.nativeHome?.productEvolutionBranches??[]),event.productRouteId])];
             raising=Object.freeze({...raising,nativeHome:normalizeNativeRaisingHome({...raising.nativeHome,productEvolutionBranches})});}
           else if(event.target>=8&&!event.inherited){const branches=[...new Set([...(raising.nativeHome?.evolutionBranches??[]),(event.oldSpecies-8)*5+growthBranchHistoryIndex(event.oldSpecies,event.index)])];
@@ -4662,7 +4698,7 @@ export function createChampionshipStandaloneApp({
       return buildPartnerIdentityCard({
         profile:syncProfileOf(instanceId),
         sync:syncLevelOf(instanceId),
-        tactic:battleTactics?.[instanceId]??BATTLE_TACTIC_DEFAULT,
+        tactic:effectiveBattleTactic(instanceId),
         grade:partnerGradeOf(syncLevels,instanceId),
         mood
       });
@@ -5040,6 +5076,63 @@ export function createChampionshipStandaloneApp({
       const arenaIndex=FREE_BATTLE_ARENAS[prepared.rng.next(0)%FREE_BATTLE_ARENAS.length];
       return {ok:true,floor:value,presetIndices,arenaIndex,individuals:party.individuals,rngPreparation};
     },
+    /** Prepare a Cyber Dungeon Roguelike combat/boss room with HP/TP carry-over and run-only Data Chip start TP. */
+    async prepareDungeonBattle({presetIndices,partyIds,arenaIndex=2,carryRatioById=null,startTpBonusPct=0}={}){
+      if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
+      const presets=(Array.isArray(presetIndices)?presetIndices:[]).filter(Number.isSafeInteger);
+      if(!presets.length)return {ok:false,reason:'DUNGEON_PRESETS_REQUIRED'};
+      const party=withBattleTactics(await this.prepareBattleParty(null,partyIds,{sync:{capped:false}}));
+      if(!party.ok)return party;
+      if(!freeBattleMenu)rebuildFreeBattleMenu();
+      const individuals=party.individuals.map(individual=>{
+        const profile=structuredClone(individual.nativeProfile);
+        const maxHp=Math.max(1,profile.fields['058']|0);
+        const maxTp=Math.max(1,profile.fields['05c']|0);
+        const carry=carryRatioById?.[individual.instanceId];
+        if(carry){
+          const hpRatio=Math.max(0.15,Math.min(1,Number.isFinite(carry.hp)?carry.hp:1));
+          const tpRatio=Math.max(0,Math.min(1,Number.isFinite(carry.tp)?carry.tp:1));
+          profile.fields['050']=Math.max(1,Math.min(maxHp,Math.round(maxHp*hpRatio)))>>>0;
+          profile.fields['054']=Math.max(0,Math.min(maxTp,Math.round(maxTp*tpRatio)))>>>0;
+        }
+        if(startTpBonusPct>0){
+          const bonusTp=Math.round(maxTp*(startTpBonusPct/100));
+          profile.fields['054']=Math.min(maxTp,(profile.fields['054']|0)+bonusTp)>>>0;
+        }
+        return {...individual,nativeProfile:normalizeNativeIndividualProfile(profile,individual.speciesId)};
+      });
+      const rngPreparation=this.prepareBattleRng(),prepared=battleRngPreparations.get(rngPreparation);
+      prepared.localMode=2;prepared.freeMenu=freeBattleMenu;prepared.individuals=individuals;
+      prepared.freeMatch=Object.freeze({id:`dungeon:${presets.join('-')}`,kind:'WAVE',presetIndices:presets,slots:3,entryFee:0,payout:0});
+      const safeArena=FREE_BATTLE_ARENAS.includes(arenaIndex)?arenaIndex:FREE_BATTLE_ARENAS[0];
+      return {ok:true,presetIndices:presets,arenaIndex:safeArena,individuals,rngPreparation};
+    },
+    enterDungeonBattle({attemptId=nextBattleAttemptId(battleEconomy),playerInstanceIds,rngPreparation}={}){
+      return enterPreparedLocalBattle({mode:2,attemptId,playerInstanceIds,rngPreparation});
+    },
+    /** Settle Cyber Dungeon room rewards (crystals, Bits, and Resonance Altar race/faction points into the leader). */
+    grantCyberDungeonRewards({crystals=0,bits=0,altarBlessing=null,leadInstanceId=null}={}){
+      if(tutorialBaseline)return {ok:false,reason:'INTERACTIVE_TUTORIAL_ISOLATED'};
+      let paidCrystals=0,paidBits=0,altarApplied=false;
+      if(Number.isSafeInteger(crystals)&&crystals>0) paidCrystals=addSyncCrystals(crystals);
+      if(Number.isSafeInteger(bits)&&bits>0){
+        const shop=requireShop();
+        const room=Math.max(0,BITS_WALLET_CAP-shop.getBits());
+        const credit=Math.min(room,bits);
+        if(credit>0){shop.creditBits(credit,{evidence:'OWNER_APPROVED_ADAPTATION'});paidBits=credit;}
+      }
+      if(altarBlessing&&typeof altarBlessing.field==='string'&&Number.isSafeInteger(altarBlessing.points)&&altarBlessing.points>0&&leadInstanceId){
+        const profile=raisingNativeProfile(leadInstanceId);
+        if(profile&&Object.hasOwn(profile.fields,altarBlessing.field)){
+          const updated=structuredClone(profile);
+          updated.fields[altarBlessing.field]=Math.min(999,((updated.fields[altarBlessing.field]|0)+altarBlessing.points))>>>0;
+          writeRaisingNativeProfile(leadInstanceId,normalizeNativeIndividualProfile(updated));
+          altarApplied=true;
+        }
+      }
+      if(paidCrystals||paidBits||altarApplied)savePort.markDirty();
+      return Object.freeze({ok:true,crystals:paidCrystals,bits:paidBits,altarApplied});
+    },
     /**
      * Story battle (OWNER_APPROVED_ADAPTATION 2026-11-11): an ordinary free battle against
      * fixed native presets (the chapter's opponent), no entry fee and no purse -- the
@@ -5141,7 +5234,7 @@ export function createChampionshipStandaloneApp({
     getTacticPractice(){
       requireSession();
       return tacticPractice?Object.freeze({series:tacticPractice,nextBout:tacticPracticeNextBout(tacticPractice),
-        tactic:battleTactics[tacticPractice.instanceId]??BATTLE_TACTIC_DEFAULT,crystals:TACTIC_PRACTICE_CRYSTALS,
+        tactic:effectiveBattleTactic(tacticPractice.instanceId),crystals:TACTIC_PRACTICE_CRYSTALS,
         clearCrystals:TACTIC_PRACTICE_CLEAR_CRYSTALS,cleared:tacticPracticeCleared(tacticPractice),lastResult:lastSparResult}):null;
     },
     /** Start (or restart) a series for one partner; new rivals each round. */
@@ -5185,7 +5278,7 @@ export function createChampionshipStandaloneApp({
       const prepared=battleRngPreparations.get(rngPreparation),bout=prepared?.sparBout,series=tacticPractice;
       const result=enterPreparedLocalBattle({mode:2,attemptId,playerInstanceIds,rngPreparation});
       if(result.ok&&!result.duplicate&&Number.isInteger(bout)&&series)
-        pendingSpar=Object.freeze({attemptId,bout,instanceId:series.instanceId,tactic:battleTactics[series.instanceId]??BATTLE_TACTIC_DEFAULT});
+        pendingSpar=Object.freeze({attemptId,bout,instanceId:series.instanceId,tactic:effectiveBattleTactic(series.instanceId)});
       return result;
     },
     /**
@@ -5710,17 +5803,47 @@ export function createChampionshipStandaloneApp({
 
     getFreeBattleMatches(){return listNativeFreeBattleMatches(freeBattleMenu);},
 
-    /** The partner's battle plan: 0 必殺技優先, 1 普通攻擊 (default), 2 支援優先. */
-    getBattleTactic(instanceId){return battleTactics[instanceId]??BATTLE_TACTIC_DEFAULT;},
+    /** The partner's effective battle plan: match manual choice > ranch training tendency > legacy battleTactics > default (1). */
+    getBattleTactic(instanceId){return effectiveBattleTactic(instanceId);},
 
     setBattleTactic(instanceId,tactic){
       requireSession();
       if(![0,1,2].includes(tactic))return Object.freeze({ok:false,reason:'TACTIC_INVALID'});
       if(!this.getRaisingInstances().some(entry=>entry.instanceId===instanceId))return Object.freeze({ok:false,reason:'UNKNOWN_INDIVIDUAL'});
+      matchTacticOverrides.set(instanceId,tactic);
       const next={...battleTactics};
       if(tactic===BATTLE_TACTIC_DEFAULT)delete next[instanceId];else next[instanceId]=tactic;
       battleTactics=normalizeBattleTactics(next);savePort.markDirty();
       return Object.freeze({ok:true,instanceId,tactic});
+    },
+
+    /** Per-individual reversible ranch training tendency (`ENDURANCE` | `SKILL`) or null. */
+    getPartnerTrainingTendency(instanceId){
+      return trainingTendencies[instanceId]??null;
+    },
+
+    setPartnerTrainingTendency(instanceId,kind,{source='RANCH_DRILL',cageEcology=null}={}){
+      requireSession();
+      if(!this.getRaisingInstances().some(entry=>entry.instanceId===instanceId))return Object.freeze({ok:false,reason:'UNKNOWN_INDIVIDUAL'});
+      if(kind===null||kind===undefined||kind===''){
+        return this.clearPartnerTrainingTendency(instanceId);
+      }
+      if(!PARTNER_TENDENCY_KINDS.includes(kind))return Object.freeze({ok:false,reason:'TENDENCY_INVALID'});
+      // A new ranch drill takes effect cleanly for this individual without touching any other individual.
+      matchTacticOverrides.delete(instanceId);
+      const next={...trainingTendencies,[instanceId]:{kind,source,...(cageEcology?{cageEcology}:{})}};
+      trainingTendencies=normalizePartnerTendencies(next);savePort.markDirty();
+      return Object.freeze({ok:true,instanceId,tendency:trainingTendencies[instanceId],tactic:effectiveBattleTactic(instanceId)});
+    },
+
+    clearPartnerTrainingTendency(instanceId){
+      requireSession();
+      if(!this.getRaisingInstances().some(entry=>entry.instanceId===instanceId))return Object.freeze({ok:false,reason:'UNKNOWN_INDIVIDUAL'});
+      matchTacticOverrides.delete(instanceId);
+      const next={...trainingTendencies};
+      delete next[instanceId];
+      trainingTendencies=normalizePartnerTendencies(next);savePort.markDirty();
+      return Object.freeze({ok:true,instanceId,tendency:null,tactic:effectiveBattleTactic(instanceId)});
     },
 
     openFreeBattle(){
@@ -6648,7 +6771,7 @@ export function createChampionshipStandaloneApp({
         let status;
         try {
           status = savePort.save({ snapshot: candidateSnapshot, creature: candidateCreature, sessionId,
-            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, saveId, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, cyberGacha: candidateGacha, burstEvolution: candidateBurst, syncLevels: candidateSync, tamerTalents: tamerPaid.state, journey, raising: candidateRaising,
+            revision: revision + 1, interactionCount, friendsPlaytest, onlineBindReward, saveId, tamerRank: tamerRankValue, battleBadges:battleBadgesValue, nativeTitles, nativeMessages, nativeOpening, championshipRun, freeBattleMenu, battleTactics, trainingTendencies, cyberGacha: candidateGacha, burstEvolution: candidateBurst, syncLevels: candidateSync, tamerTalents: tamerPaid.state, journey, raising: candidateRaising,
             registeredSpecies: candidateBook,
             shop: (bonusShop ?? shop) ? (bonusShop ?? shop).toSave() : null, cageEdit: cageEdit ? cageEdit.toSave() : null,
             battleEconomy, instanceIdentity: candidateIdentity, gameplayRng: gameplayRngSnapshot(),

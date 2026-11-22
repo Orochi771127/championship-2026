@@ -679,7 +679,6 @@
     "pixi.js": "./assets/production/public-runtime/vendor-pixi.mjs"
   },
   "files": [
-    "assets/production/PUBLIC_RUNTIME_INDEX.json",
     "assets/production/battle/bm01-polish-r2/base.webp",
     "assets/production/battle/bm01-polish-r2/boundary-glow.webp",
     "assets/production/battle/bm01-polish-r2/emissive.webp",
@@ -7158,12 +7157,12 @@
     "assets/production/data-arena/interactions-v1/cargo-18-clean-ground-low.webp",
     "assets/production/data-arena/interactions-v1/cargo-7-clean-ground-high.webp",
     "assets/production/data-arena/interactions-v1/cargo-7-clean-ground-low.webp",
-    "assets/production/data-arena/interactions-v1/ice-high.webp",
-    "assets/production/data-arena/interactions-v1/ice-low.webp",
     "assets/production/data-arena/interactions-v1/ice_cracked-high.webp",
     "assets/production/data-arena/interactions-v1/ice_cracked-low.webp",
     "assets/production/data-arena/interactions-v1/ice_melt-high.webp",
     "assets/production/data-arena/interactions-v1/ice_melt-low.webp",
+    "assets/production/data-arena/interactions-v1/ice-high.webp",
+    "assets/production/data-arena/interactions-v1/ice-low.webp",
     "assets/production/data-arena/interactions-v1/timber-burnt-high.webp",
     "assets/production/data-arena/interactions-v1/timber-burnt-low.webp",
     "assets/production/data-arena/interactions-v1/timber-damaged-high.webp",
@@ -8490,6 +8489,7 @@
     "assets/production/original-ui-intake-20261007/medals/title-58.png",
     "assets/production/original-ui-intake-20261007/medals/title-59.png",
     "assets/production/original-ui-intake-20261007/medals/title-60.png",
+    "assets/production/PUBLIC_RUNTIME_INDEX.json",
     "assets/production/public-media-clean-20261017/currency-hud-r1/bits-24.png",
     "assets/production/public-media-clean-20261017/currency-hud-r1/bits-48.png",
     "assets/production/public-media-clean-20261017/currency-hud-r1/diamond-24.png",
@@ -8783,6 +8783,8 @@
     "assets/production/ui/cyber-gacha-r1/gacha_ticket.webp",
     "assets/production/ui/cyber-gacha-r1/machine_body.webp",
     "assets/production/ui/cyber-gacha-r1/synth_furnace.webp",
+    "assets/production/ui/move-icons-r1/move_1_64.webp",
+    "assets/production/ui/move-icons-r1/move_10_64.webp",
     "assets/production/ui/move-icons-r1/move_100_64.webp",
     "assets/production/ui/move-icons-r1/move_101_64.webp",
     "assets/production/ui/move-icons-r1/move_102_64.webp",
@@ -8793,7 +8795,7 @@
     "assets/production/ui/move-icons-r1/move_107_64.webp",
     "assets/production/ui/move-icons-r1/move_108_64.webp",
     "assets/production/ui/move-icons-r1/move_109_64.webp",
-    "assets/production/ui/move-icons-r1/move_10_64.webp",
+    "assets/production/ui/move-icons-r1/move_11_64.webp",
     "assets/production/ui/move-icons-r1/move_110_64.webp",
     "assets/production/ui/move-icons-r1/move_111_64.webp",
     "assets/production/ui/move-icons-r1/move_112_64.webp",
@@ -8804,7 +8806,7 @@
     "assets/production/ui/move-icons-r1/move_117_64.webp",
     "assets/production/ui/move-icons-r1/move_118_64.webp",
     "assets/production/ui/move-icons-r1/move_119_64.webp",
-    "assets/production/ui/move-icons-r1/move_11_64.webp",
+    "assets/production/ui/move-icons-r1/move_12_64.webp",
     "assets/production/ui/move-icons-r1/move_120_64.webp",
     "assets/production/ui/move-icons-r1/move_121_64.webp",
     "assets/production/ui/move-icons-r1/move_122_64.webp",
@@ -8815,7 +8817,7 @@
     "assets/production/ui/move-icons-r1/move_127_64.webp",
     "assets/production/ui/move-icons-r1/move_128_64.webp",
     "assets/production/ui/move-icons-r1/move_129_64.webp",
-    "assets/production/ui/move-icons-r1/move_12_64.webp",
+    "assets/production/ui/move-icons-r1/move_13_64.webp",
     "assets/production/ui/move-icons-r1/move_130_64.webp",
     "assets/production/ui/move-icons-r1/move_131_64.webp",
     "assets/production/ui/move-icons-r1/move_132_64.webp",
@@ -8826,7 +8828,7 @@
     "assets/production/ui/move-icons-r1/move_137_64.webp",
     "assets/production/ui/move-icons-r1/move_138_64.webp",
     "assets/production/ui/move-icons-r1/move_139_64.webp",
-    "assets/production/ui/move-icons-r1/move_13_64.webp",
+    "assets/production/ui/move-icons-r1/move_14_64.webp",
     "assets/production/ui/move-icons-r1/move_140_64.webp",
     "assets/production/ui/move-icons-r1/move_141_64.webp",
     "assets/production/ui/move-icons-r1/move_142_64.webp",
@@ -8837,7 +8839,7 @@
     "assets/production/ui/move-icons-r1/move_147_64.webp",
     "assets/production/ui/move-icons-r1/move_148_64.webp",
     "assets/production/ui/move-icons-r1/move_149_64.webp",
-    "assets/production/ui/move-icons-r1/move_14_64.webp",
+    "assets/production/ui/move-icons-r1/move_15_64.webp",
     "assets/production/ui/move-icons-r1/move_150_64.webp",
     "assets/production/ui/move-icons-r1/move_151_64.webp",
     "assets/production/ui/move-icons-r1/move_152_64.webp",
@@ -8848,7 +8850,7 @@
     "assets/production/ui/move-icons-r1/move_157_64.webp",
     "assets/production/ui/move-icons-r1/move_158_64.webp",
     "assets/production/ui/move-icons-r1/move_159_64.webp",
-    "assets/production/ui/move-icons-r1/move_15_64.webp",
+    "assets/production/ui/move-icons-r1/move_16_64.webp",
     "assets/production/ui/move-icons-r1/move_160_64.webp",
     "assets/production/ui/move-icons-r1/move_161_64.webp",
     "assets/production/ui/move-icons-r1/move_162_64.webp",
@@ -8859,7 +8861,7 @@
     "assets/production/ui/move-icons-r1/move_167_64.webp",
     "assets/production/ui/move-icons-r1/move_168_64.webp",
     "assets/production/ui/move-icons-r1/move_169_64.webp",
-    "assets/production/ui/move-icons-r1/move_16_64.webp",
+    "assets/production/ui/move-icons-r1/move_17_64.webp",
     "assets/production/ui/move-icons-r1/move_170_64.webp",
     "assets/production/ui/move-icons-r1/move_171_64.webp",
     "assets/production/ui/move-icons-r1/move_172_64.webp",
@@ -8870,7 +8872,7 @@
     "assets/production/ui/move-icons-r1/move_177_64.webp",
     "assets/production/ui/move-icons-r1/move_178_64.webp",
     "assets/production/ui/move-icons-r1/move_179_64.webp",
-    "assets/production/ui/move-icons-r1/move_17_64.webp",
+    "assets/production/ui/move-icons-r1/move_18_64.webp",
     "assets/production/ui/move-icons-r1/move_180_64.webp",
     "assets/production/ui/move-icons-r1/move_181_64.webp",
     "assets/production/ui/move-icons-r1/move_182_64.webp",
@@ -8881,7 +8883,7 @@
     "assets/production/ui/move-icons-r1/move_187_64.webp",
     "assets/production/ui/move-icons-r1/move_188_64.webp",
     "assets/production/ui/move-icons-r1/move_189_64.webp",
-    "assets/production/ui/move-icons-r1/move_18_64.webp",
+    "assets/production/ui/move-icons-r1/move_19_64.webp",
     "assets/production/ui/move-icons-r1/move_190_64.webp",
     "assets/production/ui/move-icons-r1/move_191_64.webp",
     "assets/production/ui/move-icons-r1/move_192_64.webp",
@@ -8892,8 +8894,8 @@
     "assets/production/ui/move-icons-r1/move_197_64.webp",
     "assets/production/ui/move-icons-r1/move_198_64.webp",
     "assets/production/ui/move-icons-r1/move_199_64.webp",
-    "assets/production/ui/move-icons-r1/move_19_64.webp",
-    "assets/production/ui/move-icons-r1/move_1_64.webp",
+    "assets/production/ui/move-icons-r1/move_2_64.webp",
+    "assets/production/ui/move-icons-r1/move_20_64.webp",
     "assets/production/ui/move-icons-r1/move_200_64.webp",
     "assets/production/ui/move-icons-r1/move_201_64.webp",
     "assets/production/ui/move-icons-r1/move_202_64.webp",
@@ -8904,7 +8906,7 @@
     "assets/production/ui/move-icons-r1/move_207_64.webp",
     "assets/production/ui/move-icons-r1/move_208_64.webp",
     "assets/production/ui/move-icons-r1/move_209_64.webp",
-    "assets/production/ui/move-icons-r1/move_20_64.webp",
+    "assets/production/ui/move-icons-r1/move_21_64.webp",
     "assets/production/ui/move-icons-r1/move_210_64.webp",
     "assets/production/ui/move-icons-r1/move_211_64.webp",
     "assets/production/ui/move-icons-r1/move_212_64.webp",
@@ -8915,7 +8917,7 @@
     "assets/production/ui/move-icons-r1/move_217_64.webp",
     "assets/production/ui/move-icons-r1/move_218_64.webp",
     "assets/production/ui/move-icons-r1/move_219_64.webp",
-    "assets/production/ui/move-icons-r1/move_21_64.webp",
+    "assets/production/ui/move-icons-r1/move_22_64.webp",
     "assets/production/ui/move-icons-r1/move_220_64.webp",
     "assets/production/ui/move-icons-r1/move_221_64.webp",
     "assets/production/ui/move-icons-r1/move_222_64.webp",
@@ -8926,7 +8928,7 @@
     "assets/production/ui/move-icons-r1/move_227_64.webp",
     "assets/production/ui/move-icons-r1/move_228_64.webp",
     "assets/production/ui/move-icons-r1/move_229_64.webp",
-    "assets/production/ui/move-icons-r1/move_22_64.webp",
+    "assets/production/ui/move-icons-r1/move_23_64.webp",
     "assets/production/ui/move-icons-r1/move_230_64.webp",
     "assets/production/ui/move-icons-r1/move_231_64.webp",
     "assets/production/ui/move-icons-r1/move_232_64.webp",
@@ -8937,7 +8939,7 @@
     "assets/production/ui/move-icons-r1/move_237_64.webp",
     "assets/production/ui/move-icons-r1/move_238_64.webp",
     "assets/production/ui/move-icons-r1/move_239_64.webp",
-    "assets/production/ui/move-icons-r1/move_23_64.webp",
+    "assets/production/ui/move-icons-r1/move_24_64.webp",
     "assets/production/ui/move-icons-r1/move_240_64.webp",
     "assets/production/ui/move-icons-r1/move_241_64.webp",
     "assets/production/ui/move-icons-r1/move_242_64.webp",
@@ -8948,7 +8950,7 @@
     "assets/production/ui/move-icons-r1/move_247_64.webp",
     "assets/production/ui/move-icons-r1/move_248_64.webp",
     "assets/production/ui/move-icons-r1/move_249_64.webp",
-    "assets/production/ui/move-icons-r1/move_24_64.webp",
+    "assets/production/ui/move-icons-r1/move_25_64.webp",
     "assets/production/ui/move-icons-r1/move_250_64.webp",
     "assets/production/ui/move-icons-r1/move_251_64.webp",
     "assets/production/ui/move-icons-r1/move_252_64.webp",
@@ -8959,7 +8961,7 @@
     "assets/production/ui/move-icons-r1/move_257_64.webp",
     "assets/production/ui/move-icons-r1/move_258_64.webp",
     "assets/production/ui/move-icons-r1/move_259_64.webp",
-    "assets/production/ui/move-icons-r1/move_25_64.webp",
+    "assets/production/ui/move-icons-r1/move_26_64.webp",
     "assets/production/ui/move-icons-r1/move_260_64.webp",
     "assets/production/ui/move-icons-r1/move_261_64.webp",
     "assets/production/ui/move-icons-r1/move_262_64.webp",
@@ -8970,7 +8972,7 @@
     "assets/production/ui/move-icons-r1/move_267_64.webp",
     "assets/production/ui/move-icons-r1/move_268_64.webp",
     "assets/production/ui/move-icons-r1/move_269_64.webp",
-    "assets/production/ui/move-icons-r1/move_26_64.webp",
+    "assets/production/ui/move-icons-r1/move_27_64.webp",
     "assets/production/ui/move-icons-r1/move_270_64.webp",
     "assets/production/ui/move-icons-r1/move_271_64.webp",
     "assets/production/ui/move-icons-r1/move_272_64.webp",
@@ -8981,7 +8983,7 @@
     "assets/production/ui/move-icons-r1/move_277_64.webp",
     "assets/production/ui/move-icons-r1/move_278_64.webp",
     "assets/production/ui/move-icons-r1/move_279_64.webp",
-    "assets/production/ui/move-icons-r1/move_27_64.webp",
+    "assets/production/ui/move-icons-r1/move_28_64.webp",
     "assets/production/ui/move-icons-r1/move_280_64.webp",
     "assets/production/ui/move-icons-r1/move_281_64.webp",
     "assets/production/ui/move-icons-r1/move_282_64.webp",
@@ -8992,7 +8994,7 @@
     "assets/production/ui/move-icons-r1/move_287_64.webp",
     "assets/production/ui/move-icons-r1/move_288_64.webp",
     "assets/production/ui/move-icons-r1/move_289_64.webp",
-    "assets/production/ui/move-icons-r1/move_28_64.webp",
+    "assets/production/ui/move-icons-r1/move_29_64.webp",
     "assets/production/ui/move-icons-r1/move_290_64.webp",
     "assets/production/ui/move-icons-r1/move_291_64.webp",
     "assets/production/ui/move-icons-r1/move_292_64.webp",
@@ -9003,8 +9005,8 @@
     "assets/production/ui/move-icons-r1/move_297_64.webp",
     "assets/production/ui/move-icons-r1/move_298_64.webp",
     "assets/production/ui/move-icons-r1/move_299_64.webp",
-    "assets/production/ui/move-icons-r1/move_29_64.webp",
-    "assets/production/ui/move-icons-r1/move_2_64.webp",
+    "assets/production/ui/move-icons-r1/move_3_64.webp",
+    "assets/production/ui/move-icons-r1/move_30_64.webp",
     "assets/production/ui/move-icons-r1/move_300_64.webp",
     "assets/production/ui/move-icons-r1/move_301_64.webp",
     "assets/production/ui/move-icons-r1/move_302_64.webp",
@@ -9015,7 +9017,7 @@
     "assets/production/ui/move-icons-r1/move_307_64.webp",
     "assets/production/ui/move-icons-r1/move_308_64.webp",
     "assets/production/ui/move-icons-r1/move_309_64.webp",
-    "assets/production/ui/move-icons-r1/move_30_64.webp",
+    "assets/production/ui/move-icons-r1/move_31_64.webp",
     "assets/production/ui/move-icons-r1/move_310_64.webp",
     "assets/production/ui/move-icons-r1/move_311_64.webp",
     "assets/production/ui/move-icons-r1/move_312_64.webp",
@@ -9026,7 +9028,7 @@
     "assets/production/ui/move-icons-r1/move_317_64.webp",
     "assets/production/ui/move-icons-r1/move_318_64.webp",
     "assets/production/ui/move-icons-r1/move_319_64.webp",
-    "assets/production/ui/move-icons-r1/move_31_64.webp",
+    "assets/production/ui/move-icons-r1/move_32_64.webp",
     "assets/production/ui/move-icons-r1/move_320_64.webp",
     "assets/production/ui/move-icons-r1/move_321_64.webp",
     "assets/production/ui/move-icons-r1/move_322_64.webp",
@@ -9037,7 +9039,7 @@
     "assets/production/ui/move-icons-r1/move_327_64.webp",
     "assets/production/ui/move-icons-r1/move_328_64.webp",
     "assets/production/ui/move-icons-r1/move_329_64.webp",
-    "assets/production/ui/move-icons-r1/move_32_64.webp",
+    "assets/production/ui/move-icons-r1/move_33_64.webp",
     "assets/production/ui/move-icons-r1/move_330_64.webp",
     "assets/production/ui/move-icons-r1/move_331_64.webp",
     "assets/production/ui/move-icons-r1/move_332_64.webp",
@@ -9048,7 +9050,7 @@
     "assets/production/ui/move-icons-r1/move_337_64.webp",
     "assets/production/ui/move-icons-r1/move_338_64.webp",
     "assets/production/ui/move-icons-r1/move_339_64.webp",
-    "assets/production/ui/move-icons-r1/move_33_64.webp",
+    "assets/production/ui/move-icons-r1/move_34_64.webp",
     "assets/production/ui/move-icons-r1/move_340_64.webp",
     "assets/production/ui/move-icons-r1/move_341_64.webp",
     "assets/production/ui/move-icons-r1/move_342_64.webp",
@@ -9059,7 +9061,7 @@
     "assets/production/ui/move-icons-r1/move_347_64.webp",
     "assets/production/ui/move-icons-r1/move_348_64.webp",
     "assets/production/ui/move-icons-r1/move_349_64.webp",
-    "assets/production/ui/move-icons-r1/move_34_64.webp",
+    "assets/production/ui/move-icons-r1/move_35_64.webp",
     "assets/production/ui/move-icons-r1/move_350_64.webp",
     "assets/production/ui/move-icons-r1/move_351_64.webp",
     "assets/production/ui/move-icons-r1/move_352_64.webp",
@@ -9070,7 +9072,7 @@
     "assets/production/ui/move-icons-r1/move_357_64.webp",
     "assets/production/ui/move-icons-r1/move_358_64.webp",
     "assets/production/ui/move-icons-r1/move_359_64.webp",
-    "assets/production/ui/move-icons-r1/move_35_64.webp",
+    "assets/production/ui/move-icons-r1/move_36_64.webp",
     "assets/production/ui/move-icons-r1/move_360_64.webp",
     "assets/production/ui/move-icons-r1/move_361_64.webp",
     "assets/production/ui/move-icons-r1/move_362_64.webp",
@@ -9081,7 +9083,7 @@
     "assets/production/ui/move-icons-r1/move_367_64.webp",
     "assets/production/ui/move-icons-r1/move_368_64.webp",
     "assets/production/ui/move-icons-r1/move_369_64.webp",
-    "assets/production/ui/move-icons-r1/move_36_64.webp",
+    "assets/production/ui/move-icons-r1/move_37_64.webp",
     "assets/production/ui/move-icons-r1/move_370_64.webp",
     "assets/production/ui/move-icons-r1/move_371_64.webp",
     "assets/production/ui/move-icons-r1/move_372_64.webp",
@@ -9092,7 +9094,7 @@
     "assets/production/ui/move-icons-r1/move_377_64.webp",
     "assets/production/ui/move-icons-r1/move_378_64.webp",
     "assets/production/ui/move-icons-r1/move_379_64.webp",
-    "assets/production/ui/move-icons-r1/move_37_64.webp",
+    "assets/production/ui/move-icons-r1/move_38_64.webp",
     "assets/production/ui/move-icons-r1/move_380_64.webp",
     "assets/production/ui/move-icons-r1/move_381_64.webp",
     "assets/production/ui/move-icons-r1/move_382_64.webp",
@@ -9103,7 +9105,7 @@
     "assets/production/ui/move-icons-r1/move_387_64.webp",
     "assets/production/ui/move-icons-r1/move_388_64.webp",
     "assets/production/ui/move-icons-r1/move_389_64.webp",
-    "assets/production/ui/move-icons-r1/move_38_64.webp",
+    "assets/production/ui/move-icons-r1/move_39_64.webp",
     "assets/production/ui/move-icons-r1/move_390_64.webp",
     "assets/production/ui/move-icons-r1/move_391_64.webp",
     "assets/production/ui/move-icons-r1/move_392_64.webp",
@@ -9114,8 +9116,8 @@
     "assets/production/ui/move-icons-r1/move_397_64.webp",
     "assets/production/ui/move-icons-r1/move_398_64.webp",
     "assets/production/ui/move-icons-r1/move_399_64.webp",
-    "assets/production/ui/move-icons-r1/move_39_64.webp",
-    "assets/production/ui/move-icons-r1/move_3_64.webp",
+    "assets/production/ui/move-icons-r1/move_4_64.webp",
+    "assets/production/ui/move-icons-r1/move_40_64.webp",
     "assets/production/ui/move-icons-r1/move_400_64.webp",
     "assets/production/ui/move-icons-r1/move_401_64.webp",
     "assets/production/ui/move-icons-r1/move_402_64.webp",
@@ -9126,7 +9128,7 @@
     "assets/production/ui/move-icons-r1/move_407_64.webp",
     "assets/production/ui/move-icons-r1/move_408_64.webp",
     "assets/production/ui/move-icons-r1/move_409_64.webp",
-    "assets/production/ui/move-icons-r1/move_40_64.webp",
+    "assets/production/ui/move-icons-r1/move_41_64.webp",
     "assets/production/ui/move-icons-r1/move_410_64.webp",
     "assets/production/ui/move-icons-r1/move_411_64.webp",
     "assets/production/ui/move-icons-r1/move_412_64.webp",
@@ -9137,7 +9139,7 @@
     "assets/production/ui/move-icons-r1/move_417_64.webp",
     "assets/production/ui/move-icons-r1/move_418_64.webp",
     "assets/production/ui/move-icons-r1/move_419_64.webp",
-    "assets/production/ui/move-icons-r1/move_41_64.webp",
+    "assets/production/ui/move-icons-r1/move_42_64.webp",
     "assets/production/ui/move-icons-r1/move_420_64.webp",
     "assets/production/ui/move-icons-r1/move_421_64.webp",
     "assets/production/ui/move-icons-r1/move_422_64.webp",
@@ -9148,7 +9150,7 @@
     "assets/production/ui/move-icons-r1/move_427_64.webp",
     "assets/production/ui/move-icons-r1/move_428_64.webp",
     "assets/production/ui/move-icons-r1/move_429_64.webp",
-    "assets/production/ui/move-icons-r1/move_42_64.webp",
+    "assets/production/ui/move-icons-r1/move_43_64.webp",
     "assets/production/ui/move-icons-r1/move_430_64.webp",
     "assets/production/ui/move-icons-r1/move_431_64.webp",
     "assets/production/ui/move-icons-r1/move_432_64.webp",
@@ -9159,7 +9161,7 @@
     "assets/production/ui/move-icons-r1/move_437_64.webp",
     "assets/production/ui/move-icons-r1/move_438_64.webp",
     "assets/production/ui/move-icons-r1/move_439_64.webp",
-    "assets/production/ui/move-icons-r1/move_43_64.webp",
+    "assets/production/ui/move-icons-r1/move_44_64.webp",
     "assets/production/ui/move-icons-r1/move_440_64.webp",
     "assets/production/ui/move-icons-r1/move_441_64.webp",
     "assets/production/ui/move-icons-r1/move_442_64.webp",
@@ -9170,7 +9172,7 @@
     "assets/production/ui/move-icons-r1/move_447_64.webp",
     "assets/production/ui/move-icons-r1/move_448_64.webp",
     "assets/production/ui/move-icons-r1/move_449_64.webp",
-    "assets/production/ui/move-icons-r1/move_44_64.webp",
+    "assets/production/ui/move-icons-r1/move_45_64.webp",
     "assets/production/ui/move-icons-r1/move_450_64.webp",
     "assets/production/ui/move-icons-r1/move_451_64.webp",
     "assets/production/ui/move-icons-r1/move_452_64.webp",
@@ -9181,7 +9183,7 @@
     "assets/production/ui/move-icons-r1/move_457_64.webp",
     "assets/production/ui/move-icons-r1/move_458_64.webp",
     "assets/production/ui/move-icons-r1/move_459_64.webp",
-    "assets/production/ui/move-icons-r1/move_45_64.webp",
+    "assets/production/ui/move-icons-r1/move_46_64.webp",
     "assets/production/ui/move-icons-r1/move_460_64.webp",
     "assets/production/ui/move-icons-r1/move_461_64.webp",
     "assets/production/ui/move-icons-r1/move_462_64.webp",
@@ -9192,7 +9194,7 @@
     "assets/production/ui/move-icons-r1/move_467_64.webp",
     "assets/production/ui/move-icons-r1/move_468_64.webp",
     "assets/production/ui/move-icons-r1/move_469_64.webp",
-    "assets/production/ui/move-icons-r1/move_46_64.webp",
+    "assets/production/ui/move-icons-r1/move_47_64.webp",
     "assets/production/ui/move-icons-r1/move_470_64.webp",
     "assets/production/ui/move-icons-r1/move_471_64.webp",
     "assets/production/ui/move-icons-r1/move_472_64.webp",
@@ -9203,7 +9205,7 @@
     "assets/production/ui/move-icons-r1/move_477_64.webp",
     "assets/production/ui/move-icons-r1/move_478_64.webp",
     "assets/production/ui/move-icons-r1/move_479_64.webp",
-    "assets/production/ui/move-icons-r1/move_47_64.webp",
+    "assets/production/ui/move-icons-r1/move_48_64.webp",
     "assets/production/ui/move-icons-r1/move_480_64.webp",
     "assets/production/ui/move-icons-r1/move_481_64.webp",
     "assets/production/ui/move-icons-r1/move_482_64.webp",
@@ -9214,7 +9216,7 @@
     "assets/production/ui/move-icons-r1/move_487_64.webp",
     "assets/production/ui/move-icons-r1/move_488_64.webp",
     "assets/production/ui/move-icons-r1/move_489_64.webp",
-    "assets/production/ui/move-icons-r1/move_48_64.webp",
+    "assets/production/ui/move-icons-r1/move_49_64.webp",
     "assets/production/ui/move-icons-r1/move_490_64.webp",
     "assets/production/ui/move-icons-r1/move_491_64.webp",
     "assets/production/ui/move-icons-r1/move_492_64.webp",
@@ -9225,8 +9227,8 @@
     "assets/production/ui/move-icons-r1/move_497_64.webp",
     "assets/production/ui/move-icons-r1/move_498_64.webp",
     "assets/production/ui/move-icons-r1/move_499_64.webp",
-    "assets/production/ui/move-icons-r1/move_49_64.webp",
-    "assets/production/ui/move-icons-r1/move_4_64.webp",
+    "assets/production/ui/move-icons-r1/move_5_64.webp",
+    "assets/production/ui/move-icons-r1/move_50_64.webp",
     "assets/production/ui/move-icons-r1/move_500_64.webp",
     "assets/production/ui/move-icons-r1/move_501_64.webp",
     "assets/production/ui/move-icons-r1/move_502_64.webp",
@@ -9237,7 +9239,7 @@
     "assets/production/ui/move-icons-r1/move_507_64.webp",
     "assets/production/ui/move-icons-r1/move_508_64.webp",
     "assets/production/ui/move-icons-r1/move_509_64.webp",
-    "assets/production/ui/move-icons-r1/move_50_64.webp",
+    "assets/production/ui/move-icons-r1/move_51_64.webp",
     "assets/production/ui/move-icons-r1/move_510_64.webp",
     "assets/production/ui/move-icons-r1/move_511_64.webp",
     "assets/production/ui/move-icons-r1/move_512_64.webp",
@@ -9248,7 +9250,7 @@
     "assets/production/ui/move-icons-r1/move_517_64.webp",
     "assets/production/ui/move-icons-r1/move_518_64.webp",
     "assets/production/ui/move-icons-r1/move_519_64.webp",
-    "assets/production/ui/move-icons-r1/move_51_64.webp",
+    "assets/production/ui/move-icons-r1/move_52_64.webp",
     "assets/production/ui/move-icons-r1/move_520_64.webp",
     "assets/production/ui/move-icons-r1/move_521_64.webp",
     "assets/production/ui/move-icons-r1/move_522_64.webp",
@@ -9259,7 +9261,7 @@
     "assets/production/ui/move-icons-r1/move_527_64.webp",
     "assets/production/ui/move-icons-r1/move_528_64.webp",
     "assets/production/ui/move-icons-r1/move_529_64.webp",
-    "assets/production/ui/move-icons-r1/move_52_64.webp",
+    "assets/production/ui/move-icons-r1/move_53_64.webp",
     "assets/production/ui/move-icons-r1/move_530_64.webp",
     "assets/production/ui/move-icons-r1/move_531_64.webp",
     "assets/production/ui/move-icons-r1/move_532_64.webp",
@@ -9270,7 +9272,7 @@
     "assets/production/ui/move-icons-r1/move_537_64.webp",
     "assets/production/ui/move-icons-r1/move_538_64.webp",
     "assets/production/ui/move-icons-r1/move_539_64.webp",
-    "assets/production/ui/move-icons-r1/move_53_64.webp",
+    "assets/production/ui/move-icons-r1/move_54_64.webp",
     "assets/production/ui/move-icons-r1/move_540_64.webp",
     "assets/production/ui/move-icons-r1/move_541_64.webp",
     "assets/production/ui/move-icons-r1/move_542_64.webp",
@@ -9281,7 +9283,7 @@
     "assets/production/ui/move-icons-r1/move_547_64.webp",
     "assets/production/ui/move-icons-r1/move_548_64.webp",
     "assets/production/ui/move-icons-r1/move_549_64.webp",
-    "assets/production/ui/move-icons-r1/move_54_64.webp",
+    "assets/production/ui/move-icons-r1/move_55_64.webp",
     "assets/production/ui/move-icons-r1/move_550_64.webp",
     "assets/production/ui/move-icons-r1/move_551_64.webp",
     "assets/production/ui/move-icons-r1/move_552_64.webp",
@@ -9292,7 +9294,7 @@
     "assets/production/ui/move-icons-r1/move_557_64.webp",
     "assets/production/ui/move-icons-r1/move_558_64.webp",
     "assets/production/ui/move-icons-r1/move_559_64.webp",
-    "assets/production/ui/move-icons-r1/move_55_64.webp",
+    "assets/production/ui/move-icons-r1/move_56_64.webp",
     "assets/production/ui/move-icons-r1/move_560_64.webp",
     "assets/production/ui/move-icons-r1/move_561_64.webp",
     "assets/production/ui/move-icons-r1/move_562_64.webp",
@@ -9303,7 +9305,7 @@
     "assets/production/ui/move-icons-r1/move_567_64.webp",
     "assets/production/ui/move-icons-r1/move_568_64.webp",
     "assets/production/ui/move-icons-r1/move_569_64.webp",
-    "assets/production/ui/move-icons-r1/move_56_64.webp",
+    "assets/production/ui/move-icons-r1/move_57_64.webp",
     "assets/production/ui/move-icons-r1/move_570_64.webp",
     "assets/production/ui/move-icons-r1/move_571_64.webp",
     "assets/production/ui/move-icons-r1/move_572_64.webp",
@@ -9314,7 +9316,7 @@
     "assets/production/ui/move-icons-r1/move_577_64.webp",
     "assets/production/ui/move-icons-r1/move_578_64.webp",
     "assets/production/ui/move-icons-r1/move_579_64.webp",
-    "assets/production/ui/move-icons-r1/move_57_64.webp",
+    "assets/production/ui/move-icons-r1/move_58_64.webp",
     "assets/production/ui/move-icons-r1/move_580_64.webp",
     "assets/production/ui/move-icons-r1/move_581_64.webp",
     "assets/production/ui/move-icons-r1/move_582_64.webp",
@@ -9325,7 +9327,7 @@
     "assets/production/ui/move-icons-r1/move_587_64.webp",
     "assets/production/ui/move-icons-r1/move_588_64.webp",
     "assets/production/ui/move-icons-r1/move_589_64.webp",
-    "assets/production/ui/move-icons-r1/move_58_64.webp",
+    "assets/production/ui/move-icons-r1/move_59_64.webp",
     "assets/production/ui/move-icons-r1/move_590_64.webp",
     "assets/production/ui/move-icons-r1/move_591_64.webp",
     "assets/production/ui/move-icons-r1/move_592_64.webp",
@@ -9336,8 +9338,8 @@
     "assets/production/ui/move-icons-r1/move_597_64.webp",
     "assets/production/ui/move-icons-r1/move_598_64.webp",
     "assets/production/ui/move-icons-r1/move_599_64.webp",
-    "assets/production/ui/move-icons-r1/move_59_64.webp",
-    "assets/production/ui/move-icons-r1/move_5_64.webp",
+    "assets/production/ui/move-icons-r1/move_6_64.webp",
+    "assets/production/ui/move-icons-r1/move_60_64.webp",
     "assets/production/ui/move-icons-r1/move_600_64.webp",
     "assets/production/ui/move-icons-r1/move_604_64.webp",
     "assets/production/ui/move-icons-r1/move_605_64.webp",
@@ -9345,7 +9347,7 @@
     "assets/production/ui/move-icons-r1/move_607_64.webp",
     "assets/production/ui/move-icons-r1/move_608_64.webp",
     "assets/production/ui/move-icons-r1/move_609_64.webp",
-    "assets/production/ui/move-icons-r1/move_60_64.webp",
+    "assets/production/ui/move-icons-r1/move_61_64.webp",
     "assets/production/ui/move-icons-r1/move_610_64.webp",
     "assets/production/ui/move-icons-r1/move_611_64.webp",
     "assets/production/ui/move-icons-r1/move_612_64.webp",
@@ -9356,11 +9358,10 @@
     "assets/production/ui/move-icons-r1/move_617_64.webp",
     "assets/production/ui/move-icons-r1/move_618_64.webp",
     "assets/production/ui/move-icons-r1/move_619_64.webp",
-    "assets/production/ui/move-icons-r1/move_61_64.webp",
+    "assets/production/ui/move-icons-r1/move_62_64.webp",
     "assets/production/ui/move-icons-r1/move_620_64.webp",
     "assets/production/ui/move-icons-r1/move_621_64.webp",
     "assets/production/ui/move-icons-r1/move_622_64.webp",
-    "assets/production/ui/move-icons-r1/move_62_64.webp",
     "assets/production/ui/move-icons-r1/move_63_64.webp",
     "assets/production/ui/move-icons-r1/move_64_64.webp",
     "assets/production/ui/move-icons-r1/move_65_64.webp",
@@ -9368,7 +9369,7 @@
     "assets/production/ui/move-icons-r1/move_67_64.webp",
     "assets/production/ui/move-icons-r1/move_68_64.webp",
     "assets/production/ui/move-icons-r1/move_69_64.webp",
-    "assets/production/ui/move-icons-r1/move_6_64.webp",
+    "assets/production/ui/move-icons-r1/move_7_64.webp",
     "assets/production/ui/move-icons-r1/move_70_64.webp",
     "assets/production/ui/move-icons-r1/move_71_64.webp",
     "assets/production/ui/move-icons-r1/move_72_64.webp",
@@ -9379,7 +9380,7 @@
     "assets/production/ui/move-icons-r1/move_77_64.webp",
     "assets/production/ui/move-icons-r1/move_78_64.webp",
     "assets/production/ui/move-icons-r1/move_79_64.webp",
-    "assets/production/ui/move-icons-r1/move_7_64.webp",
+    "assets/production/ui/move-icons-r1/move_8_64.webp",
     "assets/production/ui/move-icons-r1/move_80_64.webp",
     "assets/production/ui/move-icons-r1/move_81_64.webp",
     "assets/production/ui/move-icons-r1/move_82_64.webp",
@@ -9390,7 +9391,7 @@
     "assets/production/ui/move-icons-r1/move_87_64.webp",
     "assets/production/ui/move-icons-r1/move_88_64.webp",
     "assets/production/ui/move-icons-r1/move_89_64.webp",
-    "assets/production/ui/move-icons-r1/move_8_64.webp",
+    "assets/production/ui/move-icons-r1/move_9_64.webp",
     "assets/production/ui/move-icons-r1/move_90_64.webp",
     "assets/production/ui/move-icons-r1/move_91_64.webp",
     "assets/production/ui/move-icons-r1/move_92_64.webp",
@@ -9401,7 +9402,6 @@
     "assets/production/ui/move-icons-r1/move_97_64.webp",
     "assets/production/ui/move-icons-r1/move_98_64.webp",
     "assets/production/ui/move-icons-r1/move_99_64.webp",
-    "assets/production/ui/move-icons-r1/move_9_64.webp",
     "assets/production/ui/move-icons-r1/move_arcBolt_64.webp",
     "assets/production/ui/move-icons-r1/move_arcFan_64.webp",
     "assets/production/ui/move-icons-r1/move_arcField_64.webp",
@@ -9510,8 +9510,8 @@
     "assets/production/ui/talent-icons-r1/line-trader_96.webp",
     "assets/production/ui/talent-icons-r1/trader.appraisal_96.webp",
     "assets/production/ui/talent-icons-r1/trader.belt_96.webp",
-    "assets/production/ui/talent-icons-r1/trader.bountyHunter_96.webp",
     "assets/production/ui/talent-icons-r1/trader.bounty_96.webp",
+    "assets/production/ui/talent-icons-r1/trader.bountyHunter_96.webp",
     "assets/production/ui/talent-icons-r1/trader.crystal_96.webp",
     "assets/production/ui/talent-icons-r1/trader.haggle_96.webp",
     "assets/production/ui/talent-icons-r1/trader.magnet_96.webp",
@@ -10875,10 +10875,10 @@
     "assets/production/vfx/auto-moves/99.png",
     "assets/production/vfx/licensed-runtime-v1/battle/atkup/atkup.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/atkup/atkup.png",
-    "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.glb",
-    "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.png",
     "assets/production/vfx/licensed-runtime-v1/battle/circle_my/circle_my.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/circle_my/circle_my.png",
+    "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.glb",
+    "assets/production/vfx/licensed-runtime-v1/battle/circle/circle.png",
     "assets/production/vfx/licensed-runtime-v1/battle/critup/critup.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/critup/critup.png",
     "assets/production/vfx/licensed-runtime-v1/battle/defup/defup.glb",
@@ -10893,11 +10893,11 @@
     "assets/production/vfx/licensed-runtime-v1/battle/hitspark_small/ip_circle.png",
     "assets/production/vfx/licensed-runtime-v1/battle/hitup/hitup.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/hitup/hitup.png",
+    "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereff.png",
+    "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereffect_ring.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/hypereffect/hitmark.png",
     "assets/production/vfx/licensed-runtime-v1/battle/hypereffect/hypereffect.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/hypereffect/new1.png",
-    "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereff.png",
-    "assets/production/vfx/licensed-runtime-v1/battle/hypereffect_ring/hypereffect_ring.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/s_impact_b/ip_circle.png",
     "assets/production/vfx/licensed-runtime-v1/battle/s_impact_b/s_impact_b.glb",
     "assets/production/vfx/licensed-runtime-v1/battle/s_impact_s/ip_circle.png",
@@ -10912,22 +10912,22 @@
     "assets/production/vfx/licensed-runtime-v1/battle/toleup/toleup.png",
     "assets/production/vfx/licensed-runtime-v1/common/lightup/light_eff.png",
     "assets/production/vfx/licensed-runtime-v1/common/lightup/lightup.glb",
-    "assets/production/vfx/licensed-runtime-v1/common/mist/mist.glb",
     "assets/production/vfx/licensed-runtime-v1/common/mist/mist_eff.png",
-    "assets/production/vfx/licensed-runtime-v1/common/rain/rain.glb",
+    "assets/production/vfx/licensed-runtime-v1/common/mist/mist.glb",
     "assets/production/vfx/licensed-runtime-v1/common/rain/rain_eff.png",
+    "assets/production/vfx/licensed-runtime-v1/common/rain/rain.glb",
     "assets/production/vfx/licensed-runtime-v1/common/sandstome/sand_eff.png",
     "assets/production/vfx/licensed-runtime-v1/common/sandstome/sandstome.glb",
-    "assets/production/vfx/licensed-runtime-v1/common/snow/snow.glb",
     "assets/production/vfx/licensed-runtime-v1/common/snow/snow_eff.png",
-    "assets/production/vfx/licensed-runtime-v1/common/snowstome/snowstome.glb",
+    "assets/production/vfx/licensed-runtime-v1/common/snow/snow.glb",
     "assets/production/vfx/licensed-runtime-v1/common/snowstome/snowstome_eff.png",
+    "assets/production/vfx/licensed-runtime-v1/common/snowstome/snowstome.glb",
     "assets/production/vfx/licensed-runtime-v1/common/spark/m_spark_eff.png",
     "assets/production/vfx/licensed-runtime-v1/common/spark/spark.glb",
     "assets/production/vfx/licensed-runtime-v1/common/time_pl/time_p.png",
     "assets/production/vfx/licensed-runtime-v1/common/time_pl/time_pl.glb",
-    "assets/production/vfx/licensed-runtime-v1/common/wind/wind.glb",
     "assets/production/vfx/licensed-runtime-v1/common/wind/wind_eff.png",
+    "assets/production/vfx/licensed-runtime-v1/common/wind/wind.glb",
     "assets/production/vfx/original-battle-2d-v1/effects.png",
     "assets/production/vfx/original-shared-review-292-r1/effects.png",
     "assets/production/vfx/original-shared-review-292-r1/effects.webp",
@@ -10938,9 +10938,9 @@
     "assets/production/web-app/icon-192.png",
     "assets/production/web-app/icon-512.png",
     "championship.html",
-    "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json",
     "docs/contracts/championship/battle-field-presentation.v1.json",
     "docs/contracts/championship/battle-player-roster.v1.json",
+    "docs/contracts/championship/CHAMPIONSHIP_TOOLBAR_CONTRACT.v1.json",
     "docs/contracts/championship/raising-home-presentation.v1.json",
     "manifest.webmanifest",
     "node_modules/three/build/three.core.js",
@@ -10951,7 +10951,6 @@
     "node_modules/three/examples/jsm/loaders/GLTFLoader.js",
     "node_modules/three/examples/jsm/utils/BufferGeometryUtils.js",
     "node_modules/three/examples/jsm/utils/SkeletonUtils.js",
-    "src/championship/app/ChampionshipPersistentSavePort.js",
     "src/championship/app/assetPrefetch.js",
     "src/championship/app/autosaveScheduler.js",
     "src/championship/app/badgeUnlockText.js",
@@ -10967,6 +10966,7 @@
     "src/championship/app/bragCardPreview.js",
     "src/championship/app/cageRoster.js",
     "src/championship/app/championshipClockDriver.js",
+    "src/championship/app/ChampionshipPersistentSavePort.js",
     "src/championship/app/championshipRaisingProduction.js",
     "src/championship/app/championshipScreen.js",
     "src/championship/app/championshipScreenStack.js",
@@ -10999,13 +10999,13 @@
     "src/championship/app/huntMobile.css",
     "src/championship/app/huntTacticalDock.js",
     "src/championship/app/huntToolFamilyCards.js",
-    "src/championship/app/intRh2Styles.css",
     "src/championship/app/interactiveTutorial.css",
     "src/championship/app/interactiveTutorialBattleSteps.js",
     "src/championship/app/interactiveTutorialCheckpoint.js",
     "src/championship/app/interactiveTutorialHuntSteps.js",
     "src/championship/app/interactiveTutorialPreview.js",
     "src/championship/app/interactiveTutorialRaisingSteps.js",
+    "src/championship/app/intRh2Styles.css",
     "src/championship/app/journeyScreen.js",
     "src/championship/app/loadProgress.js",
     "src/championship/app/loadStylesheet.js",
@@ -11183,10 +11183,12 @@
     "src/championship/contracts/productBattleTransport.js",
     "src/championship/contracts/productBurstEvolution.js",
     "src/championship/contracts/productCampaign.js",
+    "src/championship/contracts/productCyberDungeon.js",
     "src/championship/contracts/productGrowthRules.js",
     "src/championship/contracts/productJourney.js",
     "src/championship/contracts/productLineFusion.js",
     "src/championship/contracts/productOriginalSpecies.js",
+    "src/championship/contracts/productPartnerTendency.js",
     "src/championship/contracts/productPasswordTransport.js",
     "src/championship/contracts/productSpeciesData.js",
     "src/championship/contracts/productSpeciesExtensions.js",
@@ -11488,10 +11490,10 @@
     "src/championship/presentation/vfx/nitroVfxAnimationSidecar.js",
     "src/championship/presentation/vfx/originalVfxCellArt.js",
     "src/championship/presentation/vfx/originalVfxSystemBindings.js",
-    "src/championship/presentation/vfx/pixelHitBurstSprites.js",
-    "src/championship/presentation/vfx/pixelHitBursts.js",
-    "src/championship/presentation/vfx/pixelMotes.js",
     "src/championship/presentation/vfx/pixelateCanvas.js",
+    "src/championship/presentation/vfx/pixelHitBursts.js",
+    "src/championship/presentation/vfx/pixelHitBurstSprites.js",
+    "src/championship/presentation/vfx/pixelMotes.js",
     "src/championship/presentation/vfx/remadeEffectBriefs.js",
     "src/championship/presentation/vfx/remadeEffectCells.js",
     "src/championship/presentation/vfx/statusAilmentSprites.js",
@@ -11564,6 +11566,7 @@
     "src/championship/raising/nativeRaisingWaste.js",
     "src/championship/raising/nativeTutorialRaisingActor.js",
     "src/championship/raising/productGrowthPolicy.js",
+    "src/championship/raising/productOpenEvolution.js",
     "src/championship/raising/productTrainingPolicy.js",
     "src/championship/raising/raisingGroundReview.js",
     "src/championship/raising/raisingHomeDefinition.js",
@@ -11588,6 +11591,7 @@
     "src/championship/text/catalogs.th.js",
     "src/championship/text/catalogs.vi.js",
     "src/championship/text/catalogs.zhHant.js",
+    "src/championship/text/cyberDungeonText.js",
     "src/championship/text/dataArenaText.js",
     "src/championship/text/evolutionPresentationText.js",
     "src/championship/text/gameText.en.js",
@@ -11604,9 +11608,11 @@
     "src/championship/text/moveNameElements.js",
     "src/championship/text/onboardingText.js",
     "src/championship/text/onlineText.js",
+    "src/championship/text/openEvolutionText.js",
     "src/championship/text/openingEggText.js",
     "src/championship/text/openingFilmText.js",
     "src/championship/text/openingStoryText.js",
+    "src/championship/text/partnerTendencyText.js",
     "src/championship/text/productFormText.js",
     "src/championship/text/raisingMessages.en.js",
     "src/championship/text/raisingMessages.ja.js",
@@ -52750,7 +52756,7 @@
       },
       {
         "path": "championship.html",
-        "sha256": "880278f1794baf8c7b4beea717545775daa192e7fadd6191aa3804aa0cda3dff"
+        "sha256": "ae39ac91ae8e26ca8334b05f5a4241f58ef1e0c8b4a7fc3a9726769db4bb2f1d"
       },
       {
         "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -52866,7 +52872,7 @@
       },
       {
         "path": "src/championship/app/ChampionshipPersistentSavePort.js",
-        "sha256": "19f4089f1ca80dc172fccf2442995ca6ed8b91153ecdd55d9f045549ee488ffe"
+        "sha256": "23b2c7f8a10d3b9b7e0505b2321e4d32da76597736b3d2158537f56a67709d96"
       },
       {
         "path": "src/championship/app/championshipRaisingProduction.js",
@@ -52882,7 +52888,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneApp.js",
-        "sha256": "e6314a447e079ce4494122516f84b99a4d656f664a1d83f90c9b7ce8add51911"
+        "sha256": "03fa2a1a99414f93c699d55f9397b76357f89efb4480a16babd36e9cbf00630a"
       },
       {
         "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -52890,7 +52896,7 @@
       },
       {
         "path": "src/championship/app/championshipStandaloneSave.js",
-        "sha256": "a732ddb063bd0f77dd87324416d0aca637621f809c7b95e989e6c692c07bde9d"
+        "sha256": "8108888fd1ed2dd5f2aecb84838b101aecf99bd158fd53c27981b9bfa1b3fe28"
       },
       {
         "path": "src/championship/app/championshipStatusBar.js",
@@ -52926,11 +52932,11 @@
       },
       {
         "path": "src/championship/app/dataArena.css",
-        "sha256": "5e4c1a853d5bfe613956fd6b4fd69cb7e90570598ff192d1a8e2de51089a9f01"
+        "sha256": "83e767a151bb88956e0ca01a268e37fe0f43771ac3256ea991c00e13104064fc"
       },
       {
         "path": "src/championship/app/dataArenaScreen.js",
-        "sha256": "d919c45fe72efbf82e99924222bad895b3a71c4c1dff989501387025b1d94a1a"
+        "sha256": "bb394a64c8e9d655f51fd6d91168d6b75e4d7a4ea62cf9963a70bd2b6fae6b94"
       },
       {
         "path": "src/championship/app/daylightSkin.css",
@@ -52938,7 +52944,7 @@
       },
       {
         "path": "src/championship/app/digimonListScreen.js",
-        "sha256": "8b25aa14364695672cbec6c082df60915c17d4fa7ac89fdf6ed02d44af89dfed"
+        "sha256": "8498c8dfed6db600f20a58855ddfccb8c425dd63ef02a2dcfad3ab338337e084"
       },
       {
         "path": "src/championship/app/downloadSaveBackup.js",
@@ -53026,7 +53032,7 @@
       },
       {
         "path": "src/championship/app/journeyScreen.js",
-        "sha256": "43c30510451fded05cad48eb68d10e66dad4c495dbe3d974a9d6ccd9cbc2b456"
+        "sha256": "beb6b6c045c4f80aeb616fde2e941a7ab2fe4e7a2e49be3d19a72f1a2f8d2a77"
       },
       {
         "path": "src/championship/app/loadProgress.js",
@@ -53042,7 +53048,7 @@
       },
       {
         "path": "src/championship/app/main.js",
-        "sha256": "e084510c665eee12e43427595a91f3e6f44cd9a7fc71a426eef34d7179e97dc9"
+        "sha256": "c3e85ae93119572c5786dc8799616e86774ac78598e5dcf6a697ca91ff69a46d"
       },
       {
         "path": "src/championship/app/medalCollection.css",
@@ -53126,7 +53132,7 @@
       },
       {
         "path": "src/championship/app/partnerEvolutionCompass.js",
-        "sha256": "b5ee63599fd2656697f3475b96c384507311d238c1a8669fb2cb3c6629415c59"
+        "sha256": "5e8e72c53ae5683a05f1732b9c6ce78e76794ce82848c3849cdd000d65aad3b3"
       },
       {
         "path": "src/championship/app/phase1ProductCreatures.js",
@@ -53150,7 +53156,7 @@
       },
       {
         "path": "src/championship/app/raisingHomeP1RView.js",
-        "sha256": "60c53eaec859582faac032d91b35e100cd4ec240e89fbf5deec85c3590276dfc"
+        "sha256": "6c55da9b98f179fa8ea863679b32559e2b0a0548bc5ab0a7642615f64d222cb5"
       },
       {
         "path": "src/championship/app/raisingPresentationSource.js",
@@ -53242,7 +53248,7 @@
       },
       {
         "path": "src/championship/app/styles.css",
-        "sha256": "d0f03abc7c3ff61d5677750fc4cedf5b2b2322d575f14fd7c1337b95ef7155bf"
+        "sha256": "cf0d9870aa324507a8cff27cfa31cc5a7af61cd56fe9f65bd1645d0f23fb9bfb"
       },
       {
         "path": "src/championship/app/tamerInfoScreen.js",
@@ -53306,7 +53312,7 @@
       },
       {
         "path": "src/championship/app/ui/journey.css",
-        "sha256": "624e025c3d97dd5476a62d412042316c8881c56dfec9354dfca4cb1d56aa0a14"
+        "sha256": "5e5e7706ff726f7ee2c48940b514eb290d2bee81381308b5fbf1f9af415f8736"
       },
       {
         "path": "src/championship/app/ui/juicyShowcase.css",
@@ -53394,11 +53400,11 @@
       },
       {
         "path": "src/championship/app/vs5Screens.js",
-        "sha256": "319d1b1adb6aac71454e808c9498fcea81ead591f403e2222aec5b361cfd1969"
+        "sha256": "afeaf318414116d9a4511dc336f2e42e6f020a7bea8ca1330ef10bd442ec0014"
       },
       {
         "path": "src/championship/app/vs5Styles.css",
-        "sha256": "dbb4948ec971c719287acfd8182006f1a1eda70a1b3da0e4b206c6cf0b31f395"
+        "sha256": "841eba4ab96bddde87f161505ce036941902048b7ffb8cc9681e3e9956f5f7db"
       },
       {
         "path": "src/championship/app/waveRunField.js",
@@ -53733,6 +53739,10 @@
         "sha256": "d3198939a2b51abb559e530b4b959257b81fc11a01a0a76f7c363296ddb98dee"
       },
       {
+        "path": "src/championship/contracts/productCyberDungeon.js",
+        "sha256": "342178a39f10b3f6bfe28026769f1d37ca4fce103bb682fe117b939aa5a53bff"
+      },
+      {
         "path": "src/championship/contracts/productGrowthRules.js",
         "sha256": "ae7c90d29cfbdff4b6b0f9270af22d13823351db9cd57725e3f638bd82858c14"
       },
@@ -53747,6 +53757,10 @@
       {
         "path": "src/championship/contracts/productOriginalSpecies.js",
         "sha256": "ae215f63ae1b764941575074e32191d6631500e394ef7753fa687ae3fee716ec"
+      },
+      {
+        "path": "src/championship/contracts/productPartnerTendency.js",
+        "sha256": "57e57e225863c701b36bef83639afaf6ccd3055838a6895adee1a78d855c25f8"
       },
       {
         "path": "src/championship/contracts/productPasswordTransport.js",
@@ -54130,7 +54144,7 @@
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaEligibility.js",
-        "sha256": "947d4bae17d6dafc5ed38740ab6456044509f898a4e33b2fc54533d44369f4e4"
+        "sha256": "8c45db22399d1254ae12577c8c79cf491e5a0e6fb8f2de13d993b2699be0b906"
       },
       {
         "path": "src/championship/modes/dataArena/dataArenaGrid.js",
@@ -55166,7 +55180,7 @@
       },
       {
         "path": "src/championship/raising/nativeRaisingActor.js",
-        "sha256": "2c34ab016723cb8ec8e3976b8f94bc0298b814d4b944bbe8d30be7666c4a4456"
+        "sha256": "964d5f4d329c6cc204d55b0669012323901ca9c939fea6547670ce5093f70b9d"
       },
       {
         "path": "src/championship/raising/nativeRaisingCalendar.js",
@@ -55254,7 +55268,11 @@
       },
       {
         "path": "src/championship/raising/productGrowthPolicy.js",
-        "sha256": "faee7de09d239269db2d46fe9f4b264ab057c55594c4558da0eb6fe65762c789"
+        "sha256": "d838ec0431c1e0073bb561a5bb8e8d1023af5b7c5b3c924fb302bbcaa7fa13c5"
+      },
+      {
+        "path": "src/championship/raising/productOpenEvolution.js",
+        "sha256": "a4f4c9288e3f686d9690b30ac2c44096daf0eb1fa551b0a45675f78d7910a037"
       },
       {
         "path": "src/championship/raising/productTrainingPolicy.js",
@@ -55353,6 +55371,10 @@
         "sha256": "57e763a92c7c648bc0e623df58c10b083c7420a21cad6f6c729f66cdf30284eb"
       },
       {
+        "path": "src/championship/text/cyberDungeonText.js",
+        "sha256": "89d1bfb4a7f26c5b4b34f0772ac0483d4bfe32170ced024b2ca952c0b20b7bf8"
+      },
+      {
         "path": "src/championship/text/dataArenaText.js",
         "sha256": "75aa4504ff4d832766315c6d9acb6a135a4b01fb96dc949d87c9cde1491607ec"
       },
@@ -55417,6 +55439,10 @@
         "sha256": "1610ac591b7c2e95fc338247c1be2958a372936f319a26463717039d5e0227a8"
       },
       {
+        "path": "src/championship/text/openEvolutionText.js",
+        "sha256": "a8a0c83e0db3a38c61dc5653a0ce41a4c178277ec5bd053357860f4afafa3232"
+      },
+      {
         "path": "src/championship/text/openingEggText.js",
         "sha256": "96dc1c7a04341e71f6f106613d8c48193bfed7bd0c09f84fe3f4c60b7f334bfc"
       },
@@ -55427,6 +55453,10 @@
       {
         "path": "src/championship/text/openingStoryText.js",
         "sha256": "416f186e13d0f8552bf9f3b806e6485fc86028fbfe102fe518de2dafd432430c"
+      },
+      {
+        "path": "src/championship/text/partnerTendencyText.js",
+        "sha256": "27c1685d8bc215d5197bbff7d806ce1a36053f5fad83fbd1e239ce9d6f6ca452"
       },
       {
         "path": "src/championship/text/productFormText.js",
@@ -55470,7 +55500,7 @@
       },
       {
         "path": "src/championship/text/tacticRecordText.js",
-        "sha256": "4b31b43adbc0fd6490f29f7aa0cc8eefa34f1d33719a06e3291ae4cf8a12246d"
+        "sha256": "65c1f4d709536a4feb4473762c992f86de3ff4dc7e39ff58326d2900e21af05e"
       },
       {
         "path": "src/championship/text/tamerTalentText.js",
