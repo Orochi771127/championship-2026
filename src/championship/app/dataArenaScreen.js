@@ -548,10 +548,13 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const hype = el("div", "da-bar da-bar--hype"); hype.append(el("span", "da-bar__label", t("hud.hype")), hudRefs.hypeFill);
     const pause = button("da-hud__pause", "Ⅱ", () => togglePause(), signal);
     pause.setAttribute("aria-label", t("hud.pause"));
+    hudRefs.touchControlMode = button("da-hud__mode", t(`relay.control.${sim?.getControlMode?.() ?? controlModePref}`).replace(/\s+[A-Z]$/, ""), () => { if (root.dataset.state === "PLAY") cycleControlMode(); }, signal);
+    hudRefs.touchControlMode.title = t("relay.control.hint");
+    hudRefs.touchControlMode.hidden = gameMode !== "RELAY";
     right.append(hudRefs.score, hudRefs.level, xp, hype, hudRefs.weather, hudRefs.hitTelemetry);
     hudRefs.combo = el("div", "da-hud__combo");
     hudRefs.combo.hidden = true;
-    top.append(left, center, right, pause, hudRefs.combo);
+    top.append(left, center, right, hudRefs.touchControlMode, pause, hudRefs.combo);
     // The rival's bar is a slim strip tucked under the top bar, never over the field (Owner 2026-11-02).
     hudRefs.boss = el("div", "da-boss");
     hudRefs.bossElement = el("span", "da-boss__element");
@@ -708,12 +711,20 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           if (val) node.textContent = val;
         }, hitStr);
       }
-      if (hudRefs.controlMode) {
+      if (hudRefs.controlMode || hudRefs.touchControlMode) {
         const cm = snap.controlMode ?? controlModePref;
-        put('controlMode', hudRefs.controlMode, (node, mode) => {
-          node.textContent = t(`relay.control.${mode}`);
-          node.dataset.controlMode = mode;
-        }, cm);
+        if (hudRefs.controlMode) {
+          put('controlMode', hudRefs.controlMode, (node, mode) => {
+            node.textContent = t(`relay.control.${mode}`);
+            node.dataset.controlMode = mode;
+          }, cm);
+        }
+        if (hudRefs.touchControlMode) {
+          put('touchControlMode', hudRefs.touchControlMode, (node, mode) => {
+            node.textContent = t(`relay.control.${mode}`).replace(/\s+[A-Z]$/, "");
+            node.dataset.controlMode = mode;
+          }, cm);
+        }
       }
       if (hudRefs.guard) {
         const g = p.guard ?? { active: false, cooldown: 0 };
@@ -1043,21 +1054,59 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   }
 
   // ------------------------------------------------------------------ events -> DOM/audio/music
+  let audioComboCount = 0, audioComboAt = 0, spikeAudioStep = 0;
+  function moveAudioSpec(moveId, team = "player") {
+    const state = sim?.getState?.();
+    const fallbackEl = team === "player"
+      ? relayPartner(state?.player?.formPartnerId ?? state?.player?.partnerId)?.element
+      : state?.rivals?.[0]?.element;
+    const move = gameMode === "RELAY" ? relayMove(moveId) : DATA_ARENA_MOVES[moveId];
+    const spec = moveId != null ? resolveMoveSpecV2(moveId, move) : null;
+    return {
+      archetype: spec?.v2Archetype ?? "VOLLEY_BARRAGE",
+      element: spec?.paletteKey ?? fallbackEl ?? "neutral"
+    };
+  }
   function handleEvents(events) {
     scene?.handleEvents(events);
     for (const event of events) {
       switch (event.type) {
         case 'RELAY_SWITCH': releaseInputs(); buildHud(); audio?.play('capture'); toast(t('relay.switched'), { x: event.x, y: event.y - 70, tone: 'good', key: 'relay-switch' }); break;
-        case 'RELAY_TAG_BURST': audio?.play('slam'); break;
-        case 'GUARD_BLOCK': audio?.play('perfect'); break;
-        case 'GUARD_PARRY': audio?.play('perfect'); break;
-        case 'GUARD_BROKEN': audio?.play('slam'); break;
-        case 'STAT_BUFF': audio?.play('pickup'); break;
-        case 'TACTICAL_HEAL': audio?.play('pickup'); break;
-        case 'COUNTER_RIPOSTE': audio?.play('slam'); break;
-        case 'FLURRY_HIT': audio?.play('hit'); break;
-        case 'BACKSTAB_HIT': audio?.play('slam'); break;
-        case 'CLASH': audio?.play('slam'); break;
+        case 'RELAY_TAG_BURST': audio?.playMove({ archetype: 'SHOCKWAVE_RING', element: 'light' }); break;
+        case 'GUARD_START': audio?.playMove({ archetype: 'PROTECT_COUNTER', element: 'light' }); break;
+        case 'GUARD_BLOCK': audio?.playImpact({ guarded: true }); break;
+        case 'GUARD_PARRY': audio?.playImpact({ parry: true }); break;
+        case 'GUARD_BROKEN': audio?.playImpact({ guardBreak: true }); break;
+        case 'STAT_BUFF': audio?.playMove({ archetype: 'SELF_BUFF', element: 'light' }); break;
+        case 'TACTICAL_HEAL': audio?.playMove({ archetype: 'RECOVERY_SUPPORT', element: 'nature' }); break;
+        case 'COUNTER_UP': audio?.playMove({ archetype: 'PROTECT_COUNTER', element: 'metal' }); break;
+        case 'COUNTER_RIPOSTE': audio?.playImpact({ amount: 34, clash: false }); audio?.playMove({ archetype: 'SHADOW_BACKSTAB', element: 'metal', phase: 'hit' }); break;
+        case 'FLURRY_HIT': audio?.playMove({ archetype: 'FLURRY_COMBO', element: moveAudioSpec(event.moveId, event.side).element, step: event.hitIndex ?? 0 }); break;
+        case 'BACKSTAB_VANISH': audio?.playMove({ archetype: 'SHADOW_BACKSTAB', element: 'dark', phase: 'vanish' }); break;
+        case 'BACKSTAB_HIT': audio?.playMove({ archetype: 'SHADOW_BACKSTAB', element: 'dark', phase: 'hit' }); break;
+        case 'BURROW_START': audio?.playMove({ archetype: 'BURROW_AMBUSH', element: moveAudioSpec(event.moveId, event.team).element, phase: 'start' }); break;
+        case 'BURROW_ERUPT': audio?.playMove({ archetype: 'BURROW_AMBUSH', element: moveAudioSpec(event.moveId, event.team).element, phase: 'erupt' }); break;
+        case 'GROUND_SPIKE_ERUPT': audio?.playMove({ archetype: 'GROUND_SPIKES', element: moveAudioSpec(event.moveId, event.team).element, step: spikeAudioStep++ }); break;
+        case 'TEMP_PROP_SPAWN': audio?.playMove({ archetype: 'PROTECT_COUNTER', element: event.element ?? 'earth', phase: 'wall', material: event.material ?? 'STONE' }); break;
+        case 'SHOCKWAVE_START':
+        case 'LEAP_SLAM_HIT':
+        case 'GRAB_SLAM_HIT': audio?.playMove({ archetype: 'SHOCKWAVE_RING', element: moveAudioSpec(event.moveId, event.team).element }); break;
+        case 'TK_LIFT': audio?.playMove({ archetype: 'TELEKINESIS_SLAM', element: 'psychic', phase: 'lift' }); break;
+        case 'TK_SLAM_HIT': audio?.playMove({ archetype: 'TELEKINESIS_SLAM', element: 'psychic', phase: 'slam' }); break;
+        case 'ZONE_PLACED': {
+          const spec = moveAudioSpec(event.moveId, event.team);
+          if (event.vortexLift) {
+            const isCage = event.moveId === 'iceCage' || event.moveId === 'vineSnare';
+            audio?.playMove({ archetype: isCage ? 'TELEKINESIS_SLAM' : 'VORTEX_PULL', element: spec.element, phase: isCage ? 'cage' : 'release' });
+          } else {
+            audio?.playMove({ archetype: 'METEOR_RAIN', element: spec.element, phase: 'drop' });
+          }
+          break;
+        }
+        case 'CLASH': audio?.playImpact({ clash: true }); break;
+        case 'WEATHER_START': audio?.playMove({ archetype: 'VORTEX_PULL', element: event.kind === 'SUN' ? 'fire' : event.kind === 'RAIN' ? 'water' : event.kind === 'HAIL' ? 'ice' : 'earth' }); break;
+        case 'DECOY_SPAWN': audio?.playMove({ archetype: 'TELEKINESIS_SLAM', element: 'light', phase: 'cage' }); break;
+        case 'DECOY_BREAK': audio?.playImpact({ guardBreak: true }); break;
         case 'SUDDEN_DEATH': audio?.play('warn'); banner(t('relay.suddenDeathShort'), 'warn', 2000); break;
         case 'TRAINER_CALLOUT': tactical(t('relay.callout', { move: moveName(event.moveId) }), { tone: 'good', key: `callout-${event.moveId}`, ms: 1300 }); break;
         case 'RELAY_PERFECT_SWITCH': audio?.play('perfect'); toast(t('relay.perfectSwitch'), { x: event.x, y: event.y - 84, tone: 'crit', key: 'perfect-switch', gap: 400 }); break;
@@ -1089,7 +1138,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         case 'RELAY_END': releaseInputs(); break;
         case "LASER_HIT": audio?.play("hit"); break;
         case "ENEMY_KILLED": audio?.play("kill"); break;
-        case "PLAYER_HIT": audio?.play("hurt"); flashVignette(); break;
+        case "PLAYER_HIT":
+          if (gameMode === "RELAY") audio?.playImpact({ amount: event.amount ?? 16, guarded: Boolean(event.guarded) });
+          else audio?.play("hurt");
+          flashVignette();
+          break;
         case "DASH": audio?.play("dash"); break;
         case "PERFECT_DODGE": audio?.play("perfect"); toast(t("fct.perfect"), { x: event.x, y: event.y - 64, tone: "dodge", key: "perfect", gap: 600 }); break;
         case "ELEMENT_CHAIN": tactical(t(`toast.chain.${event.kind}`), { tone: "chain", key: `chain-${event.kind}` }); break;
@@ -1164,11 +1217,46 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           break;
         }
         case "ULT_READY": audio?.play("level"); buttonFlag("ult", t("btn.ready"), { tone: "good" }); break;
-        case "CAST_RELEASE": if (event.team === "player") audio?.play(gameMode === 'RELAY' ? relayEffectStyle(event.moveId, relayPartner(sim.getState().player.formPartnerId ?? sim.getState().player.partnerId)?.element).cue : event.moveType === 'LUNGE' ? 'dash' : 'burst'); break;
-        case "ULT_CAST": audio?.play("roar"); ultCutIn(event); break;
-        case "NOVA": case "ZONE_BURST": audio?.play("burst"); break;
-        case "CANCEL": if (event.rule === "BARRIER_BLOCKS_SHOT") { audio?.play("block"); toast(t("fct.blocked"), { x: event.x, y: event.y - 40, tone: "good", key: "blocked", gap: 1200 }); } break;
-        case "RIVAL_HIT": case "SKILL_HIT": audio?.play("hit"); break;
+        case "CAST":
+          if (gameMode === "RELAY" && event.moveId) {
+            const spec = moveAudioSpec(event.moveId, event.team);
+            if (spec.archetype === "STREAM_BEAM") audio?.playMove({ ...spec, phase: "cast" });
+          }
+          break;
+        case "CAST_RELEASE":
+          if (gameMode === "RELAY" && event.moveId) {
+            const spec = moveAudioSpec(event.moveId, event.team);
+            audio?.playMove({ ...spec, phase: "release", ultimate: Boolean(event.ultimate) });
+          } else if (event.team === "player") {
+            audio?.play(event.moveType === "LUNGE" ? "dash" : "burst");
+          }
+          break;
+        case "ULT_CAST": {
+          const spec = moveAudioSpec(event.moveId, event.team);
+          audio?.playMove({ ...spec, phase: "cast", ultimate: true });
+          audio?.play("roar");
+          ultCutIn(event);
+          break;
+        }
+        case "NOVA":
+        case "ZONE_BURST":
+          if (gameMode === "RELAY" && event.moveId) {
+            const spec = moveAudioSpec(event.moveId, event.team);
+            audio?.playMove({ archetype: event.type === "ZONE_BURST" ? "METEOR_RAIN" : spec.archetype, element: spec.element, phase: "burst" });
+          } else audio?.play("burst");
+          break;
+        case "CANCEL": if (event.rule === "BARRIER_BLOCKS_SHOT") { audio?.playImpact({ guarded: true }); toast(t("fct.blocked"), { x: event.x, y: event.y - 40, tone: "good", key: "blocked", gap: 1200 }); } break;
+        case "RIVAL_HIT": {
+          const nowT = sim?.getState?.()?.time ?? 0;
+          audioComboCount = nowT - audioComboAt <= 1.85 ? audioComboCount + 1 : 1;
+          audioComboAt = nowT;
+          audio?.playImpact({ amount: event.amount ?? 14, guarded: Boolean(event.guarded), combo: audioComboCount });
+          break;
+        }
+        case "SKILL_HIT": audio?.playImpact({ amount: event.amount ?? 12 }); break;
+        case "EFFECTIVE":
+          if (gameMode === "RELAY") audio?.playImpact({ amount: event.mult > 1 ? 26 : 8, effectiveness: event.mult > 1 ? "super" : "resist" });
+          break;
         case "RIVAL_DODGE": toast(t("fct.dodge"), { x: event.x, y: event.y - 64, tone: "dodge", key: "rival-dodge", gap: 450 }); break;
         case "OFFER": showLevelUp(event.options); break;
         case "RESULT": if (root.dataset.state === "REPLAY") { replayPaused = true; if (replayPauseBtn) replayPauseBtn.textContent = t("replay.play"); } else showResult(); break;

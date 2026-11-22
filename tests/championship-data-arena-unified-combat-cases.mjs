@@ -17,6 +17,7 @@ import { MOVE_VFX_3D_PIECE_GROUP } from "../src/championship/presentation/vfx/mo
 import { MOVE_VFX_PIECE_SPRITES } from "../src/championship/presentation/vfx/moveVfxPieceSprites.js";
 import { V2_ARCHETYPES, resolveMoveSpecV2 } from "../src/championship/modes/dataArena/dataArenaMoveCatalogV2.js";
 import { createDataArenaPixelFxV2 } from "../src/championship/presentation/dataArena/dataArenaPixelFxV2.js";
+import { createDataArenaAudio } from "../src/championship/presentation/dataArena/dataArenaAudio.js";
 import { readFileSync } from "node:fs";
 
 function startRelayFight(opts = {}) {
@@ -755,4 +756,50 @@ test("web crash-proof LRU GPU sheet cache: zero per-frame re-bakes, strict VRAM 
   assert.equal(cache.getDiagnostics().cachedSheets, 0, "dispose releases 100% of cached GPU sheets");
   assert.equal(cache.getDiagnostics().estimatedVramMb, 0, "dispose zeroes VRAM estimate");
   assert.equal(layer.children.length, 0, "dispose removes all live sprites");
+});
+
+test("666-move procedural SFX & fighting-game impact audio: all 20 archetypes, 13 elements, 6 wall materials, and hit tiers synthesize cleanly", () => {
+  let oscCount = 0, noiseCount = 0;
+  const makeParam = () => ({ value: 0, setValueAtTime() {}, exponentialRampToValueAtTime() {}, setTargetAtTime() {} });
+  let clock = 0;
+  const mockContext = {
+    sampleRate: 44100,
+    state: "running",
+    get currentTime() { return clock; },
+    createGain() { return { gain: makeParam(), connect() {}, disconnect() {} }; },
+    createBiquadFilter() { return { type: "bandpass", frequency: makeParam(), Q: makeParam(), connect() {} }; },
+    createOscillator() { oscCount++; return { type: "sine", frequency: makeParam(), connect() {}, start() {}, stop() {} }; },
+    createBuffer(ch, len) { return { getChannelData: () => new Float32Array(len) }; },
+    createBufferSource() { noiseCount++; return { buffer: null, playbackRate: makeParam(), connect() {}, start() {}, stop() {} }; }
+  };
+  const audio = createDataArenaAudio({ bus: { output: () => ({ context: mockContext, destination: {} }) } });
+  assert.equal(audio.available, true);
+
+  const elements = ["fire", "water", "ice", "thunder", "wind", "earth", "nature", "light", "dark", "metal", "toxic", "psychic", "neutral"];
+  for (let i = 0; i < V2_ARCHETYPES.length; i++) {
+    clock += 0.25;
+    audio.playMove({ archetype: V2_ARCHETYPES[i], element: elements[i % elements.length], phase: "release", ultimate: i % 5 === 0, step: i });
+  }
+  for (const material of ["STONE", "WOOD", "ICE", "BASALT", "CRYSTAL", "METAL"]) {
+    clock += 0.25;
+    audio.playMove({ archetype: "PROTECT_COUNTER", element: "earth", phase: "wall", material });
+  }
+  for (const impact of [
+    { amount: 8 },
+    { amount: 18, combo: 3 },
+    { amount: 36, effectiveness: "super", combo: 5 },
+    { amount: 12, effectiveness: "resist" },
+    { guarded: true },
+    { parry: true },
+    { guardBreak: true },
+    { clash: true }
+  ]) {
+    clock += 0.25;
+    audio.playImpact(impact);
+  }
+  const diag = audio.getDiagnostics();
+  assert.ok(diag.movesPlayed >= 15, `played procedural move SFX (${diag.movesPlayed})`);
+  assert.ok(diag.impactsPlayed >= 5, `played fighting-game impact SFX (${diag.impactsPlayed})`);
+  assert.ok(oscCount > 20 && noiseCount > 10, `layered oscillators (${oscCount}) + noise bursts (${noiseCount})`);
+  audio.dispose();
 });

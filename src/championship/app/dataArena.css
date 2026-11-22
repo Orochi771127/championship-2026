@@ -1074,6 +1074,90 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 .da-replay-bar__fill { display: block; width: 100%; height: 100%; background: #38bdf8; transform-origin: left center; transform: scaleX(0); }
 .da-btn--replay { background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; border-color: #7dd3fc; }
 
-.da-root:not([data-mode="RELAY"]) .da-tbtn--guard, .da-root:not([data-mode="RELAY"]) .da-tbtn--tactical { display: none; }
-.da-root[data-mode="RELAY"] .da-tbtn--guard { position: absolute; right: 174px; bottom: 12px; width: 52px; height: 52px; border-color: rgba(251, 191, 36, .8); }
-.da-root[data-mode="RELAY"] .da-tbtn--tactical { position: absolute; right: 174px; bottom: 72px; width: 52px; height: 52px; border-color: rgba(167, 139, 250, .8); }
+/* ==== Relay Dual-Ring Touch Layout (2026-11-22: Zero-Overlap Safe-Area Ergonomics) ====
+   Every single right-hand button uses --da-control-right / --da-control-bottom so iPhone
+   Dynamic Island & Home Bar safe areas never cause drift or collisions.
+   Anchor: basic (72x72) center at (36, 36).
+   Inner ring (r=98, 54x54): s1=180deg, s2=135deg, s3=90deg (>=20px air between every pair).
+   Outer ring (r=166, 48x48; ult 58x58 at r=170): guard=180deg, dash=150deg, tactical=120deg, ult=90deg
+   (>=16px radial air from inner ring, >=32px chord air along outer ring, >=36px open channel to left stick on 390px portrait). */
+.da-root:not([data-mode="RELAY"]) .da-tbtn--guard,
+.da-root:not([data-mode="RELAY"]) .da-tbtn--tactical { display: none; }
+
+.da-root[data-mode="RELAY"] { --da-control-left: max(14px, env(safe-area-inset-left)); --da-control-right: max(14px, env(safe-area-inset-right)); --da-control-bottom: max(16px, env(safe-area-inset-bottom)); }
+.da-root[data-mode="RELAY"] .da-tbtn--basic { right: var(--da-control-right); bottom: var(--da-control-bottom); width: 72px; height: 72px; }
+.da-root[data-mode="RELAY"] .da-tbtn--s1,
+.da-root[data-mode="RELAY"] .da-tbtn--s2,
+.da-root[data-mode="RELAY"] .da-tbtn--s3 { width: 54px; height: 54px; }
+.da-root[data-mode="RELAY"] .da-tbtn--s1 { right: calc(var(--da-control-right) + 107px); bottom: calc(var(--da-control-bottom) + 9px); }
+.da-root[data-mode="RELAY"] .da-tbtn--s2 { right: calc(var(--da-control-right) + 78px); bottom: calc(var(--da-control-bottom) + 78px); }
+.da-root[data-mode="RELAY"] .da-tbtn--s3 { right: calc(var(--da-control-right) + 9px); bottom: calc(var(--da-control-bottom) + 107px); }
+.da-root[data-mode="RELAY"] .da-tbtn--guard {
+  position: absolute; right: calc(var(--da-control-right) + 178px); bottom: calc(var(--da-control-bottom) + 12px);
+  width: 48px; height: 48px; --ring: #fbbf24; --base: #78350f; border-color: var(--ring);
+}
+.da-root[data-mode="RELAY"] .da-tbtn--dash {
+  right: calc(var(--da-control-right) + 156px); bottom: calc(var(--da-control-bottom) + 95px);
+  width: 48px; height: 48px;
+}
+.da-root[data-mode="RELAY"] .da-tbtn--tactical {
+  position: absolute; right: calc(var(--da-control-right) + 95px); bottom: calc(var(--da-control-bottom) + 156px);
+  width: 48px; height: 48px; --ring: #c4b5fd; --base: #3b0764; border-color: var(--ring);
+}
+.da-root[data-mode="RELAY"] .da-tbtn--ult {
+  right: calc(var(--da-control-right) + 7px); bottom: calc(var(--da-control-bottom) + 177px);
+  width: 58px; height: 58px;
+}
+.da-root[data-mode="RELAY"] :is(.da-tbtn--guard, .da-tbtn--dash, .da-tbtn--tactical) .da-tbtn__label { font-size: calc(10.5px * var(--text-scale-hud, 1)); }
+
+/* Left thumb zone: compact movement dial + side-by-side switch cards with unblocked advantage badge */
+.da-root[data-mode="RELAY"] .da-move-hint { left: var(--da-control-left); bottom: calc(var(--da-control-bottom) + 8px); width: 96px; height: 96px; }
+.da-root[data-mode="RELAY"] :is(.da-tbtn--switch, .da-tbtn--switch2) {
+  left: var(--da-control-left); bottom: calc(var(--da-control-bottom) + 148px);
+  width: 72px; height: 48px; padding: 5px 5px 9px 30px; overflow: visible;
+}
+.da-root[data-mode="RELAY"] .da-tbtn--switch2 { left: calc(var(--da-control-left) + 80px); bottom: calc(var(--da-control-bottom) + 148px); }
+.da-root[data-mode="RELAY"] :is(.da-tbtn--switch, .da-tbtn--switch2)[data-advantage="1"] .da-tbtn__adv {
+  top: -9px; right: -4px; padding: 0 5px; font-size: calc(8.5px * var(--text-scale-hud, 1));
+}
+.da-root[data-mode="RELAY"] .da-tbtn--burst {
+  left: var(--da-control-left); bottom: calc(var(--da-control-bottom) + 206px); width: 54px; height: 54px;
+}
+
+/* Landscape phone: tighten dual-ring radii so top Ult stays >=90px clear below Pause */
+@media (orientation: landscape) and (max-height: 520px) {
+  .da-root[data-mode="RELAY"] .da-tbtn--basic { width: 68px; height: 68px; }
+  .da-root[data-mode="RELAY"] .da-tbtn--s1,
+  .da-root[data-mode="RELAY"] .da-tbtn--s2,
+  .da-root[data-mode="RELAY"] .da-tbtn--s3 { width: 52px; height: 52px; }
+  .da-root[data-mode="RELAY"] .da-tbtn--s1 { right: calc(var(--da-control-right) + 100px); bottom: calc(var(--da-control-bottom) + 8px); }
+  .da-root[data-mode="RELAY"] .da-tbtn--s2 { right: calc(var(--da-control-right) + 73px); bottom: calc(var(--da-control-bottom) + 73px); }
+  .da-root[data-mode="RELAY"] .da-tbtn--s3 { right: calc(var(--da-control-right) + 8px); bottom: calc(var(--da-control-bottom) + 100px); }
+  .da-root[data-mode="RELAY"] .da-tbtn--guard { right: calc(var(--da-control-right) + 165px); bottom: calc(var(--da-control-bottom) + 11px); width: 46px; height: 46px; }
+  .da-root[data-mode="RELAY"] .da-tbtn--dash { right: calc(var(--da-control-right) + 145px); bottom: calc(var(--da-control-bottom) + 88px); width: 46px; height: 46px; }
+  .da-root[data-mode="RELAY"] .da-tbtn--tactical { right: calc(var(--da-control-right) + 88px); bottom: calc(var(--da-control-bottom) + 145px); width: 46px; height: 46px; }
+  .da-root[data-mode="RELAY"] .da-tbtn--ult { right: calc(var(--da-control-right) + 7px); bottom: calc(var(--da-control-bottom) + 163px); width: 54px; height: 54px; }
+  .da-root[data-mode="RELAY"] .da-move-hint { width: 92px; height: 92px; }
+  .da-root.da-root[data-mode="RELAY"] .da-tbtn.da-tbtn--switch { left: var(--da-control-left); bottom: calc(var(--da-control-bottom) + 122px); }
+  .da-root.da-root[data-mode="RELAY"] .da-tbtn.da-tbtn--switch2 { left: calc(var(--da-control-left) + 80px); bottom: calc(var(--da-control-bottom) + 122px); }
+  .da-root[data-mode="RELAY"] .da-tbtn--burst { left: calc(var(--da-control-left) + 160px); bottom: calc(var(--da-control-bottom) + 120px); width: 50px; height: 50px; }
+}
+
+/* Mobile Touch AI Control-Mode Pill (Manual / Commander / Auto) */
+.da-hud__mode { display: none; }
+.da-root[data-mode="RELAY"][data-input="touch"] .da-hud__mode {
+  display: inline-flex; align-items: center; justify-content: center; pointer-events: auto; cursor: pointer;
+  position: absolute; right: 0; top: 102px; z-index: 4; padding: 4px 10px; border-radius: 999px;
+  font-size: calc(11px * var(--text-scale-hud, 1)); font-weight: 900; letter-spacing: .02em; white-space: nowrap;
+  border: 1.5px solid rgba(148, 163, 184, .65); background: rgba(15, 23, 42, .86); color: #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .45);
+}
+.da-root[data-mode="RELAY"][data-input="touch"] .da-hud__mode[data-control-mode="AUTO"] {
+  background: linear-gradient(135deg, #0ea5e9, #22d3ee); color: #082f49; border-color: #bae6fd;
+}
+.da-root[data-mode="RELAY"][data-input="touch"] .da-hud__mode[data-control-mode="COMMANDER"] {
+  background: linear-gradient(135deg, #7c3aed, #a78bfa); color: #fff; border-color: #ddd6fe;
+}
+@media (orientation: landscape) and (max-height: 520px) {
+  .da-root[data-mode="RELAY"][data-input="touch"] .da-hud__mode { top: 52px; }
+}
