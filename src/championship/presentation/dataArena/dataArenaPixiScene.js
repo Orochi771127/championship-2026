@@ -583,17 +583,39 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         sprite.x = 0;
         if(!nativeDraw&&seq===DATA_ARENA_SEQUENCES.WIN&&!reducedMotion)sprite.y-=reviewedWinHop(elapsed);
         if(currentPlacement){sprite.x+=(facing>0?-1:1)*currentPlacement.offset[0]*cellScale;sprite.y+=currentPlacement.offset[1]*cellScale;}
-        // Stage four + Fighting-Game Hit-Recoil: elastic squash-and-stretch + knockback lean + blinding white hit-flash!
-        if (body.hitstun > 0 && !reducedMotion) sprite.x += Math.sin(elapsed * 115) * 3.8;
-        if (Math.hypot(body.kbx ?? 0, body.kby ?? 0) > 80 && !reducedMotion && frameCount % 2 === 0) puff(x, y, 0xc8b89a, 1, 0.78);
+        // PbRank Hit-Feel: 230ms directional hit vibration along hitDir + 55ms brightness flash alternation + pure-pixel brake skids!
+        const hurtLeft = body.hurtTimer ?? 0;
+        if (hurtLeft > 0 && !reducedMotion) {
+          const vibe = Math.sin(elapsed * 145) * 5.0 * clamp(hurtLeft / 0.23, 0, 1);
+          const hx = body.hitDirX ?? -(facing || 1), hy = body.hitDirY ?? 0;
+          sprite.x += hx * vibe;
+          sprite.y += hy * vibe * 0.6;
+        } else if (body.hitstun > 0 && !reducedMotion) {
+          sprite.x += Math.sin(elapsed * 115) * 3.8;
+        }
+        if (Math.hypot(body.kbx ?? 0, body.kby ?? 0) > 90 && !reducedMotion && frameCount % 2 === 0) {
+          addSkidMark(x, y, body.kbx, body.kby);
+        }
+        // PbRank action micro-motion synced with hitFrame: melee pullback (-4px) -> release lunge (+12px), ranged recoil (-4px)!
         if (motion && relayProfile && !reducedMotion && !motion.preserveAuthoredPose) {
           const a = body.action;
-          // No action in progress means no lunge; a null action used to throw here and stop the HUD.
-          const pulse = !a ? 0 : a.releasedAt === null ? Math.min(1, (state.time - a.startedAt) / a.windup) : Math.max(0, 1 - (state.time - a.releasedAt) / a.recovery);
-          sprite.x += (facing > 0 ? 1 : -1) * relayProfile.thrust * pulse;
-          sprite.y -= relayProfile.lift * pulse;
-          if (a && a.releasedAt === null) { sprite.scale.x *= 1 - 0.08 * pulse; sprite.scale.y *= 1 + 0.09 * pulse; }
-          else if (a && state.time - a.releasedAt < 0.12) { sprite.scale.x *= 1.15; sprite.scale.y *= 0.87; }
+          const dirSign = facing > 0 ? 1 : -1;
+          const isMeleeMove = a?.moveId ? Boolean(elementFx?.look?.(a.moveId)?.melee || body.lunge) : (relayProfile.thrust >= 6);
+          if (a) {
+            if (a.releasedAt === null) {
+              const p = clamp((state.time - a.startedAt) / Math.max(0.01, a.windup), 0, 1);
+              sprite.x += dirSign * (isMeleeMove ? -4 * p : relayProfile.thrust * 0.4 * p);
+              sprite.y -= relayProfile.lift * p;
+              sprite.scale.x *= 1 - 0.08 * p;
+              sprite.scale.y *= 1 + 0.09 * p;
+            } else {
+              const p = clamp((state.time - a.releasedAt) / Math.max(0.01, a.recovery), 0, 1);
+              const arc = Math.sin(Math.PI * p);
+              sprite.x += dirSign * (isMeleeMove ? (12 + relayProfile.thrust * 0.5) * arc : -4 * arc);
+              sprite.y -= relayProfile.lift * (1 - p);
+              if (state.time - a.releasedAt < 0.12) { sprite.scale.x *= 1.15; sprite.scale.y *= 0.87; }
+            }
+          }
         }
         if (flash > 0.02 && !reducedMotion) {
           const fRatio = clamp(flash / 0.18, 0, 1);
@@ -605,8 +627,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           sprite.rotation = 0;
         }
         sprite.alpha = alpha;
-        sprite.tint = flash > 0.10 ? 0xffffff : flash > 0 ? 0xff8a8a : 0xffffff;
-        syncFlash(flash > 0.10 && !reducedMotion, clamp((flash - 0.09) * 10, 0.45, 0.92));
+        const blinkBright = hurtLeft > 0 && Math.floor(hurtLeft / 0.055) % 2 === 0;
+        sprite.tint = (flash > 0.10 || blinkBright) ? 0xffffff : flash > 0 ? 0xff8a8a : 0xffffff;
+        syncFlash((flash > 0.10 || blinkBright) && !reducedMotion, clamp(Math.max(flash - 0.09, blinkBright ? 0.065 : 0) * 10, 0.45, 0.92));
         shadow.alpha = (0.75 - sink * 0.6) * (lift > 0 ? 0.52 : 1);
       },
       diagnostics: () => ({ sequenceId: sequence, frameIndex: controller?.getSnapshot().sourceFrameIndex ?? null,
@@ -960,14 +983,94 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   // Stage three: cover debris in the block's material and the timed arena zones.
   const COVER_CHIP = { STONE: 0xb7bec2, WOOD: 0xb07b48, BASALT: 0x5a4a4f, CORAL: 0xf2c7b8, ICE: 0xd6f3fb, SANDSTONE: 0xe0c08a, CRYSTAL: 0x8ff3ff, METAL: 0x9aa8b6 };
   const ZONE_TINT = { ECHO: 0xc79bff, BLOOM: 0x8be37a, VENT: 0xff8a3c, TIDE: 0x6fd8ff, UPDRAFT: 0xd8f0ff, RECHARGE: 0xffe066 };
+  // PbRank Pure-Pixel Ground Skid Marks (1.45s), 3D Bouncing Pixel Debris (gravity -260, bounce 0.28x),
+  // and Periodic Arena Energy Orbs (beam looks remain 100% owned by PixelFX kit).
+  const skidMarks = [];
+  const debris3D = [];
+  const skidGfx = new PIXI.Graphics(); skidGfx.label = "pbRank skid marks";
+  cellFx.addChild(skidGfx);
+  const debrisGfx = new PIXI.Graphics(); debrisGfx.label = "pbRank 3d pixel debris";
+  particles.addChild(debrisGfx);
+  const orbGfx = new PIXI.Graphics(); orbGfx.label = "pbRank arena energy orbs"; orbGfx.blendMode = "add";
+  objects.addChild(orbGfx);
+
+  function addSkidMark(x, y, vx, vy) {
+    if (reducedMotion) return;
+    const len = Math.hypot(vx, vy) || 1;
+    skidMarks.push({ x, y: y + 4, dx: vx / len, dy: vy / len, life: 1.45, maxLife: 1.45 });
+    if (skidMarks.length > 48) skidMarks.shift();
+  }
+
+  function spawnDebris3D(x, y, { count = 7, color = 0xc8c0b4, speed = 160 } = {}) {
+    if (reducedMotion) return;
+    const cap3d = rich ? 64 : 28;
+    for (let i = 0; i < count; i++) {
+      const a = Math.random() * TAU;
+      const spd = speed * (0.45 + Math.random() * 0.85);
+      debris3D.push({
+        x, y, z: 8 + Math.random() * 18,
+        vx: Math.cos(a) * spd, vy: Math.sin(a) * spd * 0.72, vz: 95 + Math.random() * 145,
+        color, size: 3 + Math.floor(Math.random() * 3), life: 0.75 + Math.random() * 0.45, maxLife: 1.2
+      });
+      if (debris3D.length > cap3d) debris3D.shift();
+    }
+  }
+
+  function updatePbRankEffects(dt) {
+    skidGfx.clear();
+    for (let i = skidMarks.length - 1; i >= 0; i--) {
+      const s = skidMarks[i];
+      s.life -= dt;
+      if (s.life <= 0) { skidMarks.splice(i, 1); continue; }
+      const alpha = clamp(s.life / s.maxLife, 0, 1) * 0.42;
+      const px = -s.dy * 5, py = s.dx * 5;
+      skidGfx.moveTo(s.x + px - s.dx * 5, s.y + py - s.dy * 5).lineTo(s.x + px + s.dx * 5, s.y + py + s.dy * 5)
+        .stroke({ color: 0x3b2f24, width: 2, alpha });
+      skidGfx.moveTo(s.x - px - s.dx * 5, s.y - py - s.dy * 5).lineTo(s.x - px + s.dx * 5, s.y - py + s.dy * 5)
+        .stroke({ color: 0x3b2f24, width: 2, alpha });
+    }
+    debrisGfx.clear();
+    for (let i = debris3D.length - 1; i >= 0; i--) {
+      const d = debris3D[i];
+      d.life -= dt;
+      if (d.life <= 0) { debris3D.splice(i, 1); continue; }
+      d.x += d.vx * dt; d.y += d.vy * dt; d.z += d.vz * dt;
+      d.vz -= 260 * dt;
+      if (d.z <= 0) {
+        d.z = 0;
+        d.vz = Math.abs(d.vz) * 0.28;
+        d.vx *= 0.65; d.vy *= 0.65;
+      }
+      const alpha = clamp(d.life / 0.35, 0, 1);
+      debrisGfx.rect(Math.round(d.x - d.size * 0.5), Math.round(d.y - 1), d.size, 2).fill({ color: 0x090d16, alpha: alpha * 0.35 });
+      const py = Math.round(d.y - d.z);
+      debrisGfx.rect(Math.round(d.x - d.size * 0.5), py - d.size, d.size, d.size).fill({ color: d.color, alpha }).stroke({ color: 0x161b26, width: 1, alpha });
+    }
+    orbGfx.clear();
+    if (relayMode && state.energyOrbs?.length) {
+      orbGfx.zIndex = 900;
+      for (const orb of state.energyOrbs) {
+        const bob = reducedMotion ? 0 : Math.sin(elapsed * 5 + orb.id) * 4;
+        const pulse = 0.72 + 0.28 * Math.sin(elapsed * 7 + orb.id);
+        const ox = orb.x, oy = orb.y - 14 + bob;
+        orbGfx.ellipse(orb.x, orb.y + 4, 12, 5).fill({ color: 0x090d16, alpha: 0.35 });
+        orbGfx.poly([ox, oy - 11, ox + 10, oy, ox, oy + 11, ox - 10, oy]).fill({ color: 0x38bdf8, alpha: 0.85 * pulse }).stroke({ color: 0xffe066, width: 2, alpha: 0.95 });
+        orbGfx.poly([ox, oy - 5, ox + 5, oy, ox, oy + 5, ox - 5, oy]).fill({ color: 0xffffff, alpha: 0.95 });
+      }
+    }
+  }
+
   function relayCoverHit(event, broken) {
     const tint = COVER_CHIP[event.material] ?? 0xffffff;
-    burst(event.x, event.y - 22, { count: broken ? 16 : event.weak ? 8 : 4, speed: broken ? 240 : 140, tint, texture: textures.relayRock ?? textures.shard,
-      scale: broken ? 0.3 : 0.2, gravity: 520, life: broken ? 0.8 : 0.45, spin: 6 });
-    if (event.weak) ring(event.x, event.y - 20, 40, 0xffe066, 0.25);
+    spawnDebris3D(event.x, event.y, { count: broken ? 18 : 7, color: tint, speed: broken ? 220 : 135 });
+    if (!purePixelFx) {
+      burst(event.x, event.y - 22, { count: broken ? 16 : event.weak ? 8 : 4, speed: broken ? 240 : 140, tint, texture: textures.relayRock ?? textures.shard,
+        scale: broken ? 0.3 : 0.2, gravity: 520, life: broken ? 0.8 : 0.45, spin: 6 });
+      if (event.weak) ring(event.x, event.y - 20, 40, 0xffe066, 0.25);
+    }
     // Refinement pass 2: the block's own baked chip / break burst over the rock particles.
     if (typeof elementFx?.prop === 'function') elementFx.prop({x: event.x, y: event.y, material: event.material, broken, weak: event.weak});
-    if (broken) { puff(event.x, event.y - 10, tint, 4, 1.4); camera.addTrauma(0.32); }
+    if (broken) { camera.addTrauma(0.32); }
     else camera.addTrauma(event.weak ? 0.12 : 0.05);
   }
   // An arc that starts its own path: Graphics.arc() alone joins its first point to the
@@ -984,7 +1087,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       const pulse = reducedMotion ? 0.7 : 0.55 + 0.35 * Math.sin(elapsed * (active ? 5 : 9));
       for (const zone of arena.zones) {
         if (purePixelFx) {
-          zoneGfx.circle(zone.x, zone.y, zone.radius).fill({ color: tint, alpha: active ? 0.1 + 0.04 * pulse : 0.05 }).stroke({ color: tint, width: active ? 2.5 : 1.5, alpha: active ? 0.85 : 0.55 });
+          if (!zoneSigil(zone, tint, active ? 0.85 : 0.42)) {
+            zoneGfx.circle(zone.x, zone.y, zone.radius).stroke({ color: tint, width: active ? 2 : 1.5, alpha: active ? 0.72 : 0.45 });
+          }
           continue;
         }
         if (active) {
@@ -1011,7 +1116,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       const active = sc.phase === 'ACTIVE';
       const pulse = reducedMotion ? 0.8 : 0.6 + 0.35 * Math.sin(elapsed * 7);
       if (purePixelFx) {
-        zoneGfx.circle(sc.x, sc.y, sc.radius).fill({ color: 0xffe066, alpha: active ? 0.14 : 0.06 }).stroke({ color: 0xffe066, width: active ? 3 : 2, alpha: active ? 0.92 : 0.65 });
+        if (!zoneSigil(sc, 0xffe066, active ? 0.9 : 0.5)) {
+          zoneGfx.circle(sc.x, sc.y, sc.radius).stroke({ color: 0xffe066, width: active ? 2.5 : 2, alpha: active ? 0.85 : 0.55 });
+        }
       } else {
         zoneGfx.circle(sc.x, sc.y, sc.radius).fill({ color: 0xffe066, alpha: active ? 0.18 + 0.08 * pulse : 0.08 });
         zoneGfx.circle(sc.x, sc.y, sc.radius).stroke({ color: 0xffe066, width: active ? 4 : 2.5, alpha: active ? 0.95 : 0.65 });
@@ -1051,25 +1158,31 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       });
     }
   };
-  const heavyHit = (amount, wx = null, wy = null, { angle = 0, guarded = false, side = null } = {}) => {
+  const heavyHit = (amount, wx = null, wy = null, { angle = 0, guarded = false, side = null, critical = false } = {}) => {
     if (reducedMotion || !(amount >= 1)) return;
+    // PbRank 4-tier Hit-Stop: Light 0ms / Medium 55ms / Heavy 65ms / Ultimate・Break・Parry 105ms
     const heavy = amount >= 28 && !guarded;
     const medium = amount >= 16 && !guarded;
     const light = amount >= 6 && !guarded;
-    if (heavy) {
-      hitStop = Math.max(hitStop, relayMode ? 0.112 : 0.085);
-      camera.addTrauma(0.46);
-      camera.focusBoost(1.048, 0.18);
+    if (critical) {
+      hitStop = Math.max(hitStop, 0.105);
+      camera.addTrauma(0.5);
+      camera.focusBoost(1.055, 0.2);
       if (relayMode && wx !== null && wy !== null) triggerImpactFrame(wx, wy, 0.068);
+      fightingHitSparks(wx, wy, angle, 8, true);
+    } else if (heavy) {
+      hitStop = Math.max(hitStop, relayMode ? 0.065 : 0.085);
+      camera.addTrauma(0.42);
+      camera.focusBoost(1.045, 0.16);
+      if (relayMode && wx !== null && wy !== null) triggerImpactFrame(wx, wy, 0.055);
       fightingHitSparks(wx, wy, angle, 7, true);
     } else if (medium) {
-      hitStop = Math.max(hitStop, 0.074);
-      camera.addTrauma(0.28);
-      camera.focusBoost(1.028, 0.14);
+      hitStop = Math.max(hitStop, 0.055);
+      camera.addTrauma(0.26);
+      camera.focusBoost(1.024, 0.12);
       fightingHitSparks(wx, wy, angle, 5, false);
     } else if (light) {
-      hitStop = Math.max(hitStop, 0.044);
-      camera.addTrauma(0.15);
+      camera.addTrauma(0.14);
       fightingHitSparks(wx, wy, angle, 3, false);
     }
     if (relayMode && side && !guarded && wx !== null && wy !== null) {
@@ -1191,13 +1304,21 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         case "GUARD_PARRY":
           if (purePixelFx) elementFx.parry?.({ x: event.x, y: event.y - 20 });
           else { ring(event.x, event.y - 20, 82, 0x7fe9ff, 0.38); ring(event.x, event.y - 20, 56, 0xffe066, 0.28); burst(event.x, event.y - 22, { count: 16, speed: 320, tint: 0x7fe9ff, life: 0.36 }); }
+          if (!reducedMotion) { hitStop = Math.max(hitStop, 0.105); triggerImpactFrame(event.x, event.y - 22, 0.068); }
           floatText(event.x, event.y - 78, t("fct.parry"), "crit");
           break;
         case "GUARD_BROKEN":
           if (purePixelFx) elementFx.hit?.({ x: event.x, y: event.y - 22, groundY: event.y, moveId: "quakeSlam", heavy: true });
           else { ring(event.x, event.y - 20, 74, 0xff5a3c, 0.38); burst(event.x, event.y - 22, { count: 18, speed: 340, tint: 0xffb72b, texture: textures.shard, gravity: 380, life: 0.45 }); }
+          if (!reducedMotion) { hitStop = Math.max(hitStop, 0.105); triggerImpactFrame(event.x, event.y - 22, 0.068); }
+          spawnDebris3D(event.x, event.y, { count: 10, color: 0xffb72b, speed: 210 });
           floatText(event.x, event.y - 72, t("fct.guardBreak"), "crit");
           camera.addTrauma(0.32);
+          break;
+        case "ENERGY_ORB_PICKUP":
+          if (purePixelFx) elementFx?.heal?.({ x: event.x, y: event.y - 14 });
+          else ring(event.x, event.y - 14, 54, 0x38bdf8, 0.35);
+          floatText(event.x, event.y - 68, t("fct.energyOrb"), "dodge");
           break;
         case "GUARD_MISS": if (!purePixelFx) puff(event.x, event.y - 10, 0x9aa4b0, 2, 0.7); break;
         case "STAT_BUFF":
@@ -1843,6 +1964,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     }
     environmentView?.update({ elapsed: ambientElapsed, reducedMotion, left, right, top, bottom, low: !rich, focus,reaction:crowd });
     interactionView.update({left,right,top,bottom,elapsed});
+    sigilSeen.clear();
     if (relayMode) drawArenaZones();
     if (bridgeLift >= 0) {
       bridgeLift += dt;
@@ -2075,6 +2197,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     drawStorm();
     atlas.endFrame(dt * 1000);
     updateParticles(dt);
+    updatePbRankEffects(dt);
     updateNumbers(dt);
     for (let i = ghosts.length - 1; i >= 0; i--) {
       const ghost = ghosts[i];
@@ -2224,7 +2347,6 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   }
   function drawMarks() {
     const g = marks;
-    sigilSeen.clear();
     g.blendMode = "add";
     g.clear();
     drawAimGuide(g);
@@ -2570,7 +2692,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       wallTexCache.clear();
       ground.destroy();
       textures.destroy();
-      live.length = 0; pool.length = 0; cellPool.length = 0; fans.length = 0;
+      live.length = 0; pool.length = 0; cellPool.length = 0; fans.length = 0; skidMarks.length = 0; debris3D.length = 0;
     }
   });
   } catch (error) {

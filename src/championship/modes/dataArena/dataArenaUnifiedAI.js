@@ -15,6 +15,41 @@ export function normalizeControlMode(mode) {
   return CONTROL_MODES.includes(mode) ? mode : "MANUAL";
 }
 
+/**
+ * 3-tier competitive real-time arena AI difficulty profiles (PbRank rhythm):
+ * controls decision cadence, attack pacing, lead-aim precision, dodge reflex,
+ * lateral strafing, and move-selection variance.
+ */
+export const AI_DIFFICULTIES = Object.freeze({
+  easy: Object.freeze({
+    decision: 0.46, decisionJitter: 0.20,
+    attackDelay: 2.15, attackJitter: 0.55,
+    aimError: 110, lead: 0.12,
+    dodgeChance: 0.12, dangerRadius: 110,
+    movement: 0.73, strafe: 0.20, choiceNoise: 0.80
+  }),
+  normal: Object.freeze({
+    decision: 0.28, decisionJitter: 0.13,
+    attackDelay: 1.50, attackJitter: 0.40,
+    aimError: 58, lead: 0.35,
+    dodgeChance: 0.32, dangerRadius: 150,
+    movement: 0.90, strafe: 0.34, choiceNoise: 0.40
+  }),
+  hard: Object.freeze({
+    decision: 0.16, decisionJitter: 0.08,
+    attackDelay: 1.04, attackJitter: 0.25,
+    aimError: 22, lead: 0.68,
+    dodgeChance: 0.62, dangerRadius: 190,
+    movement: 1.00, strafe: 0.46, choiceNoise: 0.22
+  })
+});
+
+export const AI_DIFFICULTY_IDS = Object.freeze(["easy", "normal", "hard"]);
+
+export function normalizeAiDifficulty(level) {
+  return Object.prototype.hasOwnProperty.call(AI_DIFFICULTIES, level) ? level : "normal";
+}
+
 export const DEFAULT_AI_SETTINGS = Object.freeze({
   autoAttack: true,
   autoGuard: true,
@@ -95,7 +130,7 @@ export function threatOfShot(shot, body, horizon = 0.45) {
 /** Scan hostile projectiles and soon-detonating zones for an immediate threat. */
 export function detectIncomingThreat({ body, hostileOwner, hostileTeam, projectiles, zones, threatSeen, horizon = 0.45 }) {
   for (const shot of projectiles) {
-    if (shot.dead || shot.owner !== hostileOwner || threatSeen?.has(shot.id)) continue;
+    if (shot.dead || shot.isWallShard || shot.owner !== hostileOwner || threatSeen?.has(shot.id)) continue;
     const hit = threatOfShot(shot, body, horizon);
     if (hit) {
       threatSeen?.add(shot.id);
@@ -164,8 +199,89 @@ export function chooseUnifiedGoal({
 }
 
 /**
+ * PbRank projectile-intercept dodge detector:
+ * Computes closest approach time `r = (s · v) / |v|²`. When `0 < r < 0.6s` and
+ * predicted miss distance `< body.radius + shot.radius + 18`, flags an immediate
+ * perpendicular dodge vector.
+ */
+export function pbRankInterceptDodge({ body, hostileOwner, projectiles, dangerRadius = 150, threatSeen = null }) {
+  for (const shot of projectiles) {
+    if (shot.dead || shot.isWallShard || shot.owner !== hostileOwner || threatSeen?.has(shot.id)) continue;
+    if (distance(shot.x, shot.y, body.x, body.y) > dangerRadius) continue;
+    const sx = body.x - shot.x;
+    const sy = body.y - shot.y;
+    const v2 = shot.vx * shot.vx + shot.vy * shot.vy;
+    if (v2 < 1) continue;
+    const r = (sx * shot.vx + sy * shot.vy) / v2;
+    if (r > 0 && r < 0.6 && Math.hypot(sx - shot.vx * r, sy - shot.vy * r) < (body.radius ?? 20) + (shot.radius ?? 12) + 18) {
+      threatSeen?.add(shot.id);
+      return { t: r, dirX: shot.vx, dirY: shot.vy, kind: "SHOT" };
+    }
+  }
+  return null;
+}
+
+/**
+ * PbRank obstacle corner-waypoint navigator:
+ * When line-of-sight to `target` is blocked by cover props, evaluates all four
+ * corners padded by `pad` px around intact cover props and picks the reachable
+ * waypoint minimizing `dist(body, c) + dist(c, target) + sightPenalty`.
+ */
+export function pbRankCornerWaypoint({ body, target, props = [], cell = 48, pad = 45, blocked, hasSight }) {
+  if (!body || !target || hasSight(body.x, body.y, target.x, target.y)) return null;
+  let best = null;
+  let bestCost = Infinity;
+  for (const prop of props) {
+    if (prop.destroyed) continue;
+    const x0 = prop.col * cell;
+    const y0 = prop.row * cell;
+    const x1 = (prop.col + (prop.width ?? 1)) * cell;
+    const y1 = (prop.row + (prop.height ?? 1)) * cell;
+    const corners = [
+      { x: x0 - pad, y: y0 - pad },
+      { x: x1 + pad, y: y0 - pad },
+      { x: x0 - pad, y: y1 + pad },
+      { x: x1 + pad, y: y1 + pad }
+    ];
+    for (const c of corners) {
+      if (blocked(c.x, c.y)) continue;
+      if (!hasSight(body.x, body.y, c.x, c.y)) continue;
+      const sightPenalty = hasSight(c.x, c.y, target.x, target.y) ? 0 : 250;
+      const cost = distance(body.x, body.y, c.x, c.y) + distance(c.x, c.y, target.x, target.y) + sightPenalty;
+      if (cost < bestCost) {
+        bestCost = cost;
+        best = c;
+      }
+    }
+  }
+  return best;
+}
+
+/**
+ * PbRank spacing & lateral-strafe movement vector:
+ * Keeps melee fighters close (~95 px), pulse fighters mid (~160 px), and ranged
+ * fighters at comfortable firing spacing (~320-360 px) with organic lateral strafe.
+ */
+export function pbRankSpacingVector({ body, target, idealDist = 280, strafeDir = 1, strafeWeight = 0.34, hasObjective = false }) {
+  const dx = target.x - body.x;
+  const dy = target.y - body.y;
+  const dist = Math.hypot(dx, dy) || 1;
+  const ux = dx / dist;
+  const uy = dy / dist;
+  let mx = hasObjective || dist > idealDist ? ux : dist < 0.65 * idealDist ? -ux : 0;
+  let my = hasObjective || dist > idealDist ? uy : dist < 0.65 * idealDist ? -uy : 0;
+  if (!hasObjective) {
+    mx += -uy * strafeDir * strafeWeight;
+    my += ux * strafeDir * strafeWeight;
+  }
+  const len = Math.hypot(mx, my) || 1;
+  return { x: mx / len, y: my / len, dist };
+}
+
+/**
  * Shared move picker used by BOTH rivals and AUTO-mode player fighters.
- * Factors in range, elemental matchup multiplier, target motion, and basic attack fallback.
+ * Uses PbRank contextual scoring (base power × dual-ring matchup × STAB × range
+ * affinity + heal/protect/buff/status triggers + choiceNoise perturbation).
  */
 export function pickUnifiedMove({
   body,
@@ -179,6 +295,10 @@ export function pickUnifiedMove({
   ultimateId = null,
   ultimateReady = false,
   taxonomyMult = null,
+  isStab = null,
+  moveArchetype = null,
+  incomingThreat = false,
+  choiceNoise = 0.35,
   random
 }) {
   if (ultimateReady && ultimateId) {
@@ -190,44 +310,51 @@ export function pickUnifiedMove({
       if (ok) return { id: ultimateId, ultimate: true };
     }
   }
-  const options = [];
-  for (const id of kitMoveIds) {
-    if (!canCast(body, id)) continue;
+  let best = null;
+  const foeHasStatus = Boolean(foe && ((foe.burn ?? 0) > 0 || (foe.poison ?? 0) > 0 || (foe.paralyze ?? 0) > 0 || (foe.root ?? 0) > 0 || (foe.sleep ?? 0) > 0));
+  const scoreMove = (id, isBasicSlot = false) => {
+    if (!canCast(body, id)) return null;
     const move = moveFor(id);
-    if (!move || move.type === "BARRIER" || move.type === "BLINK") continue;
-    const range = computeMoveReach(move);
-    if (dist > range) continue;
-    let weight = move.type === "ZONE"
-      ? (Math.hypot(foe.vx ?? 0, foe.vy ?? 0) < 120 ? 3 : 1.2)
-      : move.type === "LUNGE"
-        ? (dist < (move.distance ?? 240) ? 1.5 : 0)
-        : 2;
-    if (weight > 0 && typeof taxonomyMult === "function") {
-      const m = taxonomyMult(id);
-      if (m > 1.05) weight *= 1.65;
-      else if (m < 0.95) weight *= 0.65;
+    if (!move) return null;
+    const arch = typeof moveArchetype === "function" ? moveArchetype(id, move) : null;
+    const reach = computeMoveReach(move);
+    const isSelfMove = move.type === "BARRIER" || arch === "SELF_BUFF" || arch === "RECOVERY_SUPPORT" || arch === "PROTECT_COUNTER";
+    if (!isSelfMove && move.type !== "BLINK" && dist > reach + 12) return null;
+    let score = Math.max(12, move.damage ?? 22) * (move.count ? Math.min(2.2, 0.55 * move.count) : 1);
+    if (typeof taxonomyMult === "function" && !isSelfMove) {
+      score *= taxonomyMult(id);
     }
-    if (weight > 0) options.push({ id, weight, ultimate: false });
-  }
-  if (relayMode && basicId && canCast(body, basicId)) {
-    const basic = moveFor(basicId);
-    const reach = computeMoveReach(basic);
-    if (dist <= reach) {
-      let w = options.length ? 2.4 : 1.2;
-      if (typeof taxonomyMult === "function") {
-        const m = taxonomyMult(basicId);
-        if (m > 1.05) w *= 1.3;
-      }
-      options.push({ id: basicId, weight: w, ultimate: false });
+    if (typeof isStab === "function" && !isSelfMove && isStab(id)) {
+      score *= 1.35;
     }
+    if (move.type === "LUNGE" && dist > 180) score *= 0.55;
+    if (move.type === "NOVA" && dist > (move.radius ?? 140) + 20) score *= 0.5;
+    if (move.type === "ZONE" && Math.hypot(foe?.vx ?? 0, foe?.vy ?? 0) < 120) score *= 1.3;
+    if (arch === "RECOVERY_SUPPORT") {
+      score = (body.hp < body.maxHp * 0.5 && (body.healsUsed ?? 0) < 2) ? 170 : 0;
+    } else if (move.type === "BARRIER" || arch === "PROTECT_COUNTER") {
+      score = incomingThreat ? 200 : (dist < 260 && foe?.cast ? 95 : 0);
+    } else if (arch === "SELF_BUFF") {
+      score = ((body.atkStage ?? 0) < 2 && (body.buffsUsed ?? 0) < 2 && !incomingThreat) ? 48 : 0;
+    } else if (move.type === "BLINK") {
+      score = dist > 130 && dist <= reach + 80 ? 38 : 0;
+    } else if (move.onHit && !foeHasStatus) {
+      score += 14;
+    }
+    if (isBasicSlot) score *= 0.72; // Prefer real skills when off cooldown, fall back cleanly to basic
+    if (score <= 0) return null;
+    score *= 1 - 0.5 * choiceNoise + random() * choiceNoise;
+    return { id, score, ultimate: false, move, arch };
+  };
+  for (const id of kitMoveIds) {
+    const cand = scoreMove(id, false);
+    if (cand && (!best || cand.score > best.score)) best = cand;
   }
-  if (!options.length) return null;
-  let roll = random() * options.reduce((sum, o) => sum + o.weight, 0);
-  for (const option of options) {
-    roll -= option.weight;
-    if (roll <= 0) return option;
+  if (relayMode && basicId) {
+    const cand = scoreMove(basicId, true);
+    if (cand && (!best || cand.score > best.score)) best = cand;
   }
-  return options[options.length - 1];
+  return best;
 }
 
 /**

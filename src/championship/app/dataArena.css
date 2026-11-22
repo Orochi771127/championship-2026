@@ -1051,6 +1051,7 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 .da-tactical-bar__row { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
 .da-tactical-bar__label { font-size: calc(11.5px * var(--text-scale-hud, 1)); font-weight: 900; color: #1e293b; margin-right: 4px; }
 .da-tactical-bar__art.is-active { background: #4f46e5; color: #fff; border-color: #312e81; }
+.da-tactical-bar__diff.is-active { background: #0284c7; color: #fff; border-color: #075985; }
 .da-tactical-bar__toggle.is-active { background: #0284c7; color: #fff; border-color: #075985; }
 .da-tactical-bar__sys.is-active { background: #059669; color: #fff; border-color: #065f46; }
 .da-skill__arch { display: inline-flex; align-items: center; padding: 1px 5px; border-radius: 999px; font-size: calc(9.5px * var(--text-scale-hud, 1)); font-weight: 900;
@@ -1082,7 +1083,8 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
    Outer ring (r=166, 48x48; ult 58x58 at r=170): guard=180deg, dash=150deg, tactical=120deg, ult=90deg
    (>=16px radial air from inner ring, >=32px chord air along outer ring, >=36px open channel to left stick on 390px portrait). */
 .da-root:not([data-mode="RELAY"]) .da-tbtn--guard,
-.da-root:not([data-mode="RELAY"]) .da-tbtn--tactical { display: none; }
+.da-tbtn--tactical,
+.da-chip--tactical { display: none !important; }
 
 .da-root[data-mode="RELAY"] { --da-control-left: max(14px, env(safe-area-inset-left)); --da-control-right: max(14px, env(safe-area-inset-right)); --da-control-bottom: max(16px, env(safe-area-inset-bottom)); }
 .da-root[data-mode="RELAY"] .da-tbtn--basic { right: var(--da-control-right); bottom: var(--da-control-bottom); width: 72px; height: 72px; }

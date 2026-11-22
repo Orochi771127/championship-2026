@@ -5,7 +5,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createDataArenaSimulation } from "../src/championship/modes/dataArena/dataArenaSimulation.js";
 import { createRelayReplayRecorder, createRelayReplayPlayer } from "../src/championship/modes/dataArena/dataArenaReplay.js";
-import { GUARD_RULES, suddenDeathMultiplier } from "../src/championship/modes/dataArena/dataArenaUnifiedAI.js";
+import { GUARD_RULES, suddenDeathMultiplier, AI_DIFFICULTIES, pbRankInterceptDodge, pbRankCornerWaypoint, pbRankSpacingVector } from "../src/championship/modes/dataArena/dataArenaUnifiedAI.js";
 import { weatherDamageMultiplier } from "../src/championship/modes/dataArena/dataArenaTacticalArts.js";
 import { DATA_ARENA_RELAY } from "../src/championship/modes/dataArena/dataArenaRelay.js";
 import { RELAY_ROSTER } from "../src/championship/modes/dataArena/dataArenaRelayRoster.js";
@@ -1068,4 +1068,89 @@ test("phase 7 / remastered broadcast-grade battle & 666-move audio engine: maste
   assert.equal(turnAudio.playKo({ pan: 0.2 }), true);
   assert.ok(turnAudio.getDiagnostics().played >= 5);
   turnAudio.dispose();
+});
+
+test("phase 8 / PbRank overhaul (Batch A+B+C): decluttered lobby/HUD, native skill absorption, 3-tier AI, bench cleanse, energy orbs & directional hit-feel", () => {
+  // Batch A: Lobby & HUD declutter verification
+  const screenSrc = readFileSync(new URL("../src/championship/app/dataArenaScreen.js", import.meta.url), "utf8");
+  const cssSrc = readFileSync(new URL("../src/championship/app/dataArena.css", import.meta.url), "utf8");
+  assert.ok(screenSrc.includes('t("ai.diff.heading")'), "lobby renders clean single-row AI difficulty selector");
+  assert.ok(!screenSrc.includes('t("v2.system.heading")'), "lobby removed developer V2/legacy toggle");
+  assert.ok(!screenSrc.includes('t("tactical.heading")'), "lobby removed cluttered 8-pill Tactical Art bar");
+  assert.ok(!screenSrc.includes('t("ai.settings.heading")'), "lobby removed granular AI developer toggle bar");
+  assert.ok(cssSrc.includes(".da-tbtn--tactical,\n.da-chip--tactical { display: none !important; }"), "redundant tactical button hidden in CSS");
+
+  // Batch A: Native skill absorption (GROUND_SPIKES lays entry hazards, weather moves shift weather)
+  const absSim = startRelayFight({ moveSystem: "v2", controlMode: "MANUAL" });
+  const ast = absSim.getState();
+  ast.player.kit = { ...ast.player.kit, moves: ["shardVolley", "flameRing", "emberBolt"] };
+  ast.player.energy = 100;
+  absSim.step({ cast: 0, aimX: ast.rivals[0].x, aimY: ast.rivals[0].y });
+  for (let i = 0; i < 25; i++) absSim.step({});
+  assert.ok(absSim.getSnapshot().hazards.rival >= 1, "GROUND_SPIKES move natively lays enemy entry hazard");
+
+  ast.player.energy = 100; ast.player.recovery = 0;
+  absSim.step({ cast: 1, aimX: ast.rivals[0].x, aimY: ast.rivals[0].y });
+  for (let i = 0; i < 25; i++) absSim.step({});
+  assert.ok(Boolean(absSim.getSnapshot().weather.kind), "weather move natively activates arena weather");
+
+  // Batch B: PbRank 3-tier AI primitives (intercept dodge, corner-waypoint pathing, spacing)
+  assert.equal(Object.keys(AI_DIFFICULTIES).length, 3);
+  assert.ok(AI_DIFFICULTIES.hard.lead > AI_DIFFICULTIES.normal.lead && AI_DIFFICULTIES.normal.lead > AI_DIFFICULTIES.easy.lead);
+  const incoming = pbRankInterceptDodge({
+    body: { x: 500, y: 400, radius: 20 },
+    hostileOwner: "player",
+    projectiles: [{ id: 1, dead: false, owner: "player", x: 380, y: 400, vx: 500, vy: 0, radius: 12 }],
+    dangerRadius: 180
+  });
+  assert.ok(incoming && incoming.t > 0 && incoming.t < 0.6, "pbRankInterceptDodge detects incoming linear shot");
+  const receding = pbRankInterceptDodge({
+    body: { x: 500, y: 400, radius: 20 },
+    hostileOwner: "player",
+    projectiles: [{ id: 2, dead: false, owner: "player", x: 380, y: 400, vx: -500, vy: 0, radius: 12 }],
+    dangerRadius: 180
+  });
+  assert.equal(receding, null, "pbRankInterceptDodge ignores receding shots");
+
+  const corner = pbRankCornerWaypoint({
+    body: { x: 200, y: 200 },
+    target: { x: 500, y: 200 },
+    props: [{ col: 6, row: 3, width: 2, height: 2, destroyed: false }],
+    cell: 48,
+    pad: 45,
+    blocked: () => false,
+    hasSight: (x0, y0, x1, y1) => !(Math.abs(y0 - 200) < 20 && Math.abs(y1 - 200) < 20 && x0 < 300 && x1 > 400)
+  });
+  assert.ok(corner && Math.abs(corner.y - 200) > 20, "pbRankCornerWaypoint routes around cover prop corners");
+
+  const spFar = pbRankSpacingVector({ body: { x: 0, y: 0 }, target: { x: 500, y: 0 }, idealDist: 280, strafeDir: 1, strafeWeight: 0.34 });
+  assert.ok(spFar.x > 0.7, "pbRankSpacingVector advances when beyond ideal range");
+  const spClose = pbRankSpacingVector({ body: { x: 0, y: 0 }, target: { x: 100, y: 0 }, idealDist: 280, strafeDir: 1, strafeWeight: 0.34 });
+  assert.ok(spClose.x < -0.7, "pbRankSpacingVector backs off when inside 0.65x ideal range");
+
+  // Batch B: Bench 6s cleanse + periodic Energy Orb pickup + aiDifficulty config
+  const pbSim = startRelayFight({ moveSystem: "v2", controlMode: "MANUAL", aiDifficulty: "hard" });
+  assert.equal(pbSim.getSnapshot().aiDifficulty, "hard");
+  const pst = pbSim.getState();
+  pst.relay.team[1].burn = 5;
+  pst.relay.team[1].poison = 5;
+  pst.relay.team[1].benchTime = 5.95;
+  for (let i = 0; i < 6; i++) pbSim.step({});
+  assert.equal(pst.relay.team[1].burn, 0, "6s bench cleanse purifies burn off-field");
+  assert.equal(pst.relay.team[1].poison, 0, "6s bench cleanse purifies poison off-field");
+
+  pst.player.energy = 40;
+  pst.player.cooldowns[pst.player.kit.moves[0]] = 4.0;
+  pst.energyOrbs.push({ id: 999, x: pst.player.x + 8, y: pst.player.y, bornAt: pst.time });
+  pbSim.step({});
+  const orbEvs = pbSim.drainEvents();
+  assert.ok(orbEvs.some((e) => e.type === "ENERGY_ORB_PICKUP" && e.side === "player"), "stepping on Arena Energy Orb triggers ENERGY_ORB_PICKUP");
+  assert.ok(pst.player.energy >= 68, "Energy Orb restores +28 TP");
+  assert.ok(pst.player.cooldowns[pst.player.kit.moves[0]] <= 2.6, "Energy Orb trims active move cooldowns by 1.5s");
+
+  // Batch C: Directional hurtTimer (0.23s) + PbRank hitstun + Manual Parry +18 TP reward
+  pbSim.internals.hurtPlayer(24, "RBOLT", pst.player.x + 120, pst.player.y);
+  assert.ok(pst.player.hurtTimer > 0.2, "unguarded hit sets 230ms directional hurtTimer");
+  assert.ok(pst.player.hitDirX < -0.9, "hitDir points away from attacker");
+  assert.ok(pst.player.hitstun >= 0.12 && pst.player.hitstun <= 0.20, "PbRank hitstun clamped in [0.12, 0.20]s");
 });

@@ -48,7 +48,7 @@ import { elementChartButton } from './elementChartModal.js';
 import { loadOriginalVfxCellArt } from '../presentation/vfx/originalVfxCellArt.js';
 import { dataArenaEntries, dataArenaEntryUsable, dataArenaPartnerPower } from '../modes/dataArena/dataArenaEligibility.js';
 import { createActionPortrait, setActionPortrait, warmActionPortraits } from "../presentation/juicy/actionPortrait.js";
-import { CONTROL_MODES, DEFAULT_AI_SETTINGS } from "../modes/dataArena/dataArenaUnifiedAI.js";
+import { CONTROL_MODES, AI_DIFFICULTY_IDS, DEFAULT_AI_SETTINGS } from "../modes/dataArena/dataArenaUnifiedAI.js";
 import { DATA_ARENA_TACTICAL_ARTS, TACTICAL_ART_IDS, tacticalArtById } from "../modes/dataArena/dataArenaTacticalArts.js";
 import { createRelayReplayRecorder, createRelayReplayPlayer } from "../modes/dataArena/dataArenaReplay.js";
 import { resolveMoveSpecV2 } from "../modes/dataArena/dataArenaMoveCatalogV2.js";
@@ -249,6 +249,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   const keys = new Set();
   const latch = { dash: false, guard: false, tactical: false, surge: false, ride: false, cast: null, ult: false, castAuto: false, castAim: null, switchPartner: false, burst: false, overLimit: false };
   let controlModePref = "MANUAL";
+  let aiDifficultyPref = "normal";
   let tacticalArtPref = "rallyCry";
   let aiSettingsPref = { ...DEFAULT_AI_SETTINGS };
   let moveSystemPref = (() => {
@@ -409,6 +410,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   const dashButton = button("da-tbtn da-tbtn--dash", t("touch.dash"), () => {}, signal);
   const guardTouchButton = button("da-tbtn da-tbtn--guard", t("relay.touch.guard"), () => {}, signal);
   const tacticalTouchButton = button("da-tbtn da-tbtn--tactical", t("relay.touch.tactical"), () => {}, signal);
+  tacticalTouchButton.hidden = true;
   const surgeButton = button("da-tbtn da-tbtn--surge", t("touch.surge"), () => {}, signal);
   const rideButton = button("da-tbtn da-tbtn--ride", t("touch.ride"), () => {}, signal);
   const switchButton = button("da-tbtn da-tbtn--switch", t("relay.switch"), () => {}, signal);
@@ -612,7 +614,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     hudRefs.guard = button("da-chip da-chip--guard", t("relay.guard"), () => { if (root.dataset.state === "PLAY") latch.guard = true; }, signal);
     hudRefs.guard.hidden = gameMode !== "RELAY";
     hudRefs.tacticalArt = button("da-chip da-chip--tactical", "", () => { if (root.dataset.state === "PLAY") latch.tactical = true; }, signal);
-    hudRefs.tacticalArt.hidden = gameMode !== "RELAY";
+    hudRefs.tacticalArt.hidden = true;
     hudRefs.controlMode = button("da-chip da-chip--mode", t(`relay.control.${sim?.getControlMode?.() ?? controlModePref}`), () => { if (root.dataset.state === "PLAY") cycleControlMode(); }, signal);
     hudRefs.controlMode.title = t("relay.control.hint");
     hudRefs.controlMode.hidden = gameMode !== "RELAY";
@@ -1245,6 +1247,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         case "BOSS_SHIELD_DOWN": tactical(t("toast.shieldDown"), { tone: "good" }); break;
         case "LEVEL_UP": audio?.play("level"); break;
         case "PICKUP": audio?.play("pickup"); break;
+        case "ENERGY_ORB_PICKUP": audio?.play("pickup"); break;
         case "CHEER": audio?.play("cheer"); tactical(t("hud.cheer"), { tone: "good", key: "cheer" }); break;
         case "CROWD": if (event.source !== "BOSS_DOWN") audio?.play("cheer"); break;
         case "PHASE_WARNING":
@@ -1628,6 +1631,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     // A sponsor contract armed in the battle menu takes its stake as a tournament or relay starts (AWAKENING_OVERDRIVE_20261109).
     const makeConfig = (rivalBoostPercent) => ({ seed: matchSeed, partnerId, quality, mode: gameMode,
       controlMode: gameMode === "RELAY" && typeof controlModePref !== "undefined" ? controlModePref : "MANUAL",
+      aiDifficulty: gameMode === "RELAY" && typeof aiDifficultyPref !== "undefined" ? aiDifficultyPref : "normal",
       aiSettings: gameMode === "RELAY" && typeof aiSettingsPref !== "undefined" ? { ...aiSettingsPref } : null,
       tacticalArt: gameMode === "RELAY" && typeof tacticalArtPref !== "undefined" ? tacticalArtPref : null,
       moveSystem: gameMode === "RELAY" && typeof moveSystemPref !== "undefined" ? moveSystemPref : "legacy",
@@ -2274,52 +2278,23 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       const side = el("div", "da-dock__side");
       if (gameMode === "RELAY") {
         side.append(resonanceStrip(factionResonance(teamIds().map((id) => speciesTaxonomyForId(relayPartner(id)?.speciesId)?.faction))));
-        // Phase 2: Tactical Art picker (F key) + Granular AI toggles
-        const tacWrap = el("div", "da-tactical-bar");
-        const tacRow = el("div", "da-tactical-bar__row");
-        tacRow.append(el("span", "da-tactical-bar__label", t("tactical.heading")));
-        for (const artId of TACTICAL_ART_IDS) {
-          const btn = button("da-chip-btn da-tactical-bar__art", t(`tactical.${artId}`), () => {
-            tacticalArtPref = artId;
-            previewMoveId = artId;
+        // Clean PbRank-style lobby selector: single-row AI difficulty only (zero bolted-on Tactical Arts or legacy toggles!).
+        const diffWrap = el("div", "da-tactical-bar");
+        const diffRow = el("div", "da-tactical-bar__row");
+        diffRow.append(el("span", "da-tactical-bar__label", t("ai.diff.heading")));
+        for (const lvl of AI_DIFFICULTY_IDS) {
+          const dbtn = button("da-chip-btn da-tactical-bar__diff", t(`ai.diff.${lvl}`), () => {
+            if (aiDifficultyPref === lvl) return;
+            aiDifficultyPref = lvl;
             tick(); refresh();
           }, signal);
-          btn.dataset.art = artId;
-          btn.title = t(`tactical.${artId}.desc`);
-          btn.setAttribute("aria-checked", String(tacticalArtPref === artId));
-          btn.classList.toggle("is-active", tacticalArtPref === artId);
-          tacRow.appendChild(btn);
+          dbtn.dataset.aiDifficulty = lvl;
+          dbtn.setAttribute("aria-checked", String(aiDifficultyPref === lvl));
+          dbtn.classList.toggle("is-active", aiDifficultyPref === lvl);
+          diffRow.appendChild(dbtn);
         }
-        const aiRow = el("div", "da-tactical-bar__row");
-        aiRow.append(el("span", "da-tactical-bar__label", t("ai.settings.heading")));
-        for (const key of ["autoAttack", "autoGuard", "inputBuffer"]) {
-          const tog = button("da-chip-btn da-tactical-bar__toggle", t(`ai.settings.${key}`), () => {
-            aiSettingsPref = { ...aiSettingsPref, [key]: !aiSettingsPref[key] };
-            tick(); refresh();
-          }, signal);
-          tog.dataset.aiKey = key;
-          tog.classList.toggle("is-active", aiSettingsPref[key] !== false);
-          tog.setAttribute("aria-pressed", String(aiSettingsPref[key] !== false));
-          aiRow.appendChild(tog);
-        }
-        const sysRow = el("div", "da-tactical-bar__row");
-        sysRow.append(el("span", "da-tactical-bar__label", t("v2.system.heading")));
-        for (const sys of ["v2", "legacy"]) {
-          const sbtn = button("da-chip-btn da-tactical-bar__sys", t(`v2.system.${sys}`), () => {
-            if (moveSystemPref === sys) return;
-            moveSystemPref = sys;
-            tick(); refresh();
-          }, signal);
-          sbtn.dataset.moveSystem = sys;
-          sbtn.classList.toggle("is-active", moveSystemPref === sys);
-          sbtn.setAttribute("aria-pressed", String(moveSystemPref === sys));
-          sysRow.appendChild(sbtn);
-        }
-        tacWrap.append(sysRow, tacRow, aiRow);
-        if (previewMoveId && DATA_ARENA_TACTICAL_ARTS[previewMoveId]) {
-          tacWrap.appendChild(buildMovePreviewBox(previewMoveId, partnerId));
-        }
-        side.appendChild(tacWrap);
+        diffWrap.appendChild(diffRow);
+        side.appendChild(diffWrap);
       }
       const rental = teamIds().some((id) => entryOf(gameMode, id)?.entry === "RENTAL");
       if (rental) side.append(el("p", "da-rental-note", t("entry.rentalHint")));

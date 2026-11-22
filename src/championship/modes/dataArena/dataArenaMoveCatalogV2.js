@@ -202,13 +202,13 @@ export function resolveMoveSpecV2(moveId, baseMove = null) {
     const type = baseMove?.type ?? (sig?.melee ? "LUNGE" : "BOLT");
     const rawPiece = choreo?.contact?.piece ?? "";
     const isExplicitShot = /(彈|球|珠|火球|妖火|鬼火|神火|飛彈|導彈|投射|砲|炮|光束|射線|吐息|雷射)$/.test(name);
-    // Priority 1: Support, Shield Walls, Buffs
-    if (/癒|療|回復|治療|再生|祝福|聖療|甦醒/.test(name)) v2Archetype = "RECOVERY_SUPPORT";
-    else if (/盾|壁|護|屏障|結界|鐵壁|光牆|壁壘/.test(name) || type === "BARRIER") v2Archetype = "PROTECT_COUNTER";
-    else if (/勉|鼓舞|激勵|增幅|蓄力|凝聚|戰舞|劍舞|龍舞|氣合|威嚇|祈願|強化|祈禱/.test(name)) v2Archetype = "SELF_BUFF";
+    // Priority 1: Support, Shield Walls, Buffs (absorbs former Tactical Arts cleanly into native 666 moves!)
+    if (/癒|療|回復|恢復|治療|再生|祝福|聖療|甦醒|光合|晨光|吸取|吸血|回春/.test(name)) v2Archetype = "RECOVERY_SUPPORT";
+    else if (/盾|壁|護|屏障|結界|鐵壁|光牆|壁壘|反擊|鏡面|守住/.test(name) || type === "BARRIER") v2Archetype = "PROTECT_COUNTER";
+    else if (/勉|鼓舞|激勵|增幅|蓄力|凝聚|戰舞|劍舞|龍舞|氣合|威嚇|祈願|強化|祈禱|冥想|充能|沸騰|超載/.test(name)) v2Archetype = "SELF_BUFF";
     // Priority 2: Signature 3D Volumetric Moves (Burrow, Ground Spikes, Waves, Tornado/Storm Vortexes) & Ranged Beams/Volleys/Meteors
     else if (/鑽地|潛地|挖洞|地底|地行|遁地|穿地|潛襲|潛行|掘|伏擊|潛影|潛突|深潛/.test(name)) v2Archetype = "BURROW_AMBUSH";
-    else if (/地刺|尖石|岩棘|岩刺|石棘|石筍|冰柱|冰棘|荊棘|藤刺|棘刺|根刺|破土|突岩|裂岩|岩柱|岩槍|碎岩|刺突|地牙|岩牙|冰牙|根芽/.test(name)) v2Archetype = "GROUND_SPIKES";
+    else if (/地刺|尖石|岩棘|岩刺|石棘|石筍|冰柱|冰棘|荊棘|藤刺|棘刺|根刺|破土|突岩|裂岩|岩柱|岩槍|碎岩|刺突|地牙|岩牙|冰牙|根芽|撒菱|毒菱|地釘|陷阱/.test(name)) v2Archetype = "GROUND_SPIKES";
     else if (/旋風|龍捲|颶風|風暴|裂風|渦|漩|黑洞|吞噬|吹雪|藤縛|束縛|領域|牢籠/.test(name)) v2Archetype = "VORTEX_PULL";
     else if (/浪|潮|海嘯|洪|濤|沖流|巨浪|奔流/.test(name) && !/刃|斬/.test(name) || type === "WAVE") v2Archetype = "DRAG_WAVE";
     else if (/砲|炮|光束|射線|吐息|雷射|死光|貫光|極光|魔光|雷砲/.test(name) || type === "LANCE") v2Archetype = "STREAM_BEAM";
@@ -338,12 +338,16 @@ export function resolveMoveSpecV2(moveId, baseMove = null) {
     surfRider: Boolean(moveId === "surfRush" || /衝浪|踏浪|乘浪/.test(name) || (v2Archetype === "DRAG_WAVE" && (baseMove?.type === "LUNGE" || sig?.melee))),
     pullForce: v2Archetype === "VORTEX_PULL" ? 235 : 0,
     flurryHits: v2Archetype === "FLURRY_COMBO" ? 3 : 0,
+    beamTether: v2Archetype === "STREAM_BEAM",
+    laysHazard: Boolean(v2Archetype === "GROUND_SPIKES" || /菱|釘|陷阱|地雷|隱形岩|撒/.test(name)),
+    spawnsDecoy: Boolean(/替身|分身|幻影|殘影|鏡像|假身|迷幻/.test(name)),
+    shiftsWeather: Boolean(/烈日|晴天|祈雨|暴雨|豪雨|吹雪|冰雹|暴風雪|沙暴|砂嵐|沙塵/.test(name) || ["whiteout", "flameRing", "coreNova", "shardStorm", "vortex"].includes(moveId)),
     flightLook,
     releaseLook,
     contactLook,
     groundLook,
     scale: choreo?.contact?.scale ?? (sig?.tier === "ultimate" ? 1.35 : 1.0),
-    hitStopMs: choreo?.hitStopMs ?? (sig?.tier === "ultimate" ? 85 : 50)
+    hitStopMs: choreo?.hitStopMs ?? (sig?.tier === "ultimate" ? 105 : ["GUARD_BREAK_SLAM", "LEAP_SLAM", "GRAB_SLAM", "TELEKINESIS_SLAM", "BURROW_AMBUSH"].includes(v2Archetype) ? 65 : 55)
   });
 
   cache.set(key, spec);
