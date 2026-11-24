@@ -1698,6 +1698,16 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           ring(event.x, event.y, event.radius, event.team === "player" ? 0x6ff7ff : 0xff5a3c, 0.35);
           burst(event.x, event.y, { count: 12, speed: 260, tint: state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xd8f6ff : event.effect === "IGNITE" ? 0xff9a3c : 0xbff4ff, gravity: 260, life: 0.5 }); camera.addTrauma(0.18);
           if (state.gameMode === 'RELAY') relayImpact(event.x, event.y, relayLook(event.moveId, event.team)); break;
+        case "CAST_TELEGRAPH":
+          if (purePixelFx) {
+            elementFx.telegraph?.({ x: event.x, y: event.y, angle: event.angle ?? 0, shape: event.shape, radius: event.radius, range: event.range, team: event.team, moveId: event.moveId });
+          }
+          break;
+        case "DEPLOY_SHIELD":
+          if (purePixelFx) {
+            elementFx.deployShield?.({ x: event.x, y: event.y, team: event.team });
+          }
+          break;
         case "BARRIER_UP":
           if (purePixelFx) {
             elementFx.buff?.({ x: event.x, y: event.y - 16, paletteKey: elementFx.look?.(event.moveId)?.paletteKey ?? "light", piece: "buff-def" });

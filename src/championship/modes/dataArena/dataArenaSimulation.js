@@ -45,7 +45,7 @@ import {
   DATA_ARENA_TACTICAL_ARTS, TACTICAL_ART_IDS,
   tacticalArtById, defaultTacticalArtForElement, moveCombatTraits, speedScaledDodgeChance
 } from './dataArenaTacticalArts.js';
-import { normalizeMoveSystem, resolveMoveSpecV2 } from './dataArenaMoveCatalogV2.js';
+import { normalizeMoveSystem, resolveMoveSpecV2, calibrateV2Move } from './dataArenaMoveCatalogV2.js';
 import {
   normalizeCanonicalElement, AILMENT_RULES, SURFACE_KINDS, inferMoveAilment,
   inferMoveSurfacePatch, resolveSurfaceReaction,
@@ -92,7 +92,10 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   const relayMode = mode === "RELAY";
   const survivalMode = mode === "SURVIVAL";
   const tournamentMode = mode === "TOURNAMENT" || relayMode;
-  const moveFor = (id, ultimate = false) => relayMode ? relayMove(id, ultimate) : DATA_ARENA_MOVES[id];
+  const moveFor = (id, ultimate = false) => {
+    const base = relayMode ? relayMove(id, ultimate) : DATA_ARENA_MOVES[id];
+    return v2Mode && base ? calibrateV2Move(id, base, { ultimate }) : base;
+  };
   const dashCooldown = tournamentMode ? DATA_ARENA_TOURNAMENT.dashCooldown : DATA_ARENA_PLAYER.dash.cooldown;
   const hasMate = !tournamentMode;
   const map = relayMode ? relayBattleMap(relayArenaId,portrait) : tournamentMode ? DATA_ARENA_DUEL_MAP : DATA_ARENA_MAP;
@@ -1364,6 +1367,19 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     else if (move.type === "ZONE") addTelegraph({ ...telegraph, kind: "CIRCLE", x: targetX, y: targetY, radius: move.radius, danger: caster.team !== "player" });
     else if (move.type === "NOVA") addTelegraph({ ...telegraph, kind: "CIRCLE", x: caster.x, y: caster.y, radius: move.radius, danger: caster.team !== "player" });
     emit({ type: ultimate ? "ULT_CAST" : "CAST", actionId: caster.cast.actionId, casterId: caster.id, team: caster.team, moveId, moveType: move.type, windup: move.windup, recovery: move.recovery, x: caster.x, y: caster.y, angle });
+    // PB-Rank Wave 1: emit structured ground telegraph event for baked 00GameDevs circle/sector/rect indicators!
+    if (v2Mode && (move.energy ?? 0) > 0 && (move.windup ?? 0) >= 0.14) {
+      const v2Spec = resolveMoveSpecV2(moveId, move);
+      if (v2Spec.telegraphShape && v2Spec.telegraphShape !== "none") {
+        const atTarget = v2Spec.telegraphShape === "circle" && (move.type === "ZONE" || ["METEOR_RAIN", "VORTEX_PULL", "TELEKINESIS_SLAM", "LEAP_SLAM"].includes(v2Spec.v2Archetype));
+        emit({
+          type: "CAST_TELEGRAPH", actionId: caster.cast.actionId, casterId: caster.id, team: caster.team,
+          moveId, shape: v2Spec.telegraphShape,
+          x: atTarget ? targetX : caster.x, y: atTarget ? targetY : caster.y,
+          angle, radius: v2Spec.combatRadius, range: v2Spec.combatRange, windup: move.windup, ultimate
+        });
+      }
+    }
     if (caster.cast.windup <= 0) finishCast(caster);
     return true;
   }
@@ -2818,119 +2834,127 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
           }
         }
       }
-      projectile.x += projectile.vx * DT; projectile.y += projectile.vy * DT;
-      if (projectile.life > DATA_ARENA_PROJECTILES.maxLifetime || projectile.x < -40 || projectile.y < -40
-        || projectile.x > worldWidth + 40 || projectile.y > worldHeight + 40) { projectile.dead = true; continue; }
-      const c = grid.cellOf(projectile.x), r = grid.cellOf(projectile.y);
-      if (projectile.range) {
-        projectile.travelled += Math.hypot(projectile.vx, projectile.vy) * DT;
-        if (projectile.travelled >= projectile.range) { projectile.dead = true; terrainEffect(projectile); continue; }
-      }
-      if (grid.inBounds(c, r) && grid.blocksLaser(grid.index(c, r))) {
-        const before=events.length,prop=grid.propAtCell(grid.index(c,r));
-        const strikeAngle = Math.atan2(projectile.vy, projectile.vx);
-        const cause = projectile.onTerrain==="IGNITE"||projectile.kind==="EMBER"?"FIRE":"PROJECTILE";
-        const pTeam = projectile.owner === "player" ? "player" : "rival";
-        reactAndShatterWall(prop, projectile.damage, projectile.attackElement ?? projectile.arenaElement, projectile.moveId, pTeam, strikeAngle, { melee: false, cause });
-        if(projectile.onTerrain==="IGNITE"||projectile.kind==="EMBER")grid.ignite(grid.index(c,r),events,"PROJECTILE");
-        if(projectile.kind==="WAVE"||projectile.kind==="TIDE"||projectile.onTerrain==="FREEZE")grid.applyWater(projectile.x,projectile.y,.8,events);
-        for(let k=before;k<events.length;k++)events[k].t=state.time;
-        projectile.dead = true;
-        terrainEffect(projectile, -1);
-        emit({ type: "SHOT_BLOCKED", kind: projectile.kind, x: projectile.x, y: projectile.y });
-        continue;
-      }
-      // Cross-ring mid-flight combos: evolve active vortexes, detonate/freeze/electrify ground surfaces, & fan flames along wind!
-      if (relayMode && !projectile.isWallShard) {
-        const pTeam = projectile.owner === "player" ? "player" : "rival";
-        const pAngle = Math.atan2(projectile.vy, projectile.vx);
-        const pEl = projectile.arenaElement ?? projectile.attackElement;
-        if (tryTransformVortexAt(projectile.x, projectile.y, pEl, projectile.moveId, pTeam)) {
-          if (projectile.pierce <= 0 && projectile.kind !== "WAVE") { projectile.dead = true; continue; }
+      // PB-Rank Wave 1: 8px anti-tunneling sub-stepping so fast beams/darts never skip past thin cover or fighters!
+      const totalDx = projectile.vx * DT, totalDy = projectile.vy * DT;
+      const stepDist = Math.hypot(totalDx, totalDy);
+      const subSteps = Math.max(1, Math.min(12, Math.ceil(stepDist / 8)));
+      const subDx = totalDx / subSteps, subDy = totalDy / subSteps, subDist = stepDist / subSteps;
+      for (let sub = 0; sub < subSteps && !projectile.dead; sub++) {
+        projectile.x += subDx; projectile.y += subDy;
+        if (projectile.life > DATA_ARENA_PROJECTILES.maxLifetime || projectile.x < -40 || projectile.y < -40
+          || projectile.x > worldWidth + 40 || projectile.y > worldHeight + 40) { projectile.dead = true; break; }
+        const c = grid.cellOf(projectile.x), r = grid.cellOf(projectile.y);
+        if (projectile.range) {
+          projectile.travelled += subDist;
+          if (projectile.travelled >= projectile.range) { projectile.dead = true; terrainEffect(projectile); break; }
         }
-        if (triggerSurfaceReactionAt(projectile.x, projectile.y, pEl, projectile.moveId, pTeam, pAngle) > 0) {
-          const canon = normalizeCanonicalElement(pEl, projectile.moveId);
-          if (canon !== "WIND" && projectile.pierce <= 0 && projectile.kind !== "WAVE") { projectile.dead = true; continue; }
+        if (grid.inBounds(c, r) && grid.blocksLaser(grid.index(c, r))) {
+          const before=events.length,prop=grid.propAtCell(grid.index(c,r));
+          const strikeAngle = Math.atan2(projectile.vy, projectile.vx);
+          const cause = projectile.onTerrain==="IGNITE"||projectile.kind==="EMBER"?"FIRE":"PROJECTILE";
+          const pTeam = projectile.owner === "player" ? "player" : "rival";
+          reactAndShatterWall(prop, projectile.damage, projectile.attackElement ?? projectile.arenaElement, projectile.moveId, pTeam, strikeAngle, { melee: false, cause });
+          if(projectile.onTerrain==="IGNITE"||projectile.kind==="EMBER")grid.ignite(grid.index(c,r),events,"PROJECTILE");
+          if(projectile.kind==="WAVE"||projectile.kind==="TIDE"||projectile.onTerrain==="FREEZE")grid.applyWater(projectile.x,projectile.y,.8,events);
+          for(let k=before;k<events.length;k++)events[k].t=state.time;
+          projectile.dead = true;
+          terrainEffect(projectile, -1);
+          emit({ type: "SHOT_BLOCKED", kind: projectile.kind, x: projectile.x, y: projectile.y });
+          break;
         }
-        if (grid.inBounds(c, r) && grid.fire[grid.index(c, r)] > 0 && normalizeCanonicalElement(pEl, projectile.moveId) === "WIND") {
-          const beforeSpread = events.length;
-          for (const stepDist of [cell, cell * 2]) {
-            const fx = projectile.x + Math.cos(pAngle) * stepDist;
-            const fy = projectile.y + Math.sin(pAngle) * stepDist;
-            grid.igniteAt(fx, fy, events, "WIND_SPREAD");
+        // Cross-ring mid-flight combos: evolve active vortexes, detonate/freeze/electrify ground surfaces, & fan flames along wind!
+        if (relayMode && !projectile.isWallShard) {
+          const pTeam = projectile.owner === "player" ? "player" : "rival";
+          const pAngle = Math.atan2(projectile.vy, projectile.vx);
+          const pEl = projectile.arenaElement ?? projectile.attackElement;
+          if (tryTransformVortexAt(projectile.x, projectile.y, pEl, projectile.moveId, pTeam)) {
+            if (projectile.pierce <= 0 && projectile.kind !== "WAVE") { projectile.dead = true; break; }
           }
-          for (let k = beforeSpread; k < events.length; k++) events[k].t = state.time;
-        }
-      }
-      if (projectile.kind === "WAVE") {
-        const before = events.length;
-        if (grid.applyWater(projectile.x, projectile.y, 0.8, events) > 0) chain("STEAM", projectile.x, projectile.y);
-        for (let k = before; k < events.length; k++) events[k].t = state.time;
-        // RELAY waves meet shots in relayClash() (steam against fire, both ways).
-        if (!relayMode) for (const other of state.projectiles) {
-          if (!other.dead && other.owner === "player" && distance(other.x, other.y, projectile.x, projectile.y) <= other.radius + projectile.radius) {
-            other.dead = true; emit({ type: "CANCEL", rule: "WAVE_SWALLOWS_SHOT", x: other.x, y: other.y });
+          if (triggerSurfaceReactionAt(projectile.x, projectile.y, pEl, projectile.moveId, pTeam, pAngle) > 0) {
+            const canon = normalizeCanonicalElement(pEl, projectile.moveId);
+            if (canon !== "WIND" && projectile.pierce <= 0 && projectile.kind !== "WAVE") { projectile.dead = true; break; }
+          }
+          if (grid.inBounds(c, r) && grid.fire[grid.index(c, r)] > 0 && normalizeCanonicalElement(pEl, projectile.moveId) === "WIND") {
+            const beforeSpread = events.length;
+            for (const stepDist2 of [cell, cell * 2]) {
+              const fx = projectile.x + Math.cos(pAngle) * stepDist2;
+              const fy = projectile.y + Math.sin(pAngle) * stepDist2;
+              grid.igniteAt(fx, fy, events, "WIND_SPREAD");
+            }
+            for (let k = beforeSpread; k < events.length; k++) events[k].t = state.time;
           }
         }
-      }
-      if ((projectile.kind === "EMBER" || projectile.onTerrain === "IGNITE") && grid.inBounds(c, r) && grid.ice[grid.index(c, r)] > 0) {
-        projectile.dead = true;
-        const before = events.length;
-        grid.meltAt(projectile.x, projectile.y, DATA_ARENA_GRID_RULES.emberIceMelt, events);
-        for (let k = before; k < events.length; k++) events[k].t = state.time;
-        continue;
-      }
-      if (projectile.owner === "player") { updatePlayerShot(projectile); continue; }
-      if (projectile.owner !== "mate" && player.barrier > 0 && barrierBlocks(projectile)) {
-        projectile.dead = true;
-        state.stats.barrierBlocks++;
-        emit({ type: "CANCEL", rule: "BARRIER_BLOCKS_SHOT", x: projectile.x, y: projectile.y });
-        continue;
-      }
-      if (projectile.owner === "mate") {
-        for (const other of state.projectiles) {
-          if (other.dead || other.kind !== "EMBER") continue;
-          if (distance(other.x, other.y, projectile.x, projectile.y) <= other.radius + projectile.radius) {
-            other.dead = true; projectile.dead = true;
-            state.stats.embersQuenched++;
-            emit({ type: "CANCEL", rule: "WATER_QUENCHES_EMBER", x: other.x, y: other.y });
-            break;
+        if (projectile.kind === "WAVE") {
+          const before = events.length;
+          if (grid.applyWater(projectile.x, projectile.y, 0.8, events) > 0) chain("STEAM", projectile.x, projectile.y);
+          for (let k = before; k < events.length; k++) events[k].t = state.time;
+          // RELAY waves meet shots in relayClash() (steam against fire, both ways).
+          if (!relayMode) for (const other of state.projectiles) {
+            if (!other.dead && other.owner === "player" && distance(other.x, other.y, projectile.x, projectile.y) <= other.radius + projectile.radius) {
+              other.dead = true; emit({ type: "CANCEL", rule: "WAVE_SWALLOWS_SHOT", x: other.x, y: other.y });
+            }
           }
         }
-        if (projectile.dead) continue;
-        for (const enemy of state.enemies) {
-          if (enemy.dead) continue;
-          if (distance(enemy.x, enemy.y, projectile.x, projectile.y) <= enemy.radius + projectile.radius) {
-            damageEnemy(enemy, projectile.damage, "TIDE"); projectile.dead = true; break;
+        if ((projectile.kind === "EMBER" || projectile.onTerrain === "IGNITE") && grid.inBounds(c, r) && grid.ice[grid.index(c, r)] > 0) {
+          projectile.dead = true;
+          const before = events.length;
+          grid.meltAt(projectile.x, projectile.y, DATA_ARENA_GRID_RULES.emberIceMelt, events);
+          for (let k = before; k < events.length; k++) events[k].t = state.time;
+          break;
+        }
+        if (projectile.owner === "player") { updatePlayerShot(projectile); continue; }
+        if (projectile.owner !== "mate" && player.barrier > 0 && barrierBlocks(projectile)) {
+          projectile.dead = true;
+          state.stats.barrierBlocks++;
+          emit({ type: "CANCEL", rule: "BARRIER_BLOCKS_SHOT", x: projectile.x, y: projectile.y });
+          break;
+        }
+        if (projectile.owner === "mate") {
+          for (const other of state.projectiles) {
+            if (other.dead || other.kind !== "EMBER") continue;
+            if (distance(other.x, other.y, projectile.x, projectile.y) <= other.radius + projectile.radius) {
+              other.dead = true; projectile.dead = true;
+              state.stats.embersQuenched++;
+              emit({ type: "CANCEL", rule: "WATER_QUENCHES_EMBER", x: other.x, y: other.y });
+              break;
+            }
           }
+          if (projectile.dead) break;
+          for (const enemy of state.enemies) {
+            if (enemy.dead) continue;
+            if (distance(enemy.x, enemy.y, projectile.x, projectile.y) <= enemy.radius + projectile.radius) {
+              damageEnemy(enemy, projectile.damage, "TIDE"); projectile.dead = true; break;
+            }
+          }
+          const boss = state.boss;
+          if (!projectile.dead && boss?.state === "FIGHT" && distance(boss.x, boss.y, projectile.x, projectile.y) <= boss.radius + projectile.radius) {
+            damageBoss(projectile.damage, "TIDE"); projectile.dead = true;
+          }
+          continue;
         }
-        const boss = state.boss;
-        if (!projectile.dead && boss?.state === "FIGHT" && distance(boss.x, boss.y, projectile.x, projectile.y) <= boss.radius + projectile.radius) {
-          damageBoss(projectile.damage, "TIDE"); projectile.dead = true;
+        // Hostile shot vs the player (perfect dodge window) and the mate.
+        const near = player.state !== "RIDING" && player.state !== "MOUNTING"
+          && distance(projectile.x, projectile.y, player.x, player.y) <= projectile.radius + player.radius + stat.nearMiss;
+        if (near && player.dashGrace > 0) perfectDodge(projectile.x, projectile.y);
+        if (hitsPlayerBody(projectile.x, projectile.y, projectile.radius)) {
+          if (player.dashGrace > 0 && player.state !== "RIDING") continue; // passes through the dash
+          const mult = relayMode && projectile.arenaElement ? taxonomyMultiplier(projectile.attackElement, player) : 1;
+          const beforeContact = events.length, oldHp = player.hp;
+          if (hurtPlayer(projectile.damage * mult, projectile.kind, projectile.x, projectile.y, { guardBreak: Boolean(projectile.guardBreak) })) {
+            confirmMoveContact(beforeContact, oldHp, player, projectile, projectile.casterId, projectile.x, projectile.y, Math.atan2(projectile.vy, projectile.vx));
+            if (relayMode) relayAfterHit(player, projectile.damage * mult, projectile.arenaElement, mult, projectile.x, projectile.y);
+            const hostileAilment = projectile.onHit ?? (relayMode && v2Mode && !projectile.isBasic ? inferMoveAilment(projectile.moveId, projectile.arenaElement, projectile.attackElement, null, { isBasic: false }) : null);
+            if (hostileAilment) applyStatus(player, hostileAilment);
+            if (projectile.knockback) { const v = Math.hypot(projectile.vx, projectile.vy) || 1; launch(player, projectile.vx / v, projectile.vy / v, DATA_ARENA_ENERGY.launch.WAVE); }
+            if (projectile.kind !== "WAVE") { projectile.dead = true; terrainEffect(projectile); }
+          } else if (player.invulnerable > 0 && projectile.kind !== "WAVE") projectile.dead = true;
+          break;
         }
-        continue;
-      }
-      // Hostile shot vs the player (perfect dodge window) and the mate.
-      const near = player.state !== "RIDING" && player.state !== "MOUNTING"
-        && distance(projectile.x, projectile.y, player.x, player.y) <= projectile.radius + player.radius + stat.nearMiss;
-      if (near && player.dashGrace > 0) perfectDodge(projectile.x, projectile.y);
-      if (hitsPlayerBody(projectile.x, projectile.y, projectile.radius)) {
-        if (player.dashGrace > 0 && player.state !== "RIDING") continue; // passes through the dash
-        const mult = relayMode && projectile.arenaElement ? taxonomyMultiplier(projectile.attackElement, player) : 1;
-        const beforeContact = events.length, oldHp = player.hp;
-        if (hurtPlayer(projectile.damage * mult, projectile.kind, projectile.x, projectile.y, { guardBreak: Boolean(projectile.guardBreak) })) {
-          confirmMoveContact(beforeContact, oldHp, player, projectile, projectile.casterId, projectile.x, projectile.y, Math.atan2(projectile.vy, projectile.vx));
-          if (relayMode) relayAfterHit(player, projectile.damage * mult, projectile.arenaElement, mult, projectile.x, projectile.y);
-          const hostileAilment = projectile.onHit ?? (relayMode && v2Mode && !projectile.isBasic ? inferMoveAilment(projectile.moveId, projectile.arenaElement, projectile.attackElement, null, { isBasic: false }) : null);
-          if (hostileAilment) applyStatus(player, hostileAilment);
-          if (projectile.knockback) { const v = Math.hypot(projectile.vx, projectile.vy) || 1; launch(player, projectile.vx / v, projectile.vy / v, DATA_ARENA_ENERGY.launch.WAVE); }
-          if (projectile.kind !== "WAVE") { projectile.dead = true; terrainEffect(projectile); }
-        } else if (player.invulnerable > 0 && projectile.kind !== "WAVE") projectile.dead = true;
-        continue;
-      }
-      if (hasMate && mate.state !== "DOWNED" && mate.state !== "RIDDEN" && distance(projectile.x, projectile.y, mate.x, mate.y) <= projectile.radius + mate.radius) {
-        hurtMate(projectile.damage, projectile.kind, projectile.x, projectile.y);
-        projectile.dead = true;
+        if (hasMate && mate.state !== "DOWNED" && mate.state !== "RIDDEN" && distance(projectile.x, projectile.y, mate.x, mate.y) <= projectile.radius + mate.radius) {
+          hurtMate(projectile.damage, projectile.kind, projectile.x, projectile.y);
+          projectile.dead = true;
+          break;
+        }
       }
     }
     if (state.projectiles.some((p) => p.dead)) state.projectiles = state.projectiles.filter((p) => !p.dead);
@@ -4059,6 +4083,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     relay.switchCooldown = DATA_ARENA_RELAY.switchCooldown; relay.playerDownAt = null;
     kitBuffer = null; removeTelegraph(`cast:${player.id}`); laser.firing = false;
     emit({ type: 'RELAY_SWITCH', partnerId: partner.id, speciesId: partner.speciesId, slot: index, forced, perfect: perfectSwitch, x: player.x, y: player.y });
+    emit({ type: 'DEPLOY_SHIELD', casterId: player.id, team: 'player', x: player.x, y: player.y, duration: player.invulnerable });
     if (!forced) {
       if (perfectSwitch) {
         player.energy = Math.min(DATA_ARENA_RELAY.tpMax, player.energy + (DATA_ARENA_RELAY.perfectSwitchTp ?? 25));
@@ -4224,6 +4249,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         triggerSwitchHazard(nextRival, 'rival');
         state.rivals = [nextRival];
         state.score += 1000; emit({ type: 'RELAY_RIVAL', rivalId: nextRival.definitionId, speciesId: nextRival.speciesId, enemyIndex: nextRivalIdx, x: nextRival.x, y: nextRival.y });
+        emit({ type: 'DEPLOY_SHIELD', casterId: nextRival.id, team: 'rival', x: nextRival.x, y: nextRival.y, duration: nextRival.invulnerable });
         // A Journey zone stage offers a three-choice buff between waves; the relay pauses on it.
         if (relayBuffPicks) { state.pendingLevels++; openOffer(); }
       }
@@ -4242,6 +4268,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         relay.enemyIndex = benchIdx; relay.rivalSwitchCooldown = 24;
         state.rivals = [incoming];
         emit({ type: 'RELAY_RIVAL_SWITCH', rivalId: incoming.definitionId, speciesId: incoming.speciesId, enemyIndex: benchIdx, x: incoming.x, y: incoming.y });
+        emit({ type: 'DEPLOY_SHIELD', casterId: incoming.id, team: 'rival', x: incoming.x, y: incoming.y, duration: incoming.invulnerable });
       }
     }
     const mineDead = player.hp <= 0 && relay.team.every((entry, i) => i === relay.active || entry.hp <= 0);

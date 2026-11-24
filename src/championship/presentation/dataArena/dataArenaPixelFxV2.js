@@ -124,6 +124,30 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       playPiece(pieces, "muzzle-spiral", { x, y, palette: paletteFor(spec.paletteKey), scale: 0.85, groundY: y + 28 });
       stats.casts++;
     },
+    /** PB-Rank Wave 1: Crisp baked 00GameDevs ground telegraph indicator (circle / sector / rect) during windup! */
+    telegraph({ x, y, angle = 0, shape = "circle", radius = 120, range = 260, team = "player", moveId = null }) {
+      if (reducedMotion || !groundPieces || !shape || shape === "none") return false;
+      const spec = moveId ? resolveMoveSpecV2(moveId) : null;
+      const pieceKey = shape === "sector" ? "mark-sector" : shape === "rect" ? "mark-rect" : "sigil-cast";
+      const resolved = resolve00GameDevsPiece({ piece: pieceKey, paletteKey: spec?.paletteKey ?? "fire" }) || "sigil-cast";
+      const isHostile = team !== "player";
+      const pal = isHostile
+        ? { core: 0xffd6cc, main: 0xff3b30, edge: 0x6e0d12 }
+        : paletteFor(spec?.paletteKey ?? "light");
+      const scale = shape === "rect"
+        ? Math.max(0.95, Math.min(2.1, range / 260))
+        : Math.max(0.85, Math.min(1.9, radius / 95));
+      const offset = shape === "rect" ? Math.min(110, range * 0.28) : shape === "sector" ? Math.min(54, radius * 0.42) : 0;
+      const tx = x + Math.cos(angle) * offset;
+      const ty = y + Math.sin(angle) * offset;
+      return playPiece(groundPieces, resolved, { x: tx, y: ty + 8, angle, palette: pal, scale, groundY: ty + 8 });
+    },
+    /** PB-Rank Wave 1: Crisp 0.35s deployment invulnerability shield shimmer on round start & partner switch-in! */
+    deployShield({ x, y, team = "player" }) {
+      const pal = team === "player" ? BATTLE_FX_PALETTES.light : BATTLE_FX_PALETTES.thunder;
+      const piece = resolve00GameDevsPiece({ piece: "buff-def", paletteKey: team === "player" ? "light" : "thunder" }) || "buff-def";
+      return playPiece(pieces, piece, { x, y: y - 12, palette: pal, scale: 1.05, groundY: y + 12 });
+    },
     /** Clean release: 100% pure PixelFX + 00GameDevs baked sheets (ZERO blurry procedural 3D canvas hacks!). */
     release({ x, y, angle = 0, moveId, melee = false }) {
       const spec = resolveMoveSpecV2(moveId);

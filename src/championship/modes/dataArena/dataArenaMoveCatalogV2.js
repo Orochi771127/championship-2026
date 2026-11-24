@@ -42,6 +42,34 @@ export const V2_ARCHETYPES = Object.freeze([
   "RECOVERY_SUPPORT"  // Capped 30 % Max HP recovery & status cleanse
 ]);
 
+/**
+ * Per-archetype combat feel calibration (PB-Rank x 666-move unified rhythm):
+ * ensures every move's range, windup, recovery, projectile/lunge speed, AoE radius,
+ * and ground telegraph shape distinctly match its combat identity.
+ */
+export const V2_ARCHETYPE_COMBAT_TUNING = Object.freeze({
+  FLURRY_COMBO:     Object.freeze({ range: 140, windup: 0.13, recovery: 0.20, speed: 920,  radius: 74,  telegraphShape: "sector" }),
+  MULTI_DASH:       Object.freeze({ range: 225, windup: 0.14, recovery: 0.20, speed: 1020, radius: 60,  telegraphShape: "rect" }),
+  SHADOW_BACKSTAB:  Object.freeze({ range: 320, windup: 0.16, recovery: 0.22, speed: 980,  radius: 72,  telegraphShape: "none" }),
+  UTURN_STRIKE:     Object.freeze({ range: 175, windup: 0.14, recovery: 0.18, speed: 940,  radius: 68,  telegraphShape: "rect" }),
+  LEAP_SLAM:        Object.freeze({ range: 290, windup: 0.24, recovery: 0.30, speed: 780,  radius: 145, telegraphShape: "circle" }),
+  SHOCKWAVE_RING:   Object.freeze({ range: 185, windup: 0.24, recovery: 0.28, speed: 0,    radius: 185, telegraphShape: "circle" }),
+  GRAB_SLAM:        Object.freeze({ range: 150, windup: 0.20, recovery: 0.28, speed: 880,  radius: 120, telegraphShape: "sector" }),
+  TELEKINESIS_SLAM: Object.freeze({ range: 460, windup: 0.26, recovery: 0.28, speed: 0,    radius: 125, telegraphShape: "circle" }),
+  GUARD_BREAK_SLAM: Object.freeze({ range: 175, windup: 0.26, recovery: 0.32, speed: 860,  radius: 118, telegraphShape: "sector" }),
+  STREAM_BEAM:      Object.freeze({ range: 780, windup: 0.26, recovery: 0.30, speed: 1180, radius: 15,  telegraphShape: "rect" }),
+  VOLLEY_BARRAGE:   Object.freeze({ range: 540, windup: 0.18, recovery: 0.24, speed: 790,  radius: 11,  telegraphShape: "sector" }),
+  HOMING_ORB:       Object.freeze({ range: 620, windup: 0.16, recovery: 0.22, speed: 650,  radius: 13,  telegraphShape: "none" }),
+  METEOR_RAIN:      Object.freeze({ range: 560, windup: 0.28, recovery: 0.32, speed: 0,    radius: 138, telegraphShape: "circle" }),
+  DRAG_WAVE:        Object.freeze({ range: 580, windup: 0.24, recovery: 0.28, speed: 480,  radius: 36,  telegraphShape: "rect" }),
+  VORTEX_PULL:      Object.freeze({ range: 520, windup: 0.26, recovery: 0.30, speed: 0,    radius: 132, telegraphShape: "circle" }),
+  BURROW_AMBUSH:    Object.freeze({ range: 360, windup: 0.20, recovery: 0.28, speed: 720,  radius: 112, telegraphShape: "rect" }),
+  GROUND_SPIKES:    Object.freeze({ range: 480, windup: 0.22, recovery: 0.26, speed: 680,  radius: 92,  telegraphShape: "rect" }),
+  SELF_BUFF:        Object.freeze({ range: 0,   windup: 0.14, recovery: 0.18, speed: 0,    radius: 85,  telegraphShape: "none" }),
+  PROTECT_COUNTER:  Object.freeze({ range: 0,   windup: 0.10, recovery: 0.16, speed: 0,    radius: 80,  telegraphShape: "none" }),
+  RECOVERY_SUPPORT: Object.freeze({ range: 0,   windup: 0.18, recovery: 0.22, speed: 0,    radius: 95,  telegraphShape: "none" })
+});
+
 // Map signature / element archetype -> 100% pure patch-gg/pixelfx looping projectile head (`shot-*`)
 // (Purged custom mismatched props like fish/xp/heart so every shot speaks one unified pixelfx style!)
 const FLIGHT_LOOK_BY_ARCHETYPE = Object.freeze({
@@ -324,13 +352,25 @@ export function resolveMoveSpecV2(moveId, baseMove = null) {
                       : (sig?.tier === "ultimate" ? "muzzle-spiral" : "muzzle");
 
   const groundLook = GROUND_LOOK_BY_PALETTE[paletteKey] ?? "prop-dust";
+  const tier = sig?.tier ?? "skill";
+  const tuning = V2_ARCHETYPE_COMBAT_TUNING[v2Archetype] ?? V2_ARCHETYPE_COMBAT_TUNING.HOMING_ORB;
+  const isUltTier = tier === "ultimate";
+  const isBasicTier = tier === "basic";
+  const combatRange = Math.round(tuning.range * (isUltTier ? 1.12 : 1));
+  const combatRadius = Math.round(tuning.radius * (isUltTier ? 1.18 : 1));
+  const combatWindup = Number((tuning.windup * (isBasicTier ? 0.85 : 1) + (isUltTier ? 0.05 : 0)).toFixed(2));
+  const combatRecovery = Number((tuning.recovery * (isBasicTier ? 0.85 : 1) + (isUltTier ? 0.04 : 0)).toFixed(2));
+  const combatSpeed = tuning.speed > 0 ? Math.round(tuning.speed * (isUltTier ? 1.08 : 1)) : 0;
+  const telegraphShape = isUltTier && tuning.telegraphShape === "none" && tuning.range > 0
+    ? "circle"
+    : tuning.telegraphShape;
 
   const spec = Object.freeze({
     moveId,
     name,
     v2Archetype,
     paletteKey,
-    tier: sig?.tier ?? "skill",
+    tier,
     melee: ["FLURRY_COMBO", "MULTI_DASH", "SHADOW_BACKSTAB", "UTURN_STRIKE", "LEAP_SLAM", "GRAB_SLAM", "GUARD_BREAK_SLAM"].includes(v2Archetype),
     guardBreak: ["GUARD_BREAK_SLAM", "LEAP_SLAM", "GRAB_SLAM", "TELEKINESIS_SLAM"].includes(v2Archetype),
     homing: v2Archetype === "HOMING_ORB",
@@ -342,14 +382,49 @@ export function resolveMoveSpecV2(moveId, baseMove = null) {
     laysHazard: Boolean(v2Archetype === "GROUND_SPIKES" || /菱|釘|陷阱|地雷|隱形岩|撒/.test(name)),
     spawnsDecoy: Boolean(/替身|分身|幻影|殘影|鏡像|假身|迷幻/.test(name)),
     shiftsWeather: Boolean(/烈日|晴天|祈雨|暴雨|豪雨|吹雪|冰雹|暴風雪|沙暴|砂嵐|沙塵/.test(name) || ["whiteout", "flameRing", "coreNova", "shardStorm", "vortex"].includes(moveId)),
+    combatRange,
+    combatRadius,
+    combatWindup,
+    combatRecovery,
+    combatSpeed,
+    telegraphShape,
     flightLook,
     releaseLook,
     contactLook,
     groundLook,
-    scale: choreo?.contact?.scale ?? (sig?.tier === "ultimate" ? 1.35 : 1.0),
-    hitStopMs: choreo?.hitStopMs ?? (sig?.tier === "ultimate" ? 105 : ["GUARD_BREAK_SLAM", "LEAP_SLAM", "GRAB_SLAM", "TELEKINESIS_SLAM", "BURROW_AMBUSH"].includes(v2Archetype) ? 65 : 55)
+    scale: choreo?.contact?.scale ?? (isUltTier ? 1.35 : 1.0),
+    hitStopMs: choreo?.hitStopMs ?? (isUltTier ? 105 : ["GUARD_BREAK_SLAM", "LEAP_SLAM", "GRAB_SLAM", "TELEKINESIS_SLAM", "BURROW_AMBUSH"].includes(v2Archetype) ? 65 : 55)
   });
 
   cache.set(key, spec);
   return spec;
+}
+
+const calibratedMoveCache = new WeakMap();
+/**
+ * Apply calibrated V2 per-archetype x tier range, windup, recovery, speed & radius
+ * onto a base RELAY skill/ultimate move without mutating shared config objects.
+ */
+export function calibrateV2Move(moveId, baseMove, { ultimate = false } = {}) {
+  if (!baseMove || (baseMove.energy ?? 0) <= 0) return baseMove;
+  let byKey = calibratedMoveCache.get(baseMove);
+  if (!byKey) { byKey = new Map(); calibratedMoveCache.set(baseMove, byKey); }
+  const cacheKey = `${moveId}|${ultimate ? 1 : 0}`;
+  if (byKey.has(cacheKey)) return byKey.get(cacheKey);
+  const spec = resolveMoveSpecV2(moveId, baseMove);
+  const next = { ...baseMove };
+  if (spec.combatWindup > 0) next.windup = spec.combatWindup;
+  if (spec.combatRecovery > 0) next.recovery = spec.combatRecovery;
+  if (spec.combatRange > 0) {
+    if (baseMove.type === "LUNGE") next.distance = Math.max(baseMove.distance ?? 0, spec.combatRange);
+    else next.range = spec.combatRange;
+  }
+  if (spec.combatSpeed > 0 && typeof baseMove.speed === "number") next.speed = spec.combatSpeed;
+  if (spec.combatRadius > 0 && (baseMove.type === "ZONE" || baseMove.type === "NOVA")) {
+    next.radius = Math.max(baseMove.radius ?? 0, spec.combatRadius);
+  }
+  next.telegraphShape = spec.telegraphShape;
+  const frozen = Object.freeze(next);
+  byKey.set(cacheKey, frozen);
+  return frozen;
 }

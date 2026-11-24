@@ -15,7 +15,7 @@ import { moveVfxChoreography } from "../src/championship/presentation/vfx/moveVf
 import { MOVE_VFX_SET_PIECES, MOVE_VFX_PIECE_DRAWINGS, MOVE_VFX_SUPPORT_PIECES, MOVE_VFX_00GAMEDEVS_KEYS, LEGACY_3D_TO_00GD, createMoveVfxSetPieces, loadMoveVfx00GameDevsSprites, resolve00GameDevsPiece, resolve00GameDevsProjectile } from "../src/championship/presentation/vfx/moveVfxSetPieces.js";
 import { MOVE_VFX_3D_PIECE_GROUP } from "../src/championship/presentation/vfx/moveVfxPieceSprites3dIndex.js";
 import { MOVE_VFX_PIECE_SPRITES } from "../src/championship/presentation/vfx/moveVfxPieceSprites.js";
-import { V2_ARCHETYPES, resolveMoveSpecV2 } from "../src/championship/modes/dataArena/dataArenaMoveCatalogV2.js";
+import { V2_ARCHETYPES, V2_ARCHETYPE_COMBAT_TUNING, resolveMoveSpecV2, calibrateV2Move } from "../src/championship/modes/dataArena/dataArenaMoveCatalogV2.js";
 import { createDataArenaPixelFxV2 } from "../src/championship/presentation/dataArena/dataArenaPixelFxV2.js";
 import { createDataArenaAudio } from "../src/championship/presentation/dataArena/dataArenaAudio.js";
 import { createCombatMoveAudioEngine, movePitchRate, canonicalAudioElement } from "../src/championship/presentation/combatMoveAudioEngine.js";
@@ -1302,4 +1302,78 @@ test("phase 11 / 666-move clean single-layer PixelFX + 00GameDevs audit: zero le
   assert.ok(battleSrc.includes("if (!hasOwnContact && (tier !== 'light'"), "Auto Battle suppresses duplicate pixelHits explosion when clean PixelFX/00GD contact plays");
   assert.ok(!v2Src.includes("volCache.spawn("), "Manual 3v3 Data Arena has ZERO procedural 3D canvas volCache spawns");
   assert.ok(sceneSrc.includes('case "BARRIER_UP":\n          if (purePixelFx)'), "Data Arena BARRIER_UP plays clean 00GameDevs shield instead of legacy ring");
+});
+
+test("phase 12 / Combat Wave 1: 666-move calibrated ranges/windups, 8px anti-tunneling sub-stepping, baked CAST_TELEGRAPH indicators & 0.35s DEPLOY_SHIELD", async () => {
+  await loadMoveVfx00GameDevsSprites();
+  // 1) All 20 V2 archetypes & all 641+ moves expose calibrated range, windup, recovery, radius & telegraphShape
+  for (const arch of V2_ARCHETYPES) {
+    const t = V2_ARCHETYPE_COMBAT_TUNING[arch];
+    assert.ok(t && t.windup >= 0.08 && t.recovery >= 0.14, `${arch} has calibrated windup/recovery`);
+    assert.ok(["circle", "sector", "rect", "none"].includes(t.telegraphShape), `${arch} has valid telegraphShape`);
+  }
+  const beamSpec = resolveMoveSpecV2("sunSpear");
+  const flurrySpec = resolveMoveSpecV2("fangRush");
+  const ultSpec = resolveMoveSpecV2("coreNova");
+  assert.ok(beamSpec.combatRange >= 750 && flurrySpec.combatRange <= 200, "STREAM_BEAM strictly outranges close-range FLURRY_COMBO");
+  assert.equal(beamSpec.telegraphShape, "rect", "STREAM_BEAM uses rect lane telegraph");
+  assert.equal(ultSpec.telegraphShape, "circle", "METEOR_RAIN ultimate uses circle AoE telegraph");
+  assert.ok(ultSpec.combatRadius > V2_ARCHETYPE_COMBAT_TUNING.METEOR_RAIN.radius, "ultimate scales AoE radius above standard");
+
+  const allIds = [...Object.keys(RELAY_POOL_MOVE_ELEMENT)];
+  for (let i = 31; i <= 622; i++) allIds.push(`own-${i}`);
+  for (const id of allIds) {
+    const s = resolveMoveSpecV2(id);
+    assert.ok(s.combatWindup >= 0.08 && s.combatWindup <= 0.45, `${id} windup in crisp playable bounds (${s.combatWindup})`);
+    assert.ok(s.combatRecovery >= 0.12 && s.combatRecovery <= 0.45, `${id} recovery in crisp playable bounds (${s.combatRecovery})`);
+    assert.ok(["circle", "sector", "rect", "none"].includes(s.telegraphShape), `${id} valid telegraphShape`);
+  }
+  const calibrated = calibrateV2Move("sunSpear", { type: "BOLT", energy: 22, cooldown: 1.6, windup: 0.1, range: 300, speed: 600, radius: 12, damage: 30 });
+  assert.ok(calibrated.range >= 750 && calibrated.speed >= 1100 && calibrated.telegraphShape === "rect", "calibrateV2Move applies STREAM_BEAM range/speed/telegraph");
+
+  // 2) Deployment >= 0.35s spawn invulnerability shield on partner switch-in & KO replacement
+  const sim = startRelayFight({ moveSystem: "v2", controlMode: "MANUAL" });
+  const st = sim.getState();
+  sim.step({ switchPartner: true });
+  const swEvs = sim.drainEvents();
+  const deployEv = swEvs.find((e) => e.type === "DEPLOY_SHIELD" && e.team === "player");
+  assert.ok(deployEv && deployEv.duration >= 0.35, `partner switch-in emits DEPLOY_SHIELD >= 0.35s (got ${deployEv?.duration})`);
+  assert.ok(st.player.invulnerable >= 0.32, `switched-in partner holds 0.35s spawn invulnerability after 1 tick (got ${st.player.invulnerable})`);
+  const hpBefore = st.player.hp;
+  sim.internals.hurtPlayer(30, "TEST", st.player.x, st.player.y);
+  assert.equal(st.player.hp, hpBefore, "0.35s deployment invulnerability blocks frame-1 burst damage on tag-in");
+  // Advance past spawn shield
+  for (let i = 0; i < 40; i++) sim.step({});
+  sim.drainEvents();
+
+  // 3) Casting a calibrated beam/AoE move emits CAST_TELEGRAPH with shape/range/radius
+  st.player.kit = { ...st.player.kit, moves: ["sunSpear", "flameRing", "fangRush"] };
+  st.player.energy = 100;
+  st.player.recovery = 0;
+  const rival = st.rivals[0];
+  sim.step({ cast: 0, aimX: rival.x, aimY: rival.y });
+  const castEvs = sim.drainEvents();
+  const tele = castEvs.find((e) => e.type === "CAST_TELEGRAPH" && e.moveId === "sunSpear");
+  assert.ok(tele && tele.shape === "rect" && tele.range >= 750, "sunSpear emits rect CAST_TELEGRAPH with calibrated range");
+
+  // 4) 8px anti-tunneling sub-stepping: a 2400 px/s enemy beam (40 px/tick!) aimed straight at player through a 1-cell shield wall stops on the wall!
+  st.player.x = 640; st.player.y = 480;
+  rival.x = 960; rival.y = 480;
+  st.player.cast = null; st.player.recovery = 0; st.player.energy = 100;
+  st.player.kit = { ...st.player.kit, moves: ["glacierGuard", "sunSpear", "fangRush"] };
+  sim.step({ cast: 0, aimX: rival.x, aimY: rival.y });
+  for (let i = 0; i < 25; i++) sim.step({});
+  const wallEv = sim.drainEvents().find((e) => e.type === "TEMP_PROP_SPAWN");
+  assert.ok(wallEv, "glacierGuard spawns temporary shield wall");
+  // Fire a 2400 px/s shot (40px per 1/60s tick) from the opposite side of the wall directly through the wall center toward player!
+  sim.internals.spawnProjectile({
+    owner: "rival", team: "rival", kind: "LASER", moveId: "sunSpear",
+    x: wallEv.x + 120, y: wallEv.y, vx: -2400, vy: 0, radius: 10, damage: 20, range: 600, travelled: 0, hits: new Set()
+  });
+  let sawBlocked = false;
+  for (let i = 0; i < 12; i++) {
+    sim.step({});
+    if (sim.drainEvents().some((e) => e.type === "SHOT_BLOCKED")) { sawBlocked = true; break; }
+  }
+  assert.ok(sawBlocked, "2400 px/s ultra-fast projectile stops on thin cover wall via 8px sub-stepping (zero tunneling)");
 });
