@@ -8,6 +8,7 @@ import { RELAY_ELEMENT_STRONG, RELAY_ELEMENTS, relayEffectiveness, relayElementW
 import { RELAY_ROSTER } from '../src/championship/modes/dataArena/dataArenaRelayRoster.js';
 import { speciesTaxonomyForId, elementMultiplierPercent } from '../src/championship/contracts/speciesTaxonomy.js';
 import { relayBattleMap } from '../src/championship/modes/dataArena/dataArenaRelayMaps.js';
+import { relayMove } from '../src/championship/modes/dataArena/dataArenaRelay.js';
 
 const run = (sim, seconds, input = {}) => { for (let i = 0; i < Math.ceil(seconds * 60); i++) sim.step(input); };
 const elementOf = (speciesId) => RELAY_ROSTER.find(p => p.speciesId === speciesId)?.element;
@@ -35,13 +36,14 @@ test('a skill hit is scaled by the dual-ring matchup and announced', () => {
   const sim = fight('ember-lizard'), state = sim.getState();
   const rival = state.rivals[0], mult = elementMultiplierPercent(speciesTaxonomyForId(state.player.speciesId).element, speciesTaxonomyForId(rival.speciesId).element) / 100;
   const dealt = state.relay.resonance.includes('TRI') ? 1.08 : 1;
+  const baseDmg = relayMove(state.player.kit.moves[0]).damage;
   const events = [];
   for (let tries = 0; tries < 8 && !events.some(e => e.type === 'RIVAL_HIT' && e.cause === 'SKILL'); tries++) {
     sim.step({ cast: 0, autoAim: true }); for (let i = 0; i < 70; i++) { sim.step({}); events.push(...sim.drainEvents()); }
   }
   const hit = events.find(e => e.type === 'RIVAL_HIT' && e.cause === 'SKILL');
-  assert.ok(hit, 'the ember bolt lands');
-  const expected = [20 * mult * dealt, 20 * mult * dealt * 1.5].filter((_, i) => i === 0 || state.relay.resonance.includes('RIFT'));
+  assert.ok(hit, 'the fire slot-0 skill lands');
+  const expected = [baseDmg * mult * dealt, baseDmg * mult * dealt * 1.5].filter((_, i) => i === 0 || state.relay.resonance.includes('RIFT'));
   assert.ok(expected.some(v => Math.abs(hit.amount - v) < 1e-6), `${hit.amount} vs ${expected}`);
   if (mult !== 1) assert.ok(events.some(e => e.type === 'EFFECTIVE' && e.mult === mult && e.target === 'rival'));
 });

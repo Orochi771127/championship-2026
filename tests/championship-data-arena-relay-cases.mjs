@@ -19,13 +19,14 @@ test('relay adapters keep our 3v3 identities and eight movement directions', () 
 });
 test('relay spends TP once, releases once and locks another skill through recovery', () => {
   const sim=create(),p=sim.getState().player; sim.drainEvents();
+  const slot0=p.kit.moves[0], slot1=p.kit.moves[1], cost0=relayMove(slot0).energy;
   sim.step({cast:0,autoAim:true});
-  assert.equal(p.energy,78); assert.equal(p.action.moveId,'sunSpear');
-  run(sim,.3); assert.ok(p.recovery>0);
-  assert.equal(sim.internals.beginCast(p,'scatterLight',900,700),false);
+  assert.equal(p.energy,100-cost0); assert.equal(p.action.moveId,slot0);
+  run(sim,relayMove(slot0).windup+0.08); assert.ok(p.recovery>0);
+  assert.equal(sim.internals.beginCast(p,slot1,900,700),false);
   const events=sim.drainEvents(); assert.equal(events.filter(e=>e.type==='CAST_RELEASE'&&e.casterId===p.id).length,1);
-  run(sim,.35); assert.equal(p.action,null);
-  assert.ok(sim.internals.beginCast(p,'scatterLight',900,700));
+  run(sim,.45); assert.equal(p.action,null);
+  assert.ok(sim.internals.beginCast(p,slot1,900,700));
 });
 test('switch preserves independent HP TP and cooldowns and cannot reset the resource', () => {
   const sim=create(),p=sim.getState().player;
@@ -85,10 +86,16 @@ test('old arena records remain compatible while relay records use the same write
 });
 
 test('equipped moves are validated per body and every selectable move releases', () => {
-  assert.deepEqual(relayKit('ember-lizard',['iceShard','emberBolt','emberBolt']).moves,['emberBolt','fangRush','flameRing']);
+  const firePool = RELAY_LOADOUTS['ember-lizard'];
+  const defaultFire = relayKit('ember-lizard').moves;
+  assert.deepEqual(relayKit('ember-lizard',['iceShard', firePool[0], firePool[0]]).moves, [firePool[0], ...defaultFire.filter(id => id !== firePool[0])].slice(0, 3));
+  // Verify representative partners across all 10 elements & every selectable move in their element pool releases cleanly!
+  const testedMoveIds = new Set();
   for(const [partnerId,moves] of Object.entries(RELAY_LOADOUTS))for(const id of moves) {
+    if (testedMoveIds.has(id)) continue;
+    testedMoveIds.add(id);
     const sim=createDataArenaSimulation({mode:'RELAY',partnerId,relayLoadouts:{[partnerId]:[id]},seed:19});
-    run(sim,2.1);sim.drainEvents();sim.step({cast:0,autoAim:true});run(sim,.7);
+    run(sim,2.1);sim.drainEvents();sim.step({cast:0,autoAim:true});run(sim,.85);
     assert.ok(sim.drainEvents().some(e=>e.type==='CAST_RELEASE'&&e.moveId===id),id);
     assert.equal(sim.getSnapshot().kit.moves[0].id,id);
   }

@@ -10,6 +10,7 @@
 // scripts/build-data-arena-relay-kits.mjs. Stage never changes a number: a
 // style rule is the same for every generation, matching the RELAY roster rule.
 import kitData from '../../../data/championship/data-arena-relay-kits.v1.json' with { type: 'json' };
+import { pb324PartnerKit } from './dataArenaPb324Catalog.js';
 export { RELAY_ELEMENTS } from './dataArenaRelayElements.js';
 
 // Pool moves: five per element, ultimate last. `neutral` marks body moves any
@@ -105,19 +106,20 @@ export function relayOwnMove(id) {
 }
 
 /**
- * Five selectable moves for a roster partner: its own moves first, then pool
- * moves of its element, preferring mechanics the kit does not have yet. The
- * ultimate is the partner's own (its pool's ultimate when it has none).
- * `typeOf` resolves a pool move's mechanic without importing the move tables.
+ * Wave 8-B (2026-11-25): Data Arena RELAY kits exclusively draw from the new
+ * 324 PB-Rank-modeled original moves across the 10 Canonical Elements
+ * (金木水火土日月雷冰風), replacing the legacy 666-move bloated pool.
  */
-export function relaySpeciesKit(speciesIndex, element, typeOf) {
-  const pool = RELAY_ELEMENT_KITS[element] ?? RELAY_ELEMENT_KITS.physical;
-  const own = ownBySpecies.get(speciesIndex)?.own ?? [];
-  const ultimate = own.find(move => move.ultimate) ?? null;
-  if (ultimate && !ownUltimateStandIn.has(ultimate.id)) ownUltimateStandIn.set(ultimate.id, pool.ultimate);
-  const options = own.filter(move => move !== ultimate).slice(0, 3).map(move => move.id);
-  const types = new Set(options.map(id => RELAY_STYLE_RULES[ownById.get(id).style].type));
-  const fresh = pool.moves.filter(id => !types.has(typeOf(id)));
-  for (const id of [...fresh, ...pool.moves]) if (options.length < 5 && !options.includes(id)) options.push(id);
-  return Object.freeze({ moves: Object.freeze(options), ultimate: ultimate?.id ?? pool.ultimate });
+export function relaySpeciesKit(speciesIndex, element) {
+  const kit = pb324PartnerKit(speciesIndex, element);
+  return Object.freeze({
+    element: kit.element,
+    moves: kit.moves,
+    ultimate: kit.ultimate,
+    pool: kit.pool
+  });
+}
+
+export function relayElementMovePool(speciesIndex, element) {
+  return pb324PartnerKit(speciesIndex, element).pool;
 }

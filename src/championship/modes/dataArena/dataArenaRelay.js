@@ -4,6 +4,7 @@ import { DATA_ARENA_PARTNERS, DATA_ARENA_MOVES, DATA_ARENA_KITS } from './dataAr
 import { RELAY_ROSTER, relayPartner } from './dataArenaRelayRoster.js';
 import { RELAY_POOL_MOVE_ELEMENT, relayOwnMove, relayOwnMoveInfo, relayOwnUltimateStandIn, relaySpeciesKit } from './dataArenaRelayKits.js';
 import { RELAY_PALETTE_ELEMENT } from './dataArenaRelayElements.js';
+import { pb324Move, pb324PartnerKit, pb324ToRelayMove } from './dataArenaPb324Catalog.js';
 
 export const DATA_ARENA_RELAY = Object.freeze({
   seconds: 180, teamSize: 3, switchCooldown: 6, knockoutSeconds: 1.1,
@@ -66,20 +67,25 @@ const extraMoves = Object.freeze({
   boltDash: { type:'LUNGE', energy:22, cooldown:4.5, windup:.2, distance:230, speed:1050, width:56, damage:30, invulnerable:true },
   thornRush: { type:'LUNGE', energy:22, cooldown:6, windup:.55, distance:300, speed:950, width:56, damage:28 }
 });
-// A roster partner's five choices: its own moves first, then its element pool.
-const RELAY_SPECIES_KITS = Object.freeze(Object.fromEntries(RELAY_ROSTER.map(p=>[p.id,relaySpeciesKit(p.speciesIndex,p.element,id=>relayMove(id)?.type)])));
+// Wave 8-B: Every RELAY partner exclusively equips the new 324 PB-Rank moves across 10 Canonical Elements.
+const RELAY_SPECIES_KITS = Object.freeze(Object.fromEntries(RELAY_ROSTER.map(p => [p.id, relaySpeciesKit(p.speciesIndex, p.element)])));
+const PILOT_PB324_KITS = Object.freeze({
+  'ember-lizard': pb324PartnerKit(1, 'FIRE'),
+  'corona-cub': pb324PartnerKit(2, 'SUN'),
+  'frost-drake': pb324PartnerKit(3, 'ICE')
+});
 export const RELAY_LOADOUTS = Object.freeze({
-  ...Object.fromEntries(RELAY_ROSTER.map(p=>[p.id,RELAY_SPECIES_KITS[p.id].moves])),
-  'ember-lizard': Object.freeze(['emberBolt','fangRush','flameRing','cinderGuard','clawSweep']),
-  'corona-cub': Object.freeze(['sunSpear','sunShield','scatterLight','radiantDash','haloPulse']),
-  'frost-drake': Object.freeze(['iceShard','frostStep','iceCage','frostFan','glacierGuard'])
+  ...Object.fromEntries(RELAY_ROSTER.map(p => [p.id, RELAY_SPECIES_KITS[p.id].pool])),
+  'ember-lizard': PILOT_PB324_KITS['ember-lizard'].pool,
+  'corona-cub': PILOT_PB324_KITS['corona-cub'].pool,
+  'frost-drake': PILOT_PB324_KITS['frost-drake'].pool
 });
 export function relayKit(partnerId, selection) {
-  const allowed = RELAY_LOADOUTS[partnerId], base = DATA_ARENA_KITS[partnerId] ?? RELAY_SPECIES_KITS[partnerId];
+  const allowed = RELAY_LOADOUTS[partnerId], base = PILOT_PB324_KITS[partnerId] ?? RELAY_SPECIES_KITS[partnerId] ?? DATA_ARENA_KITS[partnerId];
   if (!allowed || !base) throw new RangeError('RELAY_UNKNOWN_PARTNER');
   const moves = [...new Set((Array.isArray(selection) ? selection : []).filter(id => allowed.includes(id)))];
   for (const id of base.moves) if (!moves.includes(id)) moves.push(id);
-  return {moves:moves.slice(0,3),ultimate:base.ultimate};
+  return { moves: moves.slice(0, 3), ultimate: base.ultimate };
 }
 // Three pilot characters have visually reviewed slots. The other anatomy-based
 // mappings remain provisional; new art does not change simulation or species IDs.
@@ -136,7 +142,20 @@ const look = (base, style) => Object.freeze({ ...base, style, ...STYLE_LOOKS[sty
  * The element a hit carries against cover (stage three): an own move's colour,
  * a pool move's element, ranged basics take the caster's; body moves are physical.
  */
+const PB324_ARCH_STYLE = Object.freeze({
+  FLURRY_COMBO: 'claw', MULTI_DASH: 'pierce', SHADOW_BACKSTAB: 'dark', UTURN_STRIKE: 'slash',
+  LEAP_SLAM: 'quake', SHOCKWAVE_RING: 'quake', GRAB_SLAM: 'strike', TELEKINESIS_SLAM: 'holy',
+  GUARD_BREAK_SLAM: 'slash', STREAM_BEAM: 'beam', VOLLEY_BARRAGE: 'thorn', HOMING_ORB: 'fireball',
+  METEOR_RAIN: 'flame', DRAG_WAVE: 'water', VORTEX_PULL: 'wind', BURROW_AMBUSH: 'quake',
+  GROUND_SPIKES: 'quake', SELF_BUFF: 'holy', PROTECT_COUNTER: 'shell', RECOVERY_SUPPORT: 'seed'
+});
+const PB324_PAL_STYLE = Object.freeze({
+  metal: 'earth', wood: 'nature', earth: 'earth', water: 'water', fire: 'fire',
+  sun: 'light', ice: 'frost', wind: 'storm', thunder: 'storm', moon: 'shadow'
+});
 export function relayMoveElement(id, casterElement = null) {
+  const pb = pb324Move(id);
+  if (pb) return pb.relayElement;
   const own = relayOwnMoveInfo(id);
   if(own)return RELAY_PALETTE_ELEMENT[own.palette] ?? 'physical';
   const element = RELAY_POOL_MOVE_ELEMENT[id];
@@ -146,6 +165,8 @@ export function relayMoveElement(id, casterElement = null) {
 }
 /** Colour, texture, cue, style, impact and tether for a move; `element` is the caster's (for basics). */
 export function relayEffectStyle(id, element = null) {
+  const pb = pb324Move(id);
+  if (pb) return look(styles[PB324_PAL_STYLE[pb.palette] ?? 'claw'], PB324_ARCH_STYLE[pb.archetype] ?? 'fireball');
   const own = relayOwnMoveInfo(id);
   if(own)return look(styles[paletteStyle[own.palette] ?? 'claw'], own.style);
   if(element && styles[ELEMENT_LOOK[element]] && (RANGED_BASICS.has(id) || /^relay/.test(id)))
@@ -183,7 +204,9 @@ export function relayTeamIds(firstId, reserveId = null, thirdId = null) {
   return team.slice(0, DATA_ARENA_RELAY.teamSize);
 }
 export function relayMove(id, ultimate = false) {
-  // A partner's own ultimate fights with its pool ultimate's numbers (the move stays its own).
+  const pb = pb324ToRelayMove(id, ultimate);
+  if (pb) return pb;
+  // Legacy fallback for basics and non-RELAY modes.
   const standIn = relayOwnUltimateStandIn(id);
   const base = standIn ? { ...(extraMoves[standIn] ?? DATA_ARENA_MOVES[standIn]), mechanic: `own ultimate (${standIn} numbers)`, ownRecord: relayOwnMoveInfo(id).record }
     : basics[id] ?? extraMoves[id] ?? DATA_ARENA_MOVES[id] ?? relayOwnMove(id);

@@ -53,6 +53,8 @@ import { CONTROL_MODES, AI_DIFFICULTY_IDS, DEFAULT_AI_SETTINGS } from "../modes/
 import { DATA_ARENA_TACTICAL_ARTS, TACTICAL_ART_IDS, tacticalArtById } from "../modes/dataArena/dataArenaTacticalArts.js";
 import { createRelayReplayRecorder, createRelayReplayPlayer } from "../modes/dataArena/dataArenaReplay.js";
 import { resolveMoveSpecV2 } from "../modes/dataArena/dataArenaMoveCatalogV2.js";
+import { pb324Move, pb324MoveName, pb324MoveDesc, PB324_ELEMENT_META } from "../modes/dataArena/dataArenaPb324Catalog.js";
+import { getLocale } from "../text/locale.js";
 import { moveVfxChoreography } from "../presentation/vfx/moveVfxChoreography.js";
 import { moveVfxSignature } from "../presentation/vfx/moveVfxSignatures.js";
 import { loadMoveVfxPieceSprites, paintBakedPieceFrames } from "../presentation/vfx/moveVfxSetPieces.js";
@@ -89,11 +91,17 @@ function glyph(path, className = "da-glyph") {
   svg.appendChild(stroke);
   return svg;
 }
-// A partner's own move keeps its approved battle name; the arena line says what it does here.
-// An own ultimate says what its lent pool ultimate does (UNIFIED_MOVES_20261118).
+// Wave 8-B: PB-324 original 10-element move text resolves first; legacy own/pool moves stay supported for non-RELAY modes.
+const pb324Text = (id) => {
+  if (typeof pb324Move !== 'function') return null;
+  const pb = pb324Move(id);
+  if (!pb) return null;
+  const loc = typeof getLocale === 'function' ? getLocale() : 'zh-Hant';
+  return `${pb324MoveName(id, loc)}｜${pb324MoveDesc(id, loc)}`;
+};
 const ownMoveText = (id) => { const own = relayOwnMoveInfo(id); if (!own) return null; const lent = relayOwnUltimateStandIn(id);
   return `${battleMoveName(own.record) ?? id}｜${lent ? (t(`move.${lent}`).split(/\s*[｜|]\s*/)[1] ?? '') : `${t(`relay.style.${own.style}`)}${t(`relay.palette.${own.palette}`)}`}`; };
-const moveText = (id) => ownMoveText(id) ?? t(`move.${id}`);
+const moveText = (id) => pb324Text(id) ?? ownMoveText(id) ?? t(`move.${id}`);
 const moveName = (id) => moveText(id).split(/\s*[｜|]\s*/)[0];
 // UNIFIED_MOVES_20261118: the move's icon (shared with the auto battle and the Dex), none for a basic attack.
 const arenaMoveIcon = (id) => { const icon = id && typeof moveIcon === 'function' && !/^relay/.test(String(id)) ? moveIcon(id, 'cm-move-icon da-move-icon') : null; return icon ? [icon] : []; };
@@ -2071,17 +2079,53 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
             ctx.fillStyle = hexStr(pal.core);
             ctx.beginPath(); ctx.arc(px, py, 8, 0, Math.PI * 2); ctx.fill();
           } else if (phase >= 0.36 && phase < 0.82) {
+            // Wave 8-A/B: Crisp PB-Rank procedural pixel-particle preview (zero blocky square sprites!)
             const k = (phase - 0.36) / 0.46;
-            if (frames?.length) {
-              const f = frames[Math.min(frames.length - 1, Math.floor(k * frames.length))];
-              ctx.imageSmoothingEnabled = false;
-              const size = 104;
-              ctx.drawImage(f, dtx - size / 2, ty - 8 - size / 2, size, size);
-            } else {
-              ctx.strokeStyle = hexStr(pal.core); ctx.lineWidth = 3;
-              ctx.beginPath(); ctx.arc(dtx, ty - 6, 12 + k * 36, 0, Math.PI * 2); ctx.stroke();
+            const pb = typeof pb324Move === "function" ? pb324Move(moveId) : null;
+            const shapes = pb?.vfx?.shapes ?? ["ring", "star", "pxball"];
+            const mainCol = hexStr(pal.main);
+            const coreCol = hexStr(pal.core);
+            ctx.save();
+            ctx.globalCompositeOperation = "lighter";
+            // Expanding crisp pixel ring
+            ctx.strokeStyle = mainCol;
+            ctx.lineWidth = Math.max(1.5, 4 * (1 - k));
+            ctx.globalAlpha = 1 - k * 0.85;
+            ctx.beginPath(); ctx.ellipse(dtx, ty - 6, 10 + k * 38, 7 + k * 24, 0, 0, Math.PI * 2); ctx.stroke();
+            // Core flash star / crescent slash
+            if (k < 0.55) {
+              const sk = 1 - k / 0.55;
+              ctx.fillStyle = coreCol;
+              ctx.globalAlpha = sk;
+              const sr = 18 * sk;
+              ctx.beginPath();
+              ctx.moveTo(dtx, ty - 6 - sr); ctx.lineTo(dtx + sr * 0.25, ty - 6 - sr * 0.25);
+              ctx.lineTo(dtx + sr, ty - 6); ctx.lineTo(dtx + sr * 0.25, ty - 6 + sr * 0.25);
+              ctx.lineTo(dtx, ty - 6 + sr); ctx.lineTo(dtx - sr * 0.25, ty - 6 + sr * 0.25);
+              ctx.lineTo(dtx - sr, ty - 6); ctx.lineTo(dtx - sr * 0.25, ty - 6 - sr * 0.25);
+              ctx.closePath(); ctx.fill();
             }
-            if (!popLabel) popLabel = "HIT!";
+            // Procedural pixel-art particles (pxball / shard / 3-pass pxpuff / streak)
+            for (let i = 0; i < 12; i++) {
+              const a = (i / 12) * Math.PI * 2 + k * 0.8;
+              const dist = 8 + k * (28 + (i % 3) * 14);
+              const px = Math.round(dtx + Math.cos(a) * dist);
+              const py = Math.round(ty - 6 + Math.sin(a) * dist * 0.72);
+              const sz = Math.max(2, Math.round((1 - k) * (shapes.includes("pxpuff") ? 9 : 6)));
+              ctx.globalAlpha = Math.max(0.15, 1 - k);
+              ctx.fillStyle = i % 3 === 0 ? coreCol : mainCol;
+              if (shapes.includes("shard") && i % 2 === 0) {
+                ctx.beginPath();
+                ctx.moveTo(px + Math.cos(a) * sz * 1.4, py + Math.sin(a) * sz * 1.4);
+                ctx.lineTo(px - Math.sin(a) * sz * 0.6, py + Math.cos(a) * sz * 0.6);
+                ctx.lineTo(px + Math.sin(a) * sz * 0.6, py - Math.cos(a) * sz * 0.6);
+                ctx.closePath(); ctx.fill();
+              } else {
+                ctx.fillRect(px - Math.floor(sz / 2), py - Math.floor(sz / 2), sz, sz);
+              }
+            }
+            ctx.restore();
+            if (!popLabel) popLabel = pb?.hitFeel?.impact ? "CRIT!" : "HIT!";
           }
           if (popLabel && phase > 0.36 && phase < 0.88) {
             ctx.font = "900 12px sans-serif";
@@ -2149,17 +2193,23 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       const slots = el("div", "da-chips__slots");
       selected.moves.forEach((moveId, slot) => {
         const move = relayMove(moveId);
+        const pb = typeof pb324Move === "function" ? pb324Move(moveId) : null;
         const chip = button("da-skill", "", () => { openChips = openChips === `${id}:${slot}` ? null : `${id}:${slot}`; refresh(); }, signal);
         chip.dataset.element = relayMoveElement(moveId, partnerElement(id));
+        if (pb) chip.dataset.el10 = pb.element;
         chip.dataset.slot = String(slot);
         chip.setAttribute("aria-expanded", String(openChips === `${id}:${slot}`));
         chip.setAttribute("aria-label", `${partnerName(id)} ${kitKey(true, slot)} ${moveName(moveId)}`);
+        const elTag = pb && PB324_ELEMENT_META[pb.element] ? [el("span", "da-skill__el10", PB324_ELEMENT_META[pb.element].zh)] : [];
         const archBadge = moveSystemPref === "v2" ? [el("span", "da-skill__arch", t(`v2.arch.${resolveMoveSpecV2(moveId, move).v2Archetype}`))] : [];
-        chip.append(el("span", "da-skill__key", kitKey(touchActive, slot)), ...arenaMoveIcon(moveId), el("strong", "da-skill__name", moveName(moveId)), ...archBadge, cost(move));
+        chip.append(el("span", "da-skill__key", kitKey(touchActive, slot)), ...elTag, ...arenaMoveIcon(moveId), el("strong", "da-skill__name", moveName(moveId)), ...archBadge, cost(move));
         slots.appendChild(chip);
       });
+      const ultPb = typeof pb324Move === "function" ? pb324Move(selected.ultimate) : null;
       const ult = el("div", "da-skill da-skill--ult");
-      ult.append(el("span", "da-skill__key", kitKey(touchActive, "ult")), ...arenaMoveIcon(selected.ultimate), el("strong", "da-skill__name", moveName(selected.ultimate)), cost({ energy: DATA_ARENA_RELAY.ultimateTp }));
+      if (ultPb) ult.dataset.el10 = ultPb.element;
+      const ultElTag = ultPb && PB324_ELEMENT_META[ultPb.element] ? [el("span", "da-skill__el10", PB324_ELEMENT_META[ultPb.element].zh)] : [];
+      ult.append(el("span", "da-skill__key", kitKey(touchActive, "ult")), ...ultElTag, ...arenaMoveIcon(selected.ultimate), el("strong", "da-skill__name", moveName(selected.ultimate)), cost({ energy: DATA_ARENA_RELAY.ultimateTp }));
       slots.appendChild(ult);
       wrap.appendChild(slots);
       const [openId, openSlot] = (openChips ?? "").split(":");
@@ -2170,6 +2220,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         choices.setAttribute("aria-label", `${partnerName(id)} ${kitKey(true, slot)}`);
         for (const moveId of RELAY_LOADOUTS[id]) {
           const move = relayMove(moveId);
+          const pb = typeof pb324Move === "function" ? pb324Move(moveId) : null;
           const at = selected.moves.indexOf(moveId);
           const choice = button("da-skill da-skill--choice", "", () => {
             const moves = [...selected.moves], other = moves.indexOf(moveId);
@@ -2181,9 +2232,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           choice.setAttribute("role", "option");
           choice.setAttribute("aria-selected", String(at === slot));
           choice.dataset.element = relayMoveElement(moveId, partnerElement(id));
+          if (pb) choice.dataset.el10 = pb.element;
           choice.dataset.move = moveId;
+          const elTag = pb && PB324_ELEMENT_META[pb.element] ? [el("span", "da-skill__el10", PB324_ELEMENT_META[pb.element].zh)] : [];
           const choiceArch = moveSystemPref === "v2" ? [el("span", "da-skill__arch", t(`v2.arch.${resolveMoveSpecV2(moveId, move).v2Archetype}`))] : [];
-          choice.append(...arenaMoveIcon(moveId), el("strong", "da-skill__name", moveName(moveId)), ...choiceArch, cost(move),
+          choice.append(...elTag, ...arenaMoveIcon(moveId), el("strong", "da-skill__name", moveName(moveId)), ...choiceArch, cost(move),
             el("span", "da-skill__effect", moveEffect(moveId)), ...(at >= 0 && at !== slot ? [el("span", "da-skill__key", kitKey(touchActive, at))] : []));
           const pv = button("da-skill__preview", t("relay.preview"), (ev) => {
             ev.stopPropagation();

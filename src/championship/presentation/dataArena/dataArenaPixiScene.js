@@ -619,10 +619,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         }
         if (flash > 0.02 && !reducedMotion) {
           const fRatio = clamp(flash / 0.18, 0, 1);
-          sprite.scale.x *= 1 - 0.18 * fRatio;
-          sprite.scale.y *= 1 + 0.22 * fRatio;
+          // PB-Rank Hit Squash-and-Stretch: flatten horizontally (sx -> 1.22, sy -> 0.82) & ease back cleanly!
+          sprite.scale.x *= 1 + 0.22 * fRatio;
+          sprite.scale.y *= 1 - 0.18 * fRatio;
           const kbDir = (body.kbx ?? 0) !== 0 ? Math.sign(body.kbx) : -(facing || 1);
-          sprite.rotation = kbDir * 0.24 * fRatio;
+          sprite.rotation = kbDir * 0.22 * fRatio;
         } else if (!((body.vortexHeld ?? 0) > 0)) {
           sprite.rotation = 0;
         }
@@ -896,11 +897,23 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   }
   function damageNumber(x, y, amount, tint) {
     if (!(amount >= 1)) return;
+    const rounded = Math.round(amount);
+    // PB-Rank Rapid Multi-Hit / Stream Damage Merging: merge hits within 48px & 0.62s into one bumped total!
+    const recent = numbers.find((n) => !n.word && n.age < 0.62 && Math.hypot(n.x - x, n.y - y) < 48);
+    if (recent) {
+      recent.total = (recent.total ?? (Number(recent.text.text) || 0)) + rounded;
+      recent.text.text = String(recent.total);
+      recent.text.style.fill = tint;
+      recent.age = 0;
+      recent.bump = 0.14;
+      recent.vy = reducedMotion ? -24 : -135;
+      return;
+    }
     if (numbers.length >= 10) recycle(numbers.shift());
     const text = numberPool.pop() ?? makeText(false);
-    text.text = String(Math.round(amount)); text.style.fill = tint; text.visible = true; text.alpha = 1;
+    text.text = String(rounded); text.style.fill = tint; text.visible = true; text.alpha = 1;
     const offset = stackOffset(x, y), side = offset.x > 0 ? 1 : offset.x < 0 ? -1 : (numbers.length % 2 ? 1 : -1);
-    numbers.push({ text, x: x + offset.x, y: y + offset.y, vx: reducedMotion ? 0 : side * 46, vy: reducedMotion ? -30 : -270, age: 0, life: 0.8, gravity: 720 });
+    numbers.push({ text, total: rounded, bump: 0.12, x: x + offset.x, y: y + offset.y, vx: reducedMotion ? 0 : side * 46, vy: reducedMotion ? -30 : -270, age: 0, life: 0.8, gravity: 720 });
   }
   /** A short word beside a body: a dodge is an icy italic with one trailing afterimage, gone in 450 ms. */
   function floatText(x, y, message, tone = "info") {
@@ -925,8 +938,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       if (!reducedMotion) n.vy += n.gravity * dt;
       n.x += n.vx * dt; n.y += n.vy * dt;
       const t = n.age / n.life;
+      if (n.bump > 0) n.bump = Math.max(0, n.bump - dt);
       n.text.position.set(n.x, n.y);
-      n.text.scale.set(reducedMotion ? 1 : n.age < 0.1 ? (n.word ? 1.3 - 3 * n.age : 1.7 - 7 * n.age) : 1);
+      const popScale = n.bump > 0 ? 1 + (n.bump / 0.14) * 0.55 : (n.age < 0.1 ? (n.word ? 1.3 - 3 * n.age : 1.7 - 7 * n.age) : 1);
+      n.text.scale.set(reducedMotion ? 1 : popScale);
       n.text.alpha = t > 0.7 ? (1 - t) / 0.3 : 1;
       if (n.ghost) { n.ghost.position.set(n.x - n.vx * 0.06, n.y - n.vy * 0.06); n.ghost.scale.copyFrom(n.text.scale); n.ghost.alpha = n.text.alpha * 0.35; }
     }
@@ -1161,12 +1176,14 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     }
   }
   let hitStop = 0, statusTick = 0, koSlowMo = 0, koSlowMoScale = 1;
-  let impactFlashTimer = 0, impactFlashMax = 0.068, impactFocus = null, tetherTimer = 0;
+  let impactFlashTimer = 0, impactFlashMax = 0.068, impactFocus = null, lastImpactAt = -10, tetherTimer = 0;
   let tamerCalloutLeft = 0, tamerCalloutRight = 0, wallFlashLeft = 0, wallFlashRight = 0;
-  const triggerImpactFrame = (wx, wy, sec = 0.068) => {
+  const triggerImpactFrame = (wx, wy, sec = 0.085) => {
     if (reducedMotion || !rich) return;
+    if (elapsed - lastImpactAt < 1.0) return; // PB-Rank 60f (1.0s) impact-frame cooldown prevents strobe spam
+    lastImpactAt = elapsed;
     impactFlashTimer = Math.max(impactFlashTimer, sec);
-    impactFlashMax = Math.max(sec, 0.055);
+    impactFlashMax = Math.max(sec, 0.068);
     impactFocus = { x: wx, y: wy };
   };
   // PB-Ranked Fighting-Game Hit-Feel Director: tiered freeze-frame hitstop + directional spark needles
@@ -1185,31 +1202,36 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       });
     }
   };
-  const heavyHit = (amount, wx = null, wy = null, { angle = 0, guarded = false, side = null, critical = false } = {}) => {
+  const heavyHit = (amount, wx = null, wy = null, { angle = 0, guarded = false, side = null, critical = false, moveId = null } = {}) => {
     if (reducedMotion || !(amount >= 1)) return;
+    // PB-Rank 8-System Hit-Feel Director: read exact per-move PB-324 hitFeel when available!
+    const pbFeel = moveId ? elementFx?.look?.(moveId)?.pb324?.hitFeel ?? null : null;
+    const pbStop = pbFeel ? Math.min(0.16, pbFeel.hitstop / 60) : 0;
+    const pbShake = pbFeel ? Math.min(0.65, pbFeel.shake * 0.36) : 0;
+    const pbPunch = pbFeel ? (1 + Math.min(0.08, pbFeel.punch * 0.22)) : 1;
     // PbRank 4-tier Hit-Stop: Light 0ms / Medium 55ms / Heavy 65ms / Ultimate・Break・Parry 105ms
-    const heavy = amount >= 28 && !guarded;
+    const heavy = (amount >= 28 || Boolean(pbFeel?.impact)) && !guarded;
     const medium = amount >= 16 && !guarded;
     const light = amount >= 6 && !guarded;
     if (critical) {
-      hitStop = Math.max(hitStop, 0.105);
-      camera.addTrauma(0.5);
-      camera.focusBoost(1.055, 0.2);
+      hitStop = Math.max(hitStop, Math.max(0.105, pbStop));
+      camera.addTrauma(Math.max(0.5, pbShake));
+      camera.focusBoost(Math.max(1.055, pbPunch), 0.2);
       if (relayMode && wx !== null && wy !== null) triggerImpactFrame(wx, wy, 0.068);
       fightingHitSparks(wx, wy, angle, 8, true);
     } else if (heavy) {
-      hitStop = Math.max(hitStop, relayMode ? 0.065 : 0.085);
-      camera.addTrauma(0.42);
-      camera.focusBoost(1.045, 0.16);
-      if (relayMode && wx !== null && wy !== null) triggerImpactFrame(wx, wy, 0.055);
+      hitStop = Math.max(hitStop, Math.max(relayMode ? 0.065 : 0.085, pbStop));
+      camera.addTrauma(Math.max(0.42, pbShake));
+      camera.focusBoost(Math.max(1.045, pbPunch), 0.16);
+      if (relayMode && wx !== null && wy !== null) triggerImpactFrame(wx, wy, pbFeel?.impact ? 0.075 : 0.055);
       fightingHitSparks(wx, wy, angle, 7, true);
     } else if (medium) {
-      hitStop = Math.max(hitStop, 0.055);
-      camera.addTrauma(0.26);
-      camera.focusBoost(1.024, 0.12);
+      hitStop = Math.max(hitStop, Math.max(0.055, pbStop));
+      camera.addTrauma(Math.max(0.26, pbShake));
+      camera.focusBoost(Math.max(1.024, pbPunch), 0.12);
       fightingHitSparks(wx, wy, angle, 5, false);
     } else if (light) {
-      camera.addTrauma(0.14);
+      camera.addTrauma(Math.max(0.14, pbShake * 0.6));
       fightingHitSparks(wx, wy, angle, 3, false);
     }
     if (relayMode && side && !guarded && wx !== null && wy !== null) {
@@ -1318,7 +1340,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           camera.addTrauma(event.guarded ? 0.14 : 0.34);
           if (!purePixelFx && !atlasContact) burst(event.x, event.y - 30, { count: event.guarded ? 4 : 8, speed: 200, tint: event.guarded ? 0xffd166 : 0xff4a4a });
           damageNumber(event.x, event.y - 56, event.amount, event.guarded ? 0xffe08a : 0xffb0a8);
-          heavyHit(event.amount, event.x, event.y - 30, { angle: hitAng, guarded: event.guarded, side: "rival" });
+          heavyHit(event.amount, event.x, event.y - 30, { angle: hitAng, guarded: event.guarded, side: "rival", moveId: lastRelease.rival?.moveId ?? null });
           break;
         }
         case "GUARD_START": if (purePixelFx) elementFx.parry?.({ x: event.x, y: event.y - 20 }); else ring(event.x, event.y - 18, 48, 0xffbe3b, 0.28); break;
@@ -1816,7 +1838,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           const hitAng = Math.atan2(event.y - state.player.y, event.x - state.player.x);
           if (!purePixelFx && !atlasContact && event.cause !== "LASER" && !(kitShots && relayMode)) { burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); contact(event.x, event.y - 30, 0xffb070); }
           damageNumber(event.x, event.y - 56, event.amount, event.guarded ? 0xffe08a : 0xffffff);
-          heavyHit(event.amount, event.x, event.y - 30, { angle: hitAng, guarded: event.guarded, side: "player" });
+          heavyHit(event.amount, event.x, event.y - 30, { angle: hitAng, guarded: event.guarded, side: "player", moveId: lastRelease.player?.moveId ?? null });
           break;
         }
         case "RIVAL_DODGE": puff(event.x, event.y, 0xa89580, 3, 0.9); break;
@@ -1971,18 +1993,25 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     impactGfx.clear();
     const t = clamp(impactFlashTimer / Math.max(0.01, impactFlashMax), 0, 1);
     const fx = impactFocus ? worldToScreen(impactFocus.x, impactFocus.y) : { x: viewport.width * 0.5, y: viewport.height * 0.5 };
-    // High-contrast anime flash backdrop
-    impactGfx.rect(0, 0, viewport.width, viewport.height).fill({ color: 0xffffff, alpha: 0.55 * t });
-    // Converging black speed lines around impact point
-    const diag = Math.hypot(viewport.width, viewport.height);
-    const lines = 20;
-    for (let i = 0; i < lines; i++) {
-      const a = (i / lines) * TAU + 0.14;
-      const r0 = 78 + (i % 3) * 28;
-      const r1 = diag;
-      impactGfx.moveTo(fx.x + Math.cos(a) * r0, fx.y + Math.sin(a) * r0)
-        .lineTo(fx.x + Math.cos(a) * r1, fx.y + Math.sin(a) * r1)
-        .stroke({ color: 0x0b0e14, width: (i % 2 === 0 ? 3.5 : 1.8), alpha: 0.78 * t });
+    // PB-Rank 46-Wedge High-Contrast Anime Impact Frame: alternating ink (#0d0c12) & off-white (#f6f1e6) strobe!
+    const darkPhase = Math.floor(impactFlashTimer * 45) % 2 === 0;
+    const bgCol = darkPhase ? 0x0d0c12 : 0xf6f1e6;
+    const wedgeCol = darkPhase ? 0xf6f1e6 : 0x0d0c12;
+    impactGfx.rect(0, 0, viewport.width, viewport.height).fill({ color: bgCol, alpha: 0.88 * t });
+    const diag = Math.max(1600, Math.hypot(viewport.width, viewport.height));
+    const wedges = 46;
+    for (let i = 0; i < wedges; i++) {
+      const a = (i / wedges) * TAU + (darkPhase ? 0.06 : 0);
+      const r0 = 86 + ((i * 37) % 130);
+      const halfAng = (0.012 + ((i * 19) % 10) * 0.0014);
+      const p0x = fx.x + Math.cos(a) * r0, p0y = fx.y + Math.sin(a) * r0;
+      const p1x = fx.x + Math.cos(a - halfAng) * diag, p1y = fx.y + Math.sin(a - halfAng) * diag;
+      const p2x = fx.x + Math.cos(a + halfAng) * diag, p2y = fx.y + Math.sin(a + halfAng) * diag;
+      if (typeof impactGfx.poly === "function") {
+        impactGfx.poly([p0x, p0y, p1x, p1y, p2x, p2y]).fill({ color: wedgeCol, alpha: 0.86 * t });
+      } else {
+        impactGfx.moveTo(p0x, p0y).lineTo(p1x, p1y).stroke({ color: wedgeCol, width: 2.5, alpha: 0.86 * t });
+      }
     }
   }
   const arrows = [];
@@ -2607,7 +2636,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         const count = layers * 4;
         for (let i = 0; i < count; i++) {
           const sx = baseX + Math.cos(i * 1.9) * 65, sy = baseY + Math.sin(i * 2.3) * 95;
-          g.poly([sx, sy - 14, sx + 9, sy + 6, sx - 9, sy + 6]).fill({ color: side === "player" ? 0xff6a5c : 0xc79bff, alpha: 0.78 }).stroke({ color: 0xffffff, width: 1.5, alpha: 0.85 });
+          const darkFace = side === "player" ? 0x9e2a24 : 0x56288a;
+          const brightFace = side === "player" ? 0xff7a66 : 0xd0a8ff;
+          g.ellipse?.(sx, sy + 5, 8, 3.5).fill({ color: 0x090b14, alpha: 0.35 });
+          g.poly([sx, sy - 11, sx + 8, sy + 4, sx, sy + 6]).fill({ color: darkFace, alpha: 0.92 });
+          g.poly([sx, sy - 11, sx, sy + 6, sx - 8, sy + 4]).fill({ color: brightFace, alpha: 0.94 });
+          g.circle(sx - 2, sy - 5, 1.6).fill({ color: 0xffffff, alpha: 0.9 });
         }
       };
       drawHazardSide("player", state.hazards?.player ?? 0);

@@ -12,6 +12,7 @@ import { moveVfxSignature } from "../../presentation/vfx/moveVfxSignatures.js";
 import { moveVfxChoreography } from "../../presentation/vfx/moveVfxChoreography.js";
 import { battleMoveName } from "../../text/battleMoveNames.js";
 import { relayOwnMoveInfo } from "./dataArenaRelayKits.js";
+import { pb324Move } from "./dataArenaPb324Catalog.js";
 
 export const MOVE_SYSTEMS = Object.freeze(["v2", "legacy"]);
 
@@ -215,6 +216,54 @@ const cache = new Map();
 export function resolveMoveSpecV2(moveId, baseMove = null) {
   const key = `${moveId}|${baseMove?.type ?? ""}`;
   if (cache.has(key)) return cache.get(key);
+
+  // Wave 8-B: PB-324 original 10-element move catalog resolves directly with exact timing, VFX & hit-feel!
+  const pb = pb324Move(moveId);
+  if (pb) {
+    const v2Archetype = pb.archetype;
+    const paletteKey = pb.palette;
+    const tuning = V2_ARCHETYPE_COMBAT_TUNING[v2Archetype] ?? V2_ARCHETYPE_COMBAT_TUNING.HOMING_ORB;
+    const isUltTier = pb.ultimate;
+    const combatRange = pb.range > 0 ? pb.range : Math.round(tuning.range * (isUltTier ? 1.12 : 1));
+    const combatRadius = Math.round(tuning.radius * (isUltTier ? 1.18 : 1));
+    const combatSpeed = tuning.speed > 0 ? Math.round(tuning.speed * (isUltTier ? 1.08 : 1)) : 0;
+    const telegraphShape = isUltTier && tuning.telegraphShape === "none" && combatRange > 0 ? "circle" : tuning.telegraphShape;
+    const spec = Object.freeze({
+      moveId: pb.id,
+      name: pb.nameZh,
+      nameEn: pb.nameEn,
+      element10: pb.element,
+      v2Archetype,
+      paletteKey,
+      tier: isUltTier ? "ultimate" : "skill",
+      melee: ["FLURRY_COMBO", "MULTI_DASH", "SHADOW_BACKSTAB", "UTURN_STRIKE", "LEAP_SLAM", "GRAB_SLAM", "GUARD_BREAK_SLAM"].includes(v2Archetype),
+      guardBreak: ["GUARD_BREAK_SLAM", "LEAP_SLAM", "GRAB_SLAM", "TELEKINESIS_SLAM"].includes(v2Archetype),
+      homing: v2Archetype === "HOMING_ORB",
+      rebound: v2Archetype === "UTURN_STRIKE",
+      surfRider: v2Archetype === "DRAG_WAVE" && pb.type === "LUNGE",
+      pullForce: v2Archetype === "VORTEX_PULL" ? 235 : 0,
+      flurryHits: v2Archetype === "FLURRY_COMBO" ? Math.max(3, pb.multiHit || 3) : 0,
+      beamTether: v2Archetype === "STREAM_BEAM",
+      laysHazard: v2Archetype === "GROUND_SPIKES",
+      spawnsDecoy: false,
+      shiftsWeather: isUltTier && ["FIRE", "WATER", "ICE", "EARTH"].includes(pb.element),
+      combatRange,
+      combatRadius,
+      combatWindup: pb.windup,
+      combatRecovery: pb.recovery,
+      combatSpeed,
+      telegraphShape,
+      flightLook: "shot-plasma",
+      releaseLook: "muzzle",
+      contactLook: "core",
+      groundLook: GROUND_LOOK_BY_PALETTE[paletteKey] ?? "prop-dust",
+      scale: isUltTier ? 1.35 : 1.0,
+      hitStopMs: Math.round((pb.hitFeel.hitstop / 60) * 1000),
+      pb324: pb
+    });
+    cache.set(key, spec);
+    return spec;
+  }
 
   const own = relayOwnMoveInfo(moveId);
   const ownMatch = /^own-(\d+)$/.exec(String(moveId));

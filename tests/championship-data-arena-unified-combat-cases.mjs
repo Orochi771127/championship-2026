@@ -1707,3 +1707,82 @@ test("phase 17 / Combat Wave 6: CPU vs CPU Spectator Mode (wide neutral camera, 
     assert.ok(DATA_ARENA_TEXT.en[key], `EN copy has ${key}`);
   }
 });
+
+test("phase 18 / Combat Wave 8: All 324 PB-Rank moves across 10 Canonical Elements replace old 666 RELAY kits + procedural pixel-particle VFX & 8 Hit-Feel systems", async () => {
+  const {
+    PB324_ELEMENTS, PB324_ELEMENT_META, PB324_MOVES, PB324_BY_ID, PB324_BY_ELEMENT,
+    isPb324MoveId, pb324Move, pb324ToRelayMove, pb324MoveName, pb324MoveDesc
+  } = await import("../src/championship/modes/dataArena/dataArenaPb324Catalog.js");
+  const { RELAY_LOADOUTS, relayKit, relayMove, relayMoveElement, relayEffectStyle } = await import("../src/championship/modes/dataArena/dataArenaRelay.js");
+  const { RELAY_ROSTER } = await import("../src/championship/modes/dataArena/dataArenaRelayRoster.js");
+
+  // 1) Exact 324 moves across 10 Canonical Elements (金木水火土日月雷冰風) with 324 unique ZH & EN names
+  assert.equal(PB324_MOVES.length, 324, "exact 324 PB-Rank-modeled original moves exist");
+  assert.deepEqual([...PB324_ELEMENTS], ["METAL", "WOOD", "EARTH", "WATER", "FIRE", "SUN", "ICE", "WIND", "THUNDER", "MOON"], "exact 10 canonical elements");
+  const zhSet = new Set(PB324_MOVES.map((m) => m.nameZh));
+  const enSet = new Set(PB324_MOVES.map((m) => m.nameEn));
+  assert.equal(zhSet.size, 324, "all 324 ZH names are unique");
+  assert.equal(enSet.size, 324, "all 324 EN names are unique");
+  let sumEl = 0;
+  for (const el of PB324_ELEMENTS) {
+    const bucket = PB324_BY_ELEMENT[el];
+    assert.ok(bucket.all.length >= 14, `${el} has rich move pool (${bucket.all.length})`);
+    assert.ok(bucket.skills.length >= 12, `${el} has >=12 skills (${bucket.skills.length})`);
+    assert.ok(bucket.ultimates.length >= 2, `${el} has >=2 ultimates (${bucket.ultimates.length})`);
+    assert.ok(PB324_ELEMENT_META[el]?.zh && PB324_ELEMENT_META[el]?.en, `${el} metadata complete`);
+    sumEl += bucket.all.length;
+  }
+  assert.equal(sumEl, 324, "10 elements partition all 324 moves with zero leaks");
+
+  // 2) Every partner in RELAY_ROSTER + 3 pilots exclusively equips PB-324 moves (ZERO legacy own-* 666 moves!)
+  const allPartnerIds = [...RELAY_ROSTER.map((p) => p.id), "ember-lizard", "corona-cub", "frost-drake"];
+  const coveredMoveIds = new Set();
+  for (const pid of allPartnerIds) {
+    const pool = RELAY_LOADOUTS[pid];
+    assert.ok(Array.isArray(pool) && pool.length >= 12, `${pid} has selectable PB-324 element pool (${pool?.length})`);
+    for (const mid of pool) {
+      assert.ok(isPb324MoveId(mid), `${pid} pool move ${mid} is a PB-324 ID (zero legacy own-* moves)`);
+      coveredMoveIds.add(mid);
+    }
+    const kit = relayKit(pid);
+    assert.equal(kit.moves.length, 3, `${pid} default kit has 3 skills`);
+    for (const mid of kit.moves) assert.ok(isPb324MoveId(mid), `${pid} default move ${mid} is PB-324`);
+    assert.ok(isPb324MoveId(kit.ultimate), `${pid} ultimate ${kit.ultimate} is PB-324`);
+    coveredMoveIds.add(kit.ultimate);
+    // Legacy save resilience: passing stale own-31 / emberBolt falls back cleanly to PB-324 kit
+    const migrated = relayKit(pid, ["own-31", "emberBolt"]);
+    assert.equal(migrated.moves.length, 3);
+    assert.ok(migrated.moves.every(isPb324MoveId), `${pid} old save loadout migrates cleanly to PB-324`);
+  }
+  // Every single non-ultimate skill across all 10 elements is selectable in RELAY_LOADOUTS!
+  const allSkillCount = PB324_MOVES.filter((m) => !m.ultimate).length;
+  const coveredSkills = [...coveredMoveIds].filter((id) => !PB324_BY_ID[id].ultimate).length;
+  assert.equal(coveredSkills, allSkillCount, `all ${allSkillCount} PB-324 skills are reachable across the 10-element roster`);
+
+  // 3) Every one of the 324 moves resolves cleanly through relayMove, resolveMoveSpecV2, relayMoveElement & relayEffectStyle
+  for (const m of PB324_MOVES) {
+    const rm = relayMove(m.id, m.ultimate);
+    assert.ok(rm && rm.type && Number.isFinite(rm.windup) && Number.isFinite(rm.recovery), `${m.id} converts cleanly to relayMove`);
+    const spec = resolveMoveSpecV2(m.id, rm);
+    assert.equal(spec.v2Archetype, m.archetype, `${m.id} preserves exact archetype`);
+    assert.equal(spec.element10, m.element, `${m.id} preserves canonical element`);
+    assert.ok(spec.pb324 === m, `${m.id} attaches pb324 metadata`);
+    assert.ok(relayMoveElement(m.id), `${m.id} resolves relayMoveElement`);
+    assert.ok(relayEffectStyle(m.id)?.tint !== undefined, `${m.id} resolves relayEffectStyle`);
+    assert.ok(pb324MoveName(m.id, "zh-Hant") === m.nameZh && pb324MoveName(m.id, "en") === m.nameEn);
+    assert.ok(pb324MoveDesc(m.id, "zh-Hant").includes(`[${PB324_ELEMENT_META[m.element].zh}]`));
+    assert.ok(pb324ToRelayMove(m.id));
+    assert.ok(pb324Move(m.id));
+  }
+
+  // 4) Procedural Pixel-Particle VFX engine & 8 Global Hit-Feel systems verified in source (ZERO blocky 00GameDevs sprites!)
+  const v2Src = readFileSync(new URL("../src/championship/presentation/dataArena/dataArenaPixelFxV2.js", import.meta.url), "utf8");
+  const sceneSrc = readFileSync(new URL("../src/championship/presentation/dataArena/dataArenaPixiScene.js", import.meta.url), "utf8");
+  const screenSrc = readFileSync(new URL("../src/championship/app/dataArenaScreen.js", import.meta.url), "utf8");
+  assert.ok(!v2Src.includes("00GameDevs") && !v2Src.includes("outline: true"), "PixelFX V2 completely purged blocky 00GameDevs square sprites & dark outline blobs");
+  assert.ok(v2Src.includes("PB_PARTICLE_PALETTES") && v2Src.includes("playPbMoveVfx") && v2Src.includes("emitElementBurst") && v2Src.includes("pxpuff"), "PB-Rank procedural pixel-particle engine active");
+  assert.ok(sceneSrc.includes("0.22 * fRatio") && sceneSrc.includes("0.18 * fRatio"), "PB-Rank hit squash-and-stretch active");
+  assert.ok(sceneSrc.includes("46") && sceneSrc.includes("lastImpactAt < 1.0"), "PB-Rank 46-wedge anime Impact Frame with 1.0s cooldown active");
+  assert.ok(sceneSrc.includes("recent.total") && sceneSrc.includes("0.62"), "PB-Rank rapid multi-hit damage number merging active");
+  assert.ok(screenSrc.includes("pb324Move") && screenSrc.includes("da-skill__el10"), "Lobby displays 10-element PB-324 badges and procedural preview");
+});

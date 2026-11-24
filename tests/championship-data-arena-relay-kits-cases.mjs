@@ -13,6 +13,7 @@ import { RELAY_LOADOUTS, RELAY_ACTION_PROFILES, relayKit, relayMove, relayEffect
 import { RELAY_EFFECT_TEXTURES } from '../src/championship/presentation/dataArena/dataArenaRelayEffects.js';
 import themes from '../src/data/championship/move-vfx-themes.r1.json' with { type: 'json' };
 import { RELAY_ELEMENT_KITS, RELAY_POOL_MOVE_ELEMENT, RELAY_STYLE_RULES, relayOwnMoveInfo } from '../src/championship/modes/dataArena/dataArenaRelayKits.js';
+import { isPb324MoveId, pb324Move, pb324CanonicalElement } from '../src/championship/modes/dataArena/dataArenaPb324Catalog.js';
 import { DATA_ARENA_PARTNERS } from '../src/championship/modes/dataArena/dataArenaConfig.js';
 import { createDataArenaSimulation } from '../src/championship/modes/dataArena/dataArenaSimulation.js';
 
@@ -36,30 +37,22 @@ test('every pool holds only its own element or element-neutral body moves', () =
   }
 });
 
-test('each roster partner opens with its own moves and fills only from its element', () => {
+test('each roster partner equips exclusively from its own canonical 10-element PB-324 pool', () => {
   assert.equal(kits.species.length, RELAY_ROSTER.length);
   for (const partner of rosterPartners) {
-    const options = RELAY_LOADOUTS[partner.id], row = kitRow.get(partner.speciesIndex);
-    assert.equal(options.length, 5, partner.id);
-    assert.ok(row[2].length >= 1, `${partner.id} has no own move`);
-    const own = options.filter(id => relayOwnMoveInfo(id));
-    // UNIFIED_MOVES_20261118: the partner's own ultimate takes the R slot, the rest open the five choices.
-    assert.deepEqual(own, row[2].filter(r => r[4] !== 1).map(([record]) => `own-${record}`));
-    assert.equal(row[2].filter(r => r[4] === 1).length, 1, `${partner.id} has one own ultimate`);
-    assert.deepEqual(options.slice(0, own.length), own, `${partner.id} own moves first`);
-    for (const id of own) {
-      const info = relayOwnMoveInfo(id), base = partner.speciesIndex >= 224 ? null : partner.speciesIndex;
-      if (base !== null) assert.equal(owner.get(info.record), base, `${id} is not ${partner.id}'s move`);
-      assert.ok(moves.records[info.record].actionCost > 0, `${id} is a special move`);
+    const options = RELAY_LOADOUTS[partner.id];
+    const expectedEl = pb324CanonicalElement(partner.element, partner.speciesIndex);
+    assert.ok(options.length >= 12, `${partner.id} has full element PB-324 skill pool (${options.length})`);
+    for (const id of options) {
+      assert.ok(isPb324MoveId(id), `${partner.id} move ${id} is PB-324`);
+      assert.equal(pb324Move(id).element, expectedEl, `${partner.id} (${expectedEl}) never receives off-element move ${id}`);
     }
-    for (const id of options.filter(id => !relayOwnMoveInfo(id)))
-      assert.ok([partner.element, 'neutral'].includes(RELAY_POOL_MOVE_ELEMENT[id]), `${partner.id} (${partner.element}) gets ${id}`);
-    const ownUltimate = `own-${row[2].find(r => r[4] === 1)[0]}`;
-    assert.equal(relayKit(partner.id).ultimate, ownUltimate, `${partner.id} uses its own ultimate`);
-    // it fights with the numbers its element pool's ultimate had (balance unchanged)
-    const lent = relayMove(RELAY_ELEMENT_KITS[partner.element].ultimate, true), mine = relayMove(ownUltimate, true);
-    for (const key of ['type', 'damage', 'radius', 'range', 'windup', 'energy', 'cooldown']) assert.equal(mine[key], lent[key], `${ownUltimate} ${key}`);
-    assert.deepEqual(relayKit(partner.id).moves, options.slice(0, 3));
+    const kit = relayKit(partner.id);
+    assert.equal(kit.moves.length, 3, `${partner.id} equips 3 PB-324 skills`);
+    for (const id of kit.moves) assert.equal(pb324Move(id).element, expectedEl);
+    assert.ok(isPb324MoveId(kit.ultimate), `${partner.id} equips a PB-324 ultimate`);
+    assert.equal(pb324Move(kit.ultimate).element, expectedEl);
+    assert.ok(relayMove(kit.ultimate, true));
   }
 });
 
@@ -75,7 +68,7 @@ test('element follows the partner\'s own coloured moves; Tournament partners kee
   assert.equal(element(106), 'nature'); assert.equal(element(110), 'fire'); assert.equal(element(181), 'earth');
   assert.equal(element(175), 'nature'); assert.equal(element(60), 'nature');
   assert.equal(element(34), 'fire'); assert.equal(element(61), 'frost'); assert.equal(element(64), 'light');
-  assert.deepEqual(RELAY_LOADOUTS['frost-drake'], ['iceShard', 'frostStep', 'iceCage', 'frostFan', 'glacierGuard']);
+  assert.ok(RELAY_LOADOUTS['frost-drake'].length >= 12 && RELAY_LOADOUTS['frost-drake'].every(id => pb324Move(id)?.element === 'ICE'));
 });
 
 test('own moves take their mechanic from the style and side effects from the colour, never from stage', () => {

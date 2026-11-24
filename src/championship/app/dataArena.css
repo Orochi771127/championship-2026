@@ -672,7 +672,13 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 /* relay skill keys: paper keys with an element stripe; the power move is a purple key */
 .da-chips { display:grid; gap:8px; }
 .da-chips__slots { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:6px; }
-.da-chips__choices { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; padding:8px; border:2px dashed var(--ink); border-radius:12px; background:#f3e6c4; }
+.da-chips__choices { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; padding:8px; border:2px dashed var(--ink); border-radius:12px; background:#f3e6c4; max-height:290px; overflow-y:auto; overscroll-behavior:contain; }
+.da-skill__el10 { display:inline-grid; place-items:center; width:18px; height:18px; border-radius:5px; font-size:calc(10.5px * var(--text-scale-hud, 1)); font-weight:900; line-height:1; color:#fff; background:var(--chip); border:1.5px solid var(--ink); justify-self:start; }
+.da-skill[data-el10="METAL"] { --chip:#7e8da3; } .da-skill[data-el10="WOOD"] { --chip:#2fbf62; }
+.da-skill[data-el10="EARTH"] { --chip:#b07a3c; } .da-skill[data-el10="WATER"] { --chip:#2f8fe0; }
+.da-skill[data-el10="FIRE"] { --chip:#ff6b35; } .da-skill[data-el10="SUN"] { --chip:#e5a800; }
+.da-skill[data-el10="ICE"] { --chip:#4cc4ec; } .da-skill[data-el10="WIND"] { --chip:#2cb59b; }
+.da-skill[data-el10="THUNDER"] { --chip:#d99a00; } .da-skill[data-el10="MOON"] { --chip:#7a4fd0; }
 .da-panel--select .da-skill { --chip:#8d8676; position:relative; display:grid; gap:1px; align-content:start; min-height:50px; padding:6px 6px 7px 11px; text-align:left;
   border-radius:12px; font:inherit; cursor:pointer; min-width:0; }
 .da-skill::before { content:""; position:absolute; left:4px; top:7px; bottom:7px; width:4px; border-radius:3px; background:var(--chip); }

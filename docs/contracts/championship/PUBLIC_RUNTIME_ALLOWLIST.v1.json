@@ -145469,7 +145469,7 @@
     },
     {
       "path": "championship.html",
-      "sha256": "ae39ac91ae8e26ca8334b05f5a4241f58ef1e0c8b4a7fc3a9726769db4bb2f1d"
+      "sha256": "21fa5f6ee85d463d3a6153ca54f67052f40c759529e739c2cefd564af7951a5f"
     },
     {
       "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -145937,11 +145937,11 @@
     },
     {
       "path": "src/championship/app/dataArena.css",
-      "sha256": "b83591c4d0ffcfaa6e4d138ede878e2eb3736c76dd30dc27f0cb9fb78514228d"
+      "sha256": "38cffd2f5b16093552461c0c57abfd9d077182eb2f3468b103dde6b820a9a395"
     },
     {
       "path": "src/championship/app/dataArenaScreen.js",
-      "sha256": "1fb446a3198775eadd9c6696c930944a0122570b974da2c6677deffb44fda403"
+      "sha256": "7184e658dd529b07db0b05991222fb37e778fe90086f266d34421e420161a368"
     },
     {
       "path": "src/championship/app/daylightSkin.css",
@@ -147157,11 +147157,15 @@
     },
     {
       "path": "src/championship/modes/dataArena/dataArenaMoveCatalogV2.js",
-      "sha256": "b566d1edd62c484cd7cc4ec7610da29e174ab3cb6300382e797c1c65915e5ee2"
+      "sha256": "f1eeee5651b1c2959c9e9ad881e158ec1f4871203d2f64a6571a82be27fc5f61"
     },
     {
       "path": "src/championship/modes/dataArena/dataArenaNav.js",
       "sha256": "a3a807684c9dfbb2ef0a4a03bc174c69320af32d67de2e7cb0eff1965ec735dc"
+    },
+    {
+      "path": "src/championship/modes/dataArena/dataArenaPb324Catalog.js",
+      "sha256": "f67dbbcd2a80296a521696c32b20cf94e3bda39804defc208dcaee04bdcb9fcb"
     },
     {
       "path": "src/championship/modes/dataArena/dataArenaProps.js",
@@ -147169,7 +147173,7 @@
     },
     {
       "path": "src/championship/modes/dataArena/dataArenaRelay.js",
-      "sha256": "cbb61586157230f06af9309c4c72d23834cad4913b086afaca87bcb9097d32b5"
+      "sha256": "e43393ac68cb3c2faf90a4c038b9c36cd374089ca7ea20ca6cc2df27345070c9"
     },
     {
       "path": "src/championship/modes/dataArena/dataArenaRelayArena.js",
@@ -147181,7 +147185,7 @@
     },
     {
       "path": "src/championship/modes/dataArena/dataArenaRelayKits.js",
-      "sha256": "cbb9e4af0810f65f0c250cfc06139afd3f0eeef0890ffe118ae1e54e9164f203"
+      "sha256": "3e3bec18b6717cb25f5d0fdd9b6b20ac86d4d043edc0e37551670e2207870770"
     },
     {
       "path": "src/championship/modes/dataArena/dataArenaRelayMaps.js",
@@ -147433,11 +147437,11 @@
     },
     {
       "path": "src/championship/presentation/dataArena/dataArenaPixelFxV2.js",
-      "sha256": "1cc8becf7ba9e2ecde7c056220fb7f040d75d75511eec39a4c092184f6bd9033"
+      "sha256": "6339630e5cb521a2d3a803ceb8f87421faea3eeef2881d687dde8bc9f12224bb"
     },
     {
       "path": "src/championship/presentation/dataArena/dataArenaPixiScene.js",
-      "sha256": "d0a7b97935c15be9d91156f58702372fadbb5074d2dd66f8ac38831360fe653c"
+      "sha256": "5e664ff1fcf2e2114f3a48821afe099f160efa06ad222a71ea6a9a8ce0296ee7"
     },
     {
       "path": "src/championship/presentation/dataArena/dataArenaRelayEffects.js",
@@ -147888,16 +147892,16 @@
       "sha256": "21348765d50ea585c730e508f0d29dcc6b154ba499bec5fd2e5ebdb5768ab1cc"
     },
     {
-      "path": "src/championship/presentation/vfx/moveVfx00GameDevsSprites.js",
-      "sha256": "ce037e078903d850655a598698d82eb6638695ee6e1cd81b8ca798de0c61d270"
-    },
-    {
       "path": "src/championship/presentation/vfx/moveVfx00GameDevsBatch2Sprites.js",
       "sha256": "02bbe2cf20d81faaf399806c87e0e45bff800eb49379b7ab42d0c07089f8cfce"
     },
     {
       "path": "src/championship/presentation/vfx/moveVfx00GameDevsBatch3Sprites.js",
       "sha256": "aeed0b58a65e12bed707f791c70e9591520fc72c1d5c1d52c818cb3adae4e0b4"
+    },
+    {
+      "path": "src/championship/presentation/vfx/moveVfx00GameDevsSprites.js",
+      "sha256": "ce037e078903d850655a598698d82eb6638695ee6e1cd81b8ca798de0c61d270"
     },
     {
       "path": "src/championship/presentation/vfx/moveVfxChoreography.js",
@@ -148382,6 +148386,10 @@
     {
       "path": "src/championship/text/cyberDungeonText.js",
       "sha256": "89d1bfb4a7f26c5b4b34f0772ac0483d4bfe32170ced024b2ca952c0b20b7bf8"
+    },
+    {
+      "path": "src/championship/text/dataArenaPb324Text.js",
+      "sha256": "77bca1fd54dd08471ee4645a768f6892a815ce9dfb4e713db3763c5fd7d6104d"
     },
     {
       "path": "src/championship/text/dataArenaText.js",
