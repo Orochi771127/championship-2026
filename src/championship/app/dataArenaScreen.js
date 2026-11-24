@@ -1399,12 +1399,54 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   const frameCost = [];
   let frameFault = null;
   let replayRecorder = null, lastReplay = null, replayPlayer = null, replaySpeed = 1, replayPaused = false, replayBar = null, replayProgressFill = null, replayPauseBtn = null, replayConfig = null;
+  let spectatorMode = false, spectatorSpeed = 1, spectatorBar = null, spectatorEverUsed = false;
   function clearReplayUi() {
     replayBar?.remove(); replayBar = null; replayProgressFill = null; replayPauseBtn = null;
+  }
+  function clearSpectatorUi() {
+    spectatorBar?.remove(); spectatorBar = null;
+    delete root.dataset.spectator;
+  }
+  function mountSpectatorBar() {
+    clearSpectatorUi();
+    if (!spectatorMode) return;
+    root.dataset.spectator = "1";
+    spectatorBar = el("div", "da-spectator-bar");
+    const tag = el("span", "da-spectator-bar__tag", t("spectator.badge"));
+    const speedBtns = [1, 1.5, 2].map((spd) => {
+      const b = button("da-chip-btn da-spectator-bar__spd", `${spd}×`, () => {
+        spectatorSpeed = spd;
+        for (const sb of speedBtns) sb.classList.toggle("is-active", Number(sb.dataset.spd) === spectatorSpeed);
+      }, signal);
+      b.dataset.spd = String(spd);
+      b.classList.toggle("is-active", spd === spectatorSpeed);
+      return b;
+    });
+    const takeoverBtn = button("da-chip-btn da-spectator-bar__takeover", t("spectator.takeover"), () => {
+      spectatorMode = false;
+      spectatorSpeed = 1;
+      clearSpectatorUi();
+      scene?.setSpectator?.(false);
+      controlModePref = "MANUAL";
+      sim?.setControlMode?.("MANUAL");
+      tactical(t("spectator.takeoverCall"), { tone: "good", key: "spectator-takeover", ms: 2000 });
+    }, signal);
+    const exitBtn = button("da-chip-btn da-spectator-bar__exit", t("spectator.exit"), () => {
+      spectatorMode = false;
+      spectatorSpeed = 1;
+      spectatorEverUsed = false;
+      clearSpectatorUi();
+      void releaseMatch({ keepCast: true, keepEffects: true, keepAudio: true });
+      showSelect();
+    }, signal);
+    spectatorBar.append(tag, ...speedBtns, takeoverBtn, exitBtn);
+    hud.appendChild(spectatorBar);
   }
   function startReplay(replay) {
     if (!replay?.config || !stage) return;
     clearReplayUi();
+    spectatorMode = false;
+    clearSpectatorUi();
     replayPlayer = createRelayReplayPlayer(replay);
     replaySpeed = 1;
     replayPaused = false;
@@ -1458,9 +1500,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const dtMs = Math.min(ticker.deltaMS, 250);
     if (root.dataset.state === "PLAY" && !paused && !document.hidden) {
       const timeScale = scene.getTimeScale?.() ?? 1;
-      accumulator += dtMs * timeScale;
+      const speedMult = spectatorMode ? spectatorSpeed : 1;
+      accumulator += dtMs * timeScale * speedMult;
+      const maxSteps = Math.max(DATA_ARENA_MAX_STEPS_PER_FRAME, Math.ceil(DATA_ARENA_MAX_STEPS_PER_FRAME * speedMult));
       let steps = 0;
-      while (accumulator >= STEP_MS && steps < DATA_ARENA_MAX_STEPS_PER_FRAME) {
+      while (accumulator >= STEP_MS && steps < maxSteps) {
         const inp = buildInput();
         replayRecorder?.record(inp);
         sim.step(inp);
@@ -1468,7 +1512,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         steps++;
         if (sim.getState().mode === "LEVEL_UP" || sim.getState().mode === "ENDED") { accumulator = 0; break; }
       }
-      if (steps >= DATA_ARENA_MAX_STEPS_PER_FRAME) accumulator = 0; // drop time instead of spiralling
+      if (steps >= maxSteps) accumulator = 0; // drop time instead of spiralling
     } else if (root.dataset.state === "REPLAY" && replayPlayer && !replayPaused && !document.hidden) {
       accumulator += dtMs * replaySpeed;
       let steps = 0;
@@ -1540,6 +1584,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   function mountScene() {
     scene?.dispose();
     scene = mountDataArenaScene({ stage, sim, cast, bundles, quality, reducedMotion, shake, partnerId, environment, interactionArt, effectArt });
+    scene.setSpectator?.(spectatorMode);
     root.dataset.quality = quality;
     stage.setResolutionCap(quality === "low" ? 1 : Math.min(2, resolutionCap));
   }
@@ -1571,6 +1616,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     if (!keepEffects) { resources.push(effectArt); effectArt = null; }
     if (!keepCast) { resources.push(...bundles.values()); bundles.clear(); bundleScope = null; }
     sim = null; result = null; paused = false; accumulator = 0; qaRecentEvents.length = 0;
+    if (typeof clearSpectatorUi === "function") clearSpectatorUi();
     clearTimeout(bannerTimer); clearTimeout(vignetteTimer);
     clean(releaseInputs);
     clean(() => stage?.setResolutionCap(resolutionCap));
@@ -1594,9 +1640,14 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       return null;
     }
   }
-  async function startMatch() {
+  async function startMatch({ spectator = false } = {}) {
     if (startingMatch || qualityReloading || signal.aborted) return;
     startingMatch = true;
+    if (typeof spectatorMode !== "undefined") {
+      spectatorMode = Boolean(spectator) && gameMode === "RELAY" && !campaign;
+      spectatorSpeed = 1;
+      spectatorEverUsed = spectatorMode;
+    }
     const owner = matchLoad = createLoadAttempt({ timeoutMs: LOAD_MAX_MS });
     const abort = () => owner.cancel(signal.reason);
     signal.addEventListener("abort", abort, { once: true });
@@ -1614,7 +1665,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       const notice = el("p", "da-note", t(error?.message === "LOAD_TIMEOUT" ? "loading.timeout" : "loading.error"));
       notice.setAttribute("role", "status");
       panel.append(el("h2", "da-title", t("mode.title")), notice);
-      const retry = button("da-btn da-btn--primary", t("result.retry"), () => void startMatch(), signal);
+      const retry = button("da-btn da-btn--primary", t("result.retry"), () => void startMatch({ spectator: typeof spectatorMode !== "undefined" ? spectatorMode : false }), signal);
       retry.dataset.autofocus = "1";
       const actions = el("div", "da-actions");
       actions.append(retry, button("da-btn", t("select.back"), () => close(), signal));
@@ -1653,7 +1704,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     // A Journey zone stage carries no contract: it pays its own stars and prizes.
     // A sponsor contract armed in the battle menu takes its stake as a tournament or relay starts (AWAKENING_OVERDRIVE_20261109).
     const makeConfig = (rivalBoostPercent) => ({ seed: matchSeed, partnerId, quality, mode: gameMode,
-      controlMode: gameMode === "RELAY" && typeof controlModePref !== "undefined" ? controlModePref : "MANUAL",
+      controlMode: (typeof spectatorMode !== "undefined" && spectatorMode) ? "AUTO" : (gameMode === "RELAY" && typeof controlModePref !== "undefined" ? controlModePref : "MANUAL"),
       aiDifficulty: gameMode === "RELAY" && typeof aiDifficultyPref !== "undefined" ? aiDifficultyPref : "normal",
       aiSettings: gameMode === "RELAY" && typeof aiSettingsPref !== "undefined" ? { ...aiSettingsPref } : null,
       tacticalArt: gameMode === "RELAY" && typeof tacticalArtPref !== "undefined" ? tacticalArtPref : null,
@@ -1674,8 +1725,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     }
     if (typeof lastReplay !== "undefined") lastReplay = null;
     staked = null;
-    // A Journey zone stage carries no contract: it pays its own stars and prizes.
-    if (!campaign && (gameMode === "RELAY" || gameMode === "TOURNAMENT") && sponsor?.begin) {
+    // A Journey zone stage or Spectator match carries no sponsor contract.
+    if (!campaign && !(typeof spectatorMode !== "undefined" && spectatorMode) && (gameMode === "RELAY" || gameMode === "TOURNAMENT") && sponsor?.begin) {
       // Arena rivals are a fixed bracket built tougher than any seat, so the sponsor keeps plain odds here; the stake
       // cap and the daily limit still hold (Owner 2026-11-10).
       staked = sponsor.begin({});
@@ -1712,6 +1763,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     accumulator = 0;
     releaseInputs();
     buildHud();
+    if (typeof mountSpectatorBar === "function") mountSpectatorBar();
     hideOverlay();
     root.dataset.state = "PLAY";
     if (!tickerCallback) { tickerCallback = frame; stage.app.ticker.add(tickerCallback); }
@@ -2392,18 +2444,27 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       best.textContent = t(gameMode === "TOURNAMENT" ? "select.best.T" : "select.best", { score: entry.bestScore.toLocaleString(), wins: entry.wins, runs: entry.runs });
       goal.textContent = t(entry.runs === 0 ? `goal.first.${gameMode}` : entry.wins === 0 ? `goal.win.${gameMode}` : 'goal.best', {score:entry.bestScore.toLocaleString()});
       start.disabled = gameMode === "RELAY" ? team.length < 3 : !partnerId;
+      spectate.hidden = Boolean(campaign) || gameMode !== "RELAY";
+      spectate.disabled = start.disabled;
       if (!drawer.hidden) renderDrawer();
     }
     const actions = el("div", "da-actions");
-    const start = button("da-btn da-btn--primary", t("select.start"), () => {
+    const commitSquadChoice = () => {
       partnerPower = withSyncPower(dataArenaPartnerPower(entriesFor(gameMode)));
       records.setLastPartner(partnerId); if (!campaign) { records.setLastMode(gameMode); if(gameMode==="RELAY")records.setRelayTeam(relayReserveId,relayArenaId,relayThirdId); } audio?.play?.("ui");
+    };
+    const start = button("da-btn da-btn--primary", t("select.start"), () => {
+      commitSquadChoice();
       // Plan A (PbRank): jump straight into combat once the player has seen the 10-second controls guide.
       if (records.get().briefingSeen) void startMatch();
       else showBriefing();
     }, signal);
     start.dataset.autofocus = "1";
-    actions.append(start, button("da-btn", t("select.back"), () => close(), signal));
+    const spectate = button("da-btn da-btn--spectate", t("select.spectate"), () => {
+      commitSquadChoice();
+      void startMatch({ spectator: true });
+    }, signal);
+    actions.append(start, spectate, button("da-btn", t("select.back"), () => close(), signal));
     // The head and the action bar stay put; only the body scrolls, with room
     // under its last card so the bar never covers it.
     const body = el("div", "da-panel__body");
@@ -2549,7 +2610,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     }, signal);
     const row = el("div", "da-actions da-actions--column");
     row.append(resume, shakeToggle, qualityToggle, touchLayoutToggle,
-      button("da-btn", t("pause.restart"), () => { hideOverlay(); void startMatch(); }, signal),
+      button("da-btn", t("pause.restart"), () => { hideOverlay(); void startMatch({ spectator: spectatorMode }); }, signal),
       button("da-btn da-btn--quiet", t("pause.exit"), () => close(), signal));
     panel.appendChild(row);
     if (reducedMotion) panel.appendChild(el("p", "da-note", t("pause.motionNote")));
@@ -2561,13 +2622,19 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       result = sim.getState().result;
       if (replayRecorder) { lastReplay = replayRecorder.finalize(result); replayRecorder = null; }
     }
+    const wasSpectator = spectatorEverUsed;
+    const skipScoring = fromReplay || wasSpectator;
+    spectatorMode = false;
+    spectatorSpeed = 1;
     clearReplayUi();
+    clearSpectatorUi();
+    scene?.setSpectator?.(false);
     replayPlayer = null;
     root.dataset.state = "RESULT";
     root.dataset.outcome = result.outcome;
     releaseInputs();
     audio?.suspend();
-    const { newBest, saved, rankUpdate } = fromReplay ? { newBest: false, saved: null, rankUpdate: null } : records.recordResult(result);
+    const { newBest, saved, rankUpdate } = skipScoring ? { newBest: false, saved: null, rankUpdate: null } : records.recordResult(result);
     // P0 (2026-11-21): settle rewards onto the exact selected owned instanceIds (never silently fall back to first-of-species).
     const snap = sim.getSnapshot?.() ?? null;
     const partyIds = fighterInstances();
@@ -2575,15 +2642,15 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     // spends an armed bounty beacon on it (Owner 2026-11-10).
     let gachaTickets = 0;
     let campaignOutcome = null;
-    if (!fromReplay && campaign && typeof onCampaignResult === "function") {
+    if (!skipScoring && campaign && typeof onCampaignResult === "function") {
       try { campaignOutcome = onCampaignResult({ outcome: result.outcome, timeSeconds: result.timeSeconds, fainted: result.relayFainted ?? 0 }); } catch { campaignOutcome = null; }
     }
-    if (!fromReplay && !campaign && result.outcome === "VICTORY" && typeof onVictory === "function") {
+    if (!skipScoring && !campaign && result.outcome === "VICTORY" && typeof onVictory === "function") {
       try { gachaTickets = onVictory({ tournament: Boolean(result.tournament), partyIds })?.granted ?? 0; } catch { gachaTickets = 0; }
     }
     // Sync EXP for the ranch partners that fought; the host settles it into the save.
     let syncPanel = null;
-    if (!fromReplay && typeof onSyncResult === "function") {
+    if (!skipScoring && typeof onSyncResult === "function") {
       try {
         const record = onSyncResult({ instanceIds: fighterInstances(), won: result.outcome === "VICTORY", attemptId: `arena:${matchId}` });
         syncPanel = record && typeof syncPanelFor === "function" ? syncPanelFor(record) : null;
@@ -2591,7 +2658,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     }
     // The staked contract settles on this result: downs are relay partners left at 0 HP.
     let sponsorResult = null;
-    if (staked?.ok) {
+    if (!skipScoring && staked?.ok) {
       const downs = (snap?.relay?.team ?? []).filter((member) => member.hp <= 0).length;
       try { sponsorResult = sponsor.settle({ won: result.outcome === "VICTORY", partnerDowns: downs, seconds: result.timeSeconds, partyIds }); } catch { sponsorResult = null; }
       staked = null;
@@ -2600,7 +2667,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     music?.setScene(result.outcome === "VICTORY" ? "victory" : "defeat", `arena-result:${matchId}`);
     const panel = el("div", `da-panel da-panel--result da-result--${result.outcome.toLowerCase()}`);
     const cup = result.tournament;
-    panel.append(el("h2", "da-title", cup ? (result.outcome === "VICTORY" ? t("result.champion") : t("result.out", { round: cup.reachedRound })) : t(`result.${result.outcome}`)));
+    panel.append(el("h2", "da-title", wasSpectator ? `${t("spectator.resultTitle")} · ${t(`result.${result.outcome}`)}` : (cup ? (result.outcome === "VICTORY" ? t("result.champion") : t("result.out", { round: cup.reachedRound })) : t(`result.${result.outcome}`))));
+    if (wasSpectator) panel.append(el("p", "da-note", t("spectator.resultNote")));
     const score = el("div", "da-result__score");
     score.append(el("span", "da-result__label", t("result.score")), el("strong", "", result.score.toLocaleString()));
     if (newBest) score.appendChild(el("span", "da-badge", t("result.newBest")));
@@ -2652,13 +2720,13 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       panel.append(line);
     }
     const actions = el("div", "da-actions");
-    const retry = button("da-btn da-btn--primary", t("result.retry"), () => { syncPanel?.dispose(); void startMatch(); }, signal);
+    const retry = button("da-btn da-btn--primary", t(wasSpectator ? "spectator.rematch" : "result.retry"), () => { syncPanel?.dispose(); void startMatch({ spectator: wasSpectator }); }, signal);
     retry.dataset.autofocus = "1";
     if (gameMode === "RELAY" && lastReplay?.totalSteps > 0) {
       actions.appendChild(button("da-btn da-btn--replay", t("replay.watch"), () => { syncPanel?.dispose(); startReplay(lastReplay); }, signal));
     }
-    actions.append(retry, button("da-btn", t("result.change"), () => { void releaseMatch({ keepCast: true, keepEffects: true, keepAudio: true }); showSelect(); }, signal), button("da-btn da-btn--quiet", t("result.exit"), () => close(), signal));
-    panel.append(actions, el("p", "da-fineprint", t(saved ? "result.recordNote" : "result.recordOff")));
+    actions.append(retry, button("da-btn", t("result.change"), () => { spectatorEverUsed = false; void releaseMatch({ keepCast: true, keepEffects: true, keepAudio: true }); showSelect(); }, signal), button("da-btn da-btn--quiet", t("result.exit"), () => close(), signal));
+    panel.append(actions, el("p", "da-fineprint", t(wasSpectator ? "spectator.resultNote" : (saved ? "result.recordNote" : "result.recordOff"))));
     // A short beat so the crowd reaction and the last hit read before the panel.
     setTimeout(() => { if (!signal.aborted && root.dataset.state === "RESULT") { showOverlay(panel); syncPanel?.play(); } }, 900);
   }
@@ -2691,6 +2759,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       snapshot: () => (sim ? sim.getSnapshot() : null),
       events:()=>JSON.parse(JSON.stringify(qaRecentEvents)),
       state: () => root.dataset.state,
+      spectator: () => ({ active: spectatorMode, speed: spectatorSpeed, everUsed: spectatorEverUsed }),
       diagnostics: () => {
         const sorted = [...frameCost].sort((a, b) => a - b);
         return { frameFault: frameFault ? String(frameFault.message ?? frameFault) : null, tickerListeners: stage?.app.ticker.count ?? null, scene: scene?.getDiagnostics() ?? null, stage: stage?.getDiagnostics() ?? null, bundles: [...bundles.keys()],

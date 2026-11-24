@@ -39,7 +39,7 @@ export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion =
       boostTimer = Math.max(boostTimer, boostDuration);
     },
     snap(targetX, targetY) { x = targetX; y = targetY; },
-    update({ dtMs, viewport, target, velocity = { x: 0, y: 0 }, aim = null, threat = 0, opponent = null }) {
+    update({ dtMs, viewport, target, velocity = { x: 0, y: 0 }, aim = null, threat = 0, opponent = null, spectator = false }) {
       const dtSec = Math.max(0, dtMs) / 1000;
       time += Math.max(0, dtMs);
       if (boostTimer > 0) {
@@ -47,16 +47,19 @@ export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion =
         if (boostTimer <= 0) boostScale = 1;
       }
       const base = dataArenaBaseZoom(viewport.width, viewport.height);
-      let wanted = base * (1 - 0.14 * clamp(threat, 0, 1));
+      let wanted = base * (1 - 0.14 * clamp(threat, 0, 1)) * (spectator ? 0.88 : 1);
       let focusX = target.x, focusY = target.y;
       if (opponent) {
         // HUD chrome takes ~150 px at the top and ~90 px at the bottom; leave room for both bodies.
         const dx = Math.abs(opponent.x - target.x), dy = Math.abs(opponent.y - target.y);
-        const fit = Math.min(viewport.width / (dx + 320), (viewport.height - 250) / (dy + 240));
+        const padX = spectator ? 440 : 320, padY = spectator ? 320 : 240;
+        const fit = Math.min(viewport.width / (dx + padX), (viewport.height - (spectator ? 190 : 250)) / (dy + padY));
         wanted = clamp(Math.min(wanted, fit), Math.max(0.42, base * 0.42), wanted);
         // Centre the pair in the band between the top HUD (rival bar) and the bottom kit bar.
         const z = zoom ?? wanted;
-        focusX = target.x + (opponent.x - target.x) * 0.42; focusY = target.y + (opponent.y - target.y) * 0.42 - 55 / z; // tall sprites (the champion) clear the rival bar
+        const bias = spectator ? 0.5 : 0.42;
+        const yOff = spectator ? 30 : 55;
+        focusX = target.x + (opponent.x - target.x) * bias; focusY = target.y + (opponent.y - target.y) * bias - yOff / z; // tall sprites (the champion) clear the rival bar
       }
       if (boostTimer > 0 && boostScale > 1) {
         const env = Math.sin(clamp(boostTimer / boostDuration, 0, 1) * Math.PI * 0.5);
@@ -66,9 +69,9 @@ export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion =
       if (zoom === null) zoom = wanted;
       else zoom += (wanted - zoom) * battleFxApproach(dtMs, reducedMotion ? 1400 : (boostTimer > 0 ? 220 : 520));
       if(cover)zoom=Math.max(zoom,viewport.width/worldWidth,viewport.height/worldHeight);
-      const look = (reducedMotion ? 0.18 : 0.34) * (opponent ? 0.45 : 1);
+      const look = (reducedMotion ? 0.18 : 0.34) * (spectator ? 0.2 : opponent ? 0.45 : 1);
       let lx = clamp(velocity.x * look, -170, 170), ly = clamp(velocity.y * look, -130, 130);
-      if (aim) {
+      if (aim && !spectator) {
         const aimWeight = opponent ? 0.08 : 0.16;
         lx += clamp((aim.x - target.x) * aimWeight, -110, 110);
         ly += clamp((aim.y - target.y) * aimWeight, -90, 90);
@@ -76,14 +79,16 @@ export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion =
       const k = battleFxApproach(dtMs, reducedMotion ? 260 : 140);
       x += (focusX + lx - x) * k; y += (focusY + ly - y) * k;
       const halfW = viewport.width / (2 * zoom), halfH = viewport.height / (2 * zoom);
-      // Keep the player well inside the frame even when the follow lags a dash.
-      const boxW = halfW * 0.62, boxH = halfH * 0.58;
-      x = clamp(x, target.x - boxW, target.x + boxW); y = clamp(y, target.y - boxH, target.y + boxH);
+      // Keep the player well inside the frame even when the follow lags a dash (spectator frames both sides neutrally).
+      if (!spectator || !opponent) {
+        const boxW = halfW * 0.62, boxH = halfH * 0.58;
+        x = clamp(x, target.x - boxW, target.x + boxW); y = clamp(y, target.y - boxH, target.y + boxH);
+      }
       const placed = battleFxClampCentre({ cx: x, cy: y, halfW, halfH, art: artBounds ?? { x: 0, y: 0, width: worldWidth, height: worldHeight } });
       x = placed.x; y = placed.y;
       // In a duel the bottom kit bar must never cover the player at the arena's south
       // edge: past the floor clamp, nudge the view down just enough (at most the bar).
-      if (opponent && !cover) y = Math.min(placed.y + 110 / zoom, Math.max(y, target.y - (halfH - 110 / zoom)));
+      if (opponent && !cover && !spectator) y = Math.min(placed.y + 110 / zoom, Math.max(y, target.y - (halfH - 110 / zoom)));
       trauma = Math.max(0, trauma - (dtMs / 1000) * 1.6);
       const amplitude = shakeEnabled ? Math.min(viewport.width, viewport.height) * 0.018 * trauma * trauma : 0;
       const sx = amplitude * Math.sin(time * 0.047 + 1.3), sy = amplitude * Math.sin(time * 0.071 + 4.1);

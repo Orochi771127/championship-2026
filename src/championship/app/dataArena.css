@@ -1274,3 +1274,32 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 .da-entry--ability { background: #ede9fe; color: #3b0764; }
 .da-result__pbrank { font-weight: 900; color: #1e293b; }
 .da-result__promoted { font-weight: 900; color: #b45309; font-size: calc(16px * var(--text-scale-hud, 1)); }
+
+/* Combat Wave 6 (2026-11-24): CPU vs CPU Spectator Mode */
+.da-root .da-panel--select .da-btn--spectate {
+  --face: linear-gradient(180deg, #ede9fe, #c4b5fd);
+  --shade: #6d28d9;
+  --key-ink: #2e1065;
+}
+.da-root[data-spectator="1"] .da-touch,
+.da-root[data-spectator="1"] .da-hud__bottom,
+.da-root[data-spectator="1"] .da-hud__mode {
+  display: none !important;
+}
+.da-spectator-bar {
+  position: absolute; left: 50%; bottom: max(14px, env(safe-area-inset-bottom));
+  transform: translateX(-50%); z-index: 12; pointer-events: auto;
+  display: flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 6px;
+  padding: 8px 12px; border-radius: 999px; max-width: calc(calc(100 * var(--cm-vw, 1vw)) - 20px);
+  background: rgba(15, 23, 42, .92); border: 1.5px solid rgba(196, 181, 253, .65);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .55);
+}
+.da-spectator-bar__tag {
+  font-size: calc(12px * var(--text-scale-hud, 1)); font-weight: 900; color: #ddd6fe; white-space: nowrap;
+}
+.da-spectator-bar__spd.is-active {
+  background: #8b5cf6; color: #ffffff; border-color: #ddd6fe;
+}
+.da-spectator-bar__takeover {
+  background: linear-gradient(135deg, #0ea5e9, #2563eb); color: #ffffff; border-color: #7dd3fc;
+}

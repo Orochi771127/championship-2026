@@ -1657,3 +1657,52 @@ test("phase 16 / Combat Wave 5: PB-Rank Bronze->Champion ladder persistence & 10
   assert.ok(natureSlot.hp > hpBeforeRegen, `REGENERATOR restored bench HP (${hpBeforeRegen} -> ${natureSlot.hp})`);
   assert.ok((st.rivals[0].intimidateTimer ?? 0) > 0, "INTIMIDATE applied 6s attack debuff to active rival");
 });
+
+test("phase 17 / Combat Wave 6: CPU vs CPU Spectator Mode (wide neutral camera, 1x/1.5x/2x bar, takeover, zero RP/reward impact)", async () => {
+  const { createDataArenaCamera } = await import("../src/championship/presentation/dataArena/dataArenaCamera.js");
+  const screenSrc = readFileSync(new URL("../src/championship/app/dataArenaScreen.js", import.meta.url), "utf8");
+  const sceneSrc = readFileSync(new URL("../src/championship/presentation/dataArena/dataArenaPixiScene.js", import.meta.url), "utf8");
+  const cssSrc = readFileSync(new URL("../src/championship/app/dataArena.css", import.meta.url), "utf8");
+
+  // 1) Spectator camera frames neutrally between both fighters at a wider zoom than player-biased duel framing
+  const viewport = { width: 1280, height: 720 };
+  const target = { x: 420, y: 500 };
+  const opponent = { x: 940, y: 500 };
+  const camNormal = createDataArenaCamera({ worldWidth: 1600, worldHeight: 1100, reducedMotion: false });
+  const camSpec = createDataArenaCamera({ worldWidth: 1600, worldHeight: 1100, reducedMotion: false });
+  let vNorm = null, vSpec = null;
+  for (let i = 0; i < 40; i++) {
+    vNorm = camNormal.update({ dtMs: 33, viewport, target, opponent, spectator: false });
+    vSpec = camSpec.update({ dtMs: 33, viewport, target, opponent, spectator: true });
+  }
+  assert.ok(vSpec.zoom < vNorm.zoom, `spectator camera zooms out wider (${vSpec.zoom.toFixed(3)} < ${vNorm.zoom.toFixed(3)})`);
+  const exactMidX = (target.x + opponent.x) * 0.5;
+  assert.ok(Math.abs(vSpec.centerX - exactMidX) < Math.abs(vNorm.centerX - exactMidX),
+    `spectator camera centers closer to exact midpoint (${vSpec.centerX.toFixed(1)} vs normal ${vNorm.centerX.toFixed(1)}, mid=${exactMidX})`);
+
+  // 2) Full 3v3 AI vs AI autonomous simulation runs smoothly with zero faults and active combat exchange
+  const autoSim = startRelayFight({ moveSystem: "v2", controlMode: "AUTO", aiDifficulty: "hard" });
+  const pStart = { x: autoSim.getState().player.x, y: autoSim.getState().player.y };
+  let totalEvents = 0;
+  for (let i = 0; i < 420; i++) {
+    autoSim.step({});
+    totalEvents += autoSim.drainEvents().length;
+    if (autoSim.getState().mode === "ENDED") break;
+  }
+  const st = autoSim.getState();
+  assert.ok(Number.isFinite(st.player.x) && Number.isFinite(st.player.y), "AI vs AI player coordinates stay finite");
+  assert.ok(Math.hypot(st.player.x - pStart.x, st.player.y - pStart.y) > 25, "AI-controlled player side actively moves in Spectator mode");
+  assert.ok(totalEvents > 0, "AI vs AI match generates active combat events");
+
+  // 3) Screen, Scene, CSS & bilingual text contracts for Spectator mode
+  assert.ok(sceneSrc.includes("setSpectator(enabled)") && sceneSrc.includes("spectator: spectatorCamera"), "scene exposes setSpectator camera wiring");
+  assert.ok(screenSrc.includes('da-btn--spectate') && screenSrc.includes('da-spectator-bar'), "lobby spectate button and floating spectator pill bar exist");
+  assert.ok(screenSrc.includes('const skipScoring = fromReplay || wasSpectator;'), "spectator matches skip PB-Rank RP, ranch rewards & sponsor settlement");
+  assert.ok(screenSrc.includes('!(typeof spectatorMode !== "undefined" && spectatorMode)'), "spectator matches never stake sponsor contracts");
+  assert.ok(screenSrc.includes('[1, 1.5, 2]') && screenSrc.includes('spectator.takeover'), "spectator bar offers 1x/1.5x/2x speeds and live Take Over");
+  assert.ok(cssSrc.includes('.da-root[data-spectator="1"] .da-touch') && cssSrc.includes('.da-spectator-bar'), "CSS hides manual touch/bottom HUD in spectator mode");
+  for (const key of ["select.spectate", "spectator.badge", "spectator.takeover", "spectator.exit", "spectator.resultTitle", "spectator.resultNote", "spectator.rematch", "spectator.takeoverCall"]) {
+    assert.ok(DATA_ARENA_TEXT["zh-Hant"][key], `ZH copy has ${key}`);
+    assert.ok(DATA_ARENA_TEXT.en[key], `EN copy has ${key}`);
+  }
+});

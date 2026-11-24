@@ -2047,7 +2047,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       + (boss && boss.state !== "DOWN" ? 0.5 : 0);
     view = camera.update({ dtMs: Math.min(100, dtMs), viewport, target: focus, velocity: { x: focus.vx, y: focus.vy },
       aim: state.laser.firing ? { x: state.laser.x1, y: state.laser.y1 } : null, threat,
-      opponent: state.rivals.find((rival) => rival.hp > 0) ?? null });
+      opponent: state.rivals.find((rival) => rival.hp > 0) ?? null, spectator: spectatorCamera });
     world.scale.set(view.zoom); world.position.set(view.x, view.y);
     const left = view.centerX - view.halfW - 80, right = view.centerX + view.halfW + 80;
     const top = view.centerY - view.halfH - 120, bottom = view.centerY + view.halfH + 80;
@@ -2751,6 +2751,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   }
 
   let disposed = false;
+  let spectatorCamera = false;
   return Object.freeze({
     render,
     handleEvents,
@@ -2760,6 +2761,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     damageNumber,
     setShake(enabled) { camera.setShake(enabled); },
     setAimGuide(guide) { aimGuide = guide; },
+    setSpectator(enabled) { spectatorCamera = Boolean(enabled); },
     getTimeScale() { return koSlowMo > 0 ? koSlowMoScale : 1; },
     getDiagnostics() {
       const sorted = [...fpsWindow].sort((a, b) => a - b);
@@ -2768,6 +2770,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         environment: environmentView?.diagnostics() ?? null,
         storm: state.survival ? { drawn: stormDrawn, arrow: stormArrow.visible } : null,
         koSlowMo,
+        spectatorCamera,
         moveAtlas: { ...atlas.diagnostics(),
           shotLayerConflicts: [...shotViews.values()].filter(v => v.atlasDrawn && (v.sprite.visible || v.glow.visible || v.kitDrawn)).length,
           warningLayerConflicts: state.zones.filter(z => warningOwners.get(z) && sigilSprites.has(z)).length },
