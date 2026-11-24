@@ -1291,15 +1291,24 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
   transform: translateX(-50%); z-index: 12; pointer-events: auto;
   display: flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 6px;
   padding: 8px 12px; border-radius: 999px; max-width: calc(calc(100 * var(--cm-vw, 1vw)) - 20px);
-  background: rgba(15, 23, 42, .92); border: 1.5px solid rgba(196, 181, 253, .65);
+  background: rgba(15, 23, 42, .94); border: 1.5px solid rgba(196, 181, 253, .65);
   box-shadow: 0 8px 24px rgba(0, 0, 0, .55);
 }
+.da-root:not([data-state="PLAY"]) .da-spectator-bar { display: none; }
 .da-spectator-bar__tag {
   font-size: calc(12px * var(--text-scale-hud, 1)); font-weight: 900; color: #ddd6fe; white-space: nowrap;
 }
-.da-spectator-bar__spd.is-active {
+.da-spectator-bar .da-chip-btn,
+.da-replay-bar .da-chip-btn {
+  background: rgba(30, 41, 59, .95); color: #f8fafc; border: 1.5px solid rgba(148, 163, 184, .6);
+  box-shadow: none;
+}
+.da-spectator-bar .da-spectator-bar__spd.is-active {
   background: #8b5cf6; color: #ffffff; border-color: #ddd6fe;
 }
-.da-spectator-bar__takeover {
+.da-spectator-bar .da-spectator-bar__takeover {
   background: linear-gradient(135deg, #0ea5e9, #2563eb); color: #ffffff; border-color: #7dd3fc;
+}
+.da-spectator-bar .da-spectator-bar__exit {
+  background: rgba(51, 65, 85, .95); color: #fecaca; border-color: rgba(248, 113, 113, .6);
 }

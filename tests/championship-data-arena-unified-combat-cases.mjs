@@ -1697,10 +1697,11 @@ test("phase 17 / Combat Wave 6: CPU vs CPU Spectator Mode (wide neutral camera, 
   // 3) Screen, Scene, CSS & bilingual text contracts for Spectator mode
   assert.ok(sceneSrc.includes("setSpectator(enabled)") && sceneSrc.includes("spectator: spectatorCamera"), "scene exposes setSpectator camera wiring");
   assert.ok(screenSrc.includes('da-btn--spectate') && screenSrc.includes('da-spectator-bar'), "lobby spectate button and floating spectator pill bar exist");
+  assert.ok(screenSrc.includes('root.appendChild(spectatorBar)'), "spectator bar mounts on root so partner-switch buildHud() never wipes it");
   assert.ok(screenSrc.includes('const skipScoring = fromReplay || wasSpectator;'), "spectator matches skip PB-Rank RP, ranch rewards & sponsor settlement");
   assert.ok(screenSrc.includes('!(typeof spectatorMode !== "undefined" && spectatorMode)'), "spectator matches never stake sponsor contracts");
   assert.ok(screenSrc.includes('[1, 1.5, 2]') && screenSrc.includes('spectator.takeover'), "spectator bar offers 1x/1.5x/2x speeds and live Take Over");
-  assert.ok(cssSrc.includes('.da-root[data-spectator="1"] .da-touch') && cssSrc.includes('.da-spectator-bar'), "CSS hides manual touch/bottom HUD in spectator mode");
+  assert.ok(cssSrc.includes('.da-root[data-spectator="1"] .da-touch') && cssSrc.includes('.da-spectator-bar .da-chip-btn'), "CSS hides manual touch/bottom HUD and sets high-contrast pill buttons in spectator mode");
   for (const key of ["select.spectate", "spectator.badge", "spectator.takeover", "spectator.exit", "spectator.resultTitle", "spectator.resultNote", "spectator.rematch", "spectator.takeoverCall"]) {
     assert.ok(DATA_ARENA_TEXT["zh-Hant"][key], `ZH copy has ${key}`);
     assert.ok(DATA_ARENA_TEXT.en[key], `EN copy has ${key}`);

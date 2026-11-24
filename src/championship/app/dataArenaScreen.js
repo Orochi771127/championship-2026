@@ -1440,7 +1440,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       showSelect();
     }, signal);
     spectatorBar.append(tag, ...speedBtns, takeoverBtn, exitBtn);
-    hud.appendChild(spectatorBar);
+    root.appendChild(spectatorBar);
   }
   function startReplay(replay) {
     if (!replay?.config || !stage) return;
@@ -1483,7 +1483,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       showResult(true);
     }, signal);
     replayBar.append(tag, replayPauseBtn, ...speedBtns, track, exitBtn);
-    hud.appendChild(replayBar);
+    root.appendChild(replayBar);
     handleEvents(sim.drainEvents());
   }
   // The ticker is the product's shared one: an exception thrown from a listener
@@ -1617,6 +1617,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     if (!keepCast) { resources.push(...bundles.values()); bundles.clear(); bundleScope = null; }
     sim = null; result = null; paused = false; accumulator = 0; qaRecentEvents.length = 0;
     if (typeof clearSpectatorUi === "function") clearSpectatorUi();
+    if (typeof clearReplayUi === "function") clearReplayUi();
     clearTimeout(bannerTimer); clearTimeout(vignetteTimer);
     clean(releaseInputs);
     clean(() => stage?.setResolutionCap(resolutionCap));
