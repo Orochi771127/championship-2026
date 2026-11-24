@@ -210,11 +210,11 @@ export function resolveMoveSpecV2(moveId, baseMove = null) {
     else if (/鑽地|潛地|挖洞|地底|地行|遁地|穿地|潛襲|潛行|掘|伏擊|潛影|潛突|深潛/.test(name)) v2Archetype = "BURROW_AMBUSH";
     else if (/地刺|尖石|岩棘|岩刺|石棘|石筍|冰柱|冰棘|荊棘|藤刺|棘刺|根刺|破土|突岩|裂岩|岩柱|岩槍|碎岩|刺突|地牙|岩牙|冰牙|根芽|撒菱|毒菱|地釘|陷阱/.test(name)) v2Archetype = "GROUND_SPIKES";
     else if (/旋風|龍捲|颶風|風暴|裂風|渦|漩|黑洞|吞噬|吹雪|藤縛|束縛|領域|牢籠/.test(name)) v2Archetype = "VORTEX_PULL";
-    else if (/浪|潮|海嘯|洪|濤|沖流|巨浪|奔流/.test(name) && !/刃|斬/.test(name) || type === "WAVE") v2Archetype = "DRAG_WAVE";
+    else if (/浪|潮|海嘯|洪|濤|沖流|巨浪|奔流/.test(name) && !/刃|斬|落雷|天雷/.test(name) || type === "WAVE") v2Archetype = "DRAG_WAVE";
     else if (/砲|炮|光束|射線|吐息|雷射|死光|貫光|極光|魔光|雷砲/.test(name) || type === "LANCE") v2Archetype = "STREAM_BEAM";
     else if (/飛彈|導彈|投射|羽刃|葉刃|針雨|棘針|飛刀|手裏劍|亂射|彈幕|齊射|碎晶|冰錐|火花|星雨|棘舞/.test(name) || type === "SPREAD") v2Archetype = "VOLLEY_BARRAGE";
     else if (/天墜|墜擊|俯衝|飛撲|泰山|壓頂|飛踢|天翔擊|空墜|躍擊|跳斬|重砸/.test(name)) v2Archetype = "LEAP_SLAM";
-    else if (/天雷|落雷|隕石|星墜|落石|火雨|流星雨|轟雷|天火|隕落/.test(name)) v2Archetype = "METEOR_RAIN";
+    else if (/天雷|落雷|隕石|星墜|落石|火雨|毒雨|箭雨|冰雨|酸雨|流星雨|轟雷|天火|隕落/.test(name)) v2Archetype = "METEOR_RAIN";
     // Priority 3: Signature Physical / Psychic / Sonic Archetypes
     else if (/念|超能|精神|重力|浮空|支配|心靈|念動|提線|操線|神諭|刻時|引力|催眠/.test(name) && !isExplicitShot && !/爪$/.test(name)) v2Archetype = "TELEKINESIS_SLAM";
     else if (/摔|投擲|過肩|抱摔|擒拿|絞殺|抓摔|猛摔|壓制/.test(name)) v2Archetype = "GRAB_SLAM";

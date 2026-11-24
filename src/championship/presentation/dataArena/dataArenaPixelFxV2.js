@@ -13,22 +13,17 @@
 //  - Presentation only: zero simulation, timing, damage or RNG side effects.
 
 import { BATTLE_FX_PALETTES } from "../battleFx/battleFxPalettes.js";
-import { createMoveVfxSetPieces, loadMoveVfxPieceSprites, loadMoveVfx00GameDevsSprites, resolve00GameDevsPiece, paintBakedPieceFrames, GLOW_ALPHA } from "../vfx/moveVfxSetPieces.js";
+import {
+  createMoveVfxSetPieces,
+  loadMoveVfxPieceSprites,
+  loadMoveVfx00GameDevsSprites,
+  resolve00GameDevsPiece,
+  resolve00GameDevsProjectile,
+  paintBakedPieceFrames,
+  GLOW_ALPHA
+} from "../vfx/moveVfxSetPieces.js";
 import { resolveMoveSpecV2 } from "../../modes/dataArena/dataArenaMoveCatalogV2.js";
 import { createVolumetricSheetCache } from "./dataArenaVolumetricCache.js";
-import { renderVolumetricWave3D, renderVolumetricTornado3D } from "./dataArenaVolumetricFx3D.js";
-import { renderVolumetricGroundSpike3D, renderVolumetricBurrowMound3D } from "./dataArenaVolumetricTerrain3D.js";
-import {
-  renderVolumetricCraterShockwave3D,
-  renderVolumetricBeam3D,
-  renderVolumetricMeteor3D,
-  renderVolumetricPsychicCage3D
-} from "./dataArenaVolumetricCombat3D.js";
-import {
-  renderVolumetricSlashArc3D,
-  renderVolumetricOrb3D,
-  renderVolumetricAuraPillar3D
-} from "./dataArenaVolumetricClose3D.js";
 
 const BODY = 80;
 const UNIT = 2.6;
@@ -72,13 +67,13 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
   (ground ?? front).addChild(puddleLayer);
 
   const PUDDLE_PIXELFX = Object.freeze({
-    WATER_PUDDLE: { piece: "mark-ripple", paletteKey: "water", fps: 12, alpha: 0.78 },
-    POISON_POOL: { piece: "splat", paletteKey: "dark", fps: 10, alpha: 0.82 },
-    ICE_PATCH: { piece: "mark-frost", paletteKey: "ice", fps: 10, alpha: 0.85 },
-    FIRE_PATCH: { piece: "core", paletteKey: "fire", fps: 14, alpha: 0.82 },
-    VINE_PATCH: { piece: "mark-roots", paletteKey: "nature", fps: 10, alpha: 0.84 },
-    ELECTRIFIED_WATER: { piece: "mark-ripple", paletteKey: "thunder", fps: 16, alpha: 0.86 },
-    MUD_PATCH: { piece: "prop-dust", paletteKey: "earth", fps: 8, alpha: 0.78 }
+    WATER_PUDDLE: { piece: "mark-ripple", gdPiece: null, paletteKey: "water", fps: 12, alpha: 0.78 },
+    POISON_POOL: { piece: "splat", gdPiece: "gd-venom-pool", paletteKey: "dark", fps: 12, alpha: 0.84 },
+    ICE_PATCH: { piece: "mark-frost", gdPiece: "gd-frost-field", paletteKey: "ice", fps: 12, alpha: 0.86 },
+    FIRE_PATCH: { piece: "core", gdPiece: "gd-burning-ground", paletteKey: "fire", fps: 14, alpha: 0.84 },
+    VINE_PATCH: { piece: "mark-roots", gdPiece: "gd-thorn-crown", paletteKey: "nature", fps: 12, alpha: 0.84 },
+    ELECTRIFIED_WATER: { piece: "mark-ripple", gdPiece: null, paletteKey: "thunder", fps: 16, alpha: 0.86 },
+    MUD_PATCH: { piece: "prop-dust", gdPiece: "gd-quicksand-seal", paletteKey: "earth", fps: 12, alpha: 0.80 }
   });
 
   let holdMs = 0;
@@ -129,86 +124,46 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       playPiece(pieces, "muzzle-spiral", { x, y, palette: paletteFor(spec.paletteKey), scale: 0.85, groundY: y + 28 });
       stats.casts++;
     },
-    /** Clean release: routes signature 3D releases (Beam / Slash / Claws / DashCone) through the zero-lag GPU sheet cache! */
+    /** Clean release: 100% pure PixelFX + 00GameDevs baked sheets (ZERO blurry procedural 3D canvas hacks!). */
     release({ x, y, angle = 0, moveId, melee = false }) {
       const spec = resolveMoveSpecV2(moveId);
       const pal = paletteFor(spec.paletteKey);
-      // Move #1: DRAG_WAVE mounts its full 3D curling wave on its moving projectile!
+      // DRAG_WAVE mounts its baked wave on its moving projectile; skip stacking a second release blob.
       if (spec.v2Archetype === "DRAG_WAVE") {
-        playPiece(pieces, "muzzle", { x, y, angle, palette: pal, scale: 0.72, groundY: y + 28 });
         stats.releases++;
         return;
       }
-      // Move #6: STREAM_BEAM plays 00GameDevs 3D->PixelFX beam sheet when loaded, else 3D cylindrical spiral beam!
+      // STREAM_BEAM plays crisp 00GameDevs directional beam (fallback: pure PixelFX lance/stream).
       if (spec.v2Archetype === "STREAM_BEAM" && !melee) {
-        const beamPal = ["light", "fire", "water", "ice", "thunder", "dark", "nature"].includes(spec.paletteKey) ? spec.paletteKey : "light";
-        const scale = spec.tier === "ultimate" ? 1.92 : 1.62;
+        const beamPal = ["light", "fire", "water", "ice", "thunder", "dark", "nature", "wind", "earth", "metal"].includes(spec.paletteKey) ? spec.paletteKey : "light";
+        const scale = spec.tier === "ultimate" ? 1.55 : 1.32;
         const len = 112;
         const cosA = Math.cos(angle), sinA = Math.sin(angle);
-        const gdBeam = resolve00GameDevsPiece({ archetype: "STREAM_BEAM", paletteKey: beamPal, tier: spec.tier });
-        if (gdBeam && playPiece(pieces, gdBeam, { x: x + cosA * len * 0.42, y: y + 8 + sinA * len * 0.28, angle, palette: pal, scale: scale * 0.86, groundY: y + 28 })) {
-          stats.releases++; return;
-        }
-        const fx = volCache.spawn({
-          layer: shotLayer, keyPrefix: `beam|${beamPal}`, width: 180, height: 140, frameCount: 7,
-          directional: true, angle, anchorX: 0.5, anchorY: 0.58,
-          x: x + cosA * len * 0.36 * scale, y: y + 8 + sinA * len * 0.36 * 0.56 * scale,
-          durationSec: spec.tier === "ultimate" ? 0.66 : 0.44, scale,
-          renderForAngle: (ctx, snapped, phase) => renderVolumetricBeam3D(ctx, { width: 180, height: 140, angle: snapped, phase, paletteKey: beamPal, length: len })
-        });
-        if (fx) { stats.releases++; return; }
+        const gdBeam = resolve00GameDevsPiece({ archetype: "STREAM_BEAM", piece: "lance", paletteKey: beamPal, tier: spec.tier }) || "lance";
+        playPiece(pieces, gdBeam, { x: x + cosA * len * 0.42, y: y + 8 + sinA * len * 0.28, angle, palette: pal, scale, groundY: y + 28 });
+        stats.releases++;
+        return;
       }
-      // Move #9: Close-combat / Mobility plays 00GameDevs 3D->PixelFX slash/rend/wave sheets when loaded!
+      // Close-combat / Mobility plays crisp 00GameDevs slash/rend/wave (fallback: pure PixelFX releaseLook).
       if (melee || ["FLURRY_COMBO", "MULTI_DASH", "SHADOW_BACKSTAB", "UTURN_STRIKE", "GUARD_BREAK_SLAM"].includes(spec.v2Archetype)) {
         const cPal = spec.paletteKey || "fire";
-        const gdMelee = resolve00GameDevsPiece({ archetype: spec.v2Archetype, piece: spec.releaseLook || "slash", paletteKey: cPal, tier: spec.tier });
-        if (gdMelee && gdMelee.startsWith("gd-") && playPiece(pieces, gdMelee, { x, y: y + 6, angle, palette: pal, scale: spec.v2Archetype === "GUARD_BREAK_SLAM" ? 1.25 : 1.05, groundY: y + 24 })) {
-          stats.releases++; return;
-        }
-        const variant = spec.v2Archetype === "MULTI_DASH" ? "dashcone"
-          : (spec.contactLook === "claws" || spec.v2Archetype === "FLURRY_COMBO") ? "claws" : "slash";
-        const fx = volCache.spawn({
-          layer: shotLayer, keyPrefix: `slash|${variant}|${cPal}`, width: 120, height: 104, frameCount: 6,
-          directional: true, angle, anchorX: 0.5, anchorY: 0.66, x, y: y + 10,
-          durationSec: 0.30, scale: spec.v2Archetype === "GUARD_BREAK_SLAM" ? 1.55 : 1.32,
-          renderForAngle: (ctx, snapped, phase) => renderVolumetricSlashArc3D(ctx, { width: 120, height: 104, angle: snapped, phase, paletteKey: cPal, variant })
-        });
-        if (fx) { stats.releases++; return; }
+        const gdMelee = resolve00GameDevsPiece({ archetype: spec.v2Archetype, piece: spec.releaseLook || "slash", paletteKey: cPal, tier: spec.tier }) || spec.releaseLook || "slash";
+        playPiece(pieces, gdMelee, { x, y: y + 6, angle, palette: pal, scale: spec.v2Archetype === "GUARD_BREAK_SLAM" ? 1.25 : 1.05, groundY: y + 24 });
+        stats.releases++;
+        return;
       }
       const pieceName = melee ? (spec.releaseLook || "slash")
         : (spec.tier === "ultimate" ? "muzzle-spiral" : "muzzle");
       playPiece(pieces, pieceName, { x, y, angle, palette: pal, scale: melee ? 0.95 : 0.78, groundY: y + 28 });
       stats.releases++;
     },
-    /** Clean looping 3D cached GPU projectiles: Wave (`DRAG_WAVE`) + 3D Hovering Orbs / Crystal Darts (`HOMING_ORB`, `VOLLEY_BARRAGE`)! */
+    /** Clean looping baked PixelFX + 00GameDevs projectiles (ZERO procedural 3D canvas orbs/waves!). */
     projectile({ follow, moveId, angle = 0, lifeMs = 1200 }) {
       if (typeof follow !== "function") return false;
       const spec = resolveMoveSpecV2(moveId);
-      // Move #1: True 3D Volumetric Curling Ocean Wave (8-dir LRU GPU cached!)
-      if (spec.v2Archetype === "DRAG_WAVE") {
-        const wavePal = ["water", "ice", "fire", "dark"].includes(spec.paletteKey) ? spec.paletteKey : "water";
-        const fx = volCache.spawn({
-          layer: shotLayer, keyPrefix: `wave|${wavePal}`, width: 136, height: 116, frameCount: 8,
-          directional: true, angle, follow, anchorX: 0.5, anchorY: 0.70, yOffset: 12,
-          durationSec: Math.min(1.15, Math.max(0.65, lifeMs / 1000)), scale: 1.55,
-          renderForAngle: (ctx, snapped, phase) => renderVolumetricWave3D(ctx, { width: 136, height: 116, angle: snapped, phase, paletteKey: wavePal })
-        });
-        if (fx) { stats.projectiles++; return true; }
-      }
-      // Move #10: True 3D Hovering Elemental Orbs & Faceted Shard Darts (with grounded Z=0 shadow!)
-      if (spec.v2Archetype === "HOMING_ORB" || spec.v2Archetype === "VOLLEY_BARRAGE") {
-        const variant = spec.v2Archetype === "VOLLEY_BARRAGE" ? "dart" : "orb";
-        const oPal = spec.paletteKey || "fire";
-        const fx = volCache.spawn({
-          layer: shotLayer, keyPrefix: `proj|${variant}|${oPal}`, width: 88, height: 80, frameCount: 6,
-          directional: true, angle, follow, anchorX: 0.5, anchorY: 0.68, yOffset: 14,
-          durationSec: 0.42, scale: variant === "dart" ? 1.15 : 1.25, loop: true,
-          renderForAngle: (ctx, snapped, phase) => renderVolumetricOrb3D(ctx, { width: 88, height: 80, angle: snapped, phase, paletteKey: oPal, variant })
-        });
-        if (fx) { stats.projectiles++; return true; }
-      }
-      // Fallback: crisp dark-rimmed patch-gg/pixelfx shot
-      const sheet = shotSheet(spec.flightLook, spec.paletteKey);
+      const gdProj = resolve00GameDevsProjectile({ archetype: spec.v2Archetype, paletteKey: spec.paletteKey, tier: spec.tier });
+      const lookName = gdProj || spec.flightLook;
+      const sheet = shotSheet(lookName, spec.paletteKey) || (gdProj ? shotSheet(spec.flightLook, spec.paletteKey) : null);
       if (!sheet) return false;
       const bodySprite = new PIXI.Sprite(sheet.body.textures[0]);
       bodySprite.anchor.set(sheet.body.ox / sheet.body.w, sheet.body.oy / sheet.body.h);
@@ -221,14 +176,16 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
         shotLayer.addChild(glowSprite);
       }
       shotLayer.addChild(bodySprite);
-      const scale = Math.max(1.55, Math.min(2.6, (BODY * 0.82) / Math.max(24, sheet.body.w)));
+      const isWave = spec.v2Archetype === "DRAG_WAVE";
+      const targetPx = isWave ? BODY * 1.45 : BODY * 0.92;
+      const scale = Math.max(1.25, Math.min(2.4, targetPx / Math.max(24, sheet.body.w)));
       bodySprite.scale.set(scale);
       glowSprite?.scale.set(scale * 2);
-      liveShots.push({ follow, sheet, bodySprite, glowSprite, scale, age: 0, maxAge: lifeMs / 1000, prevX: null, prevY: null, angle });
+      liveShots.push({ follow, sheet, bodySprite, glowSprite, scale, age: 0, maxAge: lifeMs / 1000, prevX: null, prevY: null, angle, upright: isWave || sheet.upright });
       stats.projectiles++;
       return true;
     },
-    /** Strict One-Beat-One-Hero Contact with unified dark-rimmed PixelFX impact! */
+    /** Strict One-Beat-One-Hero Contact: ONE crisp PixelFX / 00GameDevs impact (no cluttered stacked layers!). */
     hit({ x, y, groundY = y, moveId, heavy = false, angle = 0 }) {
       const spec = resolveMoveSpecV2(moveId);
       const pal = paletteFor(spec.paletteKey);
@@ -240,13 +197,12 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
         : spec.contactLook;
       const contactPiece = resolve00GameDevsPiece({ piece: baseContact, archetype: spec.v2Archetype, paletteKey: spec.paletteKey, tier: heavy ? "ultimate" : spec.tier }) || baseContact;
       playPiece(pieces, contactPiece, { x, y, angle, palette: pal, scale: Math.min(1.45, spec.scale * (heavy ? 1.15 : 0.96)), groundY, at: "contact" });
-      if (heavy && groundPieces && !reducedMotion && spec.groundLook !== "mark-ripple") {
-        playPiece(groundPieces, spec.groundLook, { x, y: groundY, palette: pal, scale: 0.85, groundY });
+      if (heavy && !reducedMotion) {
         holdMs = Math.max(holdMs, 55);
       }
       stats.hits++;
     },
-    /** Clean area burst: ONE scaled centerpiece on impact (3D meteor/vortex zones stay single-layer crisp!). */
+    /** Clean area burst: ONE crisp 00GameDevs / PixelFX centerpiece on impact (zero stacked rings/decals!). */
     area({ x, y, radius = 100, moveId }) {
       const spec = resolveMoveSpecV2(moveId);
       const pal = paletteFor(spec.paletteKey);
@@ -257,15 +213,13 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
         stats.hits++;
         return true;
       }
-      const scale = Math.max(1.0, Math.min(1.9, radius / 92));
-      playPiece(pieces, spec.contactLook, { x, y, palette: pal, scale, groundY: y + 18, at: "contact" });
-      if (groundPieces && !reducedMotion && spec.groundLook !== "mark-ripple") {
-        playPiece(groundPieces, spec.groundLook, { x, y: y + 12, palette: pal, scale: scale * 0.75, groundY: y + 12 });
-      }
+      const scale = Math.max(1.0, Math.min(1.85, radius / 92));
+      const areaPiece = resolve00GameDevsPiece({ archetype: spec.v2Archetype, piece: spec.contactLook, paletteKey: spec.paletteKey, tier: spec.tier }) || spec.contactLook;
+      playPiece(pieces, areaPiece, { x, y, palette: pal, scale, groundY: y + 18, at: "contact" });
       stats.hits++;
       return true;
     },
-    /** Clean ultimate: crisp 00GameDevs telegraph sigil + impact opening + hero centerpiece. */
+    /** Clean ultimate: crisp 00GameDevs telegraph sigil + impact opening. */
     ult({ moveId, center }) {
       if (!center) return;
       const spec = resolveMoveSpecV2(moveId);
@@ -276,31 +230,19 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       holdMs = Math.max(holdMs, 65);
       stats.ults++;
     },
-    /** Move #11: 00GameDevs 3D->PixelFX Revival Bloom / Prism Guard / Verdant Heal (fallback: volumetric aura!) */
+    /** Pure PixelFX + 00GameDevs buff / barrier aura (Revival Bloom / Prism Guard / Elemental Shields). */
     buff({ x, y, paletteKey = "light", piece = "buff-atk" }) {
       const bPal = paletteKey || "light";
-      const gdBuff = resolve00GameDevsPiece({ archetype: "SELF_BUFF", piece, paletteKey: bPal });
-      if (gdBuff && gdBuff.startsWith("gd-") && playPiece(pieces, gdBuff, { x, y: y + 10, palette: paletteFor(bPal), scale: 1.15, groundY: y + 16 })) return;
-      const fx = volCache.spawn({
-        layer: shotLayer, keyPrefix: `aura|buff|${bPal}`, width: 128, height: 136, frameCount: 8,
-        directional: false, anchorX: 0.5, anchorY: 0.78, x, y: y + 14, durationSec: 0.65, scale: 1.28,
-        renderForAngle: (ctx, _ang, phase) => renderVolumetricAuraPillar3D(ctx, { width: 128, height: 136, phase, paletteKey: bPal, variant: "buff" })
-      });
-      if (!fx) playPiece(pieces, piece, { x, y, palette: paletteFor(bPal), scale: 1.15, groundY: y + 14 });
+      const gdBuff = resolve00GameDevsPiece({ archetype: "SELF_BUFF", piece, paletteKey: bPal }) || piece;
+      playPiece(pieces, gdBuff, { x, y: y + 10, palette: paletteFor(bPal), scale: 1.15, groundY: y + 16 });
     },
     heal({ x, y }) {
-      const gdHeal = resolve00GameDevsPiece({ archetype: "RECOVERY_SUPPORT", piece: "heal", paletteKey: "nature" });
-      if (gdHeal && gdHeal.startsWith("gd-") && playPiece(pieces, gdHeal, { x, y: y + 12, palette: BATTLE_FX_PALETTES.nature, scale: 1.18, groundY: y + 16 })) return;
-      const fx = volCache.spawn({
-        layer: shotLayer, keyPrefix: "aura|heal|nature", width: 128, height: 136, frameCount: 8,
-        directional: false, anchorX: 0.5, anchorY: 0.78, x, y: y + 14, durationSec: 0.72, scale: 1.32,
-        renderForAngle: (ctx, _ang, phase) => renderVolumetricAuraPillar3D(ctx, { width: 128, height: 136, phase, paletteKey: "nature", variant: "heal" })
-      });
-      if (!fx) playPiece(pieces, "heal", { x, y, palette: BATTLE_FX_PALETTES.nature, scale: 1.15, groundY: y + 14 });
+      const gdHeal = resolve00GameDevsPiece({ archetype: "RECOVERY_SUPPORT", piece: "heal", paletteKey: "nature" }) || "heal";
+      playPiece(pieces, gdHeal, { x, y: y + 12, palette: BATTLE_FX_PALETTES.nature, scale: 1.18, groundY: y + 16 });
     },
     parry({ x, y }) {
-      const gdParry = resolve00GameDevsPiece({ archetype: "PROTECT_COUNTER", piece: "ring-pop", paletteKey: "light" });
-      playPiece(pieces, gdParry || "ring-pop", { x, y, palette: BATTLE_FX_PALETTES.light, scale: 1.12, groundY: y + 14 });
+      const gdParry = resolve00GameDevsPiece({ archetype: "PROTECT_COUNTER", piece: "ring-pop", paletteKey: "light" }) || "ring-pop";
+      playPiece(pieces, gdParry, { x, y, palette: BATTLE_FX_PALETTES.light, scale: 1.12, groundY: y + 14 });
     },
     clash({ x, y }) {
       playPiece(pieces, "impact-frame", { x, y, palette: { core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true }, scale: 0.9, groundY: y + 18 });
@@ -310,159 +252,112 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       stats.clashes++;
       return true;
     },
-    /** Move #1 (Surf-Rider): True 3D curling ocean wave mounted behind the dashing surfer! */
+    /** Surf-Rider baked 00GameDevs wave mounted cleanly under the dashing surfer. */
     surfWave({ follow, angle = 0, moveId = "surfRush", durationSec = 0.62 }) {
       if (typeof follow !== "function") return false;
+      const pos = follow();
+      if (!pos) return false;
       const spec = resolveMoveSpecV2(moveId);
       const wavePal = ["water", "ice", "fire", "dark"].includes(spec.paletteKey) ? spec.paletteKey : "water";
-      const fx = volCache.spawn({
-        layer: ground ?? shotLayer, keyPrefix: `wave|${wavePal}`, width: 136, height: 116, frameCount: 8,
-        directional: true, angle, follow, anchorX: 0.5, anchorY: 0.70, leadOffset: -18, yOffset: 6,
-        durationSec, scale: 1.48,
-        renderForAngle: (ctx, snapped, phase) => renderVolumetricWave3D(ctx, { width: 136, height: 116, angle: snapped, phase, paletteKey: wavePal })
-      });
-      if (fx) { stats.releases++; return true; }
-      return false;
+      const gdWave = resolve00GameDevsPiece({ archetype: "DRAG_WAVE", piece: "wave", paletteKey: wavePal, tier: spec.tier }) || "wave";
+      playPiece(groundPieces ?? pieces, gdWave, { x: pos.x, y: pos.y + 6, angle, palette: paletteFor(wavePal), scale: 1.25, groundY: pos.y + 12 });
+      stats.releases++;
+      return true;
     },
-    /** Move #2: 00GameDevs 3D->PixelFX Tornado / Astral Vortex (fallback: volumetric LRU cache!) */
+    /** Clean 00GameDevs Vortex / Tornado (fallback: pure PixelFX vortex). */
     vortex({ x, y, angle = 0, moveId = "vortex", durationSec = 1.05, radius = 118, paletteKey = null }) {
       const spec = resolveMoveSpecV2(moveId);
       const rawPal = paletteKey || spec.paletteKey;
-      const tPal = ["wind", "water", "ice", "nature", "dark", "fire", "earth", "thunder", "light"].includes(rawPal) ? rawPal : "wind";
+      const tPal = ["wind", "water", "ice", "nature", "dark", "fire", "earth", "thunder", "light", "metal"].includes(rawPal) ? rawPal : "wind";
       const scale = Math.max(1.2, Math.min(1.85, (radius / 118) * 1.32));
-      const gdVortex = resolve00GameDevsPiece({ archetype: "VORTEX_PULL", paletteKey: tPal, tier: spec.tier });
-      if (gdVortex && gdVortex.startsWith("gd-") && playPiece(pieces, gdVortex, { x, y: y + 10, palette: paletteFor(tPal), scale, groundY: y + 14 })) {
-        stats.releases++; return true;
-      }
-      const fx = volCache.spawn({
-        layer: shotLayer, keyPrefix: `tornado|${tPal}`, width: 136, height: 136, frameCount: 8,
-        directional: true, angle, anchorX: 0.5, anchorY: 0.80, x, y: y + 10, durationSec, scale: scale * 1.15,
-        renderForAngle: (ctx, snapped, phase) => renderVolumetricTornado3D(ctx, { width: 136, height: 136, angle: snapped, phase, paletteKey: tPal })
-      });
-      if (fx) { stats.releases++; return true; }
-      return false;
+      const gdVortex = resolve00GameDevsPiece({ archetype: "VORTEX_PULL", piece: "vortex", paletteKey: tPal, tier: spec.tier }) || "vortex";
+      playPiece(pieces, gdVortex, { x, y: y + 10, palette: paletteFor(tPal), scale, groundY: y + 14 });
+      stats.releases++;
+      return true;
     },
-    /** Directional Shield-Wall Shatter: impact-frame + forward flying debris burst along strikeAngle! */
+    /** Directional Shield-Wall Shatter: crisp PixelFX debris burst along strikeAngle! */
     wallShatter({ x, y, angle = 0, material = "STONE" }) {
       const mat = String(material ?? "STONE").toUpperCase();
       const palette = COVER_PALETTE[mat] ?? COVER_PALETTE.STONE;
       playPiece(pieces, "impact-frame", { x, y, palette: { core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true }, scale: 0.92, groundY: y + 18 });
-      playPiece(pieces, "prop-dust", { x, y: y - 10, groundY: y, palette, scale: 1.48 });
-      const shardPiece = mat === "ICE" ? "flurry-shard" : mat === "WOOD" ? "flurry-leaf" : "stream";
-      playPiece(pieces, shardPiece, { x: x + Math.cos(angle) * 26, y: y + Math.sin(angle) * 26, angle, palette, scale: 1.32, groundY: y + 16 });
+      const shatterPiece = mat === "ICE" ? (resolve00GameDevsPiece({ piece: "quake", paletteKey: "ice" }) || "flurry-shard")
+        : mat === "WOOD" ? "flurry-leaf" : "prop-dust";
+      playPiece(pieces, shatterPiece, { x: x + Math.cos(angle) * 20, y: y - 4 + Math.sin(angle) * 16, angle, palette, scale: 1.35, groundY: y + 16 });
       holdMs = Math.max(holdMs, 56);
       stats.props++;
       return true;
     },
-    /** Cross-Ring Surface / Status Reaction burst (e.g. Poison Pool + Fire gasoline blast, Water + Ice flash freeze, Water + Thunder shock!) */
+    /** Cross-Ring Surface / Status Reaction: ONE crisp 00GameDevs / PixelFX burst (zero stacked rings!). */
     surfaceBurst({ x, y, radius = 100, paletteKey = "fire", kind = "POISON_IGNITE" }) {
       const pal = paletteFor(paletteKey || "fire");
-      const scale = Math.max(1.05, Math.min(1.9, radius / 86));
+      const scale = Math.max(1.05, Math.min(1.85, radius / 86));
       if (kind === "POISON_IGNITE" || kind === "WILDFIRE_IGNITE" || kind === "ECLIPSE_BURST") {
-        const gdBlast = resolve00GameDevsPiece({ archetype: kind === "ECLIPSE_BURST" ? "GUARD_BREAK_SLAM" : "HOMING_ORB", paletteKey: paletteKey || "fire", tier: "ultimate" });
-        if (!(gdBlast && gdBlast.startsWith("gd-") && playPiece(pieces, gdBlast, { x, y, palette: pal, scale: scale * 1.15, groundY: y + 14 }))) {
-          volCache.spawn({
-            layer: shotLayer, keyPrefix: `crater|${paletteKey || "fire"}`, width: 160, height: 124, frameCount: 8,
-            directional: false, anchorX: 0.5, anchorY: 0.64, x, y: y + 4, durationSec: 0.56, scale: scale * 1.15,
-            renderForAngle: (ctx, _ang, phase) => renderVolumetricCraterShockwave3D(ctx, { width: 160, height: 124, phase, paletteKey: paletteKey || "fire" })
-          });
-        }
-        playPiece(pieces, "impact-frame", { x, y, palette: { core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true }, scale: 0.95, groundY: y + 18 });
+        const gdBlast = resolve00GameDevsPiece({ archetype: kind === "ECLIPSE_BURST" ? "GUARD_BREAK_SLAM" : "SHOCKWAVE_RING", piece: "core", paletteKey: paletteKey || "fire", tier: "ultimate" }) || "core";
+        playPiece(pieces, gdBlast, { x, y, palette: pal, scale: scale * 1.15, groundY: y + 14 });
         holdMs = Math.max(holdMs, 55);
       } else if (kind === "WATER_FREEZE" || kind === "FLASH_FREEZE" || kind === "TOXIC_FROST") {
-        const gdIce = resolve00GameDevsPiece({ archetype: "GROUND_SPIKES", piece: "flurry-shard", paletteKey: "ice" });
-        playPiece(pieces, gdIce || "flurry-shard", { x, y, palette: BATTLE_FX_PALETTES.ice, scale: scale * 1.15, groundY: y + 14 });
-        playPiece(pieces, "ring-burst", { x, y, palette: BATTLE_FX_PALETTES.ice, scale, groundY: y + 14 });
+        const gdIce = resolve00GameDevsPiece({ archetype: "GROUND_SPIKES", piece: "flurry-shard", paletteKey: "ice" }) || "flurry-shard";
+        playPiece(pieces, gdIce, { x, y, palette: BATTLE_FX_PALETTES.ice, scale: scale * 1.15, groundY: y + 14 });
       } else if (kind === "WATER_ELECTRIFY" || kind === "ELECTRO_CHARGE" || kind === "CONDUCT") {
-        const gdBolt = resolve00GameDevsPiece({ archetype: "METEOR_RAIN", piece: "bolt", paletteKey: "thunder" });
-        playPiece(pieces, gdBolt || "bolt", { x, y, palette: BATTLE_FX_PALETTES.thunder, scale: scale * 1.15, groundY: y + 14 });
-        playPiece(pieces, "ring-pop", { x, y, palette: BATTLE_FX_PALETTES.thunder, scale, groundY: y + 14 });
+        const gdBolt = resolve00GameDevsPiece({ archetype: "METEOR_RAIN", piece: "bolt", paletteKey: "thunder" }) || "bolt";
+        playPiece(pieces, gdBolt, { x, y, palette: BATTLE_FX_PALETTES.thunder, scale: scale * 1.15, groundY: y + 14 });
       } else {
-        playPiece(pieces, "ring-burst", { x, y, palette: pal, scale, groundY: y + 14 });
+        const gdSpread = resolve00GameDevsPiece({ archetype: "VORTEX_PULL", piece: "ring-burst", paletteKey: paletteKey || "wind" }) || "ring-burst";
+        playPiece(pieces, gdSpread, { x, y, palette: pal, scale, groundY: y + 14 });
       }
       stats.hits++;
       return true;
     },
-    /** Move #4B: 00GameDevs 3D->PixelFX Ground Spike / Thorn Crown (fallback: volumetric LRU cache!) */
+    /** Clean 00GameDevs Ground Spike / Thorn Crown / Quicksand Seal (fallback: pure PixelFX quake). */
     groundSpike({ x, y, angle = 0, moveId = "shardVolley", durationSec = 0.68, scale = 1.48 }) {
       const spec = resolveMoveSpecV2(moveId);
-      const sPal = ["earth", "ice", "nature", "fire", "dark", "thunder", "water"].includes(spec.paletteKey) ? spec.paletteKey : "earth";
-      const gdSpike = resolve00GameDevsPiece({ archetype: "GROUND_SPIKES", paletteKey: sPal });
-      if (gdSpike && gdSpike.startsWith("gd-") && playPiece(pieces, gdSpike, { x, y: y + 6, palette: paletteFor(sPal), scale: scale * 0.85, groundY: y + 12 })) {
-        stats.releases++; return true;
-      }
-      const fx = volCache.spawn({
-        layer: shotLayer, keyPrefix: `spike|${sPal}`, width: 116, height: 116, frameCount: 7,
-        directional: true, angle, anchorX: 0.5, anchorY: 0.76, x, y: y + 6, durationSec, scale,
-        renderForAngle: (ctx, snapped, phase) => renderVolumetricGroundSpike3D(ctx, { width: 116, height: 116, angle: snapped, phase, paletteKey: sPal })
-      });
-      if (fx) { stats.releases++; return true; }
-      return false;
+      const sPal = ["earth", "ice", "nature", "fire", "dark", "thunder", "water", "light"].includes(spec.paletteKey) ? spec.paletteKey : "earth";
+      const gdSpike = resolve00GameDevsPiece({ archetype: "GROUND_SPIKES", piece: "quake", paletteKey: sPal }) || "quake";
+      playPiece(pieces, gdSpike, { x, y: y + 6, palette: paletteFor(sPal), scale: scale * 0.85, groundY: y + 12 });
+      stats.releases++;
+      return true;
     },
-    /** Move #4A: True 3D Volumetric Burrow Mound (8-dir LRU GPU cached!) */
+    /** Clean 00GameDevs Burrow Mound (Quicksand Seal / Smoke Puff, fallback: PixelFX prop-dust). */
     burrowMound({ follow, angle = 0, moveId = "own-63", durationSec = 0.60, scale = 1.48 }) {
       if (typeof follow !== "function") return false;
+      const pos = follow();
+      if (!pos) return false;
       const spec = resolveMoveSpecV2(moveId);
       const bPal = spec.paletteKey === "water" ? "water" : spec.paletteKey === "ice" ? "ice" : "earth";
-      const fx = volCache.spawn({
-        layer: shotLayer, keyPrefix: `burrow|${bPal}`, width: 112, height: 96, frameCount: 6,
-        directional: true, angle, follow, anchorX: 0.5, anchorY: 0.68, yOffset: 4, durationSec, scale, loop: true,
-        renderForAngle: (ctx, snapped, phase) => renderVolumetricBurrowMound3D(ctx, { width: 112, height: 96, angle: snapped, phase, paletteKey: bPal })
-      });
-      if (fx) { stats.releases++; return true; }
-      return false;
+      const gdBurrow = resolve00GameDevsPiece({ archetype: "BURROW_AMBUSH", piece: "mark-earth", paletteKey: bPal }) || "prop-dust";
+      playPiece(groundPieces ?? pieces, gdBurrow, { x: pos.x, y: pos.y + 4, palette: paletteFor(bPal), scale: scale * 0.72, groundY: pos.y + 10 });
+      stats.releases++;
+      return true;
     },
-    /** Move #5: 00GameDevs 3D->PixelFX Shockwave / Darkchain Burst (fallback: volumetric LRU cache!) */
+    /** Clean 00GameDevs Shockwave / Magma Fissure / Ice Shatter / Darkchain Burst (fallback: PixelFX quake). */
     craterShockwave({ x, y, moveId = "quakeSlam", radius = 140, durationSec = 0.58 }) {
       const spec = resolveMoveSpecV2(moveId);
-      const cPal = ["earth", "fire", "ice", "thunder", "nature", "dark", "water", "light"].includes(spec.paletteKey) ? spec.paletteKey : "earth";
+      const cPal = ["earth", "fire", "ice", "thunder", "nature", "dark", "water", "light", "wind", "metal"].includes(spec.paletteKey) ? spec.paletteKey : "earth";
       const scale = Math.max(1.2, Math.min(1.85, (radius / 120) * 1.25));
-      const gdCrater = resolve00GameDevsPiece({ archetype: spec.v2Archetype === "GUARD_BREAK_SLAM" ? "GUARD_BREAK_SLAM" : "SHOCKWAVE_RING", paletteKey: cPal, tier: spec.tier });
-      if (gdCrater && gdCrater.startsWith("gd-") && playPiece(pieces, gdCrater, { x, y: y + 4, palette: paletteFor(cPal), scale, groundY: y + 12 })) {
-        stats.hits++; return true;
-      }
-      const fx = volCache.spawn({
-        layer: shotLayer, keyPrefix: `crater|${cPal}`, width: 160, height: 124, frameCount: 8,
-        directional: false, anchorX: 0.5, anchorY: 0.64, x, y: y + 4, durationSec, scale: scale * 1.15,
-        renderForAngle: (ctx, _ang, phase) => renderVolumetricCraterShockwave3D(ctx, { width: 160, height: 124, phase, paletteKey: cPal })
-      });
-      if (fx) { stats.hits++; return true; }
-      return false;
+      const gdCrater = resolve00GameDevsPiece({ archetype: spec.v2Archetype === "GUARD_BREAK_SLAM" ? "GUARD_BREAK_SLAM" : "SHOCKWAVE_RING", piece: "quake", paletteKey: cPal, tier: spec.tier }) || "quake";
+      playPiece(pieces, gdCrater, { x, y: y + 4, palette: paletteFor(cPal), scale, groundY: y + 12 });
+      stats.hits++;
+      return true;
     },
-    /** Move #7: 00GameDevs 3D->PixelFX Meteor/Thunder/Frost/Celestial Sky-Drop (fallback: volumetric LRU cache!) */
+    /** Clean 00GameDevs Meteor / Hellfire / Thunder / Frost / Sacred Relic Sky-Drop (fallback: PixelFX drop). */
     meteorDrop({ x, y, moveId = "flameRing", durationSec = 0.92, radius = 110 }) {
       const spec = resolveMoveSpecV2(moveId);
-      const mPal = ["fire", "thunder", "ice", "dark", "earth", "light", "water", "nature"].includes(spec.paletteKey) ? spec.paletteKey : "fire";
-      const gdSky = resolve00GameDevsPiece({ archetype: "METEOR_RAIN", paletteKey: mPal, tier: spec.tier });
+      const mPal = ["fire", "thunder", "ice", "dark", "earth", "light", "water", "nature", "metal", "wind"].includes(spec.paletteKey) ? spec.paletteKey : "fire";
+      const gdSky = resolve00GameDevsPiece({ archetype: "METEOR_RAIN", piece: "drop", paletteKey: mPal, tier: spec.tier }) || "drop";
       const scale = Math.max(1.25, Math.min(1.85, (radius / 100) * 1.35));
-      if (gdSky && gdSky.startsWith("gd-") && playPiece(pieces, gdSky, { x, y: y + 8, palette: paletteFor(mPal), scale, groundY: y + 14 })) {
-        stats.releases++; return true;
-      }
-      const variant = mPal === "thunder" ? "thunder" : "meteor";
-      const fx = volCache.spawn({
-        layer: shotLayer, keyPrefix: `meteor|${variant}|${mPal}`, width: 148, height: 196, frameCount: 9,
-        directional: false, anchorX: 0.5, anchorY: 0.82, x, y: y + 6, durationSec: Math.max(0.65, durationSec), scale: scale * 1.12,
-        renderForAngle: (ctx, _ang, phase) => renderVolumetricMeteor3D(ctx, { width: 148, height: 196, phase, paletteKey: mPal, variant })
-      });
-      if (fx) { stats.releases++; return true; }
-      return false;
+      playPiece(pieces, gdSky, { x, y: y + 8, palette: paletteFor(mPal), scale, groundY: y + 14 });
+      stats.releases++;
+      return true;
     },
-    /** Move #8: 00GameDevs 3D->PixelFX Binding Curse / Prism Guard Cage (fallback: volumetric gyroscopic cage!) */
+    /** Clean 00GameDevs Binding Curse / Arcane Matrix / Prism Guard Cage (fallback: PixelFX eye/buff-def). */
     psychicCage({ x, y, follow = null, moveId = "nightPulse", mode = "telekinesis", durationSec = 0.85, radius = 100 }) {
       const spec = resolveMoveSpecV2(moveId);
-      const pPal = ["dark", "light", "thunder", "ice", "fire", "nature", "water"].includes(spec.paletteKey) ? spec.paletteKey : "dark";
+      const pPal = ["dark", "light", "thunder", "ice", "fire", "nature", "water", "metal"].includes(spec.paletteKey) ? spec.paletteKey : "dark";
       const scale = Math.max(1.2, Math.min(1.75, (radius / 100) * 1.25));
-      const gdCage = resolve00GameDevsPiece({ archetype: mode === "telekinesis" ? "TELEKINESIS_SLAM" : "PROTECT_COUNTER", piece: mode === "telekinesis" ? "eye" : "buff-def", paletteKey: pPal });
-      if (gdCage && gdCage.startsWith("gd-") && playPiece(pieces, gdCage, { x, y: y + 6, palette: paletteFor(pPal), scale, groundY: y + 14 })) {
-        stats.releases++; return true;
-      }
-      const fx = volCache.spawn({
-        layer: shotLayer, keyPrefix: `cage|${mode}|${pPal}`, width: 148, height: 148, frameCount: 8,
-        directional: false, anchorX: 0.5, anchorY: 0.74, x, y: y + 6, follow, durationSec, scale: scale * 1.15,
-        renderForAngle: (ctx, _ang, phase) => renderVolumetricPsychicCage3D(ctx, { width: 148, height: 148, phase, paletteKey: pPal, mode })
-      });
-      if (fx) { stats.releases++; return true; }
-      return false;
+      const gdCage = resolve00GameDevsPiece({ archetype: mode === "telekinesis" ? "TELEKINESIS_SLAM" : "PROTECT_COUNTER", piece: mode === "telekinesis" ? "eye" : "buff-def", paletteKey: pPal }) || (mode === "telekinesis" ? "eye" : "buff-def");
+      playPiece(pieces, gdCage, { x, y: y + 6, palette: paletteFor(pPal), scale, groundY: y + 14 });
+      stats.releases++;
+      return true;
     },
     /** Subtle scorch/cone accents using pure pixelfx ground marks instead of noisy vector blasts. */
     scorchTrench({ x1, y1, x2, y2, moveId }) {
@@ -476,7 +371,8 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
     },
     coneStorm({ x, y, angle = 0, moveId }) {
       const spec = resolveMoveSpecV2(moveId);
-      playPiece(pieces, "stream", { x, y, angle, palette: paletteFor(spec.paletteKey), scale: 1.15, groundY: y + 20 });
+      const gdCone = resolve00GameDevsPiece({ archetype: "STREAM_BEAM", piece: "stream", paletteKey: spec.paletteKey, tier: spec.tier }) || "stream";
+      playPiece(pieces, gdCone, { x, y, angle, palette: paletteFor(spec.paletteKey), scale: 1.15, groundY: y + 20 });
       return true;
     },
     prop({ x, y, material = "STONE", broken = false, weak = false }) {
@@ -512,7 +408,9 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
           entry = null;
         }
         if (!entry) {
-          const sheet = shotSheet(cfg.piece, cfg.paletteKey);
+          const puddleLook = (cfg.gdPiece && resolve00GameDevsPiece({ piece: cfg.gdPiece, paletteKey: cfg.paletteKey }) === cfg.gdPiece)
+            ? cfg.gdPiece : cfg.piece;
+          const sheet = shotSheet(puddleLook, cfg.paletteKey) || shotSheet(cfg.piece, cfg.paletteKey);
           if (!sheet?.body?.textures?.length) continue;
           const sprite = new PIXI.Sprite(sheet.body.textures[0]);
           sprite.anchor.set(0.5, 0.5);
@@ -565,15 +463,17 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
         const idx = Math.floor(s.age * s.sheet.fps) % s.sheet.body.textures.length;
         s.bodySprite.texture = s.sheet.body.textures[idx];
         s.bodySprite.position.set(Math.round(pos.x), Math.round(pos.y));
-        const rot = s.sheet.upright ? 0 : s.angle;
-        const flipY = (!s.sheet.upright && Math.cos(rot) < 0) ? -1 : 1;
+        const isUpright = Boolean(s.upright || s.sheet.upright);
+        const rot = isUpright ? 0 : s.angle;
+        const flipX = (isUpright && Math.cos(s.angle) < 0) ? -1 : 1;
+        const flipY = (!isUpright && Math.cos(rot) < 0) ? -1 : 1;
         s.bodySprite.rotation = rot;
-        s.bodySprite.scale.set(s.scale, s.scale * flipY);
+        s.bodySprite.scale.set(s.scale * flipX, s.scale * flipY);
         if (s.glowSprite && s.sheet.glow) {
           s.glowSprite.texture = s.sheet.glow.textures[idx % s.sheet.glow.textures.length];
           s.glowSprite.position.set(Math.round(pos.x), Math.round(pos.y));
           s.glowSprite.rotation = rot;
-          s.glowSprite.scale.set(s.scale * 2, s.scale * 2 * flipY);
+          s.glowSprite.scale.set(s.scale * 2 * flipX, s.scale * 2 * flipY);
         }
       }
     },

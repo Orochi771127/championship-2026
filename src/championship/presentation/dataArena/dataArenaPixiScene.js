@@ -1699,21 +1699,32 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           burst(event.x, event.y, { count: 12, speed: 260, tint: state.gameMode==='RELAY'?relayLook(event.moveId,event.team).tint:event.effect === "ROOT" ? 0xd8f6ff : event.effect === "IGNITE" ? 0xff9a3c : 0xbff4ff, gravity: 260, life: 0.5 }); camera.addTrauma(0.18);
           if (state.gameMode === 'RELAY') relayImpact(event.x, event.y, relayLook(event.moveId, event.team)); break;
         case "BARRIER_UP":
-          if (!purePixelFx && event.casterId === state.player.id) {
+          if (purePixelFx) {
+            elementFx.buff?.({ x: event.x, y: event.y - 16, paletteKey: elementFx.look?.(event.moveId)?.paletteKey ?? "light", piece: "buff-def" });
+            break;
+          }
+          if (event.casterId === state.player.id) {
             activeGuard = atlas.ready(event.moveId, 'active') ? event : null;
             if (activeGuard) break;
           }
           ring(event.x, event.y - 16, 70, 0xffe066, 0.3); break;
         case "ARENA_WARNING": for (const zone of event.zones) ring(zone.x, zone.y, zone.radius, ZONE_TINT[event.kind] ?? 0xffffff, 0.5); break;
-        case "ARENA_ACTIVE": for (const zone of state.relay?.arena?.zones ?? []) { ring(zone.x, zone.y, zone.radius * 1.3, ZONE_TINT[event.kind] ?? 0xffffff, 0.45); burst(zone.x, zone.y, { count: 10, speed: 160, tint: ZONE_TINT[event.kind] ?? 0xffffff, life: 0.5 }); } break;
-        case "ARENA_CLAIM": ring(event.x, event.y, 80, ZONE_TINT[event.kind] ?? 0xffffff, 0.4); burst(event.x, event.y - 20, { count: 14, speed: 240, tint: ZONE_TINT[event.kind] ?? 0xffffff, life: 0.55 });
+        case "ARENA_ACTIVE": for (const zone of state.relay?.arena?.zones ?? []) { ring(zone.x, zone.y, zone.radius * 1.3, ZONE_TINT[event.kind] ?? 0xffffff, 0.45); if (!purePixelFx) burst(zone.x, zone.y, { count: 10, speed: 160, tint: ZONE_TINT[event.kind] ?? 0xffffff, life: 0.5 }); } break;
+        case "ARENA_CLAIM": ring(event.x, event.y, 80, ZONE_TINT[event.kind] ?? 0xffffff, 0.4); if (!purePixelFx) burst(event.x, event.y - 20, { count: 14, speed: 240, tint: ZONE_TINT[event.kind] ?? 0xffffff, life: 0.55 });
           if (event.team === 0) crowdReact("CHEER", event.x, 0.8); break;
         case "ARENA_PRESSURE": camera.addTrauma(0.3); break;
         case "EFFECTIVE": if (!purePixelFx) { ring(event.x, event.y - 30, event.mult > 1 ? 52 : 40, event.mult > 1 ? 0xffd34d : 0x9aa4b0, 0.32);
           if (event.mult > 1) burst(event.x, event.y - 34, { count: 6, speed: 200, tint: 0xffd34d, life: 0.35 }); } break;
-        case "STATUS_CLEARED": burst(event.x, event.y - 24, { count: 8, speed: 180, tint: 0xd8f6ff, texture: textures.shard, gravity: 300, life: 0.45 }); puff(event.x, event.y - 10, 0xeef7ff, 3, 1); break;
+        case "STATUS_CLEARED":
+          if (purePixelFx) { elementFx.buff?.({ x: event.x, y: event.y - 16, paletteKey: "light", piece: "cleanse" }); break; }
+          burst(event.x, event.y - 24, { count: 8, speed: 180, tint: 0xd8f6ff, texture: textures.shard, gravity: 300, life: 0.45 }); puff(event.x, event.y - 10, 0xeef7ff, 3, 1); break;
         case "BLINK":
-          if (!purePixelFx && atlas.ready(event.moveId, 'origin') && atlas.ready(event.moveId, 'arrival')) {
+          if (purePixelFx) {
+            afterimage(event.fromX, event.fromY, event.x - event.fromX);
+            elementFx.release?.({ x: event.x, y: event.y - 18, angle: event.angle ?? 0, moveId: event.moveId ?? "shadeStep", melee: true });
+            break;
+          }
+          if (atlas.ready(event.moveId, 'origin') && atlas.ready(event.moveId, 'arrival')) {
             if (Math.hypot(event.x - event.fromX, event.y - event.fromY) > 0) {
               atlas.place({}, event.moveId, 'origin', event.fromX, event.fromY - BEAM_ELEVATION, event.angle, 1, 0, false, true);
             }
@@ -1723,18 +1734,18 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           afterimage(event.fromX, event.fromY, event.x - event.fromX); burst(event.x, event.y - 20, { count: 10, speed: 200, tint: 0xd8f6ff, texture: textures.shard }); break;
         case "RIVAL_HIT": {
           const hitAng = Math.atan2(event.y - state.player.y, event.x - state.player.x);
-          if (!atlasContact && event.cause !== "LASER" && !(kitShots && relayMode)) { burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); contact(event.x, event.y - 30, 0xffb070); }
+          if (!purePixelFx && !atlasContact && event.cause !== "LASER" && !(kitShots && relayMode)) { burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); contact(event.x, event.y - 30, 0xffb070); }
           damageNumber(event.x, event.y - 56, event.amount, event.guarded ? 0xffe08a : 0xffffff);
           heavyHit(event.amount, event.x, event.y - 30, { angle: hitAng, guarded: event.guarded, side: "player" });
           break;
         }
         case "RIVAL_DODGE": puff(event.x, event.y, 0xa89580, 3, 0.9); break;
-        case "RIVAL_SPLASH": ring(event.x, event.y, 50, 0x9fe8ff, 0.4); break;
+        case "RIVAL_SPLASH": if (!purePixelFx) ring(event.x, event.y, 50, 0x9fe8ff, 0.4); break;
         case "SKILL_HIT": if (!purePixelFx && (atlasContact || (!confirmed && atlas.supports(event.moveId)))) break;
           if (kitShots && state.gameMode === 'RELAY') break;
           spawn({ x: event.x, y: event.y - 14, texture: textures.glow, tint: state.gameMode==='RELAY'?relayLook(event.moveId,'player').tint:MOVE_TINT[event.moveId] ?? 0xffffff, scale: 0.6, scaleTo: 0.15, life: 0.14 });
           if (state.gameMode === 'RELAY') { relayImpact(event.x, event.y - 14, relayLook(event.moveId, 'player')); } break;
-        case "STATUS": burst(event.x, event.y - 30, { count: 4, speed: 120, tint: event.status === "ROOT" ? 0xd8f6ff : event.status === "SLOW" ? 0x7fc8ff : 0xff9a3c, life: 0.35 }); break;
+        case "STATUS": if (!purePixelFx) burst(event.x, event.y - 30, { count: 4, speed: 120, tint: event.status === "ROOT" ? 0xd8f6ff : event.status === "SLOW" ? 0x7fc8ff : 0xff9a3c, life: 0.35 }); break;
         case "ROUND_WON": crowdReact("VICTORY", event.x ?? worldWidth / 2, 1.4); confetti(); camera.addTrauma(0.3); break;
         case "ROUND_LOST": crowdReact("DEFEAT", worldWidth / 2, 1); break;
         case "RESULT": crowdReact(event.outcome === "VICTORY" ? "VICTORY" : "DEFEAT", worldWidth / 2, 1.6); if (event.outcome === "VICTORY") confetti(); break;

@@ -28,7 +28,7 @@ import {createPixelHitBursts} from '../vfx/pixelHitBursts.js';
 import {createPixelMotes} from '../vfx/pixelMotes.js';
 import {productArenaMoveRecord} from '../../contracts/productArenaMoves.js';
 import {moveVfxChoreography as sharedChoreography, moveVfxSupportChoreography} from '../vfx/moveVfxChoreography.js';
-import {createMoveVfxSetPieces, bakedPieceLook, paintBakedPieceFrames, resolve00GameDevsPiece} from '../vfx/moveVfxSetPieces.js';
+import {createMoveVfxSetPieces, bakedPieceLook, paintBakedPieceFrames, loadMoveVfx00GameDevsSprites, resolve00GameDevsPiece} from '../vfx/moveVfxSetPieces.js';
 /** Palette key -> the element its motes wear (as unifiedMoveVfxResolver reads a bank's family colour). */
 const PALETTE_ELEMENT = Object.freeze({fire: 'FIRE', water: 'WATER', ice: 'ICE', thunder: 'THUNDER', metal: 'METAL', nature: 'WOOD',
   earth: 'EARTH', wind: 'WIND', light: 'SUN', dark: 'MOON'});
@@ -316,7 +316,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
   const pixelHits = typeof createPixelHitBursts === 'function' ? createPixelHitBursts({PIXI, layer: worldFront, quality: rich ? 'balanced' : 'saver', reducedMotion}) : null;
   // Pixel motes (MOVE_VFX_QUALITY_20261110): element particles trailing every live move effect and scattering from every hit.
   const burstAt = new Map(); // slot -> elapsed ms of its last pixel hit burst
-  // Each move's own moment (BESPOKE_MOVE_VFX_PROGRAM_20261111): bespoke pixel set pieces from its choreography.
+  // Each move's own moment (BESPOKE_MOVE_VFX_PROGRAM_20261111 + 00GameDevs MIT PixelFX): bespoke pixel set pieces from its choreography.
+  loadMoveVfx00GameDevsSprites();
   const setPieces = typeof createMoveVfxSetPieces === 'function' ? createMoveVfxSetPieces({PIXI, layer: worldFront, reducedMotion}) : null;
   const motes = typeof createPixelMotes === 'function' ? createPixelMotes({PIXI, layer: worldFront, quality: rich ? 'balanced' : 'saver', reducedMotion, seed: seed ^ 0x6d07}) : null;
   const standIns = new Map(); // live effect actor id -> {at, alive, standIn, trail, ...}
@@ -690,24 +691,26 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         if (event.moveId >= 28 && event.moveId <= 30) continue;
         const info = slot(event.slot), look = describeMove(event.slot, event.moveId);
         const vfx = vfxOf(event.slot, event.moveId);
-        // A record that names no bank still leaves the hand on an original cell.
-        if (info && vfx?.fallback && !vfx.melee) {
+        const choreo = moveVfxChoreography(event.moveId);
+        const signature = signatureOf(event.moveId);
+        const hasOwnRelease = Boolean(info && choreo?.release && setPieces && piecesBaked());
+        // Clean PixelFX + 00GameDevs: skip legacy fallback cell when a clean baked release plays.
+        if (!hasOwnRelease && info && vfx?.fallback && !vfx.melee) {
           const launchCell = vfx.cells.find(c => c.role === 'launch' || c.role === 'prepare');
           if (launchCell) element?.cell({...launchCell, ...muzzleOf(info), scale: ctx.nativeScale, flip: info.facing < 0, hue: vfx.cellHue});
         }
-        const choreo = moveVfxChoreography(event.moveId);
         if (info && choreo?.release && setPieces) {
           const releasePalette = vfx?.palette ?? BATTLE_FX_PALETTES[look?.palette] ?? BATTLE_FX_PALETTES.neutral;
-          setPieces.play(choreo.release.piece, {...muzzleOf(info), angle: info.facing < 0 ? Math.PI : 0, palette: releasePalette,
+          const releasePiece = resolve00GameDevsPiece({ piece: choreo.release.piece, paletteKey: signature?.paletteKey ?? look?.palette ?? 'fire', tier: look?.tier ?? 'standard' }) || choreo.release.piece;
+          setPieces.play(releasePiece, {...muzzleOf(info), angle: info.facing < 0 ? Math.PI : 0, palette: releasePalette,
             size: info.width, unit: ctx.nativeScale, groundY: info.groundY, scale: choreo.release.scale ?? 1, sprite: choreo.release.sprite});
         }
         if (!info || !look || look.tier === 'basic' || look.tier === 'support') continue;
         const palette = vfx?.palette ?? BATTLE_FX_PALETTES[look.palette] ?? BATTLE_FX_PALETTES.neutral;
-        // Charge at the release point: an element orb with four glints spiralling in.
-        if (!reducedMotion) element?.charge({...muzzleOf(info), palette, ms: juicy ? BATTLE_FX_JUICY.windupMs + 60 : 200,
+        // Charge at the release point only when no bespoke baked release piece already owns the muzzle.
+        if (!reducedMotion && !hasOwnRelease) element?.charge({...muzzleOf(info), palette, ms: juicy ? BATTLE_FX_JUICY.windupMs + 60 : 200,
           size: info.width * (look.tier === 'ultimate' ? 0.55 : 0.4), follow: () => { const now = slot(event.slot); return now ? muzzleOf(now) : null; }});
         // The move's own sigil opens on the ground under the caster.
-        const signature = signatureOf(event.moveId);
         if (kit && signature) {
           // Sized to the fighter: the battle camera pushes in close, so a sigil wider than a body fills the screen.
           kit.sigil({x: info.x, y: info.groundY, paletteKey: signature.paletteKey, signature, size: info.width * 0.28, ms: look.tier === 'ultimate' ? 700 : 420,
@@ -820,9 +823,11 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           if (!hasAtlasContact) dust({x: target.x, groundY: target.groundY, count: rich ? 4 : 2, spread: target.width * 0.3, push: fx.knockDir, life: 520, scale: 0.9});
         }
         if (hasAtlasContact) continue;
-        // Original cells drawn by this layer: a fallback record's own hit set, the
-        // element accent on a bank-less melee hit, and the struck body's overlay.
-        if (vfx) {
+        const signature = signatureOf(event.moveId);
+        // Clean Single-Layer PixelFX + 00GameDevs: when the move's own baked piece plays, never stack legacy cells, kit bursts, or a second pixelHit explosion on top of it!
+        const hasOwnContact = Boolean(choreo?.contact && setPieces && piecesBaked());
+        // Original cells drawn by this layer only when no clean baked contact piece owns the impact.
+        if (vfx && !hasOwnContact) {
           const cellAt = {x: hit.x, y: hit.y, scale: ctx.nativeScale, flip: (fx.knockDir || 1) < 0, hue: vfx.cellHue};
           if (vfx.fallback) { const hitCell = vfx.cells.find(c => c.role === 'hit'); if (hitCell) element?.cell({...hitCell, ...cellAt}); }
           if (vfx.accent) element?.cell({...vfx.accent, ...cellAt, hue: 0});
@@ -831,9 +836,8 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           if (!productArenaMoveRecord(event.moveId) && (tier !== 'light' || look?.tier === 'ultimate')) element?.decal({x: hit.x, y: hit.groundY, kind: vfx.decal, palette, paletteKey: vfx.paletteKey,
             size: target.width * (tier === 'heavy' ? 1.3 : 0.9), scale: ctx.nativeScale});
         }
-        // The move's own closing burst (and a signature move's ground sigil) at the contact.
-        const signature = signatureOf(event.moveId);
-        if (kit && signature) {
+        // The move's own closing burst (only when no baked contact piece already owns the hit).
+        if (kit && signature && !hasOwnContact) {
           kit.burst({x: hit.x, y: hit.y, groundY: hit.groundY, angle: attacker ? Math.atan2(target.groundY - attacker.groundY, target.x - attacker.x) : 0,
             paletteKey: signature.paletteKey, signature, size: target.width * (tier === 'light' ? 0.18 : 0.24), heavy: tier === 'heavy'});
           kitStats.bursts++;
@@ -847,21 +851,21 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           angle: attacker ? Math.atan2(target.groundY - attacker.groundY, target.x - attacker.x) : 0,
           palette: {core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true}, size: target.width, unit: ctx.nativeScale, groundY: hit.groundY, scale: (choreo?.contact?.scale ?? 1) * 0.7});
         if (choreo?.contact && setPieces) {
-          const contactPiece = resolve00GameDevsPiece({ piece: choreo.contact.piece, paletteKey: signature?.paletteKey ?? 'fire', tier: look?.tier ?? tier }) || choreo.contact.piece;
+          const contactPiece = resolve00GameDevsPiece({ piece: choreo.contact.piece, paletteKey: signature?.paletteKey ?? look?.palette ?? 'fire', tier: look?.tier ?? tier }) || choreo.contact.piece;
           setPieces.play(contactPiece, {x: hit.x, y: hit.y,
             angle: attacker ? Math.atan2(target.groundY - attacker.groundY, target.x - attacker.x) : 0, palette, size: target.width,
             unit: ctx.nativeScale, groundY: hit.groundY, scale: choreo.contact.scale ?? 1, fast: choreo.contact.fast, sprite: choreo.contact.sprite, at: 'contact'});
         }
         const lastBurst = burstAt.get(event.slot) ?? -Infinity;
-        if (tier !== 'light' || elapsed - lastBurst > 220) {
+        if (!hasOwnContact && (tier !== 'light' || elapsed - lastBurst > 220)) {
           pixelHits?.spawn({element: vfx?.element ?? 'NEUTRAL', x: hit.x, y: hit.y, groundY: hit.groundY, size: target.width * (tier === 'light' ? 0.8 : 1),
             unit: ctx.nativeScale, heavy: tier === 'heavy', flip: (fx.knockDir || 1) < 0});
           burstAt.set(event.slot, elapsed);
         }
         if (critical) cue({type: 'CRIT', system: CRITICAL_VFX_SYSTEM, slot: event.slot, x: target.x, y: target.groundY});
         if (critical) hitFeel?.split();
-        // At the contact point: a flash and sparks that fall to the target's ground.
-        spawnFlash({x: hit.x, y: hit.y, tint: palette.core, size: tier === 'heavy' ? 46 : 30, life: tier === 'heavy' ? 170 : 120});
+        // At the contact point: avoid stacking a duplicate radial glow blob over our baked PixelFX / 00GameDevs piece.
+        if (!hasOwnContact) spawnFlash({x: hit.x, y: hit.y, tint: palette.core, size: tier === 'heavy' ? 46 : 30, life: tier === 'heavy' ? 170 : 120});
         if (!motes) sparks({x: hit.x, y: hit.y, count: tier === 'heavy' ? (rich ? 22 : 10) : tier === 'medium' ? (rich ? 12 : 6) : 6, palette,
           speed: tier === 'heavy' ? 210 : 150, groundY: hit.groundY, scale: tier === 'heavy' ? 1.2 : 1});
         // On the ground beneath it: the shock ring, dust and, for heavy hits, debris and scorch.

@@ -12,7 +12,7 @@ import { RELAY_ROSTER } from "../src/championship/modes/dataArena/dataArenaRelay
 import { RELAY_POOL_MOVE_ELEMENT } from "../src/championship/modes/dataArena/dataArenaRelayKits.js";
 import { listProductOriginalMoveRecords } from "../src/championship/contracts/productOriginalSpecies.js";
 import { moveVfxChoreography } from "../src/championship/presentation/vfx/moveVfxChoreography.js";
-import { MOVE_VFX_SET_PIECES, MOVE_VFX_PIECE_DRAWINGS, MOVE_VFX_SUPPORT_PIECES, MOVE_VFX_00GAMEDEVS_KEYS, createMoveVfxSetPieces, loadMoveVfx00GameDevsSprites, resolve00GameDevsPiece } from "../src/championship/presentation/vfx/moveVfxSetPieces.js";
+import { MOVE_VFX_SET_PIECES, MOVE_VFX_PIECE_DRAWINGS, MOVE_VFX_SUPPORT_PIECES, MOVE_VFX_00GAMEDEVS_KEYS, LEGACY_3D_TO_00GD, createMoveVfxSetPieces, loadMoveVfx00GameDevsSprites, resolve00GameDevsPiece, resolve00GameDevsProjectile } from "../src/championship/presentation/vfx/moveVfxSetPieces.js";
 import { MOVE_VFX_3D_PIECE_GROUP } from "../src/championship/presentation/vfx/moveVfxPieceSprites3dIndex.js";
 import { MOVE_VFX_PIECE_SPRITES } from "../src/championship/presentation/vfx/moveVfxPieceSprites.js";
 import { V2_ARCHETYPES, resolveMoveSpecV2 } from "../src/championship/modes/dataArena/dataArenaMoveCatalogV2.js";
@@ -1255,4 +1255,51 @@ test("phase 10 / 00GameDevs MIT 3D->PixelFX Batch 1 + 2 + 3 (FINAL): all 78 bake
   }
   pieces.update(50);
   pieces.dispose();
+});
+
+test("phase 11 / 666-move clean single-layer PixelFX + 00GameDevs audit: zero legacy stacking, zero 3d-* fallback leaks & zero procedural 3D canvas hacks", async () => {
+  const { MOVE_VFX_CHOREOGRAPHY } = await import("../src/championship/presentation/vfx/moveVfxChoreography.js");
+  const { moveVfxSignature } = await import("../src/championship/presentation/vfx/moveVfxSignatures.js");
+  const loaded00 = await loadMoveVfx00GameDevsSprites();
+  const validPixelFx = new Set([...MOVE_VFX_SET_PIECES, ...MOVE_VFX_SUPPORT_PIECES, ...Object.keys(MOVE_VFX_PIECE_SPRITES)]);
+
+  // 1) All 71 legacy 3d-* keys map cleanly to loaded 00GameDevs gd-* sheets
+  assert.ok(Object.keys(LEGACY_3D_TO_00GD).length >= 71, "all 71 legacy 3d-* keys mapped to 00GameDevs gd-*");
+  for (const [old3d, gdKey] of Object.entries(LEGACY_3D_TO_00GD)) {
+    assert.ok(loaded00[gdKey], `${old3d} -> ${gdKey} is loaded`);
+    assert.equal(resolve00GameDevsPiece({ piece: old3d }), gdKey, `resolve00GameDevsPiece upgrades ${old3d} -> ${gdKey}`);
+  }
+
+  // 2) All 638 Turn-Based Auto Battle moves resolve 100% to 00GameDevs gd-* or pure PixelFX (ZERO leftover 3d-*!)
+  for (const [k, c] of Object.entries(MOVE_VFX_CHOREOGRAPHY)) {
+    const key = /^\d+$/.test(k) ? Number(k) : k;
+    const sig = moveVfxSignature(key);
+    const resolved = resolve00GameDevsPiece({ piece: c.contact.piece, paletteKey: sig?.paletteKey ?? "fire", tier: sig?.tier ?? "standard" });
+    assert.ok(!resolved.startsWith("3d-"), `Auto move ${k} has zero 3d-* fallback (got ${resolved})`);
+    assert.ok(Boolean(loaded00[resolved]) || validPixelFx.has(resolved), `Auto move ${k} resolves to pure PixelFX/00GD (${resolved})`);
+  }
+
+  // 3) All 641+ Manual 3v3 PB-Rank moves resolve cleanly to 00GameDevs + PixelFX projectiles & impacts
+  const allIds = [...Object.keys(RELAY_POOL_MOVE_ELEMENT)];
+  for (let i = 31; i <= 622; i++) allIds.push(`own-${i}`);
+  for (const id of allIds) {
+    const spec = resolveMoveSpecV2(id);
+    const hero = resolve00GameDevsPiece({ archetype: spec.v2Archetype, piece: spec.contactLook, paletteKey: spec.paletteKey, tier: spec.tier });
+    assert.ok(hero && loaded00[hero], `Manual V2 move ${id} resolves to baked 00GameDevs ${hero}`);
+    const proj = resolve00GameDevsProjectile({ archetype: spec.v2Archetype, paletteKey: spec.paletteKey, tier: spec.tier });
+    assert.ok((proj && loaded00[proj]) || Boolean(MOVE_VFX_PIECE_SPRITES[spec.flightLook]), `Manual V2 move ${id} has pure PixelFX/00GD projectile`);
+  }
+  // Semantic checks fixed during 666-move audit
+  assert.equal(resolveMoveSpecV2("own-341").v2Archetype, "METEOR_RAIN", "廢都毒雨 -> METEOR_RAIN");
+  assert.equal(resolveMoveSpecV2("own-352").v2Archetype, "METEOR_RAIN", "潮鑄落雷 -> METEOR_RAIN");
+
+  // 4) Zero old+new stacking in battleFxLayer & zero procedural volCache canvas spawns in dataArenaPixelFxV2
+  const battleSrc = readFileSync(new URL("../src/championship/presentation/battleFx/battleFxLayer.js", import.meta.url), "utf8");
+  const v2Src = readFileSync(new URL("../src/championship/presentation/dataArena/dataArenaPixelFxV2.js", import.meta.url), "utf8");
+  const sceneSrc = readFileSync(new URL("../src/championship/presentation/dataArena/dataArenaPixiScene.js", import.meta.url), "utf8");
+  assert.ok(battleSrc.includes("if (vfx && !hasOwnContact)"), "Auto Battle suppresses legacy ROM cells when clean PixelFX/00GD contact plays");
+  assert.ok(battleSrc.includes("if (kit && signature && !hasOwnContact)"), "Auto Battle suppresses legacy kit.burst when clean PixelFX/00GD contact plays");
+  assert.ok(battleSrc.includes("if (!hasOwnContact && (tier !== 'light'"), "Auto Battle suppresses duplicate pixelHits explosion when clean PixelFX/00GD contact plays");
+  assert.ok(!v2Src.includes("volCache.spawn("), "Manual 3v3 Data Arena has ZERO procedural 3D canvas volCache spawns");
+  assert.ok(sceneSrc.includes('case "BARRIER_UP":\n          if (purePixelFx)'), "Data Arena BARRIER_UP plays clean 00GameDevs shield instead of legacy ring");
 });

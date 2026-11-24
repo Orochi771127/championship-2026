@@ -184,6 +184,58 @@ export const MOVE_VFX_00GAMEDEVS_FALLBACK = Object.freeze({
 });
 export const MOVE_VFX_00GAMEDEVS_KEYS = Object.freeze(Object.keys(MOVE_VFX_00GAMEDEVS_FALLBACK));
 
+/** 1:1 mapping from legacy 3d-* choreography keys to crisp baked 00GameDevs PixelFX (gd-*) keys. */
+export const LEGACY_3D_TO_00GD = Object.freeze({
+  '3d-aegis': 'gd-aegis-weave', '3d-aegis-b': 'gd-aegis-weave',
+  '3d-airburst': 'gd-billowing-airburst',
+  '3d-arc-ray': 'gd-arc-ray', '3d-arc-ray-b': 'gd-arc-ray',
+  '3d-arcane-matrix': 'gd-arcane-matrix', '3d-arcane-matrix-b': 'gd-arcane-matrix',
+  '3d-astral-convergence': 'gd-astral-vortex',
+  '3d-astral-gate': 'gd-astral-gate',
+  '3d-binding-curse': 'gd-binding-curse',
+  '3d-burning-ground': 'gd-burning-ground', '3d-burning-ground-b': 'gd-burning-ground',
+  '3d-charged-beam': 'gd-charged-beam', '3d-charged-beam-b': 'gd-charged-beam',
+  '3d-darkchain': 'gd-darkchain-burst',
+  '3d-dust-devil': 'gd-dust-devil',
+  '3d-energy-burst': 'gd-energy-burst', '3d-energy-burst-b': 'gd-energy-burst', '3d-energy-burst-c': 'gd-energy-burst',
+  '3d-energy-vortex': 'gd-energy-vortex',
+  '3d-fire-blast': 'gd-fire-explosion',
+  '3d-fire-vortex': 'gd-fire-vortex',
+  '3d-fireball-hit': 'gd-fireball',
+  '3d-fireburst': 'gd-rolling-fireburst', '3d-fireburst-b': 'gd-rolling-fireburst',
+  '3d-fissure': 'gd-magma-fissure',
+  '3d-flame-surge': 'gd-flame-surge',
+  '3d-frost-lance-rain': 'gd-frost-lance-rain',
+  '3d-frost-wheel': 'gd-frost-wheel',
+  '3d-golden-chains': 'gd-golden-chain-rain',
+  '3d-ice-lance': 'gd-ice-lance',
+  '3d-ice-shard-hit': 'gd-ice-shard',
+  '3d-ice-shatter': 'gd-ice-shatter', '3d-ice-shatter-b': 'gd-ice-shatter',
+  '3d-ice-shield': 'gd-ice-shield',
+  '3d-plasma-bolt': 'gd-plasma-bolt',
+  '3d-pool': 'gd-venom-pool',
+  '3d-prism-guard': 'gd-prism-guard', '3d-prism-guard-b': 'gd-prism-guard', '3d-prism-guard-c': 'gd-prism-guard',
+  '3d-prism-parry': 'gd-prism-parry', '3d-prism-parry-b': 'gd-prism-parry', '3d-prism-parry-c': 'gd-prism-parry',
+  '3d-pulse-beam': 'gd-pulse-beam',
+  '3d-quicksand': 'gd-quicksand-seal',
+  '3d-radiant-beam': 'gd-radiant-beam', '3d-radiant-beam-b': 'gd-radiant-beam', '3d-radiant-beam-c': 'gd-radiant-beam',
+  '3d-relic-descent': 'gd-sacred-relic', '3d-relic-descent-b': 'gd-sacred-relic',
+  '3d-shard-storm': 'gd-arcane-arrow-rain',
+  '3d-shockwave': 'gd-shockwave', '3d-shockwave-b': 'gd-shockwave',
+  '3d-smoke-column': 'gd-smoke-column',
+  '3d-smoke-puff': 'gd-smoke-puff',
+  '3d-starblade': 'gd-starblade-explosion', '3d-starblade-b': 'gd-starblade-cataclysm',
+  '3d-steam-jet': 'gd-steam-jet',
+  '3d-sustained-arc': 'gd-sustained-arc', '3d-sustained-arc-b': 'gd-sustained-arc',
+  '3d-thorn-crown': 'gd-thorn-crown', '3d-thorn-crown-b': 'gd-thorn-crown',
+  '3d-thunder-storm': 'gd-lightning-tornado',
+  '3d-thunder-strike': 'gd-thunder-strike',
+  '3d-tidal-surge': 'gd-tidal-surge', '3d-tidal-surge-b': 'gd-tidal-surge',
+  '3d-verdant': 'gd-verdant-heal', '3d-verdant-b': 'gd-verdant-heal',
+  '3d-whiteout': 'gd-ground-freeze',
+  '3d-wind-vortex': 'gd-wind-vortex', '3d-wind-vortex-b': 'gd-wind-vortex'
+});
+
 /** The bloom's strength over the colour (pixelfx adds its light at full; a bright arena takes a little less). */
 export const GLOW_ALPHA = 0.85;
 
@@ -236,6 +288,13 @@ export function loadMoveVfx00GameDevsSprites() {
 }
 /** Resolve a 00GameDevs MIT hero animation upgrade for a move archetype / piece + element palette (78 pieces across Batch 1-3). */
 export function resolve00GameDevsPiece({ piece = null, archetype = null, paletteKey = 'fire', tier = 'standard' } = {}) {
+  if (typeof piece === 'string' && piece.startsWith('gd-')) {
+    return baked00Gd?.[piece] ? piece : (MOVE_VFX_00GAMEDEVS_FALLBACK[piece] ?? piece);
+  }
+  if (typeof piece === 'string' && LEGACY_3D_TO_00GD[piece]) {
+    const mapped = LEGACY_3D_TO_00GD[piece];
+    if (baked00Gd?.[mapped]) return mapped;
+  }
   let candidate = null;
   if (archetype) {
     switch (archetype) {
@@ -421,6 +480,33 @@ export function resolve00GameDevsPiece({ piece = null, archetype = null, palette
   }
   if (candidate && baked00Gd?.[candidate]) return candidate;
   return piece;
+}
+/** Resolve a crisp 00GameDevs MIT directional projectile sprite sheet when loaded (fallback: null -> PixelFX shot-*). */
+export function resolve00GameDevsProjectile({ archetype = null, paletteKey = 'fire', tier = 'standard' } = {}) {
+  if (!baked00Gd) return null;
+  let candidate = null;
+  if (archetype === 'DRAG_WAVE') {
+    candidate = paletteKey === 'fire' ? 'gd-rolling-fireburst'
+      : (paletteKey === 'earth' || paletteKey === 'dark') ? 'gd-flame-surge'
+        : 'gd-tidal-surge';
+  } else if (archetype === 'VOLLEY_BARRAGE') {
+    candidate = paletteKey === 'thunder' ? 'gd-lightning-arrow'
+      : paletteKey === 'ice' ? 'gd-frost-wheel'
+        : paletteKey === 'wind' ? 'gd-spiral-gale'
+          : paletteKey === 'light' ? 'gd-arcane-missile'
+            : paletteKey === 'fire' ? 'gd-flame-magic-bolt'
+              : paletteKey === 'dark' ? 'gd-shadow-glaive'
+                : 'gd-ice-lance';
+  } else if (archetype === 'HOMING_ORB') {
+    candidate = paletteKey === 'thunder' ? 'gd-plasma-bolt'
+      : paletteKey === 'ice' ? 'gd-ice-shard'
+        : paletteKey === 'wind' ? 'gd-spiral-gale'
+          : paletteKey === 'light' ? 'gd-arcane-missile'
+            : (paletteKey === 'fire' && tier === 'ultimate') ? 'gd-flame-magic-bolt'
+              : paletteKey === 'dark' ? 'gd-shadow-glaive'
+                : 'gd-fireball';
+  }
+  return candidate && baked00Gd[candidate] ? candidate : null;
 }
 /** Load the group modules holding these three.js pieces (other names are ignored). */
 export function loadMoveVfx3dPieces(names) {
