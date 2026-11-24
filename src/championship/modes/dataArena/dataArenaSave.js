@@ -15,6 +15,46 @@ import { relayKit } from './dataArenaRelay.js';
 
 export const DATA_ARENA_RECORD_SCHEMA = DATA_ARENA_VERSION;
 export const DATA_ARENA_TOUCH_LAYOUTS = Object.freeze(["standard", "compact", "wide", "leftHand"]);
+export const DATA_ARENA_RANKS = Object.freeze([
+  Object.freeze({ id: "BRONZE", minRp: 0, aiDifficulty: "easy", badge: "🥉" }),
+  Object.freeze({ id: "SILVER", minRp: 150, aiDifficulty: "normal", badge: "🥈" }),
+  Object.freeze({ id: "GOLD", minRp: 350, aiDifficulty: "normal", badge: "🥇" }),
+  Object.freeze({ id: "PLATINUM", minRp: 650, aiDifficulty: "hard", badge: "💎" }),
+  Object.freeze({ id: "MASTER", minRp: 1050, aiDifficulty: "hard", badge: "👑" }),
+  Object.freeze({ id: "CHAMPION", minRp: 1600, aiDifficulty: "hard", badge: "🏆" })
+]);
+export function pbRankForPoints(rp = 0) {
+  const pts = Number.isFinite(rp) ? Math.max(0, Math.floor(rp)) : 0;
+  let current = DATA_ARENA_RANKS[0];
+  for (const tier of DATA_ARENA_RANKS) {
+    if (pts >= tier.minRp) current = tier;
+  }
+  const idx = DATA_ARENA_RANKS.indexOf(current);
+  const next = DATA_ARENA_RANKS[idx + 1] ?? null;
+  return Object.freeze({ ...current, rp: pts, index: idx, nextMinRp: next ? next.minRp : null });
+}
+export function applyPbRankMatch(prev = {}, { won = false, fainted = 0 } = {}) {
+  const rp0 = count(prev?.rp ?? 0);
+  const peak0 = Math.max(rp0, count(prev?.peakRp ?? 0));
+  const streak0 = count(prev?.streak ?? 0);
+  const bestStreak0 = Math.max(streak0, count(prev?.bestStreak ?? 0));
+  const before = pbRankForPoints(rp0);
+  let rp = rp0, streak = streak0;
+  if (won) {
+    streak = streak0 + 1;
+    const winGain = 35 + Math.min(streak, 5) * 8 + (fainted === 0 ? 12 : 0);
+    rp = count(rp0 + winGain);
+  } else {
+    streak = 0;
+    const floor = before.index <= 0 ? 0 : before.minRp;
+    rp = Math.max(floor, rp0 - 15);
+  }
+  const after = pbRankForPoints(rp);
+  return {
+    next: { rp, peakRp: Math.max(peak0, rp), streak, bestStreak: Math.max(bestStreak0, streak) },
+    before, after, rpDelta: rp - rp0, promoted: after.index > before.index
+  };
+}
 const QUALITY = new Set(["auto", "high", "low"]);
 const TOUCH_LAYOUTS = new Set(DATA_ARENA_TOUCH_LAYOUTS);
 const MODES = ["TOURNAMENT", "HARBOR", "RELAY", "SURVIVAL"];
@@ -24,7 +64,9 @@ const count = (value) => (Number.isSafeInteger(value) && value >= 0 ? Math.min(v
 export function defaultDataArenaRecords() {
   return {
     schemaVersion: 1, kind: "DATA_ARENA_RECORDS", runs: 0, wins: 0, bestScore: 0, bestVictorySeconds: null,
-    lastPartnerId: DATA_ARENA_PARTNERS[0].id, lastMode: "RELAY", relayLoadouts: {}, relayReserveId: null, relayThirdId: null, relayArenaId: RELAY_MAP_IDS[0], partners: {}, modes: {}, settings: { shake: true, quality: "auto", touchLayout: "standard" }, briefingSeen: false
+    lastPartnerId: DATA_ARENA_PARTNERS[0].id, lastMode: "RELAY", relayLoadouts: {}, relayReserveId: null, relayThirdId: null, relayArenaId: RELAY_MAP_IDS[0], partners: {}, modes: {},
+    rank: { rp: 0, peakRp: 0, streak: 0, bestStreak: 0 },
+    settings: { shake: true, quality: "auto", touchLayout: "standard" }, briefingSeen: false
   };
 }
 
@@ -45,12 +87,16 @@ export function sanitizeDataArenaRecords(raw) {
   const relayLoadouts = {};
   for(const id of PARTNER_IDS)if(Array.isArray(raw.relayLoadouts?.[id]))relayLoadouts[id]=relayKit(id,raw.relayLoadouts[id]).moves;
   const best = raw.bestVictorySeconds;
+  const rawRank = raw.rank && typeof raw.rank === "object" ? raw.rank : {};
+  const rp = count(rawRank.rp);
+  const streak = count(rawRank.streak);
   return {
     ...base,
     runs: count(raw.runs), wins: Math.min(count(raw.wins), count(raw.runs)), bestScore: count(raw.bestScore),
     bestVictorySeconds: Number.isFinite(best) && best > 0 && best < 3600 ? best : null,
     lastPartnerId: PARTNER_IDS.has(raw.lastPartnerId) ? raw.lastPartnerId : base.lastPartnerId,
     partners, modes, relayLoadouts, relayReserveId:PARTNER_IDS.has(raw.relayReserveId)?raw.relayReserveId:null, relayThirdId:PARTNER_IDS.has(raw.relayThirdId)?raw.relayThirdId:null, relayArenaId:RELAY_MAP_IDS.includes(raw.relayArenaId)?raw.relayArenaId:base.relayArenaId, lastMode: MODES.includes(raw.lastMode) ? raw.lastMode : base.lastMode,
+    rank: { rp, peakRp: Math.max(rp, count(rawRank.peakRp)), streak, bestStreak: Math.max(streak, count(rawRank.bestStreak)) },
     settings: { shake: raw.settings?.shake !== false, quality: QUALITY.has(raw.settings?.quality) ? raw.settings.quality : "auto", touchLayout: TOUCH_LAYOUTS.has(raw.settings?.touchLayout) ? raw.settings.touchLayout : "standard" },
     briefingSeen: raw.briefingSeen === true
   };
@@ -112,7 +158,13 @@ export function createDataArenaRecordStore({ port = null } = {}) {
       const newModeBest = score > entry.bestScore;
       records.modes[mode] = { runs: entry.runs + 1, wins: entry.wins + (victory ? 1 : 0), bestScore: Math.max(entry.bestScore, score), bestRound: Math.max(entry.bestRound, reached) };
       records.lastMode = mode;
-      return { saved: write(), newBest: newModeBest, overallBest: newBest };
+      let rankUpdate = null;
+      if (mode === "RELAY" && result.outcome !== "DRAW") {
+        const applied = applyPbRankMatch(records.rank, { won: victory, fainted: count(result.relayFainted ?? 0) });
+        records.rank = applied.next;
+        rankUpdate = { before: applied.before, after: applied.after, rpDelta: applied.rpDelta, promoted: applied.promoted, streak: applied.next.streak };
+      }
+      return { saved: write(), newBest: newModeBest, overallBest: newBest, rankUpdate };
     }
   });
 }

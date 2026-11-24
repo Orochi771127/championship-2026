@@ -18,7 +18,7 @@ import { dataArenaUpgrade, previewDataArenaUpgrade } from "../modes/dataArena/da
 import { loadStylesheet } from './loadStylesheet.js';
 import { createLoadAttempt, LOAD_MAX_MS } from './loadWatchdog.js';
 import { gachaTicketImage } from "./cyberGachaIcons.js";
-import { createDataArenaRecordStore, DATA_ARENA_TOUCH_LAYOUTS } from "../modes/dataArena/dataArenaSave.js";
+import { createDataArenaRecordStore, DATA_ARENA_TOUCH_LAYOUTS, pbRankForPoints } from "../modes/dataArena/dataArenaSave.js";
 import { createChampionshipDataArenaPort } from "./ChampionshipPersistentSavePort.js";
 import { dataArenaCast, loadDataArenaCharacter } from "../presentation/dataArena/dataArenaRoster.js";
 import { mountDataArenaScene } from "../presentation/dataArena/dataArenaPixiScene.js";
@@ -33,7 +33,7 @@ import { juicyPresentationEnabled } from "../presentation/juicy/juicyArt.js";
 
 import { RELAY_ROSTER, relayPartner } from '../modes/dataArena/dataArenaRelayRoster.js';
 import { RELAY_MAP_IDS } from '../modes/dataArena/dataArenaRelayMaps.js';
-import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, RELAY_LOADOUTS, relayKit, relayMove, relayEffectStyle, relayMoveElement } from '../modes/dataArena/dataArenaRelay.js';
+import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, RELAY_LOADOUTS, relayKit, relayMove, relayEffectStyle, relayMoveElement, partnerAbilityFor } from '../modes/dataArena/dataArenaRelay.js';
 import { relayOwnMoveInfo, relayBasicRecord, relayOwnUltimateStandIn } from '../modes/dataArena/dataArenaRelayKits.js';
 import { battleMoveName } from '../text/battleMoveNames.js';
 import { speciesTaxonomyForId, elementMatchup, elementMultiplierPercent, factionResonance } from '../contracts/speciesTaxonomy.js';
@@ -1788,7 +1788,11 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const panel = el("div", "da-panel da-panel--select");
     const head = el("header", "da-panel__head");
     const eyebrow = el("p", "da-eyebrow");
-    head.append(eyebrow, el("h2", "da-title", campaign ? campaign.title : t("mode.title")));
+    const rankRec = records.get().rank ?? { rp: 0, streak: 0 };
+    const rankInfo = pbRankForPoints(rankRec.rp);
+    const rankBadge = el("span", "da-rank-pill", `${t("rank.pill", { badge: rankInfo.badge, tier: t(`rank.${rankInfo.id}`), rp: rankInfo.rp })}${rankRec.streak >= 2 ? ` · ${t("rank.streak", { streak: rankRec.streak })}` : ""}`);
+    rankBadge.dataset.rankTier = rankInfo.id;
+    head.append(eyebrow, el("h2", "da-title", campaign ? campaign.title : t("mode.title")), rankBadge);
     // Plan A (2026-11-23): Manual Battle is ONE single PB-Rank 3v3 real-time mode; hide legacy mode cartridges unless explicitly requested via ?mode=.
     const modes = el("div", "da-modes");
     if (campaign || !urlMode) modes.hidden = true;
@@ -2062,6 +2066,10 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       if (row) title.appendChild(entryTag(row.entry));
       const tags = el("div", "da-taxonomy");
       tags.append(taxonomyBadgeRow(taxonomy), elementChartButton(taxonomy?.element ?? null));
+      if (gameMode === "RELAY") {
+        const ab = partnerAbilityFor(id);
+        tags.appendChild(el("span", "da-entry da-entry--ability", t("ability.tag", { name: t(`ability.${ab.id}`) })));
+      }
       body.append(label, title);
       if (harborLike(gameMode) && relayPartner(id)?.canSwim) tags.appendChild(el("span", "da-entry da-entry--swim", t("harbor.swim")));
       const seatIdx = seat === "third" ? 2 : seat === "reserve" ? 1 : 0;
@@ -2559,7 +2567,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     root.dataset.outcome = result.outcome;
     releaseInputs();
     audio?.suspend();
-    const { newBest, saved } = fromReplay ? { newBest: false, saved: null } : records.recordResult(result);
+    const { newBest, saved, rankUpdate } = fromReplay ? { newBest: false, saved: null, rankUpdate: null } : records.recordResult(result);
     // P0 (2026-11-21): settle rewards onto the exact selected owned instanceIds (never silently fall back to first-of-species).
     const snap = sim.getSnapshot?.() ?? null;
     const partyIds = fighterInstances();
@@ -2597,6 +2605,16 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     score.append(el("span", "da-result__label", t("result.score")), el("strong", "", result.score.toLocaleString()));
     if (newBest) score.appendChild(el("span", "da-badge", t("result.newBest")));
     panel.append(score, el("p", "da-note", t("result.best", { score: best.toLocaleString() })));
+    if (rankUpdate) {
+      const deltaTxt = `${rankUpdate.rpDelta >= 0 ? "+" : ""}${rankUpdate.rpDelta} RP`;
+      const rLine = el("p", "da-result__line da-result__pbrank",
+        `${t("rank.delta", { badge: rankUpdate.after.badge, tier: t(`rank.${rankUpdate.after.id}`), rp: rankUpdate.after.rp, delta: deltaTxt })}${rankUpdate.streak >= 2 ? ` · ${t("rank.streak", { streak: rankUpdate.streak })}` : ""}`);
+      rLine.dataset.rankTier = rankUpdate.after.id;
+      panel.append(rLine);
+      if (rankUpdate.promoted) {
+        panel.append(el("p", "da-result__line da-result__promoted", t("rank.promoted", { tier: t(`rank.${rankUpdate.after.id}`) })));
+      }
+    }
     if (cup) {
       const rounds = el("ol", "da-bracket da-bracket--result");
       for (const entry of cup.results) {

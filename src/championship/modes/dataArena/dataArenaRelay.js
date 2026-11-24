@@ -194,3 +194,35 @@ export function relayMove(id, ultimate = false) {
 }
 /** 0=south, then southeast/east/northeast/north/northwest/west/southwest. */
 export function relayFacing8(angle) { return (Math.round((Math.PI / 2 - angle) / (Math.PI / 4)) + 8) % 8; }
+
+// Combat Wave 5: Signature Passive Abilities mapped cleanly across every partner element/species.
+export const DATA_ARENA_ABILITIES = Object.freeze({
+  FLASH_FIRE: Object.freeze({ id: "FLASH_FIRE", element: "fire", palette: "fire" }),
+  WATER_ABSORB: Object.freeze({ id: "WATER_ABSORB", element: "water", palette: "water" }),
+  VOLT_ABSORB: Object.freeze({ id: "VOLT_ABSORB", element: "storm", palette: "thunder" }),
+  THICK_FAT: Object.freeze({ id: "THICK_FAT", element: "frost", palette: "ice" }),
+  STURDY: Object.freeze({ id: "STURDY", element: "earth", palette: "earth" }),
+  REGENERATOR: Object.freeze({ id: "REGENERATOR", element: "nature", palette: "nature" }),
+  INTIMIDATE: Object.freeze({ id: "INTIMIDATE", element: "light", palette: "light" }),
+  SPEED_BOOST: Object.freeze({ id: "SPEED_BOOST", element: "shadow", palette: "dark" }),
+  GUTS: Object.freeze({ id: "GUTS", element: "physical", palette: "fire" }),
+  NATURAL_CURE: Object.freeze({ id: "NATURAL_CURE", element: "neutral", palette: "light" })
+});
+const ABILITY_BY_ELEMENT = Object.freeze({
+  fire: "FLASH_FIRE",
+  water: "WATER_ABSORB",
+  storm: "VOLT_ABSORB",
+  frost: "THICK_FAT",
+  earth: "STURDY",
+  nature: "REGENERATOR",
+  light: "INTIMIDATE",
+  shadow: "SPEED_BOOST",
+  physical: "GUTS"
+});
+export function partnerAbilityFor(partnerOrElement) {
+  const el = typeof partnerOrElement === "string"
+    ? (relayPartner(partnerOrElement)?.element ?? partnerOrElement)
+    : (partnerOrElement?.element ?? relayPartner(partnerOrElement?.partnerId ?? partnerOrElement?.id)?.element ?? "neutral");
+  const key = ABILITY_BY_ELEMENT[String(el ?? "").toLowerCase()] ?? "NATURAL_CURE";
+  return DATA_ARENA_ABILITIES[key];
+}

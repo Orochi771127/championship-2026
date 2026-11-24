@@ -1260,3 +1260,17 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
   .da-root.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn.da-tbtn--switch2 { left: auto; right: calc(var(--da-control-right) + 80px); bottom: calc(var(--da-control-bottom) + 122px); }
   .da-root.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn.da-tbtn--burst { left: auto; right: calc(var(--da-control-right) + 160px); bottom: calc(var(--da-control-bottom) + 120px); }
 }
+
+/* Combat Wave 5 (2026-11-24): PB-Rank Ladder Emblem & Signature Passive Ability Tag */
+.da-rank-pill {
+  order: 2; display: inline-flex; align-items: center; gap: 6px; padding: 3px 12px; border-radius: 999px;
+  border: 2px solid var(--ax-ink, #14141f); background: linear-gradient(180deg, #fff6cc, #ffd859);
+  color: #1c1200; font-size: calc(12px * var(--text-scale-hud, 1)); font-weight: 900;
+  box-shadow: 0 3px 0 var(--ax-ink, #14141f);
+}
+.da-rank-pill[data-rank-tier="PLATINUM"], .da-rank-pill[data-rank-tier="MASTER"], .da-rank-pill[data-rank-tier="CHAMPION"] {
+  background: linear-gradient(180deg, #e0f2fe, #7dd3fc); color: #082f49;
+}
+.da-entry--ability { background: #ede9fe; color: #3b0764; }
+.da-result__pbrank { font-weight: 900; color: #1e293b; }
+.da-result__promoted { font-weight: 900; color: #b45309; font-size: calc(16px * var(--text-scale-hud, 1)); }

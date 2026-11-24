@@ -33,7 +33,7 @@ import { DATA_ARENA_SURVIVAL, createSurvivalStorm, survivalCircleAt, outsideCirc
 
 import { relayPartner, RELAY_ROSTER } from './dataArenaRelayRoster.js';
 import { relayBattleMap } from './dataArenaRelayMaps.js';
-import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, relayMove, relayFacing8, relayKit, relayMoveElement } from './dataArenaRelay.js';
+import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, relayMove, relayFacing8, relayKit, relayMoveElement, partnerAbilityFor } from './dataArenaRelay.js';
 import { createRelayArenaEvents } from './dataArenaRelayArena.js';
 import {
   CONTROL_MODES, normalizeControlMode, AI_DIFFICULTIES, normalizeAiDifficulty, DEFAULT_AI_SETTINGS, normalizeAiSettings, GUARD_RULES, suddenDeathMultiplier,
@@ -759,6 +759,14 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     }
     // Burst evolution (relay): every hit on the fighter is scaled by both sides' burst and fills both gauges.
     amount = scaleArenaBurst(player, amount); chargeArenaBurst(player, amount);
+    // Combat Wave 5: STURDY passive ability (earth) survives a lethal hit from >50% HP at 1 HP once per partner!
+    const playerAbility = relayMode ? partnerAbilityFor(partner) : null;
+    if (relayMode && playerAbility?.id === "STURDY" && !player.sturdyUsed && player.hp > player.maxHp * 0.5 && player.hp - amount <= 0) {
+      player.sturdyUsed = true;
+      amount = Math.max(0, player.hp - 1);
+      player.invulnerable = Math.max(player.invulnerable ?? 0, 0.5);
+      emit({ type: "ABILITY_PROC", side: "player", abilityId: "STURDY", x: player.x, y: player.y });
+    }
     player.hp -= amount;
     chargeUlt(amount * DATA_ARENA_ENERGY.ultPerDamageTaken);
     state.stats.damageTaken += amount;
@@ -1117,8 +1125,45 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     // Burn weakens attacker's outgoing damage by 15%
     const attackerBody = target === player ? state.rivals[0] : (isRival(target) ? player : null);
     if (relayMode && attackerBody && (attackerBody.burn ?? 0) > 0) amount *= AILMENT_RULES.burnAtkScale;
-    // Cross-ring physical-chemistry combatant status reactions (6 ailments + wet): follow the move's element first!
+    // Combat Wave 5: Passive Abilities (FLASH_FIRE / WATER_ABSORB / VOLT_ABSORB / THICK_FAT / GUTS / INTIMIDATE)
     const canonicalHit = normalizeCanonicalElement(element ?? attackElement, moveId);
+    if (relayMode && attackerBody) {
+      if ((attackerBody.intimidateTimer ?? 0) > 0) amount *= 0.85;
+      const atkAb = partnerAbilityFor(attackerBody === player ? partner : attackerBody);
+      if (atkAb?.id === "GUTS" && ((attackerBody.burn ?? 0) > 0 || (attackerBody.poison ?? 0) > 0 || (attackerBody.slow ?? 0) > 0 || (attackerBody.paralyze ?? 0) > 0)) {
+        amount *= 1.22;
+      }
+    }
+    if (relayMode && target && target.hp > 0 && amount > 0 && cause !== "BURN" && cause !== "WEATHER") {
+      const defAb = partnerAbilityFor(target === player ? partner : target);
+      const defSide = target === player ? "player" : "rival";
+      const cdReady = (target.abilityCooldown ?? 0) <= 0;
+      if (defAb?.id === "WATER_ABSORB" && canonicalHit === "WATER" && cdReady) {
+        target.abilityCooldown = 8.0;
+        const healAmt = Math.max(1, Math.round(target.maxHp * 0.1));
+        target.hp = Math.min(target.maxHp, target.hp + healAmt);
+        emit({ type: "ABILITY_PROC", side: defSide, abilityId: "WATER_ABSORB", amount: healAmt, x: target.x, y: target.y });
+        return false;
+      }
+      if (defAb?.id === "VOLT_ABSORB" && (canonicalHit === "THUNDER" || canonicalHit === "WIND") && cdReady) {
+        target.abilityCooldown = 8.0;
+        target.energy = Math.min(DATA_ARENA_RELAY.tpMax, (target.energy ?? 0) + 22);
+        target.spdStage = Math.min(2, (target.spdStage ?? 0) + 1);
+        emit({ type: "ABILITY_PROC", side: defSide, abilityId: "VOLT_ABSORB", amount: 22, x: target.x, y: target.y });
+        return false;
+      }
+      if (defAb?.id === "FLASH_FIRE" && canonicalHit === "FIRE") {
+        amount *= 0.65;
+        if (!target.flashFireBoosted) {
+          target.flashFireBoosted = true;
+          target.atkStage = Math.min(2, (target.atkStage ?? 0) + 1);
+          emit({ type: "ABILITY_PROC", side: defSide, abilityId: "FLASH_FIRE", x: target.x, y: target.y });
+        }
+      } else if (defAb?.id === "THICK_FAT" && (canonicalHit === "FIRE" || canonicalHit === "ICE")) {
+        amount *= 0.75;
+      }
+    }
+    // Cross-ring physical-chemistry combatant status reactions (6 ailments + wet): follow the move's element first!
     const reactions = [];
     if (relayMode && target && target.hp > 0) {
       if ((target.sleep ?? 0) > 0 && amount > 0) {
@@ -2311,6 +2356,19 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     if ((caster.hurtTimer ?? 0) > 0) caster.hurtTimer = Math.max(0, caster.hurtTimer - DT);
     if (relayMode) {
       caster.recovery = Math.max(0, (caster.recovery ?? 0) - DT);
+      if ((caster.abilityCooldown ?? 0) > 0) caster.abilityCooldown = Math.max(0, caster.abilityCooldown - DT);
+      if ((caster.intimidateTimer ?? 0) > 0) caster.intimidateTimer = Math.max(0, caster.intimidateTimer - DT);
+      if (state.tournament?.status === "FIGHT" && caster.hp > 0) {
+        const ab = partnerAbilityFor(caster === player ? partner : caster);
+        if (ab?.id === "SPEED_BOOST" && (caster.spdStage ?? 0) < 2) {
+          caster.speedBoostTimer = (caster.speedBoostTimer ?? 0) + DT;
+          if (caster.speedBoostTimer >= 6.0) {
+            caster.speedBoostTimer = 0;
+            caster.spdStage = Math.min(2, (caster.spdStage ?? 0) + 1);
+            emit({ type: "ABILITY_PROC", side: caster === player ? "player" : "rival", abilityId: "SPEED_BOOST", x: caster.x, y: caster.y });
+          }
+        }
+      }
       if (!caster.cast && !caster.lunge && caster.recovery <= 0) caster.action = null;
       if (caster.hp <= 0) { caster.cast = caster.lunge = caster.action = null; removeTelegraph(`cast:${caster.id}`); return; }
     }
@@ -3453,6 +3511,13 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       emit({ type: "GUARD_BLOCK", side: "rival", amount: Math.round(amount), x: rival.x, y: rival.y });
     }
     if (relayMode) { amount = scaleArenaBurst(rival, amount); chargeArenaBurst(rival, amount); }
+    const rivalAb = relayMode ? partnerAbilityFor(rival) : null;
+    if (relayMode && rivalAb?.id === "STURDY" && !rival.sturdyUsed && rival.hp > rival.maxHp * 0.5 && rival.hp - amount <= 0) {
+      rival.sturdyUsed = true;
+      amount = Math.max(0, rival.hp - 1);
+      rival.invulnerable = Math.max(rival.invulnerable ?? 0, 0.5);
+      emit({ type: "ABILITY_PROC", side: "rival", abilityId: "STURDY", x: rival.x, y: rival.y });
+    }
     rival.hp = Math.max(0, rival.hp - amount);
     rival.hitFlash = 0.12;
     rival.hurtTimer = guarded ? 0.1 : 0.23;
@@ -4061,6 +4126,16 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const leaving = relay.team[relay.active]?.burst;
     if (leaving && (leaving.phase === 'BURST' || leaving.phase === 'WEAK')) { leaving.phase = 'SPENT'; revertArenaForm(player, leaving); emit({ type: 'BURST_END', side: 'player', form: leaving.form, x: player.x, y: player.y }); }
     player.burstPartnerId = null;
+    // Combat Wave 5: Outgoing passive abilities on switch-out (REGENERATOR +18% HP / NATURAL_CURE instant cleanse)
+    const outgoingAb = partnerAbilityFor(partner);
+    if (!forced && player.hp > 0 && outgoingAb?.id === "REGENERATOR") {
+      const regenAmt = Math.max(1, Math.round(player.maxHp * 0.18));
+      player.hp = Math.min(player.maxHp, player.hp + regenAmt);
+      emit({ type: "ABILITY_PROC", side: "player", abilityId: "REGENERATOR", amount: regenAmt, x: player.x, y: player.y });
+    } else if (!forced && player.hp > 0 && outgoingAb?.id === "NATURAL_CURE" && ((player.burn ?? 0) > 0 || (player.poison ?? 0) > 0 || (player.paralyze ?? 0) > 0 || (player.slow ?? 0) > 0)) {
+      player.burn = 0; player.poison = 0; player.poisonStacks = 0; player.paralyze = 0; player.slow = 0; player.slowTimer = 0;
+      emit({ type: "ABILITY_PROC", side: "player", abilityId: "NATURAL_CURE", x: player.x, y: player.y });
+    }
     saveRelayPlayer(); relay.active = index;
     const entry = relay.team[index];
     partner = relayPartner(entry.partnerId);
@@ -4070,12 +4145,20 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       state: 'NORMAL', stateTime: 0, cast: null, lunge: null, action: null, recovery: 0, barrier: 0, hitFlash: 0,
       guardTimer: 0, guardCooldown: 0, guardBlocked: false, barrierStreak: 0,
       atkStage: 0, defStage: 0, spdStage: 0, buffsUsed: 0, healsUsed: entry.healsUsed ?? 0,
+      abilityCooldown: 0, flashFireBoosted: false, intimidateTimer: 0, speedBoostTimer: 0,
       decoy: null, decoyUsed: Boolean(entry.decoyUsed),
       counterTimer: 0, flurry: null, backstab: null, approach: null,
       slow: 0, slowTimer: 0, root: 0, burn: 0, paralyze: 0, paralyzeTick: 0, poison: 0, poisonStacks: 0, sleep: 0, wet: 0, ccImmune: 0,
       vx: 0, vy: 0, kbx: 0, kby: 0, dashTimer: 0, dashGrace: 0,
       invulnerable: forced ? 0.8 : (perfectSwitch ? 0.55 : 0.35),
       tagShield: forced ? 0 : (DATA_ARENA_RELAY.tagShieldSeconds ?? 1.2) });
+    // Incoming passive ability: INTIMIDATE lowers rival's outgoing damage by 15% for 6s!
+    const incomingAb = partnerAbilityFor(partner);
+    const foeOnEntry = state.rivals[0];
+    if (incomingAb?.id === "INTIMIDATE" && foeOnEntry && foeOnEntry.active && foeOnEntry.hp > 0) {
+      foeOnEntry.intimidateTimer = Math.max(foeOnEntry.intimidateTimer ?? 0, 6.0);
+      emit({ type: "ABILITY_PROC", side: "player", abilityId: "INTIMIDATE", x: player.x, y: player.y });
+    }
     if (player.ai) { player.ai.calledMove = null; player.ai.goal = null; player.ai.threatSeen.clear(); }
     triggerSwitchHazard(player, 'player');
     // Switching never moves a land creature into an impassable cell.

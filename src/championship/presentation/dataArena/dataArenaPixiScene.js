@@ -1745,6 +1745,23 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             elementFx.deployShield?.({ x: event.x, y: event.y, team: event.team });
           }
           break;
+        case "ABILITY_PROC": {
+          const abPal = event.abilityId === "WATER_ABSORB" ? "water"
+            : event.abilityId === "VOLT_ABSORB" ? "thunder"
+              : event.abilityId === "FLASH_FIRE" ? "fire"
+                : event.abilityId === "REGENERATOR" ? "nature"
+                  : event.abilityId === "STURDY" ? "earth"
+                    : event.abilityId === "SPEED_BOOST" ? "dark" : "light";
+          if (purePixelFx) {
+            if (event.abilityId === "WATER_ABSORB" || event.abilityId === "REGENERATOR") {
+              elementFx.heal?.({ x: event.x, y: event.y - 14 });
+            } else {
+              elementFx.buff?.({ x: event.x, y: event.y - 16, paletteKey: abPal, piece: event.abilityId === "STURDY" ? "buff-def" : "buff-atk" });
+            }
+          }
+          floatText(event.x, event.y - 78, t("ability.proc", { name: t(`ability.${event.abilityId}`) }), "crit");
+          break;
+        }
         case "BARRIER_UP":
           if (purePixelFx) {
             elementFx.buff?.({ x: event.x, y: event.y - 16, paletteKey: elementFx.look?.(event.moveId)?.paletteKey ?? "light", piece: "buff-def" });

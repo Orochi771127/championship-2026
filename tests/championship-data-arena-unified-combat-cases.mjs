@@ -1583,3 +1583,77 @@ test("phase 15 / Combat Wave 4: STREAM_BEAM mouth/hand energy conduit in PixelFX
   assert.ok(cssSrc.includes('@media (max-width: 440px)') && cssSrc.includes('[data-touch-layout="wide"] .da-tbtn.da-tbtn--switch'), "narrow portrait wide preset prevents overlap with guard/dash");
   assert.ok(cssSrc.includes('.da-root.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn.da-tbtn--switch { left: auto; right: var(--da-control-right); bottom: calc(var(--da-control-bottom) + 122px); }'), "landscape leftHand mirrors reserve switch buttons cleanly to the right");
 });
+
+test("phase 16 / Combat Wave 5: PB-Rank Bronze->Champion ladder persistence & 10 Signature Passive Abilities in combat", async () => {
+  const { DATA_ARENA_RANKS, pbRankForPoints, applyPbRankMatch, sanitizeDataArenaRecords, createDataArenaRecordStore } = await import("../src/championship/modes/dataArena/dataArenaSave.js");
+  const { DATA_ARENA_ABILITIES, partnerAbilityFor } = await import("../src/championship/modes/dataArena/dataArenaRelay.js");
+  const { RELAY_ROSTER } = await import("../src/championship/modes/dataArena/dataArenaRelayRoster.js");
+  const { arenaText } = await import("../src/championship/text/dataArenaText.js");
+
+  // 1) PB-Rank 6-tier ladder math, promotion, streak bonus & floor protection
+  assert.equal(DATA_ARENA_RANKS.length, 6, "PB-Rank has 6 tiers (Bronze -> Champion)");
+  assert.equal(pbRankForPoints(0).id, "BRONZE");
+  assert.equal(pbRankForPoints(150).id, "SILVER");
+  assert.equal(pbRankForPoints(350).id, "GOLD");
+  assert.equal(pbRankForPoints(650).id, "PLATINUM");
+  assert.equal(pbRankForPoints(1050).id, "MASTER");
+  assert.equal(pbRankForPoints(1600).id, "CHAMPION");
+
+  const promo = applyPbRankMatch({ rp: 130, peakRp: 130, streak: 1, bestStreak: 1 }, { won: true, fainted: 0 });
+  assert.equal(promo.before.id, "BRONZE");
+  assert.equal(promo.after.id, "SILVER");
+  assert.equal(promo.promoted, true, "winning across 150 RP promotes Bronze -> Silver");
+  assert.equal(promo.rpDelta, 35 + 16 + 12, "win RP includes streak + flawless bonus");
+
+  const protectedLoss = applyPbRankMatch({ rp: 155, peakRp: 155, streak: 2, bestStreak: 2 }, { won: false });
+  assert.equal(protectedLoss.after.rp, 150, "defeat protects Silver tier floor at 150 RP");
+  assert.equal(protectedLoss.next.streak, 0, "defeat resets current streak while keeping bestStreak");
+
+  // Persistence round-trip via recordResult
+  let savedJson = null;
+  const store = createDataArenaRecordStore({
+    port: { storageKey: "test", read: () => ({ text: savedJson, error: null }), write: (t) => { savedJson = t; return { ok: true, error: null }; } }
+  });
+  const res = store.recordResult({ partnerId: "ember-lizard", mode: "RELAY", outcome: "VICTORY", score: 4200, timeSeconds: 48, relayFainted: 0 });
+  assert.ok(res.rankUpdate && res.rankUpdate.rpDelta > 0 && store.get().rank.rp === res.rankUpdate.after.rp, "RELAY win persists RP update");
+  const san = sanitizeDataArenaRecords(JSON.parse(savedJson));
+  assert.equal(san.rank.rp, store.get().rank.rp, "rank survives sanitizeDataArenaRecords");
+
+  // 2) Every partner in the entire RELAY roster maps to one of the 10 signature abilities with copy
+  assert.equal(Object.keys(DATA_ARENA_ABILITIES).length, 10, "10 canonical passive abilities defined");
+  for (const p of RELAY_ROSTER) {
+    const ab = partnerAbilityFor(p);
+    assert.ok(ab && DATA_ARENA_ABILITIES[ab.id], `${p.id} maps to valid passive ability (${ab?.id})`);
+    assert.ok(arenaText(`ability.${ab.id}`).length > 0, `ability.${ab.id} copy exists`);
+  }
+
+  // 3) Live combat checks: STURDY survives lethal hit at 1 HP; REGENERATOR heals 18% on switch-out; INTIMIDATE lowers foe damage!
+  const earthP = RELAY_ROSTER.find((p) => p.element === "earth");
+  const natureP = RELAY_ROSTER.find((p) => p.element === "nature");
+  const lightP = RELAY_ROSTER.find((p) => p.element === "light");
+  assert.ok(earthP && natureP && lightP, "earth, nature, and light roster partners exist");
+
+  const sim = startRelayFight({ partnerId: earthP.id, relayReserveId: natureP.id, relayThirdId: lightP.id, moveSystem: "v2", controlMode: "MANUAL" });
+  const st = sim.getState();
+  st.player.invulnerable = 0;
+  st.player.hp = st.player.maxHp;
+  sim.internals.hurtPlayer(9999, "TEST", st.player.x, st.player.y);
+  const sturdyEv = sim.drainEvents().find((e) => e.type === "ABILITY_PROC" && e.abilityId === "STURDY");
+  assert.ok(sturdyEv && st.player.hp === 1, `STURDY survives lethal hit from >50% HP at 1 HP (got hp=${st.player.hp})`);
+
+  // Switch to nature partner -> hurt -> switch to light partner -> verify REGENERATOR healed outgoing nature partner AND INTIMIDATE debuffed rival!
+  st.relay.switchCooldown = 0;
+  sim.step({ switchPartner: 2 }); // 1-based -> slot 1 (natureP)
+  sim.drainEvents();
+  st.relay.switchCooldown = 0;
+  st.player.invulnerable = 0;
+  st.player.hp = Math.round(st.player.maxHp * 0.5);
+  const hpBeforeRegen = st.player.hp;
+  sim.step({ switchPartner: 3 }); // 1-based -> slot 2 (lightP)
+  const swEvs = sim.drainEvents();
+  assert.ok(swEvs.some((e) => e.type === "ABILITY_PROC" && e.abilityId === "REGENERATOR"), "outgoing nature partner triggers REGENERATOR +18% HP");
+  assert.ok(swEvs.some((e) => e.type === "ABILITY_PROC" && e.abilityId === "INTIMIDATE"), "incoming light partner triggers INTIMIDATE on rival");
+  const natureSlot = st.relay.team.find((m) => m.partnerId === natureP.id);
+  assert.ok(natureSlot.hp > hpBeforeRegen, `REGENERATOR restored bench HP (${hpBeforeRegen} -> ${natureSlot.hp})`);
+  assert.ok((st.rivals[0].intimidateTimer ?? 0) > 0, "INTIMIDATE applied 6s attack debuff to active rival");
+});
