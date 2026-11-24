@@ -1222,6 +1222,21 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 .da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--dash { right: calc(var(--da-control-right) + 178px); bottom: calc(var(--da-control-bottom) + 108px); width: 54px; height: 54px; }
 .da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--ult { right: calc(var(--da-control-right) + 8px); bottom: calc(var(--da-control-bottom) + 200px); width: 64px; height: 64px; }
 .da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-move-hint { width: 108px; height: 108px; }
+@media (max-width: 440px) {
+  .da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--basic { width: 76px; height: 76px; }
+  .da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--s1,
+  .da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--s2,
+  .da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--s3 { width: 56px; height: 56px; }
+  .da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--s1 { right: calc(var(--da-control-right) + 112px); bottom: calc(var(--da-control-bottom) + 9px); }
+  .da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--s2 { right: calc(var(--da-control-right) + 82px); bottom: calc(var(--da-control-bottom) + 82px); }
+  .da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--s3 { right: calc(var(--da-control-right) + 9px); bottom: calc(var(--da-control-bottom) + 112px); }
+  .da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--guard { right: calc(var(--da-control-right) + 186px); bottom: calc(var(--da-control-bottom) + 12px); width: 50px; height: 50px; }
+  .da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--dash { right: calc(var(--da-control-right) + 152px); bottom: calc(var(--da-control-bottom) + 94px); width: 50px; height: 50px; }
+  .da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--ult { right: calc(var(--da-control-right) + 8px); bottom: calc(var(--da-control-bottom) + 186px); width: 62px; height: 62px; }
+  .da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-move-hint { width: 90px; height: 90px; }
+  .da-root.da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn.da-tbtn--switch,
+  .da-root.da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn.da-tbtn--switch2 { bottom: calc(var(--da-control-bottom) + 168px); }
+}
 
 .da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--basic { right: auto; left: var(--da-control-left); }
 .da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--s1 { right: auto; left: calc(var(--da-control-left) + 107px); }
@@ -1231,6 +1246,17 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 .da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--dash { right: auto; left: calc(var(--da-control-left) + 156px); }
 .da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--ult { right: auto; left: calc(var(--da-control-left) + 7px); }
 .da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-move-hint { left: auto; right: var(--da-control-right); }
-.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--switch { left: auto; right: var(--da-control-right); }
-.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--switch2 { left: auto; right: calc(var(--da-control-right) + 80px); }
-.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--burst { left: auto; right: var(--da-control-right); }
+.da-root.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn.da-tbtn--switch { left: auto; right: var(--da-control-right); }
+.da-root.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn.da-tbtn--switch2 { left: auto; right: calc(var(--da-control-right) + 80px); }
+.da-root.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn.da-tbtn--burst { left: auto; right: var(--da-control-right); }
+@media (orientation: landscape) and (max-height: 520px) {
+  .da-root.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn.da-tbtn--s1 { right: auto; left: calc(var(--da-control-left) + 100px); }
+  .da-root.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn.da-tbtn--s2 { right: auto; left: calc(var(--da-control-left) + 73px); }
+  .da-root.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn.da-tbtn--s3 { right: auto; left: calc(var(--da-control-left) + 8px); }
+  .da-root.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn.da-tbtn--guard { right: auto; left: calc(var(--da-control-left) + 165px); }
+  .da-root.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn.da-tbtn--dash { right: auto; left: calc(var(--da-control-left) + 145px); }
+  .da-root.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn.da-tbtn--ult { right: auto; left: calc(var(--da-control-left) + 7px); }
+  .da-root.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn.da-tbtn--switch { left: auto; right: var(--da-control-right); bottom: calc(var(--da-control-bottom) + 122px); }
+  .da-root.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn.da-tbtn--switch2 { left: auto; right: calc(var(--da-control-right) + 80px); bottom: calc(var(--da-control-bottom) + 122px); }
+  .da-root.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn.da-tbtn--burst { left: auto; right: calc(var(--da-control-right) + 160px); bottom: calc(var(--da-control-bottom) + 120px); }
+}

@@ -753,6 +753,22 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       }) === true;
       // The kit draws this shot's head and trail; the vector head and its glow stand down.
       if (entry.kitDrawn) entry.sprite.visible = entry.glow.visible = false;
+      // Combat Wave 4: Delegate STREAM_BEAM mouth/hand energy conduit cleanly to the PixelFX V2 kit.
+      const look = elementFx.look?.(projectile.moveId);
+      if (look?.v2Archetype === "STREAM_BEAM" && typeof elementFx.beamStream === "function") {
+        elementFx.beamStream({
+          moveId: projectile.moveId,
+          width: Math.max(10, Math.min(26, projectile.radius * 0.95)),
+          followStart: (endPt) => {
+            const ownerBody = projectile.owner === "player" ? state.player : (state.rivals.find(r => r.active && r.hp > 0) ?? state.rivals[0]);
+            if (!ownerBody || ownerBody.hp <= 0) return entry.origin ?? null;
+            const tx = endPt?.x ?? projectile.x, ty = endPt?.y ?? (projectile.y - 12);
+            const ang = Math.atan2(ty - (ownerBody.y - BEAM_ELEVATION), tx - ownerBody.x);
+            return { x: ownerBody.x + Math.cos(ang) * 20, y: ownerBody.y - BEAM_ELEVATION + Math.sin(ang) * 14 };
+          },
+          followEnd: () => (!projectile.dead && state.projectiles.includes(projectile) ? { x: projectile.x, y: projectile.y - 12 } : null)
+        });
+      }
     }
     shotViews.set(projectile.id, entry);
     return entry;
@@ -1144,7 +1160,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       }
     }
   }
-  let hitStop = 0, statusTick = 0;
+  let hitStop = 0, statusTick = 0, koSlowMo = 0, koSlowMoScale = 1;
   let impactFlashTimer = 0, impactFlashMax = 0.068, impactFocus = null, tetherTimer = 0;
   let tamerCalloutLeft = 0, tamerCalloutRight = 0, wallFlashLeft = 0, wallFlashRight = 0;
   const triggerImpactFrame = (wx, wy, sec = 0.068) => {
@@ -1682,15 +1698,21 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           ring(event.x, event.y, (event.radius ?? 68) * 1.35, 0xffe066, 0.5);
           if (event.type === "SUPER_CORE_ACTIVE") floatText(event.x, event.y - 54, t("arena.SUPER_CORE.short"), "crit");
           break;
-        case "RIVAL_KO":
-          camera.focusBoost?.(1.22, 0.48);
-          camera.addTrauma(0.5);
-          hitStop = Math.max(hitStop, reducedMotion ? 0 : 0.08);
-          triggerImpactFrame(event.x, event.y - 24, 0.072);
+        case "RIVAL_KO": {
+          const isFinalKo = relayMode ? (state.relay?.enemiesRemaining ?? 0) <= 1 || state.rivals.every((r) => r.hp <= 0) : true;
+          camera.focusBoost?.(isFinalKo ? 1.26 : 1.22, isFinalKo ? 0.55 : 0.48);
+          camera.addTrauma(isFinalKo ? 0.58 : 0.5);
+          hitStop = Math.max(hitStop, reducedMotion ? 0 : (isFinalKo ? 0.095 : 0.08));
+          if (!reducedMotion) {
+            koSlowMo = Math.max(koSlowMo, isFinalKo ? 0.44 : 0.22);
+            koSlowMoScale = isFinalKo ? 0.26 : 0.42;
+          }
+          triggerImpactFrame(event.x, event.y - 24, isFinalKo ? 0.085 : 0.072);
           for (let i = 0; i < 3; i++) ring(event.x, event.y - 20, 75 + i * 40, i % 2 ? 0xffffff : 0xffd34d, 0.42 + i * 0.1);
           burst(event.x, event.y - 24, { count: 24, speed: 340, tint: 0xffd34d, texture: textures.shard, scale: 1.7, gravity: 280, life: 0.75 });
           floatText(event.x, event.y - 66, t("relay.ko"), "crit");
           break;
+        }
         case "BURST":
           camera.focusBoost?.(1.22, 0.48);
           hitStop = Math.max(hitStop, reducedMotion ? 0 : 0.065);
@@ -1961,13 +1983,19 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     // The authoritative simulation is paused by the screen as before.
     const observedFrameMs=dtMs;
     if(ambientPaused)dtMs=0;
-    const dt = Math.min(0.1, dtMs / 1000);
+    const realDt = Math.min(0.1, observedFrameMs / 1000);
+    if (koSlowMo > 0) {
+      koSlowMo = Math.max(0, koSlowMo - realDt);
+      if (koSlowMo <= 0) koSlowMoScale = 1;
+    }
+    const timeScale = koSlowMo > 0 ? koSlowMoScale : 1;
+    const dt = Math.min(0.1, (dtMs * timeScale) / 1000);
     atlas.beginFrame();
     elapsed += dt; frameCount++;
     if (!ambientPaused) ambientElapsed += dt;
     if(!ambientPaused)fpsWindow.push(observedFrameMs); if (fpsWindow.length > 120) fpsWindow.shift();
-    if (hitStop > 0) hitStop = Math.max(0, hitStop - Math.min(0.1, observedFrameMs / 1000));
-    if (impactFlashTimer > 0) impactFlashTimer = Math.max(0, impactFlashTimer - Math.min(0.1, observedFrameMs / 1000));
+    if (hitStop > 0) hitStop = Math.max(0, hitStop - realDt);
+    if (impactFlashTimer > 0) impactFlashTimer = Math.max(0, impactFlashTimer - realDt);
     if (tetherTimer > 0) tetherTimer = Math.max(0, tetherTimer - dt);
     if (tamerCalloutLeft > 0) tamerCalloutLeft = Math.max(0, tamerCalloutLeft - dt);
     if (tamerCalloutRight > 0) tamerCalloutRight = Math.max(0, tamerCalloutRight - dt);
@@ -2715,12 +2743,14 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     damageNumber,
     setShake(enabled) { camera.setShake(enabled); },
     setAimGuide(guide) { aimGuide = guide; },
+    getTimeScale() { return koSlowMo > 0 ? koSlowMoScale : 1; },
     getDiagnostics() {
       const sorted = [...fpsWindow].sort((a, b) => a - b);
       return {
         renderer: "CHAMPIONSHIP_SINGLE_PIXI_STAGE", scene: "DATA_ARENA", quality, reducedMotion, hasCreatureArt: playerView.hasArt,
         environment: environmentView?.diagnostics() ?? null,
         storm: state.survival ? { drawn: stormDrawn, arrow: stormArrow.visible } : null,
+        koSlowMo,
         moveAtlas: { ...atlas.diagnostics(),
           shotLayerConflicts: [...shotViews.values()].filter(v => v.atlasDrawn && (v.sprite.visible || v.glow.visible || v.kitDrawn)).length,
           warningLayerConflicts: state.zones.filter(z => warningOwners.get(z) && sigilSprites.has(z)).length },

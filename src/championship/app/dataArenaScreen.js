@@ -1457,7 +1457,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     const started = performance.now();
     const dtMs = Math.min(ticker.deltaMS, 250);
     if (root.dataset.state === "PLAY" && !paused && !document.hidden) {
-      accumulator += dtMs;
+      const timeScale = scene.getTimeScale?.() ?? 1;
+      accumulator += dtMs * timeScale;
       let steps = 0;
       while (accumulator >= STEP_MS && steps < DATA_ARENA_MAX_STEPS_PER_FRAME) {
         const inp = buildInput();

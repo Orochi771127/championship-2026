@@ -1562,3 +1562,24 @@ test("phase 14 / Combat Wave 3: Living Arena 22s pure-PixelFX zone events, team-
   assert.ok(screenSrc.includes('root.dataset.touchLayout = touchLayout;'), "screen applies data-touch-layout attribute");
   assert.ok(cssSrc.includes('[data-touch-layout="leftHand"]') && cssSrc.includes('[data-touch-layout="compact"]') && cssSrc.includes('[data-touch-layout="wide"]'), "CSS defines compact, wide, and leftHand touch layouts");
 });
+
+test("phase 15 / Combat Wave 4: STREAM_BEAM mouth/hand energy conduit in PixelFX V2, dramatic KO slow-mo finisher & zero-overlap wide/landscape-leftHand touch CSS", () => {
+  const sceneSrc = readFileSync(new URL("../src/championship/presentation/dataArena/dataArenaPixiScene.js", import.meta.url), "utf8");
+  const v2Src = readFileSync(new URL("../src/championship/presentation/dataArena/dataArenaPixelFxV2.js", import.meta.url), "utf8");
+  const screenSrc = readFileSync(new URL("../src/championship/app/dataArenaScreen.js", import.meta.url), "utf8");
+  const cssSrc = readFileSync(new URL("../src/championship/app/dataArena.css", import.meta.url), "utf8");
+
+  // 1) STREAM_BEAM dynamic conduit owned cleanly by PixelFX V2 (0.65s, zero shadowBlur, capped at 8, disposed cleanly)
+  assert.ok(sceneSrc.includes('look?.v2Archetype === "STREAM_BEAM"') && sceneSrc.includes("elementFx.beamStream({"), "scene delegates STREAM_BEAM conduit cleanly to PixelFX V2 kit");
+  assert.ok(v2Src.includes("beamConduits.push(") && v2Src.includes("beamConduitGfx.clear()"), "PixelFX V2 renders beamConduits on GPU Graphics without shadowBlur");
+  assert.ok(v2Src.includes("beamConduits.length = 0;"), "beamConduits clean up on PixelFX V2 dispose");
+
+  // 2) Dramatic KO slow-mo finisher & time-scale integration
+  assert.ok(sceneSrc.includes("koSlowMo = Math.max(koSlowMo, isFinalKo ? 0.44 : 0.22)"), "RIVAL_KO triggers dramatic slow-motion finisher");
+  assert.ok(sceneSrc.includes("getTimeScale() { return koSlowMo > 0 ? koSlowMoScale : 1; }"), "scene exposes getTimeScale() for ticker slow-mo");
+  assert.ok(screenSrc.includes("const timeScale = scene.getTimeScale?.() ?? 1;"), "dataArenaScreen applies scene timeScale during PLAY");
+
+  // 3) Live-QA CSS fixes: narrow portrait wide preset + landscape leftHand specificity override
+  assert.ok(cssSrc.includes('@media (max-width: 440px)') && cssSrc.includes('[data-touch-layout="wide"] .da-tbtn.da-tbtn--switch'), "narrow portrait wide preset prevents overlap with guard/dash");
+  assert.ok(cssSrc.includes('.da-root.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn.da-tbtn--switch { left: auto; right: var(--da-control-right); bottom: calc(var(--da-control-bottom) + 122px); }'), "landscape leftHand mirrors reserve switch buttons cleanly to the right");
+});

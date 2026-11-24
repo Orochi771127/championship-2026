@@ -65,6 +65,13 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
   const shotLayer = new PIXI.Container();
   shotLayer.label = "pixelfx v2 shots";
   front.addChild(shotLayer);
+  const beamConduits = [];
+  const beamConduitGfx = PIXI.Graphics ? new PIXI.Graphics() : null;
+  if (beamConduitGfx) {
+    beamConduitGfx.label = "pixelfx v2 beam conduits";
+    beamConduitGfx.blendMode = "add";
+    front.addChild(beamConduitGfx);
+  }
   const scarLayer = new PIXI.Container();
   scarLayer.label = "pixelfx v2 battle scars";
   (ground ?? front).addChild(scarLayer);
@@ -238,6 +245,26 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
         : (spec.tier === "ultimate" ? "muzzle-spiral" : "muzzle");
       playPiece(pieces, pieceName, { x, y, angle, palette: pal, scale: melee ? 0.95 : 0.78, groundY: y + 28 });
       stats.releases++;
+    },
+    /** Combat Wave 4: Continuous mouth/hand-to-projectile energy conduit for STREAM_BEAM moves (0.65s, zero shadowBlur). */
+    beamStream({ followStart, followEnd, moveId = "sunSpear", width = 16, durationSec = 0.65 }) {
+      if (reducedMotion || !beamConduitGfx || typeof followStart !== "function" || typeof followEnd !== "function") return false;
+      const spec = resolveMoveSpecV2(moveId);
+      const pal = paletteFor(spec.paletteKey);
+      const s0 = followStart();
+      const e0 = followEnd();
+      if (!s0 || !e0) return false;
+      beamConduits.push({
+        followStart, followEnd,
+        originX: s0.x, originY: s0.y,
+        lastX: e0.x, lastY: e0.y,
+        main: pal.main ?? 0x6ff7ff,
+        core: pal.core ?? 0xffffff,
+        width: Math.max(10, Math.min(26, width)),
+        age: 0, maxAge: durationSec, detachedAt: null
+      });
+      if (beamConduits.length > 8) beamConduits.shift();
+      return true;
     },
     /** Clean looping baked PixelFX + 00GameDevs projectiles (ZERO procedural 3D canvas orbs/waves!). */
     projectile({ follow, moveId, angle = 0, lifeMs = 1200 }) {
@@ -573,17 +600,63 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
           s.glowSprite.scale.set(s.scale * 2 * flipX, s.scale * 2 * flipY);
         }
       }
+      if (beamConduitGfx) {
+        beamConduitGfx.clear();
+        for (let i = beamConduits.length - 1; i >= 0; i--) {
+          const bc = beamConduits[i];
+          bc.age += dt;
+          const endPt = bc.followEnd();
+          if (endPt) {
+            bc.lastX = endPt.x;
+            bc.lastY = endPt.y;
+            const startPt = bc.followStart(endPt);
+            if (startPt) { bc.originX = startPt.x; bc.originY = startPt.y; }
+          } else if (bc.detachedAt === null) {
+            bc.detachedAt = bc.age;
+          }
+          const fadeOut = bc.detachedAt !== null ? Math.max(0, 1 - (bc.age - bc.detachedAt) / 0.16) : 1;
+          const lifeFade = Math.max(0, 1 - bc.age / bc.maxAge);
+          const alpha = Math.min(fadeOut, lifeFade * 2.2);
+          if (bc.age >= bc.maxAge || alpha <= 0.02) {
+            beamConduits.splice(i, 1);
+            continue;
+          }
+          const dx = bc.lastX - bc.originX, dy = bc.lastY - bc.originY;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 16) continue;
+          const nx = -dy / dist, ny = dx / dist;
+          const pulse = 0.85 + 0.22 * Math.sin(bc.age * 42 + i * 1.7);
+          const wOuter = bc.width * pulse * (0.45 + 0.55 * alpha);
+          const wCore = Math.max(3, wOuter * 0.42);
+          beamConduitGfx.moveTo(bc.originX, bc.originY).lineTo(bc.lastX, bc.lastY)
+            .stroke({ color: bc.main, width: wOuter, alpha: 0.52 * alpha, cap: "round" });
+          const segs = Math.min(10, Math.max(4, Math.floor(dist / 42)));
+          beamConduitGfx.moveTo(bc.originX, bc.originY);
+          for (let s = 1; s < segs; s++) {
+            const f = s / segs;
+            const wave = Math.sin(f * Math.PI * 3 - bc.age * 36 + i) * (wCore * 0.65);
+            beamConduitGfx.lineTo(bc.originX + dx * f + nx * wave, bc.originY + dy * f + ny * wave);
+          }
+          beamConduitGfx.lineTo(bc.lastX, bc.lastY)
+            .stroke({ color: bc.core, width: wCore, alpha: 0.92 * alpha, cap: "round", join: "round" });
+          beamConduitGfx.circle(bc.originX, bc.originY, wOuter * 0.62).fill({ color: bc.main, alpha: 0.55 * alpha });
+          beamConduitGfx.circle(bc.originX, bc.originY, wCore * 0.72).fill({ color: bc.core, alpha: 0.9 * alpha });
+        }
+      }
     },
     holding: () => holdMs > 0,
     getDiagnostics: () => Object.freeze({
       ...stats,
       liveShots: liveShots.length,
       scars: liveScars.length,
+      beamConduits: beamConduits.length,
       volumetricCache: volCache.getDiagnostics(),
       pieces: pieces?.getDiagnostics?.() ?? null
     }),
     dispose() {
       volCache.dispose();
+      beamConduits.length = 0;
+      beamConduitGfx?.destroy();
       for (const sc of liveScars) sc.sprite.destroy();
       liveScars.length = 0;
       scarLayer.destroy();
