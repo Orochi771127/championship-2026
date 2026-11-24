@@ -225,16 +225,16 @@ test("a chapter plays to its clear card, claims once, and shows the partner sign
   assert.equal(result.outcome, "completed"); assert.equal(claims, 1);
   assert.deepEqual(result.battles, [{ presets: [491], played: true, won: true }]);
   assert.ok(f.calls.some(c => c[0] === "form" && c[1] === "小紅"));
-  assert.ok(f.calls.some(c => c[0] === "say" && c[2] === "……不錯嘛。下次我可不會讓。"), "win branch line");
-  assert.ok(!f.calls.some(c => c[0] === "say" && c[2] === "沒關係！輸掉的是這一場，不是我們。"), "lose branch skipped");
+  assert.ok(f.calls.some(c => c[0] === "say" && c[2] === storyVnText("C1_RIN_WIN")), "win branch line");
+  assert.ok(!f.calls.some(c => c[0] === "say" && c[2] === storyVnText("C1_P_LOSE")), "lose branch skipped");
   assert.ok(f.calls.some(c => c[0] === "say" && c[1] === "黑鐵駭客・凜"));
   assert.ok(f.calls.some(c => c[0] === "bust" && c[1] === "right" && c[2] === 21), "the partner speaks from the right");
-  assert.deepEqual(f.calls.find(c => c[0] === "clear")[1], ["首通獎勵　數碼轉蛋券 ×6", "與小紅的羈絆 ♥ +1"]);
+  assert.deepEqual(f.calls.find(c => c[0] === "clear")[1], ["首通獎勵　網線轉蛋券 ×6", "與小紅的羈絆 ♥ +1"]);
   // Ai-chan hosts: a recap after the first scene, the bond moment and a teaser before the clear card.
   const said = f.calls.filter(c => c[0] === "say");
   assert.equal(said[0][1], "愛醬"); assert.ok(said[0][2].startsWith("上回"));
   assert.equal(result.bond, "BOND_OPT_PAT");
-  assert.ok(said.some(c => c[2] === "嘿嘿……阿凱的手，暖暖的。"), "the partner answers the bond moment");
+  assert.ok(said.some(c => c[2] === storyVnText("BOND_REACT_PAT", "zh-Hant", { tamer: "阿凱" })), "the partner answers the bond moment");
   assert.ok(said.at(-1)[1] === "愛醬" && said.at(-1)[2].startsWith("下回預告"));
   assert.ok(f.calls.some(c => c[0] === "bust" && c[1] === "left" && c[2] === "aichan"), "Ai-chan speaks from the left");
   assert.ok(f.calls.some(c => c[0] === "stage-dispose") && f.calls.some(c => c[0] === "theater-dispose"));
@@ -243,7 +243,7 @@ test("a chapter plays to its clear card, claims once, and shows the partner sign
 test("a lost battle takes the lose branch; a battle that cannot start is retried or left, never a win", async () => {
   const lost = fakes();
   await createStoryVnDirector({ doc: {}, host: {}, ...lost, runBattle: async () => ({ ok: true, won: false }) }).play("vn1-c1", { partner: "小紅", partnerSpecies: 21 });
-  assert.ok(lost.calls.some(c => c[0] === "say" && c[2] === "沒關係！輸掉的是這一場，不是我們。"));
+  assert.ok(lost.calls.some(c => c[0] === "say" && c[2] === storyVnText("C1_P_LOSE")));
   // WAVE_RUN_20261118: a technical failure asks retry / back; a retry that wins takes the win branch.
   let asked = 0; const retried = fakes({ choose: options => { if (options.join() === "重試,返回") asked++; return 0; } });
   let tries = 0; const requests = [];
@@ -261,16 +261,16 @@ test("a lost battle takes the lose branch; a battle that cannot start is retried
   assert.equal(claims, 0);
   assert.equal(abandoned, 1, "the host closes the run");
   assert.deepEqual(result.battles, [{ presets: [491], played: false, won: null }]);
-  assert.ok(!refused.calls.some(c => c[0] === "say" && c[2] === "……不錯嘛。下次我可不會讓。"), "never the win branch");
+  assert.ok(!refused.calls.some(c => c[0] === "say" && c[2] === storyVnText("C1_RIN_WIN")), "never the win branch");
 });
 
 test("overwritten name plates speak as 【參賽者】 until restored, and choices take their branch", async () => {
   const f = fakes({ choose: () => 1 });
   const result = await createStoryVnDirector({ doc: {}, host: {}, ...f }).play("vn1-c2", { partner: "小紅", partnerSpecies: 21 });
   assert.deepEqual(result.choices, [{ key: "C2_CHOICE", option: "C2_OPT_IRON" }]);
-  assert.ok(f.calls.some(c => c[0] === "say" && c[1] === "【參賽者】" && c[2].startsWith("【參賽者】，請入場")));
-  assert.ok(f.calls.some(c => c[0] === "say" && c[2] === "中繼器放大了訊號，我不否認。但源頭不在我們這裡。"));
-  assert.ok(!f.calls.some(c => c[0] === "say" && c[2] === "我們的推論沒錯……可是保全區，確實很久沒有人進去了。"));
+  assert.ok(f.calls.some(c => c[0] === "say" && c[1] === "【參賽者】" && c[2].startsWith("【參賽者】，請")));
+  assert.ok(f.calls.some(c => c[0] === "say" && c[2] === storyVnText("C2_RIN_PICK")));
+  assert.ok(!f.calls.some(c => c[0] === "say" && c[2] === storyVnText("C2_EI_PICK")));
 });
 
 test("leaving mid-line aborts without a claim; an invalid or busy start is refused", async () => {
@@ -331,7 +331,7 @@ test("exploration: spots play their beats, a locked spot only answers, and the f
   assert.deepEqual(f.calls.find(c => c[0] === "field"), ["field", "lobby", ["subaru", "rin", "orlan", "board"]]);
   const said = f.calls.filter(c => c[0] === "say").map(c => c[2]);
   const at = text => said.indexOf(text);
-  assert.ok(at("委託板等等再看，先跟大家打招呼吧！") >= 0 && at("委託板等等再看，先跟大家打招呼吧！") < at(storyVnText("P3C1_S1")), "the board answers before the greetings are done");
+  assert.ok(at(storyVnText("P3C1_LOCK")) >= 0 && at(storyVnText("P3C1_LOCK")) < at(storyVnText("P3C1_S1")), "the board answers before the greetings are done");
   assert.ok(f.calls.some(c => c[0] === "card" && c[1] === "沒有寄件人的委託"), "the board's note opens at the end");
   assert.ok(f.calls.some(c => c[0] === "spot" && c[1] === "board" && c[2] === "goal"), "the board lights up once everyone was greeted");
   assert.ok(said.indexOf(storyVnText("P3C1_N3")) > said.indexOf(storyVnText("P3C1_A5")), "the chapter goes on after the field");

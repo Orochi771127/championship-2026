@@ -23,7 +23,7 @@ test('entry eligibility screenshot and all authored legacy UI keys display neutr
   try{for(const locale of LOCALES){
     setLocale(locale);
     for(const key of keys)assert.doesNotMatch(uiText(key,{limit:3}),legacy,`${locale}: ${key}`);
-    if(locale==='zh-Hant')assert.equal(uiText('這隻數碼獸目前的身體狀況無法參賽。'),'這隻夥伴目前的身體狀況無法參賽。');
+    if(locale==='zh-Hant')assert.equal(uiText('這隻數碼獸目前的身體狀況無法參賽。'),'這隻拍檔狀態不佳，先休養再上陣吧。');
   }}finally{setLocale(previous);}
 });
 

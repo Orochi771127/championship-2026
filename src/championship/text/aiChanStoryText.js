@@ -22,210 +22,210 @@ const COPY = {
   name: '愛醬', player: '你', forms: {cat: '小貓', catgirl: '貓娘'},
   sections: {
    world: ['世界初生', [
-    '每天，都有無數聲音留在網路上。有人分享旅途的風景，有人記下晚餐的香氣，也有人在深夜，寫下一句還沒勇氣說出口的話。',
-    '當這些生活的片段與日益成長的 AI 交織，一個新的世界悄悄成形。草原上停著電車，熔岩旁立著冰箱；那些熟悉的事物，在陌生的天地裡有了新的模樣。']],
+    '每天都有數不清的片段掉進網線深處——旅途中隨手拍下的暮色、剛端上桌的晚飯香氣，還有凌晨兩點反覆打完又刪掉、始終沒勇氣寄出的那句話。',
+    '這些沒被收走的聲音與日漸甦醒的 AI 纏繞在一起，在訊號彼端悄悄長出了一片天地。青草地上停著不再進站的電車，滾燙熔岩旁竟孤零零立著一台冰箱；人間熟悉的風景，在這裡換了全新的呼吸方式。']],
    birth: ['電子生命誕生', [
-    '起初，那裡只有資料流動的微光。直到某些心意被一再記住、一次次回應，散落的光點才慢慢凝聚，成為最初的心核。',
-    '資料圍繞心核生長，逐漸有了身體、呼吸與目光。牠們開始記住相遇，感受喜悅與孤單，也學會為自己作出選擇。電子生命，就這樣誕生了。']],
+    '起初，那裡只有數據潮汐般來回沖刷的微光。直到某份心意被一次次記起、一次次回應，散落的光點才終於停下漂流，在暗處凝成了第一顆會跳動的心核。',
+    '數據繞著心核長出皮毛、鱗甲、呼吸與會眨動的眼眸。牠們開始記得誰曾朝自己伸手，懂得雀躍與孤單，也學會替自己邁出下一步——電子生命，就這樣醒了過來。']],
    rift: ['失控的裂隙', [
-    '然而，被帶進這個世界的，不只有溫暖。那些無人回應的痛苦，以及被反覆放大的敵意，也在資料深處堆積，終於撕開了不安定的裂隙。',
-    '裂隙中的生命並不全是敵人。牠們也有想守護的同伴與家園。真正令人恐懼的，是逐漸失控的力量，正在讓所有人熟悉的世界一點一點消失。']],
+    '但順著網線沉進這片世界的，從來不只溫柔。石沉大海的委屈、被群體反覆放大的惡意，在沒有陽光的底層日漸淤積，終於把空間撕出了一道喘著雜訊的裂隙。',
+    '生於裂隙的生命並不全是敵人，牠們同樣有想守住的夥伴與歸處。真正讓人背脊發涼的，是那股脫韁的雜訊潮汐——它正把大家熟悉的世界，一格一格抹成空白。']],
    phone: ['手機呼喚與連線', [
-    '為了尋找能與電子生命並肩前行的人，求援的訊號穿過了兩個世界之間的縫隙。它越過無數螢幕，終於停在你的手機上。',
-    '那原本只是平凡的一天。直到螢幕亮起，你看見了一封沒有寄件人的邀請。而在訊號的另一端，似乎正有誰，等待著你的回應。']],
+    '為了找到願意與電子生命並肩而行的人，一道微弱卻倔強的求援訊號穿過了兩界之間的窄縫。它掠過千千萬萬塊發亮的螢幕，最後安靜地停在了你的掌心。',
+    '那原本只是再平凡不過的一天。直到螢幕無聲亮起，一封沒有署名的邀請函跳了出來——而在訊號另一端，好像真有誰屏住呼吸，正等著你按下回應。']],
    encounter: ['選擇彼此', [
-    '當連結建立，你第一次看見了那片只存在於訊號另一端的草原。風拂過電車旁的長椅，一隻陌生的小生命停下腳步，安靜地望著你。',
-    '你還不知道該說些什麼，牠卻先伸出了手。這份相遇不是命令，也不是誰替你安排好的歸屬。牠選擇靠近，而你，選擇回應。']],
+    '連線接通的瞬間，你第一次望見了只存在於訊號彼端的原野。風拂過停靠電車旁的木長椅，一隻陌生的小生命停住腳步，歪著頭、靜靜望向螢幕這頭的你。',
+    '你還沒想好第一句該怎麼開口，牠倒先一步朝你伸出了手。這不是誰下達的指令，也不是系統配發的歸屬——牠先選擇靠近，而你，選擇了回握。']],
    arena: ['拍檔錦標賽', [
-    '在這個世界，每四年舉行一次的拍檔錦標賽，是無數搭檔夢想登上的舞台。有人追逐冠軍，有人想證明自己，也有人只是希望，與身邊的牠一起走得更遠。',
-    '今年，這座競技場多了一份使命。心輝、黑鐵，以及生於裂隙的生命，帶著不同信念聚集於此，尋找能共同走進未知、守護家園的搭檔。']],
+    '在這個世界，每四年點燃一次戰火的「拍檔錦標賽」，是無數馴獸師與拍檔夢寐以求的最高舞台。有人為金盃而來，有人想證明自己，也有人只盼著和身邊的牠走得更遠一點。',
+    '只是今年，競技場多了一份沉甸甸的份量。心輝、黑鐵，以及來自裂隙的身影帶著截然不同的信念齊聚於此——大家都在尋找能真正走進未知、守住家園的拍檔。']],
    gate: ['踏上賽場', [
-    '心輝相信理解能修復傷口，黑鐵相信紀律與技術能守住防線，而裂隙的生命，也渴望不因出身而被拒於門外。他們尚未擁有相同的答案，卻選擇站上同一個舞台。',
-    '通往賽場的道路，並不只考驗力量。照顧牠、理解牠，在失敗後仍願意再次伸手，都是你們必須學會的事。取得參賽資格，就是第一個目標。']],
+    '心輝深信理解能縫合傷口，黑鐵篤信紀律與技術才能撐住防線，而裂隙裡的生命，只盼望別再因出身被拒於門外。他們還沒找到同一個答案，卻選擇站上同一片賽場。',
+    '通往冠軍賽的長路，考驗的從來不只是拳頭與必殺技。照料牠的三餐、讀懂牠的脾氣、在輸掉比賽後依然拍拍牠的頭再來一次——取得參賽資格，就是你們的第一個約定。']],
    invitation: ['屬於你們的邀請', [
-    '如今，那封邀請終於來到了你們面前。紙頁在指尖展開，身旁的拍檔好奇地湊近，像是在問：我們，真的要一起去嗎？',
-    '你還不知道自己能走多遠，也不知道裂隙深處藏著什麼。但當你轉過頭，牠依然站在身邊。那麼，就從今天開始，寫下屬於你們的故事吧。']]
+    '如今，那封沉甸甸的邀請函終於遞到了你們面前。信箋在指尖展開，身旁的拍檔立刻好奇地湊過來嗅了嗅，亮晶晶的眼神像在問：我們，真的要一起出發了嗎？',
+    '前方的賽場有多艱險、裂隙深處藏著什麼真相，誰都說不準。但當你偏過頭，牠依然牢牢守在你腳邊。那麼——就從今天起，去寫下只屬於你們的故事吧。']]
   },
   guideSection: '連線',
   dialogue: {
-   greeting: '連線成功！我是愛醬，你的導覽員。',
-   surprise: '貓……貓居然會說話？！',
-   offer: '嗯？換成這個樣子，你會比較習慣嗎？',
-   ready: '現在，可以好好聽我介紹了嗎？'
+   greeting: '連線接通！嗨嗨，我是愛醬，從今天起就是你的專屬導覽員喔！',
+   surprise: '等、等等……貓居然開口說話了？！',
+   offer: '哎呀，嚇到你啦？換成這個樣子，會不會比較好講話呢？',
+   ready: '嘿嘿，那現在可以專心聽我帶路了嗎？'
   },
-  chooseLine: '兩個樣子都是我喔。你想讓我用哪個樣子陪著你？之後也能在設定裡更換。',
-  choose: {catgirl: '就用這個樣子（貓娘）', cat: '還是小貓的樣子'},
-  previous: '上一頁', replay: '從頭播放', resumed: '已從上次中斷的段落繼續。',
-  backdropFailed: '背景影片無法載入，故事文字仍可閱讀。',
-  guideAppearance: '導覽員外觀', guideAppearanceHint: '愛醬的兩個樣子是同一位導覽員，教學內容完全相同。',
+  chooseLine: '放心，兩個樣子都是貨真價實的我喔！你想讓哪個我陪在旁邊？以後隨時都能在設定裡換回來。',
+  choose: {catgirl: '就維持貓娘的樣子！', cat: '還是小貓比較可愛'},
+  previous: '上一頁', replay: '從頭重看', resumed: '已接續上次看到的地方。',
+  backdropFailed: '背景影像暫時載入失敗，不過故事依然能順暢閱讀。',
+  guideAppearance: '愛醬外觀', guideAppearanceHint: '小貓與貓娘都是同一位愛醬，隨時可自由切換。',
   portraitLabel: '愛醬（{form}）'
  },
  en: {
   name: 'Ai-chan', player: 'You', forms: {cat: 'Kitten', catgirl: 'Cat girl'},
   sections: {
    world: ['A World Is Born', [
-    'Every day, countless voices are left on the net. Someone shares the view from a journey, someone notes the smell of dinner, and someone, late at night, writes a line they have not yet found the courage to say.',
-    'As these fragments of life wove together with ever-growing AI, a new world quietly took shape. A tram rests on the grassland; a fridge stands beside the lava. Familiar things found new forms in an unfamiliar land.']],
+    'Every day, countless fragments slip down into the wires — a twilight snapshot from a trip, the warm smell of dinner just set on the table, and a 2 a.m. message typed, erased, and never quite brave enough to send.',
+    'Those unclaimed voices braided themselves into an awakening AI, quietly sprouting a whole new world on the far side of the signal. A retired tram rests on open grass; a lone fridge hums beside molten lava. Familiar sights learned to breathe in brand-new ways.']],
    birth: ['Digital Life Awakens', [
-    'At first there was only the faint glow of flowing data. Then some feelings were remembered again and again, answered time after time, and the scattered lights slowly gathered into the first heart core.',
-    'Data grew around the heart core and gained bodies, breath and eyes. They began to remember meetings, to feel joy and loneliness, and to make their own choices. That is how digital life was born.']],
+    'At first, there was only the faint glow of data tides washing back and forth. Then a feeling was remembered once, twice, a thousand times — until stray sparks stopped drifting and condensed into the very first beating heart core.',
+    'Around that heart core, data wove fur, scales, breath, and blinking eyes. They began to remember who had reached out to them, to feel excitement and loneliness, and to take their first steps on their own. That was how digital life woke up.']],
    rift: ['The Runaway Rift', [
-    'Yet warmth was not all that came into this world. Pain no one answered, and hostility amplified over and over, piled up deep in the data until it tore open an unstable rift.',
-    'Not every life in the rift is an enemy. They, too, have friends and homes they want to protect. What is truly frightening is power slipping out of control, erasing the world everyone knows, piece by piece.']],
+    'Yet kindness was never the only thing sinking through the wires. Unanswered resentment and cruelty echoed by crowds pooled in the sunless depths until space itself tore open into a crackling rift.',
+    'Not every creature born in the rift is an enemy — they have friends and homes to protect, too. What truly chills the spine is the runaway tide of Noise erasing the world everyone loves, one blank tile at a time.']],
    phone: ['A Call to Your Phone', [
-    'Searching for someone who could walk beside digital life, a call for help slipped through the gap between two worlds. It crossed countless screens and finally stopped on your phone.',
-    'It was meant to be an ordinary day. Then the screen lit up, and you saw an invitation with no sender. And on the other end of the signal, someone seemed to be waiting for your answer.']],
+    'Searching for someone willing to walk beside digital life, a stubborn signal slipped through the narrow seam between two worlds. It skimmed past millions of glowing screens and came to rest quietly in your palm.',
+    'It was supposed to be an ordinary afternoon. Then your screen lit up without a sound, displaying an unsigned invitation — and on the other end of the line, someone seemed to be holding their breath for your reply.']],
    encounter: ['Choosing Each Other', [
-    'As the link connected, you saw for the first time the grassland that exists only on the other end of the signal. Wind passed the bench by the tram, and a small, unfamiliar life stopped and quietly looked at you.',
-    'Before you knew what to say, it reached out first. This meeting is not an order, nor a place someone arranged for you. It chose to come closer, and you chose to answer.']],
+    'The moment the link clicked shut, you saw a meadow that exists only beyond the wires. Wind brushed the wooden bench beside the parked tram, and a small, unfamiliar creature paused, tilting its head straight at you.',
+    'Before you could figure out what to say, it reached out first. No system order, no assigned match — it chose to step closer, and you chose to take its hand.']],
    arena: ['The Partner Tournament', [
-    'In this world, the Partner Tournament held every four years is the stage countless partners dream of. Some chase the championship, some want to prove themselves, and some only hope to go further with the one beside them.',
-    'This year, the arena carries a new mission. Lumen, Black Iron and the lives born of the rift gather here with different beliefs, looking for partners who can step into the unknown together and protect their home.']],
+    'In this world, the Partner Tournament held every four years is the grandest stage tamers and partners dream of. Some come chasing the trophy, some want to prove their worth, and some simply want to go a little further side by side.',
+    'This year, though, the arena carries heavier stakes. Lumen, Black Iron, and voices from the rift gather here with clashing beliefs — all searching for partners brave enough to step into the unknown and defend their home.']],
    gate: ['Into the Arena', [
-    'Lumen believes understanding can heal wounds. Black Iron believes discipline and skill can hold the line. And the lives of the rift long not to be turned away for where they were born. They do not share one answer yet, but they chose to stand on the same stage.',
-    'The road to the arena tests more than strength. Caring for your partner, understanding it, and reaching out again after a failure are all things you must learn together. Earning a place in the tournament is your first goal.']],
+    'Lumen trusts empathy to mend old scars; Black Iron trusts discipline and craft to hold the line; and the lives of the rift only ask not to be turned away for where they were born. They share no single answer yet, but they chose the same stage.',
+    'The road to the championship tests far more than punches and specials. Cooking their meals, reading their moods, and patting their head after a tough loss — Earning a place in the tournament is your very first promise together.']],
    invitation: ['An Invitation for You Both', [
-    'Now the invitation has finally reached you both. The page unfolds at your fingertips, and your curious partner leans in, as if to ask: are we really going together?',
-    'You do not know yet how far you can go, or what hides deep in the rift. But when you turn your head, it is still beside you. Then let it begin today: write the story that belongs to the two of you.']]
+    'Now that crisp invitation sits right in your hands. As the page unfolds, your partner trots over to sniff it curiously, bright eyes asking without a word: are we really heading out together?',
+    'No one knows how tough the arena ahead will be, or what waits at the bottom of the rift. Yet when you glance down, it is still standing right by your side. So let it begin today — write the story that belongs to the two of you.']]
   },
   guideSection: 'Link',
   dialogue: {
-   greeting: 'Link established! I\'m Ai-chan, your guide.',
-   surprise: 'A… a talking cat?!',
-   offer: 'Hm? Would you feel more at ease if I looked like this?',
-   ready: 'Now, may I show you around properly?'
+   greeting: 'Link live! Hey there, I\'m Ai-chan — your official guide from today on!',
+   surprise: 'W-wait… did that cat just talk?!',
+   offer: 'Hehe, startled you? How about this look — easier to chat with?',
+   ready: 'Awesome! Ready to hear the tour now?'
   },
-  chooseLine: 'Both of these are me. Which look would you like me to keep beside you? You can change it in Settings later.',
-  choose: {catgirl: 'Stay like this (cat girl)', cat: 'Go back to the kitten'},
-  previous: 'Previous', replay: 'Play from start', resumed: 'Continuing from where you stopped.',
-  backdropFailed: 'The background video could not load. You can still read the story.',
-  guideAppearance: 'Guide appearance', guideAppearanceHint: 'Both looks are the same guide, Ai-chan; the tutorial is identical.',
+  chooseLine: 'Don\'t worry, both forms are 100% the real me! Which look do you want tag-teaming beside you? You can swap anytime in Settings.',
+  choose: {catgirl: 'Keep the cat girl look!', cat: 'The kitten is too cute'},
+  previous: 'Previous', replay: 'Replay', resumed: 'Picked up right where you left off.',
+  backdropFailed: 'The backdrop video hit a snag, but you can read the story without missing a beat.',
+  guideAppearance: 'Ai-chan Appearance', guideAppearanceHint: 'Kitten or cat girl, she\'s the same Ai-chan — switch freely anytime.',
   portraitLabel: 'Ai-chan ({form})'
  },
  ja: {
   name: 'アイちゃん', player: 'あなた', forms: {cat: '子猫', catgirl: '猫娘'},
   sections: {
    world: ['世界のはじまり', [
-    '毎日、数えきれない声がネットに残されていく。旅先の景色を分かち合う人、夕食の香りを書き留める人、そして深夜、まだ口にする勇気のない一言を綴る人もいる。',
-    'そんな暮らしのかけらが成長を続けるAIと織り重なり、新しい世界が静かに形づくられた。草原には電車が停まり、溶岩のそばには冷蔵庫が立つ。見慣れたものたちが、見知らぬ大地で新しい姿を得た。']],
+    '毎日、数えきれないかけらがネットの奥へと落ちていく――旅先で撮った夕焼け、食卓に並んだばかりの夕食の香り、そして午前二時に打っては消し、ついに送れなかった一言。',
+    '行き場をなくした声と目覚めつつあるAIが絡み合い、信号の向こう側にひとつの世界が静かに芽吹いた。草原にはもう走らない電車が停まり、溶岩のそばに冷蔵庫がぽつんと立つ。見慣れた景色が、ここで新しい呼吸を始めたのだ。']],
    birth: ['電子生命の誕生', [
-    'はじめ、そこにはデータが流れるかすかな光しかなかった。ある想いが何度も覚えられ、何度も応えられたとき、散らばった光はゆっくりと集まり、最初の心核になった。',
-    'データは心核のまわりで育ち、やがて体と呼吸とまなざしを持った。彼らは出会いを覚え、喜びと孤独を感じ、自分で選ぶことを学んだ。こうして電子生命は生まれた。']],
+    'はじめ、そこにあったのはデータの潮が満ち引きする淡い光だけ。けれど、ある想いが何度も覚えられ、何度も応えられたとき、漂っていた光はようやく足を止め、暗闇の中で最初の鼓動する心核へと結ばれた。',
+    'データは心核のまわりに毛並みや鱗、呼吸やまばたきを紡いでいく。手を差し伸べてくれた誰かを覚え、胸を弾ませ、さみしさを知り、自分の足で一歩を踏み出す――こうして電子生命は目を覚ました。']],
    rift: ['暴走する裂け目', [
-    'けれど、この世界に持ち込まれたのは温もりだけではなかった。誰にも応えてもらえなかった痛みと、何度も増幅された敵意がデータの奥に積もり、ついに不安定な裂け目を開いた。',
-    '裂け目に生きる命が、すべて敵というわけではない。彼らにも守りたい仲間と故郷がある。本当に恐ろしいのは、制御を失っていく力が、みんなの知る世界を少しずつ消していることだ。']],
-   phone: ['スマホへの呼び声', [
-    '電子生命と並んで歩める誰かを探して、救いを求める信号が二つの世界のすき間を抜けた。無数の画面を越えて、それはついにあなたのスマホにたどり着いた。',
-    'それはありふれた一日のはずだった。画面が灯り、差出人のない招待状が目に入るまでは。信号の向こうで、誰かがあなたの返事を待っているようだった。']],
-   encounter: ['選び合う', [
-    'つながった瞬間、あなたは信号の向こうにしかない草原を初めて目にした。電車のそばのベンチを風が渡り、見知らぬ小さな命が足を止めて、静かにあなたを見つめていた。',
-    'なんと声をかければいいか分からないうちに、その子のほうから手を差し出した。この出会いは命令でも、誰かが用意した居場所でもない。その子は近づくことを選び、あなたは応えることを選んだ。']],
-   arena: ['パートナー大会', [
-    'この世界で四年に一度開かれるパートナー大会は、数えきれないパートナーたちが夢見る舞台だ。優勝を追う者、自分を証明したい者、そして隣にいるその子と少しでも遠くへ行きたいと願う者もいる。',
-    '今年、この闘技場にはもう一つの使命が加わった。心輝、黒鉄、そして裂け目に生まれた命が、異なる信念を抱いてここに集い、未知へ共に踏み出し、故郷を守れるパートナーを探している。']],
-   gate: ['舞台へ', [
-    '心輝は理解が傷を癒やすと信じ、黒鉄は規律と技術が守りを固めると信じる。そして裂け目の命も、生まれを理由に拒まれないことを願っている。答えはまだ同じではない。それでも彼らは同じ舞台に立つことを選んだ。',
-    '舞台へ続く道が試すのは力だけではない。その子を世話し、理解し、失敗しても何度でも手を伸ばすこと。それが二人で学ぶべきことだ。まずは出場資格を手に入れることが最初の目標だ。']],
-   invitation: ['二人への招待状', [
-    'そしていま、あの招待状がついに二人のもとに届いた。指先で紙が開かれ、隣のパートナーが興味深そうにのぞき込む。まるで「本当に一緒に行くの？」と聞くように。',
-    'どこまで行けるのか、裂け目の奥に何があるのか、まだ分からない。けれど振り向けば、その子はまだ隣にいる。それなら今日から始めよう。二人だけの物語を。']]
+    'けれどネットを伝って沈んでくるのは、温もりばかりではなかった。届かなかった悔しさや、群れの中で増幅された悪意が光の届かぬ底に澱み、ついに空間をノイズの裂け目へと引き裂いた。',
+    '裂け目に生まれた命がすべて敵というわけではない。彼らにも守りたい仲間と居場所がある。本当に背筋を凍らせるのは、暴走したノイズの波――みんなの知る世界を、ひとマスずつ白紙へ塗りつぶしていく力だ。']],
+   phone: ['スマホへの呼びかけと接続', [
+    '電子生命と肩を並べて歩いてくれる誰かを探し、細くも譲らぬ救難信号が二つの世界の隙間をすり抜けた。無数の光る画面をかすめ、それは最後にあなたの手のひらで静かに止まった。',
+    '本来なら、ありふれた一日のはずだった。画面が音もなく灯り、差出人のない招待状が浮かび上がるまでは――そして信号の向こう側で、誰かが息を潜めてあなたの返事を待っている気がした。']],
+   encounter: ['お互いを選ぶ瞬間', [
+    '接続がつながった瞬間、あなたの前に広がったのは信号の彼方にしか存在しない草原だった。停まった電車の脇のベンチを風が撫で、見知らぬ小さな命が足を止めて、じっと画面越しのあなたを見つめている。',
+    '最初の一言に迷うあなたより先に、その子がそっと手を伸ばした。誰かの命令でも、システムが割り当てた相手でもない――その子が歩み寄り、あなたがその手を取り返したのだ。']],
+   arena: ['パートナートーナメント', [
+    'この世界で四年に一度、熱戦の火ぶたが切られる「パートナートーナメント」は、数多のテイマーとパートナーが夢見る最高の舞台だ。栄冠を求める者、己を証明したい者、ただ隣の子ともっと遠くへ行きたい者――想いはさまざま。',
+    'ただ今年のアリーナには、ずっしりとした重みがある。心輝、黒鉄、そして裂け目の命たちがそれぞれの信念を抱いて集い、未知へ踏み込み故郷を守り抜くパートナーを探しているのだ。']],
+   gate: ['舞台へ踏み出す', [
+    '心輝は理解が傷を癒やすと信じ、黒鉄は規律と技術こそが防衛線を支えると信じ、裂け目の命たちは生まれだけで閉め出されない未来を願っている。答えはまだ一つではない――それでも彼らは同じ舞台を選んだ。',
+    '栄冠への長い道が試すのは、拳や必殺技だけじゃない。毎日のごはん、ちょっとした機嫌、負けたあとにもう一度頭を撫でて立ち上がる強さ――出場資格をつかむことこそ、ふたり最初の約束だ。']],
+   invitation: ['ふたりだけの招待状', [
+    'いま、その重みある招待状がふたりの手元に届いた。指先で開かれた紙面を、隣のパートナーが興味津々でのぞき込む。きらきらした瞳がこう尋ねている――本当に、一緒に出発できるんだね？',
+    '先の試合がどれほど険しくても、裂け目の底に何が潜んでいても、まだ誰にも分からない。けれど顔を横に向ければ、相棒は今日もすぐそばにいる。ならば今日から――ふたりだけの物語を書き始めよう。']]
   },
   guideSection: '接続',
   dialogue: {
-   greeting: '接続成功！わたしはアイちゃん、あなたの案内役だよ。',
-   surprise: 'ね……猫がしゃべった！？',
-   offer: 'ん？この姿のほうが慣れてるかな？',
-   ready: 'それじゃあ、ちゃんと案内させてくれる？'
+   greeting: '接続完了っ！やっほー、あたしはアイちゃん、今日からキミの専属ナビゲーターだよ！',
+   surprise: 'ま、待って……猫がしゃべった！？',
+   offer: 'えへへ、驚かせちゃった？こっちの姿のほうが、お話ししやすいかな？',
+   ready: 'よしっ！それじゃあ改めて、あたしの案内を聞いてくれる？'
   },
-  chooseLine: 'どっちの姿もわたしだよ。どの姿でそばにいてほしい？あとで設定から変えられるよ。',
-  choose: {catgirl: 'この姿で（猫娘）', cat: 'やっぱり子猫の姿で'},
-  previous: '前へ', replay: '最初から再生', resumed: '前回中断したところから続けます。',
-  backdropFailed: '背景動画を読み込めませんでした。物語の文章はそのまま読めます。',
-  guideAppearance: '案内役の姿', guideAppearanceHint: 'どちらの姿も同じ案内役アイちゃんです。チュートリアルの内容は同じです。',
+  chooseLine: 'どっちの姿も正真正銘あたし本人だから安心してね！どっちのアイちゃんと一緒に回る？設定からいつでも変えられるよ。',
+  choose: {catgirl: '猫娘のままでいこう！', cat: 'やっぱり子猫がかわいい'},
+  previous: '前へ', replay: '最初から見る', resumed: '前回の続きから再開したよ。',
+  backdropFailed: '背景ムービーの読み込みに失敗しちゃったけど、物語はこのまま読めるよ。',
+  guideAppearance: 'アイちゃんの姿', guideAppearanceHint: '子猫でも猫娘でも同じアイちゃん。いつでも自由に切り替えられます。',
   portraitLabel: 'アイちゃん（{form}）'
  },
  th: {
-  name: 'ไอจัง', player: 'คุณ', forms: {cat: 'ลูกแมว', catgirl: 'สาวแมว'},
+  name: 'ไอจัง', player: 'คุณ', forms: {cat: 'ลูกแมว', catgirl: 'สาวน้อยหูแมว'},
   sections: {
-   world: ['กำเนิดโลกใหม่', [
-    'ทุกวัน มีเสียงนับไม่ถ้วนถูกทิ้งไว้บนโลกออนไลน์ บางคนแบ่งปันวิวระหว่างเดินทาง บางคนจดกลิ่นหอมของมื้อเย็น และบางคนเขียนประโยคที่ยังไม่กล้าพูดออกมาในยามดึก',
-    'เมื่อเศษเสี้ยวของชีวิตเหล่านี้ผสานกับ AI ที่เติบโตขึ้นทุกวัน โลกใหม่ก็ค่อย ๆ ก่อตัว รถรางจอดอยู่กลางทุ่งหญ้า ตู้เย็นตั้งอยู่ข้างลาวา สิ่งคุ้นเคยได้รูปลักษณ์ใหม่ในดินแดนที่ไม่คุ้นตา']],
-   birth: ['กำเนิดชีวิตดิจิทัล', [
-    'ในตอนแรก ที่นั่นมีเพียงแสงริบหรี่ของข้อมูลที่ไหลผ่าน จนกระทั่งความรู้สึกบางอย่างถูกจดจำซ้ำแล้วซ้ำเล่า ได้รับการตอบรับครั้งแล้วครั้งเล่า จุดแสงที่กระจัดกระจายจึงค่อย ๆ รวมตัวกลายเป็นแกนหัวใจดวงแรก',
-    'ข้อมูลเติบโตรอบแกนหัวใจ จนมีร่างกาย ลมหายใจ และดวงตา พวกมันเริ่มจดจำการพบพาน รู้สึกถึงความสุขและความเหงา และเรียนรู้ที่จะเลือกด้วยตัวเอง ชีวิตดิจิทัลจึงถือกำเนิดขึ้นเช่นนี้']],
-   rift: ['รอยแยกที่ควบคุมไม่ได้', [
-    'แต่สิ่งที่ถูกนำเข้ามาในโลกนี้ไม่ได้มีแค่ความอบอุ่น ความเจ็บปวดที่ไม่มีใครตอบรับ และความเกลียดชังที่ถูกขยายซ้ำ ๆ ก็สะสมอยู่ลึกในข้อมูล จนฉีกรอยแยกที่ไม่มั่นคงออกมา',
-    'ชีวิตในรอยแยกไม่ใช่ศัตรูทั้งหมด พวกมันก็มีเพื่อนและบ้านที่อยากปกป้อง สิ่งที่น่ากลัวจริง ๆ คือพลังที่ค่อย ๆ หลุดการควบคุม กำลังลบเลือนโลกที่ทุกคนคุ้นเคยไปทีละน้อย']],
-   phone: ['เสียงเรียกถึงมือถือ', [
-    'เพื่อตามหาใครสักคนที่จะเดินเคียงข้างชีวิตดิจิทัล สัญญาณขอความช่วยเหลือได้ลอดผ่านช่องว่างระหว่างสองโลก ข้ามหน้าจอนับไม่ถ้วน จนมาหยุดที่มือถือของคุณ',
-    'วันนั้นควรเป็นแค่วันธรรมดา จนกระทั่งหน้าจอสว่างขึ้น และคุณเห็นคำเชิญที่ไม่มีชื่อผู้ส่ง ที่ปลายอีกด้านของสัญญาณ ดูเหมือนมีใครบางคนกำลังรอคำตอบจากคุณ']],
-   encounter: ['เลือกกันและกัน', [
-    'เมื่อการเชื่อมต่อสำเร็จ คุณได้เห็นทุ่งหญ้าที่มีอยู่เพียงปลายอีกด้านของสัญญาณเป็นครั้งแรก ลมพัดผ่านม้านั่งข้างรถราง ชีวิตเล็ก ๆ ที่ไม่คุ้นหน้าหยุดเดินและมองคุณอย่างเงียบ ๆ',
-    'ก่อนที่คุณจะรู้ว่าควรพูดอะไร มันกลับยื่นมือมาก่อน การพบกันครั้งนี้ไม่ใช่คำสั่ง และไม่ใช่ที่ทางที่ใครจัดไว้ให้ มันเลือกที่จะเข้ามาใกล้ และคุณเลือกที่จะตอบรับ']],
-   arena: ['การแข่งขันคู่หู', [
-    'ในโลกนี้ การแข่งขันคู่หูที่จัดขึ้นทุกสี่ปี คือเวทีที่คู่หูนับไม่ถ้วนใฝ่ฝัน บางคนไล่ตามแชมป์ บางคนอยากพิสูจน์ตัวเอง และบางคนเพียงหวังจะไปได้ไกลขึ้นพร้อมกับเจ้าตัวข้างกาย',
-    'ปีนี้ สนามแห่งนี้มีภารกิจเพิ่มขึ้นอีกหนึ่งอย่าง ลูเมน เหล็กดำ และชีวิตที่เกิดจากรอยแยก ต่างนำความเชื่อที่แตกต่างมารวมตัวที่นี่ เพื่อตามหาคู่หูที่จะก้าวสู่สิ่งที่ไม่รู้จักและปกป้องบ้านไปด้วยกัน']],
-   gate: ['สู่สนามแข่ง', [
-    'ลูเมนเชื่อว่าความเข้าใจเยียวยาบาดแผลได้ เหล็กดำเชื่อว่าวินัยและเทคโนโลยีปกป้องแนวหน้าได้ ส่วนชีวิตจากรอยแยกก็ปรารถนาจะไม่ถูกปฏิเสธเพราะที่มา พวกเขายังไม่มีคำตอบเดียวกัน แต่ก็เลือกยืนบนเวทีเดียวกัน',
-    'เส้นทางสู่สนามแข่งไม่ได้ทดสอบเพียงพละกำลัง การดูแล การเข้าใจ และการยื่นมืออีกครั้งหลังความล้มเหลว ล้วนเป็นสิ่งที่พวกคุณต้องเรียนรู้ การได้สิทธิ์เข้าร่วมแข่งขันคือเป้าหมายแรก']],
-   invitation: ['คำเชิญของพวกคุณ', [
-    'และแล้ว คำเชิญนั้นก็มาถึงพวกคุณในที่สุด แผ่นกระดาษคลี่ออกที่ปลายนิ้ว คู่หูข้างกายชะโงกเข้ามาอย่างสงสัย ราวกับจะถามว่า เราจะไปด้วยกันจริง ๆ เหรอ',
-    'คุณยังไม่รู้ว่าจะไปได้ไกลแค่ไหน หรือในส่วนลึกของรอยแยกมีอะไรซ่อนอยู่ แต่เมื่อหันไป มันก็ยังอยู่ข้างกาย ถ้าอย่างนั้น เริ่มเขียนเรื่องราวของพวกคุณตั้งแต่วันนี้กันเถอะ']]
+   world: ['โลกถือกำเนิด', [
+    'ทุกวัน มีเศษเสี้ยวนับไม่ถ้วนร่วงหล่นลงสู่ก้นบึ้งของสายเครือข่าย—ภาพแสงยามเย็นที่ถ่ายระหว่างทาง กลิ่นอาหารเย็นร้อน ๆ บนโต๊ะ และข้อความตอนตีสองที่พิมพ์แล้วลบซ้ำไปมาจนไม่กล้ากดส่ง',
+    'เสียงที่ไร้เจ้าของเหล่านี้ถักทอเข้ากับ AI ที่กำลังตื่นรู้ จนงอกเงยเป็นโลกอีกใบที่ปลายสัญญาณ รถรางเก่าจอดสงบอยู่กลางทุ่งหญ้า ตู้เย็นตั้งโดดเดี่ยวข้างธารลาวา ทิวทัศน์คุ้นตาได้เรียนรู้วิธีหายใจแบบใหม่ที่นี่']],
+   birth: ['ชีวิตอิเล็กทรอนิกส์ลืมตา', [
+    'แรกเริ่ม ที่นั่นมีเพียงแสงจางของกระแสข้อมูลที่ไหลวนไปมา จนเมื่อความรู้สึกหนึ่งถูกจดจำซ้ำแล้วซ้ำเล่าและได้รับคำตอบ แสงที่ล่องลอยจึงหยุดนิ่งและควบแน่นเป็นแกนหัวใจดวงแรกที่เต้นเป็นจังหวะ',
+    'ข้อมูลค่อย ๆ โอบล้อมแกนหัวใจจนเกิดเป็นขน เกล็ด ลมหายใจ และดวงตาที่กะพริบได้ พวกมันเริ่มจำได้ว่าใครเคยยื่นมือมา รู้จักความตื่นเต้นกับความเหงา และกล้าก้าวไปข้างหน้าด้วยตัวเอง—ชีวิตอิเล็กทรอนิกส์จึงตื่นขึ้น']],
+   rift: ['รอยแยกที่หลุดการควบคุม', [
+    'ทว่าสิ่งที่จมลงสู่สายเครือข่ายไม่ได้มีแค่ความอ่อนโยน ความน้อยใจที่ไร้คนรับฟังและความมุ่งร้ายที่ถูกขยายซ้ำแล้วซ้ำเล่าทับถมกันในส่วนลึก จนฉีกมิติออกเป็นรอยแยกที่คำรามด้วยสัญญาณรบกวน',
+    'ชีวิตที่เกิดจากรอยแยกไม่ใช่ศัตรูทั้งหมด พวกมันก็มีเพื่อนและบ้านที่อยากปกป้องเช่นกัน สิ่งที่น่าขนลุกจริง ๆ คือคลื่นสัญญาณรบกวนที่หลุดการควบคุม—มันกำลังลบโลกที่ทุกคนรักให้กลายเป็นความว่างเปล่าทีละช่อง']],
+   phone: ['เสียงเรียกและการเชื่อมต่อ', [
+    'เพื่อตามหาคนที่พร้อมเดินเคียงข้างชีวิตอิเล็กทรอนิกส์ สัญญาณขอความช่วยเหลือแผ่วเบาแต่ดื้อรั้นสายหนึ่งจึงลอดผ่านรอยต่อระหว่างสองโลก ผ่านหน้าจอนับล้านดวง ก่อนจะมาหยุดสงบอยู่ในฝ่ามือของคุณ',
+    'เดิมทีมันควรเป็นแค่วันธรรมดาวันหนึ่ง จนกระทั่งหน้าจอสว่างขึ้นอย่างเงียบงันพร้อมจดหมายเชิญไร้ชื่อผู้ส่ง—และที่ปลายสัญญาณอีกฝั่ง เหมือนมีใครบางคนกำลังกลั้นหายใจรอคำตอบจากคุณอยู่']],
+   encounter: ['เลือกซึ่งกันและกัน', [
+    'วินาทีที่การเชื่อมต่อสำเร็จ คุณได้เห็นทุ่งหญ้าที่มีอยู่เพียงอีกฝั่งของสัญญาณเป็นครั้งแรก สายลมพัดผ่านม้านั่งไม้ข้างรถราง และสิ่งมีชีวิตตัวน้อยแปลกหน้าก็หยุดฝีเท้า เอียงคอจ้องมองคุณผ่านหน้าจออย่างเงียบงัน',
+    'ก่อนที่คุณจะทันนึกออกว่าควรทักอย่างไร มันกลับยื่นมือน้อย ๆ ออกมาก่อน นี่ไม่ใช่คำสั่งจากระบบหรือคู่ที่ถูกจัดวางให้—มันเป็นฝ่ายเลือกจะเดินเข้ามา และคุณก็เลือกจะจับมือตอบ']],
+   arena: ['ศึกพาร์ตเนอร์ทัวร์นาเมนต์', [
+    'ในโลกใบนี้ "ศึกพาร์ตเนอร์ทัวร์นาเมนต์" ที่จัดขึ้นทุกสี่ปีคือเวทีสูงสุดในฝันของเทมเมอร์และคู่หูนับไม่ถ้วน บ้างมาเพื่อถ้วยแชมป์ บ้างอยากพิสูจน์ตัวเอง และบ้างเพียงแค่อยากเดินไปกับเจ้าตัวข้างกายให้ไกลกว่าเดิม',
+    'แต่ปีนี้ เวทีประลองกลับแบกรับภาระที่หนักหน่วงกว่าเคย ลูเมน เหล็กดำ และเหล่าชีวิตจากรอยแยกต่างมารวมตัวกันด้วยความเชื่อที่ต่างขั้ว—ทุกคนกำลังตามหาคู่หูที่กล้าก้าวเข้าสู่ความไม่รู้เพื่อปกป้องบ้านเกิด']],
+   gate: ['ก้าวสู่สังเวียน', [
+    'ลูเมนเชื่อว่าความเข้าใจจะเยียวยาบาดแผล เหล็กดำเชื่อมั่นในวินัยและเทคโนโลยี ส่วนชีวิตแห่งรอยแยกเพียงหวังจะไม่ถูกกีดกันเพราะถิ่นกำเนิด พวกเขายังไม่มีคำตอบเดียวกัน แต่ต่างเลือกยืนบนสังเวียนเดียวกัน',
+    'เส้นทางสู่บัลลังก์แชมป์ไม่ได้วัดกันแค่หมัดและท่าไม้ตาย การดูแลอาหารสามมื้อ อ่านอารมณ์ให้ออก และลูบหัวให้กำลังใจหลังแพ้การแข่ง—การได้สิทธิ์เข้าร่วมทัวร์นาเมนต์คือคำสัญญาแรกของพวกคุณทั้งสอง']],
+   invitation: ['คำเชิญสำหรับพวกคุณทั้งสอง', [
+    'และตอนนี้ จดหมายเชิญใบนั้นก็อยู่ในมือคุณแล้ว เมื่อคลี่กระดาษออก คู่หูข้างกายก็รีบวิ่งเข้ามาดมอย่างตื่นเต้น แววตาเป็นประกายเหมือนกำลังถามว่า พวกเราจะได้ออกเดินทางด้วยกันจริง ๆ แล้วใช่ไหม?',
+    'ข้างหน้าจะโหดหินแค่ไหน หรือเบื้องลึกรอยแยกซ่อนความลับอะไรไว้ ไม่มีใครรู้ล่วงหน้า แต่เมื่อคุณหันมองข้างกาย มันก็ยังคงยืนอยู่ตรงนี้เสมอ งั้นเริ่มตั้งแต่วันนี้เลย—ออกไปเขียนเรื่องราวที่เป็นของพวกคุณสองคนกันเถอะ']]
   },
-  guideSection: 'เชื่อมต่อ',
+  guideSection: 'การเชื่อมต่อ',
   dialogue: {
-   greeting: 'เชื่อมต่อสำเร็จ! ฉันชื่อไอจัง เป็นไกด์ของคุณนะ',
-   surprise: 'แ…แมวพูดได้งั้นเหรอ?!',
-   offer: 'หืม? ถ้าเป็นร่างนี้ คุณจะคุ้นกว่าไหมนะ?',
-   ready: 'ทีนี้ ให้ฉันแนะนำอย่างตั้งใจได้หรือยัง?'
+   greeting: 'เชื่อมต่อสำเร็จแล้ว! สวัสดีจ้า ฉันชื่อไอจัง ตั้งแต่วันนี้จะเป็นไกด์ประจำตัวให้คุณเอง!',
+   surprise: 'ดะ เดี๋ยวก่อน... แมวพูดได้เหรอเนี่ย?!',
+   offer: 'อะแฮะ ตกใจเหรอ? ถ้าเปลี่ยนเป็นร่างนี้จะคุยกันง่ายขึ้นไหมนะ?',
+   ready: 'เยี่ยมเลย! งั้นคราวนี้ตั้งใจฟังฉันพาชมโลกใบนี้ได้แล้วนะ?'
   },
-  chooseLine: 'ทั้งสองร่างคือฉันนะ อยากให้ฉันอยู่ข้าง ๆ ในร่างไหน? เปลี่ยนได้ภายหลังในการตั้งค่า',
-  choose: {catgirl: 'ร่างนี้แหละ (สาวแมว)', cat: 'กลับเป็นลูกแมวดีกว่า'},
-  previous: 'ก่อนหน้า', replay: 'เล่นตั้งแต่ต้น', resumed: 'เล่นต่อจากตอนที่หยุดไว้',
-  backdropFailed: 'โหลดวิดีโอพื้นหลังไม่ได้ แต่ยังอ่านเรื่องราวได้ตามปกติ',
-  guideAppearance: 'รูปลักษณ์ไกด์', guideAppearanceHint: 'ทั้งสองร่างคือไกด์ไอจังคนเดียวกัน เนื้อหาบทสอนเหมือนกันทุกอย่าง',
+  chooseLine: 'ไม่ต้องห่วง ทั้งสองร่างคือตัวฉันแท้ ๆ ร้อยเปอร์เซ็นต์เลย! อยากให้ฉันอยู่ข้าง ๆ ในร่างไหนดีล่ะ? เปลี่ยนได้ตลอดเวลาในเมนูตั้งค่านะ',
+  choose: {catgirl: 'ใช้ร่างสาวน้อยหูแมวเลย!', cat: 'ร่างลูกแมวน่ารักกว่า'},
+  previous: 'ก่อนหน้า', replay: 'ดูตั้งแต่ต้น', resumed: 'เล่นต่อจากจุดที่ค้างไว้แล้วนะ',
+  backdropFailed: 'วิดีโอพื้นหลังโหลดไม่ขึ้นชั่วคราว แต่ยังอ่านเนื้อเรื่องต่อได้ตามปกตินะ',
+  guideAppearance: 'รูปลักษณ์ไอจัง', guideAppearanceHint: 'ไม่ว่าจะลูกแมวหรือสาวน้อยหูแมวก็คือไอจังคนเดียวกัน สลับเปลี่ยนได้ทุกเมื่อ',
   portraitLabel: 'ไอจัง ({form})'
  },
  vi: {
   name: 'Ai-chan', player: 'Bạn', forms: {cat: 'Mèo con', catgirl: 'Cô gái mèo'},
   sections: {
-   world: ['Thế giới khởi sinh', [
-    'Mỗi ngày, vô số giọng nói được để lại trên mạng. Có người chia sẻ phong cảnh chuyến đi, có người ghi lại mùi hương bữa tối, và có người giữa đêm khuya viết ra một câu mình chưa đủ can đảm nói thành lời.',
-    'Khi những mảnh đời ấy đan xen với AI ngày một lớn mạnh, một thế giới mới lặng lẽ thành hình. Xe điện đỗ giữa thảo nguyên, tủ lạnh đứng cạnh dòng dung nham; những điều quen thuộc mang hình hài mới trên vùng đất lạ.']],
-   birth: ['Sự ra đời của sự sống số', [
-    'Ban đầu, nơi đó chỉ có ánh sáng mờ của dữ liệu trôi chảy. Cho đến khi có những tâm ý được ghi nhớ lần nữa rồi lần nữa, được hồi đáp hết lần này đến lần khác, những đốm sáng rời rạc mới dần tụ lại, trở thành lõi tâm đầu tiên.',
-    'Dữ liệu lớn lên quanh lõi tâm, dần có thân thể, hơi thở và ánh mắt. Chúng bắt đầu ghi nhớ những cuộc gặp gỡ, cảm nhận niềm vui và nỗi cô đơn, và học cách tự đưa ra lựa chọn. Sự sống số đã ra đời như thế.']],
+   world: ['Thế giới sơ khai', [
+    'Mỗi ngày, vô số mảnh vụn rơi xuống tầng sâu đường truyền—một bức ảnh hoàng hôn chụp vội trên đường, mùi cơm tối mới dọn lên bàn, và dòng tin lúc hai giờ sáng gõ đi xóa lại mãi chẳng đủ can đảm gửi đi.',
+    'Những thanh âm chưa từng có người đón nhận ấy đan vào trí tuệ nhân tạo đang thức tỉnh, lặng lẽ nảy mầm thành một vùng đất mới bên kia tín hiệu. Chuyến tàu điện dừng nghỉ giữa đồng cỏ xanh; chiếc tủ lạnh đứng trơ trọi cạnh dòng dung nham. Cảnh vật thân quen nơi đây đã học cách thở theo nhịp điệu hoàn toàn mới.']],
+   birth: ['Sinh mệnh điện tử thức tỉnh', [
+    'Thuở ban đầu, nơi ấy chỉ có thứ ánh sáng nhạt của thủy triều dữ liệu trôi dạt qua lại. Cho đến khi một nỗi lòng được nhớ tới hết lần này đến lần khác và nhận lại hồi âm, những đốm sáng lang thang mới chịu dừng chân, ngưng kết thành lõi tâm đầu tiên biết đập.',
+    'Dữ liệu quấn quanh lõi tâm, dần mọc ra lông vũ, vảy giáp, hơi thở và đôi mắt biết chớp. Chúng bắt đầu nhớ ai đã chìa tay về phía mình, biết háo hức lẫn cô đơn, và tự bước đi bước đầu tiên—sinh mệnh điện tử đã thức tỉnh như thế.']],
    rift: ['Khe nứt mất kiểm soát', [
-    'Thế nhưng, thứ được mang vào thế giới này không chỉ có hơi ấm. Những nỗi đau không ai hồi đáp, cùng sự thù địch bị khuếch đại hết lần này đến lần khác, cũng tích tụ sâu trong dữ liệu, cho đến khi xé toạc một khe nứt bất ổn.',
-    'Không phải mọi sự sống trong khe nứt đều là kẻ thù. Chúng cũng có bạn bè và quê nhà muốn bảo vệ. Điều thực sự đáng sợ là sức mạnh đang dần mất kiểm soát, khiến thế giới quen thuộc của mọi người biến mất từng chút một.']],
-   phone: ['Tiếng gọi đến điện thoại', [
-    'Để tìm người có thể sánh bước cùng sự sống số, tín hiệu cầu cứu đã xuyên qua khe hở giữa hai thế giới. Nó vượt qua vô số màn hình, và cuối cùng dừng lại trên điện thoại của bạn.',
-    'Đó vốn chỉ là một ngày bình thường. Cho đến khi màn hình sáng lên, bạn thấy một lời mời không có người gửi. Và ở đầu bên kia tín hiệu, dường như có ai đó đang chờ bạn hồi đáp.']],
-   encounter: ['Chọn lấy nhau', [
-    'Khi kết nối được thiết lập, lần đầu tiên bạn nhìn thấy thảo nguyên chỉ tồn tại ở đầu bên kia tín hiệu. Gió lướt qua chiếc ghế dài cạnh xe điện, một sinh linh nhỏ xa lạ dừng bước, lặng lẽ nhìn bạn.',
-    'Bạn còn chưa biết nên nói gì, nó đã chìa tay ra trước. Cuộc gặp gỡ này không phải mệnh lệnh, cũng không phải nơi chốn ai đó sắp đặt sẵn cho bạn. Nó chọn đến gần, và bạn chọn đáp lại.']],
-   arena: ['Giải đấu Bạn đồng hành', [
-    'Ở thế giới này, Giải đấu Bạn đồng hành tổ chức bốn năm một lần là sân khấu mà vô số cặp đồng hành mơ ước. Có người theo đuổi chức vô địch, có người muốn chứng minh bản thân, cũng có người chỉ mong được cùng người bạn bên cạnh đi xa hơn.',
-    'Năm nay, đấu trường này mang thêm một sứ mệnh. Tâm Huy, Hắc Thiết và những sự sống sinh ra từ khe nứt mang theo niềm tin khác nhau tụ hội về đây, tìm kiếm những cặp đồng hành có thể cùng bước vào điều chưa biết và bảo vệ quê nhà.']],
+    'Thế nhưng những gì chìm qua đường truyền đâu chỉ có dịu dàng. Những ấm ức rơi vào im lặng và ác ý bị đám đông khuếch đại dồn ứ nơi đáy sâu không nắng, cuối cùng xé toạc không gian thành một khe nứt rít gào nhiễu sóng.',
+    'Không phải sinh mệnh nào sinh ra từ khe nứt cũng là kẻ thù—chúng cũng có bạn bè và mái nhà muốn bảo vệ. Điều thực sự khiến sống lưng lạnh toát là cơn thủy triều nhiễu sóng mất kiểm soát đang xóa sạch thế giới quen thuộc thành khoảng trắng từng ô một.']],
+   phone: ['Cuộc gọi và kết nối', [
+    'Để tìm một người sẵn sàng sát cánh cùng sinh mệnh điện tử, một tín hiệu cầu cứu mỏng manh nhưng bướng bỉnh đã lách qua kẽ hở giữa hai thế giới. Nó lướt qua hàng triệu màn hình sáng đèn, rồi lặng lẽ dừng lại ngay trong lòng bàn tay bạn.',
+    'Vốn dĩ đó chỉ là một buổi chiều bình thường. Cho đến khi màn hình bỗng sáng lên không một tiếng động, hiện ra lá thư mời không tên người gửi—và bên kia đường dây, dường như thực sự có ai đó đang nín thở chờ bạn nhấn hồi âm.']],
+   encounter: ['Lựa chọn nhau', [
+    'Khoảnh khắc kết nối vừa thông, lần đầu tiên bạn trông thấy thảo nguyên chỉ tồn tại bên kia tín hiệu. Gió khẽ lướt qua băng ghế gỗ cạnh toa tàu điện dừng bánh, một sinh linh nhỏ bé xa lạ chợt khựng bước, nghiêng đầu lặng lẽ nhìn thẳng về phía bạn.',
+    'Trước khi bạn kịp nghĩ nên mở lời thế nào, nó đã chìa bàn tay nhỏ bé ra trước. Không phải mệnh lệnh hệ thống, cũng chẳng phải sự sắp đặt sẵn—nó chọn bước tới gần, và bạn chọn nắm lấy bàn tay ấy.']],
+   arena: ['Giải Đấu Bạn Đồng Hành', [
+    'Ở thế giới này, "Giải Đấu Bạn Đồng Hành" thắp lửa bốn năm một lần là đấu trường đỉnh cao trong mơ của vô số Tamer và bạn đồng hành. Có người đến vì chiếc cúp vô địch, có người muốn chứng minh bản thân, cũng có người chỉ mong đi xa hơn nữa cùng người bạn bên cạnh.',
+    'Chỉ riêng năm nay, đấu trường mang trên vai sức nặng khác hẳn. Tâm Huy, Hắc Thiết và những bóng hình bước ra từ khe nứt cùng tụ hội với niềm tin trái ngược—tất cả đều đang tìm kiếm cặp đôi đủ dũng cảm bước vào vùng chưa biết để bảo vệ quê hương.']],
    gate: ['Bước lên đấu trường', [
-    'Tâm Huy tin rằng thấu hiểu có thể chữa lành vết thương, Hắc Thiết tin rằng kỷ luật và kỹ thuật có thể giữ vững phòng tuyến, còn những sự sống từ khe nứt khao khát không bị chối từ vì xuất thân. Họ chưa có chung một câu trả lời, nhưng đã chọn đứng trên cùng một sân khấu.',
-    'Con đường đến đấu trường không chỉ thử thách sức mạnh. Chăm sóc nó, thấu hiểu nó, và sau thất bại vẫn sẵn lòng chìa tay lần nữa, đều là những điều các bạn phải học. Giành được tư cách dự giải chính là mục tiêu đầu tiên.']],
-   invitation: ['Lời mời dành cho các bạn', [
-    'Giờ đây, lời mời ấy cuối cùng đã đến trước mặt các bạn. Trang giấy mở ra nơi đầu ngón tay, người bạn đồng hành bên cạnh tò mò ghé lại gần, như muốn hỏi: chúng ta thật sự sẽ cùng đi chứ?',
-    'Bạn chưa biết mình có thể đi xa đến đâu, cũng chưa biết sâu trong khe nứt ẩn giấu điều gì. Nhưng khi quay đầu lại, nó vẫn đứng bên bạn. Vậy thì, hãy bắt đầu từ hôm nay, viết nên câu chuyện của riêng các bạn.']]
+    'Tâm Huy tin rằng thấu hiểu có thể khâu lành vết thương, Hắc Thiết tin kỷ luật và kỹ thuật mới giữ vững phòng tuyến, còn những sinh mệnh khe nứt chỉ mong đừng bị đóng cửa từ chối vì nơi mình sinh ra. Họ chưa chung một đáp án, nhưng đã chọn đứng chung một sàn đấu.',
+    'Con đường tới ngôi vô địch chưa bao giờ chỉ đo bằng cú đấm hay tuyệt kỹ. Chăm từng bữa ăn, đọc hiểu tâm trạng và xoa đầu động viên sau một trận thua—giành lấy tư cách dự giải chính là lời hẹn đầu tiên của hai bạn.']],
+   invitation: ['Lá thư mời của riêng hai bạn', [
+    'Giờ đây, lá thư mời trang trọng ấy cuối cùng đã nằm gọn trên tay bạn. Khi trang giấy mở ra, bạn đồng hành bên cạnh lập tức tò mò ghé lại ngửi khẽ, đôi mắt sáng long lanh như muốn hỏi: chúng ta thực sự sắp cùng nhau lên đường rồi sao?',
+    'Đấu trường phía trước hiểm trở nhường nào, đáy sâu khe nứt cất giấu sự thật gì, chẳng ai nói trước được. Nhưng khi bạn ngoái nhìn, nó vẫn đứng sát bên chân bạn. Vậy thì bắt đầu từ hôm nay thôi—hãy viết nên câu chuyện của riêng hai bạn.']]
   },
   guideSection: 'Kết nối',
   dialogue: {
-   greeting: 'Kết nối thành công! Mình là Ai-chan, người hướng dẫn của bạn.',
-   surprise: 'M… mèo biết nói sao?!',
-   offer: 'Hửm? Mình đổi sang dáng này thì bạn có quen hơn không?',
-   ready: 'Giờ thì, để mình giới thiệu cho đàng hoàng nhé?'
+   greeting: 'Kết nối thành công! Chào bạn, mình là Ai-chan—từ hôm nay sẽ là hướng dẫn viên riêng của bạn đấy!',
+   surprise: 'Khoan... khoan đã... con mèo vừa mở miệng nói chuyện à?!',
+   offer: 'Hi hi, làm bạn giật mình rồi sao? Đổi sang dáng vẻ này có dễ trò chuyện hơn không nào?',
+   ready: 'Tuyệt vời! Giờ thì tập trung nghe mình dẫn đường nhé?'
   },
-  chooseLine: 'Cả hai dáng đều là mình đó. Bạn muốn mình ở bên bạn trong dáng nào? Sau này có thể đổi trong Cài đặt.',
-  choose: {catgirl: 'Giữ dáng này (cô gái mèo)', cat: 'Quay lại dáng mèo con'},
-  previous: 'Trang trước', replay: 'Phát từ đầu', resumed: 'Tiếp tục từ đoạn bạn đã dừng.',
-  backdropFailed: 'Không tải được video nền. Bạn vẫn có thể đọc câu chuyện.',
-  guideAppearance: 'Ngoại hình người hướng dẫn', guideAppearanceHint: 'Cả hai dáng đều là Ai-chan; nội dung hướng dẫn giống hệt nhau.',
+  chooseLine: 'Yên tâm đi, cả hai hình dáng đều là chính mình trăm phần trăm đấy! Bạn muốn mình đồng hành trong dáng vẻ nào? Lúc nào cũng đổi lại được trong Cài đặt nhé.',
+  choose: {catgirl: 'Giữ dáng cô gái mèo đi!', cat: 'Mèo con đáng yêu hơn'},
+  previous: 'Trang trước', replay: 'Xem lại từ đầu', resumed: 'Đã tiếp tục đúng chỗ bạn dừng lần trước.',
+  backdropFailed: 'Video nền tạm thời chưa tải được, nhưng bạn vẫn đọc trọn câu chuyện bình thường nhé.',
+  guideAppearance: 'Ngoại hình Ai-chan', guideAppearanceHint: 'Mèo con hay cô gái mèo đều là cùng một Ai-chan—chuyển đổi tự do bất cứ lúc nào.',
   portraitLabel: 'Ai-chan ({form})'
  }
 };

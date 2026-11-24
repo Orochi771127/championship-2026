@@ -8,12 +8,12 @@ export const SYNC_LEVEL_COPY = deepFreeze({
   'zh-Hant': {
     'panel.kicker': '心核同步', 'panel.title': '同步經驗', 'level': 'Lv.{level}', 'level.max': 'Lv.MAX',
     'exp.gain': '+{exp} EXP', 'exp.next': '{exp} / {next}', 'levelUp': 'LEVEL UP!', 'levelUp.range': 'Lv.{before} → Lv.{after}',
-    'stat.vital': 'HP・TP +{value}%', 'overflow': '溢出經驗轉為高純度經驗結晶 +{value}', 'capped': 'Lv.{level} 上限・融合同種升星',
-    'breakthrough': '心核突破', 'cap': '本場同步上限 Lv.{level}', 'crown': '巔峰傳奇金冠',
-    'STRIKE': '攻擊曲線 +1 階・數據競技場戰力 +2%', 'GUARD': '防禦曲線 +1 階・數據競技場戰力 +2%',
-    'TEMPO': '速度曲線與另一條能力曲線各 +1 階・數據競技場戰力 +2%', 'SIGNATURE': '攻擊曲線再 +1 階・數據競技場戰力 +2%',
-    'CROWN': '四條能力曲線各 +1 階・金冠標記・溢出經驗轉結晶',
-    'STRIKE.title': 'Lv.10 攻勢突破', 'GUARD.title': 'Lv.20 守勢突破', 'TEMPO.title': 'Lv.30 節奏突破', 'SIGNATURE.title': 'Lv.40 必殺突破', 'CROWN.title': 'Lv.50 巔峰'
+    'stat.vital': 'HP・TP +{value}%', 'overflow': '滿級溢出經驗轉化為經驗結晶 +{value}', 'capped': 'Lv.{level} 上限・融合同種升星',
+    'breakthrough': '心核突破！', 'cap': '本戰同步上限 Lv.{level}', 'crown': '巔峰傳奇金冠',
+    'STRIKE': '攻擊潛力進階・數據競技場戰力 +2%', 'GUARD': '防禦潛力進階・數據競技場戰力 +2%',
+    'TEMPO': '速度與副屬性潛力進階・數據競技場戰力 +2%', 'SIGNATURE': '攻擊潛力再度進階・數據競技場戰力 +2%',
+    'CROWN': '全四維潛力進階・解鎖金冠・溢出經驗轉結晶',
+    'STRIKE.title': 'Lv.10 攻勢突破', 'GUARD.title': 'Lv.20 守勢突破', 'TEMPO.title': 'Lv.30 節奏突破', 'SIGNATURE.title': 'Lv.40 必殺突破', 'CROWN.title': 'Lv.50 巔峰共鳴'
   },
   en: {
     'panel.kicker': 'Core Sync', 'panel.title': 'Sync EXP', 'level': 'Lv.{level}', 'level.max': 'Lv.MAX',

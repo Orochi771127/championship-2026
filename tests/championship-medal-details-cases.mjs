@@ -51,8 +51,8 @@ test('invalid, coercible and tutorial IDs do not create medals', () => {
 });
 
 test('specific restrictions reflect individual qualification, with OR family choices and separate arenas', () => localeWork('zh-Hant', () => {
-  assert.match(fact(describeMedalDetails(21), 'participation'), /羽翼族.*龍族.*其中一種/);
-  assert.match(fact(describeMedalDetails(22), 'participation'), /機巧族.*幽冥族.*其中一種/);
+  assert.match(fact(describeMedalDetails(21), 'participation'), /羽翼族.*龍族.*其一/);
+  assert.match(fact(describeMedalDetails(22), 'participation'), /機巧族.*幽冥族.*其一/);
   assert.match(fact(describeMedalDetails(32), 'participation'), /覺醒體・二段\n限定裂隙陣營/);
   assert.match(fact(describeMedalDetails(34), 'teamSize'), /最多 1/);
   assert.match(fact(describeMedalDetails(34), 'participation'), /覺醒體・二段\n限定黑鐵陣營/);
@@ -61,11 +61,11 @@ test('specific restrictions reflect individual qualification, with OR family cho
     assert.ok(fact(describeMedalDetails(id), 'arena'));
   }
   assert.equal(fact(describeMedalDetails(43), 'participation'), '限定植物類型');
-  assert.equal(fact(describeMedalDetails(44), 'participation'), `限定以下種類：${formatList(['鐵球豆','小鋼豆','土豪豆'])}`);
+  assert.equal(fact(describeMedalDetails(44), 'participation'), `限定參賽種類：${formatList(['鐵球豆','小鋼豆','土豪豆'])}`);
   assert.match(fact(describeMedalDetails(48), 'participation'), /限定起源組：/);
   assert.match(fact(describeMedalDetails(49), 'participation'), /限定擺錘組：/);
-  for (const [id, count] of [[50, 3], [51, 5], [52, 10]]) assert.match(fact(describeMedalDetails(id), 'participation'), new RegExp(`每隻隊員至少轉生為蛋 ${count} 次`));
-  assert.match(fact(describeMedalDetails(53), 'participation'), /每隻隊員容量至少 24/);
+  for (const [id, count] of [[50, 3], [51, 5], [52, 10]]) assert.match(fact(describeMedalDetails(id), 'participation'), new RegExp(`每隻隊員須轉生為蛋至少 ${count} 次`));
+  assert.match(fact(describeMedalDetails(53), 'participation'), /每隻隊員容量須達 24 以上/);
   assert.equal(fact(describeMedalDetails(54), 'participation'), `限定${personalityName(7)}個性`);
   assert.equal(fact(describeMedalDetails(27), 'participation'), `限定${generationName(5)}`);
 }));
@@ -100,15 +100,15 @@ test('Moon Evolution ID57 shows actual costs and collection value, never invente
   assert.equal(fact(moon, 'arena'), '體育場');
   assert.equal(fact(moon, 'participation'), '無額外隊員限制');
   assert.deepEqual(moon.shopUnlocks, []); assert.deepEqual(moon.gateUnlocks, []);
-  assert.match(fact(moon, 'functions'), /計入頭銜收藏.*沒有獨立/);
-  assert.match(moon.notes.join('\n'), /不是可裝備稱號.*不會.*直接增加攻防/);
-  assert.match(moon.notes.join('\n'), /不是佩戴徽章或重看收藏的獎勵/);
+  assert.match(fact(moon, 'functions'), /頭銜殿堂.*無額外商店或狩獵場解鎖/);
+  assert.match(moon.notes.join('\n'), /純榮譽收藏品.*不提供額外攻防加成/);
+  assert.match(moon.notes.join('\n'), /賽後立即結算入帳/);
 }));
 
 test('Shop eligibility is not a free item, Gate opening is not a fee waiver', () => localeWork('zh-Hant', () => {
   const both = describeMedalDetails(7);
-  assert.match(fact(both, 'functions'), /可在商店購買：究極繩 α.*另行付費.*不會免費獲得/);
-  assert.match(fact(both, 'functions'), /開放狩獵場：雪之國度.*既有入場費規則/);
+  assert.match(fact(both, 'functions'), /奪冠上架商店：究極繩 α.*須於商店購買/);
+  assert.match(fact(both, 'functions'), /奪冠解鎖狩獵場：雪之國度.*照常收取出發入場費/);
   assert.equal(both.gateUnlocks[0].entranceFeeBits, 1200);
   assert.equal(both.shopUnlocks[0].unitPriceBits, 45000);
   assert.equal(both.shopUnlocks[0].unlockEvidence, 'VERIFIED_BINARY');

@@ -22,20 +22,20 @@ const SOURCE = [
 ];
 const COPY = {
   'zh-Hant': ({creature:c,tournament:t}) => [
-    `每四年舉辦一次的\n${t}。`, `取得參賽資格，\n正是身為真正${c}馴獸師的證明。`,
-    `而今天，你也迎來了\n參加${t}的機會。\n\n奪下勝利吧！\n${t}！`, '好像已經收到郵件了。'],
+    `每四年才燃起一次戰火的\n${t}。`, `親手握住入場資格的那一刻，\n才算是真正獨當一面的${c}馴獸師。`,
+    `而今天，命運的入場券\n終於在你的螢幕前亮了起來。\n\n去奪下桂冠吧！\n${t}！`, '叮咚——信箱裡躺著一封新郵件。'],
   en: ({creature:c,tournament:t}) => [
-    `Once every four years comes\nthe ${t}.`, `Earning a place in it\nis the proof of a true ${c} tamer.`,
-    `And today, your own chance\nto enter the ${t} has come.\n\nGo and win it!\nThe ${t}!`, 'Looks like some mail has arrived.'],
+    `Once every four years, the fires of\nthe ${t} ignite.`, `Holding that entry pass\nis the proof of a true ${c} tamer.`,
+    `And today, your own ticket\nlights up before your eyes.\n\nGo seize the crown!\nThe ${t}!`, 'Ding! A new letter just landed in your inbox.'],
   ja: ({creature:c,tournament:t}) => [
-    `4年に一度開催される\n${t}。`, `出場資格を得ることは、\n真の${c}テイマーである証。`,
-    `そして今日、あなたにも\n${t}に出場するチャンスが訪れた。\n\n勝利をつかめ！\n${t}！`, 'どうやらメールが届いたようだ。'],
+    `四年に一度、熱戦の火ぶたが切られる\n${t}。`, `出場資格をその手につかむことこそ、\n一人前の${c}テイマーである証。`,
+    `そして今日、運命の招待状が\nあなたの画面にともった。\n\n栄冠をつかみ取れ！\n${t}！`, 'ピコン――メールボックスに新着メールが届いている。'],
   th: ({creature:c,tournament:t}) => [
-    `${t}\nจัดขึ้นทุกสี่ปี`, `การได้สิทธิ์เข้าร่วมการแข่งขัน\nคือเครื่องพิสูจน์การเป็นผู้ฝึก${c}ที่แท้จริง`,
-    `และวันนี้ คุณเองก็ได้รับโอกาส\nเข้าร่วม${t}แล้ว\n\nคว้าชัยชนะมาให้ได้!\n${t}!`, 'ดูเหมือนจะมีจดหมายเข้ามาแล้ว'],
+    `ทุกสี่ปี เปลวไฟแห่ง\n${t} จะลุกโชนขึ้นอีกครั้ง`, `การคว้าสิทธิ์และได้สิทธิ์เข้าร่วมการแข่งขัน\nคือเครื่องพิสูจน์ของผู้ฝึก${c}ตัวจริง`,
+    `และวันนี้ บัตรเชิญแห่งโชคชะตา\nก็สว่างขึ้นตรงหน้าคุณแล้ว\n\nออกไปคว้ามงกุฎแชมป์กันเลย!\n${t}!`, 'ติ๊ง— มีจดหมายฉบับใหม่ส่งมาถึงกล่องข้อความแล้ว'],
   vi: ({creature:c,tournament:t}) => [
-    `${t}\nđược tổ chức bốn năm một lần.`, `Giành được quyền tham dự\nlà minh chứng của một huấn luyện viên ${c} thực thụ.`,
-    `Và hôm nay, bạn cũng đã có cơ hội\ntham gia ${t}.\n\nHãy giành chiến thắng!\n${t}!`, 'Có vẻ như thư đã đến.']
+    `Bốn năm một lần, ngọn lửa của\n${t} lại bùng cháy.`, `Nắm chắc tấm vé và giành quyền tham dự\nchính là minh chứng của một huấn luyện viên ${c} thực thụ.`,
+    `Và hôm nay, tấm vé định mệnh\nđã bừng sáng ngay trước mắt bạn.\n\nHãy đoạt lấy ngôi vương!\n${t}!`, 'Tinh— một bức thư mới vừa rơi vào hộp thư đến.']
 };
 export function openingStoryText(source) {
   const rawIndex = SOURCE.indexOf(source);
@@ -51,18 +51,18 @@ export function openingStoryText(source) {
 // onStart creates a save. Exact authored keys only; never rewrite saved names.
 const LETTER_COPY={
   'zh-Hant':({creature:c,egg:e})=>[
-    `從現在起，你也是${c}馴獸師了。\n與夥伴一起，朝冠軍賽優勝邁進吧！\n贈禮應該就快送到了。`,
-    `這顆${e}送給你。\n請替牠取個名字。`,`請替${e}取名字`],
+    `從今天起，你也是正式的${c}馴獸師了！\n和拍檔並肩作戰，向冠軍賽最高寶座衝刺吧！\n協會準備的見面禮應該馬上送到。`,
+    `這顆${e}就交給你保管囉！\n快幫裡頭的小傢伙取個響亮的名字吧。`,`幫${e}取個名字`],
   en:({creature:c,egg:e})=>[
-    `From today, you are a ${c} tamer too.\nTogether with your partner, aim to win the Championship!\nYour gift should arrive very soon.`,
-    `This ${e} is for you.\nPlease give it a name.`,`Name your ${e}`],
+    `Welcome aboard — from today on, you're an official ${c} tamer!\nTeam up with your partner and charge for the Championship crown!\nYour Association welcome gift should arrive any moment now.`,
+    `This ${e} is in your care now!\nGive the little one inside a name to remember.`,`Name your ${e}`],
   ja:({creature:c,egg:e})=>[
-    `今日からあなたも${c}テイマーです。\n仲間と一緒にチャンピオンシップ優勝を目指しましょう！\nプレゼントはもうすぐ届きます。`,
-    `この${e}をあなたに贈ります。\n名前を付けてください。`,`${e}に名前を付けてください`],
+    `今日からあなたも正式な${c}テイマーだよ！\nパートナーと力を合わせて、チャンピオンシップの頂点を目指そう！\n協会からのウェルカムギフトも、もうすぐ届くはず。`,
+    `この${e}をあなたに預けるね！\n中にいる小さな相棒に、ステキな名前を付けてあげよう。`,`${e}に名前を付けよう`],
   th:({creature:c,egg:e})=>[
-    `ตั้งแต่วันนี้ คุณก็เป็นผู้ฝึก${c}แล้ว\nร่วมมือกับคู่หูเพื่อคว้าแชมป์!\nของขวัญของคุณกำลังจะมาถึง`,
-    `${e}ใบนี้มอบให้คุณ\nโปรดตั้งชื่อให้มันด้วย`,`ตั้งชื่อ${e}ของคุณ`],
+    `ยินดีต้อนรับ! ตั้งแต่วันนี้ คุณคือผู้ฝึก${c}อย่างเป็นทางการแล้ว!\nจับมือคู่หูแล้วพุ่งทะยานสู่บัลลังก์แชมเปียนชิปกันเลย!\nของขวัญต้อนรับจากสมาคมกำลังจะส่งถึงมือเร็ว ๆ นี้`,
+    `ขอฝาก${e}ใบนี้ไว้ในความดูแลของคุณนะ!\nตั้งชื่อเท่ ๆ ให้เจ้าตัวน้อยข้างในกันเลย`,`ตั้งชื่อให้${e}`],
   vi:({creature:c,egg:e})=>[
-    `Từ hôm nay, bạn cũng là huấn luyện viên ${c}.\nHãy cùng đồng đội giành chức vô địch!\nMón quà của bạn sẽ sớm đến.`,
-    `${e} này dành cho bạn.\nHãy đặt tên cho nó.`,`Đặt tên cho ${e} của bạn`]
+    `Chào mừng gia nhập! Từ hôm nay bạn đã là huấn luyện viên ${c} chính thức!\nHãy kề vai cùng bạn đồng hành tiến thẳng tới ngôi vô địch!\nMón quà chào sân từ Hiệp hội sẽ tới tay bạn ngay thôi.`,
+    `Quả ${e} này giao lại cho bạn chăm sóc nhé!\nHãy đặt cho nhóc con bên trong một cái tên thật vang dội nào.`,`Đặt tên cho ${e}`]
 };

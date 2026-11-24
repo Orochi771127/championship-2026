@@ -69,6 +69,7 @@ export const STORY_VN_PART_THREE_CHAPTERS = {
     beats: [
       { type: "bg", id: "lobby", titleKey: "LOC_LOBBY" },
       nar("P3C1_N1"),
+      nar("P3C1_N1B"),
       say("aichan", "P3C1_A1", "happy"),
       { type: "enter", who: "partner", x: 0.35, from: "left", face: "right" },
       { type: "bubble", who: "partner", glyph: "spark" },
@@ -83,6 +84,7 @@ export const STORY_VN_PART_THREE_CHAPTERS = {
           { type: "file", key: "P3C1_NOTE" },
           say("aichan", "P3C1_A3", "shock"),
           say("aichan", "P3C1_A4", "sad"),
+          say("aichan", "P3C1_A4B", "sad"),
           say("partner", "P3C1_P3", "serious"),
           say("rival", "P3C1_R3", "serious"),
           say("aichan", "P3C1_A5", "serious")
@@ -99,6 +101,7 @@ export const STORY_VN_PART_THREE_CHAPTERS = {
     beats: [
       { type: "bg", id: "oldstreet", titleKey: "LOC_OLDSTREET" },
       nar("P3C2_N1"),
+      nar("P3C2_N1B"),
       say("partner", "P3C2_P1", "think"),
       say("aichan", "P3C2_A1", "talk"),
       { type: "explore", field: "oldstreet", titleKey: "LOC_OLDSTREET", goalKey: "P3C2_GOAL", count: ["shop", "mailbox", "clock"], start: [10, 88], spots: [
@@ -120,6 +123,7 @@ export const STORY_VN_PART_THREE_CHAPTERS = {
         ] }
       ] },
       nar("P3C2_N2"),
+      nar("P3C2_N2B"),
       { type: "end" }
     ]
   },
@@ -138,6 +142,7 @@ export const STORY_VN_PART_THREE_CHAPTERS = {
         { id: "f3", kind: "inspect", at: [64, 30], labelKey: "P3C3_L3", goal: true, requires: ["f1", "f2"], lockedKey: "P3C3_LOCK", end: true, beats: [{ type: "file", key: "P3C3_F3" }] }
       ] },
       say("aichan", "P3C3_A2", "sad"),
+      say("aichan", "P3C3_A2B", "sad"),
       say("aichan", "P3C3_A3", "sad"),
       { type: "enter", who: "partner", x: 0.4, from: "left", face: "right" },
       { type: "choice", key: "P3C3_CHOICE", options: [{ key: "P3C3_OPT_SELF", next: "self" }, { key: "P3C3_OPT_BACK", next: "back" }] },
@@ -148,6 +153,7 @@ export const STORY_VN_PART_THREE_CHAPTERS = {
       say("aichan", "P3C3_A_BACK", "happy"),
       { ...say("rival", "P3C3_R2", "calm"), label: "join" },
       nar("P3C3_N1"),
+      nar("P3C3_N1B"),
       { type: "end" }
     ]
   },
@@ -158,6 +164,7 @@ export const STORY_VN_PART_THREE_CHAPTERS = {
     beats: [
       { type: "bg", id: "forest", titleKey: "LOC_FOREST" },
       nar("P3C4_N1"),
+      nar("P3C4_N1B"),
       say("aichan", "P3C4_A1", "think"),
       { type: "explore", field: "forest", titleKey: "LOC_FOREST", goalKey: "P3C4_GOAL", count: ["w1", "w2", "w3"], start: [8, 88], spots: [
         { id: "w1", kind: "npc", who: "echoA", at: [24, 82], beats: [say("echoA", "P3C4_E1", "sad"), say("partner", "P3C4_P1", "happy"), { type: "fx", kind: "resonance" }, nar("P3C4_FADE")] },
@@ -178,6 +185,7 @@ export const STORY_VN_PART_THREE_CHAPTERS = {
         ] }
       ] },
       say("aichan", "P3C4_A3", "happy"),
+      say("aichan", "P3C4_A3B", "sad"),
       nar("P3C4_N2"),
       { type: "end" }
     ]
@@ -189,6 +197,7 @@ export const STORY_VN_PART_THREE_CHAPTERS = {
     beats: [
       { type: "bg", id: "lobby", titleKey: "LOC_LOBBY" },
       nar("P3C5_N1"),
+      nar("P3C5_N1B"),
       { type: "enter", who: "partner", x: 0.4, from: "left", face: "right" },
       say("partner", "P3C5_P1", "sad"),
       { type: "enter", who: "registrarMon", x: 0.74, from: "right", face: "left" },
@@ -218,12 +227,14 @@ export const STORY_VN_PART_THREE_CHAPTERS = {
     beats: [
       { type: "bg", id: "origin", titleKey: "LOC_ORIGIN" },
       nar("P3C6_N1"),
+      nar("P3C6_N1B"),
       { type: "explore", field: "origin", titleKey: "LOC_ORIGIN", goalKey: "P3C6_GOAL", count: ["gate", "bowl"], start: [8, 88], spots: [
         { id: "gate", kind: "inspect", at: [20, 46], labelKey: "P3C6_L_GATE", beats: [nar("P3C6_GATE"), say("partner", "P3C6_P_GATE", "sad")] },
         { id: "bowl", kind: "inspect", at: [67, 62], labelKey: "P3C6_L_BOWL", beats: [nar("P3C6_BOWL")] },
         { id: "aichan", kind: "npc", who: "aichan", at: [54, 80], goal: true, after: ["gate", "bowl"], end: true, beats: [
           say("aichan", "P3C6_A1", "sad"),
           say("aichan", "P3C6_A2", "sad"),
+          say("aichan", "P3C6_A2B", "sad"),
           say("partner", "P3C6_P1", "serious")
         ] }
       ] },
@@ -251,6 +262,7 @@ export const STORY_VN_PART_THREE_CHAPTERS = {
       { type: "act", who: "partner", action: "cheer" },
       say("partner", "P3C6_P3", "happy"),
       nar("P3C6_N2"),
+      nar("P3C6_N2B"),
       { type: "end" }
     ]
   },

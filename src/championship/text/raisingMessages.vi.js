@@ -63,7 +63,7 @@ export const SEQUENTIAL = Object.freeze([
   "Kiên trì nuôi dưỡng qua nhiều thế hệ cũng là cách để trở nên mạnh mẽ hơn. Đôi khi thất bại cũng đừng vội nản lòng.",
   "Bạn đồng hành có sở thích về môi trường chuồng khác nhau, một số cá thể thích nơi tối tăm và ẩm ướt.",
   "Giữa các chủng tộc có mối quan hệ tương khắc lẫn nhau, tùy theo thuộc tính mà có sự khắc chế.",
-  "Khi bạn đồng hành không nghe lời, bạn có thể nhấn giữ phím L hoặc R rồi chạm để hỗ trợ tóm lấy.",
+  "Nếu bạn đồng hành bướng bỉnh không chịu đi, hãy nhấn giữ ổn định bằng công cụ bàn tay cho tới khi nhấc nó lên được nhé!",
   "Các bạn đồng hành hợp tính nhau sẽ cùng cất tiếng hát để vui vẻ giải tỏa căng thẳng."
 ]);
 

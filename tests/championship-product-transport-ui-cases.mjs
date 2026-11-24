@@ -47,7 +47,7 @@ test('password UI permits full v2 paste/generation and labels new-build requirem
   for(const input of fields)assert.ok(input.maxLength>=v2password.length);
   f.paste(v2password);f.find(n=>n.dataset.action==='paste-password').click();await tick();
   assert.equal(fields[0].value,v2password);assert.equal(f.find(n=>n.dataset.codeVersionNotice==='password').hidden,false);
-  assert.match(f.find(n=>n.dataset.codeVersionNotice==='password').textContent,/舊版無法使用/);
+  assert.match(f.find(n=>n.dataset.codeVersionNotice==='password').textContent,/須由新版遊戲讀取/);
   f.find(n=>n.dataset.instanceId==='one').click();f.find(n=>n.dataset.action==='create-password').click();await tick();
   assert.equal(f.find(n=>n.tagName==='INPUT'&&n.readOnly).value,v2password);assert.equal(fields[0].value,v2password);
   fields[0].value='OLD';fields[0].dispatchEvent(new Event('input'));assert.equal(f.find(n=>n.dataset.codeVersionNotice==='password').hidden,true);
@@ -68,14 +68,14 @@ test('link host can explicitly choose v2 for a native team; changing the choice 
  }finally{f.view.dispose();}
 });
 test('unsupported version, catalog and readiness reasons receive specific user-facing explanations',async()=>{
- for(const [reason,needle] of [['PRODUCT_BATTLE_TRANSPORT_CATALOG_MISMATCH',/角色目錄版本不一致/],['PRODUCT_BATTLE_TRANSPORT_SPECIES_NOT_READY',/尚未完成/],['LINK_BATTLE_V2_INVITE_REQUIRED',/主機勾選第 2 版/]]){
+ for(const [reason,needle] of [['PRODUCT_BATTLE_TRANSPORT_CATALOG_MISMATCH',/雙方遊戲版本不同步/],['PRODUCT_BATTLE_TRANSPORT_SPECIES_NOT_READY',/尚未開放/],['LINK_BATTLE_V2_INVITE_REQUIRED',/房主勾選「V2 邀請」/]]){
   assert.match(battleTransportErrorMessage(reason,'generic'),needle);
  }
  const f=await setup('PASSWORD_BATTLE',{onEnter:async()=>({ok:false,reason:'PRODUCT_BATTLE_TRANSPORT_CATALOG_MISMATCH',message:'generic'})});
  try{
   for(const input of f.all().filter(n=>n.tagName==='INPUT'&&!n.readOnly)){input.value=v2password;input.dispatchEvent(new Event('input'));}
   f.find(n=>n.textContent==='開始密碼對戰').click();await tick();
-  assert.match(f.find(n=>n.dataset.reason==='PRODUCT_BATTLE_TRANSPORT_CATALOG_MISMATCH').textContent,/角色目錄版本不一致/);
+  assert.match(f.find(n=>n.dataset.reason==='PRODUCT_BATTLE_TRANSPORT_CATALOG_MISMATCH').textContent,/雙方遊戲版本不同步/);
  }finally{f.view.dispose();}
 });
 

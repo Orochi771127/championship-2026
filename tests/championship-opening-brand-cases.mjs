@@ -57,16 +57,16 @@ test('five-language opening gift letters and egg naming use central terms withou
   assert.equal(openingStoryText('數碼獸小蛋'),'數碼獸小蛋');
  }
  setLocale('zh-Hant');assert.equal(setLocale('unsupported'),false);
- assert.equal(openingStoryText(egg),'這顆培育蛋送給你。\n請替牠取個名字。');
- assert.equal(openingStoryText(tamer).split('\n')[0],'從現在起，你也是拍檔馴獸師了。');
+ assert.equal(openingStoryText(egg),'這顆培育蛋就交給你保管囉！\n快幫裡頭的小傢伙取個響亮的名字吧。');
+ assert.equal(openingStoryText(tamer).split('\n')[0],'從今天起，你也是正式的拍檔馴獸師了！');
  assert.equal(getOpeningBrandTerms('unsupported').egg,'培育蛋');
  }finally{setLocale('zh-Hant');}
 });
 test('the approved zh-Hant story is used verbatim, page by page, in the package order',()=>{
  setLocale('zh-Hant');
  const pages=openingPrologueChapter().beats.map(beat=>resolveOpeningStoryText(beat.text));
- assert.equal(pages[0],'每天，都有無數聲音留在網路上。有人分享旅途的風景，有人記下晚餐的香氣，也有人在深夜，寫下一句還沒勇氣說出口的話。');
- assert.equal(pages[8],'連線成功！我是愛醬，你的導覽員。');assert.equal(pages[9],'貓……貓居然會說話？！');
- assert.equal(pages[10],'嗯？換成這個樣子，你會比較習慣嗎？');assert.equal(pages[12],'現在，可以好好聽我介紹了嗎？');
- assert.equal(pages.at(-1),'你還不知道自己能走多遠，也不知道裂隙深處藏著什麼。但當你轉過頭，牠依然站在身邊。那麼，就從今天開始，寫下屬於你們的故事吧。');
+ assert.equal(pages[0],'每天都有數不清的片段掉進網線深處——旅途中隨手拍下的暮色、剛端上桌的晚飯香氣，還有凌晨兩點反覆打完又刪掉、始終沒勇氣寄出的那句話。');
+ assert.equal(pages[8],'連線接通！嗨嗨，我是愛醬，從今天起就是你的專屬導覽員喔！');assert.equal(pages[9],'等、等等……貓居然開口說話了？！');
+ assert.equal(pages[10],'哎呀，嚇到你啦？換成這個樣子，會不會比較好講話呢？');assert.equal(pages[12],'嘿嘿，那現在可以專心聽我帶路了嗎？');
+ assert.equal(pages.at(-1),'前方的賽場有多艱險、裂隙深處藏著什麼真相，誰都說不準。但當你偏過頭，牠依然牢牢守在你腳邊。那麼——就從今天起，去寫下只屬於你們的故事吧。');
 });
