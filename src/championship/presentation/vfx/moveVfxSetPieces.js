@@ -91,11 +91,13 @@ const DIRECTIONAL_PIECES = new Set([
   'knives', 'vines', 'muzzle', 'flurry-leaf', 'flurry-feather', 'flurry-shard', 'flurry-bubble',
   // 00GameDevs MIT directional 3D->PixelFX hero pieces (right-facing 0 rad, upright flip when aiming left)
   'gd-radiant-beam', 'gd-arc-ray', 'gd-ice-lance', 'gd-lightning-arrow', 'gd-fireball',
-  'gd-shadow-glaive', 'gd-azure-sweep', 'gd-sword-wave'
+  'gd-shadow-glaive', 'gd-azure-sweep', 'gd-sword-wave',
+  'gd-charged-beam', 'gd-venom-stream', 'gd-soul-siphon'
 ]);
 
-/** 00GameDevs MIT 3D->PixelFX Batch 1 hero pieces & their instant pixelfx fallbacks before lazy load finishes. */
+/** 00GameDevs MIT 3D->PixelFX Batch 1 + Batch 2 (48) hero pieces & their instant pixelfx fallbacks before lazy load finishes. */
 export const MOVE_VFX_00GAMEDEVS_FALLBACK = Object.freeze({
+  // Batch 1 (24 core archetype animations)
   'gd-thousand-slashes': 'cross',
   'gd-azure-sweep': 'slash',
   'gd-dimensional-rend': 'iai',
@@ -119,7 +121,32 @@ export const MOVE_VFX_00GAMEDEVS_FALLBACK = Object.freeze({
   'gd-ice-pillar': 'quake',
   'gd-thorn-crown': 'vines',
   'gd-prism-parry': 'ring-pop',
-  'gd-healing-field': 'heal'
+  'gd-healing-field': 'heal',
+  // Batch 2 (24 elemental ultimates, combo vortexes, beams, traps, buffs & shields)
+  'gd-hellfire-pillar': 'drop',
+  'gd-dark-pillar': 'vortex',
+  'gd-dark-lightning': 'bolt',
+  'gd-starblade-cataclysm': 'lance',
+  'gd-starblade-explosion': 'core',
+  'gd-golden-chain-rain': 'rain',
+  'gd-arcane-arrow-rain': 'rain',
+  'gd-magma-fissure': 'quake',
+  'gd-ground-freeze': 'mark-frost',
+  'gd-ice-shatter': 'flurry-shard',
+  'gd-energy-burst': 'roar',
+  'gd-fire-vortex': 'vortex',
+  'gd-wind-vortex': 'vortex',
+  'gd-dust-devil': 'vortex',
+  'gd-charged-beam': 'lance',
+  'gd-venom-stream': 'stream',
+  'gd-soul-siphon': 'wisps',
+  'gd-binding-curse': 'eye',
+  'gd-venom-pool': 'mist',
+  'gd-burning-ground': 'core',
+  'gd-frost-field': 'mark-frost',
+  'gd-verdant-heal': 'heal',
+  'gd-revival-bloom': 'buff-atk',
+  'gd-prism-guard': 'buff-def'
 });
 export const MOVE_VFX_00GAMEDEVS_KEYS = Object.freeze(Object.keys(MOVE_VFX_00GAMEDEVS_FALLBACK));
 
@@ -160,14 +187,19 @@ const baked3d = {}, groupLoads = new Map();
 const lookOf = name => baked?.[name] ?? baked00Gd?.[name] ?? baked3d[name] ?? null;
 const is3d = name => typeof name === 'string' && name.startsWith('3d-');
 const is00Gd = name => typeof name === 'string' && name.startsWith('gd-');
-/** Load the 00GameDevs MIT 3D->PixelFX Batch 1 sprite sheets on demand (lazy, zero boot cost). */
+/** Load the 00GameDevs MIT 3D->PixelFX Batch 1 + Batch 2 sprite sheets on demand (lazy, zero boot cost). */
 export function loadMoveVfx00GameDevsSprites() {
-  baked00GdPromise ??= import('./moveVfx00GameDevsSprites.js')
-    .then(m => { baked00Gd = m.MOVE_VFX_00GAMEDEVS_SPRITES; return baked00Gd; })
-    .catch(() => null);
+  baked00GdPromise ??= Promise.all([
+    import('./moveVfx00GameDevsSprites.js').then(m => m.MOVE_VFX_00GAMEDEVS_SPRITES).catch(() => null),
+    import('./moveVfx00GameDevsBatch2Sprites.js').then(m => m.MOVE_VFX_00GAMEDEVS_BATCH2_SPRITES).catch(() => null)
+  ]).then(([b1, b2]) => {
+    if (!b1 && !b2) return null;
+    baked00Gd = Object.freeze({ ...(b1 ?? {}), ...(b2 ?? {}) });
+    return baked00Gd;
+  });
   return baked00GdPromise;
 }
-/** Resolve a 00GameDevs MIT hero animation upgrade for a move archetype / piece + element palette. */
+/** Resolve a 00GameDevs MIT hero animation upgrade for a move archetype / piece + element palette (48 pieces across Batch 1 + 2). */
 export function resolve00GameDevsPiece({ piece = null, archetype = null, paletteKey = 'fire', tier = 'standard' } = {}) {
   let candidate = null;
   if (archetype) {
@@ -176,15 +208,30 @@ export function resolve00GameDevsPiece({ piece = null, archetype = null, palette
       case 'SHADOW_BACKSTAB': candidate = 'gd-dimensional-rend'; break;
       case 'UTURN_STRIKE': candidate = 'gd-sword-wave'; break;
       case 'MULTI_DASH': candidate = 'gd-shadow-glaive'; break;
-      case 'STREAM_BEAM': candidate = (paletteKey === 'thunder' || paletteKey === 'wind' || paletteKey === 'dark') ? 'gd-arc-ray' : 'gd-radiant-beam'; break;
+      case 'STREAM_BEAM':
+        candidate = tier === 'ultimate'
+          ? ((paletteKey === 'light' || paletteKey === 'fire') ? 'gd-starblade-cataclysm' : 'gd-charged-beam')
+          : (paletteKey === 'toxic' || paletteKey === 'poison') ? 'gd-venom-stream'
+            : paletteKey === 'dark' ? 'gd-soul-siphon'
+              : (paletteKey === 'thunder' || paletteKey === 'wind') ? 'gd-arc-ray'
+                : 'gd-radiant-beam';
+        break;
       case 'METEOR_RAIN':
-        candidate = paletteKey === 'thunder' ? 'gd-thunder-strike'
-          : (paletteKey === 'ice' || paletteKey === 'water') ? 'gd-frost-lance-rain'
-            : (paletteKey === 'fire' || paletteKey === 'earth') ? 'gd-meteor-strike'
-              : 'gd-celestial-rain';
+        candidate = paletteKey === 'dark' ? (tier === 'ultimate' ? 'gd-dark-pillar' : 'gd-dark-lightning')
+          : paletteKey === 'thunder' ? 'gd-thunder-strike'
+            : (paletteKey === 'ice' || paletteKey === 'water') ? 'gd-frost-lance-rain'
+              : paletteKey === 'fire' ? (tier === 'ultimate' ? 'gd-hellfire-pillar' : 'gd-meteor-strike')
+                : paletteKey === 'earth' ? 'gd-meteor-strike'
+                  : paletteKey === 'metal' ? 'gd-golden-chain-rain'
+                    : (paletteKey === 'wind' || paletteKey === 'nature') ? 'gd-arcane-arrow-rain'
+                      : 'gd-celestial-rain';
         break;
       case 'VORTEX_PULL':
-        candidate = (paletteKey === 'dark' || paletteKey === 'light' || paletteKey === 'psychic') ? 'gd-astral-vortex' : 'gd-lightning-tornado';
+        candidate = paletteKey === 'fire' ? 'gd-fire-vortex'
+          : (paletteKey === 'wind' || paletteKey === 'nature') ? 'gd-wind-vortex'
+            : (paletteKey === 'earth' || paletteKey === 'metal') ? 'gd-dust-devil'
+              : paletteKey === 'thunder' ? 'gd-lightning-tornado'
+                : 'gd-astral-vortex';
         break;
       case 'DRAG_WAVE':
         candidate = (paletteKey === 'fire' || paletteKey === 'earth' || paletteKey === 'dark') ? 'gd-flame-surge' : 'gd-tidal-surge';
@@ -192,18 +239,40 @@ export function resolve00GameDevsPiece({ piece = null, archetype = null, palette
       case 'SHOCKWAVE_RING':
       case 'LEAP_SLAM':
       case 'GRAB_SLAM':
-        candidate = 'gd-shockwave'; break;
-      case 'GUARD_BREAK_SLAM':
-      case 'TELEKINESIS_SLAM':
-        candidate = 'gd-darkchain-burst'; break;
-      case 'BURROW_AMBUSH':
-      case 'GROUND_SPIKES':
-        candidate = (paletteKey === 'nature' || paletteKey === 'wood' || paletteKey === 'dark') ? 'gd-thorn-crown' : 'gd-ice-pillar';
+        candidate = paletteKey === 'ice' ? 'gd-ice-shatter'
+          : paletteKey === 'thunder' ? 'gd-energy-burst'
+            : (paletteKey === 'fire' && tier === 'ultimate') ? 'gd-starblade-explosion'
+              : (paletteKey === 'fire' || paletteKey === 'earth') ? 'gd-magma-fissure'
+                : 'gd-shockwave';
         break;
-      case 'PROTECT_COUNTER': candidate = 'gd-prism-parry'; break;
+      case 'GUARD_BREAK_SLAM':
+        candidate = paletteKey === 'dark' ? 'gd-dark-pillar'
+          : (paletteKey === 'light' || paletteKey === 'fire') ? 'gd-starblade-explosion'
+            : 'gd-darkchain-burst';
+        break;
+      case 'TELEKINESIS_SLAM':
+        candidate = 'gd-binding-curse'; break;
+      case 'BURROW_AMBUSH':
+        candidate = paletteKey === 'fire' ? 'gd-hellfire-pillar'
+          : paletteKey === 'ice' ? 'gd-ice-pillar'
+            : (paletteKey === 'nature' || paletteKey === 'wood') ? 'gd-thorn-crown'
+              : 'gd-magma-fissure';
+        break;
+      case 'GROUND_SPIKES':
+        candidate = paletteKey === 'fire' ? 'gd-burning-ground'
+          : paletteKey === 'ice' ? 'gd-ground-freeze'
+            : (paletteKey === 'dark' || paletteKey === 'toxic') ? 'gd-venom-pool'
+              : (paletteKey === 'nature' || paletteKey === 'wood') ? 'gd-thorn-crown'
+                : 'gd-ice-pillar';
+        break;
+      case 'PROTECT_COUNTER':
+        candidate = piece === 'buff-def' ? 'gd-prism-guard' : 'gd-prism-parry'; break;
       case 'RECOVERY_SUPPORT':
-      case 'SELF_BUFF': candidate = 'gd-healing-field'; break;
-      case 'HOMING_ORB': candidate = 'gd-fireball'; break;
+        candidate = paletteKey === 'nature' ? 'gd-verdant-heal' : 'gd-healing-field'; break;
+      case 'SELF_BUFF':
+        candidate = piece === 'buff-def' ? 'gd-prism-guard' : 'gd-revival-bloom'; break;
+      case 'HOMING_ORB':
+        candidate = paletteKey === 'dark' ? 'gd-soul-siphon' : 'gd-fireball'; break;
       case 'VOLLEY_BARRAGE':
         candidate = (paletteKey === 'thunder' || paletteKey === 'light') ? 'gd-lightning-arrow' : 'gd-ice-lance';
         break;
@@ -211,19 +280,34 @@ export function resolve00GameDevsPiece({ piece = null, archetype = null, palette
     }
   }
   if (!candidate && piece) {
-    if (piece === 'drop' || piece === 'drop-bomb' || piece === 'drop-rock') candidate = 'gd-meteor-strike';
-    else if (piece === 'bolt') candidate = 'gd-thunder-strike';
-    else if (piece === 'rain') candidate = (paletteKey === 'ice' || paletteKey === 'water') ? 'gd-frost-lance-rain' : 'gd-celestial-rain';
-    else if (piece === 'vortex') candidate = (paletteKey === 'fire' || paletteKey === 'thunder' || paletteKey === 'wind') ? 'gd-lightning-tornado' : 'gd-astral-vortex';
-    else if (piece === 'quake') candidate = 'gd-shockwave';
+    if (piece === 'drop' || piece === 'drop-bomb' || piece === 'drop-rock') candidate = (paletteKey === 'dark') ? 'gd-dark-pillar' : 'gd-meteor-strike';
+    else if (piece === 'bolt') candidate = paletteKey === 'dark' ? 'gd-dark-lightning' : 'gd-thunder-strike';
+    else if (piece === 'rain') candidate = (paletteKey === 'ice' || paletteKey === 'water') ? 'gd-frost-lance-rain'
+      : paletteKey === 'metal' ? 'gd-golden-chain-rain'
+        : (paletteKey === 'wind' || paletteKey === 'nature') ? 'gd-arcane-arrow-rain' : 'gd-celestial-rain';
+    else if (piece === 'vortex') candidate = paletteKey === 'fire' ? 'gd-fire-vortex'
+      : paletteKey === 'wind' ? 'gd-wind-vortex'
+        : paletteKey === 'earth' ? 'gd-dust-devil'
+          : paletteKey === 'thunder' ? 'gd-lightning-tornado' : 'gd-astral-vortex';
+    else if (piece === 'quake') candidate = paletteKey === 'ice' ? 'gd-ice-shatter'
+      : (paletteKey === 'fire' || paletteKey === 'earth') ? 'gd-magma-fissure' : 'gd-shockwave';
+    else if (piece === 'roar') candidate = 'gd-energy-burst';
     else if (piece === 'wave') candidate = (paletteKey === 'fire' || paletteKey === 'earth') ? 'gd-flame-surge' : 'gd-tidal-surge';
     else if (piece === 'iai') candidate = 'gd-dimensional-rend';
     else if (piece === 'cross' || piece === 'spin') candidate = tier === 'ultimate' ? 'gd-thousand-slashes' : 'gd-azure-sweep';
     else if (piece === 'slash' || piece === 'scissor') candidate = 'gd-azure-sweep';
-    else if (piece === 'lance' || piece === 'stream') candidate = (paletteKey === 'thunder' || paletteKey === 'dark') ? 'gd-arc-ray' : 'gd-radiant-beam';
-    else if (piece === 'core') candidate = 'gd-fireball';
+    else if (piece === 'lance' || piece === 'stream') candidate = tier === 'ultimate' ? 'gd-charged-beam'
+      : (paletteKey === 'toxic' || paletteKey === 'poison') ? 'gd-venom-stream'
+        : (paletteKey === 'thunder' || paletteKey === 'dark') ? 'gd-arc-ray' : 'gd-radiant-beam';
+    else if (piece === 'core') candidate = tier === 'ultimate' ? 'gd-starblade-explosion' : 'gd-fireball';
+    else if (piece === 'eye') candidate = 'gd-binding-curse';
+    else if (piece === 'mist' || piece === 'splat') candidate = 'gd-venom-pool';
+    else if (piece === 'wisps') candidate = paletteKey === 'dark' ? 'gd-soul-siphon' : 'gd-burning-ground';
+    else if (piece === 'mark-frost') candidate = 'gd-frost-field';
     else if (piece === 'vines') candidate = 'gd-thorn-crown';
-    else if (piece === 'heal') candidate = 'gd-healing-field';
+    else if (piece === 'heal') candidate = paletteKey === 'nature' ? 'gd-verdant-heal' : 'gd-healing-field';
+    else if (piece === 'buff-def') candidate = 'gd-prism-guard';
+    else if (piece === 'buff-atk' || piece === 'buff-spd' || piece === 'cleanse') candidate = 'gd-revival-bloom';
   }
   if (candidate && baked00Gd?.[candidate]) return candidate;
   return piece;

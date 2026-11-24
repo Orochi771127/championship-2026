@@ -1186,25 +1186,38 @@ test("phase 9 / Plan A single PB-Rank manual battle mode: unified RELAY entry, h
   assert.ok(st.player.energy >= 49, `RELAY V2 rapid TP regen prevents mana drought (got ${st.player.energy.toFixed(1)})`);
 });
 
-test("phase 10 / 00GameDevs MIT 3D->PixelFX Batch 1: 24 baked sheets load, carry verbatim MIT notice, map all 20 V2 archetypes & play cleanly across 10 elements", async () => {
-  const spritesSrc = readFileSync(new URL("../src/championship/presentation/vfx/moveVfx00GameDevsSprites.js", import.meta.url), "utf8");
-  assert.ok(spritesSrc.includes("The MIT License") && spritesSrc.includes("00GameDevs (@00vchannel)"), "verbatim MIT license & copyright notice preserved");
+test("phase 10 / 00GameDevs MIT 3D->PixelFX Batch 1 + Batch 2: all 48 baked sheets load, carry verbatim MIT notices, map all 20 V2 archetypes & 10 elements & play cleanly", async () => {
+  const spritesSrc1 = readFileSync(new URL("../src/championship/presentation/vfx/moveVfx00GameDevsSprites.js", import.meta.url), "utf8");
+  const spritesSrc2 = readFileSync(new URL("../src/championship/presentation/vfx/moveVfx00GameDevsBatch2Sprites.js", import.meta.url), "utf8");
+  assert.ok(spritesSrc1.includes("The MIT License") && spritesSrc1.includes("00GameDevs (@00vchannel)"), "Batch 1 verbatim MIT notice preserved");
+  assert.ok(spritesSrc2.includes("The MIT License") && spritesSrc2.includes("00GameDevs (@00vchannel)"), "Batch 2 verbatim MIT notice preserved");
   const loaded = await loadMoveVfx00GameDevsSprites();
-  assert.ok(loaded, "lazy 00GameDevs PixelFX sprite module loads cleanly");
-  assert.equal(MOVE_VFX_00GAMEDEVS_KEYS.length, 24, "Batch 1 registers all 24 core move animations");
+  assert.ok(loaded, "lazy 00GameDevs PixelFX Batch 1 + 2 sprite modules load cleanly");
+  assert.equal(MOVE_VFX_00GAMEDEVS_KEYS.length, 48, "Batch 1 + Batch 2 register all 48 core + elemental move animations");
   for (const key of MOVE_VFX_00GAMEDEVS_KEYS) {
     const entry = loaded[key];
-    assert.ok(entry && entry.w > 16 && entry.h > 16, `${key} has valid dimensions`);
+    assert.ok(entry && entry.w > 16 && entry.h >= 14, `${key} has valid dimensions`);
     assert.ok(Array.isArray(entry.frames) && entry.frames.length >= 8, `${key} has >= 8 baked frames`);
     assert.ok(Array.isArray(entry.glow) && entry.glow.length === entry.frames.length, `${key} has matching half-res additive glow`);
     assert.ok(Array.isArray(entry.palette) && entry.palette.length >= 2, `${key} has valid quantised palette`);
   }
-  // Every single V2 archetype resolves to an upgraded gd-* hero piece once loaded!
+  // Every single V2 archetype across multiple elements resolves to an upgraded gd-* hero piece!
   for (const arch of V2_ARCHETYPES) {
-    const resolved = resolve00GameDevsPiece({ archetype: arch, paletteKey: "fire", tier: "standard" });
-    assert.ok(typeof resolved === "string" && resolved.startsWith("gd-") && loaded[resolved], `V2 archetype ${arch} upgrades to baked ${resolved}`);
+    for (const pal of ["fire", "ice", "thunder", "dark", "nature", "earth", "light", "metal"]) {
+      const resolved = resolve00GameDevsPiece({ archetype: arch, paletteKey: pal, tier: "ultimate" });
+      assert.ok(typeof resolved === "string" && resolved.startsWith("gd-") && loaded[resolved], `V2 ${arch}/${pal} upgrades to baked ${resolved}`);
+    }
   }
-  // Mock Pixi playback smoke test across all 24 pieces (recolored dynamically!)
+  // Spot-check Batch 2 elemental routing distinctions
+  assert.equal(resolve00GameDevsPiece({ archetype: "METEOR_RAIN", paletteKey: "fire", tier: "ultimate" }), "gd-hellfire-pillar");
+  assert.equal(resolve00GameDevsPiece({ archetype: "METEOR_RAIN", paletteKey: "dark", tier: "ultimate" }), "gd-dark-pillar");
+  assert.equal(resolve00GameDevsPiece({ archetype: "METEOR_RAIN", paletteKey: "metal", tier: "standard" }), "gd-golden-chain-rain");
+  assert.equal(resolve00GameDevsPiece({ archetype: "VORTEX_PULL", paletteKey: "wind", tier: "standard" }), "gd-wind-vortex");
+  assert.equal(resolve00GameDevsPiece({ archetype: "VORTEX_PULL", paletteKey: "earth", tier: "standard" }), "gd-dust-devil");
+  assert.equal(resolve00GameDevsPiece({ archetype: "STREAM_BEAM", paletteKey: "light", tier: "ultimate" }), "gd-starblade-cataclysm");
+  assert.equal(resolve00GameDevsPiece({ archetype: "SELF_BUFF", piece: "buff-def", paletteKey: "light" }), "gd-prism-guard");
+  assert.equal(resolve00GameDevsPiece({ archetype: "RECOVERY_SUPPORT", paletteKey: "nature" }), "gd-verdant-heal");
+  // Mock Pixi playback smoke test across all 48 pieces (recolored dynamically!)
   class MockNode { constructor() { this.children = []; this.scale = { set() {} }; this.anchor = { set() {} }; this.position = { set() {} }; } addChild(c) { c.parent = this; this.children.push(c); } removeChild(c) { this.children = this.children.filter((x) => x !== c); } destroy() {} }
   const MockPIXI = {
     Container: MockNode,

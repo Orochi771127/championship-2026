@@ -275,9 +275,11 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       holdMs = Math.max(holdMs, 65);
       stats.ults++;
     },
-    /** Move #11: True 3D Rising Spiral Power-Up Spire & Emerald Heal Sanctuary Pillar! */
+    /** Move #11: 00GameDevs 3D->PixelFX Revival Bloom / Prism Guard / Verdant Heal (fallback: volumetric aura!) */
     buff({ x, y, paletteKey = "light", piece = "buff-atk" }) {
       const bPal = paletteKey || "light";
+      const gdBuff = resolve00GameDevsPiece({ archetype: "SELF_BUFF", piece, paletteKey: bPal });
+      if (gdBuff && gdBuff.startsWith("gd-") && playPiece(pieces, gdBuff, { x, y: y + 10, palette: paletteFor(bPal), scale: 1.15, groundY: y + 16 })) return;
       const fx = volCache.spawn({
         layer: shotLayer, keyPrefix: `aura|buff|${bPal}`, width: 128, height: 136, frameCount: 8,
         directional: false, anchorX: 0.5, anchorY: 0.78, x, y: y + 14, durationSec: 0.65, scale: 1.28,
@@ -443,14 +445,18 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       if (fx) { stats.releases++; return true; }
       return false;
     },
-    /** Move #8: True 3D Gyroscopic Telekinesis Field OR 3D Hexagonal Energy Cage (LRU GPU cached!) */
+    /** Move #8: 00GameDevs 3D->PixelFX Binding Curse / Prism Guard Cage (fallback: volumetric gyroscopic cage!) */
     psychicCage({ x, y, follow = null, moveId = "nightPulse", mode = "telekinesis", durationSec = 0.85, radius = 100 }) {
       const spec = resolveMoveSpecV2(moveId);
       const pPal = ["dark", "light", "thunder", "ice", "fire", "nature", "water"].includes(spec.paletteKey) ? spec.paletteKey : "dark";
-      const scale = Math.max(1.3, Math.min(1.85, (radius / 100) * 1.45));
+      const scale = Math.max(1.2, Math.min(1.75, (radius / 100) * 1.25));
+      const gdCage = resolve00GameDevsPiece({ archetype: mode === "telekinesis" ? "TELEKINESIS_SLAM" : "PROTECT_COUNTER", piece: mode === "telekinesis" ? "eye" : "buff-def", paletteKey: pPal });
+      if (gdCage && gdCage.startsWith("gd-") && playPiece(pieces, gdCage, { x, y: y + 6, palette: paletteFor(pPal), scale, groundY: y + 14 })) {
+        stats.releases++; return true;
+      }
       const fx = volCache.spawn({
         layer: shotLayer, keyPrefix: `cage|${mode}|${pPal}`, width: 148, height: 148, frameCount: 8,
-        directional: false, anchorX: 0.5, anchorY: 0.74, x, y: y + 6, follow, durationSec, scale,
+        directional: false, anchorX: 0.5, anchorY: 0.74, x, y: y + 6, follow, durationSec, scale: scale * 1.15,
         renderForAngle: (ctx, _ang, phase) => renderVolumetricPsychicCage3D(ctx, { width: 148, height: 148, phase, paletteKey: pPal, mode })
       });
       if (fx) { stats.releases++; return true; }

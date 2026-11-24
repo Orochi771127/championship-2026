@@ -910,10 +910,13 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
           setPieces.play(healPiece, {x: info.x, y: info.top + info.height * 0.5, groundY: info.groundY,
             palette: BATTLE_FX_PALETTES.nature, size: info.width, unit: lastCtx?.nativeScale ?? 1, scale: 0.9});
         }
-        // Batch 7: the support move's own cast on the body that receives it.
+        // Batch 7 + 00GameDevs Batch 2: the support move's own cast on the body that receives it.
         const support = event.type === 'SUPPORT' && typeof moveVfxSupportChoreography === 'function' ? moveVfxSupportChoreography(event.statusCode) : null;
-        if (support && setPieces) setPieces.play(support.piece, {x: info.x, y: info.top + info.height * 0.5, angle: info.facing < 0 ? Math.PI : 0,
-          palette: BATTLE_FX_PALETTES[support.palette] ?? BATTLE_FX_PALETTES.light, size: info.width, unit: ctx.nativeScale, groundY: info.groundY, scale: support.scale});
+        if (support && setPieces) {
+          const supportPiece = resolve00GameDevsPiece({ piece: support.piece, paletteKey: support.palette ?? 'light' }) || support.piece;
+          setPieces.play(supportPiece, {x: info.x, y: info.top + info.height * 0.5, angle: info.facing < 0 ? Math.PI : 0,
+            palette: BATTLE_FX_PALETTES[support.palette] ?? BATTLE_FX_PALETTES.light, size: info.width, unit: ctx.nativeScale, groundY: info.groundY, scale: support.scale});
+        }
         const palette = event.type === 'HEAL' ? BATTLE_FX_PALETTES.nature : BATTLE_FX_PALETTES.light;
         spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 0.9, tint: palette.main, life: 560});
         spawnRing({x: info.x, groundY: info.groundY, radius: info.width * 0.6, tint: palette.core, life: 480, delay: 120});
