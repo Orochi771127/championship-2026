@@ -265,12 +265,13 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       stats.hits++;
       return true;
     },
-    /** Clean ultimate: crisp pixelfx rune/impact opening + hero centerpiece. */
+    /** Clean ultimate: crisp 00GameDevs telegraph sigil + impact opening + hero centerpiece. */
     ult({ moveId, center }) {
       if (!center) return;
       const spec = resolveMoveSpecV2(moveId);
       const pal = paletteFor(spec.paletteKey);
-      if (groundPieces) playPiece(groundPieces, "sigil-cast", { x: center.x, y: center.y + 24, palette: pal, scale: 1.35, groundY: center.y + 24 });
+      const sigil = resolve00GameDevsPiece({ piece: "sigil-cast", paletteKey: spec.paletteKey, tier: "ultimate" }) || "sigil-cast";
+      if (groundPieces) playPiece(groundPieces, sigil, { x: center.x, y: center.y + 24, palette: pal, scale: 1.35, groundY: center.y + 24 });
       playPiece(pieces, "impact-frame", { x: center.x, y: center.y, palette: { core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true }, scale: 1.0, groundY: center.y + 24 });
       holdMs = Math.max(holdMs, 65);
       stats.ults++;
@@ -303,7 +304,8 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
     },
     clash({ x, y }) {
       playPiece(pieces, "impact-frame", { x, y, palette: { core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true }, scale: 0.9, groundY: y + 18 });
-      playPiece(pieces, "ring-pop", { x, y, palette: BATTLE_FX_PALETTES.thunder, scale: 1.25, groundY: y + 18 });
+      const clashRing = resolve00GameDevsPiece({ piece: "ring-pop", paletteKey: "thunder" }) || "ring-pop";
+      playPiece(pieces, clashRing, { x, y, palette: BATTLE_FX_PALETTES.thunder, scale: 1.25, groundY: y + 18 });
       holdMs = Math.max(holdMs, 50);
       stats.clashes++;
       return true;
