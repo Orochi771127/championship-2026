@@ -1088,7 +1088,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       for (const zone of arena.zones) {
         if (purePixelFx) {
           if (!zoneSigil(zone, tint, active ? 0.85 : 0.42)) {
-            zoneGfx.circle(zone.x, zone.y, zone.radius).stroke({ color: tint, width: active ? 2 : 1.5, alpha: active ? 0.72 : 0.45 });
+            zoneGfx.circle(zone.x, zone.y, zone.radius).fill({ color: tint, alpha: active ? 0.1 + 0.04 * pulse : 0.05 }).stroke({ color: tint, width: active ? 2.5 : 1.5, alpha: active ? 0.82 : 0.48 });
+          } else {
+            zoneGfx.circle(zone.x, zone.y, zone.radius).stroke({ color: tint, width: active ? 2.5 : 1.5, alpha: active ? 0.72 + 0.16 * pulse : 0.45 });
           }
           continue;
         }
@@ -1103,10 +1105,16 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         }
         if (!active) zoneGfx.circle(zone.x, zone.y, zone.radius * (1 - (arena.remaining % 1))).stroke({ color: tint, width: 1.5, alpha: 0.5 });
       }
-      const channel = arena.channel?.[0] ?? 0;
-      if (active && channel > 0) {
+      const pChan = arena.channel?.[0] ?? 0;
+      if (active && pChan > 0) {
         const zone = arena.zones.find(z => Math.hypot(state.player.x - z.x, state.player.y - z.y) <= z.radius);
-        if (zone) arcPath(zoneGfx, zone.x, zone.y, zone.radius + 8, -Math.PI / 2, -Math.PI / 2 + TAU * channel / 0.7).stroke({ color: 0xffffff, width: 4, alpha: 0.9 });
+        if (zone) arcPath(zoneGfx, zone.x, zone.y, zone.radius + 8, -Math.PI / 2, -Math.PI / 2 + TAU * clamp(pChan / 0.7, 0, 1)).stroke({ color: 0xffffff, width: 4.5, alpha: 0.95 });
+      }
+      const rChan = arena.channel?.[1] ?? 0;
+      const activeRival = state.rivals?.find(r => r.active && r.hp > 0);
+      if (active && rChan > 0 && activeRival) {
+        const zone = arena.zones.find(z => Math.hypot(activeRival.x - z.x, activeRival.y - z.y) <= z.radius);
+        if (zone) arcPath(zoneGfx, zone.x, zone.y, zone.radius + 12, -Math.PI / 2, -Math.PI / 2 + TAU * clamp(rChan / 0.7, 0, 1)).stroke({ color: 0xff4a6a, width: 4, alpha: 0.9 });
       }
       if (!purePixelFx && active && !reducedMotion && rich && Math.floor(elapsed * 8) !== Math.floor((elapsed - 1 / 60) * 8))
         for (const zone of arena.zones) spawn({ x: zone.x + (Math.random() - 0.5) * zone.radius, y: zone.y + (Math.random() - 0.3) * zone.radius * 0.6, vy: -50, texture: textures.glow, tint, scale: 0.18, scaleTo: 0.05, life: 0.6, alpha: 0.7 });
@@ -1117,7 +1125,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       const pulse = reducedMotion ? 0.8 : 0.6 + 0.35 * Math.sin(elapsed * 7);
       if (purePixelFx) {
         if (!zoneSigil(sc, 0xffe066, active ? 0.9 : 0.5)) {
-          zoneGfx.circle(sc.x, sc.y, sc.radius).stroke({ color: 0xffe066, width: active ? 2.5 : 2, alpha: active ? 0.85 : 0.55 });
+          zoneGfx.circle(sc.x, sc.y, sc.radius).fill({ color: 0xffe066, alpha: active ? 0.14 : 0.06 }).stroke({ color: 0xffe066, width: active ? 3 : 2, alpha: active ? 0.92 : 0.6 });
+        } else {
+          zoneGfx.circle(sc.x, sc.y, sc.radius).stroke({ color: 0xffe066, width: active ? 3 : 2, alpha: active ? 0.8 + 0.15 * pulse : 0.55 });
         }
       } else {
         zoneGfx.circle(sc.x, sc.y, sc.radius).fill({ color: 0xffe066, alpha: active ? 0.18 + 0.08 * pulse : 0.08 });
@@ -1128,8 +1138,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           arcPath(zoneGfx, sc.x, sc.y, sc.radius - 7, a0, a0 + 0.25).stroke({ color: 0xffffff, width: 3, alpha: 0.85 });
         }
       }
-      if ((sc.channel?.[0] ?? 0) > 0) {
-        arcPath(zoneGfx, sc.x, sc.y, sc.radius + 10, -Math.PI / 2, -Math.PI / 2 + TAU * (sc.channel[0] / 0.65)).stroke({ color: 0xffffff, width: 5, alpha: 0.95 });
+      const scChan = typeof sc.channel === "number" ? sc.channel : (sc.channel?.[0] ?? 0);
+      if (scChan > 0) {
+        arcPath(zoneGfx, sc.x, sc.y, sc.radius + 10, -Math.PI / 2, -Math.PI / 2 + TAU * clamp(scChan / 0.65, 0, 1)).stroke({ color: 0xffffff, width: 5, alpha: 0.95 });
       }
     }
   }
@@ -1664,6 +1675,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           break;
         case "SUPER_CORE_WARNING":
         case "SUPER_CORE_ACTIVE":
+          if (purePixelFx && elementFx.arenaZone?.({ x: event.x, y: event.y, kind: "SUPER_CORE", phase: event.type === "SUPER_CORE_WARNING" ? "WARNING" : "ACTIVE", radius: event.radius ?? 76 })) {
+            if (event.type === "SUPER_CORE_ACTIVE") floatText(event.x, event.y - 54, t("arena.SUPER_CORE.short"), "crit");
+            break;
+          }
           ring(event.x, event.y, (event.radius ?? 68) * 1.35, 0xffe066, 0.5);
           if (event.type === "SUPER_CORE_ACTIVE") floatText(event.x, event.y - 54, t("arena.SUPER_CORE.short"), "crit");
           break;
@@ -1718,10 +1733,26 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             if (activeGuard) break;
           }
           ring(event.x, event.y - 16, 70, 0xffe066, 0.3); break;
-        case "ARENA_WARNING": for (const zone of event.zones) ring(zone.x, zone.y, zone.radius, ZONE_TINT[event.kind] ?? 0xffffff, 0.5); break;
-        case "ARENA_ACTIVE": for (const zone of state.relay?.arena?.zones ?? []) { ring(zone.x, zone.y, zone.radius * 1.3, ZONE_TINT[event.kind] ?? 0xffffff, 0.45); if (!purePixelFx) burst(zone.x, zone.y, { count: 10, speed: 160, tint: ZONE_TINT[event.kind] ?? 0xffffff, life: 0.5 }); } break;
-        case "ARENA_CLAIM": ring(event.x, event.y, 80, ZONE_TINT[event.kind] ?? 0xffffff, 0.4); if (!purePixelFx) burst(event.x, event.y - 20, { count: 14, speed: 240, tint: ZONE_TINT[event.kind] ?? 0xffffff, life: 0.55 });
-          if (event.team === 0) crowdReact("CHEER", event.x, 0.8); break;
+        case "ARENA_WARNING":
+          for (const zone of event.zones) {
+            if (purePixelFx && elementFx.arenaZone?.({ x: zone.x, y: zone.y, kind: event.kind, phase: "WARNING", radius: zone.radius })) continue;
+            ring(zone.x, zone.y, zone.radius, ZONE_TINT[event.kind] ?? 0xffffff, 0.5);
+          }
+          break;
+        case "ARENA_ACTIVE":
+          for (const zone of state.relay?.arena?.zones ?? []) {
+            if (purePixelFx && elementFx.arenaZone?.({ x: zone.x, y: zone.y, kind: event.kind, phase: "ACTIVE", radius: zone.radius })) continue;
+            ring(zone.x, zone.y, zone.radius * 1.3, ZONE_TINT[event.kind] ?? 0xffffff, 0.45);
+            if (!purePixelFx) burst(zone.x, zone.y, { count: 10, speed: 160, tint: ZONE_TINT[event.kind] ?? 0xffffff, life: 0.5 });
+          }
+          break;
+        case "ARENA_CLAIM":
+          if (!(purePixelFx && elementFx.arenaZone?.({ x: event.x, y: event.y, kind: event.kind, phase: "CLAIM", radius: 74 }))) {
+            ring(event.x, event.y, 80, ZONE_TINT[event.kind] ?? 0xffffff, 0.4);
+            if (!purePixelFx) burst(event.x, event.y - 20, { count: 14, speed: 240, tint: ZONE_TINT[event.kind] ?? 0xffffff, life: 0.55 });
+          }
+          if (event.team === 0) crowdReact("CHEER", event.x, 0.8);
+          break;
         case "ARENA_PRESSURE": camera.addTrauma(0.3); break;
         case "EFFECTIVE": if (!purePixelFx) { ring(event.x, event.y - 30, event.mult > 1 ? 52 : 40, event.mult > 1 ? 0xffd34d : 0x9aa4b0, 0.32);
           if (event.mult > 1) burst(event.x, event.y - 34, { count: 6, speed: 200, tint: 0xffd34d, life: 0.35 }); } break;
@@ -2653,6 +2684,14 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if (state.boss && state.boss.state !== "DOWN") pointTo(state.boss.x, state.boss.y, 0xff4a6a, 1.3);
     for (const rival of state.rivals) if (rival.active !== false && rival.hp > 0) pointTo(rival.x, rival.y, 0xff4a6a, 1.25);
     for (const orb of state.energyOrbs ?? []) pointTo(orb.x, orb.y, 0xffe066, 0.92);
+    const arena = state.relay?.arena;
+    if (arena?.phase === "ACTIVE" && !arena.claimed?.[0]) {
+      const zTint = ZONE_TINT[arena.kind] ?? 0x6ff7ff;
+      for (const zone of arena.zones ?? []) pointTo(zone.x, zone.y, zTint, 0.95);
+    }
+    if (arena?.superCore?.phase === "ACTIVE" && !arena.superCore.claimed) {
+      pointTo(arena.superCore.x, arena.superCore.y, 0xffe066, 1.18);
+    }
     if (state.mate.state === "DOWNED") pointTo(state.mate.x, state.mate.y, 0x8dffb0);
     for (; n < arrows.length; n++) arrows[n].visible = false;
   }

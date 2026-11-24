@@ -3825,7 +3825,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       ai.goalTimer -= DT;
       const basicDef = moveFor(RELAY_ACTION_PROFILES[partner.id]?.basic);
       const prefRange = basicDef?.type === "LUNGE" ? 95 : basicDef?.type === "NOVA" ? 160 : 320;
-      const objectiveGoal = nearestEnergyOrb(player) ?? relayArena?.rivalTarget(player) ?? null;
+      const objectiveGoal = nearestEnergyOrb(player) ?? relayArena?.zoneTargetFor?.(player, 0) ?? relayArena?.rivalTarget(player) ?? null;
       if (ai.goalTimer <= 0 || !ai.goal) {
         const plan = chooseUnifiedGoal({
           body: player,

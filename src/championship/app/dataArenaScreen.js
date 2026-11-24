@@ -18,7 +18,7 @@ import { dataArenaUpgrade, previewDataArenaUpgrade } from "../modes/dataArena/da
 import { loadStylesheet } from './loadStylesheet.js';
 import { createLoadAttempt, LOAD_MAX_MS } from './loadWatchdog.js';
 import { gachaTicketImage } from "./cyberGachaIcons.js";
-import { createDataArenaRecordStore } from "../modes/dataArena/dataArenaSave.js";
+import { createDataArenaRecordStore, DATA_ARENA_TOUCH_LAYOUTS } from "../modes/dataArena/dataArenaSave.js";
 import { createChampionshipDataArenaPort } from "./ChampionshipPersistentSavePort.js";
 import { dataArenaCast, loadDataArenaCharacter } from "../presentation/dataArena/dataArenaRoster.js";
 import { mountDataArenaScene } from "../presentation/dataArena/dataArenaPixiScene.js";
@@ -152,6 +152,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   const settings = records.get().settings;
   let shake = settings.shake && !reducedMotion;
   let quality = settings.quality === "auto" ? (coarse || Math.min(innerWidth, innerHeight) < 500 ? "low" : "high") : settings.quality;
+  let touchLayout = DATA_ARENA_TOUCH_LAYOUTS.includes(settings.touchLayout) ? settings.touchLayout : "standard";
   // Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): former 覺醒體/究極體 are a 成熟期's burst forms in the
   // relay too, so they are not picked; a saved pick of one becomes the 成熟期 that bursts into it.
   const relayIndexOf = id => Number(String(relayPartner(id)?.speciesId ?? '').split('-').at(-1));
@@ -228,6 +229,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   root.dataset.state = "SELECT";
   root.dataset.mode = gameMode;
   root.dataset.quality = quality;
+  root.dataset.touchLayout = touchLayout;
   if (reducedMotion) root.dataset.motion = "reduced";
   root.setAttribute("role", "application");
   root.setAttribute("aria-label", t("mode.title"));
@@ -498,9 +500,10 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
     pointer.mouse = false;
     const rect = root.getBoundingClientRect();
     const left = event.clientX - rect.left < rect.width * 0.5;
-    const slot = left ? "move" : "aim";
+    const isMove = touchLayout === "leftHand" ? !left : left;
+    const slot = isMove ? "move" : "aim";
     if (sticks[slot]) return;
-    const visual = left ? moveStick : aimStick;
+    const visual = isMove ? moveStick : aimStick;
     sticks[slot] = { id: event.pointerId, ox: event.clientX, oy: event.clientY, vector: { x: 0, y: 0 }, visual };
     visual.base.hidden = false;
     // Screen pixels to the arena's own pixels (they differ by the interface zoom).
@@ -2528,8 +2531,15 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         if(!signal.aborted)for(const[control,disabled]of controls)control.disabled=disabled;
       }
     }, signal);
+    const touchLayoutToggle = button("da-btn da-toggle", `${t("pause.touchLayout")}：${t(`pause.touchLayout.${touchLayout}`)}`, () => {
+      const idx = DATA_ARENA_TOUCH_LAYOUTS.indexOf(touchLayout);
+      touchLayout = DATA_ARENA_TOUCH_LAYOUTS[(idx + 1) % DATA_ARENA_TOUCH_LAYOUTS.length];
+      root.dataset.touchLayout = touchLayout;
+      records.setSettings({ touchLayout });
+      touchLayoutToggle.textContent = `${t("pause.touchLayout")}：${t(`pause.touchLayout.${touchLayout}`)}`;
+    }, signal);
     const row = el("div", "da-actions da-actions--column");
-    row.append(resume, shakeToggle, qualityToggle,
+    row.append(resume, shakeToggle, qualityToggle, touchLayoutToggle,
       button("da-btn", t("pause.restart"), () => { hideOverlay(); void startMatch(); }, signal),
       button("da-btn da-btn--quiet", t("pause.exit"), () => close(), signal));
     panel.appendChild(row);

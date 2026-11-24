@@ -1469,3 +1469,96 @@ test("phase 13 / Combat Wave 2: 3v3 smart AI partner switching, AoE telegraph do
   const sceneSrc = readFileSync(new URL("../src/championship/presentation/dataArena/dataArenaPixiScene.js", import.meta.url), "utf8");
   assert.ok(sceneSrc.includes("for (const orb of state.energyOrbs ?? []) pointTo("), "off-screen HUD indicator arrow tracks Energy Orbs alongside active rivals");
 });
+
+test("phase 14 / Combat Wave 3: Living Arena 22s pure-PixelFX zone events, team-aware AI/AUTO contest & mobile touch layout presets", async () => {
+  const { createRelayArenaEvents } = await import("../src/championship/modes/dataArena/dataArenaRelayArena.js");
+  const { DATA_ARENA_TOUCH_LAYOUTS, sanitizeDataArenaRecords, createDataArenaRecordStore } = await import("../src/championship/modes/dataArena/dataArenaSave.js");
+  const { arenaText } = await import("../src/championship/text/dataArenaText.js");
+  const { loadMoveVfxPieceSprites } = await import("../src/championship/presentation/vfx/moveVfxSetPieces.js");
+  await loadMoveVfxPieceSprites();
+  await loadMoveVfx00GameDevsSprites();
+
+  // 1) Team-aware zoneTargetFor(body, team) + Super Core priority for player AUTO/COMMANDER
+  const events = [];
+  const pBody = { x: 820, y: 610, hp: 120, maxHp: 200, energy: 40, cooldowns: {} };
+  const rBody = { x: 820, y: 610, hp: 120, maxHp: 200, energy: 40, cooldowns: {} };
+  const arena = createRelayArenaEvents({
+    map: { battleFieldId: "field_bm06_01", cell: 32, cols: 50, rows: 38, arenaZones: [[25, 19], [26, 20]] },
+    grid: { props: [] },
+    emit: (e) => events.push(e),
+    now: () => 0,
+    bodies: () => [pBody, rBody],
+    effects: { tpMax: 100, heal() {}, dashMissing: () => false, refillDash() {}, triLinkRush() {} }
+  });
+  // Activate 22s cycle (firstWarning=8, warning=2.5 -> active at 11.0s)
+  arena.step(0.1, 11.0);
+  const pTarget = arena.zoneTargetFor(pBody, 0);
+  const rTarget = arena.zoneTargetFor(rBody, 1);
+  assert.ok(pTarget && pTarget.kind === "RECHARGE", "team 0 (player AUTO) targets active RECHARGE zone");
+  assert.ok(rTarget && rTarget.kind === "RECHARGE", "team 1 (rival) targets active RECHARGE zone");
+  // Claim for rival only -> rival stops targeting it, player STILL targets it!
+  arena.state.claimed[1] = true;
+  assert.equal(arena.zoneTargetFor(rBody, 1), null, "rival stops targeting after claiming");
+  assert.ok(arena.zoneTargetFor(pBody, 0), "player AUTO still targets unclaimed zone independently of rival");
+  // Super Core spawns at t=60s -> player AUTO prioritizes SUPER_CORE
+  arena.step(0.1, 61.0);
+  const scTarget = arena.zoneTargetFor(pBody, 0);
+  assert.equal(scTarget?.kind, "SUPER_CORE", "player AUTO prioritizes active SUPER_CORE objective");
+
+  // 2) Pure baked PixelFX / 00GameDevs arenaZone bursts across all 7 zone types
+  class Node {
+    constructor() { this.children = []; this.anchor = { set() {} }; this.scale = { set() {} }; this.position = { set() {} }; }
+    addChild(c) { c.parent = this; this.children.push(c); return c; }
+    removeChild(c) { this.children = this.children.filter((x) => x !== c); }
+    destroy() { this.destroyed = true; }
+  }
+  const MockPIXI = {
+    Container: Node,
+    Sprite: class extends Node { constructor(t) { super(); this.texture = t; } },
+    Rectangle: class { constructor(x, y, w, h) { this.x = x; this.y = y; this.w = w; this.h = h; } },
+    Texture: class { static from() { return { width: 48, height: 48, source: { scaleMode: "nearest" }, destroy() {} }; } destroy() {} }
+  };
+  const origDoc = globalThis.document;
+  globalThis.document = {
+    createElement: () => ({
+      width: 0, height: 0,
+      getContext: () => ({ createImageData: (w, h) => ({ data: new Uint8ClampedArray(w * h * 4) }), putImageData() {} })
+    })
+  };
+  try {
+    const fx = createDataArenaPixelFxV2({ PIXI: MockPIXI, ground: new Node(), front: new Node(), quality: "high" });
+    for (const kind of ["ECHO", "BLOOM", "VENT", "TIDE", "UPDRAFT", "RECHARGE", "SUPER_CORE"]) {
+      for (const phase of ["WARNING", "ACTIVE", "CLAIM"]) {
+        assert.doesNotThrow(() => fx.arenaZone({ x: 300, y: 300, kind, phase, radius: 72 }), `arenaZone(${kind}, ${phase}) renders cleanly`);
+      }
+    }
+    fx.dispose();
+  } finally {
+    globalThis.document = origDoc;
+  }
+
+  // 3) Scene wiring: dual capture rings, numeric superCore.channel fix, arenaZone FX & off-screen arrows
+  const sceneSrc = readFileSync(new URL("../src/championship/presentation/dataArena/dataArenaPixiScene.js", import.meta.url), "utf8");
+  assert.ok(sceneSrc.includes('typeof sc.channel === "number" ? sc.channel'), "Super Core numeric channel progress arc bug fixed");
+  assert.ok(sceneSrc.includes("elementFx.arenaZone?.("), "Living Arena zone events route through pure PixelFX arenaZone");
+  assert.ok(sceneSrc.includes("if (arena?.superCore?.phase === \"ACTIVE\""), "off-screen directional arrow tracks active Super Core & Arena zones");
+
+  // 4) Mobile touch layout presets persisted & sanitized cleanly
+  assert.deepEqual([...DATA_ARENA_TOUCH_LAYOUTS], ["standard", "compact", "wide", "leftHand"], "all 4 touch layout presets exported");
+  const badSan = sanitizeDataArenaRecords({ schemaVersion: 1, kind: "DATA_ARENA_RECORDS", settings: { touchLayout: "broken" } });
+  assert.equal(badSan.settings.touchLayout, "standard", "invalid touchLayout sanitizes to standard");
+  let savedJson = null;
+  const store = createDataArenaRecordStore({
+    port: { storageKey: "test", read: () => ({ text: savedJson, error: null }), write: (t) => { savedJson = t; return { ok: true, error: null }; } }
+  });
+  store.setSettings({ touchLayout: "leftHand" });
+  assert.equal(store.get().settings.touchLayout, "leftHand", "touchLayout preset persists cleanly");
+  for (const preset of DATA_ARENA_TOUCH_LAYOUTS) {
+    assert.ok(arenaText(`pause.touchLayout.${preset}`).length > 0, `touchLayout.${preset} copy exists`);
+  }
+  const screenSrc = readFileSync(new URL("../src/championship/app/dataArenaScreen.js", import.meta.url), "utf8");
+  const cssSrc = readFileSync(new URL("../src/championship/app/dataArena.css", import.meta.url), "utf8");
+  assert.ok(screenSrc.includes('const isMove = touchLayout === "leftHand" ? !left : left;'), "leftHand preset mirrors floating move/aim sticks");
+  assert.ok(screenSrc.includes('root.dataset.touchLayout = touchLayout;'), "screen applies data-touch-layout attribute");
+  assert.ok(cssSrc.includes('[data-touch-layout="leftHand"]') && cssSrc.includes('[data-touch-layout="compact"]') && cssSrc.includes('[data-touch-layout="wide"]'), "CSS defines compact, wide, and leftHand touch layouts");
+});

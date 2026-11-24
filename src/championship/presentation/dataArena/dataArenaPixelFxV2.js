@@ -189,6 +189,23 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       const piece = resolve00GameDevsPiece({ piece: "buff-def", paletteKey: team === "player" ? "light" : "thunder" }) || "buff-def";
       return playPiece(pieces, piece, { x, y: y - 12, palette: pal, scale: 1.05, groundY: y + 12 });
     },
+    /** PB-Rank Wave 3: Pure baked 00GameDevs / PixelFX Living Arena 22s dynamic zone warning, activation & claim bursts! */
+    arenaZone({ x, y, kind = "RECHARGE", phase = "ACTIVE", radius = 68 }) {
+      const ZONE_PALETTE = { ECHO: "dark", BLOOM: "nature", VENT: "fire", TIDE: "water", UPDRAFT: "wind", RECHARGE: "thunder", SUPER_CORE: "light" };
+      const ZONE_ARCH = { ECHO: "SELF_BUFF", BLOOM: "RECOVERY_SUPPORT", VENT: "SHOCKWAVE_RING", TIDE: "VORTEX_PULL", UPDRAFT: "VORTEX_PULL", RECHARGE: "SELF_BUFF", SUPER_CORE: "METEOR_RAIN" };
+      const palKey = ZONE_PALETTE[kind] ?? "light";
+      const pal = paletteFor(palKey);
+      const scale = Math.max(0.85, Math.min(1.65, (radius / 68) * (phase === "CLAIM" ? 1.15 : 1.0)));
+      if (phase === "WARNING") {
+        const piece = resolve00GameDevsPiece({ piece: "sigil-cast", paletteKey: palKey }) || "sigil-cast";
+        return playPiece(groundPieces ?? pieces, piece, { x, y: y + 6, palette: pal, scale, groundY: y + 6 });
+      }
+      const fallbackPiece = kind === "BLOOM" ? "heal" : kind === "VENT" ? "quake" : kind === "TIDE" || kind === "UPDRAFT" ? "vortex" : "buff-atk";
+      const piece = resolve00GameDevsPiece({ archetype: ZONE_ARCH[kind] ?? "SELF_BUFF", piece: fallbackPiece, paletteKey: palKey, tier: kind === "SUPER_CORE" ? "ultimate" : "standard" }) || fallbackPiece;
+      const ok = playPiece(pieces, piece, { x, y: y + 4, palette: pal, scale, groundY: y + 12 });
+      if (phase === "CLAIM" && kind === "VENT") stampScar({ x, y: y + 8, paletteKey: "fire", scale: 1.0 });
+      return ok;
+    },
     /** Clean release: 100% pure PixelFX + 00GameDevs baked sheets (ZERO blurry procedural 3D canvas hacks!). */
     release({ x, y, angle = 0, moveId, melee = false }) {
       const spec = resolveMoveSpecV2(moveId);

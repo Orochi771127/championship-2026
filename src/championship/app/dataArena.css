@@ -1197,3 +1197,40 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 /* Plan A (2026-11-23): Single PB-Rank manual battle mode hides legacy mode cartridges and makes Dodge clickable on desktop */
 .da-modes[hidden] { display: none !important; }
 .da-chip--dash { pointer-events: auto; cursor: pointer; }
+
+/* Combat Wave 3 (2026-11-24): Mobile Touch Ergonomics Presets (Standard / Compact / Wide / Left-Handed) */
+.da-root[data-mode="RELAY"][data-touch-layout="compact"] .da-tbtn--basic { width: 64px; height: 64px; }
+.da-root[data-mode="RELAY"][data-touch-layout="compact"] .da-tbtn--s1,
+.da-root[data-mode="RELAY"][data-touch-layout="compact"] .da-tbtn--s2,
+.da-root[data-mode="RELAY"][data-touch-layout="compact"] .da-tbtn--s3 { width: 48px; height: 48px; }
+.da-root[data-mode="RELAY"][data-touch-layout="compact"] .da-tbtn--s1 { right: calc(var(--da-control-right) + 92px); bottom: calc(var(--da-control-bottom) + 8px); }
+.da-root[data-mode="RELAY"][data-touch-layout="compact"] .da-tbtn--s2 { right: calc(var(--da-control-right) + 67px); bottom: calc(var(--da-control-bottom) + 67px); }
+.da-root[data-mode="RELAY"][data-touch-layout="compact"] .da-tbtn--s3 { right: calc(var(--da-control-right) + 8px); bottom: calc(var(--da-control-bottom) + 92px); }
+.da-root[data-mode="RELAY"][data-touch-layout="compact"] .da-tbtn--guard { right: calc(var(--da-control-right) + 154px); bottom: calc(var(--da-control-bottom) + 10px); width: 44px; height: 44px; }
+.da-root[data-mode="RELAY"][data-touch-layout="compact"] .da-tbtn--dash { right: calc(var(--da-control-right) + 134px); bottom: calc(var(--da-control-bottom) + 82px); width: 44px; height: 44px; }
+.da-root[data-mode="RELAY"][data-touch-layout="compact"] .da-tbtn--ult { right: calc(var(--da-control-right) + 6px); bottom: calc(var(--da-control-bottom) + 152px); width: 52px; height: 52px; }
+.da-root[data-mode="RELAY"][data-touch-layout="compact"] .da-move-hint { width: 84px; height: 84px; }
+
+.da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--basic { width: 80px; height: 80px; }
+.da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--s1,
+.da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--s2,
+.da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--s3 { width: 60px; height: 60px; }
+.da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--s1 { right: calc(var(--da-control-right) + 122px); bottom: calc(var(--da-control-bottom) + 10px); }
+.da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--s2 { right: calc(var(--da-control-right) + 89px); bottom: calc(var(--da-control-bottom) + 89px); }
+.da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--s3 { right: calc(var(--da-control-right) + 10px); bottom: calc(var(--da-control-bottom) + 122px); }
+.da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--guard { right: calc(var(--da-control-right) + 202px); bottom: calc(var(--da-control-bottom) + 14px); width: 54px; height: 54px; }
+.da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--dash { right: calc(var(--da-control-right) + 178px); bottom: calc(var(--da-control-bottom) + 108px); width: 54px; height: 54px; }
+.da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-tbtn--ult { right: calc(var(--da-control-right) + 8px); bottom: calc(var(--da-control-bottom) + 200px); width: 64px; height: 64px; }
+.da-root[data-mode="RELAY"][data-touch-layout="wide"] .da-move-hint { width: 108px; height: 108px; }
+
+.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--basic { right: auto; left: var(--da-control-left); }
+.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--s1 { right: auto; left: calc(var(--da-control-left) + 107px); }
+.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--s2 { right: auto; left: calc(var(--da-control-left) + 78px); }
+.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--s3 { right: auto; left: calc(var(--da-control-left) + 9px); }
+.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--guard { right: auto; left: calc(var(--da-control-left) + 178px); }
+.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--dash { right: auto; left: calc(var(--da-control-left) + 156px); }
+.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--ult { right: auto; left: calc(var(--da-control-left) + 7px); }
+.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-move-hint { left: auto; right: var(--da-control-right); }
+.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--switch { left: auto; right: var(--da-control-right); }
+.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--switch2 { left: auto; right: calc(var(--da-control-right) + 80px); }
+.da-root[data-mode="RELAY"][data-touch-layout="leftHand"] .da-tbtn--burst { left: auto; right: var(--da-control-right); }

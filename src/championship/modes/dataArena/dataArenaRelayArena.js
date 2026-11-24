@@ -194,15 +194,24 @@ export function createRelayArenaEvents({ map, grid, emit, now, bodies, effects }
       } else state.channel[team] = 0;
     });
   }
+  /** A zone worth walking to for `team` (0 = player AUTO/COMMANDER, 1 = rival), including active Super Core for player. */
+  function zoneTargetFor(body, team = 1) {
+    if (!live(body)) return null;
+    if (team === 0 && superCore.phase === 'ACTIVE' && !superCore.claimed && superCore.remaining >= 0.8) {
+      if (Math.hypot(body.x - superCore.x, body.y - superCore.y) <= R.aiReach * 1.45) {
+        return { x: superCore.x, y: superCore.y, kind: 'SUPER_CORE' };
+      }
+    }
+    if (state.phase !== 'ACTIVE' || state.remaining < 1 || state.claimed[team] || (state.kind !== 'UPDRAFT' && !useful(body, team))) return null;
+    const zone = [...zones].sort((a, b) => Math.hypot(body.x - a.x, body.y - a.y) - Math.hypot(body.x - b.x, body.y - b.y))[0];
+    return zone && Math.hypot(body.x - zone.x, body.y - zone.y) <= R.aiReach ? { x: zone.x, y: zone.y, kind: state.kind } : null;
+  }
   return Object.freeze({
     state, step,
     /** Movement multiplier: updraft zones speed whoever stands inside while active. */
     speedScale(body) { return state.kind === 'UPDRAFT' && state.phase === 'ACTIVE' && live(body) && zoneAt(body) ? R.speedScale : 1; },
+    zoneTargetFor,
     /** A zone worth walking to for the rival (team 1), or null. */
-    rivalTarget(body) {
-      if (state.phase !== 'ACTIVE' || state.remaining < 1 || state.claimed[1] || !live(body) || (state.kind !== 'UPDRAFT' && !useful(body, 1))) return null;
-      const zone = [...zones].sort((a, b) => Math.hypot(body.x - a.x, body.y - a.y) - Math.hypot(body.x - b.x, body.y - b.y))[0];
-      return zone && Math.hypot(body.x - zone.x, body.y - zone.y) <= R.aiReach ? { x: zone.x, y: zone.y } : null;
-    }
+    rivalTarget(body) { return zoneTargetFor(body, 1); }
   });
 }

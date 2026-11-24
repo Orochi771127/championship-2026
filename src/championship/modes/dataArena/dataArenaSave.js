@@ -14,7 +14,9 @@ import { RELAY_MAP_IDS } from './dataArenaRelayMaps.js';
 import { relayKit } from './dataArenaRelay.js';
 
 export const DATA_ARENA_RECORD_SCHEMA = DATA_ARENA_VERSION;
+export const DATA_ARENA_TOUCH_LAYOUTS = Object.freeze(["standard", "compact", "wide", "leftHand"]);
 const QUALITY = new Set(["auto", "high", "low"]);
+const TOUCH_LAYOUTS = new Set(DATA_ARENA_TOUCH_LAYOUTS);
 const MODES = ["TOURNAMENT", "HARBOR", "RELAY", "SURVIVAL"];
 const PARTNER_IDS = new Set(RELAY_ROSTER.map((partner) => partner.id));
 const count = (value) => (Number.isSafeInteger(value) && value >= 0 ? Math.min(value, 1e9) : 0);
@@ -22,7 +24,7 @@ const count = (value) => (Number.isSafeInteger(value) && value >= 0 ? Math.min(v
 export function defaultDataArenaRecords() {
   return {
     schemaVersion: 1, kind: "DATA_ARENA_RECORDS", runs: 0, wins: 0, bestScore: 0, bestVictorySeconds: null,
-    lastPartnerId: DATA_ARENA_PARTNERS[0].id, lastMode: "RELAY", relayLoadouts: {}, relayReserveId: null, relayThirdId: null, relayArenaId: RELAY_MAP_IDS[0], partners: {}, modes: {}, settings: { shake: true, quality: "auto" }, briefingSeen: false
+    lastPartnerId: DATA_ARENA_PARTNERS[0].id, lastMode: "RELAY", relayLoadouts: {}, relayReserveId: null, relayThirdId: null, relayArenaId: RELAY_MAP_IDS[0], partners: {}, modes: {}, settings: { shake: true, quality: "auto", touchLayout: "standard" }, briefingSeen: false
   };
 }
 
@@ -49,7 +51,7 @@ export function sanitizeDataArenaRecords(raw) {
     bestVictorySeconds: Number.isFinite(best) && best > 0 && best < 3600 ? best : null,
     lastPartnerId: PARTNER_IDS.has(raw.lastPartnerId) ? raw.lastPartnerId : base.lastPartnerId,
     partners, modes, relayLoadouts, relayReserveId:PARTNER_IDS.has(raw.relayReserveId)?raw.relayReserveId:null, relayThirdId:PARTNER_IDS.has(raw.relayThirdId)?raw.relayThirdId:null, relayArenaId:RELAY_MAP_IDS.includes(raw.relayArenaId)?raw.relayArenaId:base.relayArenaId, lastMode: MODES.includes(raw.lastMode) ? raw.lastMode : base.lastMode,
-    settings: { shake: raw.settings?.shake !== false, quality: QUALITY.has(raw.settings?.quality) ? raw.settings.quality : "auto" },
+    settings: { shake: raw.settings?.shake !== false, quality: QUALITY.has(raw.settings?.quality) ? raw.settings.quality : "auto", touchLayout: TOUCH_LAYOUTS.has(raw.settings?.touchLayout) ? raw.settings.touchLayout : "standard" },
     briefingSeen: raw.briefingSeen === true
   };
 }
