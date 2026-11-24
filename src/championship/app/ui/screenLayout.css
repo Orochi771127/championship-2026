@@ -482,12 +482,13 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 14px;
+  padding: 6px 14px;
   border: 3px solid #14141f;
   border-radius: 999px;
-  background: rgba(20, 20, 31, 0.82);
+  background: rgba(20, 20, 31, 0.86);
   color: #fff;
   font-weight: 900;
+  text-shadow: none;
 }
 :root body #cm-title .cm-title__boot-status p:not(:empty)::before {
   content: "";
@@ -523,7 +524,9 @@
   animation: cm-title-arrive 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) both, cm-title-logo-bob 3.2s 0.85s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate;
 }
 @keyframes cm-title-logo-bob { from { translate: 0 -6px; rotate: -1deg; } to { translate: 0 8px; rotate: 1deg; } }
-:root body[data-landscape-entry] #cm-title :is(.cm-title__boot-status, .cm-title__background-feedback, .cm-title__note) { width: fit-content; max-width: 100%; margin: 0 auto; padding: 0; background: transparent; text-align: center; }
+:root body[data-landscape-entry] #cm-title :is(.cm-title__boot-status, .cm-title__background-feedback) { width: fit-content; max-width: 100%; margin: 0 auto; padding: 0; background: transparent; text-align: center; }
+:root body[data-landscape-entry] #cm-title .cm-title__note { width: fit-content; max-width: 100%; margin: 0 auto; text-align: center; }
+:root body[data-landscape-entry] #cm-title .cm-title__note:empty { padding: 0; background: transparent; }
 :root body[data-landscape-entry] #cm-title .cm-title__boot-status p:not(:empty) { padding: 8px 14px; background: rgba(20, 20, 31, 0.82); color: #fff; font-size: calc(13px * var(--text-scale, 1)); line-height: 1.2; }
 /* The partners flank the menu at the foot instead of standing behind it. */
 :root body[data-landscape-entry] #cm-title > .cm-title__panel .cm-title__partners {

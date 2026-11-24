@@ -152,6 +152,8 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
     beforeHide: restoreHintFocus,
     onPhaseChange: () => { syncHintOverflow(); onHintPhaseDone?.(); }
   });
+  const dismissHintOnTouch = () => { if (!hint.hidden) { hintStarted = true; hintTimer.hide(); } };
+  fieldHost.addEventListener?.('pointerdown', dismissHintOnTouch, { passive: true });
   function updateEntryHint(frame) {
     if (disposed || hintStarted || !firstRunHint || field.isPlayable === false) return;
     if (root.ownerDocument?.hidden || fieldHost.getAttribute('aria-busy') === 'true') return;
@@ -1023,6 +1025,7 @@ export async function createRaisingHomeP1RView({ root, source, mountField, hudAr
       discoveryJournal.dispose();
       storyBadge.dispose();
       hintTimer.dispose();
+      fieldHost.removeEventListener?.('pointerdown', dismissHintOnTouch);
       hintSizeObserver?.disconnect();
       root.ownerDocument?.defaultView?.removeEventListener?.('resize', syncHintOverflow);
       hintObserver?.disconnect();

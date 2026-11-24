@@ -390,6 +390,8 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
   // DIAMOND_ECONOMY_20261102: the prize pool preview shows the new automation items with their rates and effects.
   const pool = element("section", "cm-gacha__pool");
   pool.setAttribute("aria-label", uiText("獎池預覽"));
+  pool.dataset.expanded = "false";
+  let poolExpanded = false;
   machinePane.append(deck, pulls, rates, pool);
 
   // ---- Synthesizer ----------------------------------------------------------
@@ -949,8 +951,24 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
   function paintPool(frame, premium) {
     pool.hidden = !premium || !frame.automation?.length;
     if (pool.hidden) return;
-    pool.replaceChildren(element("h3", "cm-gacha__pool-title", uiText("獎池預覽・新增全自動飼育")));
+    pool.dataset.expanded = String(poolExpanded);
+    const toggle = button("cm-gacha__pool-toggle");
+    toggle.setAttribute("aria-expanded", String(poolExpanded));
+    const title = element("span", "cm-gacha__pool-title", uiText("獎池預覽・新增全自動飼育"));
+    const tag = element("span", "cm-gacha__pool-tag", "SSR / UR");
+    const caret = element("span", "cm-gacha__pool-caret", poolExpanded ? "▴" : "▾");
+    caret.setAttribute("aria-hidden", "true");
+    toggle.append(title, tag, caret);
     const list = element("div", "cm-gacha__pool-list");
+    list.hidden = !poolExpanded;
+    toggle.addEventListener("click", () => {
+      poolExpanded = !poolExpanded;
+      pool.dataset.expanded = String(poolExpanded);
+      toggle.setAttribute("aria-expanded", String(poolExpanded));
+      caret.textContent = poolExpanded ? "▴" : "▾";
+      list.hidden = !poolExpanded;
+      fx(toggle, "toggle");
+    });
     for (const item of frame.automation) {
       const card = element("article", "cm-gacha__pool-card");
       card.dataset.rarity = item.rarity;
@@ -964,7 +982,7 @@ export function createCyberGachaPanel({ host, intents, onRefusal = () => {} }) {
       card.append(copy);
       list.append(card);
     }
-    pool.append(list);
+    pool.replaceChildren(toggle, list);
   }
 
   /** Directed forging: each recipe, what it takes, and its key. */

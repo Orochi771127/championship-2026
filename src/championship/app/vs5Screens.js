@@ -137,12 +137,13 @@ function shell(root, screen, label) {
  * Mode identity is now traced through OVL10 0210F88C's help-bank dispatch.
  * The application supplies each mode's entries; this view holds only selection.
  */
-/** The pre-match sponsor contract picker: three contract keys and the stake stepper. */
+/** The pre-match sponsor contract picker: collapsed to a 1-line capsule until opened, or armed summary. */
 export function createSponsorContractStrip(source, busy = () => false) {
   const strip = element("div", "cm-vs5-sponsors");
   strip.setAttribute("role", "group");
   strip.setAttribute("aria-label", uiText("SPONSOR_TITLE"));
   let stake = null;
+  let expanded = false;
   const paint = () => {
     const view = source.read();
     strip.hidden = !view;
@@ -150,9 +151,21 @@ export function createSponsorContractStrip(source, busy = () => false) {
     const { contracts, stakes, armed, bits, today = null } = view;
     stake = armed?.stake ?? stake ?? stakes.defaultStake;
     strip.dataset.armed = String(Boolean(armed));
-    const head = element("div", "cm-vs5-sponsors__head");
-    head.append(element("span", "cm-vs5-sponsors__label", uiText(armed ? "SPONSOR_ARMED" : "SPONSOR_TITLE"), false));
+    strip.dataset.expanded = String(expanded);
+    const armedContract = armed ? contracts.find((c) => c.id === armed.contractId) : null;
+    const head = element("button", "cm-vs5-sponsors__head cm-vs5-sponsors__toggle");
+    head.type = "button";
+    head.setAttribute("aria-expanded", String(expanded));
+    const labelText = armedContract
+      ? `${uiText("SPONSOR_ARMED")} · ${uiText(`SPONSOR_${armedContract.id}_NAME`)} (${stake.toLocaleString()})`
+      : uiText("SPONSOR_TITLE");
+    head.append(element("span", "cm-vs5-sponsors__label", labelText, false));
     if (today) head.append(element("span", "cm-vs5-sponsors__today", uiText("SPONSOR_TODAY", { left: today.left, limit: today.limit }), false));
+    head.append(element("span", "cm-vs5-sponsors__caret", expanded ? "▴" : "▾", false));
+    head.addEventListener("click", () => { expanded = !expanded; paint(); });
+
+    const body = element("div", "cm-vs5-sponsors__body");
+    body.hidden = !expanded;
     const stepper = element("div", "cm-vs5-sponsors__stake");
     const minus = element("button", "cm-vs5-sponsors__step", "−", false), plus = element("button", "cm-vs5-sponsors__step", "+", false);
     minus.type = plus.type = "button";
@@ -166,7 +179,6 @@ export function createSponsorContractStrip(source, busy = () => false) {
     };
     minus.addEventListener("click", () => shift(-stakes.step)); plus.addEventListener("click", () => shift(stakes.step));
     stepper.append(minus, element("span", "cm-vs5-sponsors__amount", uiText("SPONSOR_STAKE", { bits: stake }), false), plus);
-    head.append(stepper);
     const keys = element("div", "cm-vs5-sponsors__keys");
     for (const contract of contracts) {
       const key = element("button", "cm-vs5-sponsor");
@@ -189,7 +201,8 @@ export function createSponsorContractStrip(source, busy = () => false) {
     const caps = view.caps ?? {};
     const note = element("p", "cm-vs5-sponsors__note", uiText(bits < stakes.minimum ? "SPONSOR_NEED_BITS" : "SPONSOR_NOTE", { bits: stakes.minimum,
       free: caps.FREE ?? 0, title: caps.TITLE ?? 0, cup: caps.CHAMPIONSHIP ?? 0 }), false);
-    strip.replaceChildren(head, keys, note);
+    body.append(stepper, keys, note);
+    strip.replaceChildren(head, body);
   };
   paint();
   return strip;

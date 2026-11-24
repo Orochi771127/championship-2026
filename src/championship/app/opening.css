@@ -497,7 +497,7 @@ body[data-landscape-entry] #cm-title > .cm-title__controls {
   left: calc(var(--cm-entry-left) + (var(--cm-entry-logo-width) - var(--cm-entry-action-width)) / 2);
   display: flex; flex-direction: column; justify-content: flex-start; gap: 10px;
   width: var(--cm-entry-action-width); height: auto; min-height: 0;
-  padding: 4px 6px 12px; box-sizing: border-box;
+  padding: 12px 10px 14px; box-sizing: border-box;
   overflow-y: auto; overscroll-behavior: contain;
 }
 body[data-landscape-entry] #cm-title .cm-title__entry {
@@ -537,7 +537,7 @@ body[data-landscape-entry] #cm-title .cm-title__film-watch { left: max(16px, env
     --cm-entry-action-top: calc(var(--cm-entry-logo-top) + var(--cm-entry-logo-width) / 2 + 10px);
   }
   body[data-landscape-entry] #cm-title .cm-title__actions { gap: 8px; }
-  body[data-landscape-entry] #cm-title > .cm-title__controls { gap: 8px; padding-top: 2px; }
+  body[data-landscape-entry] #cm-title > .cm-title__controls { gap: 8px; padding-top: 8px; }
 }
 body[data-landscape-entry] #cm-title .cm-title__film {
   width: 100%; height: 100%; --cm-title-height: var(--cm-visible-viewport-height, 100dvh);

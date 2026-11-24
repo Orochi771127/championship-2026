@@ -1312,3 +1312,52 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 .da-spectator-bar .da-spectator-bar__exit {
   background: rgba(51, 65, 85, .95); color: #fecaca; border-color: rgba(248, 113, 113, .6);
 }
+
+/* UI Polish (2026-11-24): TP bar label contrast & short-landscape lobby/banner ergonomics. */
+.da-bar--energy .da-bar__label,
+.da-bar--energy .da-bar__value {
+  color: #ffffff;
+  text-shadow: 0 1px 0 #14141f, 0 0 4px rgba(14, 16, 28, 0.9);
+}
+@media (orientation: landscape) and (max-height: 520px) {
+  .da-banner { top: 44%; }
+  .da-panel--select {
+    max-height: calc(calc(100 * var(--cm-dvh, 1dvh)) - 12px);
+  }
+  .da-panel--select .da-panel__body {
+    padding: 8px 14px 6px;
+  }
+  .da-panel--select .da-title {
+    font-size: calc(18px * var(--text-scale-hud, 1));
+    margin-bottom: 4px;
+  }
+  .da-panel--select .da-modes {
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .da-panel--select .da-mode {
+    padding: 5px 10px;
+    min-height: 40px;
+  }
+  .da-panel--select .da-mode-brief {
+    margin: 4px 0 6px;
+    font-size: calc(11.5px * var(--text-scale-hud, 1));
+    line-height: 1.3;
+  }
+  .da-panel--select .da-stages {
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .da-panel--select .da-stage {
+    min-height: 36px;
+    padding: 4px 10px;
+    font-size: calc(12px * var(--text-scale-hud, 1));
+  }
+  .da-panel--select .da-actions {
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+  }
+  .da-panel--select .da-actions .da-btn {
+    min-height: 42px;
+    padding: 6px 14px;
+  }
+}

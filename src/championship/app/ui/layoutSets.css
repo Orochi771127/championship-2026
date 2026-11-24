@@ -82,7 +82,7 @@
     grid-column: 1; grid-row: 1; align-self: center; margin: 8px 0 0; font-size: calc(24px * var(--text-scale, 1));
   }
   :root[data-theme][data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-header > .cm-vs5-data-arena:not([hidden]) {
-    grid-column: 2; grid-row: 1; margin-top: 8px; min-height: 48px; padding: 5px 12px 6px 16px;
+    grid-column: 2; grid-row: 1; margin-top: 8px; min-height: 54px; padding: 8px 14px 10px 16px; row-gap: 2px;
   }
   :root[data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube { grid-column: 1; grid-row: 2; justify-self: center; }
   :root[data-theme] body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube__note { display: none; }
@@ -94,14 +94,37 @@
 .cm-vs5-sponsors__step { min-width: 40px; min-height: 40px; }
 
 /* ==== Ranch menus, sideways ============================================================== *
- * With the notch insets the four-across tiles were about 95px wide and still carried their
- * hint line: every label broke after two characters (探索／手帳). Sideways the tiles are
- * one line of label, like the 系統 group already was. */
+ * With the notch insets the four-across tiles were narrow and absolute icons overlapped the
+ * labels (探索手帳 / 故事章節 / 徽章收藏). Lay each tile as a clean horizontal flex chip with
+ * a compact leading icon, and keep the sheet clear of the top wallet pill. */
 @media (max-height: 500px) and (orientation: landscape) {
+  :root body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .cm-toolbar[data-mode="1"] .cm-toolbar__menu {
+    max-height: calc(var(--cm-viewport-height, calc(100 * var(--cm-dvh, 1dvh))) - var(--cm-status-bar-height, var(--hud-height)) - 86px - var(--safe-bottom));
+    padding: 8px 12px;
+    gap: 6px;
+  }
   :root body .cm-toolbar__menu .cm-toolbar__entry-hint { display: none; }
-  :root body .cm-toolbar__menu .cm-toolbar__entry { min-height: 48px; align-content: center; }
-  :root body .cm-toolbar__menu .cm-toolbar__entry-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  :root body .cm-toolbar__menu .cm-toolbar__group { row-gap: 6px; }
+  :root body .cm-toolbar__menu .cm-toolbar__entry {
+    display: flex; align-items: center; justify-content: flex-start; gap: 5px;
+    min-height: 42px; padding: 5px 7px;
+  }
+  :root body .cm-toolbar__menu .cm-toolbar__entry:has(.cm-toolbar__entry-icon),
+  :root body .cm-toolbar__menu .cm-toolbar__entry[data-glyph="badge"] .cm-toolbar__entry-label { padding-right: 0; }
+  :root body .cm-toolbar__menu .cm-toolbar__entry .cm-toolbar__entry-icon,
+  :root body .cm-toolbar__menu .cm-toolbar__entry-glyph[data-placement="badge"] {
+    position: static; order: -1; flex: 0 0 18px; width: 18px; height: 18px;
+  }
+  :root body .cm-toolbar__menu .cm-toolbar__entry-label { min-width: 0; flex: 1 1 auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: calc(12.5px * var(--text-scale, 1)); }
+  :root body .cm-toolbar__menu .cm-toolbar__group { row-gap: 5px; }
+  :root body .cm-toolbar__menu .cm-toolbar__group[data-separate="true"] .cm-toolbar__group-entries {
+    grid-template-columns: repeat(2, minmax(0, 1.32fr)) repeat(2, minmax(0, 0.74fr));
+    gap: 6px;
+  }
+}
+
+/* ==== Hunt loadout: section headings readable on the dark arcade stage =================== */
+:root[data-theme="arcade"] body .cm-vs2-root[data-screen="HUNT_LOADOUT"] .cm-vs2-loadout__label {
+  color: #fff; text-shadow: 0 1px 0 #0e101a; font-weight: var(--fw-heavy); opacity: 0.94;
 }
 
 /* ==== Shop: Cyber Gachapon, sideways ===================================================== *
@@ -311,29 +334,28 @@ body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-pa
   .cm-gacha__reveal-inner { gap: 6px; }
 }
 
-/* ==== Page exits, sideways: no footer row (Owner 2026-11-11) ============================= *
- * 「那兩塊就又大又厚，然後佔了很多空間」: on a phone held sideways the back row took 57–63px
- * of a 375–390px screen on every page. Sideways the row has no height and no band: the
- * page's keys float together in the lower right corner (the right thumb's reach; the lower
- * left belongs to panels such as the editor's selection and the gate preview), over the
- * page, which now runs to the bottom edge. Lists end with room to scroll clear of the keys.
- * Keys, ids and order are unchanged. */
+/* ==== Page exits, sideways: sleek docked bar, zero overlap (2026-11-24) ================== *
+ * Floating a zero-height footer over the page overlapped content in sideways (capacity bars,
+ * fixtures, TAMER ID, sponsor stake +). Because sub-screens now reclaim ~50px by hiding the
+ * world-clock bar and ~36px by slimming headers, a sleek 48px docked bar leaves MORE content
+ * room than before with ZERO floating collisions. */
 @media (max-height: 500px) and (orientation: landscape) {
   :root[data-theme] body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-root[data-screen] .cm-vs2-footer, .cm-screen-footer, .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer) {
     position: sticky; bottom: 0; z-index: 6;
-    display: flex; align-items: flex-end; justify-content: flex-end; gap: 8px;
-    height: 0; min-height: 0; padding-block: 0; border: 0; background: none; box-shadow: none;
-    overflow: visible; pointer-events: none;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    height: auto; min-height: 48px;
+    padding: 4px max(16px, var(--safe-right)) max(4px, var(--safe-bottom)) max(16px, var(--safe-left));
+    border-top: 2px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(180deg, rgba(16, 15, 32, 0.92), #131126);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.35);
+    overflow: visible; pointer-events: auto;
   }
   :root[data-theme] body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-root[data-screen] .cm-vs2-footer, .cm-screen-footer, .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer)::before,
   :root[data-theme] body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-root[data-screen] .cm-vs2-footer, .cm-screen-footer, .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer)::after { content: none; }
   :root[data-theme] body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-root[data-screen] .cm-vs2-footer, .cm-screen-footer, .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-footer) > * {
     pointer-events: auto; flex: 0 1 auto; width: auto; min-width: 0; min-height: 40px; margin: 0; padding: 2px 16px;
-    white-space: nowrap; translate: 0 calc(-8px - var(--safe-bottom));
+    white-space: nowrap; translate: none;
   }
-  /* The last row of a page scrolls clear of the floating keys. */
-  body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-shop__list, .cm-vs2-database__sheet, .cm-gacha__pane, .cm-vs2-cage-tray, .cm-digimon-shell, .cm-schedule-shell, .cm-tamer-shell, .cm-help-shell, .cm-championship-shell, .cm-vs5-shell, .cm-vs2-body) { scroll-padding-bottom: 60px; }
-  body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) :is(.cm-vs2-shop__list, .cm-gacha__pane, .cm-digimon-shell, .cm-schedule-shell, .cm-tamer-shell, .cm-help-shell, .cm-championship-shell)::after { content: ""; display: block; flex: none; grid-column: 1 / -1; height: 56px; }
 }
 
 /* ==== Key sizes, desktop (Owner 2026-11-11) =============================================== *
@@ -411,8 +433,484 @@ body[data-landscape-menu]:not([data-portrait-frame]) .cm-vs2-root[data-screen] .
    key steps aside while the card is open, like the hint and the notice do. */
 body:not([data-desktop-raising]) .int-rh2-root:has(.int-rh2-companion[data-open="true"]) .int-rh2-discoveries { visibility: hidden; }
 
-/* Multi-round events, sideways: the page is shorter than the screen, so its floating key sat
-   at the end of the page (over the second card's prize) instead of the screen's corner. */
+/* Multi-round events, sideways: keep its docked footer at the bottom of the screen. */
 @media (max-height: 500px) and (orientation: landscape) {
-  :root:root[data-theme] body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) .cm-championship-shell > .cm-screen-footer.cm-championship-footer { position: fixed; inset: auto max(16px, var(--safe-right)) 0 auto; }
+  :root:root[data-theme] body:is([data-landscape-menu], [data-cage-landscape]):not([data-portrait-frame]) .cm-championship-shell { min-height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+}
+
+/* ========================================================================================= *
+ * Batch 2 — Modern Mobile Game Chrome (2026-11-24)
+ * 1. Hide world-clock status bar on sub-screens and live Hunt/Battle fields (full-screen!).
+ * 2. Slim single-row sub-screen headers (drop redundant kickers & essay subtitles).
+ * 3. Collapsible Sponsor Contract capsule on Battle Select & Team Select.
+ * 4. Prevent Battle Team row overlap & Journey CTA clipping.
+ * ========================================================================================= */
+
+/* 1. Full-screen live Hunt/Battle & clean sub-screens (status bar belongs on Raising Home). */
+:root[data-theme="arcade"] body[data-status-bar="on"]:has(#cm-root[data-active-screen]:not([data-active-screen="RAISING_HOME"]):not([hidden])) {
+  --cm-screen-top: var(--safe-top, 0px);
+}
+:root[data-theme="arcade"] body[data-status-bar="on"]:has(#cm-root[data-active-screen="HUNT_FIELD"]:not([hidden])),
+:root[data-theme="arcade"] body[data-status-bar="on"]:has(#cm-root[data-active-screen="BATTLE_FIELD"]:not([hidden])),
+:root[data-theme="arcade"] body[data-status-bar="on"]:has(#cm-root[data-active-screen="BATTLE_RESULT"]:not([hidden])) {
+  --cm-screen-top: 0px;
+}
+:root[data-theme="arcade"] .cm-status-bar:not([data-screen="RAISING_HOME"]) {
+  width: 1px;
+  height: 1px;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+/* Keep live Hunt & Battle corner HUD below the phone notch while the arena fills 100% behind it. */
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud {
+  padding-top: max(10px, var(--safe-top, 0px));
+}
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_FIELD"] .cm-vs5-field__top {
+  padding-top: max(8px, var(--safe-top, 0px));
+}
+
+/* 2. Slim modern sub-screen headers: drop redundant category kickers & wall-of-text subtitles. */
+:root[data-theme="arcade"] :is(
+  .cm-vs2-kicker, .cm-vs5-kicker, .cm-digimon-kicker, .cm-schedule-kicker,
+  .cm-tamer-kicker, .cm-help-kicker, .cm-championship-kicker, .cm-medals__kicker,
+  .cm-vs2-root[data-screen="SHOP"] .cm-vs2-subtitle,
+  .cm-vs2-root[data-screen="DATABASE"] .cm-vs2-subtitle,
+  .cm-help-lead, .cm-medals__lead, .cm-schedule-lead
+) {
+  display: none;
+}
+:root[data-theme="arcade"] :is(.cm-vs2-header, .cm-digimon-head, .cm-schedule-head, .cm-tamer-head, .cm-help-head, .cm-medals__head) {
+  padding-top: 6px;
+  padding-bottom: 4px;
+  gap: 6px 12px;
+}
+/* Compact docked footers on Desktop & Portrait too: sleek 54px bar, no bloated padding. */
+:root[data-theme="arcade"] :is(.cm-vs2-footer, .cm-vs5-footer, .cm-screen-footer) {
+  padding-top: 8px;
+  padding-bottom: max(10px, var(--safe-bottom, 0px));
+}
+
+/* 3. Collapsible Sponsor Contract capsule (vs5Screens.js createSponsorContractStrip). */
+.cm-vs5-sponsors {
+  display: grid;
+  gap: 8px;
+  padding: 6px 10px;
+}
+.cm-vs5-sponsors[data-expanded="false"] {
+  padding: 0;
+  gap: 0;
+}
+.cm-vs5-sponsors__toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.cm-vs5-sponsors__toggle .cm-vs5-sponsors__label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cm-vs5-sponsors__toggle .cm-vs5-sponsors__today {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.cm-vs5-sponsors__caret {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: calc(13px * var(--text-scale, 1));
+  line-height: 1;
+}
+.cm-vs5-sponsors__body {
+  display: grid;
+  gap: 8px;
+}
+.cm-vs5-sponsors__body[hidden] {
+  display: none;
+}
+.cm-vs5-sponsors__body .cm-vs5-sponsors__stake {
+  justify-self: end;
+}
+
+/* 4. Battle team row spacing: prevent hover/selected transform overlap between adjacent rows. */
+.cm-vs5-root .cm-vs5-party {
+  row-gap: 10px;
+}
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-party-row:hover:not(:disabled),
+:root[data-theme="arcade"] .cm-vs5-root .cm-vs5-party-row:active:not(:disabled) {
+  transform: none;
+}
+
+/* 5. Journey (征途): keep the primary challenge CTA cleanly inside the scroll viewport. */
+.cm-journey .cm-journey__scroll {
+  padding-bottom: max(20px, var(--safe-bottom, 0px));
+}
+@media (min-width: 700px) and (min-height: 521px) {
+  .cm-journey .cm-journey__pod {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 6px 14px;
+    padding: 10px 14px;
+  }
+  .cm-journey .cm-journey__pod-top { grid-column: 1; }
+  .cm-journey .cm-journey__gauge { grid-column: 1; }
+  .cm-journey .cm-journey__pod-held { grid-column: 1; }
+  .cm-journey .cm-journey__pod-actions { grid-column: 2; grid-row: 1 / span 3; }
+}
+
+/* ========================================================================================= *
+ * Batch 3 — Clean Raising Menus & Compact Social Dock (2026-11-24)
+ * (Preserves main's circular care rail and collapsible 出發 quick-toggle FAB.)
+ * ========================================================================================= */
+
+/* Portrait phone menus: hide repetitive 2-line hints so the whole menu reads cleanly at a glance. */
+@media (max-width: 600px) {
+  :root[data-theme="arcade"] body .cm-toolbar__menu .cm-toolbar__entry-hint { display: none; }
+  :root[data-theme="arcade"] body .cm-toolbar__menu .cm-toolbar__entry { min-height: 50px; padding: 8px 10px; }
+  :root[data-theme="arcade"] body .cm-toolbar__menu .cm-toolbar__group:not([data-prominent="true"], [data-separate="true"]) .cm-toolbar__entry { padding-top: 12px; }
+}
+
+/* Highlight flagship Story Mode tile in System Menu so it stands out immediately. */
+:root[data-theme="arcade"] .cm-toolbar__menu .cm-toolbar__entry[data-entry-id="story"] {
+  background: linear-gradient(135deg, #f3ebff 0%, #e1f7ff 100%);
+  box-shadow: inset 0 6px 0 #7b4dff, 0 4px 0 #b8a4e8;
+}
+
+/* Compact Passport & Social Dock inside the System Menu popup (1 slim row instead of 4 giant slabs). */
+:root[data-theme="arcade"] .cm-toolbar__menu .cm-passport {
+  padding: 8px 10px;
+  gap: 6px;
+}
+:root[data-theme="arcade"] .cm-toolbar__menu .cm-social-dock__grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+:root[data-theme="arcade"] .cm-toolbar__menu .cm-social-key {
+  min-height: 44px;
+  padding: 6px 6px;
+  gap: 4px;
+  justify-content: center;
+}
+:root[data-theme="arcade"] .cm-toolbar__menu :is(.cm-social-key__sub, .cm-social-key__go) {
+  display: none;
+}
+:root[data-theme="arcade"] .cm-toolbar__menu .cm-social-key__name {
+  font-size: calc(11px * var(--text-scale, 1));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ========================================================================================= *
+ * Batch 4 — Per-Screen Decluttering & Modern Mobile Polish (2026-11-24)
+ * ========================================================================================= */
+
+/* 1. Shop -> Gacha: remove duplicate wallet pill when Gacha's 3-currency bar is active, and tighten deck. */
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="SHOP"]:has(.cm-gacha:not([hidden])) .cm-vs2-shop__wallet {
+  display: none;
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="SHOP"] .cm-gacha {
+  gap: 8px;
+}
+@media (min-width: 700px) and (min-height: 521px) {
+  :root[data-theme="arcade"] .cm-vs2-root[data-screen="SHOP"] .cm-gacha__pane--machine {
+    gap: 8px;
+  }
+  :root[data-theme="arcade"] .cm-vs2-root[data-screen="SHOP"] .cm-gacha__deck {
+    min-height: 220px;
+  }
+}
+
+/* 2. Facility editor (設施配置): drop duplicate land-note line inside the canvas pill. */
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__land-note {
+  display: none;
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="CAGE_EDIT"][data-hex-world="true"] .cm-hexworld__land {
+  padding-block: 4px;
+  min-height: 36px;
+}
+
+/* 3. Database / Dex detail: clean pill padding for 高清立繪 / 實機動作 so text never clips. */
+:root[data-theme="arcade"] .cm-vs2-database__detail :is(.cm-dex-mode-btn, .cm-dex-showcase__tab) {
+  padding-inline: 10px;
+}
+
+/* 4. Backpack & Discovery Journal: strip verbose boilerplate prose, keep stats & rewards crisp. */
+:root[data-theme="arcade"] dialog.cm-dialog:has(.cm-backpack) .cm-dialog__message,
+:root[data-theme="arcade"] dialog.cm-dialog:has(.cm-backpack) .cm-backpack__wallet,
+:root[data-theme="arcade"] dialog.cm-dialog:has(.cm-backpack) .cm-backpack__item[data-kind="SUPPLY"] .cm-backpack__effect {
+  display: none;
+}
+:root[data-theme="arcade"] dialog.cm-dialog:has(.int-rh2-discovery-list) .cm-dialog__message,
+:root[data-theme="arcade"] dialog.cm-dialog:has(.int-rh2-discovery-list) .int-rh2-discovery-claim,
+:root[data-theme="arcade"] dialog.cm-dialog:has(.int-rh2-discovery-list) .int-rh2-discovery-foot {
+  display: none;
+}
+
+/* 5. Digimon List (夥伴名單): hide unimplemented disabled stub keys & placeholder prose. */
+:root[data-theme="arcade"] .cm-digimon-root .cm-digimon-control[data-state="NOT_IMPLEMENTED"],
+:root[data-theme="arcade"] .cm-digimon-root .cm-digimon-controls-note {
+  display: none;
+}
+
+/* 6. Tamer Info (馴獸師資料): compact top action row so the Licence Card fits above the fold. */
+@media (min-width: 700px), (orientation: landscape) and (max-height: 520px) {
+  :root[data-theme="arcade"] .cm-tamer-shell {
+    row-gap: 8px;
+  }
+  :root[data-theme="arcade"] .cm-tamer-code {
+    padding-block: 6px;
+  }
+  :root[data-theme="arcade"] .cm-tamer-shell > .cm-brag-cta {
+    min-height: 44px;
+    padding-block: 6px;
+  }
+}
+
+/* ========================================================================================= *
+ * Batch 5 — Modern Mobile Game Visual & UX Polish (2026-11-24)
+ * 1. Lightweight translucent Ranch entry hint pill (never blocks center view).
+ * 2. Collapsible Cyber Gacha Prize Pool bar + clean one-screen cabinet fit & crisp Shop cards.
+ * 3. High-frequency polish: Portrait Battle Select, Portrait Journey, Dex Detail & Conditions,
+ *    and Battle Result hierarchy.
+ * ========================================================================================= */
+
+/* 1. Ranch entry hint: sleek frosted-glass micro-pill instead of a chunky high-contrast box. */
+:root[data-theme="arcade"] .int-rh2-hint {
+  padding: 5px 12px;
+  border: 1.5px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+  background: rgba(16, 20, 36, 0.72);
+  color: rgba(242, 248, 255, 0.94);
+  font-size: calc(12px * var(--text-scale, 1));
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(6px);
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  :root[data-theme="arcade"] body:has(#cm-root[data-active-screen="RAISING_HOME"]:not([hidden])) .int-rh2-hint {
+    top: auto;
+    bottom: calc(68px + var(--safe-bottom));
+    left: max(12px, var(--safe-left));
+    right: auto;
+    max-width: min(360px, calc(100% - 216px - var(--safe-left) - var(--safe-right)));
+  }
+}
+
+/* 2. Cyber Gacha: collapsible prize-pool bar + clean one-screen cabinet fit (no peeking card). */
+.cm-gacha__pool[data-expanded="false"] {
+  padding: 0;
+  gap: 0;
+  margin-top: 0;
+}
+.cm-gacha__pool[data-expanded="true"] {
+  padding: 0 8px 8px;
+  gap: 6px;
+}
+.cm-gacha__pool-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 40px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.cm-gacha__pool-toggle .cm-gacha__pool-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cm-gacha__pool-tag {
+  flex: 0 0 auto;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255, 201, 60, 0.18);
+  border: 1px solid rgba(255, 201, 60, 0.45);
+  color: #ffe27a;
+  font-size: calc(10.5px * var(--text-scale, 1));
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.cm-gacha__pool-caret {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #f2f8ff;
+  font-size: calc(12px * var(--text-scale, 1));
+  line-height: 1;
+}
+.cm-gacha__pool-list[hidden] {
+  display: none;
+}
+/* Give Desktop & Portrait Gacha cabinet exact breathing room so machine + pulls + rates + pool toggle fit in 1 screen. */
+@media (min-height: 521px) {
+  :root[data-theme="arcade"] .cm-vs2-root[data-screen="SHOP"] .cm-gacha__pane--machine {
+    gap: 7px;
+    padding-bottom: 6px;
+  }
+  :root[data-theme="arcade"] .cm-vs2-root[data-screen="SHOP"] .cm-gacha__deck {
+    height: clamp(164px, calc(100cqh - 178px), 300px);
+    min-height: 164px;
+  }
+  :root[data-theme="arcade"] .cm-vs2-root[data-screen="SHOP"] .cm-gacha__pulls {
+    padding-bottom: 2px;
+  }
+}
+
+/* 3. Shop item cards: cleaner modern mobile visual hierarchy, glowing art pedestal, no awkward CJK currency wraps. */
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__row {
+  gap: 7px;
+  padding: 8px 9px 10px;
+  background: linear-gradient(180deg, #fffef9 0%, #f7f1e3 100%);
+  transition: transform 120ms ease-out, box-shadow 120ms ease-out;
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__row[aria-selected="true"] {
+  background: linear-gradient(180deg, #fff5c4 0%, #ffe066 100%);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.65), 0 4px 0 var(--ax-ink), 0 0 0 2px #ffd23f;
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__row:not([data-cage-card="true"]) .cm-vs2-shop__card-art {
+  background: radial-gradient(circle at 50% 45%, #fffef8 0%, #f1e5c8 72%, #e6d6b4 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+:root[data-theme="arcade"] .cm-vs2-root[data-screen="SHOP"][data-shop-layout="ARCADE_GRID_R1"] .cm-vs2-shop__meta {
+  font-size: calc(12px * var(--text-scale, 1));
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  word-break: keep-all;
+}
+
+/* 4. Portrait Battle Select: drop redundant prism swipe tutorial sentence (already dropped on Desktop & Landscape). */
+@media (max-width: 699px) {
+  body:not([data-desktop-menu]):not([data-landscape-menu]):not([data-portrait-frame]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-cube__note {
+    display: none;
+  }
+}
+
+/* 5. Portrait Journey (征途): tighten vertical rhythm so the primary Challenge CTA sits cleanly above the fold. */
+@media (max-width: 699px) and (min-height: 521px) {
+  .cm-journey .cm-journey__scroll {
+    gap: 8px;
+  }
+  .cm-journey .cm-journey__pod {
+    padding: 8px 11px;
+    gap: 4px;
+  }
+  .cm-journey .cm-journey__tower {
+    gap: 7px;
+  }
+  .cm-journey .cm-journey__floors {
+    gap: 3px;
+    padding: 5px 8px;
+  }
+  .cm-journey .cm-journey__floor {
+    min-height: 40px;
+    padding: 3px 8px;
+  }
+  .cm-journey .cm-journey__detail {
+    gap: 6px;
+    padding: 9px 10px;
+  }
+  .cm-journey .cm-journey__team {
+    grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+    gap: 5px;
+  }
+  .cm-journey .cm-journey__member {
+    padding: 4px 3px;
+  }
+  .cm-journey .cm-journey__face {
+    width: 32px;
+    height: 32px;
+  }
+  .cm-journey .cm-journey__go {
+    min-height: 46px;
+  }
+}
+
+/* 6. Database / Dex Detail & Conditions: cleaner breathing room, crisp portrait tabs, lighter condition disclaimers. */
+:root[data-theme="arcade"] .cm-vs2-database__sheet-panel {
+  gap: 6px;
+}
+:root[data-theme="arcade"] .cm-vs2-database__close {
+  min-height: 40px;
+  padding-block: 4px;
+}
+@media (max-width: 600px) {
+  :root[data-theme="arcade"] .cm-vs2-database__detail .cm-dex-showcase__tabs {
+    gap: 2px;
+    padding: 3px;
+  }
+  :root[data-theme="arcade"] .cm-vs2-database__detail :is(.cm-dex-mode-btn, .cm-dex-showcase__tab) {
+    padding-inline: 8px;
+    font-size: calc(12px * var(--text-scale, 1));
+  }
+}
+:root[data-theme="arcade"] .cm-dex-conditions__panel {
+  gap: 5px;
+}
+:root[data-theme="arcade"] .cm-dex-conditions__notice {
+  margin: 0;
+  font-size: calc(11px * var(--text-scale, 1));
+  line-height: 1.35;
+  opacity: 0.74;
+}
+:root[data-theme="arcade"] .cm-dex-conditions__row {
+  padding-block: 4px;
+}
+
+/* 7. Battle Result: crisp card spacing and readable reward hierarchy. */
+:root[data-theme="arcade"] .cm-vs5-root[data-screen="BATTLE_RESULT"] .cm-vs5-result-card {
+  gap: 10px;
+  padding: 14px 16px;
+}
+
+/* 8. Story theater observation log: open cleanly above the control header so Log / Auto / Skip stay tappable. */
+:root[data-theme="arcade"] .cm-story-vn__log {
+  bottom: calc(100% + 8px);
+}
+
+/* 9. Main-branch polish: keep Data Arena side card at its natural height in desktop grid & thumb-size Journey tactic pills. */
+@media (min-width: 700px) and (min-height: 521px) {
+  body:not([data-portrait-frame]):not([data-landscape-menu]) .cm-vs5-root[data-screen="BATTLE_SELECT"] .cm-vs5-data-arena--side {
+    align-self: start;
+  }
+}
+.cm-journey .cm-journey__tactic-pill {
+  min-height: 40px;
 }
