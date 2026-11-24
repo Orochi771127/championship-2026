@@ -127,8 +127,8 @@ export function threatOfShot(shot, body, horizon = 0.45) {
   return miss <= (shot.radius ?? 12) + (body.radius ?? 20) + 12 ? { t, dirX: shot.vx, dirY: shot.vy, kind: "SHOT" } : null;
 }
 
-/** Scan hostile projectiles and soon-detonating zones for an immediate threat. */
-export function detectIncomingThreat({ body, hostileOwner, hostileTeam, projectiles, zones, threatSeen, horizon = 0.45 }) {
+/** Scan hostile projectiles, soon-detonating zones, and imminent AoE/beam windup telegraphs for an immediate threat. */
+export function detectIncomingThreat({ body, hostileOwner, hostileTeam, projectiles, zones, telegraphs = [], threatSeen, horizon = 0.45 }) {
   for (const shot of projectiles) {
     if (shot.dead || shot.isWallShard || shot.owner !== hostileOwner || threatSeen?.has(shot.id)) continue;
     const hit = threatOfShot(shot, body, horizon);
@@ -144,6 +144,29 @@ export function detectIncomingThreat({ body, hostileOwner, hostileTeam, projecti
       const dx = body.x - zone.x + 0.01;
       const dy = body.y - zone.y;
       return { t: Math.max(0.05, zone.delay - zone.t), dirX: -dy, dirY: dx, kind: "ZONE" };
+    }
+  }
+  for (const tg of telegraphs) {
+    if (!tg || tg.team !== hostileTeam) continue;
+    const key = `tg:${tg.owner ?? ""}:${tg.moveId ?? ""}`;
+    if (threatSeen?.has(key)) continue;
+    const rem = Math.max(0.05, (tg.duration ?? 0.3) - (tg.t ?? 0));
+    if (rem > horizon + 0.15) continue;
+    if (tg.kind === "CIRCLE" && distance(tg.x, tg.y, body.x, body.y) < (tg.radius ?? 100) + (body.radius ?? 20)) {
+      threatSeen?.add(key);
+      const dx = body.x - tg.x + 0.01;
+      const dy = body.y - tg.y;
+      return { t: rem, dirX: -dy, dirY: dx, kind: "TELEGRAPH_CIRCLE" };
+    }
+    if (tg.kind === "LINE" && (tg.width ?? 24) >= 24) {
+      const cosA = Math.cos(tg.angle ?? 0), sinA = Math.sin(tg.angle ?? 0);
+      const rx = body.x - tg.x, ry = body.y - tg.y;
+      const along = rx * cosA + ry * sinA;
+      const perp = Math.abs(-rx * sinA + ry * cosA);
+      if (along > -10 && along < (tg.length ?? 400) + 20 && perp < (tg.width ?? 24) * 0.65 + (body.radius ?? 20)) {
+        threatSeen?.add(key);
+        return { t: rem, dirX: cosA, dirY: sinA, kind: "TELEGRAPH_LINE" };
+      }
     }
   }
   return null;
@@ -330,6 +353,10 @@ export function pickUnifiedMove({
     if (move.type === "LUNGE" && dist > 180) score *= 0.55;
     if (move.type === "NOVA" && dist > (move.radius ?? 140) + 20) score *= 0.5;
     if (move.type === "ZONE" && Math.hypot(foe?.vx ?? 0, foe?.vy ?? 0) < 120) score *= 1.3;
+    // Wave 2: Punish actively guarding/shielded foes with Guard-Break archetypes!
+    if ((foe?.guardTimer > 0 || foe?.barrier > 0) && ["GUARD_BREAK_SLAM", "LEAP_SLAM", "GRAB_SLAM", "TELEKINESIS_SLAM"].includes(arch)) {
+      score *= 2.2;
+    }
     if (arch === "RECOVERY_SUPPORT") {
       score = (body.hp < body.maxHp * 0.5 && (body.healsUsed ?? 0) < 2) ? 170 : 0;
     } else if (move.type === "BARRIER" || arch === "PROTECT_COUNTER") {
@@ -441,4 +468,61 @@ export function shouldUseTacticalArt({
       return false;
   }
 }
+
+/**
+ * Wave 2 Smart 3v3 Partner Switch Evaluator (shared by Opponent AI & Player AUTO mode):
+ * Evaluates active HP, elemental disadvantage, crippling ailments (for 6s bench cleanse),
+ * and ranks healthy reserve partners by counter-element matchup + HP ratio.
+ * Returns the best reserve slot index (>= 0) or -1 to stay in.
+ */
+export function evaluateSmartSwitch({
+  active,
+  bench = [],
+  activeIdx = 0,
+  incomingMultOf = () => 1,
+  outgoingMultOf = () => 1,
+  difficulty = "normal",
+  switchCooldown = 0,
+  roundTime = 0
+} = {}) {
+  if (!active || active.hp <= 0 || switchCooldown > 0) return -1;
+  if (active.cast || active.lunge || (active.hitstun ?? 0) > 0) return -1;
+  const diff = normalizeAiDifficulty(difficulty);
+  if (diff === "easy") return -1;
+  const minRoundTime = diff === "hard" ? 6 : 10;
+  if (roundTime < minRoundTime) return -1;
+
+  const activeHpRatio = active.hp / Math.max(1, active.maxHp ?? 200);
+  const activeIncoming = incomingMultOf(active, activeIdx);
+  const activeOutgoing = outgoingMultOf(active, activeIdx);
+  const severelyAiled = Boolean((active.burn ?? 0) > 1.2 || (active.poison ?? 0) > 1.5 || (active.paralyze ?? 0) > 1.5);
+
+  const lowHpTrigger = activeHpRatio < (diff === "hard" ? 0.38 : 0.34);
+  const badMatchupTrigger = activeIncoming > 1.15 && activeHpRatio < (diff === "hard" ? 0.72 : 0.62);
+  const cleanseTrigger = diff === "hard" && severelyAiled && activeHpRatio < 0.56;
+  if (!lowHpTrigger && !badMatchupTrigger && !cleanseTrigger) return -1;
+
+  const currentScore = activeOutgoing * 1.35 - activeIncoming * 1.25 + activeHpRatio * 1.15 - (severelyAiled ? 0.35 : 0);
+  let bestIdx = -1;
+  let bestScore = currentScore + (lowHpTrigger ? 0.15 : 0.45);
+  const minBenchHp = lowHpTrigger ? 0.50 : 0.58;
+
+  for (let i = 0; i < bench.length; i++) {
+    if (i === activeIdx) continue;
+    const cand = bench[i];
+    if (!cand || cand.hp <= 0) continue;
+    const hpRatio = cand.hp / Math.max(1, cand.maxHp ?? 200);
+    if (hpRatio < minBenchHp) continue;
+    const inc = incomingMultOf(cand, i);
+    const out = outgoingMultOf(cand, i);
+    const candAiled = Boolean((cand.burn ?? 0) > 0 || (cand.poison ?? 0) > 0 || (cand.paralyze ?? 0) > 0);
+    const score = out * 1.35 - inc * 1.25 + hpRatio * 1.15 - (candAiled ? 0.35 : 0);
+    if (score > bestScore) {
+      bestScore = score;
+      bestIdx = i;
+    }
+  }
+  return bestIdx;
+}
+
 

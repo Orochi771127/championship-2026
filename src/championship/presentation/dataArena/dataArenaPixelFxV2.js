@@ -59,12 +59,53 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
   const shotSheets = new Map();
   const liveShots = [];
   const livePuddles = new Map();
+  const liveScars = [];
+  const MAX_SCARS = quality === "low" ? 24 : 48;
+  const SCAR_TTL = 4.0;
   const shotLayer = new PIXI.Container();
   shotLayer.label = "pixelfx v2 shots";
   front.addChild(shotLayer);
+  const scarLayer = new PIXI.Container();
+  scarLayer.label = "pixelfx v2 battle scars";
+  (ground ?? front).addChild(scarLayer);
   const puddleLayer = new PIXI.Container();
   puddleLayer.label = "pixelfx v2 ground surfaces";
   (ground ?? front).addChild(puddleLayer);
+
+  const SCAR_LOOK_BY_PALETTE = Object.freeze({
+    fire: "prop-dust",
+    earth: "prop-dust",
+    metal: "prop-dust",
+    ice: "mark-frost",
+    water: "mark-ripple",
+    nature: "mark-roots",
+    thunder: "sigil-rune",
+    light: "sigil-rune",
+    dark: "splat",
+    wind: "mark-ripple"
+  });
+
+  function stampScar({ x, y, paletteKey = "earth", scale = 1 }) {
+    if (reducedMotion) return false;
+    const look = SCAR_LOOK_BY_PALETTE[paletteKey] ?? "prop-dust";
+    const sheet = shotSheet(look, paletteKey);
+    if (!sheet?.body?.textures?.length) return false;
+    while (liveScars.length >= MAX_SCARS) {
+      const oldest = liveScars.shift();
+      oldest.sprite.destroy();
+    }
+    const frames = sheet.body.textures;
+    const sprite = new PIXI.Sprite(frames[Math.min(frames.length - 1, Math.floor(frames.length * 0.6))]);
+    sprite.anchor.set(0.5, 0.5);
+    const baseW = Math.max(24, sprite.texture?.width ?? 48);
+    const sc = Math.max(0.65, Math.min(1.65, (BODY * 0.72 * scale) / baseW));
+    sprite.position.set(Math.round(x), Math.round(y + 6));
+    sprite.scale.set(sc, sc * 0.62);
+    sprite.alpha = 0.52;
+    scarLayer.addChild(sprite);
+    liveScars.push({ sprite, age: 0, maxAge: SCAR_TTL, baseAlpha: 0.52 });
+    return true;
+  }
 
   const PUDDLE_PIXELFX = Object.freeze({
     WATER_PUDDLE: { piece: "mark-ripple", gdPiece: null, paletteKey: "water", fps: 12, alpha: 0.78 },
@@ -222,6 +263,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       const contactPiece = resolve00GameDevsPiece({ piece: baseContact, archetype: spec.v2Archetype, paletteKey: spec.paletteKey, tier: heavy ? "ultimate" : spec.tier }) || baseContact;
       playPiece(pieces, contactPiece, { x, y, angle, palette: pal, scale: Math.min(1.45, spec.scale * (heavy ? 1.15 : 0.96)), groundY, at: "contact" });
       if (heavy && !reducedMotion) {
+        stampScar({ x, y: groundY, paletteKey: spec.paletteKey, scale: Math.min(1.3, spec.scale) });
         holdMs = Math.max(holdMs, 55);
       }
       stats.hits++;
@@ -230,6 +272,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
     area({ x, y, radius = 100, moveId }) {
       const spec = resolveMoveSpecV2(moveId);
       const pal = paletteFor(spec.paletteKey);
+      stampScar({ x, y: y + 8, paletteKey: spec.paletteKey, scale: Math.max(0.9, Math.min(1.5, radius / 95)) });
       if (spec.v2Archetype === "METEOR_RAIN") {
         if (!reducedMotion) {
           playPiece(pieces, "impact-frame", { x, y, palette: { core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true }, scale: 0.9, groundY: y + 18 });
@@ -360,6 +403,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       const scale = Math.max(1.2, Math.min(1.85, (radius / 120) * 1.25));
       const gdCrater = resolve00GameDevsPiece({ archetype: spec.v2Archetype === "GUARD_BREAK_SLAM" ? "GUARD_BREAK_SLAM" : "SHOCKWAVE_RING", piece: "quake", paletteKey: cPal, tier: spec.tier }) || "quake";
       playPiece(pieces, gdCrater, { x, y: y + 4, palette: paletteFor(cPal), scale, groundY: y + 12 });
+      stampScar({ x, y: y + 8, paletteKey: cPal, scale: Math.min(1.5, scale) });
       stats.hits++;
       return true;
     },
@@ -370,6 +414,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       const gdSky = resolve00GameDevsPiece({ archetype: "METEOR_RAIN", piece: "drop", paletteKey: mPal, tier: spec.tier }) || "drop";
       const scale = Math.max(1.25, Math.min(1.85, (radius / 100) * 1.35));
       playPiece(pieces, gdSky, { x, y: y + 8, palette: paletteFor(mPal), scale, groundY: y + 14 });
+      stampScar({ x, y: y + 10, paletteKey: mPal, scale: Math.min(1.45, scale) });
       stats.releases++;
       return true;
     },
@@ -463,6 +508,17 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       pieces?.update(stepMs);
       groundPieces?.update(stepMs);
       volCache.update(dt);
+      for (let i = liveScars.length - 1; i >= 0; i--) {
+        const sc = liveScars[i];
+        sc.age += dt;
+        if (sc.age >= sc.maxAge) {
+          sc.sprite.destroy();
+          liveScars.splice(i, 1);
+          continue;
+        }
+        const rem = sc.maxAge - sc.age;
+        sc.sprite.alpha = rem < 0.85 ? sc.baseAlpha * (rem / 0.85) : sc.baseAlpha;
+      }
       for (const entry of livePuddles.values()) {
         entry.age += dt;
         const frames = entry.sheet.body.textures;
@@ -505,11 +561,15 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
     getDiagnostics: () => Object.freeze({
       ...stats,
       liveShots: liveShots.length,
+      scars: liveScars.length,
       volumetricCache: volCache.getDiagnostics(),
       pieces: pieces?.getDiagnostics?.() ?? null
     }),
     dispose() {
       volCache.dispose();
+      for (const sc of liveScars) sc.sprite.destroy();
+      liveScars.length = 0;
+      scarLayer.destroy();
       for (const entry of livePuddles.values()) entry.sprite.destroy();
       livePuddles.clear();
       puddleLayer.destroy();

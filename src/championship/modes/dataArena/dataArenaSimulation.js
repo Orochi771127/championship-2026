@@ -38,7 +38,7 @@ import { createRelayArenaEvents } from './dataArenaRelayArena.js';
 import {
   CONTROL_MODES, normalizeControlMode, AI_DIFFICULTIES, normalizeAiDifficulty, DEFAULT_AI_SETTINGS, normalizeAiSettings, GUARD_RULES, suddenDeathMultiplier,
   threatOfShot, detectIncomingThreat, pbRankInterceptDodge, pbRankCornerWaypoint, pbRankSpacingVector,
-  chooseUnifiedGoal, pickUnifiedMove, evaluateMoveMatchups, shouldUseTacticalArt
+  chooseUnifiedGoal, pickUnifiedMove, evaluateMoveMatchups, shouldUseTacticalArt, evaluateSmartSwitch
 } from './dataArenaUnifiedAI.js';
 import {
   statStageMultiplier, speedStageMultiplier, TACTICAL_CAPS, WEATHER_RULES, desiredWeatherForElement, weatherDamageMultiplier, weatherImmune,
@@ -3585,6 +3585,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         hostileTeam: "player",
         projectiles: state.projectiles,
         zones: state.zones,
+        telegraphs: state.telegraphs,
         threatSeen: rival.threatSeen,
         horizon: 0.45
       });
@@ -3801,6 +3802,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         hostileTeam: "rival",
         projectiles: state.projectiles,
         zones: state.zones,
+        telegraphs: state.telegraphs,
         threatSeen: ai.threatSeen,
         horizon: 0.45
       });
@@ -4253,11 +4255,20 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         // A Journey zone stage offers a three-choice buff between waves; the relay pauses on it.
         if (relayBuffPicks) { state.pendingLevels++; openOffer(); }
       }
-    } else if (t.roundTime > 14 && relay.rivalSwitchCooldown <= 0 && rival.hp < rival.maxHp * 0.36 && !rival.cast && !rival.lunge && rival.hitFlash > 0) {
-      // Tactical AI switch: preserves the wounded rival's remaining HP on the bench without counting as a KO!
-      const basicId = RELAY_ACTION_PROFILES[partner.id]?.basic ?? 'relaySlash';
-      const disadvantaged = taxonomyMultiplier(attackElementOf(player, basicId), rival) > 1;
-      const benchIdx = disadvantaged ? relay.rivals.findIndex((r, idx) => idx !== relay.enemyIndex && r.hp > r.maxHp * 0.65) : -1;
+    } else if (relay.rivalSwitchCooldown <= 0 && !rival.cast && !rival.lunge) {
+      // Wave 2 Smart 3v3 AI Switch: evaluates low HP, elemental counter-matchups & ailment bench-cleanse!
+      const playerBasicId = RELAY_ACTION_PROFILES[partner.id]?.basic ?? 'relaySlash';
+      const playerAtkEl = attackElementOf(player, playerBasicId);
+      const benchIdx = evaluateSmartSwitch({
+        active: rival,
+        bench: relay.rivals,
+        activeIdx: relay.enemyIndex,
+        incomingMultOf: (cand) => taxonomyMultiplier(playerAtkEl, cand),
+        outgoingMultOf: (cand) => taxonomyMultiplier(attackElementOf(cand, cand.basic ?? 'relaySlash'), player),
+        difficulty: state.aiDifficulty,
+        switchCooldown: relay.rivalSwitchCooldown,
+        roundTime: t.roundTime
+      });
       if (benchIdx >= 0) {
         rival.active = false; rival.cast = rival.lunge = rival.action = null; removeTelegraph(`cast:${rival.id}`);
         const incoming = relay.rivals[benchIdx];
@@ -4265,11 +4276,29 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         incoming.atkStage = 0; incoming.defStage = 0; incoming.spdStage = 0; incoming.buffsUsed = 0;
         incoming.counterTimer = 0; incoming.flurry = null; incoming.backstab = null; incoming.approach = null;
         triggerSwitchHazard(incoming, 'rival');
-        relay.enemyIndex = benchIdx; relay.rivalSwitchCooldown = 24;
+        relay.enemyIndex = benchIdx; relay.rivalSwitchCooldown = state.aiDifficulty === "hard" ? 16 : 22;
         state.rivals = [incoming];
         emit({ type: 'RELAY_RIVAL_SWITCH', rivalId: incoming.definitionId, speciesId: incoming.speciesId, enemyIndex: benchIdx, x: incoming.x, y: incoming.y });
         emit({ type: 'DEPLOY_SHIELD', casterId: incoming.id, team: 'rival', x: incoming.x, y: incoming.y, duration: incoming.invulnerable });
       }
+    }
+    // Wave 2: Player AUTO mode smart 3v3 tag-out when endangered / countered & reserve is healthy
+    if (state.controlMode === "AUTO" && player.hp > 0 && rival && rival.active && rival.hp > 0 && relay.switchCooldown <= 0) {
+      const rivalAtkEl = attackElementOf(rival, rival.basic ?? 'relaySlash');
+      const autoSlot = evaluateSmartSwitch({
+        active: player,
+        bench: relay.team,
+        activeIdx: relay.active,
+        incomingMultOf: (cand) => taxonomyMultiplier(rivalAtkEl, cand),
+        outgoingMultOf: (cand) => {
+          const bId = RELAY_ACTION_PROFILES[cand.partnerId]?.basic ?? 'relaySlash';
+          return taxonomyMultiplier(attackElementOf(cand, bId), rival);
+        },
+        difficulty: "normal",
+        switchCooldown: relay.switchCooldown,
+        roundTime: t.roundTime
+      });
+      if (autoSlot >= 0) switchRelayPlayer(false, autoSlot);
     }
     const mineDead = player.hp <= 0 && relay.team.every((entry, i) => i === relay.active || entry.hp <= 0);
     const theirsDead = relay.rivals.every(r => r.hp <= 0);

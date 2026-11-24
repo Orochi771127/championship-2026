@@ -5,7 +5,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createDataArenaSimulation } from "../src/championship/modes/dataArena/dataArenaSimulation.js";
 import { createRelayReplayRecorder, createRelayReplayPlayer } from "../src/championship/modes/dataArena/dataArenaReplay.js";
-import { GUARD_RULES, suddenDeathMultiplier, AI_DIFFICULTIES, pbRankInterceptDodge, pbRankCornerWaypoint, pbRankSpacingVector } from "../src/championship/modes/dataArena/dataArenaUnifiedAI.js";
+import { GUARD_RULES, suddenDeathMultiplier, AI_DIFFICULTIES, pbRankInterceptDodge, pbRankCornerWaypoint, pbRankSpacingVector, detectIncomingThreat, pickUnifiedMove, evaluateSmartSwitch } from "../src/championship/modes/dataArena/dataArenaUnifiedAI.js";
 import { weatherDamageMultiplier } from "../src/championship/modes/dataArena/dataArenaTacticalArts.js";
 import { DATA_ARENA_RELAY } from "../src/championship/modes/dataArena/dataArenaRelay.js";
 import { RELAY_ROSTER } from "../src/championship/modes/dataArena/dataArenaRelayRoster.js";
@@ -1376,4 +1376,96 @@ test("phase 12 / Combat Wave 1: 666-move calibrated ranges/windups, 8px anti-tun
     if (sim.drainEvents().some((e) => e.type === "SHOT_BLOCKED")) { sawBlocked = true; break; }
   }
   assert.ok(sawBlocked, "2400 px/s ultra-fast projectile stops on thin cover wall via 8px sub-stepping (zero tunneling)");
+});
+
+test("phase 13 / Combat Wave 2: 3v3 smart AI partner switching, AoE telegraph dodge, Guard-Break punish, off-screen ray arrow & 4s PixelFX battle scars", async () => {
+  // 1) Smart 3v3 Partner Switch Evaluator
+  const active = { hp: 55, maxHp: 200, burn: 0, poison: 0, paralyze: 0 };
+  const bench = [
+    active,
+    { hp: 180, maxHp: 200, burn: 0, poison: 0, paralyze: 0 }, // neutral reserve
+    { hp: 170, maxHp: 200, burn: 0, poison: 0, paralyze: 0 }  // counter-element reserve!
+  ];
+  assert.equal(evaluateSmartSwitch({ active, bench, activeIdx: 0, difficulty: "easy", roundTime: 20 }), -1, "Easy AI never aggressively tag-switches");
+  const pickNormal = evaluateSmartSwitch({
+    active, bench, activeIdx: 0, difficulty: "normal", roundTime: 15,
+    incomingMultOf: (_c, i) => (i === 0 ? 1.5 : i === 2 ? 0.5 : 1.0),
+    outgoingMultOf: (_c, i) => (i === 2 ? 1.5 : 1.0)
+  });
+  assert.equal(pickNormal, 2, "Normal/Hard AI tags in the counter-element healthy reserve (#2 over neutral #1)");
+
+  const ailedActive = { hp: 100, maxHp: 200, burn: 3.0, poison: 0, paralyze: 0 };
+  const pickCleanse = evaluateSmartSwitch({
+    active: ailedActive, bench: [ailedActive, { hp: 190, maxHp: 200 }], activeIdx: 0,
+    difficulty: "hard", roundTime: 8
+  });
+  assert.equal(pickCleanse, 1, "Hard AI tags out severely burned fighter for 6s bench cleanse");
+
+  // 2) Proactive AoE & beam telegraph threat detection
+  const circleThreat = detectIncomingThreat({
+    body: { x: 400, y: 400, radius: 20 }, hostileOwner: "player", hostileTeam: "player",
+    projectiles: [], zones: [],
+    telegraphs: [{ owner: "cast:p", team: "player", moveId: "flameRing", kind: "CIRCLE", x: 420, y: 400, radius: 130, duration: 0.3, t: 0.05 }],
+    threatSeen: new Set(), horizon: 0.45
+  });
+  assert.equal(circleThreat?.kind, "TELEGRAPH_CIRCLE", "AI proactively detects hostile AoE circle windup telegraph");
+  const lineThreat = detectIncomingThreat({
+    body: { x: 520, y: 405, radius: 20 }, hostileOwner: "player", hostileTeam: "player",
+    projectiles: [], zones: [],
+    telegraphs: [{ owner: "cast:p", team: "player", moveId: "sunSpear", kind: "LINE", x: 300, y: 400, angle: 0, length: 600, width: 32, duration: 0.28, t: 0.05 }],
+    threatSeen: new Set(), horizon: 0.45
+  });
+  assert.equal(lineThreat?.kind, "TELEGRAPH_LINE", "AI proactively detects hostile beam lane windup telegraph");
+
+  // 3) Guard-Break punish priority when foe is guarding
+  const moveDefs = {
+    jab: { type: "LUNGE", distance: 160, damage: 24, energy: 15 },
+    breaker: { type: "LUNGE", distance: 170, damage: 24, energy: 20 }
+  };
+  const gbPick = pickUnifiedMove({
+    body: { hp: 200, maxHp: 200, energy: 100 },
+    foe: { hp: 200, maxHp: 200, guardTimer: 0.35, vx: 0, vy: 0 },
+    dist: 120, canCast: () => true, moveFor: (id) => moveDefs[id],
+    kitMoveIds: ["jab", "breaker"],
+    moveArchetype: (id) => (id === "breaker" ? "GUARD_BREAK_SLAM" : "FLURRY_COMBO"),
+    choiceNoise: 0, random: () => 0.5
+  });
+  assert.equal(gbPick?.id, "breaker", "AI prioritizes Guard-Break moves to shatter actively guarding foes");
+
+  // 4) 4-second pure-PixelFX ground battle scars lifecycle & cap in dataArenaPixelFxV2
+  const { loadMoveVfxPieceSprites } = await import("../src/championship/presentation/vfx/moveVfxSetPieces.js");
+  await loadMoveVfxPieceSprites();
+  class Node {
+    constructor() { this.children = []; this.anchor = { set() {} }; this.scale = { set() {} }; this.position = { set() {} }; }
+    addChild(c) { c.parent = this; this.children.push(c); return c; }
+    removeChild(c) { this.children = this.children.filter((x) => x !== c); }
+    destroy() { this.destroyed = true; }
+  }
+  const MockPIXI = {
+    Container: Node,
+    Sprite: class extends Node { constructor(t) { super(); this.texture = t; } },
+    Rectangle: class { constructor(x, y, w, h) { this.x = x; this.y = y; this.w = w; this.h = h; } },
+    Texture: class { static from() { return { width: 48, height: 48, source: { scaleMode: "nearest" }, destroy() {} }; } destroy() {} }
+  };
+  const origDoc = globalThis.document;
+  globalThis.document = {
+    createElement: () => ({
+      width: 0, height: 0,
+      getContext: () => ({ createImageData: (w, h) => ({ data: new Uint8ClampedArray(w * h * 4) }), putImageData() {} })
+    })
+  };
+  try {
+    const fx = createDataArenaPixelFxV2({ PIXI: MockPIXI, ground: new Node(), front: new Node(), quality: "high" });
+    for (let i = 0; i < 60; i++) fx.area({ x: 100 + i * 5, y: 200, radius: 110, moveId: "quakeSlam" });
+    assert.ok(fx.getDiagnostics().scars > 0 && fx.getDiagnostics().scars <= 48, `battle scars stamped & capped <= 48 (got ${fx.getDiagnostics().scars})`);
+    for (let i = 0; i < 45; i++) fx.update(100); // 4.5s > 4.0s TTL
+    assert.equal(fx.getDiagnostics().scars, 0, "battle scars fade out & dispose cleanly after 4.0s TTL");
+    fx.dispose();
+  } finally {
+    globalThis.document = origDoc;
+  }
+
+  // 5) Off-screen directional ray-box indicator covers rivals & Energy Orbs
+  const sceneSrc = readFileSync(new URL("../src/championship/presentation/dataArena/dataArenaPixiScene.js", import.meta.url), "utf8");
+  assert.ok(sceneSrc.includes("for (const orb of state.energyOrbs ?? []) pointTo("), "off-screen HUD indicator arrow tracks Energy Orbs alongside active rivals");
 });

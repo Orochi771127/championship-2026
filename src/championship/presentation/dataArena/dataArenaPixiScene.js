@@ -2632,18 +2632,27 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   function updateIndicators(viewport) {
     let n = 0;
     const margin = 34;
+    const minX = margin, maxX = Math.max(minX + 10, viewport.width - margin);
+    const minY = margin + 46, maxY = Math.max(minY + 10, viewport.height - margin - 90);
+    const cx = viewport.width / 2, cy = viewport.height / 2;
     const pointTo = (x, y, tint, size = 1) => {
       const sx = view.x + x * view.zoom, sy = view.y + y * view.zoom;
-      if (sx > margin && sx < viewport.width - margin && sy > margin + 40 && sy < viewport.height - margin) return;
-      const cx = viewport.width / 2, cy = viewport.height / 2, angle = Math.atan2(sy - cy, sx - cx);
-      const ex = clamp(sx, margin, viewport.width - margin), ey = clamp(sy, margin + 46, viewport.height - margin - 90);
+      if (sx > minX && sx < maxX && sy > minY && sy < maxY) return;
+      const dx = sx - cx, dy = sy - cy;
+      const angle = Math.atan2(dy, dx);
+      // Ray-box intersection against safe HUD viewport edges so the directional arrow points accurately along the true bearing!
+      const tx = Math.abs(dx) > 1e-4 ? (dx > 0 ? (maxX - cx) / dx : (minX - cx) / dx) : Infinity;
+      const ty = Math.abs(dy) > 1e-4 ? (dy > 0 ? (maxY - cy) / dy : (minY - cy) / dy) : Infinity;
+      const tHit = Math.min(tx, ty, 1);
+      const ex = clamp(cx + dx * tHit, minX, maxX), ey = clamp(cy + dy * tHit, minY, maxY);
       const arrow = arrowAt(n++);
-      arrow.position.set(ex, ey); arrow.rotation = angle; arrow.tint = tint; arrow.scale.set(size * (0.9 + 0.1 * Math.sin(elapsed * 6)));
+      arrow.position.set(ex, ey); arrow.rotation = angle; arrow.tint = tint; arrow.scale.set(size * (0.9 + 0.12 * Math.sin(elapsed * 7)));
     };
     for (const beacon of state.beacons) if (beacon.active && !beacon.captured) pointTo(beacon.x, beacon.y, 0x5affc8);
     for (const core of state.cores) if (!core.out) pointTo(core.x, core.y, 0xff8a2a);
     if (state.boss && state.boss.state !== "DOWN") pointTo(state.boss.x, state.boss.y, 0xff4a6a, 1.3);
-    for (const rival of state.rivals) if (rival.hp > 0) pointTo(rival.x, rival.y, 0xff6a8a, 1.2);
+    for (const rival of state.rivals) if (rival.active !== false && rival.hp > 0) pointTo(rival.x, rival.y, 0xff4a6a, 1.25);
+    for (const orb of state.energyOrbs ?? []) pointTo(orb.x, orb.y, 0xffe066, 0.92);
     if (state.mate.state === "DOWNED") pointTo(state.mate.x, state.mate.y, 0x8dffb0);
     for (; n < arrows.length; n++) arrows[n].visible = false;
   }
