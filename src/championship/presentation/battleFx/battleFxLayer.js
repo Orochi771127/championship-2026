@@ -28,7 +28,7 @@ import {createPixelHitBursts} from '../vfx/pixelHitBursts.js';
 import {createPixelMotes} from '../vfx/pixelMotes.js';
 import {productArenaMoveRecord} from '../../contracts/productArenaMoves.js';
 import {moveVfxChoreography as sharedChoreography, moveVfxSupportChoreography} from '../vfx/moveVfxChoreography.js';
-import {createMoveVfxSetPieces, bakedPieceLook, paintBakedPieceFrames} from '../vfx/moveVfxSetPieces.js';
+import {createMoveVfxSetPieces, bakedPieceLook, paintBakedPieceFrames, resolve00GameDevsPiece} from '../vfx/moveVfxSetPieces.js';
 /** Palette key -> the element its motes wear (as unifiedMoveVfxResolver reads a bank's family colour). */
 const PALETTE_ELEMENT = Object.freeze({fire: 'FIRE', water: 'WATER', ice: 'ICE', thunder: 'THUNDER', metal: 'METAL', nature: 'WOOD',
   earth: 'EARTH', wind: 'WIND', light: 'SUN', dark: 'MOON'});
@@ -846,9 +846,12 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         if ((choreo?.impactFrame || critical) && setPieces) setPieces.play('impact-frame', {x: hit.x, y: hit.y,
           angle: attacker ? Math.atan2(target.groundY - attacker.groundY, target.x - attacker.x) : 0,
           palette: {core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true}, size: target.width, unit: ctx.nativeScale, groundY: hit.groundY, scale: (choreo?.contact?.scale ?? 1) * 0.7});
-        if (choreo?.contact && setPieces) setPieces.play(choreo.contact.piece, {x: hit.x, y: hit.y,
-          angle: attacker ? Math.atan2(target.groundY - attacker.groundY, target.x - attacker.x) : 0, palette, size: target.width,
-          unit: ctx.nativeScale, groundY: hit.groundY, scale: choreo.contact.scale ?? 1, fast: choreo.contact.fast, sprite: choreo.contact.sprite, at: 'contact'});
+        if (choreo?.contact && setPieces) {
+          const contactPiece = resolve00GameDevsPiece({ piece: choreo.contact.piece, paletteKey: signature?.paletteKey ?? 'fire', tier: look?.tier ?? tier }) || choreo.contact.piece;
+          setPieces.play(contactPiece, {x: hit.x, y: hit.y,
+            angle: attacker ? Math.atan2(target.groundY - attacker.groundY, target.x - attacker.x) : 0, palette, size: target.width,
+            unit: ctx.nativeScale, groundY: hit.groundY, scale: choreo.contact.scale ?? 1, fast: choreo.contact.fast, sprite: choreo.contact.sprite, at: 'contact'});
+        }
         const lastBurst = burstAt.get(event.slot) ?? -Infinity;
         if (tier !== 'light' || elapsed - lastBurst > 220) {
           pixelHits?.spawn({element: vfx?.element ?? 'NEUTRAL', x: hit.x, y: hit.y, groundY: hit.groundY, size: target.width * (tier === 'light' ? 0.8 : 1),
@@ -902,8 +905,11 @@ export function createBattleFxLayer({PIXI, worldBack, worldFront, screen, qualit
         impactAudio?.playSupport?.(event.type === 'HEAL' ? 'heal' : 'support', { pan: info.team === ctx.localTeam ? -0.2 : 0.2 });
         if (event.type === 'SUPPORT') cue({type: 'BUFF', system: supportVfxSystem(event.statusCode), slot: event.slot, x: info.x, y: info.groundY});
         // A heal that no support move cast (a regen, an item) shows the baked heal on the body.
-        if (event.type === 'HEAL' && piecesBaked()) setPieces.play('heal', {x: info.x, y: info.top + info.height * 0.5, groundY: info.groundY,
-          palette: BATTLE_FX_PALETTES.nature, size: info.width, unit: lastCtx?.nativeScale ?? 1, scale: 0.9});
+        if (event.type === 'HEAL' && piecesBaked()) {
+          const healPiece = resolve00GameDevsPiece({ piece: 'heal', paletteKey: 'nature' }) || 'heal';
+          setPieces.play(healPiece, {x: info.x, y: info.top + info.height * 0.5, groundY: info.groundY,
+            palette: BATTLE_FX_PALETTES.nature, size: info.width, unit: lastCtx?.nativeScale ?? 1, scale: 0.9});
+        }
         // Batch 7: the support move's own cast on the body that receives it.
         const support = event.type === 'SUPPORT' && typeof moveVfxSupportChoreography === 'function' ? moveVfxSupportChoreography(event.statusCode) : null;
         if (support && setPieces) setPieces.play(support.piece, {x: info.x, y: info.top + info.height * 0.5, angle: info.facing < 0 ? Math.PI : 0,

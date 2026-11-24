@@ -88,8 +88,40 @@ export const MOVE_VFX_CONTACT_FRAME = Object.freeze({drop: 7, bolt: 4, rain: 4, 
  * Ground-anchored pieces with a flat waterline (`wave`, `quake`) stay upright on the arena floor. */
 const DIRECTIONAL_PIECES = new Set([
   'slash', 'claws', 'iai', 'cross', 'scissor', 'horn', 'rush', 'lance', 'stream',
-  'knives', 'vines', 'muzzle', 'flurry-leaf', 'flurry-feather', 'flurry-shard', 'flurry-bubble'
+  'knives', 'vines', 'muzzle', 'flurry-leaf', 'flurry-feather', 'flurry-shard', 'flurry-bubble',
+  // 00GameDevs MIT directional 3D->PixelFX hero pieces (right-facing 0 rad, upright flip when aiming left)
+  'gd-radiant-beam', 'gd-arc-ray', 'gd-ice-lance', 'gd-lightning-arrow', 'gd-fireball',
+  'gd-shadow-glaive', 'gd-azure-sweep', 'gd-sword-wave'
 ]);
+
+/** 00GameDevs MIT 3D->PixelFX Batch 1 hero pieces & their instant pixelfx fallbacks before lazy load finishes. */
+export const MOVE_VFX_00GAMEDEVS_FALLBACK = Object.freeze({
+  'gd-thousand-slashes': 'cross',
+  'gd-azure-sweep': 'slash',
+  'gd-dimensional-rend': 'iai',
+  'gd-sword-wave': 'slash',
+  'gd-shadow-glaive': 'spin',
+  'gd-fireball': 'core',
+  'gd-ice-lance': 'horn',
+  'gd-lightning-arrow': 'bolt',
+  'gd-radiant-beam': 'lance',
+  'gd-arc-ray': 'bolt',
+  'gd-meteor-strike': 'drop',
+  'gd-thunder-strike': 'bolt',
+  'gd-frost-lance-rain': 'rain',
+  'gd-celestial-rain': 'rain',
+  'gd-tidal-surge': 'wave',
+  'gd-flame-surge': 'wave',
+  'gd-lightning-tornado': 'vortex',
+  'gd-astral-vortex': 'vortex',
+  'gd-shockwave': 'quake',
+  'gd-darkchain-burst': 'vortex',
+  'gd-ice-pillar': 'quake',
+  'gd-thorn-crown': 'vines',
+  'gd-prism-parry': 'ring-pop',
+  'gd-healing-field': 'heal'
+});
+export const MOVE_VFX_00GAMEDEVS_KEYS = Object.freeze(Object.keys(MOVE_VFX_00GAMEDEVS_FALLBACK));
 
 /** The bloom's strength over the colour (pixelfx adds its light at full; a bright arena takes a little less). */
 export const GLOW_ALPHA = 0.85;
@@ -122,10 +154,80 @@ function lookName(layer, drawing, piece) {
 }
 
 let bakedPromise = null, baked = null;
+let baked00GdPromise = null, baked00Gd = null;
 // Three.js pieces (UNIFIED_MOVES_20261118): small group modules loaded when a move needs one.
 const baked3d = {}, groupLoads = new Map();
-const lookOf = name => baked?.[name] ?? baked3d[name] ?? null;
+const lookOf = name => baked?.[name] ?? baked00Gd?.[name] ?? baked3d[name] ?? null;
 const is3d = name => typeof name === 'string' && name.startsWith('3d-');
+const is00Gd = name => typeof name === 'string' && name.startsWith('gd-');
+/** Load the 00GameDevs MIT 3D->PixelFX Batch 1 sprite sheets on demand (lazy, zero boot cost). */
+export function loadMoveVfx00GameDevsSprites() {
+  baked00GdPromise ??= import('./moveVfx00GameDevsSprites.js')
+    .then(m => { baked00Gd = m.MOVE_VFX_00GAMEDEVS_SPRITES; return baked00Gd; })
+    .catch(() => null);
+  return baked00GdPromise;
+}
+/** Resolve a 00GameDevs MIT hero animation upgrade for a move archetype / piece + element palette. */
+export function resolve00GameDevsPiece({ piece = null, archetype = null, paletteKey = 'fire', tier = 'standard' } = {}) {
+  let candidate = null;
+  if (archetype) {
+    switch (archetype) {
+      case 'FLURRY_COMBO': candidate = 'gd-thousand-slashes'; break;
+      case 'SHADOW_BACKSTAB': candidate = 'gd-dimensional-rend'; break;
+      case 'UTURN_STRIKE': candidate = 'gd-sword-wave'; break;
+      case 'MULTI_DASH': candidate = 'gd-shadow-glaive'; break;
+      case 'STREAM_BEAM': candidate = (paletteKey === 'thunder' || paletteKey === 'wind' || paletteKey === 'dark') ? 'gd-arc-ray' : 'gd-radiant-beam'; break;
+      case 'METEOR_RAIN':
+        candidate = paletteKey === 'thunder' ? 'gd-thunder-strike'
+          : (paletteKey === 'ice' || paletteKey === 'water') ? 'gd-frost-lance-rain'
+            : (paletteKey === 'fire' || paletteKey === 'earth') ? 'gd-meteor-strike'
+              : 'gd-celestial-rain';
+        break;
+      case 'VORTEX_PULL':
+        candidate = (paletteKey === 'dark' || paletteKey === 'light' || paletteKey === 'psychic') ? 'gd-astral-vortex' : 'gd-lightning-tornado';
+        break;
+      case 'DRAG_WAVE':
+        candidate = (paletteKey === 'fire' || paletteKey === 'earth' || paletteKey === 'dark') ? 'gd-flame-surge' : 'gd-tidal-surge';
+        break;
+      case 'SHOCKWAVE_RING':
+      case 'LEAP_SLAM':
+      case 'GRAB_SLAM':
+        candidate = 'gd-shockwave'; break;
+      case 'GUARD_BREAK_SLAM':
+      case 'TELEKINESIS_SLAM':
+        candidate = 'gd-darkchain-burst'; break;
+      case 'BURROW_AMBUSH':
+      case 'GROUND_SPIKES':
+        candidate = (paletteKey === 'nature' || paletteKey === 'wood' || paletteKey === 'dark') ? 'gd-thorn-crown' : 'gd-ice-pillar';
+        break;
+      case 'PROTECT_COUNTER': candidate = 'gd-prism-parry'; break;
+      case 'RECOVERY_SUPPORT':
+      case 'SELF_BUFF': candidate = 'gd-healing-field'; break;
+      case 'HOMING_ORB': candidate = 'gd-fireball'; break;
+      case 'VOLLEY_BARRAGE':
+        candidate = (paletteKey === 'thunder' || paletteKey === 'light') ? 'gd-lightning-arrow' : 'gd-ice-lance';
+        break;
+      default: break;
+    }
+  }
+  if (!candidate && piece) {
+    if (piece === 'drop' || piece === 'drop-bomb' || piece === 'drop-rock') candidate = 'gd-meteor-strike';
+    else if (piece === 'bolt') candidate = 'gd-thunder-strike';
+    else if (piece === 'rain') candidate = (paletteKey === 'ice' || paletteKey === 'water') ? 'gd-frost-lance-rain' : 'gd-celestial-rain';
+    else if (piece === 'vortex') candidate = (paletteKey === 'fire' || paletteKey === 'thunder' || paletteKey === 'wind') ? 'gd-lightning-tornado' : 'gd-astral-vortex';
+    else if (piece === 'quake') candidate = 'gd-shockwave';
+    else if (piece === 'wave') candidate = (paletteKey === 'fire' || paletteKey === 'earth') ? 'gd-flame-surge' : 'gd-tidal-surge';
+    else if (piece === 'iai') candidate = 'gd-dimensional-rend';
+    else if (piece === 'cross' || piece === 'spin') candidate = tier === 'ultimate' ? 'gd-thousand-slashes' : 'gd-azure-sweep';
+    else if (piece === 'slash' || piece === 'scissor') candidate = 'gd-azure-sweep';
+    else if (piece === 'lance' || piece === 'stream') candidate = (paletteKey === 'thunder' || paletteKey === 'dark') ? 'gd-arc-ray' : 'gd-radiant-beam';
+    else if (piece === 'core') candidate = 'gd-fireball';
+    else if (piece === 'vines') candidate = 'gd-thorn-crown';
+    else if (piece === 'heal') candidate = 'gd-healing-field';
+  }
+  if (candidate && baked00Gd?.[candidate]) return candidate;
+  return piece;
+}
 /** Load the group modules holding these three.js pieces (other names are ignored). */
 export function loadMoveVfx3dPieces(names) {
   const groups = new Set([...(names ?? [])].filter(is3d).map(n => MOVE_VFX_3D_PIECE_GROUP[n]).filter(Boolean));
@@ -136,6 +238,7 @@ export function loadMoveVfx3dPieces(names) {
 }
 /** Load the baked sheets once (the module is large, so not part of the first load). */
 export function loadMoveVfxPieceSprites() {
+  loadMoveVfx00GameDevsSprites();
   bakedPromise ??= import('./moveVfxPieceSprites.js').then(m => { baked = m.MOVE_VFX_PIECE_SPRITES; return baked; }).catch(() => null);
   return bakedPromise;
 }
@@ -274,9 +377,16 @@ export function createMoveVfxSetPieces({PIXI, layer, reducedMotion = false, doc 
      * frame. Returns false when the piece is unknown or not loaded yet.
      */
     play(piece, {x, y, groundY = null, angle = 0, palette, size = 80, unit = null, scale = 1, fast = false, sprite: drawing = null, at = null}) {
-      // a three.js piece plays as one layer; until its group is in, the shared piece it replaces plays
-      const layers = LAYERS[piece] ?? (is3d(piece) && MOVE_VFX_3D_PIECE_GROUP[piece] ? [{look: piece}] : (baked?.[piece] ? [{look: piece}] : null));
+      // a three.js / 00GameDevs piece plays as one layer; until loaded, the shared pixelfx piece it replaces plays
+      const layers = LAYERS[piece]
+        ?? (is00Gd(piece) && MOVE_VFX_00GAMEDEVS_FALLBACK[piece] ? [{look: piece}]
+          : (is3d(piece) && MOVE_VFX_3D_PIECE_GROUP[piece] ? [{look: piece}] : (baked?.[piece] ? [{look: piece}] : null)));
       if (!layers || !palette) return false;
+      if (is00Gd(piece) && !lookOf(piece)) {
+        loadMoveVfx00GameDevsSprites();
+        const base = MOVE_VFX_00GAMEDEVS_FALLBACK[piece];
+        return base ? this.play(base, arguments[1]) : false;
+      }
       if (is3d(piece) && !lookOf(piece)) {
         loadMoveVfx3dPieces([piece]);
         const base = MOVE_VFX_3D_FALLBACK[piece];

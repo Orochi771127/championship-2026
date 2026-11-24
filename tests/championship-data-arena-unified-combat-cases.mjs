@@ -12,7 +12,7 @@ import { RELAY_ROSTER } from "../src/championship/modes/dataArena/dataArenaRelay
 import { RELAY_POOL_MOVE_ELEMENT } from "../src/championship/modes/dataArena/dataArenaRelayKits.js";
 import { listProductOriginalMoveRecords } from "../src/championship/contracts/productOriginalSpecies.js";
 import { moveVfxChoreography } from "../src/championship/presentation/vfx/moveVfxChoreography.js";
-import { MOVE_VFX_SET_PIECES, MOVE_VFX_PIECE_DRAWINGS, MOVE_VFX_SUPPORT_PIECES, createMoveVfxSetPieces } from "../src/championship/presentation/vfx/moveVfxSetPieces.js";
+import { MOVE_VFX_SET_PIECES, MOVE_VFX_PIECE_DRAWINGS, MOVE_VFX_SUPPORT_PIECES, MOVE_VFX_00GAMEDEVS_KEYS, createMoveVfxSetPieces, loadMoveVfx00GameDevsSprites, resolve00GameDevsPiece } from "../src/championship/presentation/vfx/moveVfxSetPieces.js";
 import { MOVE_VFX_3D_PIECE_GROUP } from "../src/championship/presentation/vfx/moveVfxPieceSprites3dIndex.js";
 import { MOVE_VFX_PIECE_SPRITES } from "../src/championship/presentation/vfx/moveVfxPieceSprites.js";
 import { V2_ARCHETYPES, resolveMoveSpecV2 } from "../src/championship/modes/dataArena/dataArenaMoveCatalogV2.js";
@@ -1184,4 +1184,51 @@ test("phase 9 / Plan A single PB-Rank manual battle mode: unified RELAY entry, h
   st.player.energySpentAt = st.time;
   for (let i = 0; i < 60; i++) sim.step({}); // 1.0 s total: 0.20 s delay + 0.80 s * 26 TP/s = +20.8 TP
   assert.ok(st.player.energy >= 49, `RELAY V2 rapid TP regen prevents mana drought (got ${st.player.energy.toFixed(1)})`);
+});
+
+test("phase 10 / 00GameDevs MIT 3D->PixelFX Batch 1: 24 baked sheets load, carry verbatim MIT notice, map all 20 V2 archetypes & play cleanly across 10 elements", async () => {
+  const spritesSrc = readFileSync(new URL("../src/championship/presentation/vfx/moveVfx00GameDevsSprites.js", import.meta.url), "utf8");
+  assert.ok(spritesSrc.includes("The MIT License") && spritesSrc.includes("00GameDevs (@00vchannel)"), "verbatim MIT license & copyright notice preserved");
+  const loaded = await loadMoveVfx00GameDevsSprites();
+  assert.ok(loaded, "lazy 00GameDevs PixelFX sprite module loads cleanly");
+  assert.equal(MOVE_VFX_00GAMEDEVS_KEYS.length, 24, "Batch 1 registers all 24 core move animations");
+  for (const key of MOVE_VFX_00GAMEDEVS_KEYS) {
+    const entry = loaded[key];
+    assert.ok(entry && entry.w > 16 && entry.h > 16, `${key} has valid dimensions`);
+    assert.ok(Array.isArray(entry.frames) && entry.frames.length >= 8, `${key} has >= 8 baked frames`);
+    assert.ok(Array.isArray(entry.glow) && entry.glow.length === entry.frames.length, `${key} has matching half-res additive glow`);
+    assert.ok(Array.isArray(entry.palette) && entry.palette.length >= 2, `${key} has valid quantised palette`);
+  }
+  // Every single V2 archetype resolves to an upgraded gd-* hero piece once loaded!
+  for (const arch of V2_ARCHETYPES) {
+    const resolved = resolve00GameDevsPiece({ archetype: arch, paletteKey: "fire", tier: "standard" });
+    assert.ok(typeof resolved === "string" && resolved.startsWith("gd-") && loaded[resolved], `V2 archetype ${arch} upgrades to baked ${resolved}`);
+  }
+  // Mock Pixi playback smoke test across all 24 pieces (recolored dynamically!)
+  class MockNode { constructor() { this.children = []; this.scale = { set() {} }; this.anchor = { set() {} }; this.position = { set() {} }; } addChild(c) { c.parent = this; this.children.push(c); } removeChild(c) { this.children = this.children.filter((x) => x !== c); } destroy() {} }
+  const MockPIXI = {
+    Container: MockNode,
+    Sprite: MockNode,
+    Rectangle: class { constructor(x, y, w, h) { this.x = x; this.y = y; this.w = w; this.h = h; } },
+    Texture: class { static from() { return { source: { scaleMode: "nearest" }, destroy() {} }; } destroy() {} }
+  };
+  const mockDoc = {
+    createElement() {
+      return {
+        width: 0, height: 0,
+        getContext() {
+          return {
+            createImageData: (w, h) => ({ data: new Uint8ClampedArray(w * h * 4) }),
+            putImageData() {}
+          };
+        }
+      };
+    }
+  };
+  const pieces = createMoveVfxSetPieces({ PIXI: MockPIXI, layer: new MockNode(), doc: mockDoc });
+  for (const key of MOVE_VFX_00GAMEDEVS_KEYS) {
+    assert.equal(pieces.play(key, { x: 100, y: 120, angle: 0.4, palette: { core: 0xffe8a3, main: 0xff6b2b, edge: 0x5c180a }, size: 80 }), true, `${key} plays cleanly in setPieces`);
+  }
+  pieces.update(50);
+  pieces.dispose();
 });

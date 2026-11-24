@@ -13,7 +13,7 @@
 //  - Presentation only: zero simulation, timing, damage or RNG side effects.
 
 import { BATTLE_FX_PALETTES } from "../battleFx/battleFxPalettes.js";
-import { createMoveVfxSetPieces, loadMoveVfxPieceSprites, paintBakedPieceFrames, GLOW_ALPHA } from "../vfx/moveVfxSetPieces.js";
+import { createMoveVfxSetPieces, loadMoveVfxPieceSprites, loadMoveVfx00GameDevsSprites, resolve00GameDevsPiece, paintBakedPieceFrames, GLOW_ALPHA } from "../vfx/moveVfxSetPieces.js";
 import { resolveMoveSpecV2 } from "../../modes/dataArena/dataArenaMoveCatalogV2.js";
 import { createVolumetricSheetCache } from "./dataArenaVolumetricCache.js";
 import { renderVolumetricWave3D, renderVolumetricTornado3D } from "./dataArenaVolumetricFx3D.js";
@@ -50,6 +50,7 @@ const UPRIGHT_SHOTS = new Set(["shot-tornado", "shot-wisp", "shot-heart", "shot-
 export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high", reducedMotion = false }) {
   if (!PIXI || !front) return null;
   loadMoveVfxPieceSprites();
+  loadMoveVfx00GameDevsSprites();
   const pieces = createMoveVfxSetPieces({ PIXI, layer: front, reducedMotion, outline: true });
   const groundPieces = ground ? createMoveVfxSetPieces({ PIXI, layer: ground, reducedMotion, outline: true }) : null;
 
@@ -138,12 +139,16 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
         stats.releases++;
         return;
       }
-      // Move #6: STREAM_BEAM mounts our 3D cylindrical spiral energy cannon (cached GPU sheet!)
+      // Move #6: STREAM_BEAM plays 00GameDevs 3D->PixelFX beam sheet when loaded, else 3D cylindrical spiral beam!
       if (spec.v2Archetype === "STREAM_BEAM" && !melee) {
         const beamPal = ["light", "fire", "water", "ice", "thunder", "dark", "nature"].includes(spec.paletteKey) ? spec.paletteKey : "light";
         const scale = spec.tier === "ultimate" ? 1.92 : 1.62;
         const len = 112;
         const cosA = Math.cos(angle), sinA = Math.sin(angle);
+        const gdBeam = resolve00GameDevsPiece({ archetype: "STREAM_BEAM", paletteKey: beamPal, tier: spec.tier });
+        if (gdBeam && playPiece(pieces, gdBeam, { x: x + cosA * len * 0.42, y: y + 8 + sinA * len * 0.28, angle, palette: pal, scale: scale * 0.86, groundY: y + 28 })) {
+          stats.releases++; return;
+        }
         const fx = volCache.spawn({
           layer: shotLayer, keyPrefix: `beam|${beamPal}`, width: 180, height: 140, frameCount: 7,
           directional: true, angle, anchorX: 0.5, anchorY: 0.58,
@@ -153,11 +158,15 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
         });
         if (fx) { stats.releases++; return; }
       }
-      // Move #9: Close-combat / Mobility 3D Crescent Slash, Triple Claws, or Supersonic Dash Cone!
+      // Move #9: Close-combat / Mobility plays 00GameDevs 3D->PixelFX slash/rend/wave sheets when loaded!
       if (melee || ["FLURRY_COMBO", "MULTI_DASH", "SHADOW_BACKSTAB", "UTURN_STRIKE", "GUARD_BREAK_SLAM"].includes(spec.v2Archetype)) {
+        const cPal = spec.paletteKey || "fire";
+        const gdMelee = resolve00GameDevsPiece({ archetype: spec.v2Archetype, piece: spec.releaseLook || "slash", paletteKey: cPal, tier: spec.tier });
+        if (gdMelee && gdMelee.startsWith("gd-") && playPiece(pieces, gdMelee, { x, y: y + 6, angle, palette: pal, scale: spec.v2Archetype === "GUARD_BREAK_SLAM" ? 1.25 : 1.05, groundY: y + 24 })) {
+          stats.releases++; return;
+        }
         const variant = spec.v2Archetype === "MULTI_DASH" ? "dashcone"
           : (spec.contactLook === "claws" || spec.v2Archetype === "FLURRY_COMBO") ? "claws" : "slash";
-        const cPal = spec.paletteKey || "fire";
         const fx = volCache.spawn({
           layer: shotLayer, keyPrefix: `slash|${variant}|${cPal}`, width: 120, height: 104, frameCount: 6,
           directional: true, angle, anchorX: 0.5, anchorY: 0.66, x, y: y + 10,
@@ -226,9 +235,10 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       if (heavy && !reducedMotion) {
         playPiece(pieces, "impact-frame", { x, y, angle, palette: { core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true }, scale: 0.72, groundY });
       }
-      const contactPiece = (spec.v2Archetype === "DRAG_WAVE" || spec.contactLook === "wave")
+      const baseContact = (spec.v2Archetype === "DRAG_WAVE" || spec.contactLook === "wave")
         ? (spec.paletteKey === "water" || spec.paletteKey === "ice" ? "flurry-bubble" : "ring-burst")
         : spec.contactLook;
+      const contactPiece = resolve00GameDevsPiece({ piece: baseContact, archetype: spec.v2Archetype, paletteKey: spec.paletteKey, tier: heavy ? "ultimate" : spec.tier }) || baseContact;
       playPiece(pieces, contactPiece, { x, y, angle, palette: pal, scale: Math.min(1.45, spec.scale * (heavy ? 1.15 : 0.96)), groundY, at: "contact" });
       if (heavy && groundPieces && !reducedMotion && spec.groundLook !== "mark-ripple") {
         playPiece(groundPieces, spec.groundLook, { x, y: groundY, palette: pal, scale: 0.85, groundY });
@@ -276,6 +286,8 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       if (!fx) playPiece(pieces, piece, { x, y, palette: paletteFor(bPal), scale: 1.15, groundY: y + 14 });
     },
     heal({ x, y }) {
+      const gdHeal = resolve00GameDevsPiece({ archetype: "RECOVERY_SUPPORT", piece: "heal", paletteKey: "nature" });
+      if (gdHeal && gdHeal.startsWith("gd-") && playPiece(pieces, gdHeal, { x, y: y + 12, palette: BATTLE_FX_PALETTES.nature, scale: 1.18, groundY: y + 16 })) return;
       const fx = volCache.spawn({
         layer: shotLayer, keyPrefix: "aura|heal|nature", width: 128, height: 136, frameCount: 8,
         directional: false, anchorX: 0.5, anchorY: 0.78, x, y: y + 14, durationSec: 0.72, scale: 1.32,
@@ -284,7 +296,8 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       if (!fx) playPiece(pieces, "heal", { x, y, palette: BATTLE_FX_PALETTES.nature, scale: 1.15, groundY: y + 14 });
     },
     parry({ x, y }) {
-      playPiece(pieces, "ring-pop", { x, y, palette: BATTLE_FX_PALETTES.light, scale: 1.1, groundY: y + 14 });
+      const gdParry = resolve00GameDevsPiece({ archetype: "PROTECT_COUNTER", piece: "ring-pop", paletteKey: "light" });
+      playPiece(pieces, gdParry || "ring-pop", { x, y, palette: BATTLE_FX_PALETTES.light, scale: 1.12, groundY: y + 14 });
     },
     clash({ x, y }) {
       playPiece(pieces, "impact-frame", { x, y, palette: { core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true }, scale: 0.9, groundY: y + 18 });
@@ -307,15 +320,19 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       if (fx) { stats.releases++; return true; }
       return false;
     },
-    /** Move #2: True 3D Volumetric Tornado / Storm Vortex (8-dir LRU GPU cached; supports elemental combo evolution!) */
+    /** Move #2: 00GameDevs 3D->PixelFX Tornado / Astral Vortex (fallback: volumetric LRU cache!) */
     vortex({ x, y, angle = 0, moveId = "vortex", durationSec = 1.05, radius = 118, paletteKey = null }) {
       const spec = resolveMoveSpecV2(moveId);
       const rawPal = paletteKey || spec.paletteKey;
       const tPal = ["wind", "water", "ice", "nature", "dark", "fire", "earth", "thunder", "light"].includes(rawPal) ? rawPal : "wind";
-      const scale = Math.max(1.35, Math.min(2.05, (radius / 118) * 1.55));
+      const scale = Math.max(1.2, Math.min(1.85, (radius / 118) * 1.32));
+      const gdVortex = resolve00GameDevsPiece({ archetype: "VORTEX_PULL", paletteKey: tPal, tier: spec.tier });
+      if (gdVortex && gdVortex.startsWith("gd-") && playPiece(pieces, gdVortex, { x, y: y + 10, palette: paletteFor(tPal), scale, groundY: y + 14 })) {
+        stats.releases++; return true;
+      }
       const fx = volCache.spawn({
         layer: shotLayer, keyPrefix: `tornado|${tPal}`, width: 136, height: 136, frameCount: 8,
-        directional: true, angle, anchorX: 0.5, anchorY: 0.80, x, y: y + 10, durationSec, scale,
+        directional: true, angle, anchorX: 0.5, anchorY: 0.80, x, y: y + 10, durationSec, scale: scale * 1.15,
         renderForAngle: (ctx, snapped, phase) => renderVolumetricTornado3D(ctx, { width: 136, height: 136, angle: snapped, phase, paletteKey: tPal })
       });
       if (fx) { stats.releases++; return true; }
@@ -338,18 +355,23 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       const pal = paletteFor(paletteKey || "fire");
       const scale = Math.max(1.05, Math.min(1.9, radius / 86));
       if (kind === "POISON_IGNITE" || kind === "WILDFIRE_IGNITE" || kind === "ECLIPSE_BURST") {
-        volCache.spawn({
-          layer: shotLayer, keyPrefix: `crater|${paletteKey || "fire"}`, width: 160, height: 124, frameCount: 8,
-          directional: false, anchorX: 0.5, anchorY: 0.64, x, y: y + 4, durationSec: 0.56, scale: scale * 1.15,
-          renderForAngle: (ctx, _ang, phase) => renderVolumetricCraterShockwave3D(ctx, { width: 160, height: 124, phase, paletteKey: paletteKey || "fire" })
-        });
+        const gdBlast = resolve00GameDevsPiece({ archetype: kind === "ECLIPSE_BURST" ? "GUARD_BREAK_SLAM" : "HOMING_ORB", paletteKey: paletteKey || "fire", tier: "ultimate" });
+        if (!(gdBlast && gdBlast.startsWith("gd-") && playPiece(pieces, gdBlast, { x, y, palette: pal, scale: scale * 1.15, groundY: y + 14 }))) {
+          volCache.spawn({
+            layer: shotLayer, keyPrefix: `crater|${paletteKey || "fire"}`, width: 160, height: 124, frameCount: 8,
+            directional: false, anchorX: 0.5, anchorY: 0.64, x, y: y + 4, durationSec: 0.56, scale: scale * 1.15,
+            renderForAngle: (ctx, _ang, phase) => renderVolumetricCraterShockwave3D(ctx, { width: 160, height: 124, phase, paletteKey: paletteKey || "fire" })
+          });
+        }
         playPiece(pieces, "impact-frame", { x, y, palette: { core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true }, scale: 0.95, groundY: y + 18 });
         holdMs = Math.max(holdMs, 55);
       } else if (kind === "WATER_FREEZE" || kind === "FLASH_FREEZE" || kind === "TOXIC_FROST") {
-        playPiece(pieces, "flurry-shard", { x, y, palette: BATTLE_FX_PALETTES.ice, scale: scale * 1.15, groundY: y + 14 });
+        const gdIce = resolve00GameDevsPiece({ archetype: "GROUND_SPIKES", piece: "flurry-shard", paletteKey: "ice" });
+        playPiece(pieces, gdIce || "flurry-shard", { x, y, palette: BATTLE_FX_PALETTES.ice, scale: scale * 1.15, groundY: y + 14 });
         playPiece(pieces, "ring-burst", { x, y, palette: BATTLE_FX_PALETTES.ice, scale, groundY: y + 14 });
       } else if (kind === "WATER_ELECTRIFY" || kind === "ELECTRO_CHARGE" || kind === "CONDUCT") {
-        playPiece(pieces, "bolt", { x, y, palette: BATTLE_FX_PALETTES.thunder, scale: scale * 1.15, groundY: y + 14 });
+        const gdBolt = resolve00GameDevsPiece({ archetype: "METEOR_RAIN", piece: "bolt", paletteKey: "thunder" });
+        playPiece(pieces, gdBolt || "bolt", { x, y, palette: BATTLE_FX_PALETTES.thunder, scale: scale * 1.15, groundY: y + 14 });
         playPiece(pieces, "ring-pop", { x, y, palette: BATTLE_FX_PALETTES.thunder, scale, groundY: y + 14 });
       } else {
         playPiece(pieces, "ring-burst", { x, y, palette: pal, scale, groundY: y + 14 });
@@ -357,10 +379,14 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       stats.hits++;
       return true;
     },
-    /** Move #4B: True 3D Volumetric Ground Spike (8-dir LRU GPU cached!) */
+    /** Move #4B: 00GameDevs 3D->PixelFX Ground Spike / Thorn Crown (fallback: volumetric LRU cache!) */
     groundSpike({ x, y, angle = 0, moveId = "shardVolley", durationSec = 0.68, scale = 1.48 }) {
       const spec = resolveMoveSpecV2(moveId);
       const sPal = ["earth", "ice", "nature", "fire", "dark", "thunder", "water"].includes(spec.paletteKey) ? spec.paletteKey : "earth";
+      const gdSpike = resolve00GameDevsPiece({ archetype: "GROUND_SPIKES", paletteKey: sPal });
+      if (gdSpike && gdSpike.startsWith("gd-") && playPiece(pieces, gdSpike, { x, y: y + 6, palette: paletteFor(sPal), scale: scale * 0.85, groundY: y + 12 })) {
+        stats.releases++; return true;
+      }
       const fx = volCache.spawn({
         layer: shotLayer, keyPrefix: `spike|${sPal}`, width: 116, height: 116, frameCount: 7,
         directional: true, angle, anchorX: 0.5, anchorY: 0.76, x, y: y + 6, durationSec, scale,
@@ -382,28 +408,36 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       if (fx) { stats.releases++; return true; }
       return false;
     },
-    /** Move #5: True 3D Volumetric Seismic Crater & Expanding Shockwave Ring (LRU GPU cached!) */
+    /** Move #5: 00GameDevs 3D->PixelFX Shockwave / Darkchain Burst (fallback: volumetric LRU cache!) */
     craterShockwave({ x, y, moveId = "quakeSlam", radius = 140, durationSec = 0.58 }) {
       const spec = resolveMoveSpecV2(moveId);
       const cPal = ["earth", "fire", "ice", "thunder", "nature", "dark", "water", "light"].includes(spec.paletteKey) ? spec.paletteKey : "earth";
-      const scale = Math.max(1.3, Math.min(2.05, (radius / 120) * 1.48));
+      const scale = Math.max(1.2, Math.min(1.85, (radius / 120) * 1.25));
+      const gdCrater = resolve00GameDevsPiece({ archetype: spec.v2Archetype === "GUARD_BREAK_SLAM" ? "GUARD_BREAK_SLAM" : "SHOCKWAVE_RING", paletteKey: cPal, tier: spec.tier });
+      if (gdCrater && gdCrater.startsWith("gd-") && playPiece(pieces, gdCrater, { x, y: y + 4, palette: paletteFor(cPal), scale, groundY: y + 12 })) {
+        stats.hits++; return true;
+      }
       const fx = volCache.spawn({
         layer: shotLayer, keyPrefix: `crater|${cPal}`, width: 160, height: 124, frameCount: 8,
-        directional: false, anchorX: 0.5, anchorY: 0.64, x, y: y + 4, durationSec, scale,
+        directional: false, anchorX: 0.5, anchorY: 0.64, x, y: y + 4, durationSec, scale: scale * 1.15,
         renderForAngle: (ctx, _ang, phase) => renderVolumetricCraterShockwave3D(ctx, { width: 160, height: 124, phase, paletteKey: cPal })
       });
       if (fx) { stats.hits++; return true; }
       return false;
     },
-    /** Move #7: True 3D Falling Flaming Meteor OR Storm-Cloud Thunder Pillar + 3D Blast (LRU GPU cached!) */
+    /** Move #7: 00GameDevs 3D->PixelFX Meteor/Thunder/Frost/Celestial Sky-Drop (fallback: volumetric LRU cache!) */
     meteorDrop({ x, y, moveId = "flameRing", durationSec = 0.92, radius = 110 }) {
       const spec = resolveMoveSpecV2(moveId);
       const mPal = ["fire", "thunder", "ice", "dark", "earth", "light", "water", "nature"].includes(spec.paletteKey) ? spec.paletteKey : "fire";
+      const gdSky = resolve00GameDevsPiece({ archetype: "METEOR_RAIN", paletteKey: mPal, tier: spec.tier });
+      const scale = Math.max(1.25, Math.min(1.85, (radius / 100) * 1.35));
+      if (gdSky && gdSky.startsWith("gd-") && playPiece(pieces, gdSky, { x, y: y + 8, palette: paletteFor(mPal), scale, groundY: y + 14 })) {
+        stats.releases++; return true;
+      }
       const variant = mPal === "thunder" ? "thunder" : "meteor";
-      const scale = Math.max(1.4, Math.min(1.95, (radius / 100) * 1.55));
       const fx = volCache.spawn({
         layer: shotLayer, keyPrefix: `meteor|${variant}|${mPal}`, width: 148, height: 196, frameCount: 9,
-        directional: false, anchorX: 0.5, anchorY: 0.82, x, y: y + 6, durationSec: Math.max(0.65, durationSec), scale,
+        directional: false, anchorX: 0.5, anchorY: 0.82, x, y: y + 6, durationSec: Math.max(0.65, durationSec), scale: scale * 1.12,
         renderForAngle: (ctx, _ang, phase) => renderVolumetricMeteor3D(ctx, { width: 148, height: 196, phase, paletteKey: mPal, variant })
       });
       if (fx) { stats.releases++; return true; }
