@@ -64,8 +64,12 @@ export function huntRimDirection(camera, sunPosition, target = [0, 0, 0]) {
 }
 
 /** Shared uniforms for every partner on one map; update rimDir in place. */
-export function createHuntActorLightUniforms(THREE, light) {
+export function createHuntActorLightUniforms(THREE, light, { kc = 32 * Math.cos(52 * Math.PI / 180), waterTint = 0x4a90b8 } = {}) {
+  const c = new THREE.Color(waterTint);
   return {
+    // Ground contact (groundContact.mjs): screen px per unit of height, and the map's water colour.
+    hmActorKC: { value: kc },
+    hmActorWaterTint: { value: new THREE.Vector3(c.r, c.g, c.b) },
     hmActorLight: { value: new THREE.Vector3(...light.color) },
     hmActorGround: { value: new THREE.Vector3(...light.ground) },
     hmActorGroundStrength: { value: light.groundStrength },
@@ -82,12 +86,22 @@ export function createHuntActorLightUniforms(THREE, light) {
  */
 export function installHuntActorLight(material, uniforms) {
   const previous = material.onBeforeCompile, previousKey = material.customProgramCacheKey;
+  // Per-partner waterline (screen px above the feet; 0 = dry), set by groundContact.mjs.
+  material.userData.hmWater ??= { value: 0 };
   material.onBeforeCompile = (shader, renderer) => {
     previous?.call(material, shader, renderer);
-    Object.assign(shader.uniforms, uniforms);
+    Object.assign(shader.uniforms, uniforms, { hmActorWater: material.userData.hmWater });
+    const ground = shader.vertexShader.includes('uniform float hmGroundHeight') ? 'hmGroundHeight' : '0.0';
+    shader.vertexShader = 'varying float hmActorAbove;\n' + shader.vertexShader.replace('#include <project_vertex>',
+      `#include <project_vertex>
+      hmActorAbove = (modelMatrix * vec4(transformed, 1.0)).y - ${ground};`);
     const hook = '#include <map_fragment>';
     if (!shader.fragmentShader.includes(hook)) throw new Error('HUNT_ACTOR_LIGHT_SHADER_HOOK_MISSING');
-    shader.fragmentShader = `uniform vec3 hmActorLight;\nuniform vec3 hmActorGround;\nuniform float hmActorGroundStrength;\nuniform float hmActorBounceHeight;\nuniform vec3 hmActorRim;\nuniform float hmActorRimStrength;\nuniform vec2 hmActorRimDir;\n`
+    shader.fragmentShader = `varying float hmActorAbove;
+uniform float hmActorKC;
+uniform vec3 hmActorWaterTint;
+uniform float hmActorWater;
+uniform vec3 hmActorLight;\nuniform vec3 hmActorGround;\nuniform float hmActorGroundStrength;\nuniform float hmActorBounceHeight;\nuniform vec3 hmActorRim;\nuniform float hmActorRimStrength;\nuniform vec2 hmActorRimDir;\n`
       + shader.fragmentShader.replace(hook, `${hook}
       #ifdef USE_MAP
       {
@@ -101,10 +115,20 @@ export function installHuntActorLight(material, uniforms) {
         float hmOut2 = texture2D(map, vMapUv + hmActorRimDir * hmTexel * 2.0).a;
         float hmEdge = step(0.5, diffuseColor.a) * step(0.5, hmOut1) * (1.0 - step(0.5, hmOut2));
         diffuseColor.rgb = diffuseColor.rgb * hmLit + hmActorRim * (hmActorRimStrength * hmEdge) * diffuseColor.rgb;
+        // Wading (groundContact.mjs): below the waterline the body is tinted and see-through,
+        // with a one-pixel foam edge at the line.
+        if (hmActorWater > 0.0) {
+          float hmPx = hmActorAbove * hmActorKC;
+          float hmUnder = 1.0 - smoothstep(hmActorWater - 0.5, hmActorWater + 0.5, hmPx);
+          float hmFoam = (1.0 - smoothstep(0.0, 1.0, abs(hmPx - hmActorWater))) * step(0.5, diffuseColor.a);
+          diffuseColor.rgb = mix(diffuseColor.rgb, hmActorWaterTint * hmActorLight, 0.6 * hmUnder);
+          diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.92, 0.98, 1.0) * hmActorLight, 0.45 * hmFoam);
+          diffuseColor.a *= mix(1.0, 0.32, hmUnder);
+        }
       }
       #endif`);
   };
-  material.customProgramCacheKey = () => `${previousKey ? previousKey.call(material) : ''}|hunt-actor-light-v1`;
+  material.customProgramCacheKey = () => `${previousKey ? previousKey.call(material) : ''}|hunt-actor-light-v2`;
   material.needsUpdate = true;
   return material;
 }

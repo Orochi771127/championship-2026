@@ -709,7 +709,8 @@ export function createGateHuntPresentationSource(app, { onCommitted = null, getH
         enclosure: runtime.getEnclosureStroke(),
         tools:runtime.getToolState?.() ?? null,
         objects: world.objects,
-        isBlockedTile: (x, y) => world.isBlockedTile(x, y)
+        isBlockedTile: (x, y) => world.isBlockedTile(x, y),
+        terrainAt: (x, y) => runtime.getTerrainAt?.(x, y) ?? null
       };
     }
   });

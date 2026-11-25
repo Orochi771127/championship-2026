@@ -11,6 +11,7 @@ import {loadAuthoredMapAssets,configureAuthoredLighting} from './authoredMapAsse
 import {hd2dLook,applyHd2dLighting,createHd2dPost} from './hd2dLook.mjs';
 import {huntActorFootprint} from './actorFootprint.mjs';
 import {huntActorLight,huntRimDirection,createHuntActorLightUniforms,installHuntActorLight} from './actorLight.mjs';
+import {createHuntGroundContact,huntGroundKind,huntWaterTint} from './groundContact.mjs';
 import {HUNT_INSTINCT_GLOW,HUNT_ACTOR_SHADOW,huntContactEnvelope,huntSoftContactVertices,huntCastShadowReach,huntCastShadowVertices,createHuntCastShadowMaterial} from './actorShadows.mjs';
 
 // Caller provides a hash-verified manifest and an explicit appearance approval,
@@ -38,7 +39,9 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
   const look=authored||baked?hd2dLook(manifest.map,fieldId):null;let hd2d=null;
   // Partners take the same map light (actorLight.mjs, Owner 2026-11-25).
   const actorLight=look?huntActorLight(look,{mapKey:manifest.map,night:fieldId.endsWith('_02')}):null;
-  const actorLightUniforms=actorLight?createHuntActorLightUniforms(THREE,actorLight):null;
+  const actorLightUniforms=actorLight?createHuntActorLightUniforms(THREE,actorLight,{kc:map.k*map.c,waterTint:huntWaterTint(manifest.map)}):null;
+  // Partners touch the ground they stand on: water, ice, grass, sand/snow (groundContact.mjs, Owner 2026-11-25).
+  const groundContact=createHuntGroundContact({THREE,scene,map,mapKey:manifest.map});
   let active=true, view=null, pass=null, gltf=null, prototypeGltf=null, sizeKey='', restoreFallback=null, external=null, frameIndex=0, suspended=false;
   const controller=new AbortController(), resourceDisposer=createResourceDisposer(), batches=new Set(),cleanupErrors=[];
   const cleanup=(label,callback)=>{try{callback();}catch(error){cleanupErrors.push(`${label}: ${error?.message??error}`);}};
@@ -62,7 +65,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
     cleanup('shared pass',()=>pass?.dispose());cleanup('borrowed nodes',restore);
     cleanup('context listener',()=>offLost?.());
     for(const a of actors.values())for(const owned of [a.geometry,a.material,a.userData.shadow?.geometry,a.userData.shadow?.material,a.userData.cast?.geometry,a.userData.cast?.material,a.userData.core?.geometry,a.userData.core?.material])resourceDisposer.once(owned);
-    actors.clear();cleanup('actor textures',()=>textures.dispose());
+    actors.clear();cleanup('ground contact',()=>groundContact.dispose());cleanup('actor textures',()=>textures.dispose());
     for(const batch of batches)resourceDisposer.once(batch);batches.clear();
     cleanup('scene',()=>resourceDisposer.gltf(gltf));cleanup('prototypes',()=>resourceDisposer.gltf(prototypeGltf));cleanup('external assets',releaseExternal);
     cleanup('authored shadow',()=>sun.shadow.dispose());
@@ -199,7 +202,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
         view=next;const live=new Set();
         for(const {wild,node,sprite,frame,support,quad,opacity} of records){
           live.add(wild.wildId);let actor=actors.get(wild.wildId);
-          if(support.offscreen){if(actor){actor.visible=false;actor.material.map=null;if(actor.userData.shadow)actor.userData.shadow.visible=false;if(actor.userData.core)actor.userData.core.visible=false;if(actor.userData.cast){actor.userData.cast.visible=false;actor.userData.cast.material.map=null;}const aura=actor.userData.instinct;if(aura)for(const o of [aura.halo,aura.sigil,aura.sparks])o.visible=false;}hide(sprite);hide(node.body);hide(node.contactShadow);hide(node.instinctAura);continue;}
+          if(support.offscreen){if(actor){actor.visible=false;actor.material.map=null;if(actor.userData.shadow)actor.userData.shadow.visible=false;if(actor.userData.core)actor.userData.core.visible=false;if(actor.userData.cast){actor.userData.cast.visible=false;actor.userData.cast.material.map=null;}const aura=actor.userData.instinct;if(aura)for(const o of [aura.halo,aura.sigil,aura.sparks])o.visible=false;}groundContact.hide(wild.wildId);hide(sprite);hide(node.body);hide(node.contactShadow);hide(node.instinctAura);continue;}
           if(!actor){const geometry=new THREE.BufferGeometry();geometry.setIndex([0,1,2,0,2,3]);geometry.setAttribute('position',new THREE.Float32BufferAttribute(new Float32Array(12),3));geometry.setAttribute('uv',new THREE.Float32BufferAttribute([0,1,0,0,1,0,1,1],2));
             const material=new THREE.MeshBasicMaterial({alphaTest:0,transparent:true,depthTest:true,depthWrite:true,side:THREE.DoubleSide});installFlatGroundDepthCandidate(material,{THREE,groundHeight:support.groundHeight,eyeDirection:map.eye});if(actorLightUniforms)installHuntActorLight(material,actorLightUniforms);
             actor=new THREE.Mesh(geometry,material);actor.userData.supportHeight=support.groundHeight;actors.set(wild.wildId,actor);scene.add(actor);}
@@ -254,12 +257,13 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
           if(!cast.material.map)cast.material.needsUpdate=true;cast.material.map=actor.material.map;
           cast.material.opacity=(fieldId.endsWith('_02')?HUNT_ACTOR_SHADOW.castNightOpacity:HUNT_ACTOR_SHADOW.castOpacity)*fade;
           cast.visible=shadow.visible;
+          groundContact.update(wild.wildId,{wild,kind:huntGroundKind(next.terrainAt?.(wild.worldX,wild.worldY),manifest.map,wild.worldX,wild.worldY),actor,quad,footprint,groundHeight:support.groundHeight,visible:actor.visible,fade,now:globalThis.performance?.now?.()??Date.now()});
           hide(sprite);hide(node.body);hide(node.contactShadow);hide(node.instinctAura);
           // The idle 2D ring floats over the 3D scene ahead of the feet and frames the partner like a sticker;
           // the 3D ground layers replace it. The gold ring of a tethered partner stays (HUNT_GROUNDING_20261110).
           if(next.selectedWildId!==wild.wildId)hide(node.ring);
         }
-        for(const [id,a]of actors)if(!live.has(id)){scene.remove(a);for(const layer of [a.userData.shadow,a.userData.core,a.userData.cast])if(layer){scene.remove(layer);layer.geometry.dispose();layer.material.dispose();}a.geometry.dispose();a.material.dispose();actors.delete(id);}
+        for(const [id,a]of actors)if(!live.has(id)){groundContact.remove(id);scene.remove(a);for(const layer of [a.userData.shadow,a.userData.core,a.userData.cast])if(layer){scene.remove(layer);layer.geometry.dispose();layer.material.dispose();}a.geometry.dispose();a.material.dispose();actors.delete(id);}
         for(const n of backgroundNodes)hide(n);
         // Keep native UI/rings/stamina/tools and pointer mapping on existing Pixi.
         if(!baked&&!authored){const night=fieldId.endsWith('_02');ambient.intensity=night?.55:1.6;sun.intensity=night?.65:2.2;sun.color.set(night?0x9eb8ff:0xffe3b0);}
@@ -270,7 +274,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
       if(!reviewHarness)throw new Error('HUNT_REVIEW_ONLY');suspended=Boolean(value);
       if(suspended){restore();restoreFallback?.();}
     },
-    getDiagnostics(){return {active,threeUsed:active&&!suspended&&view!==null,renderer:'THREE_SHARED_PIXI_WEBGL2_HUNT_UNIFIED',map:manifest.map??'hm02',fieldId,canvasCount:1,contextCount:1,actorCount:actors.size,actorTextureCount:textures.getDiagnostics().entries,actorTextures:textures.getDiagnostics(),assetVersion:manifest.assetVersion??null,treeSelection:manifest.treeSelection??null,horizontalRotationEnabled:false,hd2d:hd2d?.getDiagnostics()??null,projectionElevationDegrees:manifest.projection.elevationDegrees,residentFrameTextures:external?.textures.length??0,frameIndex,externalAssets:external?.stats??null,fallback2DRetained:true,fallback2DReleaseApproved:false,qaApproved:false,three:renderer?.info,measuredMobilePerformance:false,cleanupErrors:[...cleanupErrors,...resourceDisposer.getErrors()],sharedPass:pass?.getDiagnostics()??null};},
+    getDiagnostics(){return {active,groundContact:groundContact.diagnostics(),threeUsed:active&&!suspended&&view!==null,renderer:'THREE_SHARED_PIXI_WEBGL2_HUNT_UNIFIED',map:manifest.map??'hm02',fieldId,canvasCount:1,contextCount:1,actorCount:actors.size,actorTextureCount:textures.getDiagnostics().entries,actorTextures:textures.getDiagnostics(),assetVersion:manifest.assetVersion??null,treeSelection:manifest.treeSelection??null,horizontalRotationEnabled:false,hd2d:hd2d?.getDiagnostics()??null,projectionElevationDegrees:manifest.projection.elevationDegrees,residentFrameTextures:external?.textures.length??0,frameIndex,externalAssets:external?.stats??null,fallback2DRetained:true,fallback2DReleaseApproved:false,qaApproved:false,three:renderer?.info,measuredMobilePerformance:false,cleanupErrors:[...cleanupErrors,...resourceDisposer.getErrors()],sharedPass:pass?.getDiagnostics()??null};},
     dispose
   });
 }
