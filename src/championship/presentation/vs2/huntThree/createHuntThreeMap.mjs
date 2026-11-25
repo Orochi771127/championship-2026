@@ -10,6 +10,7 @@ import {installFlatGroundDepthCandidate} from './supportDepth.mjs';
 import {loadAuthoredMapAssets,configureAuthoredLighting} from './authoredMapAssets.mjs';
 import {hd2dLook,applyHd2dLighting,createHd2dPost} from './hd2dLook.mjs';
 import {huntActorFootprint} from './actorFootprint.mjs';
+import {huntActorLight,huntRimDirection,createHuntActorLightUniforms,installHuntActorLight} from './actorLight.mjs';
 import {HUNT_INSTINCT_GLOW,HUNT_ACTOR_SHADOW,huntContactEnvelope,huntSoftContactVertices,huntCastShadowReach,huntCastShadowVertices,createHuntCastShadowMaterial} from './actorShadows.mjs';
 
 // Caller provides a hash-verified manifest and an explicit appearance approval,
@@ -35,6 +36,9 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
   if(authored)configureAuthoredLighting({manifest,scene,ambient,sun,night:fieldId.endsWith('_02')});
   // HD-2D (Owner 2026-10-27): every map with a look in hd2dLook.mjs; baked maps take the post pass only.
   const look=authored||baked?hd2dLook(manifest.map,fieldId):null;let hd2d=null;
+  // Partners take the same map light (actorLight.mjs, Owner 2026-11-25).
+  const actorLight=look?huntActorLight(look,{mapKey:manifest.map,night:fieldId.endsWith('_02')}):null;
+  const actorLightUniforms=actorLight?createHuntActorLightUniforms(THREE,actorLight):null;
   let active=true, view=null, pass=null, gltf=null, prototypeGltf=null, sizeKey='', restoreFallback=null, external=null, frameIndex=0, suspended=false;
   const controller=new AbortController(), resourceDisposer=createResourceDisposer(), batches=new Set(),cleanupErrors=[];
   const cleanup=(label,callback)=>{try{callback();}catch(error){cleanupErrors.push(`${label}: ${error?.message??error}`);}};
@@ -150,6 +154,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
       const {center,halfWidth,halfHeight}=map.viewport(view,app.screen.width,app.screen.height);
       camera.left=-halfWidth;camera.right=halfWidth;camera.top=halfHeight;camera.bottom=-halfHeight;
       camera.position.set(...center.map((v,i)=>v+500*map.eye[i]));camera.up.set(...map.up);camera.lookAt(...center);camera.updateProjectionMatrix();
+      if(actorLightUniforms){camera.updateMatrixWorld();const rim=huntRimDirection(camera,sun.position.toArray(),sun.target.position.toArray());actorLightUniforms.hmActorRimDir.value.set(rim[0],rim[1]);}
       const nextSize=`${app.screen.width}:${app.screen.height}:${app.renderer.resolution}`;
       if(sizeKey!==nextSize){renderer.setPixelRatio(app.renderer.resolution);renderer.setSize(app.screen.width,app.screen.height,false);sizeKey=nextSize;}
       // Clear the complete shared canvas, but clip Three scenery/actors to the
@@ -196,13 +201,13 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
           live.add(wild.wildId);let actor=actors.get(wild.wildId);
           if(support.offscreen){if(actor){actor.visible=false;actor.material.map=null;if(actor.userData.shadow)actor.userData.shadow.visible=false;if(actor.userData.core)actor.userData.core.visible=false;if(actor.userData.cast){actor.userData.cast.visible=false;actor.userData.cast.material.map=null;}const aura=actor.userData.instinct;if(aura)for(const o of [aura.halo,aura.sigil,aura.sparks])o.visible=false;}hide(sprite);hide(node.body);hide(node.contactShadow);hide(node.instinctAura);continue;}
           if(!actor){const geometry=new THREE.BufferGeometry();geometry.setIndex([0,1,2,0,2,3]);geometry.setAttribute('position',new THREE.Float32BufferAttribute(new Float32Array(12),3));geometry.setAttribute('uv',new THREE.Float32BufferAttribute([0,1,0,0,1,0,1,1],2));
-            const material=new THREE.MeshBasicMaterial({alphaTest:0,transparent:true,depthTest:true,depthWrite:true,side:THREE.DoubleSide});installFlatGroundDepthCandidate(material,{THREE,groundHeight:support.groundHeight,eyeDirection:map.eye});
+            const material=new THREE.MeshBasicMaterial({alphaTest:0,transparent:true,depthTest:true,depthWrite:true,side:THREE.DoubleSide});installFlatGroundDepthCandidate(material,{THREE,groundHeight:support.groundHeight,eyeDirection:map.eye});if(actorLightUniforms)installHuntActorLight(material,actorLightUniforms);
             actor=new THREE.Mesh(geometry,material);actor.userData.supportHeight=support.groundHeight;actors.set(wild.wildId,actor);scene.add(actor);}
           const t=sprite.texture,p=actor.geometry.attributes.position;
           // A fleeing partner leans into its run (the Pixi node cannot skew, so the lean is applied here).
           const lean=Number.isFinite(node.motionLean)?node.motionLean:0,points=[];
           quad.forEach(([dx,dy],i)=>{const v=map.actorVertex({worldX:wild.worldX,worldY:wild.worldY,worldZ:wild.worldZ??0,supportOffsetY:0,groundHeight:support.groundHeight},dx-dy*lean,dy);points.push(v);p.setXYZ(i,...v);});
-          if(actor.userData.supportHeight!==support.groundHeight){installFlatGroundDepthCandidate(actor.material,{THREE,groundHeight:support.groundHeight,eyeDirection:map.eye});actor.userData.supportHeight=support.groundHeight;}
+          if(actor.userData.supportHeight!==support.groundHeight){installFlatGroundDepthCandidate(actor.material,{THREE,groundHeight:support.groundHeight,eyeDirection:map.eye});if(actorLightUniforms)installHuntActorLight(actor.material,actorLightUniforms);actor.userData.supportHeight=support.groundHeight;}
           p.needsUpdate=true;actor.geometry.computeBoundingSphere();if(!actor.material.map)actor.material.needsUpdate=true;actor.material.map=textures.get(t);actor.material.opacity=opacity;actor.material.color.set(sprite.tint??0xffffff);actor.visible=sprite.visible&&node.visible&&!support.offscreen;
           const ellipses=node.threeContactEllipses;
           if(!Array.isArray(ellipses))throw new Error('HM02_EXISTING_SHADOW_BINDING_REQUIRED');

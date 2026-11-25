@@ -542,6 +542,7 @@
     "src/championship/presentation/vs2/huntRopeVfx.js",
     "src/championship/presentation/vs2/huntThree/actorBounds.mjs",
     "src/championship/presentation/vs2/huntThree/actorFootprint.mjs",
+    "src/championship/presentation/vs2/huntThree/actorLight.mjs",
     "src/championship/presentation/vs2/huntThree/actorShadows.mjs",
     "src/championship/presentation/vs2/huntThree/actorTextureCache.mjs",
     "src/championship/presentation/vs2/huntThree/authoredMapAssets.mjs",
@@ -11516,6 +11517,7 @@
     "src/championship/presentation/vs2/huntRopeVfx.js",
     "src/championship/presentation/vs2/huntThree/actorBounds.mjs",
     "src/championship/presentation/vs2/huntThree/actorFootprint.mjs",
+    "src/championship/presentation/vs2/huntThree/actorLight.mjs",
     "src/championship/presentation/vs2/huntThree/actorShadows.mjs",
     "src/championship/presentation/vs2/huntThree/actorTextureCache.mjs",
     "src/championship/presentation/vs2/huntThree/authoredMapAssets.mjs",
@@ -55065,6 +55067,10 @@
         "sha256": "bcb101df2949f35b48cd0b507bca5926b544e3a903fcc39122c82575fb95fd23"
       },
       {
+        "path": "src/championship/presentation/vs2/huntThree/actorLight.mjs",
+        "sha256": "53a51658506913b9c83ff3c8d329d6d2a0bd60a9de48cc87dc0b6d078277c55c"
+      },
+      {
         "path": "src/championship/presentation/vs2/huntThree/actorShadows.mjs",
         "sha256": "339f95bd468326f3f8401e462a748f5d329b95051bf02e93f58326b461ed3648"
       },
@@ -55078,7 +55084,7 @@
       },
       {
         "path": "src/championship/presentation/vs2/huntThree/createHuntThreeMap.mjs",
-        "sha256": "c2d0baf3a9de676036a55e8820e7a372a5708ea83dcb1fd38288d3733c75580a"
+        "sha256": "7eab1d3a0c923a04d22253fb584f85f8fb408df396379ed29411bec6abcab39c"
       },
       {
         "path": "src/championship/presentation/vs2/huntThree/dracoLifecycle.mjs",
