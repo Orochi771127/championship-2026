@@ -1,12 +1,15 @@
 // HM10/HM11/HM13/HM14 3D hunt maps: field mapping, hash chain and loader admission.
-// These four keep their native 128x128 fields; the 2880 candidate geometry is
-// clipped to the 2048 core and drawn through the shared authored-map path.
+// Owner 2026-11-25 「我每一張地圖其實都要擴大」: like the other eleven maps they now play
+// on 180x180 fields (2880 world) with the untrimmed candidate geometry (c2).
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import { MAPS, huntThreeProductionRequest } from '../src/championship/presentation/vs2/huntThree/manifestBindings.mjs';
 import { ORIGINAL_HUNT_FIELD_BINDINGS } from '../src/championship/gate/originalHuntFieldBindings.js';
+import { createNativeHuntEnvironment } from '../src/championship/hunt/capture/nativeHuntSceneSources.js';
+import expansions from '../src/data/championship/catalogs/hunt-art-expansions-20261023.json' with { type: 'json' };
+import scene from '../src/data/championship/catalogs/hunt-scene.r1.json' with { type: 'json' };
 
 const sha = (bytes) => crypto.createHash('sha256').update(bytes).digest('hex');
 const loopback = new URL('http://127.0.0.1:8732/championship.html');
@@ -17,12 +20,13 @@ const EXPECTED = {
   hm14: { fields: ['field_hm14_01', 'field_hm14_02'], biome: 'Crag' },
 };
 
-test('the four maps bind every native day/night field of their gate at the native 2048 world', () => {
+test('the four maps bind every native day/night field of their gate at the expanded 2880 world', () => {
   for (const [key, want] of Object.entries(EXPECTED)) {
     const map = MAPS[key];
     assert.ok(map, key);
     assert.deepEqual(map.fields, want.fields);
-    assert.equal(map.worldSize, 2048);
+    assert.equal(map.worldSize, 2880);
+    assert.ok(map.directory.endsWith('-three-c2-20261125/'), map.directory);
     assert.equal(map.appearanceApproved, true);
     const gate = ORIGINAL_HUNT_FIELD_BINDINGS[want.biome];
     assert.ok(gate, want.biome);
@@ -76,4 +80,32 @@ test('GLBs are Draco geometry with no external resources, and the authored loade
 test('the hunt canvas reports whether Three is drawing, so a silent 2D fallback is observable', () => {
   const source = fs.readFileSync('src/championship/presentation/vs2/createHuntFieldPixiPresentation.js', 'utf8');
   assert.match(source, /app\.canvas\.dataset\.huntThree = active \? "active" : "fallback"/);
+});
+
+test('every expanded field keeps its original 128 grid, and the four new maps expand both day and night', () => {
+  // (hm01's 2026-10-19 redesign opened a few old-edge wall tiles, so this holds for the four only.)
+  for (const fieldId of ['field_hm10_01', 'field_hm11_01', 'field_hm13_01', 'field_hm13_02', 'field_hm14_01', 'field_hm14_02']) {
+    const data = expansions.environments[fieldId];
+    assert.ok(data, fieldId);
+    const expanded = createNativeHuntEnvironment(data), original = createNativeHuntEnvironment(scene.environments[fieldId]);
+    assert.equal(expanded.width, 180, fieldId); assert.equal(expanded.height, 180, fieldId);
+    for (let y = 0; y < 128; y++) for (let x = 0; x < 128; x++)
+      assert.equal(expanded.readTerrain(x, y), original.readTerrain(x, y), `${fieldId} terrain ${x},${y}`);
+  }
+});
+
+test('no expanded field lets a creature escape at the old 2048 edge where the ground continues', () => {
+  // 2026-11-25: hm14-hm18 kept the native "escape off the map" cells on x=127 / y=127,
+  // so a fleeing creature mid-map was teleported as if it had reached the edge.
+  for (const [fieldId, data] of Object.entries(expansions.environments)) {
+    const env = createNativeHuntEnvironment(data), bad = [];
+    for (let y = 0; y < 128; y++) for (let x = 0; x < 128; x++) {
+      if (!(x === 127 || y === 127) || env.isBlocked(x, y)) continue;
+      const cell = env.readDirectionCell(x, y);
+      if (!(cell.escapeBoundary || cell.escapeAnchor)) continue;
+      const beyond = [x === 127 ? [x + 1, y] : null, y === 127 ? [x, y + 1] : null].filter(Boolean);
+      if (beyond.some(([bx, by]) => !env.isBlocked(bx, by))) bad.push([x, y]);
+    }
+    assert.deepEqual(bad, [], fieldId);
+  }
 });
