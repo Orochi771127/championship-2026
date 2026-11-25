@@ -2,7 +2,7 @@
 // Requests are registered internally so tutorial completion never trusts a
 // player-supplied rectangle or boolean visibility claim.
 import { huntViewportTransform } from './huntFieldCoordinates.js';
-import { huntPresentationViewport } from './huntPresentationViewport.js';
+import { huntClampViewCenter, huntPresentationViewport } from './huntPresentationViewport.js';
 import { computeVisibleChunkWindow, getFieldChunkBounds } from '../field/fieldCamera.js';
 
 const requests = new WeakMap();
@@ -75,7 +75,22 @@ export function createHuntViewportBinding(getLayout = null) {
 export function panHuntPresentationCamera(runtime, deltaX, deltaY, request, target = null) {
   const entry = getHuntPresentationRequest(request, runtime);
   if (!entry) return null;
-  const accepted = runtime.panCamera(deltaX, deltaY, entry.referenceWidth, entry.referenceHeight);
+  let panX = deltaX, panY = deltaY, clampHeight = entry.referenceHeight;
+  if (entry.mode === 'wide' && [deltaX, deltaY].every(Number.isFinite)) {
+    // Pan from the centre the player actually sees (clamped to the map), so a
+    // drag back from an edge moves the view at once. The runtime clamps with a
+    // window no larger than the shown one (width stays the portrait 512; height
+    // is the smaller of portrait and wide), so the target always fits and the
+    // shown view can reach every map edge.
+    const shown = readHuntPresentationViewport(runtime, request).viewRect;
+    const portrait = huntViewportTransform(entry.referenceWidth, entry.referenceHeight);
+    clampHeight = Math.min(portrait.worldHeight, shown.height) * portrait.scale;
+    const current = runtime.getCamera(entry.referenceWidth, clampHeight);
+    const { worldWidthPx, worldHeightPx } = runtime.world;
+    panX = huntClampViewCenter(shown.centerX + deltaX, shown.width, worldWidthPx) - (current.left + current.right) / 2;
+    panY = huntClampViewCenter(shown.centerY + deltaY, shown.height, worldHeightPx) - (current.top + current.bottom) / 2;
+  }
+  const accepted = runtime.panCamera(panX, panY, entry.referenceWidth, clampHeight);
   const viewport = readHuntPresentationViewport(runtime, request);
   return {
     accepted,

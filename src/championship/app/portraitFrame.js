@@ -24,6 +24,12 @@ export function isDesktopMenuLayout({width,height,activeScreen,hidden=false}) {
 // Viewport health check 2026-11-01: from 640px, so a 667x375 phone (iPhone SE) gets the
 // native-size landscape menus instead of the portrait frame scaled to about 54%.
 export const COMPACT_LANDSCAPE_MIN_WIDTH = 640;
+
+// Wide hunt windows at least this large dock the tools at the bottom, as on a phone.
+export const HUNT_DESKTOP_DOCK_MIN = Object.freeze({width:1024,height:600});
+export function isHuntDesktopDock({width,height}) {
+  return Number.isFinite(width)&&Number.isFinite(height)&&width>=HUNT_DESKTOP_DOCK_MIN.width&&height>=HUNT_DESKTOP_DOCK_MIN.height;
+}
 export function isCompactLandscapeMenuLayout({width,height,activeScreen,hidden=false}) {
   return Number.isFinite(width)&&Number.isFinite(height)&&width>=COMPACT_LANDSCAPE_MIN_WIDTH&&height>=320
     &&width>=height+160&&(width<1024||height<420)&&!hidden
@@ -275,7 +281,11 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     const cage=responsiveMenus&&isCageLandscapeLayout({width,height:effectiveHeight,activeScreen:root?.dataset.activeScreen,hidden:root?.hidden});
     const browse=browseWide();
     const hunt=root?.dataset.activeScreen==='HUNT_FIELD'&&!root?.hidden&&isHuntWide()===true;
-    body.toggleAttribute('data-hunt-wide',hunt);
+    // Owner 2026-11-25: a desktop keeps the phone's bottom tool dock over a
+    // full-width map; only a short landscape window (phone) docks tools at the side.
+    const huntDesktop=hunt&&isHuntDesktopDock({width,height:effectiveHeight});
+    body.toggleAttribute('data-hunt-wide',hunt&&!huntDesktop);
+    body.toggleAttribute('data-hunt-desktop',huntDesktop);
     body.toggleAttribute('data-desktop-raising',desktop);
     body.toggleAttribute('data-responsive-raising',responsiveRaising&&desktop);
     body.toggleAttribute('data-desktop-browse',browse);
@@ -342,6 +352,7 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     body.removeAttribute('data-landscape-menu');
     body.removeAttribute('data-cage-landscape');
     body.removeAttribute('data-hunt-wide');
+    body.removeAttribute('data-hunt-desktop');
     observer?.disconnect();
     for(const name of [...properties,...menuProperties,...visibleProperties,...titleProperties,...appProperties])body.style.removeProperty(name);
   }};
