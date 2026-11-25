@@ -643,32 +643,36 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               const snap = Math.max(0, 1 - (state.time - a.releasedAt) / 0.14);
               // Release follow-through along true 360° / 8-direction vector!
               if (hasDash) {
-                const fwd = (13 + baseThrust * 0.55) * arc;
+                const fwd = (22 + baseThrust * 0.72) * arc;
                 sprite.x += cosA * fwd;
                 sprite.y += sinA * fwd * 0.65;
               } else if (hasRecoil) {
-                const kick = -10 * arc;
+                const kick = -15 * arc;
                 sprite.x += cosA * kick;
                 sprite.y += sinA * kick * 0.55;
+              } else if (spec?.v2Archetype === "STREAM_BEAM") {
+                const tremor = -8 * arc + Math.sin(elapsed * 85) * 2.5 * (1 - p);
+                sprite.x += cosA * tremor;
+                sprite.y += sinA * tremor * 0.55;
               } else {
-                const nudge = -4 * arc;
+                const nudge = -6 * arc;
                 sprite.x += cosA * nudge;
                 sprite.y += sinA * nudge * 0.5;
               }
               if (hasJump) {
-                const hopH = (pose === "slam" || spec?.v2Archetype === "LEAP_SLAM") ? 22 : (pose === "hop" ? 16 : 9);
+                const hopH = (pose === "slam" || spec?.v2Archetype === "LEAP_SLAM") ? 54 : (pose === "hop" ? 36 : 22);
                 actionHop = Math.sin(Math.PI * p) * hopH;
                 sprite.y -= actionHop;
               }
               if (hasSquash && snap > 0) {
                 const verticalSnap = pose === "hop" || pose === "slam" || pose === "spin";
-                sprite.scale.x *= verticalSnap ? (1 - 0.14 * snap) : (1 + 0.18 * snap);
-                sprite.scale.y *= verticalSnap ? (1 + 0.18 * snap) : (1 - 0.14 * snap);
+                sprite.scale.x *= verticalSnap ? (1 - 0.18 * snap) : (1 + 0.24 * snap);
+                sprite.scale.y *= verticalSnap ? (1 + 0.24 * snap) : (1 - 0.18 * snap);
               }
               if (hasTilt) {
-                actionTilt = hasRecoil ? (-dirSign * 0.22 * arc) : (dirSign * (pose === "spin" ? 0.35 : 0.24) * arc);
+                actionTilt = hasRecoil ? (-dirSign * 0.28 * arc) : (dirSign * (pose === "spin" ? 0.44 : 0.34) * arc);
               }
-              if (hasAfterimage && p < 0.72 && frameCount % 3 === 0) {
+              if (hasAfterimage && p < 0.78 && frameCount % 2 === 0) {
                 const fxTint = relayLook(a.moveId, body.team)?.tint ?? 0x6ff7ff;
                 afterimage(container.position.x + sprite.x, container.position.y + sprite.y, facing, sprite, fxTint);
               }
@@ -887,7 +891,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         ice.tint = cracking ? 0xbfe8ff : 0xffffff;
         ice.alpha = 1;
       }
-      const decal = grid.scorch[i]>0 ? (grid.wet[i]>0?"scorchWet":"ash") : grid.wet[i] > 0 ? "wet" : null;
+      // Wave 9: Suppress muddy dark-brown rectangular ash/scorchWet tile blocks in purePixelFx mode (decalsGfx draws crisp cracks/speckles!)
+      const decal = purePixelFx
+        ? (grid.wet[i] > 0 ? "wet" : null)
+        : (grid.scorch[i] > 0 ? (grid.wet[i] > 0 ? "scorchWet" : "ash") : grid.wet[i] > 0 ? "wet" : null);
       const existing = decalSprites.get(i);
       if (decal && (!existing || existing.kind !== decal)) {
         if (existing) releaseCellSprite(existing.sprite);
@@ -1332,7 +1339,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         if (event.type === 'CAST' && event.moveType !== 'LUNGE') { const at = releaseAt(event); elementFx.cast({ x: at.x, y: at.y, moveId: event.moveId, speciesId: casterSpecies(event), windup: event.windup }); }
         else if (event.type === 'ULT_CAST') {
           const rect = view ? { x: view.centerX - view.halfW, y: view.centerY - view.halfH, width: view.halfW * 2, height: view.halfH * 2 } : { x: 0, y: 0, width: worldWidth, height: worldHeight };
-          elementFx.ult({ moveId: event.moveId, speciesId: casterSpecies(event), rect, center: { x: event.x, y: event.y - 30 } });
+          const foeBody = event.team === 'player'
+            ? ((state.rivals ?? []).find(r => r.active && r.hp > 0) ?? state.rivals?.[0])
+            : state.player;
+          const ultTarget = foeBody && foeBody.hp > 0 ? { x: foeBody.x, y: foeBody.y - 16 } : { x: event.x, y: event.y - 24 };
+          const ultAng = Number.isFinite(event.angle) ? event.angle : Math.atan2(ultTarget.y - (event.y - 30), ultTarget.x - event.x);
+          elementFx.ult({ moveId: event.moveId, speciesId: casterSpecies(event), rect, center: { x: event.x, y: event.y - 30 }, target: ultTarget, angle: ultAng });
           hitStop = Math.max(hitStop, reducedMotion ? 0 : 0.055);
         } else if (event.type === 'CAST_RELEASE') {
           const at = releaseAt(event);

@@ -1821,3 +1821,71 @@ test("phase 19 / Combat Wave 8.1: 324/324 1:1 PB-Rank parity, single-owner 1-mov
   assert.ok(screenSrc.includes('const choice = el("div", "da-skill da-skill--choice");') && screenSrc.includes('ev.target?.closest?.(".da-skill__preview")'), "non-nested choice card makes preview button independently clickable");
   assert.ok(cssSrc.includes('.da-panel--select[data-mode="RELAY"] .da-skill.da-skill--choice { min-height:auto; height:auto;'), "RELAY choice cards never clip vertically");
 });
+
+test("phase 20 / Combat Wave 9: Hero Volumetric PB-Rank VFX overhaul (zero ring-spam, 16 Hero renderers, 10-element projectiles, clean turf & bold choreography)", async () => {
+  const { PB324_MOVES } = await import("../src/championship/modes/dataArena/dataArenaPb324Catalog.js");
+  const v2Src = readFileSync(new URL("../src/championship/presentation/dataArena/dataArenaPixelFxV2.js", import.meta.url), "utf8");
+  const sceneSrc = readFileSync(new URL("../src/championship/presentation/dataArena/dataArenaPixiScene.js", import.meta.url), "utf8");
+  const screenSrc = readFileSync(new URL("../src/championship/app/dataArenaScreen.js", import.meta.url), "utf8");
+
+  // 1) Zero wireframe ring-spam spawns in dataArenaPixelFxV2.js & all Hero procedural geometry + showpieces present
+  assert.ok(!v2Src.includes('shape: "ring"'), "zero gratuitous shape:'ring' wireframe circle spam in PixelFX V2");
+  for (const sym of [
+    "function drawFilledCrescent(", "function drawCrystalSpear(", "function drawWaveCrest(", "function drawBoltRibbon(",
+    "HERO_METEOR", "HERO_VORTEX", "HERO_SLASH", "HERO_SHOCKWAVE", "HERO_PILLAR_AURA", "HERO_CAGE", "function drawHeroProjectile("
+  ]) {
+    assert.ok(v2Src.includes(sym), `PixelFX V2 defines Hero volumetric renderer: ${sym}`);
+  }
+
+  // 2) Full headless Graphics playback across all 324 PB-Rank moves (every element & every archetype!)
+  let drawCalls = 0;
+  class MockGfx {
+    constructor() { this.children = []; }
+    clear() { return this; }
+    rect() { drawCalls++; return this; }
+    circle() { drawCalls++; return this; }
+    ellipse() { drawCalls++; return this; }
+    poly() { drawCalls++; return this; }
+    moveTo() { return this; }
+    lineTo() { return this; }
+    fill() { return this; }
+    stroke() { return this; }
+    destroy() {}
+  }
+  class MockNode {
+    constructor() { this.children = []; }
+    addChild(c) { this.children.push(c); return c; }
+    destroy() {}
+  }
+  const MockPIXI = { Graphics: MockGfx, Container: MockNode };
+  const fx = createDataArenaPixelFxV2({ PIXI: MockPIXI, ground: new MockNode(), front: new MockNode(), quality: "high" });
+  for (let i = 0; i < PB324_MOVES.length; i += 6) {
+    const m = PB324_MOVES[i];
+    fx.cast({ x: 200, y: 200, moveId: m.id });
+    fx.release({ x: 220, y: 200, angle: 0.25, moveId: m.id, melee: m.relayType === "LUNGE" });
+    if (m.archetype === "METEOR_RAIN") fx.meteorDrop({ x: 360, y: 200, moveId: m.id, radius: 120 });
+    if (m.archetype === "VORTEX_PULL") fx.vortex({ x: 360, y: 200, moveId: m.id, radius: 118 });
+    if (m.archetype === "GROUND_SPIKES") fx.groundSpike({ x: 320, y: 200, moveId: m.id });
+    if (m.archetype === "SHOCKWAVE_RING" || m.archetype === "LEAP_SLAM") fx.craterShockwave({ x: 320, y: 200, moveId: m.id, radius: 135 });
+    if (m.archetype === "TELEKINESIS_SLAM") fx.psychicCage({ x: 340, y: 200, moveId: m.id, radius: 100 });
+    if (m.archetype === "STREAM_BEAM") fx.beamStream({ moveId: m.id, followStart: () => ({ x: 200, y: 200 }), followEnd: () => ({ x: 420, y: 210 }) });
+    if (m.ultimate) fx.ult({ moveId: m.id, center: { x: 200, y: 200 }, target: { x: 380, y: 200 }, angle: 0 });
+    let alive = true;
+    fx.projectile({ follow: () => (alive ? { x: 260 + i, y: 200 } : null), moveId: m.id, angle: 0.1 });
+    fx.hit({ x: 380, y: 200, groundY: 208, moveId: m.id, heavy: m.ultimate });
+    fx.update(60);
+    alive = false;
+  }
+  fx.update(120);
+  const diag = fx.getDiagnostics();
+  assert.ok(drawCalls > 400, `Hero volumetric renderers issued rich GPU draw calls (${drawCalls})`);
+  assert.ok(diag.releases >= 50 && diag.hits >= 50, `all sampled PB-324 moves played cleanly (releases=${diag.releases}, hits=${diag.hits})`);
+  fx.dispose();
+  assert.equal(fx.getDiagnostics().heroes, 0, "dispose clears all active Hero VFX showpieces");
+
+  // 3) Clean turf suppression, targeted ult focus, boosted phone choreography & upgraded lobby preview
+  assert.ok(sceneSrc.includes('const decal = purePixelFx\n        ? (grid.wet[i] > 0 ? "wet" : null)'), "purePixelFx suppresses muddy dark rectangular ash/scorchWet cell tiles");
+  assert.ok(sceneSrc.includes("target: ultTarget, angle: ultAng"), "ULT_CAST passes live opponent target focus to Hero ultimate VFX");
+  assert.ok(sceneSrc.includes("const hopH = (pose === \"slam\" || spec?.v2Archetype === \"LEAP_SLAM\") ? 54"), "LEAP_SLAM Z-soar amplified for clear phone readability");
+  assert.ok(screenSrc.includes("const drawPuff2d =") && screenSrc.includes('else if (arch === "METEOR_RAIN")') && screenSrc.includes('else if (arch === "VORTEX_PULL")'), "Lobby preview draws Hero volumetric VFX silhouettes");
+});

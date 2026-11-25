@@ -2035,94 +2035,178 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
             ctx.beginPath(); ctx.arc(fx, fy - 5, 14, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
           }
           ctx.restore();
-          // Archetype-specific VFX
+          // Wave 9 Hero Volumetric Preview VFX (matches live combat 1:1 — ZERO empty circle spam!)
+          const arch = v2Spec?.v2Archetype ?? "HOMING_ORB";
+          const mainCol = hexStr(pal.main);
+          const coreCol = hexStr(pal.core);
+          const edgeCol = hexStr(pal.edge ?? pal.main);
+          const drawPuff2d = (px, py, rad) => {
+            ctx.fillStyle = edgeCol;
+            ctx.beginPath(); ctx.arc(px + rad * 0.16, py + rad * 0.18, rad, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = mainCol;
+            ctx.beginPath(); ctx.arc(px, py, rad * 0.86, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = coreCol;
+            ctx.beginPath(); ctx.arc(px - rad * 0.24, py - rad * 0.26, rad * 0.46, 0, Math.PI * 2); ctx.fill();
+          };
           if (moveKind === "BUFF" || moveKind === "HEAL") {
-            const k = Math.min(1, phase / 0.75);
-            const col = moveKind === "HEAL" ? "#5aff9c" : "#fde047";
-            ctx.strokeStyle = col; ctx.lineWidth = 3;
-            ctx.globalAlpha = 1 - k * 0.8;
-            ctx.beginPath(); ctx.ellipse(fx, fy + 8, 16 + k * 46, 8 + k * 20, 0, 0, Math.PI * 2); ctx.stroke();
-            ctx.globalAlpha = 1;
+            const k = Math.min(1, phase / 0.78);
+            const col = moveKind === "HEAL" ? "#5aff9c" : mainCol;
+            ctx.save();
+            ctx.globalCompositeOperation = "lighter";
             for (let i = 0; i < 6; i++) {
-              const a = acc * 5 + (i * Math.PI) / 3;
+              const a = acc * 3.2 + (i * Math.PI) / 3;
+              const px = fx + Math.cos(a) * 20;
+              const ph = (24 + (i % 3) * 14) * (0.4 + 0.7 * k);
+              ctx.globalAlpha = (1 - k * 0.75) * 0.65;
               ctx.fillStyle = col;
-              ctx.beginPath(); ctx.arc(fx + Math.cos(a) * 20, fy - 6 - ((k * 34 + i * 7) % 34), 3, 0, Math.PI * 2); ctx.fill();
+              ctx.fillRect(px - 3, fy + 10 - ph, 6, ph);
+              ctx.fillStyle = "#ffffff";
+              ctx.fillRect(px - 1, fy + 10 - ph, 2, ph);
             }
+            ctx.restore();
             popLabel = moveKind === "HEAL" ? "+30% HP" : t("fct.statBuff");
           } else if (moveKind === "BARRIER" || moveKind === "COUNTER") {
             const col = moveKind === "COUNTER" ? "#c79bff" : "#7fe9ff";
             ctx.fillStyle = moveKind === "COUNTER" ? "rgba(199,155,255,0.22)" : "rgba(127,233,255,0.22)";
-            ctx.strokeStyle = col; ctx.lineWidth = 3;
-            ctx.beginPath(); ctx.arc(fx, fy - 6, 26, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.strokeStyle = col; ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            for (let s = 0; s < 6; s++) {
+              const ang = acc * 2 + (s / 6) * Math.PI * 2;
+              const hx = fx + Math.cos(ang) * 24, hy = fy - 6 + Math.sin(ang) * 24;
+              if (s === 0) ctx.moveTo(hx, hy); else ctx.lineTo(hx, hy);
+            }
+            ctx.closePath(); ctx.fill(); ctx.stroke();
             if (moveKind === "BARRIER") {
-              // Elemental barrier pillar rising in front of the fighter!
               const rise = Math.min(1, phase * 3.5);
               const bh = Math.round(32 * rise);
-              ctx.fillStyle = hexStr(pal.main);
+              ctx.fillStyle = mainCol;
               ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 2;
               ctx.fillRect(fx + 32, fy + 12 - bh, 18, bh);
               ctx.strokeRect(fx + 32, fy + 12 - bh, 18, bh);
             }
             popLabel = moveKind === "COUNTER" ? t("fct.counter") : "WALL!";
-          } else if (moveKind === "HAZARD") {
+          } else if (moveKind === "HAZARD" || arch === "GROUND_SPIKES" || arch === "BURROW_AMBUSH") {
+            const rise = Math.min(1, phase * 3.2);
             for (let i = 0; i < 5; i++) {
-              const hx = tx - 26 + i * 13, hy = ty + 8 + (i % 2 ? 8 : -6);
-              ctx.fillStyle = "#c79bff";
-              ctx.beginPath(); ctx.moveTo(hx, hy - 12); ctx.lineTo(hx + 6, hy + 4); ctx.lineTo(hx - 6, hy + 4); ctx.closePath(); ctx.fill();
+              const hx = tx - 28 + i * 14, hy = ty + 10 + (i % 2 ? 6 : -4);
+              const sh = (18 + (i % 2) * 8) * rise;
+              ctx.fillStyle = mainCol;
+              ctx.beginPath(); ctx.moveTo(hx, hy - sh); ctx.lineTo(hx + 8, hy + 4); ctx.lineTo(hx - 8, hy + 4); ctx.closePath(); ctx.fill();
+              ctx.fillStyle = coreCol;
+              ctx.beginPath(); ctx.moveTo(hx, hy - sh); ctx.lineTo(hx + 2, hy + 4); ctx.lineTo(hx - 5, hy + 4); ctx.closePath(); ctx.fill();
             }
             popLabel = "SPIKES!";
-          } else if (!isMelee && phase < 0.48) {
-            const k = phase / 0.48;
-            const px = fx + (tx - fx) * k, py = fy - 6 - Math.sin(k * Math.PI) * 14;
-            ctx.strokeStyle = hexStr(pal.main); ctx.lineWidth = 6;
-            ctx.beginPath(); ctx.moveTo(fx + 10, fy - 6); ctx.lineTo(px, py); ctx.stroke();
-            ctx.fillStyle = hexStr(pal.core);
-            ctx.beginPath(); ctx.arc(px, py, 8, 0, Math.PI * 2); ctx.fill();
-          } else if (phase >= 0.36 && phase < 0.82) {
-            // Wave 8-A/B: Crisp PB-Rank procedural pixel-particle preview (zero blocky square sprites!)
-            const k = (phase - 0.36) / 0.46;
-            const pb = typeof pb324Move === "function" ? pb324Move(moveId) : null;
-            const shapes = pb?.vfx?.shapes ?? ["ring", "star", "pxball"];
-            const mainCol = hexStr(pal.main);
-            const coreCol = hexStr(pal.core);
+          } else if (arch === "STREAM_BEAM") {
+            const k = Math.min(1, phase / 0.72);
+            const ex = fx + 14 + (tx - fx - 14) * Math.min(1, k * 2.2);
             ctx.save();
             ctx.globalCompositeOperation = "lighter";
-            // Expanding crisp pixel ring
-            ctx.strokeStyle = mainCol;
-            ctx.lineWidth = Math.max(1.5, 4 * (1 - k));
-            ctx.globalAlpha = 1 - k * 0.85;
-            ctx.beginPath(); ctx.ellipse(dtx, ty - 6, 10 + k * 38, 7 + k * 24, 0, 0, Math.PI * 2); ctx.stroke();
-            // Core flash star / crescent slash
+            ctx.strokeStyle = mainCol; ctx.lineWidth = 18; ctx.lineCap = "round"; ctx.globalAlpha = 0.52;
+            ctx.beginPath(); ctx.moveTo(fx + 14, fy - 6); ctx.lineTo(ex, ty - 6); ctx.stroke();
+            ctx.strokeStyle = coreCol; ctx.lineWidth = 8; ctx.globalAlpha = 0.92;
+            ctx.beginPath();
+            ctx.moveTo(fx + 14, fy - 6);
+            for (let s = 1; s <= 10; s++) {
+              const f = s / 10;
+              const bx = fx + 14 + (ex - (fx + 14)) * f;
+              const by = fy - 6 + Math.sin(f * Math.PI * 4 - acc * 28) * (palKey === "thunder" ? 9 : 5);
+              ctx.lineTo(bx, by);
+            }
+            ctx.stroke();
+            ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 3.5; ctx.globalAlpha = 0.98;
+            ctx.beginPath(); ctx.moveTo(fx + 14, fy - 6); ctx.lineTo(ex, ty - 6); ctx.stroke();
+            ctx.restore();
+            for (let c = 0; c < 4; c++) drawPuff2d(fx + 28 + (ex - fx - 28) * (c / 4), fy - 6 + Math.sin(acc * 14 + c) * 5, 7);
+            if (phase > 0.35) popLabel = "BEAM!";
+          } else if (arch === "METEOR_RAIN") {
+            if (palKey === "water") {
+              // Towering foaming water geyser column!
+              const rise = Math.min(1, phase / 0.42);
+              const colH = 74 * rise;
+              for (let i = 0; i < 6; i++) drawPuff2d(dtx + Math.sin(acc * 12 + i) * 4, ty + 6 - (i / 5) * colH, 13 - i * 1.1);
+              drawPuff2d(dtx - 16, ty - colH + 8, 9);
+              drawPuff2d(dtx + 16, ty - colH + 8, 9);
+              popLabel = "GEYSER!";
+            } else if (phase < 0.46) {
+              // Giant falling meteors streaking diagonally from sky!
+              const f = phase / 0.46;
+              for (let m = 0; m < 3; m++) {
+                const mx = tx - 56 * (1 - f) + (m - 1) * 20;
+                const my = ty - 95 * (1 - f) + (m % 2) * 8;
+                drawPuff2d(mx - 10, my - 16, 10);
+                drawPuff2d(mx, my, 12);
+              }
+            } else {
+              // Billowing multi-cloud pixel fireball explosion!
+              const k = (phase - 0.46) / 0.54;
+              ctx.globalAlpha = Math.max(0.15, 1 - k * 0.85);
+              for (let c = 0; c < 7; c++) {
+                const a = (c / 7) * Math.PI * 2;
+                drawPuff2d(dtx + Math.cos(a) * (8 + k * 28), ty - 6 + Math.sin(a) * (6 + k * 18) - k * 10, 14 * (1 - k * 0.45));
+              }
+              ctx.globalAlpha = 1;
+              popLabel = "METEOR!";
+            }
+          } else if (arch === "VORTEX_PULL") {
+            // 3D swirling pixel tornado funnel!
+            for (let tier = 0; tier < 5; tier++) {
+              const tf = tier / 4;
+              const rr = 8 + tf * 22;
+              const yOff = ty + 8 - tf * 68;
+              for (let p = 0; p < 3; p++) {
+                const ang = acc * 8 + tier + (p / 3) * Math.PI * 2;
+                drawPuff2d(dtx + Math.cos(ang) * rr, yOff + Math.sin(ang) * rr * 0.35, 7 + tf * 4);
+              }
+            }
+            popLabel = "VORTEX!";
+          } else if (arch === "DRAG_WAVE") {
+            const k = Math.min(1, phase / 0.72);
+            const wx = fx + 18 + (tx - fx - 10) * k;
+            for (let i = -3; i <= 3; i++) {
+              const bow = (9 - i * i) * 1.4;
+              drawPuff2d(wx + bow, fy - 6 + i * 9, 10 - Math.abs(i));
+            }
+            ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.arc(wx - 4, fy - 6, 30, -0.85, 0.85); ctx.stroke();
+            if (phase > 0.42) popLabel = "WAVE!";
+          } else if (!isMelee && phase < 0.48) {
+            const k = phase / 0.48;
+            const px = fx + (tx - fx) * k, py = fy - 6 - Math.sin(k * Math.PI) * 12;
+            drawPuff2d(px - 10, py, 7);
+            drawPuff2d(px, py, 11);
+          } else if (phase >= 0.36 && phase < 0.84) {
+            // Bold Hero Slash / Volumetric Cloud Impact Preview (ZERO empty wireframe circle!)
+            const k = (phase - 0.36) / 0.48;
+            const pb = typeof pb324Move === "function" ? pb324Move(moveId) : null;
+            ctx.save();
+            ctx.globalCompositeOperation = "lighter";
+            if (isMelee) {
+              // Wide filled anime X-cross crescent slash arcs!
+              for (const dir of [-1, 1]) {
+                ctx.strokeStyle = mainCol; ctx.lineWidth = 10 * (1 - k * 0.6); ctx.lineCap = "round";
+                ctx.globalAlpha = 1 - k * 0.75;
+                ctx.beginPath(); ctx.arc(dtx - 6, ty - 6, 26 + k * 14, dir * 0.3 - 0.9, dir * 0.3 + 0.9); ctx.stroke();
+                ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 4 * (1 - k * 0.6);
+                ctx.beginPath(); ctx.arc(dtx - 6, ty - 6, 26 + k * 14, dir * 0.3 - 0.7, dir * 0.3 + 0.7); ctx.stroke();
+              }
+            } else {
+              // Billowing volumetric cloud + starburst impact!
+              ctx.globalAlpha = 1 - k * 0.8;
+              for (let c = 0; c < 6; c++) {
+                const a = (c / 6) * Math.PI * 2 + k * 0.5;
+                drawPuff2d(dtx + Math.cos(a) * (6 + k * 24), ty - 6 + Math.sin(a) * (4 + k * 16), 11 * (1 - k * 0.45));
+              }
+            }
             if (k < 0.55) {
               const sk = 1 - k / 0.55;
-              ctx.fillStyle = coreCol;
-              ctx.globalAlpha = sk;
-              const sr = 18 * sk;
+              ctx.fillStyle = coreCol; ctx.globalAlpha = sk;
+              const sr = 20 * sk;
               ctx.beginPath();
               ctx.moveTo(dtx, ty - 6 - sr); ctx.lineTo(dtx + sr * 0.25, ty - 6 - sr * 0.25);
               ctx.lineTo(dtx + sr, ty - 6); ctx.lineTo(dtx + sr * 0.25, ty - 6 + sr * 0.25);
               ctx.lineTo(dtx, ty - 6 + sr); ctx.lineTo(dtx - sr * 0.25, ty - 6 + sr * 0.25);
               ctx.lineTo(dtx - sr, ty - 6); ctx.lineTo(dtx - sr * 0.25, ty - 6 - sr * 0.25);
               ctx.closePath(); ctx.fill();
-            }
-            // Procedural pixel-art particles (pxball / shard / 3-pass pxpuff / streak)
-            for (let i = 0; i < 12; i++) {
-              const a = (i / 12) * Math.PI * 2 + k * 0.8;
-              const dist = 8 + k * (28 + (i % 3) * 14);
-              const px = Math.round(dtx + Math.cos(a) * dist);
-              const py = Math.round(ty - 6 + Math.sin(a) * dist * 0.72);
-              const sz = Math.max(2, Math.round((1 - k) * (shapes.includes("pxpuff") ? 9 : 6)));
-              ctx.globalAlpha = Math.max(0.15, 1 - k);
-              ctx.fillStyle = i % 3 === 0 ? coreCol : mainCol;
-              if (shapes.includes("shard") && i % 2 === 0) {
-                ctx.beginPath();
-                ctx.moveTo(px + Math.cos(a) * sz * 1.4, py + Math.sin(a) * sz * 1.4);
-                ctx.lineTo(px - Math.sin(a) * sz * 0.6, py + Math.cos(a) * sz * 0.6);
-                ctx.lineTo(px + Math.sin(a) * sz * 0.6, py - Math.cos(a) * sz * 0.6);
-                ctx.closePath(); ctx.fill();
-              } else {
-                ctx.fillRect(px - Math.floor(sz / 2), py - Math.floor(sz / 2), sz, sz);
-              }
             }
             ctx.restore();
             if (!popLabel) popLabel = pb?.hitFeel?.impact ? "CRIT!" : "HIT!";
