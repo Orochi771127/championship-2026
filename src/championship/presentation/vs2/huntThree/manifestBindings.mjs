@@ -177,7 +177,7 @@ export const MAPS=Object.freeze({
     "directory": "assets/production/hunt/hm10-three-c3-20261126/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "8359a476a8e592d1287c9bed1cf8d3aaab0911a910f6952cd1ece887c7008abb",
+      "sha256": "276f6be660a0d7e0bfba96ae0b05bff3ea5ec7c41f33c55c958332e0afe4add6",
       "bytes": 413
     },
     "fields": [
