@@ -12,6 +12,9 @@ Owner: 「電腦版地圖拉到邊會出現空白處」, then 「先修電腦版
 - Panning starts from the centre the player sees, so dragging back from an edge moves at once.
 - The native camera centre stays inside the runtime's own clamp range.
 - The portrait layout is unchanged.
+- Owner, same day: 「為什麼他這個工具一定要在旁邊啊？電腦板難道不能像手機版一樣工具也是放在下面嗎？」.
+  - A wide hunt window of at least 1024×600 keeps the phone's bottom tool dock over a full-width map (`body[data-hunt-desktop]`). The dock is centred, as wide as its tools and at most 720 px.
+  - A shorter landscape window (a phone on its side) keeps the side panel (`body[data-hunt-wide]`).
 
 Code: `src/championship/hunt/huntPresentationViewport.js`, `src/championship/hunt/huntPresentationBinding.js`; test `tests/championship-hunt-desktop-edge-cases.mjs`.
 

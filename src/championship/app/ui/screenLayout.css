@@ -3518,6 +3518,17 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
 /* The rope scope frames the field above the lower dock. */
 :root[data-theme="arcade"] body:not([data-hunt-wide]) .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 84px 14px 104px; }
 
+/* Owner 2026-11-25: desktop hunt keeps the phone's bottom dock over a full-width
+ * map (body[data-hunt-desktop], portraitFrame.js). The bar hugs its tools and is
+ * centred, capped so it never stretches across a 1920 window. */
+:root[data-theme] body[data-hunt-desktop]:not([data-hunt-wide]) .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-tools {
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: fit-content;
+  max-width: min(720px, calc(100% - 20px));
+}
+
 /* Wide layouts: the dock is the side panel's lower card, two slots a row,
  * the rope across the top. Lures and traps lift off it towards the field. */
 :root[data-theme="arcade"] body[data-hunt-wide] .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-controls-panel .cm-hunt-tools[data-dock="tactical"] {

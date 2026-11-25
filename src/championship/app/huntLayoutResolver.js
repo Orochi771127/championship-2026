@@ -55,7 +55,7 @@ export function createHuntLayoutResolver({
       // field and the single Pixi renderer must agree on its logical dimensions.
       if (outer.hasInput || outer.keyboard || !entry.fontsReady
           || doc.fonts?.status === 'loading' || !entry.getViewport
-          || doc.body.hasAttribute('data-hunt-wide')) { invalidateSample(); return; }
+          || doc.body.hasAttribute('data-hunt-wide') || doc.body.hasAttribute('data-hunt-desktop')) { invalidateSample(); return; }
       const width = entry.host.clientWidth, height = entry.host.clientHeight;
       const stage = entry.getViewport();
       if (![width,height,stage?.width,stage?.height].every(positive)
