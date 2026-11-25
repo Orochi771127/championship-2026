@@ -830,68 +830,90 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
     }
 
     if (h.kind === "HERO_VORTEX") {
-      // Towering 125px-tall 3D swirling pixel tornado funnel (6 stacked widening cloud tiers — ZERO empty circles!)
+      // Cohesive 132px-tall 3D swirling pixel tornado funnel (tapered translucent core + tightly overlapping cloud tiers!)
       const fade = t < 0.16 ? t / 0.16 : t > 0.72 ? clamp((1 - t) / 0.28, 0, 1) : 1;
-      const tiers = 6;
-      const colMain = sampleStops(stops, 0.35);
+      const tiers = 7;
+      const colMain = sampleStops(stops, 0.36);
       const colCore = sampleStops(stops, 0.12);
       if (topGfx) {
+        if (typeof topGfx.poly === "function") {
+          const swayTop = Math.sin(h.age * 10 + 3.2 + h.seed) * 10;
+          const topW = 24 + h.radius * 0.36;
+          const botW = 12;
+          topGfx.poly([
+            h.x - botW, h.y + 8,
+            h.x + botW, h.y + 8,
+            h.x + swayTop + topW, h.y - 126,
+            h.x + swayTop - topW, h.y - 126
+          ]).fill({ color: hex.main, alpha: 0.34 * fade });
+        }
         for (let tier = 0; tier < tiers; tier++) {
           const tf = tier / (tiers - 1);
-          const ty = h.y + 8 - tf * 124;
-          const tr = (18 + tf * h.radius * 0.56) * (0.88 + 0.12 * fade);
-          const sway = Math.sin(h.age * 10 + tf * 3.2 + h.seed) * (6 + tf * 8);
-          const puffCount = 4 + Math.floor(tf * 2);
+          const ty = h.y + 8 - tf * 128;
+          const tr = (7 + tf * h.radius * 0.28) * (0.9 + 0.1 * fade);
+          const sway = Math.sin(h.age * 10 + tf * 3.2 + h.seed) * (3 + tf * 8);
+          const puffCount = 5 + Math.floor(tf * 3);
           for (let p = 0; p < puffCount; p++) {
-            const ang = h.age * (9.5 - tf * 2.5) + (p / puffCount) * TAU + tier * 0.9;
+            const ang = h.age * (10.5 - tf * 2.2) + (p / puffCount) * TAU + tier * 0.85;
             const px = h.x + sway + Math.cos(ang) * tr;
-            const py = ty + Math.sin(ang) * tr * 0.34;
-            const pr = 9 + tf * 10;
+            const py = ty + Math.sin(ang) * tr * 0.32;
+            const pr = 11 + tf * 12;
             const useBright = p % 2 === 0;
-            drawPixelPuff(topGfx, px, py, pr, useBright ? colCore.r : colMain.r, useBright ? colCore.g : colMain.g, useBright ? colCore.b : colMain.b, 0.86 * fade);
+            drawPixelPuff(topGfx, px, py, pr, useBright ? colCore.r : colMain.r, useBright ? colCore.g : colMain.g, useBright ? colCore.b : colMain.b, 0.90 * fade);
           }
         }
       }
       if (topAddGfx) {
-        // Sweeping curved wind/energy ribbons wrapping upward around the funnel
-        for (let r = 0; r < 3; r++) {
-          const baseA = h.age * 8.5 + (r / 3) * TAU;
+        for (let r = 0; r < 4; r++) {
+          const baseA = h.age * 9.5 + (r / 4) * TAU;
           let started = false;
-          for (let s = 0; s <= 10; s++) {
-            const sf = s / 10;
-            const ang = baseA + sf * Math.PI * 2.2;
-            const rad = 16 + sf * h.radius * 0.58;
-            const rx = h.x + Math.cos(ang) * rad;
-            const ry = h.y + 4 - sf * 126 + Math.sin(ang) * rad * 0.32;
+          for (let s = 0; s <= 12; s++) {
+            const sf = s / 12;
+            const ang = baseA + sf * Math.PI * 2.6;
+            const rad = 10 + sf * h.radius * 0.34;
+            const sway = Math.sin(h.age * 10 + sf * 3.2 + h.seed) * (3 + sf * 8);
+            const rx = h.x + sway + Math.cos(ang) * rad;
+            const ry = h.y + 4 - sf * 130 + Math.sin(ang) * rad * 0.30;
             if (!started) { topAddGfx.moveTo(rx, ry); started = true; }
             else topAddGfx.lineTo(rx, ry);
           }
-          topAddGfx.stroke({ color: r === 0 ? 0xffffff : hex.main, width: 2.8, alpha: 0.72 * fade, cap: "round" });
+          topAddGfx.stroke({ color: r % 2 === 0 ? 0xffffff : hex.main, width: r % 2 === 0 ? 3.2 : 2.4, alpha: 0.78 * fade, cap: "round" });
         }
       }
       return;
     }
 
     if (h.kind === "HERO_SHOCKWAVE") {
-      // Volumetric billowing cloud shockwave ring (12 expanding 3-pass shaded clouds — ZERO wireframe circle!)
+      // Organic billowing anime cloud blast (jittered overlapping outer plumes + central blast core — ZERO bead-ring!)
       const ease = 1 - Math.pow(1 - t, 2.2);
       const fade = clamp(1 - t * t, 0, 1);
-      const curR = h.radius * (0.22 + 0.78 * ease);
-      const col = sampleStops(stops, t * 0.75);
-      const count = quality === "low" ? 8 : 12;
+      const curR = h.radius * (0.18 + 0.74 * ease);
+      const col = sampleStops(stops, t * 0.72);
+      const colHot = sampleStops(stops, t * 0.3);
+      const count = quality === "low" ? 9 : 14;
       if (topGfx) {
+        // Dense central billowing plumes
+        for (let c = 0; c < 5; c++) {
+          const ca = (c / 5) * TAU + h.seed * 1.7;
+          const cd = curR * (0.26 + 0.16 * Math.sin(h.seed + c * 3.3));
+          const pr = clamp(h.radius * 0.24, 15, 28) * (1.15 - t * 0.52);
+          drawPixelPuff(topGfx, h.x + Math.cos(ca) * cd, h.y + Math.sin(ca) * cd * 0.56 - t * 14, pr, colHot.r, colHot.g, colHot.b, 0.92 * fade);
+        }
+        // Irregular overlapping outer smoke/flame/frost/earth cloud ring
         for (let i = 0; i < count; i++) {
-          const a = (i / count) * TAU + h.seed;
-          const cx = h.x + Math.cos(a) * curR;
-          const cy = h.y + 4 + Math.sin(a) * curR * 0.58 - (1 - t) * 8;
-          const pr = clamp(h.radius * 0.17, 11, 22) * (1.15 - t * 0.55);
-          drawPixelPuff(topGfx, cx, cy, pr, col.r, col.g, col.b, 0.92 * fade);
+          const a = (i / count) * TAU + h.seed + Math.sin(i * 4.1 + h.seed) * 0.18;
+          const radMul = 0.72 + 0.34 * Math.abs(Math.sin(h.seed * 3 + i * 2.7));
+          const cx = h.x + Math.cos(a) * curR * radMul;
+          const cy = h.y + 4 + Math.sin(a) * curR * radMul * 0.58 - (1 - t) * 8;
+          const szMul = 0.78 + 0.44 * Math.abs(Math.cos(h.seed + i * 3.1));
+          const pr = clamp(h.radius * 0.20, 13, 25) * szMul * (1.15 - t * 0.52);
+          drawPixelPuff(topGfx, cx, cy, pr, col.r, col.g, col.b, 0.94 * fade);
         }
       }
-      if (topAddGfx && t < 0.45) {
-        const fl = 1 - t / 0.45;
-        topAddGfx.circle(h.x, h.y, curR * 0.48).fill({ color: hex.main, alpha: 0.42 * fl });
-        topAddGfx.circle(h.x, h.y, curR * 0.24).fill({ color: 0xffffff, alpha: 0.88 * fl });
+      if (topAddGfx && t < 0.48) {
+        const fl = 1 - t / 0.48;
+        topAddGfx.circle(h.x, h.y, curR * 0.52).fill({ color: hex.main, alpha: 0.46 * fl });
+        topAddGfx.circle(h.x, h.y, curR * 0.26).fill({ color: 0xffffff, alpha: 0.92 * fl });
       }
       return;
     }

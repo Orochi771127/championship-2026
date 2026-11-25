@@ -2575,6 +2575,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           }
         }
       } else if (t.kind === "CIRCLE" && mine) {
+        if (purePixelFx) continue;
         const fxColor = t.moveId ? relayLook(t.moveId, 'player').tint : 0x6ff7ff;
         g.circle(t.x, t.y, t.radius).stroke({ width: 3, color: fxColor, alpha: 0.85 });
         g.circle(t.x, t.y, t.radius * Math.max(0.18, p)).fill({ color: fxColor, alpha: 0.16 }).stroke({ width: 1.8, color: 0xffffff, alpha: 0.55 });
@@ -2601,6 +2602,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             .fill({ color: gap ? 0x6dffb3 : 0xff5cd6, alpha: gap ? 0.9 : 0.4 + 0.5 * p });
         }
       } else if (t.kind === "CIRCLE") {
+        if (purePixelFx) continue;
         const color = t.danger ? 0xff3b5c : 0xffa13b;
         g.circle(t.x, t.y, t.radius).fill({ color, alpha: 0.12 }).stroke({ width: 3, color, alpha: 0.88 });
         g.circle(t.x, t.y, t.radius * Math.max(0.18, p)).fill({ color, alpha: t.danger ? 0.24 : 0.15 }).stroke({ width: 1.8, color: 0xffd0d8, alpha: 0.6 });
@@ -2626,14 +2628,19 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       const moveTint = zMoveId ? relayLook(zMoveId, zone.team).tint : null;
       const color = ZONE_COLOR[zone.move?.effect] ?? moveTint ?? (zone.team === "player" ? 0x1ca3ff : 0xff3b5c);
       if (purePixelFx) {
-        if (zone.vortexLift) {
-          // 3D volumetric tornado already draws its own grounded vortex collar — keep only a whisper-thin pull boundary!
-          g.ellipse(zone.x, zone.y + 4, zone.radius, zone.radius * 0.56).stroke({ width: 1.5, color, alpha: 0.32 });
-          continue;
+        // Wave 9.1: Zero giant wireframe circles over Hero VFX — draw only 4 subtle ground corner-arc brackets!
+        const r = Math.min(110, zone.radius * 0.82);
+        for (let seg = 0; seg < 4; seg++) {
+          const a0 = seg * (Math.PI * 0.5) + 0.30;
+          const a1 = a0 + 0.44;
+          const steps = 4;
+          g.moveTo(zone.x + Math.cos(a0) * r, zone.y + 4 + Math.sin(a0) * r * 0.58);
+          for (let st = 1; st <= steps; st++) {
+            const aa = a0 + (a1 - a0) * (st / steps);
+            g.lineTo(zone.x + Math.cos(aa) * r, zone.y + 4 + Math.sin(aa) * r * 0.58);
+          }
+          g.stroke({ width: 1.8, color, alpha: 0.36 + 0.16 * p, cap: 'round' });
         }
-        // Pure-PixelFX V2 visual hygiene: razor-clean single hairline reticle + gentle fill, zero stacked hexagrams!
-        g.circle(zone.x, zone.y, zone.radius).fill({ color, alpha: 0.08 + 0.08 * p }).stroke({ width: 2, color, alpha: 0.82 });
-        g.circle(zone.x, zone.y, zone.radius * Math.max(0.15, p)).stroke({ width: 1.5, color: 0xffffff, alpha: 0.65 });
         continue;
       }
       g.circle(zone.x, zone.y, zone.radius).fill({ color, alpha: 0.22 }).stroke({ width: zone.team === "player" ? 4 : 4.5, color, alpha: 0.95 });
@@ -2661,11 +2668,21 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const paintedGuard = !purePixelFx && activeGuard && atlas.place(activeGuard, activeGuard.moveId, 'active',
       self.x, self.y - 16, self.barrierAngle, self.barrierRadius / guardRadii.get(activeGuard.moveId),
       (state.time - activeGuard.t) * 1000, false);
+    const drawHexDome = (cx, cy, rad) => {
+      const pts = [];
+      for (let s = 0; s < 6; s++) {
+        const ang = elapsed * 1.4 + (s / 6) * TAU;
+        pts.push(cx + Math.cos(ang) * rad, cy + Math.sin(ang) * rad);
+      }
+      g.poly(pts).fill({ color: 0x7fe9ff, alpha: 0.18 }).stroke({ color: 0xe6fbff, width: 2.6, alpha: 0.88 });
+    };
     if (self.barrier > 0 && !paintedGuard) {
       if (relayMode) {
-        // 360-degree shimmering Protect Dome in RELAY
-        g.circle(self.x, self.y - 24, 46).fill({ color: 0x7fe9ff, alpha: 0.22 }).stroke({ color: 0xe6fbff, width: 3.5, alpha: 0.92 });
-        g.circle(self.x, self.y - 24, 38).stroke({ color: 0x5ce1ff, width: 2, alpha: 0.65 });
+        if (purePixelFx) drawHexDome(self.x, self.y - 24, 42);
+        else {
+          g.circle(self.x, self.y - 24, 46).fill({ color: 0x7fe9ff, alpha: 0.22 }).stroke({ color: 0xe6fbff, width: 3.5, alpha: 0.92 });
+          g.circle(self.x, self.y - 24, 38).stroke({ color: 0x5ce1ff, width: 2, alpha: 0.65 });
+        }
       } else {
         const half = (self.barrierArc ?? 2) / 2;
         arcPath(g, self.x, self.y - 16, self.barrierRadius ?? 64, self.barrierAngle - half, self.barrierAngle + half).stroke({ width: 7, color: 0xffe066, alpha: 0.85 });
@@ -2675,7 +2692,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if (relayMode) {
       for (const body of [self, ...state.rivals.filter((r) => r.active && r.hp > 0)]) {
         if (body !== self && body.barrier > 0) {
-          g.circle(body.x, body.y - 24, 46).fill({ color: 0x7fe9ff, alpha: 0.22 }).stroke({ color: 0xe6fbff, width: 3.5, alpha: 0.92 });
+          if (purePixelFx) drawHexDome(body.x, body.y - 24, 42);
+          else g.circle(body.x, body.y - 24, 46).fill({ color: 0x7fe9ff, alpha: 0.22 }).stroke({ color: 0xe6fbff, width: 3.5, alpha: 0.92 });
         }
         // Counter Riposte Stance: rotating violet-gold counter blade diamond
         if ((body.counterTimer ?? 0) > 0) {
@@ -2726,12 +2744,14 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       };
       drawHazardSide("player", state.hazards?.player ?? 0);
       drawHazardSide("rival", state.hazards?.rival ?? 0);
-      // Expanding ground shockwaves (SHOCKWAVE_RING / LEAP_SLAM / GRAB_SLAM / TK_SLAM)
-      for (const sw of state.shockwaves ?? []) {
-        const p = clamp(sw.t / Math.max(0.01, sw.duration), 0, 1);
-        const tint = sw.moveId ? relayLook(sw.moveId, sw.team).tint : 0xffe066;
-        g.circle(sw.x, sw.y, sw.radius).stroke({ color: tint, width: Math.max(2, 6 * (1 - p)), alpha: (1 - p) * 0.92 });
-        g.circle(sw.x, sw.y, Math.max(8, sw.radius - 10)).stroke({ color: 0xffffff, width: 1.5, alpha: (1 - p) * 0.55 });
+      // Expanding ground shockwaves (purePixelFx already draws volumetric HERO_SHOCKWAVE clouds + 3D spires — zero double wireframe rings!)
+      if (!purePixelFx) {
+        for (const sw of state.shockwaves ?? []) {
+          const p = clamp(sw.t / Math.max(0.01, sw.duration), 0, 1);
+          const tint = sw.moveId ? relayLook(sw.moveId, sw.team).tint : 0xffe066;
+          g.circle(sw.x, sw.y, sw.radius).stroke({ color: tint, width: Math.max(2, 6 * (1 - p)), alpha: (1 - p) * 0.92 });
+          g.circle(sw.x, sw.y, Math.max(8, sw.radius - 10)).stroke({ color: 0xffffff, width: 1.5, alpha: (1 - p) * 0.55 });
+        }
       }
       // Sideline Original Tamers (left = player tamer, right = rival tamer) + Hex Protective Forcefield Wall
       const drawSidelineTamer = (x, y, primary, accent, cheering, wallFlash) => {
