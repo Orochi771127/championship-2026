@@ -12,7 +12,10 @@
 //  - a night field equals the original night grid, except the converted edge cells,
 //    which take the day conversion; the appended tiles are the day ones;
 //  - caves are the interior escape-anchor pairs; the mouth is the last row south of
-//    the anchors still enclosed by corridor walls (reproduces hm09's delivered caves).
+//    the anchors still enclosed by corridor walls (reproduces hm09's delivered caves);
+//  - 2026-11-26: tiles under the props added to the hm10/hm13 extension areas
+//    (scripts/data/hunt-extension-prop-blocks-20261126.json) become terrain 1, so
+//    creatures walk around containers and rocks instead of through them.
 import fs from 'node:fs';
 import path from 'node:path';
 import { createNativeHuntEnvironment, NATIVE_HUNT_EXPANSION_ADAPTATION } from '../src/championship/hunt/capture/nativeHuntSceneSources.js';
@@ -25,6 +28,8 @@ const read = p => JSON.parse(fs.readFileSync(p, 'utf8'));
 const src = read('src/data/championship/catalogs/hunt-scene.r1.json');
 const catalog = read(CATALOG);
 const key = c => JSON.stringify(c);
+const PROP_BLOCKS = read('scripts/data/hunt-extension-prop-blocks-20261126.json').fields;
+const NEUTRAL = key({ targetQ12: [0, -4096, 0], blendQ12: 0, escapeAnchor: false, escapeBoundary: false });
 const CONVERTED = Object.freeze({ targetQ12: [0, -4096, 0], blendQ12: 205, escapeAnchor: false, escapeBoundary: false });
 const CANDIDATES = {
   field_hm10_01: 'HM10/v7/supplement/hm10-expansion-v1-candidate.json',
@@ -98,6 +103,18 @@ function caves(g, idPrefix) {
   return out;
 }
 
+/** Extension tiles under added props become terrain 1 (open ground or ice, neutral steering only). */
+function blockProps(g, fieldId) {
+  const tiles = PROP_BLOCKS[fieldId] ?? [];
+  for (const [x, y] of tiles) {
+    if (x < 128 && y < 128) throw Error(`PROP_BLOCK_IN_CORE ${fieldId} ${x},${y}`);
+    const i = at(g, x, y);
+    if (![0, 3].includes(g.terrain[i]) || key(g.cells[i]) !== NEUTRAL) throw Error(`PROP_BLOCK_NOT_OPEN ${fieldId} ${x},${y}`);
+    g.terrain[i] = 1;
+  }
+  return tiles.length;
+}
+
 // Self-check: the cave rule reproduces hm09's delivered caves.
 {
   const hm09 = decode(catalog.environments.field_hm09_01);
@@ -115,10 +132,11 @@ for (const [fieldId, rel] of Object.entries(CANDIDATES)) {
   for (let y = 0; y < 128; y++) for (let x = 0; x < 128; x++)
     if (g.terrain[at(g, x, y)] !== orig.terrain[y * 128 + x]) throw Error(`CORE_TERRAIN_CHANGED ${fieldId} ${x},${y}`);
   const converted = convertOldEdge(g);
+  const propBlocks = blockProps(g, fieldId);
   const map = fieldId.slice(6, 10);
   const caveGroups = data.caveGroups ?? (caves(g, `${map}-cave`).length ? [{ id: `${map}-original-caves`, caves: caves(g, `${map}-cave`) }] : undefined);
   next[fieldId] = encode(g, caveGroups ? { caveGroups } : {});
-  report[fieldId] = { source: rel, converted, caves: caveGroups?.[0]?.caves.length ?? 0 };
+  report[fieldId] = { source: rel, converted, propBlocks, caves: caveGroups?.[0]?.caves.length ?? 0 };
   const night = fieldId.replace('_01', '_02');
   const gate = src.gates.find(row => src.fields[row.dayIndex].fieldId === fieldId);
   if (src.fields[gate.nightIndex].fieldId === night) {

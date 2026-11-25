@@ -4,6 +4,7 @@ import {isOriginalRuntimeLocation} from '../../originalRuntimeLocation.js';
 // with the Owner; source manifest qaApproved values remain unchanged.
 // HM08 remains 2048 square and is not an enlarged-map completion.
 // HM10/11/13/14 grew to 2880 on 2026-11-25 (c2: untrimmed candidate geometry; HM14 rebuilt with core-style extension cliffs).
+// HM10/13 c3 (2026-11-26): the extension areas carry the maps' own props, which block their tiles.
 export const MAPS=Object.freeze({
   "hm01": {
     "directory": "assets/production/hunt/hm01-three-r1-20261022/",
@@ -173,10 +174,10 @@ export const MAPS=Object.freeze({
     "appearanceApproved": true
   },
   "hm10": {
-    "directory": "assets/production/hunt/hm10-three-c2-20261125/",
+    "directory": "assets/production/hunt/hm10-three-c3-20261126/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "8a4383f43e0452b3fc15ad8763ec74bac7b24d7f679c974dda6a6c65d0dfe93e",
+      "sha256": "8359a476a8e592d1287c9bed1cf8d3aaab0911a910f6952cd1ece887c7008abb",
       "bytes": 413
     },
     "fields": [
@@ -199,10 +200,10 @@ export const MAPS=Object.freeze({
     "appearanceApproved": true
   },
   "hm13": {
-    "directory": "assets/production/hunt/hm13-three-c2-20261125/",
+    "directory": "assets/production/hunt/hm13-three-c3-20261126/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "8006cbae64dc64d6d2f151f91f847a58606a8a31dc93123845aa2de799f60bdf",
+      "sha256": "1879a9ce1f7b3fd399e5e3d1c63d63d997c6c606c4ddeaf5d827847f7e0f9440",
       "bytes": 429
     },
     "fields": [

@@ -1,6 +1,7 @@
 // HM10/HM11/HM13/HM14 3D hunt maps: field mapping, hash chain and loader admission.
 // Owner 2026-11-25 「我每一張地圖其實都要擴大」: like the other eleven maps they now play
-// on 180x180 fields (2880 world) with the untrimmed candidate geometry (c2).
+// on 180x180 fields (2880 world) with the untrimmed candidate geometry (c2). On 2026-11-26
+// hm10/hm13 (c3) dress their extension areas with their own props, which block their tiles.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -10,6 +11,7 @@ import { ORIGINAL_HUNT_FIELD_BINDINGS } from '../src/championship/gate/originalH
 import { createNativeHuntEnvironment } from '../src/championship/hunt/capture/nativeHuntSceneSources.js';
 import expansions from '../src/data/championship/catalogs/hunt-art-expansions-20261023.json' with { type: 'json' };
 import scene from '../src/data/championship/catalogs/hunt-scene.r1.json' with { type: 'json' };
+import propBlocks from '../scripts/data/hunt-extension-prop-blocks-20261126.json' with { type: 'json' };
 
 const sha = (bytes) => crypto.createHash('sha256').update(bytes).digest('hex');
 const loopback = new URL('http://127.0.0.1:8732/championship.html');
@@ -26,7 +28,7 @@ test('the four maps bind every native day/night field of their gate at the expan
     assert.ok(map, key);
     assert.deepEqual(map.fields, want.fields);
     assert.equal(map.worldSize, 2880);
-    assert.ok(map.directory.endsWith('-three-c2-20261125/'), map.directory);
+    assert.match(map.directory, /-three-(c2-20261125|c3-20261126)\/$/);
     assert.equal(map.appearanceApproved, true);
     const gate = ORIGINAL_HUNT_FIELD_BINDINGS[want.biome];
     assert.ok(gate, want.biome);
@@ -107,5 +109,37 @@ test('no expanded field lets a creature escape at the old 2048 edge where the gr
       if (beyond.some(([bx, by]) => !env.isBlocked(bx, by))) bad.push([x, y]);
     }
     assert.deepEqual(bad, [], fieldId);
+  }
+});
+
+test('props added to the hm10/hm13 extension areas block their tiles, day and night, and split no region', () => {
+  const regions = (env) => {
+    const seen = new Uint8Array(180 * 180); let count = 0;
+    for (let i = 0; i < seen.length; i++) {
+      if (seen[i] || env.isBlocked(i % 180, Math.floor(i / 180))) continue;
+      count++; const stack = [i]; seen[i] = 1;
+      while (stack.length) {
+        const j = stack.pop(), x = j % 180, y = Math.floor(j / 180);
+        for (const [u, v] of [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]]) {
+          const k = v * 180 + u;
+          if (u >= 0 && v >= 0 && u < 180 && v < 180 && !seen[k] && !env.isBlocked(u, v)) { seen[k] = 1; stack.push(k); }
+        }
+      }
+    }
+    return count;
+  };
+  for (const [fieldId, tiles] of Object.entries(propBlocks.fields)) {
+    assert.ok(tiles.length > 50, fieldId);
+    const night = fieldId.replace('_01', '_02');
+    for (const id of [fieldId, ...(expansions.environments[night] ? [night] : [])]) {
+      const env = createNativeHuntEnvironment(expansions.environments[id]);
+      for (const [x, y] of tiles) {
+        assert.ok(x >= 128 || y >= 128, `${id} ${x},${y} outside the original grid`);
+        assert.equal(env.readTerrain(x, y), 1, `${id} ${x},${y} blocked`);
+      }
+      // Unblocking the prop tiles gives back the same number of separate open regions.
+      const open = { isBlocked: (x, y) => env.isBlocked(x, y) && !tiles.some(([a, b]) => a === x && b === y) };
+      assert.equal(regions(env), regions(open), `${id} regions`);
+    }
   }
 });
