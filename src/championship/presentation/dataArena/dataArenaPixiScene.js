@@ -596,24 +596,82 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         if (Math.hypot(body.kbx ?? 0, body.kby ?? 0) > 90 && !reducedMotion && frameCount % 2 === 0) {
           addSkidMark(x, y, body.kbx, body.kby);
         }
-        // PbRank action micro-motion synced with hitFrame: melee pullback (-4px) -> release lunge (+12px), ranged recoil (-4px)!
-        if (motion && relayProfile && !reducedMotion && !motion.preserveAuthoredPose) {
+        // Wave 8.1 PB-Rank Character Sprite Motion Engine:
+        // Drives ALL 8 PB Ranked sprite-body cues in true 360° / 8-direction vectors
+        // (breathe, squash-stretch, tilt, jump/aerial Z-hop, dash/lunge thrust, afterimage, self-recoil, vanish)!
+        if (!reducedMotion && !motion && Math.hypot(body.vx ?? 0, body.vy ?? 0) < 4) {
+          // Subtle PB-Rank standing idle breathe: 1 + 0.022 * sin(t * 7.5)
+          sprite.scale.y *= 1 + 0.022 * Math.sin(elapsed * 7.5 + (body.id ?? 0) * 0.7);
+        }
+        let actionTilt = 0;
+        let actionHop = 0;
+        let actionAlphaMult = 1;
+        if (motion && !reducedMotion && !motion.preserveAuthoredPose) {
           const a = body.action;
-          const dirSign = facing > 0 ? 1 : -1;
-          const isMeleeMove = a?.moveId ? Boolean(elementFx?.look?.(a.moveId)?.melee || body.lunge) : (relayProfile.thrust >= 6);
+          const spec = a?.moveId ? elementFx?.look?.(a.moveId) : null;
+          const pb = spec?.pb324 ?? null;
+          const cues = pb?.motion?.cues ?? [];
+          const pose = pb?.motion?.pose ?? "attack";
+          const ang = body.cast?.angle ?? body.lunge?.angle ?? (facing > 0 ? 0 : Math.PI);
+          const cosA = Math.cos(ang), sinA = Math.sin(ang);
+          const dirSign = cosA >= 0 ? 1 : -1;
+          const hasTilt = cues.includes("tilt") || Boolean(pb);
+          const hasSquash = cues.includes("squash-stretch") || Boolean(pb);
+          const hasJump = cues.includes("jump/aerial") || pose === "hop" || pose === "slam";
+          const hasDash = cues.includes("dash/lunge") || spec?.melee || Boolean(body.lunge);
+          const hasRecoil = cues.includes("self-recoil/impulse");
+          const hasAfterimage = cues.includes("afterimage") || spec?.v2Archetype === "MULTI_DASH" || spec?.v2Archetype === "SHADOW_BACKSTAB";
+          const hasVanish = cues.includes("vanish") || spec?.v2Archetype === "SHADOW_BACKSTAB";
+          const baseThrust = relayProfile?.thrust ?? 8;
+          const baseLift = relayProfile?.lift ?? 3;
           if (a) {
             if (a.releasedAt === null) {
               const p = clamp((state.time - a.startedAt) / Math.max(0.01, a.windup), 0, 1);
-              sprite.x += dirSign * (isMeleeMove ? -4 * p : relayProfile.thrust * 0.4 * p);
-              sprite.y -= relayProfile.lift * p;
-              sprite.scale.x *= 1 - 0.08 * p;
-              sprite.scale.y *= 1 + 0.09 * p;
+              // Windup anticipation: pull back opposite aim vector + crouch squash + lean back!
+              const pull = hasDash ? -7 * p : -3 * p;
+              sprite.x += cosA * pull;
+              sprite.y += sinA * pull * 0.55 - baseLift * p;
+              if (hasSquash) {
+                sprite.scale.x *= 1 + 0.13 * p;
+                sprite.scale.y *= 1 - 0.12 * p;
+              }
+              if (hasTilt) actionTilt = -dirSign * 0.15 * p;
+              if (hasVanish && p > 0.45) actionAlphaMult = 0.35;
             } else {
               const p = clamp((state.time - a.releasedAt) / Math.max(0.01, a.recovery), 0, 1);
               const arc = Math.sin(Math.PI * p);
-              sprite.x += dirSign * (isMeleeMove ? (12 + relayProfile.thrust * 0.5) * arc : -4 * arc);
-              sprite.y -= relayProfile.lift * (1 - p);
-              if (state.time - a.releasedAt < 0.12) { sprite.scale.x *= 1.15; sprite.scale.y *= 0.87; }
+              const snap = Math.max(0, 1 - (state.time - a.releasedAt) / 0.14);
+              // Release follow-through along true 360° / 8-direction vector!
+              if (hasDash) {
+                const fwd = (13 + baseThrust * 0.55) * arc;
+                sprite.x += cosA * fwd;
+                sprite.y += sinA * fwd * 0.65;
+              } else if (hasRecoil) {
+                const kick = -10 * arc;
+                sprite.x += cosA * kick;
+                sprite.y += sinA * kick * 0.55;
+              } else {
+                const nudge = -4 * arc;
+                sprite.x += cosA * nudge;
+                sprite.y += sinA * nudge * 0.5;
+              }
+              if (hasJump) {
+                const hopH = (pose === "slam" || spec?.v2Archetype === "LEAP_SLAM") ? 22 : (pose === "hop" ? 16 : 9);
+                actionHop = Math.sin(Math.PI * p) * hopH;
+                sprite.y -= actionHop;
+              }
+              if (hasSquash && snap > 0) {
+                const verticalSnap = pose === "hop" || pose === "slam" || pose === "spin";
+                sprite.scale.x *= verticalSnap ? (1 - 0.14 * snap) : (1 + 0.18 * snap);
+                sprite.scale.y *= verticalSnap ? (1 + 0.18 * snap) : (1 - 0.14 * snap);
+              }
+              if (hasTilt) {
+                actionTilt = hasRecoil ? (-dirSign * 0.22 * arc) : (dirSign * (pose === "spin" ? 0.35 : 0.24) * arc);
+              }
+              if (hasAfterimage && p < 0.72 && frameCount % 3 === 0) {
+                const fxTint = relayLook(a.moveId, body.team)?.tint ?? 0x6ff7ff;
+                afterimage(container.position.x + sprite.x, container.position.y + sprite.y, facing, sprite, fxTint);
+              }
             }
           }
         }
@@ -625,13 +683,14 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           const kbDir = (body.kbx ?? 0) !== 0 ? Math.sign(body.kbx) : -(facing || 1);
           sprite.rotation = kbDir * 0.22 * fRatio;
         } else if (!((body.vortexHeld ?? 0) > 0)) {
-          sprite.rotation = 0;
+          sprite.rotation = actionTilt;
         }
-        sprite.alpha = alpha;
+        sprite.alpha = alpha * actionAlphaMult;
         const blinkBright = hurtLeft > 0 && Math.floor(hurtLeft / 0.055) % 2 === 0;
         sprite.tint = (flash > 0.10 || blinkBright) ? 0xffffff : flash > 0 ? 0xff8a8a : 0xffffff;
         syncFlash((flash > 0.10 || blinkBright) && !reducedMotion, clamp(Math.max(flash - 0.09, blinkBright ? 0.065 : 0) * 10, 0.45, 0.92));
-        shadow.alpha = (0.75 - sink * 0.6) * (lift > 0 ? 0.52 : 1);
+        const totalLift = lift + actionHop;
+        shadow.alpha = (0.75 - sink * 0.6) * (totalLift > 0 ? Math.max(0.35, 1 - totalLift / 48) : 1);
       },
       diagnostics: () => ({ sequenceId: sequence, frameIndex: controller?.getSnapshot().sourceFrameIndex ?? null,
         speciesId: member?.speciesId, facing8: body.facing8 ?? null, slotPreserved: Boolean(currentPlacement), anchor: currentPlacement?.anchor ?? null, actionId: motion?.actionId??motion?.id ?? null, phase: motion?.phase ?? null, moveId: motion?.moveId ?? null,
@@ -980,15 +1039,16 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     }
   }
   const ghosts = [];
-  function afterimage(x, y, facing) {
-    if(reducedMotion)return;
-    if (!rich || ghosts.length > 8) return;
-    const sprite = new PIXI.Sprite(playerView.sprite.texture);
-    sprite.anchor.copyFrom(playerView.sprite.anchor);
-      sprite.scale.copyFrom(playerView.sprite.scale);
-    sprite.position.set(x, y); sprite.tint = 0x6ff7ff; sprite.alpha = 0.5; sprite.blendMode = "add";
+  function afterimage(x, y, facing, sourceSprite = playerView.sprite, tint = 0x6ff7ff) {
+    if (reducedMotion || !sourceSprite?.texture) return;
+    if (!rich || ghosts.length > 10) return;
+    const sprite = new PIXI.Sprite(sourceSprite.texture);
+    sprite.anchor.copyFrom(sourceSprite.anchor);
+    sprite.scale.copyFrom(sourceSprite.scale);
+    sprite.rotation = sourceSprite.rotation ?? 0;
+    sprite.position.set(x, y); sprite.tint = tint; sprite.alpha = 0.48; sprite.blendMode = "add";
     particles.addChild(sprite);
-    ghosts.push({ sprite, life: 0.28, age: 0 });
+    ghosts.push({ sprite, life: 0.26, age: 0 });
   }
 
   // ------------------------------------------------------------------ relay looks (stage two, 2026-10-28)
@@ -1190,7 +1250,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   // + micro camera zoom-punch + high-contrast anime impact frame + arcade multi-hit combo popups!
   const hitStreak = { player: { count: 0, at: -10 }, rival: { count: 0, at: -10 } };
   const fightingHitSparks = (wx, wy, angle = 0, count = 5, heavy = false) => {
-    if (reducedMotion || wx === null || wy === null) return;
+    // Wave 8.1 Single-Owner 1-Move-1-VFX: in purePixelFx mode, elementFx.hit() owns the exact procedural directional burst — zero legacy spark stacking!
+    if (purePixelFx || reducedMotion || wx === null || wy === null) return;
     for (let i = 0; i < count; i++) {
       const spread = (i - (count - 1) * 0.5) * 0.28 + (Math.random() - 0.5) * 0.16;
       const a = angle + spread;
@@ -1284,11 +1345,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               elementFx.release({ x: at.x, y: at.y, angle: event.angle ?? 0, moveId: event.moveId, speciesId: casterSpecies(event), melee: event.moveType === 'LUNGE' });
             }
           }
-          if (relayMode && (event.moveType === 'LANCE' || event.moveType === 'WAVE')) {
+          // Wave 8.1 Single-Owner 1-Move-1-VFX: in purePixelFx mode, elementFx.release() owns the full move release (no redundant scorchTrench/coneStorm double-stacking!).
+          if (!purePixelFx && relayMode && (event.moveType === 'LANCE' || event.moveType === 'WAVE')) {
             const len = event.moveType === 'LANCE' ? 420 : 320;
             const ang = event.angle ?? 0;
             elementFx.scorchTrench?.({ x1: at.x, y1: at.y + 18, x2: at.x + Math.cos(ang) * len, y2: at.y + 18 + Math.sin(ang) * len, moveId: event.moveId, speciesId: casterSpecies(event) });
-          } else if (relayMode && event.moveType === 'SPREAD') {
+          } else if (!purePixelFx && relayMode && event.moveType === 'SPREAD') {
             elementFx.coneStorm?.({ x: at.x, y: at.y + 12, angle: event.angle ?? 0, spread: 0.62, range: 280, moveId: event.moveId, speciesId: casterSpecies(event) });
           }
           lastRelease[event.team === 'player' ? 'player' : 'rival'] = { moveId: event.moveId, speciesId: casterSpecies(event), angle: event.angle ?? 0 };
@@ -1677,17 +1739,21 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             burst(x,y,{count:5,speed:150,angle:event.angle,spread:1.2,tint:fx.tint,texture:fx.texture==='relayCrystal'?textures.shard:textures.spark,life:.22});
           } else if(event.team==='player')spawn({x:event.x+Math.cos(event.angle)*26,y:event.y-BEAM_ELEVATION+Math.sin(event.angle)*26,texture:textures.glow,tint:0x6ff7ff,scale:.45,scaleTo:.1,life:.14});break;
         }
-        case "ULT_CAST": ring(event.x, event.y, 160, event.team === "player" ? 0xffe066 : 0xff3b5c, 0.5); camera.addTrauma(0.25); camera.focusBoost?.(1.22, 0.5); crowdReact("CHEER", event.x, 1.2);
-          // The caster's charge ring closes in on its feet as the cut-in plays (2026-10-28).
-          spawn({ x: event.x, y: event.y, texture: textures.ring, tint: event.team === "player" ? 0x5ff3ff : 0xb18cff, scale: 1.6, scaleTo: 0.15, life: 0.42, alpha: 0.9 });
+        case "ULT_CAST": camera.addTrauma(0.25); camera.focusBoost?.(1.22, 0.5); crowdReact("CHEER", event.x, 1.2);
+          if (!purePixelFx) {
+            ring(event.x, event.y, 160, event.team === "player" ? 0xffe066 : 0xff3b5c, 0.5);
+            spawn({ x: event.x, y: event.y, texture: textures.ring, tint: event.team === "player" ? 0x5ff3ff : 0xb18cff, scale: 1.6, scaleTo: 0.15, life: 0.42, alpha: 0.9 });
+          }
           break;
         case "RELAY_TAG_BURST": {
           const fx = relayLook(state.player.kit?.moves?.[0] ?? 'waterShot', 'player');
           const tint = event.perfect ? 0xffe066 : fx.tint;
-          afterimage(event.x - (state.player.facing || 1) * 44, event.y, state.player.facing);
-          afterimage(event.x - (state.player.facing || 1) * 22, event.y, state.player.facing);
-          for (let i = 0; i < 3; i++) ring(event.x, event.y - 12, (event.radius ?? 135) * (0.55 + i * 0.22), tint, 0.36 + i * 0.08);
-          burst(event.x, event.y - 16, { count: event.perfect ? 22 : 14, speed: event.perfect ? 340 : 250, tint, life: 0.48 });
+          afterimage(event.x - (state.player.facing || 1) * 44, event.y, state.player.facing, playerView.sprite, tint);
+          afterimage(event.x - (state.player.facing || 1) * 22, event.y, state.player.facing, playerView.sprite, tint);
+          if (!purePixelFx) {
+            for (let i = 0; i < 3; i++) ring(event.x, event.y - 12, (event.radius ?? 135) * (0.55 + i * 0.22), tint, 0.36 + i * 0.08);
+            burst(event.x, event.y - 16, { count: event.perfect ? 22 : 14, speed: event.perfect ? 340 : 250, tint, life: 0.48 });
+          }
           elementFx?.hit({ x: event.x, y: event.y - 20, groundY: event.y, moveId: state.player.kit?.moves?.[0] ?? 'waterShot', speciesId: state.player.speciesId, heavy: true });
           camera.focusBoost?.(event.perfect ? 1.22 : 1.14, 0.38);
           camera.addTrauma(event.perfect ? 0.42 : 0.25);
@@ -1696,15 +1762,17 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           break;
         }
         case "RELAY_PERFECT_SWITCH":
-          ring(event.x, event.y - 24, 96, 0xffe066, 0.4);
+          if (!purePixelFx) ring(event.x, event.y - 24, 96, 0xffe066, 0.4);
           floatText(event.x, event.y - 84, "+25 TP", "dodge");
           break;
         case "TRI_LINK_RUSH":
           camera.focusBoost?.(1.25, 0.55);
           camera.addTrauma(0.55);
           hitStop = Math.max(hitStop, reducedMotion ? 0 : 0.085);
-          for (let i = 0; i < 4; i++) ring(event.x, event.y - 20, 110 + i * 55, [0xffe066, 0x6ff7ff, 0xff6ad5, 0x8dffb0][i % 4], 0.45 + i * 0.1);
-          burst(event.x, event.y - 24, { count: 32, speed: 380, tint: 0xffe066, texture: textures.shard, scale: 1.8, life: 0.7 });
+          if (!purePixelFx) {
+            for (let i = 0; i < 4; i++) ring(event.x, event.y - 20, 110 + i * 55, [0xffe066, 0x6ff7ff, 0xff6ad5, 0x8dffb0][i % 4], 0.45 + i * 0.1);
+            burst(event.x, event.y - 24, { count: 32, speed: 380, tint: 0xffe066, texture: textures.shard, scale: 1.8, life: 0.7 });
+          }
           if (elementFx) {
             const rect = view ? { x: view.centerX - view.halfW, y: view.centerY - view.halfH, width: view.halfW * 2, height: view.halfH * 2 } : { x: 0, y: 0, width: worldWidth, height: worldHeight };
             elementFx.ult({ moveId: state.player.kit?.ultimate ?? 'coreNova', speciesId: state.player.speciesId, rect, center: { x: event.x, y: event.y - 24 } });

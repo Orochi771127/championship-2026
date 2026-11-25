@@ -725,13 +725,18 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
 
     hit({ x, y, groundY = y, moveId, heavy = false, angle = 0 }) {
       const spec = resolveMoveSpecV2(moveId);
-      const pk = normalizePalKey(spec.paletteKey);
       const pb = spec.pb324 ?? null;
+      const fxKey = pb?.vfx?.fx ? normalizePalKey(pb.vfx.fx) : normalizePalKey(spec.paletteKey);
+      const pk = normalizePalKey(spec.paletteKey);
+      const isStream = Boolean(pb?.hitFeel?.stream);
       const isHeavy = heavy || Boolean(pb?.hitFeel?.impact) || (pb?.hitFeel?.hitstop ?? 0) >= 12;
-      emitElementBurst({ x, y, palKey: pk, scale: isHeavy ? 1.25 : 0.92, angle, heavy: isHeavy });
-      if (spec.melee || pb?.vfx?.shapes?.includes("crescent")) emitCrescentSlash({ x, y, angle, palKey: pk, scale: isHeavy ? 1.15 : 0.88, count: 1 });
-      if (isHeavy && !reducedMotion) {
-        addDecal({ x, y: groundY + 6, kind: pk === "earth" ? "crack" : pk === "ice" ? "frost" : "scorch", radius: 32, pal: pk });
+      // Single cohesive procedural hit burst driven directly by each move's exact PB-324 fx preset & shapes!
+      emitElementBurst({ x, y, palKey: fxKey || pk, scale: isStream ? 0.78 : isHeavy ? 1.32 : 0.96, angle, heavy: isHeavy && !isStream });
+      if ((spec.melee || pb?.vfx?.shapes?.includes("crescent")) && !isStream) {
+        emitCrescentSlash({ x, y, angle, palKey: pk, scale: isHeavy ? 1.22 : 0.92, count: 1 });
+      }
+      if (isHeavy && !reducedMotion && (!pb || pb.vfx.layers.includes("ground-decals"))) {
+        addDecal({ x, y: groundY + 6, kind: pk === "earth" ? "crack" : pk === "ice" ? "frost" : "scorch", radius: 34, pal: pk });
         holdMs = Math.max(holdMs, spec.hitStopMs ? Math.min(115, spec.hitStopMs) : 55);
       }
       stats.hits++;

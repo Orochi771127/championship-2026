@@ -2222,28 +2222,43 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           const move = relayMove(moveId);
           const pb = typeof pb324Move === "function" ? pb324Move(moveId) : null;
           const at = selected.moves.indexOf(moveId);
-          const choice = button("da-skill da-skill--choice", "", () => {
+          const pickMove = () => {
             const moves = [...selected.moves], other = moves.indexOf(moveId);
             if (other >= 0) moves[other] = moves[slot];
             moves[slot] = moveId;
             relayLoadouts[id] = relayKit(id, moves).moves; records.setRelayLoadout(id, relayLoadouts[id]);
             openChips = null; tick(); refresh();
-          }, signal);
+          };
+          // Wave 8.1: Non-nested choice card (<div role="option">) so ▶ 預覽 button is 100% independently clickable & never clipped!
+          const choice = el("div", "da-skill da-skill--choice");
           choice.setAttribute("role", "option");
+          choice.setAttribute("tabindex", "0");
           choice.setAttribute("aria-selected", String(at === slot));
           choice.dataset.element = relayMoveElement(moveId, partnerElement(id));
           if (pb) choice.dataset.el10 = pb.element;
           choice.dataset.move = moveId;
+          choice.addEventListener("click", (ev) => {
+            if (ev.target?.closest?.(".da-skill__preview")) return;
+            pickMove();
+          }, { signal });
+          choice.addEventListener("keydown", (ev) => {
+            if ((ev.key === "Enter" || ev.key === " ") && !ev.target?.closest?.(".da-skill__preview")) {
+              ev.preventDefault(); pickMove();
+            }
+          }, { signal });
+          const headLine = el("div", "da-skill__head");
           const elTag = pb && PB324_ELEMENT_META[pb.element] ? [el("span", "da-skill__el10", PB324_ELEMENT_META[pb.element].zh)] : [];
           const choiceArch = moveSystemPref === "v2" ? [el("span", "da-skill__arch", t(`v2.arch.${resolveMoveSpecV2(moveId, move).v2Archetype}`))] : [];
-          choice.append(...elTag, ...arenaMoveIcon(moveId), el("strong", "da-skill__name", moveName(moveId)), ...choiceArch, cost(move),
-            el("span", "da-skill__effect", moveEffect(moveId)), ...(at >= 0 && at !== slot ? [el("span", "da-skill__key", kitKey(touchActive, at))] : []));
+          headLine.append(...elTag, ...arenaMoveIcon(moveId), el("strong", "da-skill__name", moveName(moveId)), ...choiceArch);
+          const footLine = el("div", "da-skill__foot");
           const pv = button("da-skill__preview", t("relay.preview"), (ev) => {
             ev.stopPropagation();
             previewMoveId = previewMoveId === moveId ? null : moveId;
             refresh();
           }, signal);
-          choice.appendChild(pv);
+          footLine.append(cost(move), pv);
+          choice.append(headLine, el("span", "da-skill__effect", moveEffect(moveId)), footLine,
+            ...(at >= 0 && at !== slot ? [el("span", "da-skill__key", kitKey(touchActive, at))] : []));
           choices.appendChild(choice);
         }
         wrap.appendChild(choices);

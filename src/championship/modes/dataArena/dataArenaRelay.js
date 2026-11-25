@@ -90,9 +90,16 @@ export function relayKit(partnerId, selection) {
 // Three pilot characters have visually reviewed slots. The other anatomy-based
 // mappings remain provisional; new art does not change simulation or species IDs.
 export function relaySequence(partnerId, moveId) {
-  const p=RELAY_ACTION_PROFILES[partnerId]; if(!p)return 7;
-  const type=relayMove(moveId)?.type;
-  return type==='LUNGE'?p.melee:['BOLT','SPREAD','LANCE','WAVE'].includes(type)?p.ranged:p.burst;
+  const p = RELAY_ACTION_PROFILES[partnerId]; if (!p) return 7;
+  const pb = pb324Move(moveId);
+  if (pb) {
+    const pose = pb.motion?.pose;
+    if (pose === 'strike' || pose === 'charge' || pose === 'slam') return p.melee;
+    if (pose === 'shoot') return p.ranged;
+    if (pose === 'hop' || pose === 'spin' || pose === 'guard') return p.burst;
+  }
+  const type = relayMove(moveId)?.type;
+  return type === 'LUNGE' ? p.melee : ['BOLT', 'SPREAD', 'LANCE', 'WAVE'].includes(type) ? p.ranged : p.burst;
 }
 const styles = Object.freeze({
   storm: Object.freeze({tint:0xbfc4ff,texture:'relayLance',cue:'ray'}),

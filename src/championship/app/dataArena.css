@@ -672,8 +672,12 @@ html.da-open, html.da-open body { overflow: hidden; overscroll-behavior: none; }
 /* relay skill keys: paper keys with an element stripe; the power move is a purple key */
 .da-chips { display:grid; gap:8px; }
 .da-chips__slots { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:6px; }
-.da-chips__choices { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; padding:8px; border:2px dashed var(--ink); border-radius:12px; background:#f3e6c4; max-height:290px; overflow-y:auto; overscroll-behavior:contain; }
-.da-skill__el10 { display:inline-grid; place-items:center; width:18px; height:18px; border-radius:5px; font-size:calc(10.5px * var(--text-scale-hud, 1)); font-weight:900; line-height:1; color:#fff; background:var(--chip); border:1.5px solid var(--ink); justify-self:start; }
+.da-chips__choices { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; padding:8px; border:2px dashed var(--ink); border-radius:12px; background:#f3e6c4; max-height:310px; overflow-y:auto; overscroll-behavior:contain; align-items:start; }
+@media (max-width:560px) { .da-chips__choices { grid-template-columns:1fr; } }
+.da-panel--select[data-mode="RELAY"] .da-skill.da-skill--choice { min-height:auto; height:auto; padding:8px 8px 8px 12px; gap:4px; overflow:visible; }
+.da-skill__head { display:flex; flex-wrap:wrap; align-items:center; gap:4px; min-width:0; }
+.da-skill__foot { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-top:2px; }
+.da-skill__el10 { display:inline-grid; place-items:center; width:18px; height:18px; border-radius:5px; font-size:calc(10.5px * var(--text-scale-hud, 1)); font-weight:900; line-height:1; color:#fff; background:var(--chip); border:1.5px solid var(--ink); justify-self:start; flex:0 0 auto; }
 .da-skill[data-el10="METAL"] { --chip:#7e8da3; } .da-skill[data-el10="WOOD"] { --chip:#2fbf62; }
 .da-skill[data-el10="EARTH"] { --chip:#b07a3c; } .da-skill[data-el10="WATER"] { --chip:#2f8fe0; }
 .da-skill[data-el10="FIRE"] { --chip:#ff6b35; } .da-skill[data-el10="SUN"] { --chip:#e5a800; }

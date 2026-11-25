@@ -1786,3 +1786,38 @@ test("phase 18 / Combat Wave 8: All 324 PB-Rank moves across 10 Canonical Elemen
   assert.ok(sceneSrc.includes("recent.total") && sceneSrc.includes("0.62"), "PB-Rank rapid multi-hit damage number merging active");
   assert.ok(screenSrc.includes("pb324Move") && screenSrc.includes("da-skill__el10"), "Lobby displays 10-element PB-324 badges and procedural preview");
 });
+
+test("phase 19 / Combat Wave 8.1: 324/324 1:1 PB-Rank parity, single-owner 1-move-1-VFX, 8-dir body-motion driver, non-nested lobby picker & PB-324 rival kits", async () => {
+  const { PB324_MOVES, isPb324MoveId } = await import("../src/championship/modes/dataArena/dataArenaPb324Catalog.js");
+
+  // 1) Exact 1:1 PB-Rank metadata parity across all 324 moves
+  assert.equal(PB324_MOVES.length, 324);
+  const impactMoves = PB324_MOVES.filter((m) => m.hitFeel.impact);
+  const streamMoves = PB324_MOVES.filter((m) => m.hitFeel.stream);
+  assert.equal(impactMoves.length, 10, "exact 10 signature impact-frame moves match PB Ranked 1:1");
+  assert.equal(streamMoves.length, 13, "exact 13 continuous stream moves match PB Ranked 1:1");
+  for (const m of PB324_MOVES) {
+    assert.ok(m.motion.pose && Array.isArray(m.motion.anims) && Array.isArray(m.motion.cues), `${m.id} has pose/anims/cues`);
+    assert.ok(m.vfx.fx && Array.isArray(m.vfx.shapes) && Array.isArray(m.vfx.layers), `${m.id} has fx/shapes/layers`);
+  }
+
+  // 2) RELAY rivals ALSO fight exclusively with PB-324 10-element kits (zero legacy vortex/inferno/shardStorm!)
+  const sim = startRelayFight({ partnerId: "ember-lizard", moveSystem: "v2", controlMode: "MANUAL" });
+  const rival = sim.getState().rivals[0];
+  assert.ok(rival && rival.kit?.moves?.length === 3, "RELAY rival initialized with 3 moves");
+  for (const mid of rival.kit.moves) assert.ok(isPb324MoveId(mid), `RELAY rival move ${mid} is PB-324`);
+  assert.ok(isPb324MoveId(rival.kit.ultimate), `RELAY rival ultimate ${rival.kit.ultimate} is PB-324`);
+
+  // 3) Single-owner 1-move-1-VFX hygiene + full 8-direction PB-Rank sprite motion engine in dataArenaPixiScene.js
+  const sceneSrc = readFileSync(new URL("../src/championship/presentation/dataArena/dataArenaPixiScene.js", import.meta.url), "utf8");
+  const screenSrc = readFileSync(new URL("../src/championship/app/dataArenaScreen.js", import.meta.url), "utf8");
+  const cssSrc = readFileSync(new URL("../src/championship/app/dataArena.css", import.meta.url), "utf8");
+  assert.ok(sceneSrc.includes("if (purePixelFx || reducedMotion || wx === null || wy === null) return;"), "purePixelFx suppresses redundant fightingHitSparks stacking");
+  assert.ok(sceneSrc.includes("if (!purePixelFx && relayMode && (event.moveType === 'LANCE' || event.moveType === 'WAVE'))"), "purePixelFx suppresses redundant scorchTrench/coneStorm double-stacking");
+  assert.ok(sceneSrc.includes("const hasTilt =") && sceneSrc.includes("const hasSquash =") && sceneSrc.includes("const hasJump =") && sceneSrc.includes("const hasAfterimage ="), "PB-Rank 8-cue sprite body-motion driver active");
+  assert.ok(sceneSrc.includes("sprite.x += cosA * fwd") && sceneSrc.includes("sprite.y += sinA * fwd * 0.65"), "true 360°/8-direction vector sprite thrust active");
+
+  // 4) Lobby choice cards use non-nested <div role="option"> + unclipped CSS height
+  assert.ok(screenSrc.includes('const choice = el("div", "da-skill da-skill--choice");') && screenSrc.includes('ev.target?.closest?.(".da-skill__preview")'), "non-nested choice card makes preview button independently clickable");
+  assert.ok(cssSrc.includes('.da-panel--select[data-mode="RELAY"] .da-skill.da-skill--choice { min-height:auto; height:auto;'), "RELAY choice cards never clip vertically");
+});
