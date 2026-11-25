@@ -3,7 +3,7 @@ import {isOriginalRuntimeLocation} from '../../originalRuntimeLocation.js';
 // Exact existing assets reviewed visually on 2026-10-23. Functional QA remains
 // with the Owner; source manifest qaApproved values remain unchanged.
 // HM08 remains 2048 square and is not an enlarged-map completion.
-// HM10/11/13/14 grew to 2880 on 2026-11-25 (c2: untrimmed candidate geometry; HM14 rebuilt).
+// HM10/11/13/14 grew to 2880 on 2026-11-25 (c2: untrimmed candidate geometry; HM14 rebuilt with core-style extension cliffs).
 export const MAPS=Object.freeze({
   "hm01": {
     "directory": "assets/production/hunt/hm01-three-r1-20261022/",
@@ -216,8 +216,8 @@ export const MAPS=Object.freeze({
     "directory": "assets/production/hunt/hm14-three-c2-20261125/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "e28d329981d7b7c07f495ea2e95c1578c16bfbb8dc473a051b27b751ae4cf850",
-      "bytes": 771
+      "sha256": "c3314039b112bd3cee7b4b7ebe989289c74a303e82a39c8cbb43390cfb9cb3de",
+      "bytes": 778
     },
     "fields": [
       "field_hm14_01",
