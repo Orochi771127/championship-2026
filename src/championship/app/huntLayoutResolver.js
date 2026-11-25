@@ -59,7 +59,10 @@ export function createHuntLayoutResolver({
       const width = entry.host.clientWidth, height = entry.host.clientHeight;
       const stage = entry.getViewport();
       if (![width,height,stage?.width,stage?.height].every(positive)
-          || Math.round(width) !== stage.width || Math.round(height) !== stage.height) {
+          // 2026-11-25: a scaled portrait frame gives the renderer a fractional
+          // size (693.08) while the host reports whole CSS px (693); an exact
+          // match never locked, so 1920x1000/1080 desktops stayed portrait.
+          || Math.abs(width - stage.width) >= 1 || Math.abs(height - stage.height) >= 1) {
         invalidateSample(); return;
       }
       // Direct landscape must still be the actual legacy portrait frame.

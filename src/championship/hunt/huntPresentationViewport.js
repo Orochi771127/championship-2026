@@ -6,6 +6,13 @@ import { huntViewportTransform, huntViewportToWorld, huntWorldToViewport } from 
 
 const positive = value => Number.isFinite(value) && value > 0;
 
+// Centre of a view `span` wide inside a map `limit` wide: the view edge stops
+// at the map edge; a view wider than the map stays centred on it.
+export function huntClampViewCenter(center, span, limit) {
+  if (span >= limit) return limit / 2;
+  return Math.min(limit - span / 2, Math.max(span / 2, center));
+}
+
 export function huntPresentationViewport({
   viewportWidth, viewportHeight, canonicalCamera,
   worldWidthPx, worldHeightPx, referenceWidth = null
@@ -24,17 +31,24 @@ export function huntPresentationViewport({
 
   // No reference supplied: original portrait transform and camera, exactly.
   // Wide callers explicitly supply the same portrait reference before/after rotation.
-  const scale = referenceWidth === null ? legacy.scale : huntViewportTransform(referenceWidth, viewportHeight).scale;
+  // Owner 2026-11-25 (desktop hunt): dragging to a map edge must never show
+  // blank page beside the map. A wide view keeps the portrait reference scale
+  // unless the window is wider/taller than the whole map at that scale; then it
+  // zooms just enough that the map fills the window (2048 maps on 1920 wide).
+  const scale = referenceWidth === null ? legacy.scale : Math.max(
+    huntViewportTransform(referenceWidth, viewportHeight).scale,
+    viewportWidth / worldWidthPx, viewportHeight / worldHeightPx);
   const transform = referenceWidth === null ? legacy : Object.freeze({
     viewportWidth, viewportHeight, scale,
     worldWidth: viewportWidth / scale, worldHeight: viewportHeight / scale
   });
-  // Keep raw canonical focus: map-edge clamping here would create a drag
-  // dead-zone or require writing a different camera back into native logic.
-  // Neutral, non-interactive margins are the approved presentation policy.
+  // The wide window is clamped to the map here; panHuntPresentationCamera pans
+  // from this same clamped centre, so there is no drag dead-zone at an edge.
   const width = transform.worldWidth, height = transform.worldHeight;
-  const centerX = (canonicalCamera.left + canonicalCamera.right) / 2;
-  const centerY = (canonicalCamera.top + canonicalCamera.bottom) / 2;
+  const rawCenterX = (canonicalCamera.left + canonicalCamera.right) / 2;
+  const rawCenterY = (canonicalCamera.top + canonicalCamera.bottom) / 2;
+  const centerX = referenceWidth === null ? rawCenterX : huntClampViewCenter(rawCenterX, width, worldWidthPx);
+  const centerY = referenceWidth === null ? rawCenterY : huntClampViewCenter(rawCenterY, height, worldHeightPx);
   const viewRect = referenceWidth === null ? canonicalCamera : Object.freeze({
     left: centerX - width / 2, top: centerY - height / 2,
     right: centerX + width / 2, bottom: centerY + height / 2,

@@ -1,5 +1,20 @@
 # Championship Owner Direction
 
+<!-- record-id: HUNT_DESKTOP_NO_EDGE_MARGIN_20261125 -->
+## 2026-11-25 — Desktop hunt: no blank page beside the map
+
+Owner: 「電腦版地圖拉到邊會出現空白處」, then 「先修電腦版空白」.
+
+`OWNER_APPROVED_ADAPTATION`. This replaces the 2026-10-14 wide-hunt rule of neutral margins beside the map:
+
+- In the wide (desktop / landscape) hunt layout, the view stops at the map edge.
+- When the window is wider or taller than the whole map at the portrait scale (2048 maps on a 1920 wide screen), the view zooms in just enough to fill the window.
+- Panning starts from the centre the player sees, so dragging back from an edge moves at once.
+- The native camera centre stays inside the runtime's own clamp range.
+- The portrait layout is unchanged.
+
+Code: `src/championship/hunt/huntPresentationViewport.js`, `src/championship/hunt/huntPresentationBinding.js`; test `tests/championship-hunt-desktop-edge-cases.mjs`.
+
 <!-- record-id: ROADMAP_R4_TAMER_SKILL_CARDS_20261118 -->
 ## 2026-11-18 — Roadmap R4: the tamer's skill-card hand
 
