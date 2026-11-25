@@ -42,7 +42,10 @@ test("light chains after the ground-depth hook and survives its reinstall", () =
     assert.equal(shader.uniforms.hmActorRimDir, uniforms.hmActorRimDir, "rim direction is shared, updated in place");
     assert.equal(shader.fragmentShader.split("hmActorLight * mix").length, 2, "light applied once");
     assert.ok(shader.fragmentShader.includes("gl_FragDepth"), "ground depth kept");
-    assert.match(material.customProgramCacheKey(), new RegExp(`hunt-flat-ground-depth.*-${round}-.*hunt-actor-light-v1$`));
+    assert.match(material.customProgramCacheKey(), new RegExp(`hunt-flat-ground-depth.*-${round}-.*hunt-actor-light-v2$`));
+    assert.ok(shader.uniforms.hmActorWater === material.userData.hmWater, 'per-partner waterline uniform');
+    assert.ok(shader.vertexShader.includes('hmActorAbove = (modelMatrix * vec4(transformed, 1.0)).y - hmGroundHeight'), 'height above the support');
+    assert.ok(shader.fragmentShader.includes('if (hmActorWater > 0.0)'), 'wading branch');
   }
 });
 

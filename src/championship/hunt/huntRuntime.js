@@ -348,6 +348,14 @@ export function createHuntRuntime({ world, fieldActor, wildCount = null, capture
     // Read-only raw focus; presentation clamps never write this authority.
     getCameraFocus() { return Object.freeze({ ...cameraCenter }); },
 
+    // Read-only native tile kind under a world point (0 open, 1 blocked, 2 shallow water,
+    // 3 ice), for presentation ground contact (groundContact.mjs). Null without a native field.
+    getTerrainAt(worldX, worldY) {
+      const environment = nativeEntry?.scene?.environment;
+      if (!environment || ![worldX, worldY].every(Number.isFinite)) return null;
+      return environment.readTerrain(Math.floor(worldX / world.tileSizePx), Math.floor(worldY / world.tileSizePx));
+    },
+
     /** A persistent camera independent of the retained developer actor fixture. */
     getCamera(viewportWidth, viewportHeight) {
       return computeFieldCameraWindow(world.definition, cameraRequest(viewportWidth, viewportHeight));
