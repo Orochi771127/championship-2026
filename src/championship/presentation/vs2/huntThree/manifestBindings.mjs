@@ -3,6 +3,7 @@ import {isOriginalRuntimeLocation} from '../../originalRuntimeLocation.js';
 // Exact existing assets reviewed visually on 2026-10-23. Functional QA remains
 // with the Owner; source manifest qaApproved values remain unchanged.
 // HM08 remains 2048 square and is not an enlarged-map completion.
+// HM10/11/13/14 grew to 2880 on 2026-11-25 (c2: untrimmed candidate geometry; HM14 rebuilt with core-style extension cliffs).
 export const MAPS=Object.freeze({
   "hm01": {
     "directory": "assets/production/hunt/hm01-three-r1-20261022/",
@@ -172,57 +173,57 @@ export const MAPS=Object.freeze({
     "appearanceApproved": true
   },
   "hm10": {
-    "directory": "assets/production/hunt/hm10-three-c1-20261026/",
+    "directory": "assets/production/hunt/hm10-three-c2-20261125/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "c6ad1daf906bfb46323e3890a9eb55dcbc8d26b738590a04238782f279f72955",
-      "bytes": 518
+      "sha256": "8a4383f43e0452b3fc15ad8763ec74bac7b24d7f679c974dda6a6c65d0dfe93e",
+      "bytes": 413
     },
     "fields": [
       "field_hm10_01"
     ],
-    "worldSize": 2048,
+    "worldSize": 2880,
     "appearanceApproved": true
   },
   "hm11": {
-    "directory": "assets/production/hunt/hm11-three-c1-20261026/",
+    "directory": "assets/production/hunt/hm11-three-c2-20261125/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "478e3443b28999d3efd5e3698f80638af3d638f79e1c32c3071c5f44c59135f1",
-      "bytes": 518
+      "sha256": "0633c1b973a5c507948ddb6665d52c76df69602c4a917043763243c2bb39ae34",
+      "bytes": 413
     },
     "fields": [
       "field_hm11_01"
     ],
-    "worldSize": 2048,
+    "worldSize": 2880,
     "appearanceApproved": true
   },
   "hm13": {
-    "directory": "assets/production/hunt/hm13-three-c1-20261026/",
+    "directory": "assets/production/hunt/hm13-three-c2-20261125/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "3ad934e811ad7f76ed4688fa08b31abcc6ec27b85a1222cb27a1ad1b252aab01",
-      "bytes": 539
+      "sha256": "8006cbae64dc64d6d2f151f91f847a58606a8a31dc93123845aa2de799f60bdf",
+      "bytes": 429
     },
     "fields": [
       "field_hm13_01",
       "field_hm13_02"
     ],
-    "worldSize": 2048,
+    "worldSize": 2880,
     "appearanceApproved": true
   },
   "hm14": {
-    "directory": "assets/production/hunt/hm14-three-c1-20261026/",
+    "directory": "assets/production/hunt/hm14-three-c2-20261125/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "765b25dbc6c9d8f6d60fd5421d8b17f65691d69fc61d7bcb73a5ec6830121f29",
-      "bytes": 1013
+      "sha256": "c3314039b112bd3cee7b4b7ebe989289c74a303e82a39c8cbb43390cfb9cb3de",
+      "bytes": 778
     },
     "fields": [
       "field_hm14_01",
       "field_hm14_02"
     ],
-    "worldSize": 2048,
+    "worldSize": 2880,
     "appearanceApproved": true
   }
 });
