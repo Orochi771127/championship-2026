@@ -14,6 +14,7 @@ import {huntActorLight,huntRimDirection,createHuntActorLightUniforms,installHunt
 import {createHuntGroundContact,huntGroundKind,huntWaterTint} from './groundContact.mjs';
 import {createHuntAmbientLife} from './ambientLife.mjs';
 import {createHuntDrainFlow} from './drainFlow.mjs';
+import {createHuntWaterShimmer} from './waterShimmer.mjs';
 import {HUNT_INSTINCT_GLOW,HUNT_ACTOR_SHADOW,huntContactEnvelope,huntSoftContactVertices,huntCastShadowReach,huntCastShadowVertices,createHuntCastShadowMaterial} from './actorShadows.mjs';
 
 // Caller provides a hash-verified manifest and an explicit appearance approval,
@@ -47,7 +48,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
   // Ambient life in the map's own space: snow, fireflies, pollen, embers, dust (ambientLife.mjs).
   const ambientLife=createHuntAmbientLife({THREE,scene,mapKey:manifest.map??'hm02',fieldId,groundHeight:manifest.flatSupport?.height??0});
   const drainFlow=createHuntDrainFlow({THREE,scene,map,mapKey:manifest.map??'hm02'});
-  let active=true, view=null, pass=null, gltf=null, prototypeGltf=null, sizeKey='', restoreFallback=null, external=null, frameIndex=0, suspended=false;
+  let active=true, view=null, pass=null, gltf=null, prototypeGltf=null, sizeKey='', restoreFallback=null, external=null, frameIndex=0, suspended=false, waterShimmer=null;
   const controller=new AbortController(), resourceDisposer=createResourceDisposer(), batches=new Set(),cleanupErrors=[];
   const cleanup=(label,callback)=>{try{callback();}catch(error){cleanupErrors.push(`${label}: ${error?.message??error}`);}};
   const onAbort=()=>dispose();
@@ -70,7 +71,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
     cleanup('shared pass',()=>pass?.dispose());cleanup('borrowed nodes',restore);
     cleanup('context listener',()=>offLost?.());
     for(const a of actors.values())for(const owned of [a.geometry,a.material,a.userData.shadow?.geometry,a.userData.shadow?.material,a.userData.cast?.geometry,a.userData.cast?.material,a.userData.core?.geometry,a.userData.core?.material])resourceDisposer.once(owned);
-    actors.clear();cleanup('ground contact',()=>groundContact.dispose());cleanup('ambient life',()=>ambientLife.dispose());cleanup('drain flow',()=>drainFlow.dispose());cleanup('actor textures',()=>textures.dispose());
+    actors.clear();cleanup('ground contact',()=>groundContact.dispose());cleanup('ambient life',()=>ambientLife.dispose());cleanup('drain flow',()=>drainFlow.dispose());cleanup('water shimmer',()=>waterShimmer?.dispose());cleanup('actor textures',()=>textures.dispose());
     for(const batch of batches)resourceDisposer.once(batch);batches.clear();
     cleanup('scene',()=>resourceDisposer.gltf(gltf));cleanup('prototypes',()=>resourceDisposer.gltf(prototypeGltf));cleanup('external assets',releaseExternal);
     cleanup('authored shadow',()=>sun.shadow.dispose());
@@ -108,6 +109,8 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
       external=await (authored?loadAuthoredMapAssets:loadExternalMapAssets)({THREE,GLTFLoader,DRACOLoader,dracoDecoderPath,manifest,fieldId,baseUrl,signal:controller.signal,disposer:resourceDisposer});
       if(!active||controller.signal.aborted){releaseExternal();controller.signal.throwIfAborted();throw new Error('HUNT_DISPOSED_DURING_ASSET_HANDOFF');}
       gltf=external.gltf;resolveSupport=external.resolveSupport;scene.add(gltf.scene);
+      // Lake, sea, swamp, sewer and ice water move (waterShimmer.mjs); the baked maps have no named water material.
+      waterShimmer=createHuntWaterShimmer({THREE,root:gltf.scene,map,mapKey:manifest.map,fieldId});
       if(look&&authored)applyHd2dLighting({THREE,scene,root:gltf.scene,ambient,sun,look});
     }else{
     const manager=new THREE.LoadingManager();manager.setURLModifier(url=>{if(url.startsWith('blob:'))return url;throw new Error('HM02_EXTERNAL_GLTF_RESOURCE_FORBIDDEN');});
@@ -118,6 +121,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
     gltf=await parse(manifest.glb);
     if(!active||controller.signal.aborted){resourceDisposer.gltf(gltf);controller.signal.throwIfAborted();throw new Error('HM02_DISPOSED_DURING_PARSE_HANDOFF');}
     scene.add(gltf.scene);
+    waterShimmer=createHuntWaterShimmer({THREE,root:gltf.scene,map,mapKey:manifest.map??'hm02',fieldId});
     prototypeGltf=await parse(manifest.treePrototypes);
     if(!active||controller.signal.aborted){resourceDisposer.gltf(prototypeGltf);controller.signal.throwIfAborted();throw new Error('HM02_DISPOSED_DURING_PARSE_HANDOFF');}
     const placements=JSON.parse(new TextDecoder().decode(await verifiedBytes(manifest.treeInstances)));
@@ -168,7 +172,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
       const {center,halfWidth,halfHeight}=map.viewport(view,app.screen.width,app.screen.height);
       camera.left=-halfWidth;camera.right=halfWidth;camera.top=halfHeight;camera.bottom=-halfHeight;
       camera.position.set(...center.map((v,i)=>v+500*map.eye[i]));camera.up.set(...map.up);camera.lookAt(...center);camera.updateProjectionMatrix();
-      const now=globalThis.performance?.now?.()??Date.now();drainFlow.update({now});
+      const now=globalThis.performance?.now?.()??Date.now();drainFlow.update({now});waterShimmer?.update({now});
       ambientLife.update({now,center,halfWidth,halfHeight,pixelRatio:(view.transform?.scale??1)*app.renderer.resolution});
       if(actorLightUniforms){camera.updateMatrixWorld();const rim=huntRimDirection(camera,sun.position.toArray(),sun.target.position.toArray());actorLightUniforms.hmActorRimDir.value.set(rim[0],rim[1]);}
       const nextSize=`${app.screen.width}:${app.screen.height}:${app.renderer.resolution}`;
@@ -287,7 +291,7 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
       if(!reviewHarness)throw new Error('HUNT_REVIEW_ONLY');suspended=Boolean(value);
       if(suspended){restore();restoreFallback?.();}
     },
-    getDiagnostics(){return {active,groundContact:groundContact.diagnostics(),ambient:ambientLife.diagnostics(),drainFlow:drainFlow.diagnostics(),threeUsed:active&&!suspended&&view!==null,renderer:'THREE_SHARED_PIXI_WEBGL2_HUNT_UNIFIED',map:manifest.map??'hm02',fieldId,canvasCount:1,contextCount:1,actorCount:actors.size,actorTextureCount:textures.getDiagnostics().entries,actorTextures:textures.getDiagnostics(),assetVersion:manifest.assetVersion??null,treeSelection:manifest.treeSelection??null,horizontalRotationEnabled:false,hd2d:hd2d?.getDiagnostics()??null,projectionElevationDegrees:manifest.projection.elevationDegrees,residentFrameTextures:external?.textures.length??0,frameIndex,externalAssets:external?.stats??null,fallback2DRetained:true,fallback2DReleaseApproved:false,qaApproved:false,three:renderer?.info,measuredMobilePerformance:false,cleanupErrors:[...cleanupErrors,...resourceDisposer.getErrors()],sharedPass:pass?.getDiagnostics()??null};},
+    getDiagnostics(){return {active,groundContact:groundContact.diagnostics(),ambient:ambientLife.diagnostics(),drainFlow:drainFlow.diagnostics(),water:waterShimmer?.diagnostics()??null,threeUsed:active&&!suspended&&view!==null,renderer:'THREE_SHARED_PIXI_WEBGL2_HUNT_UNIFIED',map:manifest.map??'hm02',fieldId,canvasCount:1,contextCount:1,actorCount:actors.size,actorTextureCount:textures.getDiagnostics().entries,actorTextures:textures.getDiagnostics(),assetVersion:manifest.assetVersion??null,treeSelection:manifest.treeSelection??null,horizontalRotationEnabled:false,hd2d:hd2d?.getDiagnostics()??null,projectionElevationDegrees:manifest.projection.elevationDegrees,residentFrameTextures:external?.textures.length??0,frameIndex,externalAssets:external?.stats??null,fallback2DRetained:true,fallback2DReleaseApproved:false,qaApproved:false,three:renderer?.info,measuredMobilePerformance:false,cleanupErrors:[...cleanupErrors,...resourceDisposer.getErrors()],sharedPass:pass?.getDiagnostics()??null};},
     dispose
   });
 }
