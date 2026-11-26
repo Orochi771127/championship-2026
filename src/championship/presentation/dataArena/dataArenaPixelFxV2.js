@@ -190,7 +190,7 @@ function drawFacetedSpire(gfx, cx, cy, radius, rot, seed, pal, alpha) {
 }
 
 // Hero Primitive 1: Filled tapered anime pixel crescent blade/claw polygon (razor-sharp outer + white hot core!)
-function drawFilledCrescent(gfx, cx, cy, radius, angle, span, thickness, mainHex, coreHex, alpha) {
+function drawFilledCrescent(gfx, cx, cy, radius, angle, span, thickness, mainHex, coreHex, alpha, ySquash = 0.84) {
   if (!gfx || alpha <= 0.02 || radius < 4) return;
   const segs = 12;
   const a0 = angle - span, a1 = angle + span;
@@ -202,8 +202,8 @@ function drawFilledCrescent(gfx, cx, cy, radius, angle, span, thickness, mainHex
     const taper = Math.sin(Math.PI * f);
     const rOut = radius;
     const rIn = Math.max(2, radius - thickness * taper);
-    outer.push(cx + Math.cos(a) * rOut, cy + Math.sin(a) * rOut * 0.84);
-    inner.unshift(cx + Math.cos(a) * rIn, cy + Math.sin(a) * rIn * 0.84);
+    outer.push(cx + Math.cos(a) * rOut, cy + Math.sin(a) * rOut * ySquash);
+    inner.unshift(cx + Math.cos(a) * rIn, cy + Math.sin(a) * rIn * ySquash);
   }
   if (typeof gfx.poly === "function") {
     gfx.poly([...outer, ...inner]).fill({ color: mainHex, alpha: 0.88 * alpha });
@@ -215,8 +215,8 @@ function drawFilledCrescent(gfx, cx, cy, radius, angle, span, thickness, mainHex
       const taper = Math.sin(Math.PI * f);
       const rOut = radius - thickness * 0.12 * taper;
       const rIn = Math.max(2, radius - thickness * 0.56 * taper);
-      coreOuter.push(cx + Math.cos(a) * rOut, cy + Math.sin(a) * rOut * 0.84);
-      coreInner.unshift(cx + Math.cos(a) * rIn, cy + Math.sin(a) * rIn * 0.84);
+      coreOuter.push(cx + Math.cos(a) * rOut, cy + Math.sin(a) * rOut * ySquash);
+      coreInner.unshift(cx + Math.cos(a) * rIn, cy + Math.sin(a) * rIn * ySquash);
     }
     gfx.poly([...coreOuter, ...coreInner]).fill({ color: coreHex, alpha: 0.96 * alpha });
   } else {
@@ -473,11 +473,11 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
   function emitElementBurst({ x, y, palKey = "fire", scale = 1, angle = 0, heavy = false, crisp = false, own = false }) {
     const pk = normalizePalKey(palKey);
     const stops = paletteStops(pk);
-    const count = Math.round((heavy ? (quality === "low" ? 12 : 22) : (quality === "low" ? 7 : 13)) * (own ? 0.4 : crisp ? 0.55 : 1));
+    const count = Math.round((heavy ? (quality === "low" ? 12 : 22) : (quality === "low" ? 7 : 13)) * (own ? 0.6 : crisp ? 0.55 : 1));
 
     // Hot white starburst + saturated volumetric flash core. An own move's drawn hit cell is its
     // burst (2026-11-27 blind review: "a generic white starburst"): it keeps only a glow and embers.
-    spawnP({ shape: "glow", x, y, size: 14 * scale, size1: (own ? 26 : 34) * scale, life: 0.18, pal: pk, add: true, alphaMul: own ? 0.7 : 0.9 });
+    spawnP({ shape: "glow", x, y, size: 14 * scale, size1: 34 * scale, life: 0.2, pal: pk, add: true, alphaMul: 0.9 });
     if (!own) spawnP({ shape: "star", x, y, size: (heavy ? 22 : 14) * scale, size1: 3 * scale, rot: rand() * TAU, life: 0.20, pal: "white", add: true });
 
     // Volumetric 3-pass shaded cloud punch at center (replaces wireframe ring!)
@@ -725,6 +725,11 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
           const subFade = subT < 0.25 ? 1 : clamp(1 - (subT - 0.25) / 0.75, 0, 1);
           const sweepA = h.angle + (i % 2 === 0 ? 1 : -1) * (slashCount > 1 ? 0.58 : 0.12) + (subT - 0.3) * 0.45 * down;
           const rr = (38 + subT * 26) * h.scale * (i === slashCount - 1 ? 1.15 : 0.95);
+          if (h.style === "heavy" && slashCount === 1) {
+            // Overhead cleave: a tall, thick arc whose stroke passes through the struck body, top to bottom.
+            drawFilledCrescent(gMain, h.x - Math.cos(h.angle) * rr * 0.55, h.y - 10, rr, sweepA, 1.05, 30 * h.scale * subFade, h.mainHex, 0xffffff, subFade, 1.25);
+            continue;
+          }
           drawFilledCrescent(slashCount > 1 ? gAdd : gMain, h.x + Math.cos(h.angle) * 14, h.y + Math.sin(h.angle) * 10, rr, sweepA, 1.28, (16 + (h.style === "heavy" ? 6 : 0)) * h.scale * subFade, h.mainHex, 0xffffff, subFade);
         }
       }

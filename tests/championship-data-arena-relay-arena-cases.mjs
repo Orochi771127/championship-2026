@@ -94,7 +94,8 @@ test('vents crack cover each active phase, updrafts speed only the bodies inside
 });
 
 test('a real relay match runs its arena cycle and the rival chips cover', () => {
-  const sim = createDataArenaSimulation({ mode: 'RELAY', partnerId: 'relay-species-106', relayArenaId: 'field_bm02_01', seed: 5 });
+  // Cover is chipped by stray shots; since the longer RELAY knockback slide (2026-11-27) seed 4 is a match that has one.
+  const sim = createDataArenaSimulation({ mode: 'RELAY', partnerId: 'relay-species-106', relayArenaId: 'field_bm02_01', seed: 4 });
   const events = [];
   for (let i = 0; i < 60 * 36; i++) { sim.step({}); events.push(...sim.drainEvents()); }
   assert.ok(events.some(e => e.type === 'ARENA_WARNING') && events.some(e => e.type === 'ARENA_ACTIVE'));

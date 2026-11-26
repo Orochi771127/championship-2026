@@ -35,7 +35,7 @@ const FIT = Object.freeze({shot: [70, 112], launch: [40, 92], hit: [72, 150], lo
 // A few drawn bodies burn in flight (2026-11-27 blind review: the flame fist read as "a plain
 // brown block"): a flickering additive aura behind the cell, a hot additive core over it and an
 // ember-coloured afterimage trail. The cell's own drawing is untouched.
-const FAMILY_GLOW = Object.freeze({flamefist00: Object.freeze({aura: 0xff5a14, core: 0xffd25a, trail: 0xff8a2a})});
+const FAMILY_GLOW = Object.freeze({flamefist00: Object.freeze({aura: 0xff5a14, core: 0xff9a2a, trail: 0xff8a2a, grow: 1.35})});
 const familyOf = bankId => String(profiles.banks[(bankId | 0) - 1]?.name ?? '').replace(/^e003_/, '');
 
 /**
@@ -160,7 +160,7 @@ export function createDataArenaOriginalMoveFx({PIXI, layer, art = null, quality 
     orient(sprite, actor.angle, actor.size * frame.tex.unit, actor.turn);
     if (actor.glow) {
       const flicker = 0.5 + 0.5 * Math.sin(elapsed * 47 + actor.x * 0.05);
-      for (const [glowSprite, grow, alpha] of [[actor.aura, 1.38 + 0.1 * flicker, 0.5 + 0.25 * flicker], [actor.core, 1, 0.62]]) {
+      for (const [glowSprite, grow, alpha] of [[actor.aura, 1.5 + 0.12 * flicker, 0.6 + 0.25 * flicker], [actor.core, 1, 0.28]]) {
         glowSprite.texture = frame.tex.texture;
         glowSprite.anchor.set(frame.tex.anchorX, frame.tex.anchorY);
         orient(glowSprite, actor.angle, actor.size * frame.tex.unit * grow, actor.turn);
@@ -236,8 +236,9 @@ export function createDataArenaOriginalMoveFx({PIXI, layer, art = null, quality 
       const at = follow?.();
       if (!seq || !at) return false;
       stats.shots++;
-      const actor = spawn({seq, x: at.x, y: at.y, angle: at.angle ?? angle, size: scaleFor(moveId, 'shot', seq), turn: true, follow});
-      const glow = actor ? FAMILY_GLOW[look.body.family] : null;
+      const burning = FAMILY_GLOW[look.body.family] ?? null;
+      const actor = spawn({seq, x: at.x, y: at.y, angle: at.angle ?? angle, size: scaleFor(moveId, 'shot', seq) * (burning?.grow ?? 1), turn: true, follow});
+      const glow = actor ? burning : null;
       if (glow) {
         actor.glow = glow;
         actor.aura = acquire(); actor.aura.blendMode = 'add'; actor.aura.tint = glow.aura;

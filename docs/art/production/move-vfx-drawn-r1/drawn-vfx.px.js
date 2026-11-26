@@ -128,6 +128,17 @@ sprite("rocketfist", { w: 28, h: 18, outline: "o" },
   rect(9, 3, 8, 12, "L"), rect(9, 3, 8, 3, "W"), rect(17, 2, 7, 14, "L"), rect(17, 2, 7, 2, "W"),
   rect(23, 4, 2, 3, "D"), rect(23, 8, 2, 3, "D"), rect(23, 12, 2, 3, "D"), rect(19, 14, 4, 3, "L"), rect(9, 12, 8, 3, "D"),
   poly([0, 5, 9, 4, 9, 14, 0, 13], "m"), poly([2, 7, 9, 6, 9, 12, 2, 11], "x"), px(5, 9, "c"), px(6, 9, "c"))
+// A molten fist (2026-11-27 blind review: the steel rocket fist read as "a white capsule" for a fist of fire):
+// knuckles, finger grooves and a thumb all in the move's own colours, glowing cracks, flame out of the wrist.
+sprite("magmafist", { w: 30, h: 20, outline: "o" },
+  poly([0, 6, 8, 5, 8, 15, 0, 14, 3, 10], "x"), poly([3, 8, 8, 7, 8, 13, 3, 12], "c"),
+  rect(7, 6, 4, 9, "e"),
+  rect(10, 3, 9, 14, "m"), rect(18, 3, 8, 13, "m"),
+  rect(25, 4, 2, 2, "m"), rect(25, 7, 2, 2, "m"), rect(25, 10, 2, 2, "m"), rect(25, 13, 2, 2, "m"),
+  line(19, 6, 25, 6, "e"), line(19, 9, 25, 9, "e"), line(19, 12, 25, 12, "e"), line(18, 3, 18, 15, "e"),
+  rect(13, 14, 10, 3, "x"), line(13, 16, 22, 16, "e"),
+  rect(10, 3, 16, 1, "x"),
+  line(11, 6, 14, 9, "c"), line(14, 9, 13, 12, "c"), line(20, 4, 22, 5, "c"), px(23, 8, "c"), px(21, 11, "c"))
 // A giant missile: a long body with a painted cone in the move's colour and a black stripe.
 sprite("missile_big", { w: 32, h: 16, outline: "o" },
   rect(6, 4, 18, 8, "L"), rect(6, 4, 18, 2, "W"), rect(6, 10, 18, 2, "D"), poly([24, 4, 31, 8, 24, 12], "m"), poly([24, 4, 27, 6, 24, 6], "x"),

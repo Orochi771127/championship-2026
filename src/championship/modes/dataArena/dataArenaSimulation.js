@@ -657,7 +657,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       emit({ type: "WALL_SLAM", target: body === player ? "player" : "rival", x: body.x, y: body.y, amount: Math.round(amount) });
       return;
     }
-    const decay = Math.exp(-8 * DT);
+    // RELAY slides further (PB: a struck body is pushed a visible distance, 2026-11-27 blind review).
+    const decay = Math.exp(-(relayMode ? 5.5 : 8) * DT);
     body.kbx *= decay; body.kby *= decay;
   }
   function moveBody(body, dx, dy, kind) {
