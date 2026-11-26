@@ -1,0 +1,118 @@
+{
+ "browser": "chromium",
+ "mode": "release",
+ "cases": [
+  {
+   "gate": "ruins",
+   "errors": [
+    "console: THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."
+   ],
+   "loadMs": 1541,
+   "three": true,
+   "map": "hm18",
+   "field": "field_hm18_01",
+   "version": "v5-20261126",
+   "geometries": 131,
+   "buf": {
+    "n": 597,
+    "mb": 36.1
+   },
+   "tex": {
+    "n": 14,
+    "mb": 43.3
+   },
+   "cleanup": [],
+   "geometry": {
+    "geometries": 130,
+    "attributes": 464,
+    "pendingBytes": 0,
+    "releasedBytes": 33608676
+   },
+   "bufMb": 33.5,
+   "heapMb": 24.3,
+   "heap0": {
+    "usedMb": 40.2,
+    "embedderMb": 7.8,
+    "backingMb": 19.7
+   },
+   "heap1": {
+    "usedMb": 53.5,
+    "embedderMb": 9.5,
+    "backingMb": 30.7
+   },
+   "panned": {
+    "three": true,
+    "geometry": {
+     "geometries": 130,
+     "attributes": 464,
+     "pendingBytes": 0,
+     "releasedBytes": 33608676
+    },
+    "bufMb": 33.6,
+    "heapMb": 25.1,
+    "cleanup": []
+   },
+   "left": {
+    "screen": null,
+    "bufMb": 0,
+    "heapMb": 26.4
+   }
+  },
+  {
+   "gate": "crag",
+   "errors": [
+    "console: THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."
+   ],
+   "loadMs": 1133,
+   "three": true,
+   "map": "hm14",
+   "field": "field_hm14_02",
+   "version": "c3-20261126",
+   "geometries": 19,
+   "buf": {
+    "n": 78,
+    "mb": 30.9
+   },
+   "tex": {
+    "n": 12,
+    "mb": 36.7
+   },
+   "cleanup": [],
+   "geometry": {
+    "geometries": 18,
+    "attributes": 54,
+    "pendingBytes": 0,
+    "releasedBytes": 28355220
+   },
+   "bufMb": 28.3,
+   "heapMb": 25.4,
+   "heap0": {
+    "usedMb": 39.5,
+    "embedderMb": 7.8,
+    "backingMb": 19.7
+   },
+   "heap1": {
+    "usedMb": 54.3,
+    "embedderMb": 9,
+    "backingMb": 30.3
+   },
+   "panned": {
+    "three": true,
+    "geometry": {
+     "geometries": 18,
+     "attributes": 54,
+     "pendingBytes": 0,
+     "releasedBytes": 28355220
+    },
+    "bufMb": 28.3,
+    "heapMb": 25,
+    "cleanup": []
+   },
+   "left": {
+    "screen": null,
+    "bufMb": 0,
+    "heapMb": 27.2
+   }
+  }
+ ]
+}
