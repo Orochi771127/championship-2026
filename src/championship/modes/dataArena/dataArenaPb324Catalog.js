@@ -198,7 +198,7 @@ export function pb324ToRelayMove(id, ultimate = false) {
     delay: m.type === "ZONE" ? 0.72 : undefined,
     duration: m.type === "BARRIER" ? 1.4 : undefined,
     arc: m.type === "BARRIER" ? 2.2 : undefined,
-    knockback: Math.round(m.hitFeel.kb * 45),
+    knockback: Math.round(m.hitFeel.kb * 65),
     invulnerable: m.archetype === "SHADOW_BACKSTAB" || m.archetype === "BURROW_AMBUSH" || m.archetype === "MULTI_DASH",
     effect,
     rootSeconds: effect === "ROOT" ? 1.15 : undefined,

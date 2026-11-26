@@ -461,6 +461,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       tickRateHz: bundle?.runtime.timing?.tickRateHz ?? 60, reducedMotion
     });
     let actionRequest = null, actionElapsed = 0, motion = null;
+    // A hard knockback lifts the body in a short arc (2026-11-27 blind review: "a short knockback arc").
+    let knockPeak = 0, knockStart = -1;
     shadow.scale.set((ROLE_HEIGHT[role] / 64) * 0.9, (ROLE_HEIGHT[role] / 64) * 0.75);
     // Pure arcade fighting-game white hit-flash overlay (PixiJS tint=0xffffff is normal color, NOT white!)
     const flashSprite = new PIXI.Sprite(sprite.texture);
@@ -602,9 +604,16 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         } else if (body.hitstun > 0 && !reducedMotion) {
           sprite.x += Math.sin(elapsed * 115) * 3.8;
         }
-        if (Math.hypot(body.kbx ?? 0, body.kby ?? 0) > 90 && !reducedMotion && frameCount % 2 === 0) {
+        const knockSpeed = Math.hypot(body.kbx ?? 0, body.kby ?? 0);
+        if (knockSpeed > 90 && !reducedMotion && frameCount % 2 === 0) {
           addSkidMark(x, y, body.kbx, body.kby);
         }
+        if (knockSpeed > knockPeak + 60) { knockPeak = knockSpeed; knockStart = state.time; }
+        else if (knockSpeed < 20) knockPeak = 0;
+        const knockAge = state.time - knockStart;
+        const knockHop = !reducedMotion && state.gameMode === 'RELAY' && knockPeak > 150 && knockAge >= 0 && knockAge < 0.3
+          ? Math.sin(Math.PI * knockAge / 0.3) * Math.min(18, knockPeak * 0.05) : 0;
+        sprite.y -= knockHop;
         // Wave 8.1 PB-Rank Character Sprite Motion Engine:
         // Drives ALL 8 PB Ranked sprite-body cues in true 360° / 8-direction vectors
         // (breathe, squash-stretch, tilt, jump/aerial Z-hop, dash/lunge thrust, afterimage, self-recoil, vanish)!
@@ -615,7 +624,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         let actionTilt = 0;
         let actionHop = 0;
         let actionAlphaMult = 1;
-        if (motion && !reducedMotion && !motion.preserveAuthoredPose) {
+        // 2026-11-27 blind review: an authored source pose still moves its body (pull back, hurl,
+        // chop); only its squash and lean are halved so the drawn pose keeps its shape.
+        if (motion && !reducedMotion) {
+          const authoredPose = Boolean(motion.preserveAuthoredPose);
+          const poseGain = authoredPose ? 0.5 : 1;
           const a = body.action;
           const spec = a?.moveId ? elementFx?.look?.(a.moveId) : null;
           const pb = spec?.pb324 ?? null;
@@ -627,25 +640,29 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           // Every move sells its cast with the body (2026-11-26 blind review: "the caster never makes a firing pose").
           const hasTilt = true;
           const hasSquash = true;
-          const hasJump = cues.includes("jump/aerial") || pose === "hop" || pose === "slam";
+          const hasJump = spec?.v2Archetype !== "GUARD_BREAK_SLAM" && (cues.includes("jump/aerial") || pose === "hop" || pose === "slam");
           const hasDash = cues.includes("dash/lunge") || spec?.melee || Boolean(body.lunge);
           const hasRecoil = cues.includes("self-recoil/impulse");
           const hasAfterimage = cues.includes("afterimage") || spec?.v2Archetype === "MULTI_DASH" || spec?.v2Archetype === "SHADOW_BACKSTAB";
           const hasVanish = cues.includes("vanish") || spec?.v2Archetype === "SHADOW_BACKSTAB";
           const baseThrust = relayProfile?.thrust ?? 8;
           const baseLift = relayProfile?.lift ?? 3;
+          // A guard-breaking blow is an overhead chop: raise on the windup, drop on the contact.
+          const chop = spec?.v2Archetype === "GUARD_BREAK_SLAM";
+          const big = Boolean(a?.ultimate);
           if (a) {
             if (a.releasedAt === null) {
               const p = clamp((state.time - a.startedAt) / Math.max(0.01, a.windup), 0, 1);
-              // Windup anticipation: pull back opposite aim vector + crouch squash + lean back!
-              const pull = hasDash ? -9 * p : -7 * p;
+              const ease = p * p * (3 - 2 * p);
+              // Windup anticipation: pull back opposite the aim, rise, lean back (an ultimate winds up deeper).
+              const pull = (hasDash ? -10 : big ? -16 : -11) * ease;
               sprite.x += cosA * pull;
-              sprite.y += sinA * pull * 0.55 - baseLift * p;
+              sprite.y += sinA * pull * 0.55 - (baseLift + (chop ? 14 : big ? 6 : 2)) * ease;
               if (hasSquash) {
-                sprite.scale.x *= 1 + 0.13 * p;
-                sprite.scale.y *= 1 - 0.12 * p;
+                sprite.scale.x *= 1 + (big ? 0.16 : 0.13) * ease * poseGain;
+                sprite.scale.y *= 1 - (big ? 0.14 : 0.12) * ease * poseGain;
               }
-              if (hasTilt) actionTilt = -dirSign * 0.15 * p;
+              if (hasTilt) actionTilt = -dirSign * (chop ? 0.34 : big ? 0.24 : 0.17) * ease * poseGain;
               if (hasVanish && p > 0.45) actionAlphaMult = 0.35;
             } else {
               const p = clamp((state.time - a.releasedAt) / Math.max(0.01, a.recovery), 0, 1);
@@ -653,9 +670,17 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               const snap = Math.max(0, 1 - (state.time - a.releasedAt) / 0.14);
               // Release follow-through along true 360° / 8-direction vector!
               if (hasDash) {
-                const fwd = (22 + baseThrust * 0.72) * arc;
+                // The body already stands at arm's reach (simulation): the follow-through is a short lean in.
+                const fwd = (body.lunge ? 22 + baseThrust * 0.72 : 6) * arc;
                 sprite.x += cosA * fwd;
                 sprite.y += sinA * fwd * 0.65;
+                if (chop) sprite.y += 8 * snap;
+              } else if (big) {
+                // An ultimate is hurled with the whole body: a long forward thrust, then a slow settle.
+                const tRel = state.time - a.releasedAt;
+                const thrust = 26 * Math.exp(-tRel * 9) - 6 * arc;
+                sprite.x += cosA * thrust;
+                sprite.y += sinA * thrust * 0.5;
               } else if (hasRecoil) {
                 const kick = -15 * arc;
                 sprite.x += cosA * kick;
@@ -667,7 +692,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               } else {
                 // Throw / fire: a sharp forward snap on the release frame, then recoil and settle.
                 const tRel = state.time - a.releasedAt;
-                const thrust = 14 * Math.exp(-tRel * 22) - 9 * arc;
+                const thrust = 20 * Math.exp(-tRel * 16) - 9 * arc;
                 sprite.x += cosA * thrust;
                 sprite.y += sinA * thrust * 0.5;
               }
@@ -678,11 +703,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               }
               if (hasSquash && snap > 0) {
                 const verticalSnap = pose === "hop" || pose === "slam" || pose === "spin";
-                sprite.scale.x *= verticalSnap ? (1 - 0.18 * snap) : (1 + 0.24 * snap);
-                sprite.scale.y *= verticalSnap ? (1 + 0.24 * snap) : (1 - 0.18 * snap);
+                sprite.scale.x *= 1 + (verticalSnap ? -0.18 : 0.24) * snap * poseGain;
+                sprite.scale.y *= 1 + (verticalSnap ? 0.24 : -0.18) * snap * poseGain;
               }
               if (hasTilt) {
-                actionTilt = hasRecoil ? (-dirSign * 0.28 * arc) : (dirSign * (pose === "spin" ? 0.44 : 0.34) * arc);
+                // The chop pitches forward hard on the contact frame and eases back.
+                actionTilt = poseGain * (chop ? dirSign * 0.5 * Math.max(snap, arc * 0.5)
+                  : hasRecoil && !big ? (-dirSign * 0.28 * arc) : (dirSign * (pose === "spin" ? 0.44 : big ? 0.4 : 0.34) * arc));
               }
               if (hasAfterimage && p < 0.78 && frameCount % 2 === 0) {
                 const fxTint = relayLook(a.moveId, body.team)?.tint ?? 0x6ff7ff;
@@ -705,7 +732,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         const blinkBright = hurtLeft > 0 && Math.floor(hurtLeft / 0.055) % 2 === 0;
         sprite.tint = (flash > 0.10 || blinkBright) ? 0xffffff : flash > 0 ? 0xff8a8a : 0xffffff;
         syncFlash((flash > 0.10 || blinkBright) && !reducedMotion, clamp(Math.max(flash - 0.09, blinkBright ? 0.065 : 0) * 10, 0.45, 0.92));
-        const totalLift = lift + actionHop;
+        const totalLift = lift + actionHop + knockHop;
         shadow.alpha = (0.75 - sink * 0.6) * (totalLift > 0 ? Math.max(0.35, 1 - totalLift / 48) : 1);
       },
       diagnostics: () => ({ sequenceId: sequence, frameIndex: controller?.getSnapshot().sourceFrameIndex ?? null,
@@ -817,7 +844,15 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     entry.origin = releaseOrigins.get(projectile.actionId) ?? null; entry.from = null;
     entry.atlasDrawn = !purePixelFx && atlas.ready(projectile.moveId, 'travel');
     entry.kitDrawn = false; entry.originalDrawn = false;
-    const followShot = () => (!projectile.dead && state.projectiles.includes(projectile) ? { x: projectile.x, y: projectile.y - 12, angle: Math.atan2(projectile.vy, projectile.vx) } : null);
+    // An own cell flies at the height it lands (BEAM_ELEVATION), easing in from the hand that threw it.
+    const shotOrigin = entry.origin;
+    let shotFrom = null;
+    const followShot = () => {
+      if (projectile.dead || !state.projectiles.includes(projectile)) return null;
+      if (shotOrigin && !shotFrom) shotFrom = [shotOrigin.x - projectile.x, shotOrigin.y - (projectile.y - BEAM_ELEVATION)];
+      const [ox, oy] = shotFrom ? releaseOffset(shotFrom, elapsed - shotOrigin.born, 0.16) : [0, 0];
+      return { x: projectile.x + ox, y: projectile.y - BEAM_ELEVATION + oy, angle: Math.atan2(projectile.vy, projectile.vx) };
+    };
     // The move's own flying cell (a lion head, a missile, a thrown spear) is the shot itself.
     if (!entry.atlasDrawn && state.gameMode === 'RELAY' && projectile.moveId && originalFx?.hasShot(projectile.moveId)
       && originalFx.projectile({ follow: followShot, moveId: projectile.moveId, angle: Math.atan2(projectile.vy, projectile.vx) })) {

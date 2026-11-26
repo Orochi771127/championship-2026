@@ -457,21 +457,28 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
   function playPendingUlt(moveId, x, y) {
     if (!pendingUlt || pendingUlt.moveId !== moveId || fxClock - pendingUlt.at > 4) return;
     const { arch, pk, angle } = pendingUlt; pendingUlt = null;
+    if (cellsOwnBurst(moveId)) {
+      // An own ultimate lands on its own drawn hit cells: they are the blast; add only its embers and a scorch.
+      emitElementBurst({ x, y: y - 14, palKey: pk, scale: 1.5, angle, heavy: true, crisp: true, own: true });
+      addDecal({ x, y: y + 8, kind: pk === "earth" ? "crack" : pk === "ice" ? "frost" : "scorch", radius: 44, pal: pk });
+      return;
+    }
     if (arch === "METEOR_RAIN") spawnHeroMeteor({ x, y, radius: 145, palKey: pk, count: pk === "water" ? 1 : 4 });
     else if (arch === "VORTEX_PULL") spawnHeroVortex({ x, y, radius: 135, palKey: pk, durationSec: 1.05 });
     else if (arch === "FLURRY_COMBO" || arch === "MULTI_DASH" || arch === "GUARD_BREAK_SLAM" || arch === "SHADOW_BACKSTAB") {
       emitCrescentSlash({ x, y, angle, palKey: pk, scale: 1.2, count: 3, style: "flurry" });
       spawnHeroShockwave({ x, y: y + 8, radius: 120, palKey: pk, spiresCount: 5 });
-    } else if (arch !== "STREAM_BEAM") spawnHeroShockwave({ x, y: y + 8, radius: 130, palKey: pk, spiresCount: 6 });
+    } else if (arch !== "STREAM_BEAM") spawnHeroShockwave({ x, y: y + 8, radius: 100, palKey: pk, spiresCount: 6 });
   }
-  function emitElementBurst({ x, y, palKey = "fire", scale = 1, angle = 0, heavy = false, crisp = false }) {
+  function emitElementBurst({ x, y, palKey = "fire", scale = 1, angle = 0, heavy = false, crisp = false, own = false }) {
     const pk = normalizePalKey(palKey);
     const stops = paletteStops(pk);
-    const count = Math.round((heavy ? (quality === "low" ? 12 : 22) : (quality === "low" ? 7 : 13)) * (crisp ? 0.55 : 1));
+    const count = Math.round((heavy ? (quality === "low" ? 12 : 22) : (quality === "low" ? 7 : 13)) * (own ? 0.4 : crisp ? 0.55 : 1));
 
-    // Hot white starburst + saturated volumetric flash core
-    spawnP({ shape: "glow", x, y, size: 14 * scale, size1: 34 * scale, life: 0.18, pal: pk, add: true, alphaMul: 0.9 });
-    spawnP({ shape: "star", x, y, size: (heavy ? 22 : 14) * scale, size1: 3 * scale, rot: rand() * TAU, life: 0.20, pal: "white", add: true });
+    // Hot white starburst + saturated volumetric flash core. An own move's drawn hit cell is its
+    // burst (2026-11-27 blind review: "a generic white starburst"): it keeps only a glow and embers.
+    spawnP({ shape: "glow", x, y, size: 14 * scale, size1: (own ? 26 : 34) * scale, life: 0.18, pal: pk, add: true, alphaMul: own ? 0.7 : 0.9 });
+    if (!own) spawnP({ shape: "star", x, y, size: (heavy ? 22 : 14) * scale, size1: 3 * scale, rot: rand() * TAU, life: 0.20, pal: "white", add: true });
 
     // Volumetric 3-pass shaded cloud punch at center (replaces wireframe ring!)
     if (!crisp && (pk === "fire" || pk === "blueFire" || pk === "water" || pk === "earth" || pk === "moon" || pk === "poison" || pk === "dragon")) {
@@ -535,6 +542,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
         size = (8 + rand() * 6) * scale;
       }
       if (crisp && (shape === "pxpuff" || shape === "rose")) { shape = "streak"; add = true; size = (3.5 + rand() * 3) * scale; }
+      if (own && shape !== "shard") { shape = "streak"; add = true; size = (3 + rand() * 3) * scale; }
       spawnP({
         shape, x, y,
         vx: Math.cos(a) * spd, vy: Math.sin(a) * spd * 0.82,
@@ -708,13 +716,16 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       } else {
         // Flurry X-cross / Heavy Overhead Cleave filled anime crescent arcs!
         const slashCount = h.count || 1;
+        // 2026-11-27 blind review: the arc is whole on the contact frame (no fade-in), solid (normal
+        // blend, so it reads over the impact frame) and always swings downward on either side.
+        const down = Math.cos(h.angle) >= 0 ? 1 : -1;
         for (let i = 0; i < slashCount; i++) {
-          const subT = clamp((h.age - i * 0.055) / Math.max(0.12, h.life - i * 0.055), 0, 1);
-          if (subT <= 0 || subT >= 1) continue;
-          const subFade = subT < 0.22 ? subT / 0.22 : clamp(1 - (subT - 0.22) / 0.78, 0, 1);
-          const sweepA = h.angle + (i % 2 === 0 ? 1 : -1) * (slashCount > 1 ? 0.58 : 0.12) + (subT - 0.5) * 0.45;
+          const subT = (h.age - i * 0.055) / Math.max(0.12, h.life - i * 0.055);
+          if (subT < 0 || subT >= 1) continue;
+          const subFade = subT < 0.25 ? 1 : clamp(1 - (subT - 0.25) / 0.75, 0, 1);
+          const sweepA = h.angle + (i % 2 === 0 ? 1 : -1) * (slashCount > 1 ? 0.58 : 0.12) + (subT - 0.3) * 0.45 * down;
           const rr = (38 + subT * 26) * h.scale * (i === slashCount - 1 ? 1.15 : 0.95);
-          drawFilledCrescent(gAdd, h.x + Math.cos(h.angle) * 14, h.y + Math.sin(h.angle) * 10, rr, sweepA, 1.28, (16 + (h.style === "heavy" ? 6 : 0)) * h.scale * subFade, h.mainHex, 0xffffff, subFade);
+          drawFilledCrescent(slashCount > 1 ? gAdd : gMain, h.x + Math.cos(h.angle) * 14, h.y + Math.sin(h.angle) * 10, rr, sweepA, 1.28, (16 + (h.style === "heavy" ? 6 : 0)) * h.scale * subFade, h.mainHex, 0xffffff, subFade);
         }
       }
       return;
@@ -932,7 +943,11 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
           const cy = h.y + 4 + Math.sin(a) * curR * radMul * 0.58 - (1 - t) * 8;
           const szMul = 0.78 + 0.44 * Math.abs(Math.cos(h.seed + i * 3.1));
           const pr = clamp(h.radius * 0.06, 4, 8) * szMul * (1.15 - t * 0.52);
-          drawPixelPuff(topGfx, cx, cy, pr, col.r, col.g, col.b, 0.94 * fade);
+          // 2026-11-27 blind review ("orange-bead debris"): the rim is a burst of outward tongues, not a ring of balls.
+          const len = pr * (2.2 + 1.4 * (1 - t));
+          const ux = Math.cos(a), uy = Math.sin(a) * 0.58, wx = -Math.sin(a) * pr * 0.55, wy = Math.cos(a) * pr * 0.32;
+          topGfx.poly([cx - ux * len * 0.35 + wx, cy - uy * len * 0.35 + wy, cx + ux * len, cy + uy * len, cx - ux * len * 0.35 - wx, cy - uy * len * 0.35 - wy])
+            .fill({ color: col.hex, alpha: 0.94 * fade });
         }
       }
       if (topAddGfx && t < 0.48) {
@@ -1105,6 +1120,15 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
     if (pk === "fire" || pk === "blueFire" || pk === "dragon") {
       // Multi-layered blazing fireball with fluttering flame tail & white-hot core!
       const c = Math.cos(s.angle), sn = Math.sin(s.angle);
+      // A tapering flame tail behind the ball (2026-11-27 blind review: "an odd chain of beads").
+      const flick = 0.85 + 0.15 * Math.sin(s.age * 40 + s.seed);
+      const tail = s.radius * 3.4 * flick, wBase = s.radius * 1.05;
+      const tx = x - c * tail, ty = y - sn * tail, px = -sn * wBase, py = c * wBase;
+      topGfx.poly([x + px, y + py, tx + px * 0.12, ty + py * 0.12, tx - px * 0.12, ty - py * 0.12, x - px, y - py]).fill({ color: col.hex, alpha: 0.82 });
+      if (topAddGfx) {
+        const t2 = tail * 0.6, hx = x - c * t2, hy = y - sn * t2;
+        topAddGfx.poly([x + px * 0.55, y + py * 0.55, hx, hy, x - px * 0.55, y - py * 0.55]).fill({ color: colHot.hex, alpha: 0.7 });
+      }
       drawPixelPuff(topGfx, x - c * s.radius * 0.95, y - sn * s.radius * 0.95, s.radius * 0.92, col.r, col.g, col.b, 0.88);
       drawPixelPuff(topGfx, x, y, s.radius * 1.25, col.r, col.g, col.b, 0.98);
       drawPixelBall(topAddGfx ?? topGfx, x + c * s.radius * 0.15, y + sn * s.radius * 0.15, s.radius * 0.62, 0xffffff, 0.96);
@@ -1374,9 +1398,19 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       const pk = normalizePalKey(spec.paletteKey);
       const isStream = Boolean(pb?.hitFeel?.stream);
       const isHeavy = heavy || Boolean(pb?.hitFeel?.impact) || (pb?.hitFeel?.hitstop ?? 0) >= 12;
-      const crisp = cellsOwnBurst(moveId) || Boolean(spec.melee);
+      const own = cellsOwnBurst(moveId);
+      const crisp = own || Boolean(spec.melee);
       playPendingUlt(moveId, x, groundY);
-      emitElementBurst({ x, y, palKey: fxKey || pk, scale: isStream ? 0.85 : isHeavy ? 1.42 : 1.05, angle, heavy: isHeavy && !isStream, crisp });
+      emitElementBurst({ x, y, palKey: fxKey || pk, scale: isStream ? 0.85 : isHeavy ? 1.42 : 1.05, angle, heavy: isHeavy && !isStream, crisp, own });
+      if (spec.v2Archetype === "GUARD_BREAK_SLAM" && !reducedMotion) {
+        // The guard shatters: angular white and element shards burst off the struck side and fall.
+        for (let i = 0; i < 8; i++) {
+          const a = angle + (rand() - 0.5) * 2.2;
+          const spd = 170 + rand() * 150;
+          spawnP({ shape: "shard", x, y, vx: Math.cos(a) * spd, vy: Math.sin(a) * spd * 0.7 - 40, vz: 110 + rand() * 90, gravity: 420,
+            drag: 0.92, size: 6 + rand() * 4, size1: 2, rot: a, vrot: (rand() - 0.5) * 14, pal: i % 2 ? pk : "white", add: i % 2 === 1, life: 0.34 + rand() * 0.12 });
+        }
+      }
       if ((spec.melee || pb?.vfx?.shapes?.includes("crescent")) && !isStream && !cellsOwnBurst(moveId)) {
         emitCrescentSlash({ x, y, angle, palKey: pk, scale: isHeavy ? 1.32 : 1.0, count: 1, style: isHeavy ? "heavy" : "cleave" });
       }
@@ -1394,7 +1428,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       const crisp = cellsOwnBurst(moveId);
       playPendingUlt(moveId, x, y);
       if (!crisp) spawnHeroShockwave({ x, y: y + 6, radius, palKey: pk, spiresCount: pk === "earth" || pk === "ice" || pk === "metal" ? 6 : 4 });
-      emitElementBurst({ x, y, palKey: pk, scale: sc, angle: 0, heavy: true, crisp });
+      emitElementBurst({ x, y, palKey: pk, scale: sc, angle: 0, heavy: true, crisp, own: crisp });
       addDecal({ x, y: y + 8, kind: pk === "earth" ? "crack" : pk === "ice" ? "frost" : "scorch", radius: Math.min(60, radius * 0.48), pal: pk });
       stats.hits++;
       return true;
@@ -1802,7 +1836,8 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
         const emitInterval = s.arch === "DRAG_WAVE" ? 0.022 : 0.028;
         if (!reducedMotion && s.trailAcc >= emitInterval) {
           s.trailAcc = 0;
-          const trailShape = (s.palKey === "fire" || s.palKey === "water" || s.palKey === "moon" || s.arch === "DRAG_WAVE") ? "pxpuff"
+          const trailShape = (s.palKey === "fire" || s.palKey === "blueFire" || s.palKey === "dragon") && s.arch !== "DRAG_WAVE" ? "streak"
+            : (s.palKey === "water" || s.palKey === "moon" || s.arch === "DRAG_WAVE") ? "pxpuff"
             : (s.palKey === "ice" || s.palKey === "metal") ? "shard"
             : s.palKey === "wood" ? "rose"
             : s.palKey === "sun" ? "star"

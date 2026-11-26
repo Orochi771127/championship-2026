@@ -1404,7 +1404,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     caster.facing = Math.cos(angle) >= 0 ? 1 : -1;
     if (relayMode) {
       caster.facing8 = relayFacing8(angle);
-      caster.action = { id: caster.cast.actionId, moveId, startedAt: state.time, releasedAt: null, windup: move.windup, recovery: move.recovery, angle };
+      caster.action = { id: caster.cast.actionId, moveId, startedAt: state.time, releasedAt: null, windup: move.windup, recovery: move.recovery, angle, ultimate: Boolean(ultimate) };
     }
     if (caster === player) { state.stats.movesCast++; if (ultimate) state.stats.ultimates++; }
     const telegraph = { owner: `cast:${caster.id}`, team: caster.team, moveId, duration: Math.max(0.12, move.windup ?? 0), follow: null };
@@ -2190,7 +2190,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         // RELAY: a dash that connects stops at arm's reach instead of running into the body
         // (2026-11-26 blind review: "the caster ends clipped inside the target").
         if (relayMode && !lunge.rebound && !target.lunge) {
-          const reach = (target.radius ?? 20) + (caster.radius ?? 18) * 0.9, gap = distance(target.x, target.y, caster.x, caster.y);
+          // Drawn bodies are wider than their hit circles: stand a body-width off (2026-11-27 review: sprites overlapped).
+          const reach = ((target.radius ?? 20) + (caster.radius ?? 18)) * 1.45, gap = distance(target.x, target.y, caster.x, caster.y);
           if (gap < reach && gap > 0.01) { caster.x = target.x - (target.x - caster.x) / gap * reach; caster.y = target.y - (target.y - caster.y) / gap * reach; }
           lunge.left = 0;
         }

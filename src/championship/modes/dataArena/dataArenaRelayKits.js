@@ -67,7 +67,7 @@ export const RELAY_STYLE_RULES = Object.freeze({
   beam: { type: 'BOLT', energy: 24, cooldown: 2, windup: 0.3, range: 800, speed: 1200, radius: 12, damage: 30, pierce: 2 },
   // ORIGINAL_MOVES_ARENA_20261126: a thrown weapon (fist, spear, knife, drill) flies at the foe;
   // a bomb is lobbed onto the aim point and goes off there (missile / flame numbers).
-  throw: { type: 'BOLT', energy: 20, cooldown: 1.6, windup: 0.24, range: 560, speed: 760, radius: 13, damage: 26, knockback: 170 },
+  throw: { type: 'BOLT', energy: 20, cooldown: 1.6, windup: 0.24, range: 560, speed: 760, radius: 13, damage: 26, knockback: 240 },
   lob: { type: 'ZONE', energy: 26, cooldown: 5, windup: 0.24, range: 520, radius: 110, delay: 0.75, damage: 32, effect: 'NONE' }
 });
 

@@ -226,7 +226,7 @@ export function relayMove(id, ultimate = false) {
     damage: shape.type === 'BARRIER' ? undefined : Math.round(['SPREAD', 'LANCE'].includes(shape.type) ? Math.min(lent.damage, lent.damage * 1.5 / Math.max(1, shape.count ?? 1)) : lent.damage),
     ...(['ZONE', 'NOVA'].includes(shape.type) ? { radius: Math.round(Math.max(shape.radius ?? 0, lent.radius ?? 0, (shape.radius ?? 100) * 1.3)) } : {}),
     // An ultimate always knocks the target back (PB: a finisher sends the body sliding).
-    knockback: shape.type === 'BARRIER' ? undefined : Math.max(shape.knockback ?? 0, lent.knockback ?? 0, 220) } : null;
+    knockback: shape.type === 'BARRIER' ? undefined : Math.max(shape.knockback ?? 0, lent.knockback ?? 0, 300) } : null;
   const base = ownUltimate ?? basics[id] ?? extraMoves[id] ?? DATA_ARENA_MOVES[id] ?? relayOwnMove(id);
   if (!base) return null;
   return { ...base, ...(id==='iceCage'?{freezeWater:true}:{}), windup: Math.max(base.windup ?? 0, 0.14),
