@@ -3,9 +3,9 @@
   "map": "hm08",
   "qaApproved": false,
   "glb": {
-    "file": "hm08-terrain-ee412126d0e2.glb",
-    "sha256": "ee412126d0e22f9986b9ac22e19b5bb8b203bc81a63862de9315dfa46440b328",
-    "bytes": 425920,
+    "file": "hm08-terrain-274412c65ce2.glb",
+    "sha256": "274412c65ce26f82b8d5f31501a0cd69a6f8349d750ee3389192d8a869dd18d9",
+    "bytes": 636904,
     "materials": 0,
     "textures": 0,
     "compression": {
@@ -16,22 +16,22 @@
         "node": "hm08-foreground_structure",
         "category": "foreground_structure",
         "primitives": 1,
-        "triangles": 37099,
-        "vertices": 19516
+        "triangles": 60867,
+        "vertices": 32104
       },
       {
         "node": "hm08-foreground_vegetation",
         "category": "foreground_vegetation",
         "primitives": 1,
-        "triangles": 55248,
-        "vertices": 30732
+        "triangles": 88069,
+        "vertices": 49322
       },
       {
         "node": "hm08-standable_ground",
         "category": "standable_ground",
         "primitives": 1,
-        "triangles": 61177,
-        "vertices": 30973
+        "triangles": 82117,
+        "vertices": 41617
       }
     ]
   },
@@ -41,15 +41,15 @@
       "clearColor": "#b5855f",
       "frames": [
         {
-          "file": "field_hm08_01-frame-00-rgb-2d0d3d566367.webp",
-          "sha256": "2d0d3d566367511002dfa8b06e7e7c8c230ea2a28a3043ace1b1025d708d68b9",
-          "bytes": 295848,
-          "width": 2048,
-          "height": 2048,
+          "file": "field_hm08_01-frame-00-rgb-2ce36932c5ce.webp",
+          "sha256": "2ce36932c5ce62bc2ebd450d47e3fa9d0c08c8ca71a8f0f90b37b4112688b3eb",
+          "bytes": 507920,
+          "width": 2880,
+          "height": 2880,
           "mask": {
-            "file": "hm08-mask-5c54be079e8c.webp",
-            "sha256": "5c54be079e8c974deee8ebba85b993081ec8746e244f66443640a883c85fa3cd",
-            "bytes": 25512
+            "file": "hm08-mask-cb3535898146.webp",
+            "sha256": "cb35358981463d9656ddef80adb58ed5d5aaf352a2dbf1144f29965f36e857e2",
+            "bytes": 48170
           }
         }
       ]
@@ -59,15 +59,15 @@
       "clearColor": "#474651",
       "frames": [
         {
-          "file": "field_hm08_02-frame-00-rgb-83e53343c192.webp",
-          "sha256": "83e53343c1922df106f29749fc1cb5327c15ff8164a187ab8b8b29306c221656",
-          "bytes": 204322,
-          "width": 2048,
-          "height": 2048,
+          "file": "field_hm08_02-frame-00-rgb-23c7402fb0e1.webp",
+          "sha256": "23c7402fb0e1915228322aabac636401e63344b0a3a3398b8d02e2dd7fd50f62",
+          "bytes": 327814,
+          "width": 2880,
+          "height": 2880,
           "mask": {
-            "file": "hm08-mask-5c54be079e8c.webp",
-            "sha256": "5c54be079e8c974deee8ebba85b993081ec8746e244f66443640a883c85fa3cd",
-            "bytes": 25512
+            "file": "hm08-mask-cb3535898146.webp",
+            "sha256": "cb35358981463d9656ddef80adb58ed5d5aaf352a2dbf1144f29965f36e857e2",
+            "bytes": 48170
           }
         }
       ]
@@ -80,14 +80,14 @@
     "nativePxPerUnit": 16,
     "worldPxPerNativePx": 2,
     "nativeSize": [
-      1024,
-      1024
+      1440,
+      1440
     ],
     "worldSize": [
-      2048,
-      2048
+      2880,
+      2880
     ],
-    "orthoScaleUnits": 64.0,
+    "orthoScaleUnits": 90.0,
     "cameraForwardGltf": [
       -0.43533849716186523,
       -0.7880106568336487,
@@ -107,7 +107,7 @@
   },
   "groundHeights": {
     "file": "hm08-ground-heights.json",
-    "sha256": "fb1b4e507cadb604ab7757233e3a568c02ffa2c8c1156c086271f8545e89c108",
-    "bytes": 92046
+    "sha256": "d27521db2d871d8d6c96d3283ca65a5a6ee651246f90ad1588a71d8a80286f07",
+    "bytes": 180755
   }
 }

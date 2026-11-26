@@ -1046,7 +1046,7 @@ async function loadOptionalHuntFieldArt(stage, { signal = null, onProgress = nul
     let manifest = null;
     let field = null;
     const authoredFallback = huntThreeProductionRequest(globalThis.location,wanted)?.key;
-    const authoredUrls = authoredFallback && !['hm01','hm08'].includes(authoredFallback) ? [publicMapManifestPath('hunt-three-fallback')] : [];
+    const authoredUrls = authoredFallback && authoredFallback !== 'hm01' ? [publicMapManifestPath('hunt-three-fallback')] : [];
     for (const url of [...authoredUrls, ...(["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname) ? [HUNT_EXPANSION_REVIEW_MANIFEST_URL, HUNT_FACTORY_REVIEW_MANIFEST_URL, HUNT_DAY_NIGHT_REVIEW_MANIFEST_URL, HUNT_DAY_REVIEW_MANIFEST_URL, finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex), ORIGINAL_HUNT_ART_MANIFEST_URL, LICENSED_HUNT_ART_MANIFEST_URL].filter(Boolean) : (isApprovedOriginalPublicLocation()?[HUNT_EXPANSION_REVIEW_MANIFEST_URL,finalHuntArtManifestUrl(wanted, app.getHuntRuntime()?.world.nativeHuntIndex)].filter(Boolean):[LICENSED_HUNT_ART_MANIFEST_URL]).filter(Boolean))]) {
       const response = await fetchRuntimeMapResponse(url, globalThis.location.href, { signal });
       if (!response.ok) {

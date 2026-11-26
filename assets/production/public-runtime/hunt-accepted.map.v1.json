@@ -3,7 +3,7 @@
   "kind": "MAP_ART_RENDER_V1",
   "assetId": "art:hunt:final-intake:20261008",
   "family": "HUNT",
-  "fieldCount": 3,
+  "fieldCount": 1,
   "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
   "filter": "nearest",
   "fields": [
@@ -56,84 +56,6 @@
           "sha256": "0b015c6dfbeb1eedb5e32bedc381835ba154bbe2786423d6a088563ac8accec0"
         },
         "pieceCount": 2288,
-        "bandNativePx": 8
-      }
-    },
-    {
-      "fieldId": "field_hm08_01",
-      "worldWidthPx": 2048,
-      "worldHeightPx": 2048,
-      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
-      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
-      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "frames": [
-        {
-          "src": "assets/production/hunt/accepted-web-20261029/images/fb06b57e6e2aaa008b5b39b5b08cf01fc298f43cc4abb2e1b6059acd90e44670.webp",
-          "sha256": "fb06b57e6e2aaa008b5b39b5b08cf01fc298f43cc4abb2e1b6059acd90e44670",
-          "durationMs": null
-        }
-      ],
-      "depthOccluders": {
-        "atlases": [
-          {
-            "src": "assets/production/hunt/accepted-web-20261029/images/46d4d9f243625c09c2aa9e1d8397ed4cc83a3bf4cecb04d68f4ce3056cf0c252.webp",
-            "sha256": "46d4d9f243625c09c2aa9e1d8397ed4cc83a3bf4cecb04d68f4ce3056cf0c252"
-          }
-        ],
-        "animationFrames": [
-          {
-            "atlases": [
-              {
-                "src": "assets/production/hunt/accepted-web-20261029/images/46d4d9f243625c09c2aa9e1d8397ed4cc83a3bf4cecb04d68f4ce3056cf0c252.webp",
-                "sha256": "46d4d9f243625c09c2aa9e1d8397ed4cc83a3bf4cecb04d68f4ce3056cf0c252"
-              }
-            ]
-          }
-        ],
-        "pieces": {
-          "src": "assets/production/public-runtime/metadata/hunt-pieces-e9c1f41b8af50c56.v1.json",
-          "sha256": "ddc990e84ccb5b39987e8731c6d75738d1d786b38ce7dd0b764c808e2797b354"
-        },
-        "pieceCount": 2379,
-        "bandNativePx": 8
-      }
-    },
-    {
-      "fieldId": "field_hm08_02",
-      "worldWidthPx": 2048,
-      "worldHeightPx": 2048,
-      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
-      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
-      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
-      "frames": [
-        {
-          "src": "assets/production/hunt/accepted-web-20261029/images/212ecb64cee1aa5e98b2be7dc729bd5e36c225c32ce7e89447aceb1da8c17fc7.webp",
-          "sha256": "212ecb64cee1aa5e98b2be7dc729bd5e36c225c32ce7e89447aceb1da8c17fc7",
-          "durationMs": null
-        }
-      ],
-      "depthOccluders": {
-        "atlases": [
-          {
-            "src": "assets/production/hunt/accepted-web-20261029/images/5a3c8ad358c039de06cdc4e80eb6f34b8c695d6316c7cc8455167131c6fa5812.webp",
-            "sha256": "5a3c8ad358c039de06cdc4e80eb6f34b8c695d6316c7cc8455167131c6fa5812"
-          }
-        ],
-        "animationFrames": [
-          {
-            "atlases": [
-              {
-                "src": "assets/production/hunt/accepted-web-20261029/images/5a3c8ad358c039de06cdc4e80eb6f34b8c695d6316c7cc8455167131c6fa5812.webp",
-                "sha256": "5a3c8ad358c039de06cdc4e80eb6f34b8c695d6316c7cc8455167131c6fa5812"
-              }
-            ]
-          }
-        ],
-        "pieces": {
-          "src": "assets/production/public-runtime/metadata/hunt-pieces-2fa4c9e40e160995.v1.json",
-          "sha256": "ddc990e84ccb5b39987e8731c6d75738d1d786b38ce7dd0b764c808e2797b354"
-        },
-        "pieceCount": 2379,
         "bandNativePx": 8
       }
     }

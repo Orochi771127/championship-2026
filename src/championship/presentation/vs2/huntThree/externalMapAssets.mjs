@@ -16,7 +16,8 @@ export function validateExternalManifest(manifest,fieldId){
     ||!manifest.fields?.[fieldId]||!new RegExp(`^field_${manifest.map}_0[12]$`).test(fieldId))
     throw new Error('HUNT_THREE_FIELD_MANIFEST_MISMATCH');
   createMapProjection(manifest.projection);
-  const size=manifest.map==='hm01'?2880:2048,phases=manifest.map==='hm01'?2:1;
+  // Both baked maps are 2880 (hm01 since 2026-10-21, hm08 since 2026-11-26).
+  const size=2880,phases=manifest.map==='hm01'?2:1;
   if(manifest.projection.worldSize.some(n=>n!==size)||Object.keys(manifest.fields).sort().join(',')!==`field_${manifest.map}_01,field_${manifest.map}_02`)
     throw new Error('HUNT_THREE_WORLD_SIZE_MISMATCH');
   validateIdentity(manifest.glb);validateIdentity(manifest.groundHeights);

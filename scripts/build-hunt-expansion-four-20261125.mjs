@@ -1,5 +1,5 @@
 // Owner 2026-11-25 「我每一張地圖其實都要擴大」: hm10, hm11, hm13 and hm14 grow to 180x180
-// like the other eleven maps. Also repairs the old-edge escape cells that hm15-hm18 kept.
+// like the other eleven maps; hm08 follows on 2026-11-26 from an original design. Also repairs the old-edge escape cells that hm15-hm18 kept.
 //
 // node scripts/build-hunt-expansion-four-20261125.mjs <hunt-runtime-handoff-20261023 dir> [--check]
 //
@@ -115,6 +115,24 @@ function blockProps(g, fieldId) {
   return tiles.length;
 }
 
+/**
+ * hm08 南橋峽谷 (2026-11-26): no delivered candidate exists, so the appended tiles come from the
+ * original design in scripts/data/hunt-hm08-extension-grid-20261126.txt ('0' open sand, '1' mesa,
+ * '2' ground obstacle -> blocked); the core keeps its own terrain and steering cells.
+ */
+function hm08Candidate() {
+  const rows = fs.readFileSync('scripts/data/hunt-hm08-extension-grid-20261126.txt', 'utf8').split(/\r?\n/);
+  const core = rawOriginal('field_hm08_01');
+  const g = { width: 180, height: 180, terrain: [], cells: [] };
+  for (let y = 0; y < 180; y++) for (let x = 0; x < 180; x++) {
+    if (x < 128 && y < 128) { g.terrain.push(core.terrain[y * 128 + x]); g.cells.push(core.cells[y * 128 + x]); continue; }
+    const c = rows[y][x];
+    if (!'012'.includes(c)) throw Error(`HM08_GRID_BAD ${x},${y}`);
+    g.terrain.push(c === '0' ? 0 : 1); g.cells.push(JSON.parse(NEUTRAL));
+  }
+  return g;
+}
+
 // Self-check: the cave rule reproduces hm09's delivered caves.
 {
   const hm09 = decode(catalog.environments.field_hm09_01);
@@ -143,6 +161,16 @@ for (const [fieldId, rel] of Object.entries(CANDIDATES)) {
     next[night] = encode(nightFrom(g, fieldId, night), caveGroups ? { caveGroups } : {});
     report[night] = { source: `night rule from ${fieldId}`, caves: caveGroups?.[0]?.caves.length ?? 0 };
   }
+}
+{
+  const fieldId = 'field_hm08_01', g = hm08Candidate();
+  const converted = convertOldEdge(g);
+  const found = caves(g, 'hm08-cave');
+  const caveGroups = found.length ? [{ id: 'hm08-original-caves', caves: found }] : undefined;
+  next[fieldId] = encode(g, caveGroups ? { caveGroups } : {});
+  next.field_hm08_02 = encode(nightFrom(g, fieldId, 'field_hm08_02'), caveGroups ? { caveGroups } : {});
+  report[fieldId] = { source: 'scripts/data/hunt-hm08-extension-grid-20261126.txt (original design)', converted, caves: found.length };
+  report.field_hm08_02 = { source: 'night rule from field_hm08_01', caves: found.length };
 }
 for (const fieldId of ['field_hm15_01', 'field_hm15_02', 'field_hm16_01', 'field_hm16_02', 'field_hm17_01', 'field_hm17_02', 'field_hm18_01', 'field_hm18_02']) {
   const data = catalog.environments[fieldId], g = decode(data);
