@@ -1289,31 +1289,35 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if (reducedMotion || !(amount >= 1)) return;
     // PB-Rank 8-System Hit-Feel Director: read exact per-move PB-324 hitFeel when available!
     const pbFeel = moveId ? elementFx?.look?.(moveId)?.pb324?.hitFeel ?? null : null;
-    const pbStop = pbFeel ? Math.min(0.16, pbFeel.hitstop / 60) : 0;
+    // PB timing, measured on its own previews 2026-11-26: a finisher holds ~0.2-0.4 s with the
+    // whole field stopped (see getTimeScale), so a pool move's own hitstop is no longer cut at 0.16 s.
+    const pbStop = pbFeel ? Math.min(0.37, pbFeel.hitstop / 60) : 0;
     const pbShake = pbFeel ? Math.min(0.65, pbFeel.shake * 0.36) : 0;
     const pbPunch = pbFeel ? (1 + Math.min(0.08, pbFeel.punch * 0.22)) : 1;
-    // PbRank 4-tier Hit-Stop: Light 0ms / Medium 55ms / Heavy 65ms / Ultimate・Break・Parry 105ms
+    // Hit-stop tiers (whole field frozen): light 60 ms / medium 120 / heavy 200 / ultimate-size or critical 300.
+    const finisher = amount >= 60 && !guarded;
     const heavy = (amount >= 28 || Boolean(pbFeel?.impact)) && !guarded;
     const medium = amount >= 16 && !guarded;
     const light = amount >= 6 && !guarded;
-    if (critical) {
-      hitStop = Math.max(hitStop, Math.max(0.105, pbStop));
+    if (critical || finisher) {
+      hitStop = Math.max(hitStop, Math.max(0.3, pbStop));
       camera.addTrauma(Math.max(0.5, pbShake));
       camera.focusBoost(Math.max(1.055, pbPunch), 0.2);
-      if (relayMode && wx !== null && wy !== null) triggerImpactFrame(wx, wy, 0.068);
+      if (relayMode && wx !== null && wy !== null) triggerImpactFrame(wx, wy, 0.1);
       fightingHitSparks(wx, wy, angle, 8, true);
     } else if (heavy) {
-      hitStop = Math.max(hitStop, Math.max(relayMode ? 0.065 : 0.085, pbStop));
+      hitStop = Math.max(hitStop, Math.max(0.2, pbStop));
       camera.addTrauma(Math.max(0.42, pbShake));
       camera.focusBoost(Math.max(1.045, pbPunch), 0.16);
       if (relayMode && wx !== null && wy !== null) triggerImpactFrame(wx, wy, pbFeel?.impact ? 0.075 : 0.055);
       fightingHitSparks(wx, wy, angle, 7, true);
     } else if (medium) {
-      hitStop = Math.max(hitStop, Math.max(0.055, pbStop));
+      hitStop = Math.max(hitStop, Math.max(0.12, pbStop));
       camera.addTrauma(Math.max(0.26, pbShake));
       camera.focusBoost(Math.max(1.024, pbPunch), 0.12);
       fightingHitSparks(wx, wy, angle, 5, false);
     } else if (light) {
+      hitStop = Math.max(hitStop, Math.max(0.06, Math.min(pbStop, 0.1)));
       camera.addTrauma(Math.max(0.14, pbShake * 0.6));
       fightingHitSparks(wx, wy, angle, 3, false);
     }
@@ -1986,7 +1990,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const weatherGfx = new PIXI.Graphics();
   weatherGfx.label = "arena weather overlay";
   weatherGfx.visible = false;
-  screen.addChild(weatherGfx, impactGfx);
+  screen.addChild(weatherGfx);
+  // The impact frame lies over the floor and under the fighters (PB timing 2026-11-26): the
+  // struck body flashes white on top of the ink-and-ray frame instead of vanishing under it.
+  world.addChildAt(impactGfx, world.getChildIndex(objects));
   function drawWeatherOverlay(viewport) {
     const kind = relayMode ? state.weather?.kind : null;
     if (!kind) { weatherGfx.visible = false; return; }
@@ -2105,6 +2112,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     if (impactFlashTimer <= 0 || reducedMotion || !rich) { impactGfx.visible = false; return; }
     impactGfx.visible = true;
     impactGfx.clear();
+    // Drawn in screen pixels from inside the world: undo the camera transform.
+    const zoom = view?.zoom || 1;
+    impactGfx.scale.set(1 / zoom); impactGfx.position.set(-(view?.x ?? 0) / zoom, -(view?.y ?? 0) / zoom);
     const t = clamp(impactFlashTimer / Math.max(0.01, impactFlashMax), 0, 1);
     const fx = impactFocus ? worldToScreen(impactFocus.x, impactFocus.y) : { x: viewport.width * 0.5, y: viewport.height * 0.5 };
     // PB-Rank 46-Wedge High-Contrast Anime Impact Frame: alternating ink (#0d0c12) & off-white (#f6f1e6) strobe!
@@ -2931,7 +2941,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     setShake(enabled) { camera.setShake(enabled); },
     setAimGuide(guide) { aimGuide = guide; },
     setSpectator(enabled) { spectatorCamera = Boolean(enabled); },
-    getTimeScale() { return koSlowMo > 0 ? koSlowMoScale : 1; },
+    // Hit-stop stops the whole field (PB timing): the simulation waits while the struck body
+    // flashes and the hit effects keep playing on the real clock.
+    getTimeScale() { return hitStop > 0 && relayMode && !reducedMotion ? 0 : koSlowMo > 0 ? koSlowMoScale : 1; },
     getDiagnostics() {
       const sorted = [...fpsWindow].sort((a, b) => a - b);
       return {

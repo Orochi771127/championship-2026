@@ -1576,7 +1576,7 @@ test("phase 15 / Combat Wave 4: STREAM_BEAM mouth/hand energy conduit in PixelFX
 
   // 2) Dramatic KO slow-mo finisher & time-scale integration
   assert.ok(sceneSrc.includes("koSlowMo = Math.max(koSlowMo, isFinalKo ? 0.44 : 0.22)"), "RIVAL_KO triggers dramatic slow-motion finisher");
-  assert.ok(sceneSrc.includes("getTimeScale() { return koSlowMo > 0 ? koSlowMoScale : 1; }"), "scene exposes getTimeScale() for ticker slow-mo");
+  assert.ok(sceneSrc.includes("getTimeScale() { return hitStop > 0 && relayMode && !reducedMotion ? 0 : koSlowMo > 0 ? koSlowMoScale : 1; }"), "scene exposes getTimeScale(): whole-field hit-stop, then ticker slow-mo");
   assert.ok(screenSrc.includes("const timeScale = scene.getTimeScale?.() ?? 1;"), "dataArenaScreen applies scene timeScale during PLAY");
 
   // 3) Live-QA CSS fixes: narrow portrait wide preset + landscape leftHand specificity override

@@ -470,7 +470,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
         spawnP({
           shape: "pxpuff", x: x + Math.cos(a) * 6, y: y + Math.sin(a) * 4,
           vx: Math.cos(a) * spd, vy: Math.sin(a) * spd * 0.72 - 18,
-          drag: 0.86, size: (heavy ? 12 : 8.5) * scale, size1: (heavy ? 20 : 14) * scale,
+          drag: 0.86, size: (heavy ? 7 : 5) * scale, size1: (heavy ? 11 : 8) * scale,
           stops, add: false, alphaMul: 0.94, life: 0.26 + rand() * 0.16
         });
       }
@@ -594,6 +594,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       x, y, radius: r, palKey: pk, stops: paletteStops(pk),
       life: 0.44
     });
+    emitElementBurst({ x, y: y - 12, palKey: pk, scale: 1.2, angle: 0, heavy: true, crisp: true });
     const spCount = quality === "low" ? Math.ceil(spiresCount * 0.6) : spiresCount;
     for (let i = 0; i < spCount; i++) {
       const a = (i / Math.max(1, spCount)) * TAU + rand() * 0.4;
@@ -901,7 +902,8 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
         for (let c = 0; c < 5; c++) {
           const ca = (c / 5) * TAU + h.seed * 1.7;
           const cd = curR * (0.26 + 0.16 * Math.sin(h.seed + c * 3.3));
-          const pr = clamp(h.radius * 0.24, 15, 28) * (1.15 - t * 0.52);
+          // 2026-11-26 PB scale: a blast reads as fine dust and sparks around the body, never a pile of balls over it.
+          const pr = clamp(h.radius * 0.07, 5, 9) * (1.15 - t * 0.52);
           drawPixelPuff(topGfx, h.x + Math.cos(ca) * cd, h.y + Math.sin(ca) * cd * 0.56 - t * 14, pr, colHot.r, colHot.g, colHot.b, 0.92 * fade);
         }
         // Irregular overlapping outer smoke/flame/frost/earth cloud ring
@@ -911,7 +913,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
           const cx = h.x + Math.cos(a) * curR * radMul;
           const cy = h.y + 4 + Math.sin(a) * curR * radMul * 0.58 - (1 - t) * 8;
           const szMul = 0.78 + 0.44 * Math.abs(Math.cos(h.seed + i * 3.1));
-          const pr = clamp(h.radius * 0.20, 13, 25) * szMul * (1.15 - t * 0.52);
+          const pr = clamp(h.radius * 0.06, 4, 8) * szMul * (1.15 - t * 0.52);
           drawPixelPuff(topGfx, cx, cy, pr, col.r, col.g, col.b, 0.94 * fade);
         }
       }
