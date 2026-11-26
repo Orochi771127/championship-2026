@@ -358,7 +358,8 @@ export function loadBragCardImage(src, { doc = globalThis.document, timeoutMs = 
 export async function loadBragCardPartnerFrame(species, { loadImage = src => loadBragCardImage(src), baseUrl = globalThis.location?.href } = {}) {
   try {
     if (!showcaseMotionAvailable(species, baseUrl)) return null;
-    const motion = await loadShowcaseMotionShared(species, { baseUrl });
+    // Owner 2026-11-26: the brag card keeps the high-detail set (detail).
+    const motion = await loadShowcaseMotionShared(species, { baseUrl, detail: true });
     const frames = motion.sequences.get(33) ?? motion.sequences.get(0) ?? null, frame = frames?.[0];
     if (!frame) return null;
     const loaded = await loadImage(frame.url);

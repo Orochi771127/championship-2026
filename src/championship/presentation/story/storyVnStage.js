@@ -50,7 +50,8 @@ export function loadStoryVnMotion(speciesIndex, { href = globalThis.location?.hr
   if (!speciesId || !showcaseMotionAvailable(speciesId, href)) return Promise.reject(new Error("STORY_VN_MOTION_UNAVAILABLE"));
   let entry = motionCache.get(speciesId);
   if (!entry) {
-    entry = loadShowcaseMotion(speciesId, { baseUrl: href, sequences: Object.values(STORY_VN_SEQUENCES), ...(fetchImpl ? { fetchImpl } : {}) });
+    // Owner 2026-11-26: story stage actors keep the high-detail set (detail).
+    entry = loadShowcaseMotion(speciesId, { baseUrl: href, sequences: Object.values(STORY_VN_SEQUENCES), detail: true, ...(fetchImpl ? { fetchImpl } : {}) });
     entry.catch(() => { if (motionCache.get(speciesId) === entry) motionCache.delete(speciesId); });
     motionCache.set(speciesId, entry);
     while (motionCache.size > 18) motionCache.delete(motionCache.keys().next().value);

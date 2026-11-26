@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import {reviewedNumericClip,reviewedArenaKoClip,createReviewedArenaPlayback} from '../src/championship/presentation/reviewedCharacterAnimation.js';
+import {reviewedNumericClip,reviewedArenaKoClip,createReviewedArenaPlayback,reviewedArenaClip} from '../src/championship/presentation/reviewedCharacterAnimation.js';
 const root=path.resolve(import.meta.dirname,'..');
 const json=rel=>JSON.parse(fs.readFileSync(path.join(root,rel),'utf8'));
 const selection=json('src/data/championship/reviewed-animation-selection.v1.json');
@@ -111,7 +111,18 @@ test('four-slot weak cycles keep the native 74-tick cycle and stay within the 2x
 });
 
 test('the eight playable originals hold their own static Arena KO frame when knocked out',()=>{
- for(const code of ['GR39','GR40','GR41','MA65','MA66','MA67','MA68','MA69']){
+ // GR39-41 play the chibi-pixel set since 2026-11-26: it carries its own drawn faint, so KO plays that and holds its
+ // last drawing (KO_SOURCE_HOLD); the static KO frame of their high-detail sets stays in the kept detail manifests.
+ for(const code of ['GR39','GR40','GR41']){
+  const doc=manifest(selection.characters.find(c=>c.displayCode===code)),faint=reviewedArenaClip(doc,'faint','R');
+  assert.equal(doc.arenaSourcePlayback.faint,true,code);assert.ok(faint&&faint.loop===false,code+' has a drawn faint');
+  const pb=createReviewedArenaPlayback(doc,{nativeFallback:false});
+  pb.sample({time:0,hp:100,vx:1,vy:0,facing:1});
+  pb.sample({time:2000,hp:0,vx:0,vy:0,facing:1});
+  const s=pb.sample({time:6000,hp:0,vx:0,vy:0,facing:1});
+  assert.equal(s.phase,'KO_SOURCE_HOLD',code);assert.equal(s.assetId,faint.frames.at(-1).assetId,code);
+ }
+ for(const code of ['MA65','MA66','MA67','MA68','MA69']){
   const doc=manifest(selection.characters.find(c=>c.displayCode===code)),ko=reviewedArenaKoClip(doc);
   assert.ok(ko,code+' has an approved KO clip');assert.equal(ko.frames.length,1,code);
   const pb=createReviewedArenaPlayback(doc,{nativeFallback:false});

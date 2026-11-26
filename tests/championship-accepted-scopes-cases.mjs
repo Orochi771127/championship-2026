@@ -9,7 +9,8 @@ const digest=p=>createHash('sha256').update(fs.readFileSync(path.join(root,p))).
 const report='docs/reports/accepted-character-scopes-20261101';
 const selection=read('src/data/championship/reviewed-animation-selection.v1.json').characters;
 for(const code of ['GR03','GR16','GR14','GR15'])test(`${code}: exact accepted scope changes, verified payloads, other animations preserved`,()=>{
- const e=selection.find(x=>x.displayCode===code),doc=read(e.path),aut=read(e.authoringPath),base=read(`${report}/baseline/${code}/public.json`);
+ // The accepted high-detail sets play as `detail` since GR moved to the chibi-pixel set (2026-11-26).
+ const s=selection.find(x=>x.displayCode===code),e={...s,...(s.detail??{})},doc=read(e.path),aut=read(e.authoringPath),base=read(`${report}/baseline/${code}/public.json`);
  assert.equal(digest(e.path),e.sha256);assert.equal(digest(e.authoringPath),e.authoringSha256);
  // A later named patch (2026-11-03 walk/bound fixes) may re-bind only the clips it lists, from existing frames.
  const patched=aut.patch20261103?.replacedClips??[],changed=[...aut.acceptedScopes20261101.replacedClips,...patched],frames=new Map(doc.frames.map(f=>[f.id,f]));

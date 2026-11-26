@@ -3,20 +3,16 @@
   "kind": "ANIMATION_HANDOFF_QA_REGISTRY",
   "version": "20261101",
   "loopbackOnly": true,
-  "note": "QA alternative manifests for owner-accepted scopes; never shipped, never used on public hosts. 2026-11-12: the UL11/UL12 north-walk partial sets are retired; the complete two-set selection (docs/reports/two-set-intake-20261112) draws every heading. Their files are kept.",
-  "entries": [
+  "note": "QA alternative manifests for owner-accepted scopes; never shipped, never used on public hosts. 2026-11-12: the UL11/UL12 north-walk partial sets are retired; the complete two-set selection (docs/reports/two-set-intake-20261112) draws every heading. Their files are kept. 2026-11-26: the GR02/GR06/GR08 Walk8 alternatives are retired too: GR01-41 play the chibi-pixel set and the high-detail sets they were built on are kept only as `detail` (cut-in, story stage, brag card). Their files are kept.",
+  "entries": [],
+  "retired20261126": [
     {
       "displayCode": "GR02",
       "speciesId": "species-035",
       "basePath": "assets/production/characters/reviewed107-20261026/GR02/animation.public-v1-arenafill-20261118.json",
       "baseSha256": "27ec67a192fcd37348cdbdc8da805cad6740fc0f6c504e89873c7f9f793dc435",
       "path": "assets/production/characters/reviewed107-20261026/GR02/animation.handoff-20261101.json",
-      "sha256": "aa9abb3df8798bc7db452dd0639f38375a3600a173ef3b8b5fad55ea77e4224d",
-      "status": "OWNER_APPROVED_SCOPED_QA_ONLY",
-      "runtimeApproved": false,
-      "scopes": [
-        "Walk:Down,DownRight,Right,UpRight,Up,UpLeft,Left,DownLeft"
-      ]
+      "sha256": "aa9abb3df8798bc7db452dd0639f38375a3600a173ef3b8b5fad55ea77e4224d"
     },
     {
       "displayCode": "GR06",
@@ -24,12 +20,7 @@
       "basePath": "assets/production/characters/reviewed107-20261026/GR06/animation.public-v1-arenafill-20261118.json",
       "baseSha256": "47e7690f2159722e73e5588431e1b0d7a5219deb01b9f0687152840edfea5859",
       "path": "assets/production/characters/reviewed107-20261026/GR06/animation.handoff-20261101.json",
-      "sha256": "c73a144a43b5ca483f95fbe073f7b21a0ec636af1d9123eb8c281c3c2a31b1be",
-      "status": "OWNER_APPROVED_SCOPED_QA_ONLY",
-      "runtimeApproved": false,
-      "scopes": [
-        "Walk:Down,DownRight,Right,UpRight,Up,UpLeft,Left,DownLeft"
-      ]
+      "sha256": "c73a144a43b5ca483f95fbe073f7b21a0ec636af1d9123eb8c281c3c2a31b1be"
     },
     {
       "displayCode": "GR08",
@@ -37,12 +28,7 @@
       "basePath": "assets/production/characters/reviewed107-20261026/GR08/animation.public-v1-arenafill-20261118.json",
       "baseSha256": "0972d6f9290bb1968cbbd3ba7b0b5b5b367a183ee72694850c9180341a51d8c6",
       "path": "assets/production/characters/reviewed107-20261026/GR08/animation.handoff-20261101.json",
-      "sha256": "6d8921ed0cc2de34546b9fc4ee17e3d0536018b9284db4cae18595fbd83a8005",
-      "status": "OWNER_APPROVED_SCOPED_QA_ONLY",
-      "runtimeApproved": false,
-      "scopes": [
-        "Walk:Down,DownRight,Right,UpRight,Up,UpLeft,Left,DownLeft"
-      ]
+      "sha256": "6d8921ed0cc2de34546b9fc4ee17e3d0536018b9284db4cae18595fbd83a8005"
     }
   ]
 }

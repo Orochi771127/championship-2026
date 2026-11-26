@@ -22,6 +22,16 @@ export const reviewedCharacterSelections=()=>selection.characters;
 // General-screen size of a reviewed set: its selected display scale times the stage body size.
 export const reviewedGeneralDisplayScale=entry=>(entry?.generalDisplayScale>0?entry.generalDisplayScale:1)*stageBodyScale(entry?.speciesId);
 
+// Owner 2026-11-26: the chibi-pixel set is the character's action animation everywhere, but the high-detail set
+// it replaced stays for places that show the body large (special-move cut-in, story stage actors, brag card).
+// A row keeps that set under `detail`; detail:true reads it, and a row without one reads its own set.
+export function reviewedSelectionSource(entry,detail=false){
+  const d=detail?entry?.detail:null;
+  if(!d)return entry;
+  return {...entry,path:d.path,sha256:d.sha256,generalMirror:d.generalMirror===true,
+    generalMirrorFrames:d.generalMirrorFrames??[],generalDisplayScale:d.generalDisplayScale,detailSet:true};
+}
+
 const sha256=async text=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
 
 /**
@@ -33,8 +43,8 @@ const sha256=async text=>Array.from(new Uint8Array(await crypto.subtle.digest('S
  * mirror:true (selection generalMirrorFrames) faces opposite to its set: draw the crop
  * flipped horizontally into its place, which is already mirrored about the pivot.
  */
-export async function loadReviewedDomFrames(speciesId,{href=globalThis.location?.href,fetchImpl=(...a)=>globalThis.fetch(...a),signal,sequences}){
-  const entry=href?reviewedCharacterSelection(speciesId,href):null;
+export async function loadReviewedDomFrames(speciesId,{href=globalThis.location?.href,fetchImpl=(...a)=>globalThis.fetch(...a),signal,sequences,detail=false}){
+  const entry=href?reviewedSelectionSource(reviewedCharacterSelection(speciesId,href),detail):null;
   if(!entry)return null;
   const ref=await reviewedDocumentRef(entry,href,fetchImpl),url=new URL(characterAssetUrl(ref.path,href));
   const response=await fetchImpl(url.href,{signal});

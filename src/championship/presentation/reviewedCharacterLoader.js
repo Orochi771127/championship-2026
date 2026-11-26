@@ -143,9 +143,33 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
       const side=options.side??'main',baseline=bundle.runtime.sides[side]?.animations??[];
       const source=new Map(baseline.map(a=>[a.id,a]));
       let current=null;
-      const restoreBaselineAnchor=()=>sprite.anchor.set(baselineAnchor.x,baselineAnchor.y);
+      // Chibi-pixel sets (2026-11-26) draw the original's colour-effect frames (red flash, black/white
+      // silhouette, grey petrify) in normal colours on the locked palette; the step's `effect` is applied here
+      // and removed again on the next frame without one, restoring the sprite's own tint and filters.
+      let effectState=null;
+      const setEffect=kind=>{
+        kind=kind??null;
+        if((effectState?.kind??null)===kind)return;
+        if(effectState){
+          sprite.tint=effectState.tint;
+          if(effectState.filter){const rest=(sprite.filters??[]).filter(f=>f!==effectState.filter);sprite.filters=rest.length?rest:null;}
+          effectState=null;
+        }
+        if(!kind)return;
+        const state={kind,tint:sprite.tint,filter:null};
+        if(kind==='flashRed')sprite.tint=0xff5a4a;
+        else if(kind==='silhouetteBlack')sprite.tint=0x14141c;
+        else if((kind==='silhouetteWhite'||kind==='grey')&&typeof PIXI.ColorMatrixFilter==='function'){
+          const filter=new PIXI.ColorMatrixFilter();
+          if(kind==='grey')filter.desaturate();else filter.matrix=[0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0];
+          state.filter=filter;sprite.filters=[...(sprite.filters??[]),filter];
+        }
+        effectState=state;
+      };
+      const restoreBaselineAnchor=()=>{sprite.anchor.set(baselineAnchor.x,baselineAnchor.y);setEffect(null);};
       const apply=(sample)=>{
-        if(!sample||!textures.has(sample.assetId))return null;
+        if(!sample||!textures.has(sample.assetId)){setEffect(null);return null;}
+        setEffect(sample.effect);
         const placement=geometry.get(sample.assetId),raw=sample.offset??[0,0],offset=placement.mirrored?[-raw[0],raw[1]]:raw;
         const adjusted={...placement,origin:placement.origin.map((v,i)=>v-offset[i]),
           nativeBounds:placement.nativeBounds.map((v,i)=>v+offset[i%2]/placement.scale)};

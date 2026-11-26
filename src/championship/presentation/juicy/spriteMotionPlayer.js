@@ -53,11 +53,11 @@ const MOTION_CACHE_LIMIT = 48;
  * The species' showcase motion, loaded once and shared. A failed or aborted
  * load is forgotten so a later request tries again.
  */
-export function loadShowcaseMotionShared(speciesId, { fetchImpl, baseUrl = globalThis.location?.href } = {}) {
-  const key = `${speciesId}|${baseUrl ?? ""}`;
+export function loadShowcaseMotionShared(speciesId, { fetchImpl, baseUrl = globalThis.location?.href, detail = false } = {}) {
+  const key = `${speciesId}|${baseUrl ?? ""}|${detail ? "detail" : "action"}`;
   let entry = motionCache.get(key);
   if (!entry) {
-    entry = loadShowcaseMotion(speciesId, { baseUrl, ...(fetchImpl ? { fetchImpl } : {}) });
+    entry = loadShowcaseMotion(speciesId, { baseUrl, detail, ...(fetchImpl ? { fetchImpl } : {}) });
     entry.catch(() => { if (motionCache.get(key) === entry) motionCache.delete(key); });
     motionCache.set(key, entry);
     while (motionCache.size > MOTION_CACHE_LIMIT) motionCache.delete(motionCache.keys().next().value);
@@ -79,11 +79,12 @@ export function loadShowcaseMotionShared(speciesId, { fetchImpl, baseUrl = globa
  * can stand the body on a pad and fit what is actually drawn.
  */
 export async function loadShowcaseMotion(speciesId, { signal = null, baseUrl = globalThis.location?.href,
-  fetchImpl = (...args) => globalThis.fetch(...args), sequences = SHOWCASE_ACTIONS.map(action => action.sequence) } = {}) {
+  fetchImpl = (...args) => globalThis.fetch(...args), sequences = SHOWCASE_ACTIONS.map(action => action.sequence), detail = false } = {}) {
   const config = publicCharacterConfig(speciesId);
   if (!config || !baseUrl || !isOriginalRuntimeLocation(baseUrl)) throw new Error("SHOWCASE_MOTION_UNAVAILABLE");
   // Species drawn with reviewed artwork show it (their original pages are retired).
-  const reviewed = await loadReviewedDomFrames(speciesId, { href: baseUrl, fetchImpl, signal, sequences });
+  // detail:true = the high-detail set a chibi-pixel row keeps (cut-in, story stage, brag card; Owner 2026-11-26).
+  const reviewed = await loadReviewedDomFrames(speciesId, { href: baseUrl, fetchImpl, signal, sequences, detail });
   if (reviewed) return reviewedShowcaseMotion(speciesId, reviewed);
   const runtimeUrl = characterAssetUrl(config.runtimePath, baseUrl);
   const response = await fetchImpl(runtimeUrl, { signal });
