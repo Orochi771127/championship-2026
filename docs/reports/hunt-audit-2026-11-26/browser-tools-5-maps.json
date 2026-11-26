@@ -1,0 +1,1680 @@
+{
+ "cases": [
+  {
+   "gate": "canyon",
+   "view": "portrait",
+   "errors": [],
+   "console": [],
+   "loadout": [
+    "ROPE:頂級捕捉繩 γ數量 15",
+    "SHOT:麻痺散彈 β數量 99",
+    "WIRE:電擊鋼索 β數量 99",
+    "ENTRAP:藍色誘引燈數量 90",
+    "DAMAGE_TRAP:強化捕捉陷阱數量 99"
+   ],
+   "first": {
+    "tools": [
+     {
+      "id": "HAND",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "ROPE",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "SHOT",
+      "subtype": "SHOT",
+      "cls": null,
+      "qty": 99,
+      "name": null
+     },
+     {
+      "id": "WIRE",
+      "subtype": "WIRE",
+      "cls": null,
+      "qty": 99,
+      "name": null
+     },
+     {
+      "id": "ENTRAP",
+      "subtype": "LIGHT",
+      "cls": null,
+      "qty": 90,
+      "name": null
+     },
+     {
+      "id": "DAMAGE_TRAP",
+      "subtype": "CAPTURE_TRAP",
+      "cls": null,
+      "qty": 99,
+      "name": null
+     }
+    ],
+    "selectedTool": null,
+    "objects": 0,
+    "objectList": [],
+    "hp": 9420,
+    "wilds": 11,
+    "states": [
+     "WILD"
+    ],
+    "inventory": 42,
+    "keys": [
+     "activeTool",
+     "frame",
+     "notice",
+     "tools",
+     "objects",
+     "rope",
+     "points",
+     "closure",
+     "snap",
+     "lassoPath",
+     "captureEffects",
+     "usedG",
+     "maxG"
+    ]
+   },
+   "dock": [
+    {
+     "tool": "HAND",
+     "text": "捕獲移動收取",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "ROPE",
+     "text": "繩索主武×15",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "SHOT",
+     "text": "麻痺散彈 β射擊",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "WIRE",
+     "text": "電擊鋼索 β鋼索",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "ENTRAP",
+     "text": "藍色誘引燈誘餌",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "DAMAGE_TRAP",
+     "text": "強化捕捉陷阱陷阱",
+     "disabled": false,
+     "visible": true
+    }
+   ],
+   "uses": [
+    {
+     "tool": "SHOT",
+     "subtype": "SHOT",
+     "label": "entry",
+     "mode": "tap",
+     "onWild": true,
+     "worldTile": [
+      69,
+      73
+     ],
+     "objects": [
+      0,
+      0
+     ],
+     "qty": [
+      99,
+      98
+     ],
+     "hp": [
+      9420,
+      8630
+     ],
+     "notice": null,
+     "last": null
+    },
+    {
+     "tool": "WIRE",
+     "subtype": "WIRE",
+     "label": "entry",
+     "mode": "drag",
+     "onWild": false,
+     "worldTile": [
+      64,
+      58
+     ],
+     "objects": [
+      0,
+      1
+     ],
+     "qty": [
+      99,
+      98
+     ],
+     "hp": [
+      8630,
+      8630
+     ],
+     "notice": null,
+     "last": {
+      "kind": "WIRE",
+      "x": -1,
+      "y": -1
+     }
+    },
+    {
+     "tool": "ENTRAP",
+     "subtype": "LIGHT",
+     "label": "new-strip",
+     "mode": "tap",
+     "onWild": false,
+     "worldTile": [
+      157,
+      139
+     ],
+     "objects": [
+      1,
+      2
+     ],
+     "qty": [
+      90,
+      89
+     ],
+     "hp": [
+      8630,
+      8630
+     ],
+     "notice": null,
+     "last": {
+      "kind": "LIGHT",
+      "x": 2520,
+      "y": 2236
+     }
+    },
+    {
+     "tool": "DAMAGE_TRAP",
+     "subtype": "CAPTURE_TRAP",
+     "label": "new-strip",
+     "mode": "tap",
+     "onWild": false,
+     "worldTile": [
+      170,
+      139
+     ],
+     "objects": [
+      2,
+      3
+     ],
+     "qty": [
+      99,
+      98
+     ],
+     "hp": [
+      8630,
+      8630
+     ],
+     "notice": null,
+     "last": {
+      "kind": "CAPTURE_TRAP",
+      "x": 2726,
+      "y": 2236
+     }
+    },
+    {
+     "tool": "WIRE",
+     "subtype": "WIRE",
+     "label": "new-strip",
+     "mode": "drag",
+     "onWild": false,
+     "worldTile": [
+      152,
+      131
+     ],
+     "objects": [
+      3,
+      3
+     ],
+     "qty": [
+      98,
+      98
+     ],
+     "hp": [
+      8630,
+      8630
+     ],
+     "notice": null,
+     "last": {
+      "kind": "CAPTURE_TRAP",
+      "x": 2726,
+      "y": 2236
+     }
+    }
+   ],
+   "capture": {
+    "result": "CAUGHT"
+   },
+   "final": {
+    "tools": [
+     {
+      "id": "HAND",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "ROPE",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "SHOT",
+      "subtype": "SHOT",
+      "cls": null,
+      "qty": 98,
+      "name": null
+     },
+     {
+      "id": "WIRE",
+      "subtype": "WIRE",
+      "cls": null,
+      "qty": 98,
+      "name": null
+     },
+     {
+      "id": "ENTRAP",
+      "subtype": "LIGHT",
+      "cls": null,
+      "qty": 89,
+      "name": null
+     },
+     {
+      "id": "DAMAGE_TRAP",
+      "subtype": "CAPTURE_TRAP",
+      "cls": null,
+      "qty": 98,
+      "name": null
+     }
+    ],
+    "selectedTool": null,
+    "objects": 2,
+    "objectList": [
+     {
+      "kind": "LIGHT",
+      "x": 2520,
+      "y": 2236
+     },
+     {
+      "kind": "CAPTURE_TRAP",
+      "x": 2726,
+      "y": 2236
+     }
+    ],
+    "hp": 6640,
+    "wilds": 7,
+    "states": [
+     "WILD",
+     "TETHERED"
+    ],
+    "inventory": 42,
+    "keys": [
+     "activeTool",
+     "frame",
+     "notice",
+     "tools",
+     "objects",
+     "rope",
+     "points",
+     "closure",
+     "snap",
+     "lassoPath",
+     "captureEffects",
+     "usedG",
+     "maxG"
+    ]
+   },
+   "totalMs": 30063
+  },
+  {
+   "gate": "factory",
+   "view": "portrait",
+   "errors": [],
+   "console": [],
+   "loadout": [
+    "ROPE:頂級捕捉繩 γ數量 15",
+    "SHOT:麻痺散彈 β數量 99",
+    "WIRE:電擊鋼索 β數量 99",
+    "ENTRAP:藍色誘引燈數量 90",
+    "DAMAGE_TRAP:強化捕捉陷阱數量 99"
+   ],
+   "first": {
+    "tools": [
+     {
+      "id": "HAND",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "ROPE",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "SHOT",
+      "subtype": "SHOT",
+      "cls": null,
+      "qty": 99,
+      "name": null
+     },
+     {
+      "id": "WIRE",
+      "subtype": "WIRE",
+      "cls": null,
+      "qty": 99,
+      "name": null
+     },
+     {
+      "id": "ENTRAP",
+      "subtype": "LIGHT",
+      "cls": null,
+      "qty": 90,
+      "name": null
+     },
+     {
+      "id": "DAMAGE_TRAP",
+      "subtype": "CAPTURE_TRAP",
+      "cls": null,
+      "qty": 99,
+      "name": null
+     }
+    ],
+    "selectedTool": null,
+    "objects": 0,
+    "objectList": [],
+    "hp": 8660,
+    "wilds": 11,
+    "states": [
+     "WILD"
+    ],
+    "inventory": 42,
+    "keys": [
+     "activeTool",
+     "frame",
+     "notice",
+     "tools",
+     "objects",
+     "rope",
+     "points",
+     "closure",
+     "snap",
+     "lassoPath",
+     "captureEffects",
+     "usedG",
+     "maxG"
+    ]
+   },
+   "dock": [
+    {
+     "tool": "HAND",
+     "text": "捕獲移動收取",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "ROPE",
+     "text": "繩索主武×15",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "SHOT",
+     "text": "麻痺散彈 β射擊",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "WIRE",
+     "text": "電擊鋼索 β鋼索",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "ENTRAP",
+     "text": "藍色誘引燈誘餌",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "DAMAGE_TRAP",
+     "text": "強化捕捉陷阱陷阱",
+     "disabled": false,
+     "visible": true
+    }
+   ],
+   "uses": [
+    {
+     "tool": "SHOT",
+     "subtype": "SHOT",
+     "label": "entry",
+     "mode": "tap",
+     "onWild": true,
+     "worldTile": [
+      65,
+      77
+     ],
+     "objects": [
+      0,
+      0
+     ],
+     "qty": [
+      99,
+      98
+     ],
+     "hp": [
+      8660,
+      8660
+     ],
+     "notice": null,
+     "last": null
+    },
+    {
+     "tool": "WIRE",
+     "subtype": "WIRE",
+     "label": "entry",
+     "mode": "drag",
+     "onWild": false,
+     "worldTile": [
+      64,
+      58
+     ],
+     "objects": [
+      0,
+      1
+     ],
+     "qty": [
+      99,
+      98
+     ],
+     "hp": [
+      8660,
+      8660
+     ],
+     "notice": null,
+     "last": {
+      "kind": "WIRE",
+      "x": -1,
+      "y": -1
+     }
+    },
+    {
+     "tool": "ENTRAP",
+     "subtype": "LIGHT",
+     "label": "new-strip",
+     "mode": "tap",
+     "onWild": false,
+     "worldTile": [
+      163,
+      139
+     ],
+     "objects": [
+      1,
+      2
+     ],
+     "qty": [
+      90,
+      89
+     ],
+     "hp": [
+      8660,
+      8660
+     ],
+     "notice": null,
+     "last": {
+      "kind": "LIGHT",
+      "x": 2624,
+      "y": 2236
+     }
+    },
+    {
+     "tool": "DAMAGE_TRAP",
+     "subtype": "CAPTURE_TRAP",
+     "label": "new-strip",
+     "mode": "tap",
+     "onWild": false,
+     "worldTile": [
+      157,
+      139
+     ],
+     "objects": [
+      2,
+      3
+     ],
+     "qty": [
+      99,
+      98
+     ],
+     "hp": [
+      8660,
+      8660
+     ],
+     "notice": null,
+     "last": {
+      "kind": "CAPTURE_TRAP",
+      "x": 2520,
+      "y": 2236
+     }
+    },
+    {
+     "tool": "WIRE",
+     "subtype": "WIRE",
+     "label": "new-strip",
+     "mode": "drag",
+     "onWild": false,
+     "worldTile": [
+      170,
+      139
+     ],
+     "objects": [
+      3,
+      4
+     ],
+     "qty": [
+      98,
+      97
+     ],
+     "hp": [
+      8660,
+      8660
+     ],
+     "notice": null,
+     "last": {
+      "kind": "CAPTURE_TRAP",
+      "x": 2520,
+      "y": 2236
+     }
+    }
+   ],
+   "capture": {
+    "result": "TIMEOUT"
+   },
+   "fatal": "page.evaluate: TypeError: Cannot read properties of null (reading 'getToolState') |     at eval (eval at evaluate (:311:30), <anonymous>:2:52) |     at UtilityScript.evaluate (<anonymous>:313:16) |     at UtilityScript.<anonymous> (<anonymous>:1:44)"
+  },
+  {
+   "gate": "ice",
+   "view": "portrait",
+   "errors": [],
+   "console": [],
+   "loadout": [
+    "ROPE:頂級捕捉繩 γ數量 15",
+    "SHOT:麻痺散彈 β數量 99",
+    "WIRE:電擊鋼索 β數量 99",
+    "ENTRAP:藍色誘引燈數量 90",
+    "DAMAGE_TRAP:強化捕捉陷阱數量 99"
+   ],
+   "first": {
+    "tools": [
+     {
+      "id": "HAND",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "ROPE",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "SHOT",
+      "subtype": "SHOT",
+      "cls": null,
+      "qty": 99,
+      "name": null
+     },
+     {
+      "id": "WIRE",
+      "subtype": "WIRE",
+      "cls": null,
+      "qty": 99,
+      "name": null
+     },
+     {
+      "id": "ENTRAP",
+      "subtype": "LIGHT",
+      "cls": null,
+      "qty": 90,
+      "name": null
+     },
+     {
+      "id": "DAMAGE_TRAP",
+      "subtype": "CAPTURE_TRAP",
+      "cls": null,
+      "qty": 99,
+      "name": null
+     }
+    ],
+    "selectedTool": null,
+    "objects": 0,
+    "objectList": [],
+    "hp": 23020,
+    "wilds": 20,
+    "states": [
+     "WILD"
+    ],
+    "inventory": 42,
+    "keys": [
+     "activeTool",
+     "frame",
+     "notice",
+     "tools",
+     "objects",
+     "rope",
+     "points",
+     "closure",
+     "snap",
+     "lassoPath",
+     "captureEffects",
+     "usedG",
+     "maxG"
+    ]
+   },
+   "dock": [
+    {
+     "tool": "HAND",
+     "text": "捕獲移動收取",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "ROPE",
+     "text": "繩索主武×15",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "SHOT",
+     "text": "麻痺散彈 β射擊",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "WIRE",
+     "text": "電擊鋼索 β鋼索",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "ENTRAP",
+     "text": "藍色誘引燈誘餌",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "DAMAGE_TRAP",
+     "text": "強化捕捉陷阱陷阱",
+     "disabled": false,
+     "visible": true
+    }
+   ],
+   "uses": [
+    {
+     "tool": "SHOT",
+     "subtype": "SHOT",
+     "label": "entry",
+     "mode": "tap",
+     "onWild": true,
+     "worldTile": [
+      56,
+      73
+     ],
+     "objects": [
+      0,
+      0
+     ],
+     "qty": [
+      99,
+      98
+     ],
+     "hp": [
+      23020,
+      23020
+     ],
+     "notice": null,
+     "last": null
+    },
+    {
+     "tool": "WIRE",
+     "subtype": "WIRE",
+     "label": "entry",
+     "mode": "drag",
+     "onWild": false,
+     "worldTile": [
+      64,
+      58
+     ],
+     "objects": [
+      0,
+      1
+     ],
+     "qty": [
+      99,
+      98
+     ],
+     "hp": [
+      23020,
+      21880
+     ],
+     "notice": null,
+     "last": {
+      "kind": "WIRE",
+      "x": -1,
+      "y": -1
+     }
+    },
+    {
+     "tool": "ENTRAP",
+     "subtype": "LIGHT",
+     "label": "new-strip",
+     "mode": "tap",
+     "onWild": false,
+     "worldTile": [
+      170,
+      139
+     ],
+     "objects": [
+      1,
+      2
+     ],
+     "qty": [
+      90,
+      89
+     ],
+     "hp": [
+      17740,
+      17740
+     ],
+     "notice": null,
+     "last": {
+      "kind": "LIGHT",
+      "x": 2726,
+      "y": 2236
+     }
+    },
+    {
+     "tool": "DAMAGE_TRAP",
+     "subtype": "CAPTURE_TRAP",
+     "label": "new-strip",
+     "mode": "tap",
+     "onWild": false,
+     "worldTile": [
+      163,
+      131
+     ],
+     "objects": [
+      2,
+      3
+     ],
+     "qty": [
+      99,
+      98
+     ],
+     "hp": [
+      17740,
+      17740
+     ],
+     "notice": null,
+     "last": {
+      "kind": "CAPTURE_TRAP",
+      "x": 2624,
+      "y": 2104
+     }
+    },
+    {
+     "tool": "WIRE",
+     "subtype": "WIRE",
+     "label": "new-strip",
+     "mode": "drag",
+     "onWild": false,
+     "worldTile": [
+      157,
+      131
+     ],
+     "objects": [
+      3,
+      3
+     ],
+     "qty": [
+      98,
+      97
+     ],
+     "hp": [
+      17740,
+      17740
+     ],
+     "notice": null,
+     "last": {
+      "kind": "CAPTURE_TRAP",
+      "x": 2624,
+      "y": 2104
+     }
+    }
+   ],
+   "capture": {
+    "result": "CAUGHT"
+   },
+   "final": {
+    "tools": [
+     {
+      "id": "HAND",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "ROPE",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "SHOT",
+      "subtype": "SHOT",
+      "cls": null,
+      "qty": 98,
+      "name": null
+     },
+     {
+      "id": "WIRE",
+      "subtype": "WIRE",
+      "cls": null,
+      "qty": 97,
+      "name": null
+     },
+     {
+      "id": "ENTRAP",
+      "subtype": "LIGHT",
+      "cls": null,
+      "qty": 89,
+      "name": null
+     },
+     {
+      "id": "DAMAGE_TRAP",
+      "subtype": "CAPTURE_TRAP",
+      "cls": null,
+      "qty": 98,
+      "name": null
+     }
+    ],
+    "selectedTool": null,
+    "objects": 3,
+    "objectList": [
+     {
+      "kind": "WIRE",
+      "x": -1,
+      "y": -1
+     },
+     {
+      "kind": "LIGHT",
+      "x": 2726,
+      "y": 2236
+     },
+     {
+      "kind": "CAPTURE_TRAP",
+      "x": 2624,
+      "y": 2104
+     }
+    ],
+    "hp": 15860,
+    "wilds": 13,
+    "states": [
+     "WILD",
+     "TETHERED"
+    ],
+    "inventory": 42,
+    "keys": [
+     "activeTool",
+     "frame",
+     "notice",
+     "tools",
+     "objects",
+     "rope",
+     "points",
+     "closure",
+     "snap",
+     "lassoPath",
+     "captureEffects",
+     "usedG",
+     "maxG"
+    ]
+   },
+   "totalMs": 30573
+  },
+  {
+   "gate": "crag",
+   "view": "portrait",
+   "errors": [],
+   "console": [],
+   "loadout": [
+    "ROPE:頂級捕捉繩 γ數量 15",
+    "SHOT:麻痺散彈 β數量 99",
+    "WIRE:電擊鋼索 β數量 99",
+    "ENTRAP:藍色誘引燈數量 90",
+    "DAMAGE_TRAP:強化捕捉陷阱數量 99"
+   ],
+   "first": {
+    "tools": [
+     {
+      "id": "HAND",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "ROPE",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "SHOT",
+      "subtype": "SHOT",
+      "cls": null,
+      "qty": 99,
+      "name": null
+     },
+     {
+      "id": "WIRE",
+      "subtype": "WIRE",
+      "cls": null,
+      "qty": 99,
+      "name": null
+     },
+     {
+      "id": "ENTRAP",
+      "subtype": "LIGHT",
+      "cls": null,
+      "qty": 90,
+      "name": null
+     },
+     {
+      "id": "DAMAGE_TRAP",
+      "subtype": "CAPTURE_TRAP",
+      "cls": null,
+      "qty": 99,
+      "name": null
+     }
+    ],
+    "selectedTool": null,
+    "objects": 0,
+    "objectList": [],
+    "hp": 8420,
+    "wilds": 11,
+    "states": [
+     "WILD"
+    ],
+    "inventory": 42,
+    "keys": [
+     "activeTool",
+     "frame",
+     "notice",
+     "tools",
+     "objects",
+     "rope",
+     "points",
+     "closure",
+     "snap",
+     "lassoPath",
+     "captureEffects",
+     "usedG",
+     "maxG"
+    ]
+   },
+   "dock": [
+    {
+     "tool": "HAND",
+     "text": "捕獲移動收取",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "ROPE",
+     "text": "繩索主武×15",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "SHOT",
+     "text": "麻痺散彈 β射擊",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "WIRE",
+     "text": "電擊鋼索 β鋼索",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "ENTRAP",
+     "text": "藍色誘引燈誘餌",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "DAMAGE_TRAP",
+     "text": "強化捕捉陷阱陷阱",
+     "disabled": false,
+     "visible": true
+    }
+   ],
+   "uses": [
+    {
+     "tool": "SHOT",
+     "subtype": "SHOT",
+     "label": "entry",
+     "mode": "tap",
+     "onWild": true,
+     "worldTile": [
+      71,
+      77
+     ],
+     "objects": [
+      0,
+      0
+     ],
+     "qty": [
+      99,
+      98
+     ],
+     "hp": [
+      8420,
+      8420
+     ],
+     "notice": null,
+     "last": null
+    },
+    {
+     "tool": "WIRE",
+     "subtype": "WIRE",
+     "label": "entry",
+     "mode": "drag",
+     "onWild": false,
+     "worldTile": [
+      64,
+      58
+     ],
+     "objects": [
+      0,
+      1
+     ],
+     "qty": [
+      99,
+      98
+     ],
+     "hp": [
+      8420,
+      8420
+     ],
+     "notice": null,
+     "last": {
+      "kind": "WIRE",
+      "x": -1,
+      "y": -1
+     }
+    },
+    {
+     "tool": "ENTRAP",
+     "subtype": "LIGHT",
+     "label": "new-strip",
+     "mode": "tap",
+     "onWild": false,
+     "worldTile": [
+      163,
+      139
+     ],
+     "objects": [
+      1,
+      2
+     ],
+     "qty": [
+      90,
+      89
+     ],
+     "hp": [
+      8420,
+      8420
+     ],
+     "notice": null,
+     "last": {
+      "kind": "LIGHT",
+      "x": 2624,
+      "y": 2236
+     }
+    },
+    {
+     "tool": "DAMAGE_TRAP",
+     "subtype": "CAPTURE_TRAP",
+     "label": "new-strip",
+     "mode": "tap",
+     "onWild": false,
+     "worldTile": [
+      157,
+      139
+     ],
+     "objects": [
+      2,
+      3
+     ],
+     "qty": [
+      99,
+      98
+     ],
+     "hp": [
+      8420,
+      8420
+     ],
+     "notice": null,
+     "last": {
+      "kind": "CAPTURE_TRAP",
+      "x": 2520,
+      "y": 2236
+     }
+    },
+    {
+     "tool": "WIRE",
+     "subtype": "WIRE",
+     "label": "new-strip",
+     "mode": "drag",
+     "onWild": false,
+     "worldTile": [
+      163,
+      131
+     ],
+     "objects": [
+      3,
+      3
+     ],
+     "qty": [
+      98,
+      97
+     ],
+     "hp": [
+      8420,
+      7650
+     ],
+     "notice": null,
+     "last": {
+      "kind": "CAPTURE_TRAP",
+      "x": 2520,
+      "y": 2236
+     }
+    }
+   ],
+   "capture": {
+    "result": "CAUGHT"
+   },
+   "final": {
+    "tools": [
+     {
+      "id": "HAND",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "ROPE",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "SHOT",
+      "subtype": "SHOT",
+      "cls": null,
+      "qty": 98,
+      "name": null
+     },
+     {
+      "id": "WIRE",
+      "subtype": "WIRE",
+      "cls": null,
+      "qty": 97,
+      "name": null
+     },
+     {
+      "id": "ENTRAP",
+      "subtype": "LIGHT",
+      "cls": null,
+      "qty": 89,
+      "name": null
+     },
+     {
+      "id": "DAMAGE_TRAP",
+      "subtype": "CAPTURE_TRAP",
+      "cls": null,
+      "qty": 98,
+      "name": null
+     }
+    ],
+    "selectedTool": null,
+    "objects": 3,
+    "objectList": [
+     {
+      "kind": "WIRE",
+      "x": -1,
+      "y": -1
+     },
+     {
+      "kind": "LIGHT",
+      "x": 2624,
+      "y": 2236
+     },
+     {
+      "kind": "CAPTURE_TRAP",
+      "x": 2520,
+      "y": 2236
+     }
+    ],
+    "hp": 7290,
+    "wilds": 9,
+    "states": [
+     "WILD"
+    ],
+    "inventory": 42,
+    "keys": [
+     "activeTool",
+     "frame",
+     "notice",
+     "tools",
+     "objects",
+     "rope",
+     "points",
+     "closure",
+     "snap",
+     "lassoPath",
+     "captureEffects",
+     "usedG",
+     "maxG"
+    ]
+   },
+   "totalMs": 27738
+  },
+  {
+   "gate": "grass",
+   "view": "portrait",
+   "errors": [],
+   "console": [],
+   "loadout": [
+    "ROPE:頂級捕捉繩 γ數量 15",
+    "SHOT:麻痺散彈 β數量 99",
+    "WIRE:電擊鋼索 β數量 99",
+    "ENTRAP:藍色誘引燈數量 90",
+    "DAMAGE_TRAP:強化捕捉陷阱數量 99"
+   ],
+   "first": {
+    "tools": [
+     {
+      "id": "HAND",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "ROPE",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "SHOT",
+      "subtype": "SHOT",
+      "cls": null,
+      "qty": 99,
+      "name": null
+     },
+     {
+      "id": "WIRE",
+      "subtype": "WIRE",
+      "cls": null,
+      "qty": 99,
+      "name": null
+     },
+     {
+      "id": "ENTRAP",
+      "subtype": "LIGHT",
+      "cls": null,
+      "qty": 90,
+      "name": null
+     },
+     {
+      "id": "DAMAGE_TRAP",
+      "subtype": "CAPTURE_TRAP",
+      "cls": null,
+      "qty": 99,
+      "name": null
+     }
+    ],
+    "selectedTool": null,
+    "objects": 0,
+    "objectList": [],
+    "hp": 5020,
+    "wilds": 11,
+    "states": [
+     "WILD"
+    ],
+    "inventory": 42,
+    "keys": [
+     "activeTool",
+     "frame",
+     "notice",
+     "tools",
+     "objects",
+     "rope",
+     "points",
+     "closure",
+     "snap",
+     "lassoPath",
+     "captureEffects",
+     "usedG",
+     "maxG"
+    ]
+   },
+   "dock": [
+    {
+     "tool": "HAND",
+     "text": "捕獲移動收取",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "ROPE",
+     "text": "繩索主武×15",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "SHOT",
+     "text": "麻痺散彈 β射擊",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "WIRE",
+     "text": "電擊鋼索 β鋼索",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "ENTRAP",
+     "text": "藍色誘引燈誘餌",
+     "disabled": false,
+     "visible": true
+    },
+    {
+     "tool": "DAMAGE_TRAP",
+     "text": "強化捕捉陷阱陷阱",
+     "disabled": false,
+     "visible": true
+    }
+   ],
+   "uses": [
+    {
+     "tool": "SHOT",
+     "subtype": "SHOT",
+     "label": "entry",
+     "mode": "tap",
+     "onWild": false,
+     "worldTile": [
+      64,
+      58
+     ],
+     "objects": [
+      0,
+      0
+     ],
+     "qty": [
+      99,
+      98
+     ],
+     "hp": [
+      5020,
+      5020
+     ],
+     "notice": null,
+     "last": null
+    },
+    {
+     "tool": "WIRE",
+     "subtype": "WIRE",
+     "label": "entry",
+     "mode": "drag",
+     "onWild": false,
+     "worldTile": [
+      58,
+      43
+     ],
+     "objects": [
+      0,
+      1
+     ],
+     "qty": [
+      99,
+      98
+     ],
+     "hp": [
+      5020,
+      5020
+     ],
+     "notice": null,
+     "last": {
+      "kind": "WIRE",
+      "x": -1,
+      "y": -1
+     }
+    },
+    {
+     "tool": "ENTRAP",
+     "subtype": "LIGHT",
+     "label": "new-strip",
+     "mode": "tap",
+     "onWild": false,
+     "worldTile": [
+      163,
+      139
+     ],
+     "objects": [
+      1,
+      2
+     ],
+     "qty": [
+      90,
+      89
+     ],
+     "hp": [
+      5020,
+      5020
+     ],
+     "notice": null,
+     "last": {
+      "kind": "LIGHT",
+      "x": 2624,
+      "y": 2236
+     }
+    },
+    {
+     "tool": "DAMAGE_TRAP",
+     "subtype": "CAPTURE_TRAP",
+     "label": "new-strip",
+     "mode": "tap",
+     "onWild": false,
+     "worldTile": [
+      170,
+      139
+     ],
+     "objects": [
+      2,
+      3
+     ],
+     "qty": [
+      99,
+      98
+     ],
+     "hp": [
+      5020,
+      4810
+     ],
+     "notice": null,
+     "last": {
+      "kind": "CAPTURE_TRAP",
+      "x": 2726,
+      "y": 2236
+     }
+    },
+    {
+     "tool": "WIRE",
+     "subtype": "WIRE",
+     "label": "new-strip",
+     "mode": "drag",
+     "onWild": false,
+     "worldTile": [
+      152,
+      139
+     ],
+     "objects": [
+      3,
+      2
+     ],
+     "qty": [
+      98,
+      98
+     ],
+     "hp": [
+      4810,
+      4810
+     ],
+     "notice": null,
+     "last": {
+      "kind": "CAPTURE_TRAP",
+      "x": 2726,
+      "y": 2236
+     }
+    }
+   ],
+   "capture": {
+    "result": "CAUGHT"
+   },
+   "final": {
+    "tools": [
+     {
+      "id": "HAND",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "ROPE",
+      "subtype": null,
+      "cls": null,
+      "qty": null,
+      "name": null
+     },
+     {
+      "id": "SHOT",
+      "subtype": "SHOT",
+      "cls": null,
+      "qty": 98,
+      "name": null
+     },
+     {
+      "id": "WIRE",
+      "subtype": "WIRE",
+      "cls": null,
+      "qty": 98,
+      "name": null
+     },
+     {
+      "id": "ENTRAP",
+      "subtype": "LIGHT",
+      "cls": null,
+      "qty": 89,
+      "name": null
+     },
+     {
+      "id": "DAMAGE_TRAP",
+      "subtype": "CAPTURE_TRAP",
+      "cls": null,
+      "qty": 98,
+      "name": null
+     }
+    ],
+    "selectedTool": null,
+    "objects": 2,
+    "objectList": [
+     {
+      "kind": "LIGHT",
+      "x": 2624,
+      "y": 2236
+     },
+     {
+      "kind": "CAPTURE_TRAP",
+      "x": 2726,
+      "y": 2236
+     }
+    ],
+    "hp": 4610,
+    "wilds": 9,
+    "states": [
+     "WILD"
+    ],
+    "inventory": 42,
+    "keys": [
+     "activeTool",
+     "frame",
+     "notice",
+     "tools",
+     "objects",
+     "rope",
+     "points",
+     "closure",
+     "snap",
+     "lassoPath",
+     "captureEffects",
+     "usedG",
+     "maxG"
+    ]
+   },
+   "totalMs": 29673
+  }
+ ]
+}
