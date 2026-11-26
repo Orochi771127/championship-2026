@@ -6,6 +6,7 @@ import {isOriginalRuntimeLocation} from '../../originalRuntimeLocation.js';
 // HM10/11/13/14 grew to 2880 on 2026-11-25 (c2: untrimmed candidate geometry; HM14 rebuilt with core-style extension cliffs).
 // HM10/13 c3 (2026-11-26): the extension areas carry the maps' own props, which block their tiles.
 // HM16/17/18 (2026-11-26): the extension areas carry copies of each map's own landmarks, which block their tiles.
+// HM14-HM18 (2026-11-26): same models with the vertex data nothing reads dropped (unused UV sets, COLOR_1, float colours as bytes).
 // HM02-HM06 (2026-11-26): same geometry, Draco-compressed at file level (folders v*d); 14.8 MB -> 5.2 MB of GLB.
 export const MAPS=Object.freeze({
   "hm01": {
@@ -120,10 +121,10 @@ export const MAPS=Object.freeze({
     "appearanceApproved": true
   },
   "hm16": {
-    "directory": "assets/production/hunt/hm16-three-v7-20261126/",
+    "directory": "assets/production/hunt/hm16-three-v8-20261126/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "c1de34d02cd5de490e6ffc55768a9878c9b11eb06b87a1ee726a026d90d4811e",
+      "sha256": "3c962bd581093f490872674e5ae4a73a89ddf23f7d63776c6b4851d3b388ae44",
       "bytes": 776
     },
     "fields": [
@@ -134,10 +135,10 @@ export const MAPS=Object.freeze({
     "appearanceApproved": true
   },
   "hm18": {
-    "directory": "assets/production/hunt/hm18-three-v4-20261126/",
+    "directory": "assets/production/hunt/hm18-three-v5-20261126/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "f7da45882d2c29d96620e9b95def24caaeb974e06bac89ae904669d82be34625",
+      "sha256": "71ae44e5288da548aa8e3b99f784e63250bf3c59ee5d834e537935b165d8ff28",
       "bytes": 771
     },
     "fields": [
@@ -148,11 +149,11 @@ export const MAPS=Object.freeze({
     "appearanceApproved": true
   },
   "hm15": {
-    "directory": "assets/production/hunt/hm15-three-v6-20261023/",
+    "directory": "assets/production/hunt/hm15-three-v7-20261126/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "a5eb705de633d5bd713422b055e093565a97f1154d9174b37bdbd10413943ebf",
-      "bytes": 990
+      "sha256": "4ae67ffbcac2b6041636eadeaf5ba046a2ae2b350d5efad0c1b724a6a598d49e",
+      "bytes": 998
     },
     "fields": [
       "field_hm15_01",
@@ -162,10 +163,10 @@ export const MAPS=Object.freeze({
     "appearanceApproved": true
   },
   "hm17": {
-    "directory": "assets/production/hunt/hm17-three-v5-20261126/",
+    "directory": "assets/production/hunt/hm17-three-v6-20261126/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "79b47ee6ec53d7234578ffbea4be6ac86292a61cb699fc7da1cd0063dcbd2e69",
+      "sha256": "e11fbd0aa4169f06d458924fda8b224810ca60e1aa53f40b9b3a35d17fd8c29d",
       "bytes": 776
     },
     "fields": [
@@ -216,11 +217,11 @@ export const MAPS=Object.freeze({
     "appearanceApproved": true
   },
   "hm14": {
-    "directory": "assets/production/hunt/hm14-three-c2-20261125/",
+    "directory": "assets/production/hunt/hm14-three-c3-20261126/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "c3314039b112bd3cee7b4b7ebe989289c74a303e82a39c8cbb43390cfb9cb3de",
-      "bytes": 778
+      "sha256": "7c652f7eb460b923aa8f61bd16e4962a1bc52deb38884b655c871a824336babd",
+      "bytes": 771
     },
     "fields": [
       "field_hm14_01",

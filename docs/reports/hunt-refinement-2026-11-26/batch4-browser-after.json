@@ -1,0 +1,171 @@
+{
+ "browser": "chromium",
+ "mode": "after",
+ "cases": [
+  {
+   "gate": "crag",
+   "errors": [
+    "console: THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."
+   ],
+   "loadMs": 1127,
+   "three": true,
+   "map": "hm14",
+   "field": "field_hm14_02",
+   "version": "c3-20261126",
+   "geometries": 19,
+   "buf": {
+    "n": 78,
+    "mb": 30.9
+   },
+   "tex": {
+    "n": 12,
+    "mb": 36.7
+   },
+   "cleanup": [],
+   "bufMb": 28.3,
+   "heapMb": 52.6,
+   "heap0": {
+    "usedMb": 39,
+    "embedderMb": 7.9,
+    "backingMb": 19.7
+   },
+   "heap1": {
+    "usedMb": 54,
+    "embedderMb": 9.1,
+    "backingMb": 57.3
+   }
+  },
+  {
+   "gate": "volcano",
+   "errors": [
+    "console: THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."
+   ],
+   "loadMs": 1259,
+   "three": true,
+   "map": "hm15",
+   "field": "field_hm15_02",
+   "version": "v7-20261126",
+   "geometries": 25,
+   "buf": {
+    "n": 104,
+    "mb": 17.3
+   },
+   "tex": {
+    "n": 23,
+    "mb": 42.6
+   },
+   "cleanup": [],
+   "bufMb": 14.7,
+   "heapMb": 35.6,
+   "heap0": {
+    "usedMb": 40.5,
+    "embedderMb": 7.8,
+    "backingMb": 19.7
+   },
+   "heap1": {
+    "usedMb": 52.9,
+    "embedderMb": 9.6,
+    "backingMb": 42.9
+   }
+  },
+  {
+   "gate": "desert",
+   "errors": [
+    "console: THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."
+   ],
+   "loadMs": 992,
+   "three": true,
+   "map": "hm16",
+   "field": "field_hm16_01",
+   "version": "v8-20261126",
+   "geometries": 72,
+   "buf": {
+    "n": 326,
+    "mb": 12.1
+   },
+   "tex": {
+    "n": 13,
+    "mb": 42
+   },
+   "cleanup": [],
+   "bufMb": 9.5,
+   "heapMb": 30,
+   "heap0": {
+    "usedMb": 39.9,
+    "embedderMb": 7.8,
+    "backingMb": 19.7
+   },
+   "heap1": {
+    "usedMb": 54,
+    "embedderMb": 9.5,
+    "backingMb": 35.6
+   }
+  },
+  {
+   "gate": "oasis",
+   "errors": [
+    "console: THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."
+   ],
+   "loadMs": 1283,
+   "three": true,
+   "map": "hm17",
+   "field": "field_hm17_02",
+   "version": "v6-20261126",
+   "geometries": 159,
+   "buf": {
+    "n": 657,
+    "mb": 14.2
+   },
+   "tex": {
+    "n": 48,
+    "mb": 49.9
+   },
+   "cleanup": [],
+   "bufMb": 11.6,
+   "heapMb": 32.8,
+   "heap0": {
+    "usedMb": 39.8,
+    "embedderMb": 7.8,
+    "backingMb": 19.7
+   },
+   "heap1": {
+    "usedMb": 54.3,
+    "embedderMb": 9.8,
+    "backingMb": 38
+   }
+  },
+  {
+   "gate": "ruins",
+   "errors": [
+    "console: THREE.WebGLShadowMap: PCFSoftShadowMap has been deprecated. Using PCFShadowMap instead."
+   ],
+   "loadMs": 1393,
+   "three": true,
+   "map": "hm18",
+   "field": "field_hm18_01",
+   "version": "v5-20261126",
+   "geometries": 131,
+   "buf": {
+    "n": 597,
+    "mb": 36.1
+   },
+   "tex": {
+    "n": 14,
+    "mb": 43.3
+   },
+   "cleanup": [],
+   "bufMb": 33.5,
+   "heapMb": 57,
+   "heap0": {
+    "usedMb": 39.5,
+    "embedderMb": 7.8,
+    "backingMb": 19.7
+   },
+   "heap1": {
+    "usedMb": 53.5,
+    "embedderMb": 9.9,
+    "backingMb": 62.7
+   }
+  }
+ ]
+}

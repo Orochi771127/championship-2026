@@ -33,6 +33,8 @@ Measured on the 16 maps as shipped after #308-#316.
 2. **Lighter coverage masks for hm01 and hm08**: about 24 MB less texture memory in the hunt for each, same picture. This is the main protection against the phone killing the web app on entry. **Done 2026-11-26: the mask is uploaded as one channel at full resolution instead of at half resolution, so no edge gets coarser; see `BATCH2.md`.**
 3. **Water that moves**: a light shader shimmer on the existing water surfaces; no new assets; off with reduced motion and in saver quality. **Done 2026-11-26 on hm05, hm06, hm11, hm13 and hm17: see `BATCH3.md`.**
 4. **Flat ground as one textured surface** on hm14, hm15, hm18, hm13 and hm10: the vertex-colour ground becomes a small baked texture on a few large quads. Fewer triangles (35-45% per map), smaller downloads, and the texture can then carry surface detail (ripples, cracks, stains).
+   **Re-planned 2026-11-26 after measuring (see `BATCH4.md`): welding and a baked ground texture gain little and risk the picture; the same maps carried unread UV sets, second colour sets and float colours instead. Done: hm14-hm18 are 8 MB lighter to download and hold 11-32 MB less in the hunt, same models.**
+   **4b (next): release the CPU copy of map geometry after it is uploaded.**
 5. **hm14 extension cliffs as rounded rock**, built like hm08's new mesas, replacing the per-tile blocks.
 
 Each batch ships as its own PR with before/after pictures, the full tests, a browser check on phone

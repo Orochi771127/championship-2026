@@ -2,6 +2,7 @@
 // Their 2026-10 extension strips were almost empty sand. Each map now carries copies of its own
 // landmarks (rock outcrops, palms on rocks, ruin blocks, pillars, flags) in the extension; the
 // tiles under every copy are blocked, day and night, and no open area is cut off.
+// (Batch 4 re-issued the three folders with unread vertex data dropped: v8 / v6 / v5, same models.)
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -14,9 +15,9 @@ import landmarks from '../scripts/data/hunt-extension-landmark-blocks-20261126.j
 
 const sha = (bytes) => crypto.createHash('sha256').update(bytes).digest('hex');
 const EXPECTED = {
-  hm16: { directory: /hm16-three-v7-20261126\/$/, stamps: 16 },
-  hm17: { directory: /hm17-three-v5-20261126\/$/, stamps: 16 },
-  hm18: { directory: /hm18-three-v4-20261126\/$/, stamps: 18 },
+  hm16: { directory: /hm16-three-v8-20261126\/$/, stamps: 16 },
+  hm17: { directory: /hm17-three-v6-20261126\/$/, stamps: 16 },
+  hm18: { directory: /hm18-three-v5-20261126\/$/, stamps: 18 },
 };
 const regions = (isBlocked) => {
   const seen = new Uint8Array(180 * 180); let count = 0;
