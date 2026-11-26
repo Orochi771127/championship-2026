@@ -577,6 +577,8 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
   // Emit bold filled anime pixel crescent slash showpiece (`HERO_SLASH` — ZERO thin wireframe lines!)
   function emitCrescentSlash({ x, y, angle = 0, palKey = "metal", scale = 1, count = 1, style = "cleave" }) {
     const pk = normalizePalKey(palKey);
+    // Centre the arc behind the struck body so the stroke passes through it, not beyond it.
+    x -= Math.cos(angle) * 18 * Math.min(1.25, scale); y -= Math.sin(angle) * 12 * Math.min(1.25, scale);
     const hex = paletteHex(pk);
     addHero({
       kind: "HERO_SLASH",
@@ -683,7 +685,8 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
     const hex = paletteHex(h.palKey);
 
     if (h.kind === "HERO_SLASH") {
-      const fade = t < 0.25 ? t / 0.25 : clamp(1 - (t - 0.25) / 0.75, 0, 1);
+      // Peak on the first frame (a slash shape lives 1-2 frames at full strength), then thins out.
+      const fade = clamp(1 - Math.max(0, t - 0.2) / 0.8, 0, 1);
       // ~1.2 body (PB keeps a slash tight on the caster and target, 2026-11-26).
       const rBase = (26 + t * 12) * Math.min(1.25, h.scale);
       const gMain = topGfx ?? topAddGfx;
@@ -1213,9 +1216,13 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       return true;
     },
 
-    cast({ x, y, moveId }) {
+    cast({ x, y, moveId, windup = 0.2 }) {
       const spec = resolveMoveSpecV2(moveId);
       const pk = normalizePalKey(spec.paletteKey);
+      // The charge is visible for the whole windup: an orb grows in the hand until the release (2026-11-26 blind review).
+      const hold = clamp(windup, 0.12, 1.4);
+      spawnP({ shape: "glow", x, y: y - 6, size: 4, size1: 22, pal: pk, add: true, alphaMul: 0.85, life: hold, drag: 1 });
+      spawnP({ shape: "pxball", x, y: y - 6, size: 2, size1: 9, pal: pk, add: false, life: hold, drag: 1 });
       // PB Ranked charge windup: bright core star + inward-converging elemental energy streaks
       spawnP({ shape: "star", x, y: y - 6, size: 15, size1: 3, rot: rand() * TAU, pal: pk, add: true, life: 0.22 });
       spawnP({ shape: "glow", x, y: y - 6, size: 14, size1: 24, pal: pk, add: true, alphaMul: 0.72, life: 0.22 });
@@ -1366,7 +1373,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       const pk = normalizePalKey(spec.paletteKey);
       const isStream = Boolean(pb?.hitFeel?.stream);
       const isHeavy = heavy || Boolean(pb?.hitFeel?.impact) || (pb?.hitFeel?.hitstop ?? 0) >= 12;
-      const crisp = cellsOwnBurst(moveId);
+      const crisp = cellsOwnBurst(moveId) || Boolean(spec.melee);
       playPendingUlt(moveId, x, groundY);
       emitElementBurst({ x, y, palKey: fxKey || pk, scale: isStream ? 0.85 : isHeavy ? 1.42 : 1.05, angle, heavy: isHeavy && !isStream, crisp });
       if ((spec.melee || pb?.vfx?.shapes?.includes("crescent")) && !isStream && !crisp) {

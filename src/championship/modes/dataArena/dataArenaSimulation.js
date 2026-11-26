@@ -2817,6 +2817,12 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       const beforeContact = events.length, oldHp = target.hp;
       const applied=strike(target, projectile.damage, "SKILL", projectile.onHit, projectile.x, projectile.y, projectile.arenaElement, projectile.attackElement, projectile.isBasic, { guardBreak: Boolean(projectile.guardBreak), moveId: projectile.moveId });
       if(relayMode&&!applied)return;
+      // A shot pushes what it hits along its flight (PB: nearly every hit slides the body back;
+      // 2026-11-26 blind review: "the promised knockback never happens"). Basics give a small shove.
+      if (relayMode && target !== player) {
+        const v = Math.hypot(projectile.vx, projectile.vy) || 1;
+        launch(target, projectile.vx / v, projectile.vy / v, projectile.knockback || (projectile.isBasic ? 60 : 110));
+      }
       emit({ type: "SKILL_HIT", actionId: projectile.actionId, x: projectile.x, y: projectile.y, moveId: projectile.moveId });
       if (applied) confirmMoveContact(beforeContact, oldHp, target, projectile, projectile.casterId, projectile.x, projectile.y, Math.atan2(projectile.vy, projectile.vx));
       if (projectile.pierce <= 0) { projectile.dead = true; terrainEffect(projectile); return; }

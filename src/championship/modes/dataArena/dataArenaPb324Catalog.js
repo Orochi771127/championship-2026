@@ -163,7 +163,7 @@ export function pb324ToRelayMove(id, ultimate = false) {
     ? Math.max(68, Math.min(110, Math.round(52 + m.power * 0.36)))
     : m.power <= 0 ? 0 : Math.max(12, Math.min(44, Math.round(11 + m.power * 0.24)));
   const speed = m.type === "LANCE" ? 1120 : m.type === "BOLT" ? 780 : m.type === "SPREAD" ? 760 : m.type === "WAVE" ? 480 : m.type === "LUNGE" ? 940 : 0;
-  const radius = m.type === "NOVA" ? (isUlt ? 245 : 145) : m.type === "ZONE" ? (isUlt ? 145 : 112) : m.type === "WAVE" ? 36 : m.type === "BARRIER" ? 64 : m.type === "LANCE" ? 18 : 11;
+  const radius = m.type === "NOVA" ? (isUlt ? 245 : 145) : m.type === "ZONE" ? (isUlt ? 145 : 112) : m.type === "WAVE" ? 36 : m.type === "BARRIER" ? 64 : m.type === "LANCE" ? 18 : (isUlt ? 18 : 11); // an ultimate orb hits when its drawn orb touches (2026-11-26)
   const isShot = m.type === "BOLT" || m.type === "SPREAD" || m.type === "LANCE";
   const isArea = m.type === "ZONE" || m.type === "NOVA";
   const onTerrain = isShot ? (m.element === "FIRE" ? "IGNITE" : m.element === "ICE" ? "FREEZE" : undefined) : undefined;

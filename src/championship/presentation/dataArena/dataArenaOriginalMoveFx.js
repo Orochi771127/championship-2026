@@ -31,7 +31,9 @@ const TICK = 1 / 60;
 // [min, max] world px: a relay body is ~78 world px tall, and a 16 px missile must read
 // at phone size as well as a 40 px lion head does (PA2D draws shots well above their hitbox).
 const SIZE = Object.freeze({shot: 2.6, launch: 2.4, hit: 2.8, lob: 3, ultimate: 1.25});
-const FIT = Object.freeze({shot: [58, 112], launch: [40, 92], hit: [72, 150], lob: [56, 96]});
+const FIT = Object.freeze({shot: [70, 112], launch: [40, 92], hit: [72, 150], lob: [56, 96]});
+// A few drawn bodies take their element's warmth (the flame fist reads as fire, not steel).
+const FAMILY_TINT = Object.freeze({flamefist00: 0xffa060});
 const familyOf = bankId => String(profiles.banks[(bankId | 0) - 1]?.name ?? '').replace(/^e003_/, '');
 
 /**
@@ -150,6 +152,7 @@ export function createDataArenaOriginalMoveFx({PIXI, layer, art = null, quality 
   function show(actor) {
     const frame = actor.seq.frames[actor.frame];
     const sprite = actor.sprite;
+    if (actor.tint && !actor.lob) sprite.tint = actor.tint;
     sprite.texture = frame.tex.texture;
     sprite.anchor.set(frame.tex.anchorX, frame.tex.anchorY);
     orient(sprite, actor.angle, actor.size * frame.tex.unit, actor.turn);
@@ -219,7 +222,9 @@ export function createDataArenaOriginalMoveFx({PIXI, layer, art = null, quality 
       const at = follow?.();
       if (!seq || !at) return false;
       stats.shots++;
-      return Boolean(spawn({seq, x: at.x, y: at.y, angle: at.angle ?? angle, size: scaleFor(moveId, 'shot', seq), turn: true, follow}));
+      const actor = spawn({seq, x: at.x, y: at.y, angle: at.angle ?? angle, size: scaleFor(moveId, 'shot', seq), turn: true, follow});
+      if (actor && FAMILY_TINT[look.body.family]) { actor.tint = FAMILY_TINT[look.body.family]; actor.sprite.tint = actor.tint; }
+      return Boolean(actor);
     },
     /** A lobbed body arcs from the caster onto its zone and waits there for the burst. */
     lob({from, to, moveId, seconds = 0.6}) {
