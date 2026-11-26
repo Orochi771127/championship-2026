@@ -33,3 +33,14 @@ Budget and behaviour:
 - one `THREE.Points` draw per map with at most 160 points;
 - positions are computed on the GPU from a seed and the time, inside a box that follows the camera, so the count does not grow with the map;
 - the layer is off in saver quality and with reduced motion, and so is the drain flow.
+
+## Browser check (Chromium, 1366x768, motion on)
+
+`browser-four-maps.jpg` shows the factory drain, the sewer, the ice field at night (snow) and the grassland by day (pollen).
+`browser-two-frames.jpg` shows the same spots 0.7 s apart: the drain streaks and the snow move between the frames.
+
+Results:
+- every map reports its layer drawing;
+- no page errors.
+
+`npm run test:ci` 4107/4107 and `npm run build:playtest` pass.
