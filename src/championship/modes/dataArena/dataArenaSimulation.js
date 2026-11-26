@@ -2187,6 +2187,13 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         if (hit) confirmMoveContact(beforeContact, oldHp, target, lunge, caster.id, target.x, target.y, Math.atan2(lunge.dirY, lunge.dirX));
         if(relayMode&&!hit)continue;
         launch(target, lunge.dirX, lunge.dirY, DATA_ARENA_ENERGY.launch.LUNGE);
+        // RELAY: a dash that connects stops at arm's reach instead of running into the body
+        // (2026-11-26 blind review: "the caster ends clipped inside the target").
+        if (relayMode && !lunge.rebound && !target.lunge) {
+          const reach = (target.radius ?? 20) + (caster.radius ?? 18) * 0.9, gap = distance(target.x, target.y, caster.x, caster.y);
+          if (gap < reach && gap > 0.01) { caster.x = target.x - (target.x - caster.x) / gap * reach; caster.y = target.y - (target.y - caster.y) / gap * reach; }
+          lunge.left = 0;
+        }
         if (lunge.rebound) {
           // UTURN_STRIKE: strike then spring back cleanly to safe spacing!
           launch(caster, -lunge.dirX, -lunge.dirY, 310);
