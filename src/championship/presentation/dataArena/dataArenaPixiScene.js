@@ -643,7 +643,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           const hasJump = spec?.v2Archetype !== "GUARD_BREAK_SLAM" && (cues.includes("jump/aerial") || pose === "hop" || pose === "slam");
           const hasDash = cues.includes("dash/lunge") || spec?.melee || Boolean(body.lunge);
           const hasRecoil = cues.includes("self-recoil/impulse");
-          const hasAfterimage = cues.includes("afterimage") || spec?.v2Archetype === "MULTI_DASH" || spec?.v2Archetype === "SHADOW_BACKSTAB";
+          const hasAfterimage = cues.includes("afterimage") || spec?.v2Archetype === "MULTI_DASH" || spec?.v2Archetype === "SHADOW_BACKSTAB" || spec?.v2Archetype === "GUARD_BREAK_SLAM";
           const hasVanish = cues.includes("vanish") || spec?.v2Archetype === "SHADOW_BACKSTAB";
           const baseThrust = relayProfile?.thrust ?? 8;
           const baseLift = relayProfile?.lift ?? 3;

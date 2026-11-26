@@ -478,7 +478,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
     // Hot white starburst + saturated volumetric flash core. An own move's drawn hit cell is its
     // burst (2026-11-27 blind review: "a generic white starburst"): it keeps only a glow and embers.
     spawnP({ shape: "glow", x, y, size: 14 * scale, size1: 34 * scale, life: 0.2, pal: pk, add: true, alphaMul: 0.9 });
-    if (!own) spawnP({ shape: "star", x, y, size: (heavy ? 22 : 14) * scale, size1: 3 * scale, rot: rand() * TAU, life: 0.20, pal: "white", add: true });
+    if (!own) spawnP({ shape: "star", x, y, size: (heavy ? 22 : 14) * scale * (crisp ? 0.7 : 1), size1: 3 * scale, rot: rand() * TAU, life: crisp ? 0.12 : 0.20, pal: crisp ? pk : "white", add: true });
 
     // Volumetric 3-pass shaded cloud punch at center (replaces wireframe ring!)
     if (!crisp && (pk === "fire" || pk === "blueFire" || pk === "water" || pk === "earth" || pk === "moon" || pk === "poison" || pk === "dragon")) {
@@ -598,6 +598,16 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       style,
       life: style === "flurry" ? 0.34 : 0.26
     });
+    if (style === "heavy" && count === 1 && !reducedMotion) {
+      // Flames lick off the cleave: tongues spawned along the arc's path, thrown outward and up.
+      const rr = 44 * clamp(scale, 0.85, 1.8), cx = x - Math.cos(angle) * rr * 0.55, cy = y - 10;
+      for (let i = 0; i < 12; i++) {
+        const a = angle - 1.05 + (i / 11) * 2.1;
+        const px0 = cx + Math.cos(a) * rr, py0 = cy + Math.sin(a) * rr * 1.25;
+        spawnP({ shape: i % 3 ? "streak" : "pxball", x: px0, y: py0, vx: Math.cos(a) * 70, vy: Math.sin(a) * 60 - 90,
+          size: (i % 3 ? 6 : 4.5) * scale, size1: 1, rot: -Math.PI / 2, pal: pk, add: true, life: 0.24 + rand() * 0.12 });
+      }
+    }
     for (let i = 0; i < 8; i++) {
       const a = angle + (rand() - 0.5) * 1.5;
       spawnP({
@@ -727,7 +737,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
           const rr = (38 + subT * 26) * h.scale * (i === slashCount - 1 ? 1.15 : 0.95);
           if (h.style === "heavy" && slashCount === 1) {
             // Overhead cleave: a tall, thick arc whose stroke passes through the struck body, top to bottom.
-            drawFilledCrescent(gMain, h.x - Math.cos(h.angle) * rr * 0.55, h.y - 10, rr, sweepA, 1.05, 30 * h.scale * subFade, h.mainHex, 0xffffff, subFade, 1.25);
+            drawFilledCrescent(gMain, h.x - Math.cos(h.angle) * rr * 0.55, h.y - 10, rr, sweepA, 1.05, 30 * h.scale * subFade, h.mainHex, sampleStops(stops, 0.22).hex, subFade, 1.25);
             continue;
           }
           drawFilledCrescent(slashCount > 1 ? gAdd : gMain, h.x + Math.cos(h.angle) * 14, h.y + Math.sin(h.angle) * 10, rr, sweepA, 1.28, (16 + (h.style === "heavy" ? 6 : 0)) * h.scale * subFade, h.mainHex, 0xffffff, subFade);
@@ -1408,12 +1418,16 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       playPendingUlt(moveId, x, groundY);
       emitElementBurst({ x, y, palKey: fxKey || pk, scale: isStream ? 0.85 : isHeavy ? 1.42 : 1.05, angle, heavy: isHeavy && !isStream, crisp, own });
       if (spec.v2Archetype === "GUARD_BREAK_SLAM" && !reducedMotion) {
-        // The guard shatters: angular white and element shards burst off the struck side and fall.
-        for (let i = 0; i < 8; i++) {
-          const a = angle + (rand() - 0.5) * 2.2;
-          const spd = 170 + rand() * 150;
-          spawnP({ shape: "shard", x, y, vx: Math.cos(a) * spd, vy: Math.sin(a) * spd * 0.7 - 40, vz: 110 + rand() * 90, gravity: 420,
-            drag: 0.92, size: 6 + rand() * 4, size1: 2, rot: a, vrot: (rand() - 0.5) * 14, pal: i % 2 ? pk : "white", add: i % 2 === 1, life: 0.34 + rand() * 0.12 });
+        // The guard shatters: big plates laid out as a shield standing in front of the struck body
+        // (on the caster's side) burst apart and fall (2026-11-27 blind review: "no guard-break cue").
+        const sx = x - Math.cos(angle) * 16, sy = y - 6;
+        for (let i = 0; i < 10; i++) {
+          const v = (i / 9 - 0.5) * 2;
+          const px0 = sx + Math.cos(angle) * Math.abs(v) * 6, py0 = sy + v * 30;
+          const a = angle + v * 0.9 + (rand() - 0.5) * 0.4;
+          const spd = 150 + rand() * 140;
+          spawnP({ shape: "shard", x: px0, y: py0, vx: Math.cos(a) * spd, vy: Math.sin(a) * spd * 0.7 + v * 60 - 30, vz: 90 + rand() * 80, gravity: 420,
+            drag: 0.92, size: 10 + rand() * 4, size1: 3, rot: a, vrot: (rand() - 0.5) * 12, pal: i % 2 ? pk : "white", add: false, life: 0.42 + rand() * 0.12 });
         }
       }
       if ((spec.melee || pb?.vfx?.shapes?.includes("crescent")) && !isStream && !cellsOwnBurst(moveId)) {

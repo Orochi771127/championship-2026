@@ -2192,7 +2192,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         // (2026-11-26 blind review: "the caster ends clipped inside the target").
         if (relayMode && !lunge.rebound && !target.lunge) {
           // Drawn bodies are wider than their hit circles: stand a body-width off (2026-11-27 review: sprites overlapped).
-          const reach = ((target.radius ?? 20) + (caster.radius ?? 18)) * 1.45, gap = distance(target.x, target.y, caster.x, caster.y);
+          const reach = ((target.radius ?? 20) + (caster.radius ?? 18)) * 1.8, gap = distance(target.x, target.y, caster.x, caster.y);
           if (gap < reach && gap > 0.01) { caster.x = target.x - (target.x - caster.x) / gap * reach; caster.y = target.y - (target.y - caster.y) / gap * reach; }
           lunge.left = 0;
         }
