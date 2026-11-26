@@ -7,9 +7,15 @@ import test from 'node:test';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import { MAPS } from '../src/championship/presentation/vs2/huntThree/manifestBindings.mjs';
-import report from '../docs/reports/hunt-refinement-2026-11-26/batch4-slim-attributes.json' with { type: 'json' };
+import slimReport from '../docs/reports/hunt-refinement-2026-11-26/batch4-slim-attributes.json' with { type: 'json' };
+import rocks from '../scripts/data/hunt-hm14-plateau-rocks-20261126.json' with { type: 'json' };
 
 const KEYS = ['hm14', 'hm15', 'hm16', 'hm17', 'hm18'];
+// Batch 6 then rebuilt hm14's extension plateaus as rounded mesas and added boulders (folder c4), all in the same
+// slim vertex layout: position + normal + byte colour = 28 bytes.
+const hm14Extra = rocks.mesas.vertices - rocks.mesas.oldPlateauVertices + rocks.addedVertices;
+const report = { ...slimReport, hm14: { ...slimReport.hm14, folder: 'hm14-three-c4-20261126', glbBytes: rocks.glbBytes,
+  vertices: slimReport.hm14.vertices + hm14Extra, vertexBytes: slimReport.hm14.vertexBytes + hm14Extra * 28 } };
 const sha = (bytes) => crypto.createHash('sha256').update(bytes).digest('hex');
 const manifestOf = (key) => JSON.parse(fs.readFileSync(MAPS[key].directory + MAPS[key].manifest.file, 'utf8'));
 const glbOf = (key) => fs.readFileSync(MAPS[key].directory + manifestOf(key).glb.file);
@@ -38,7 +44,7 @@ test('the five maps bind the slimmed folders, and manifest and GLB bytes match t
     assert.equal(glb.length, manifest.glb.bytes, key);
     assert.equal(sha(glb), manifest.glb.sha256, key);
     assert.equal(glb.length, report[key].glbBytes, `${key} report is of this file`);
-    assert.ok(report[key].glbBytes < report[key].glbBytesBefore, `${key} got smaller`);
+    assert.ok(slimReport[key].glbBytes < slimReport[key].glbBytesBefore, `${key} got smaller in batch 4`);
   }
 });
 
@@ -73,11 +79,12 @@ test('no primitive carries an unread UV set, a second colour set, or a float col
 });
 
 test('together the five maps are 8 MB lighter to download and 50 MB lighter in vertex memory per copy', () => {
-  const sum = (field) => KEYS.reduce((n, key) => n + report[key][field], 0);
+  const sum = (field) => KEYS.reduce((n, key) => n + slimReport[key][field], 0);   // batch 4 itself, before hm14's rocks
   assert.ok(sum('glbBytesBefore') - sum('glbBytes') > 8_000_000, `${sum('glbBytesBefore')} -> ${sum('glbBytes')}`);
   assert.ok(sum('vertexBytesBefore') - sum('vertexBytes') > 50_000_000, `${sum('vertexBytesBefore')} -> ${sum('vertexBytes')}`);
   // The heaviest map is now under 7 MB (hm11); hm18 was 9.65 MB.
-  for (const key of KEYS) assert.ok(report[key].glbBytes < 6_200_000, key);
+  for (const key of KEYS) assert.ok(report[key].glbBytes < 6_900_000, key);
+  assert.equal(rocks.glbBytesBefore, slimReport.hm14.glbBytes, 'the rocks were added to the slim hm14');
 });
 
 test('materials, textures and the lava phase picture are untouched', () => {

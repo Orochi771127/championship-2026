@@ -6,6 +6,8 @@ import {isOriginalRuntimeLocation} from '../../originalRuntimeLocation.js';
 // HM10/11/13/14 grew to 2880 on 2026-11-25 (c2: untrimmed candidate geometry; HM14 rebuilt with core-style extension cliffs).
 // HM10/13 c3 (2026-11-26): the extension areas carry the maps' own props, which block their tiles.
 // HM16/17/18 (2026-11-26): the extension areas carry copies of each map's own landmarks, which block their tiles.
+// HM14 c4 (2026-11-26): the extension plateaus carry the original area's own boulders along their rims.
+// HM14 c4 (2026-11-26): the extension plateaus are rounded mesas built in Blender and carry the original area's own boulders.
 // HM14-HM18 (2026-11-26): same models with the vertex data nothing reads dropped (unused UV sets, COLOR_1, float colours as bytes).
 // HM02-HM06 (2026-11-26): same geometry, Draco-compressed at file level (folders v*d); 14.8 MB -> 5.2 MB of GLB.
 export const MAPS=Object.freeze({
@@ -217,10 +219,10 @@ export const MAPS=Object.freeze({
     "appearanceApproved": true
   },
   "hm14": {
-    "directory": "assets/production/hunt/hm14-three-c3-20261126/",
+    "directory": "assets/production/hunt/hm14-three-c4-20261126/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "7c652f7eb460b923aa8f61bd16e4962a1bc52deb38884b655c871a824336babd",
+      "sha256": "baa18f6506b7c146e9bd66a6fa912e18fb70c6950c295d82c4447e0d3f3e8642",
       "bytes": 771
     },
     "fields": [

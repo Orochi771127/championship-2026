@@ -28,7 +28,7 @@ test('the four maps bind every native day/night field of their gate at the expan
     assert.ok(map, key);
     assert.deepEqual(map.fields, want.fields);
     assert.equal(map.worldSize, 2880);
-    assert.match(map.directory, /-three-(c2-20261125|c3-20261126)\/$/);
+    assert.match(map.directory, /-three-(c2-20261125|c3-20261126|c4-20261126)\/$/);
     assert.equal(map.appearanceApproved, true);
     const gate = ORIGINAL_HUNT_FIELD_BINDINGS[want.biome];
     assert.ok(gate, want.biome);
