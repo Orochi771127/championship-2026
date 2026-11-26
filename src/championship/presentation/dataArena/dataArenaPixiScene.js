@@ -34,6 +34,7 @@ import { createBattleBurstShell } from '../vs5/battleBurstShell.js';
 import { createBattleStatusAilmentFx, dataArenaStatusLook, multiplyTint } from '../battleFx/battleStatusAilmentFx.js';
 import { GACHA_BLOODLINES } from '../../gacha/cyberGacha.js';
 import { arenaText as t } from '../../text/dataArenaText.js';
+import { createDataArenaOriginalMoveFx } from './dataArenaOriginalMoveFx.js';
 // Burst evolution (OWNER_APPROVED_ADAPTATION 2026-11-02): the hex shell closes over the 成熟期 for this long before
 // its form stands in; then the plates scatter. The match itself never pauses.
 const ARENA_BURST_REVEAL_SECONDS = 0.6, ARENA_BURST_SCATTER_SECONDS = 0.5, ARENA_BURST_SHATTER_SECONDS = 0.4;
@@ -185,8 +186,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const moveVfxParam = typeof URLSearchParams === 'function' ? new URLSearchParams(globalThis.location?.search ?? '').get('moveVfx') : null;
   // Pure patch-gg/pixelfx + 3D volumetric engine in V2 mode; legacy 5-layer element dressing + atlas stay available.
   const usePixelFxV2 = state.gameMode === 'RELAY' && state.moveSystem === 'v2' && moveVfxParam !== 'classic' && typeof createDataArenaPixelFxV2 === 'function';
+  // Late-bound: the own-move layer (created below) tells PixelFX which bursts its original cells draw.
+  const originalOwns = { fx: null };
   const elementFx = usePixelFxV2
-    ? createDataArenaPixelFxV2({ PIXI, ground: cellFx, front: particles, quality, reducedMotion })
+    ? createDataArenaPixelFxV2({ PIXI, ground: cellFx, front: particles, quality, reducedMotion, ownsBurst: (moveId) => Boolean(originalOwns.fx?.look(moveId)?.hit) })
     : (typeof createDataArenaElementFx === 'function' ? createDataArenaElementFx({ PIXI, ground: cellFx, front: particles, art: effectArt, quality, reducedMotion,
         // One-style move effects (MOVE_VFX_KIT_20261105); ?moveVfx=classic keeps the cells over vector heads.
         kit: moveVfxParam !== 'classic' }) : null);
@@ -203,6 +206,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const warningOwners = new WeakMap();
   const kitShots = Boolean(elementFx?.drawsShots?.());
   if (elementFx) rollback.push(() => elementFx.dispose());
+  // A partner's own original moves fly, land and hit with their own effect cells (ORIGINAL_MOVES_ARENA_20261126).
+  const originalFx = purePixelFx && typeof createDataArenaOriginalMoveFx === 'function'
+    ? createDataArenaOriginalMoveFx({ PIXI, layer: particles, art: effectArt, quality, reducedMotion }) : null;
+  if (originalFx) rollback.push(() => originalFx.dispose());
+  originalOwns.fx = originalFx;
+  const lobFrom = { player: null, rival: null };
 
   const camera = createDataArenaCamera({ worldWidth, worldHeight, reducedMotion, shake, cover: Boolean(grid.map.battleFieldId), artBounds: environment?.manifest?.cameraArtBounds });
   let elapsed = 0;
@@ -804,8 +813,14 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     shots.addChild(entry.sprite); shotGlow.addChild(entry.glow); shotGlow.addChildAt(entry.shadow, 0);
     entry.origin = releaseOrigins.get(projectile.actionId) ?? null; entry.from = null;
     entry.atlasDrawn = !purePixelFx && atlas.ready(projectile.moveId, 'travel');
-    entry.kitDrawn = false;
-    if (!entry.atlasDrawn && state.gameMode === 'RELAY' && projectile.moveId && elementFx?.projectile) {
+    entry.kitDrawn = false; entry.originalDrawn = false;
+    const followShot = () => (!projectile.dead && state.projectiles.includes(projectile) ? { x: projectile.x, y: projectile.y - 12, angle: Math.atan2(projectile.vy, projectile.vx) } : null);
+    // The move's own flying cell (a lion head, a missile, a thrown spear) is the shot itself.
+    if (!entry.atlasDrawn && state.gameMode === 'RELAY' && projectile.moveId && originalFx?.hasShot(projectile.moveId)
+      && originalFx.projectile({ follow: followShot, moveId: projectile.moveId, angle: Math.atan2(projectile.vy, projectile.vx) })) {
+      entry.kitDrawn = true; entry.originalDrawn = true;
+      entry.sprite.visible = entry.glow.visible = false;
+    } else if (!entry.atlasDrawn && state.gameMode === 'RELAY' && projectile.moveId && elementFx?.projectile) {
       const ownerSpecies = projectile.owner === 'player' ? state.player.speciesId
         : (state.rivals.find(r => r.active && r.hp > 0) ?? state.rivals[0])?.speciesId ?? null;
       entry.kitDrawn = elementFx.projectile({
@@ -1335,6 +1350,25 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       }
       const atlasLunge = !purePixelFx && event.type === 'CAST_RELEASE' && event.moveType === 'LUNGE' && atlas.ready(event.moveId, 'travel');
       if (atlasLunge) atlasLunges.set(event.actionId, event.t);
+      // Own original moves: launch cells, a lobbed thing onto its zone, the hit cells where it lands.
+      let originalLobbed = false;
+      if (originalFx && state.gameMode === 'RELAY' && event.moveId && originalFx.look(event.moveId)) {
+        const side = event.team === 'player' ? 'player' : 'rival';
+        if (event.type === 'CAST' || event.type === 'ULT_CAST') originalFx.prewarm([event.moveId]);
+        else if (event.type === 'CAST_RELEASE') {
+          const at = releaseAt(event);
+          originalFx.release({ x: at.x, y: at.y, angle: event.angle ?? 0, moveId: event.moveId });
+          lobFrom[side] = { x: at.x, y: at.y, moveId: event.moveId };
+        } else if (event.type === 'ZONE_PLACED' && !event.vortexLift && originalFx.hasLob(event.moveId)) {
+          const from = lobFrom[side]?.moveId === event.moveId ? lobFrom[side] : casterBody(event) ?? { x: event.x, y: event.y - 120 };
+          originalLobbed = originalFx.lob({ from, to: { x: event.x, y: event.y }, moveId: event.moveId, seconds: event.delay ?? 0.75 });
+        } else if ((event.type === 'ZONE_BURST' || event.type === 'NOVA') && originalFx.isArea(event.moveId)) {
+          originalFx.hit({ x: event.x, y: event.y - 18, angle: event.angle ?? 0, moveId: event.moveId });
+        }
+      }
+      if (originalFx && state.gameMode === 'RELAY' && event.type === 'MOVE_CONTACT' && confirmed?.moveId && originalFx.look(confirmed.moveId) && !originalFx.isArea(confirmed.moveId)) {
+        originalFx.hit({ x: confirmed.x, y: confirmed.y - BEAM_ELEVATION, angle: confirmed.angle ?? 0, moveId: confirmed.moveId });
+      }
       if (elementFx) {
         if (event.type === 'CAST' && event.moveType !== 'LUNGE') { const at = releaseAt(event); elementFx.cast({ x: at.x, y: at.y, moveId: event.moveId, speciesId: casterSpecies(event), windup: event.windup }); }
         else if (event.type === 'ULT_CAST') {
@@ -1375,7 +1409,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             }
           } else {
             // Delayed sky-drop / meteor / thunder pillar zone -> mount Move #7 3D Falling Meteor / Storm-Cloud Thunder!
-            elementFx.meteorDrop?.({ x: event.x, y: event.y, moveId: event.moveId, durationSec: Math.max(0.75, (event.delay ?? 0.6) * 1.45), radius: event.radius ?? 108 });
+            if (!originalLobbed) elementFx.meteorDrop?.({ x: event.x, y: event.y, moveId: event.moveId, durationSec: Math.max(0.75, (event.delay ?? 0.6) * 1.45), radius: event.radius ?? 108 });
           }
         } else if (event.type === 'SKILL_HIT') {
           if (purePixelFx) {
@@ -2138,6 +2172,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       }
     }
     elementFx?.update(dt * 1000);
+    originalFx?.update(dt * 1000);
     statusFx?.update(dt * 1000);
     if (relayMode && !statusFx && dt > 0 && (statusTick += dt) >= 0.14) {
       statusTick = 0;
@@ -2908,7 +2943,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         moveAtlas: { ...atlas.diagnostics(),
           shotLayerConflicts: [...shotViews.values()].filter(v => v.atlasDrawn && (v.sprite.visible || v.glow.visible || v.kitDrawn)).length,
           warningLayerConflicts: state.zones.filter(z => warningOwners.get(z) && sigilSprites.has(z)).length },
-        fireCells: [...fireSprites.keys()], interactions:interactionView.diagnostics(),elementFx:elementFx?.getDiagnostics() ?? null,hitStop,effectsElapsed:elapsed, playerAnimation: playerView.diagnostics(),
+        fireCells: [...fireSprites.keys()], interactions:interactionView.diagnostics(),elementFx:elementFx?.getDiagnostics() ?? null,originalFx:originalFx?.getDiagnostics() ?? null,hitStop,effectsElapsed:elapsed, playerAnimation: playerView.diagnostics(),
         rivalAnimations: [...rivalViews.values()].map(view => view.diagnostics()),
         particleAgeTotal:live.reduce((n,p)=>n+p.age,0),scorchSprites:[...decalSprites.values()].filter(d=>d.kind!=="wet").length,
         fireMotion:[...fireSprites].slice(0,8).map(([cell,s])=>({cell,x:s.scale.x,y:s.scale.y,frame:textures.flame.indexOf(s.texture)})),
@@ -2932,7 +2967,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       // The effect owners bake their own textures (Texture.from(canvas) keeps each canvas and
       // its GPU texture in Pixi's global cache until destroyed): release them on every leave,
       // not only when construction rolls back, or each match leaves hundreds behind.
-      for (const release of [() => atlas.dispose(), () => elementFx?.dispose(), () => statusFx?.dispose(), () => burstShell.dispose()]) {
+      for (const release of [() => atlas.dispose(), () => elementFx?.dispose(), () => originalFx?.dispose(), () => statusFx?.dispose(), () => burstShell.dispose()]) {
         try { release(); } catch (error) { console.error("DATA_ARENA_SCENE_CLEANUP_FAILED", error); }
       }
       root.destroy({ children: true, texture: false, textureSource: false });

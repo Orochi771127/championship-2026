@@ -11,7 +11,17 @@
 import { moveVfxSignature } from "../../presentation/vfx/moveVfxSignatures.js";
 import { moveVfxChoreography } from "../../presentation/vfx/moveVfxChoreography.js";
 import { battleMoveName } from "../../text/battleMoveNames.js";
-import { relayOwnMoveInfo } from "./dataArenaRelayKits.js";
+import { relayOwnMove, relayOwnMoveInfo } from "./dataArenaRelayKits.js";
+import { battleFxFamilyForm, battleFxMoveBanks } from "../../presentation/battleFx/battleFxRecipes.js";
+import battleMoves from "../../../data/championship/catalogs/battle-moves.r1.json" with { type: "json" };
+
+const BATTLE_MOVE_BY_RECORD = new Map(battleMoves.records.map((move) => [move.recordIndex, move]));
+/** Form of the effect an own move's record throws (its body bank, else launch): projectile, beam, area, ... */
+function ownBodyForm(record) {
+  const banks = battleFxMoveBanks(BATTLE_MOVE_BY_RECORD.get(record));
+  const body = banks.find((b) => b.role === "body") ?? banks.find((b) => b.role === "launch");
+  return body ? battleFxFamilyForm(body.family) : null;
+}
 import { pb324Move } from "./dataArenaPb324Catalog.js";
 
 export const MOVE_SYSTEMS = Object.freeze(["v2", "legacy"]);
@@ -274,9 +284,20 @@ export function resolveMoveSpecV2(moveId, baseMove = null) {
   const paletteKey = sig?.paletteKey ?? own?.palette ?? "fire";
 
   let v2Archetype = POOL_V2_ARCHETYPE[moveId] ?? null;
+  // ORIGINAL_MOVES_ARENA_20261126: a partner's own shot flies as its original effect did
+  // (a lion head, a missile, a thrown spear). Its name never turns it into a ring, a
+  // spike line or a lift: the style the original body effect gave it decides.
+  const ownType = own ? (relayOwnMove(moveId)?.type ?? null) : null;
+  const ownForm = own ? ownBodyForm(own.record) : null;
+  if (!v2Archetype && own && ["BOLT", "SPREAD", "WAVE", "LANCE"].includes(baseMove?.type ?? ownType)) {
+    const shotType = baseMove?.type ?? ownType;
+    if (ownForm === "projectile" || ownForm === "character") {
+      v2Archetype = shotType === "SPREAD" || shotType === "LANCE" ? "VOLLEY_BARRAGE" : shotType === "WAVE" ? "DRAG_WAVE" : "HOMING_ORB";
+    } else if (ownForm === "beam" && (shotType === "BOLT" || shotType === "LANCE")) v2Archetype = "STREAM_BEAM";
+  }
 
   if (!v2Archetype) {
-    const type = baseMove?.type ?? (sig?.melee ? "LUNGE" : "BOLT");
+    const type = baseMove?.type ?? ownType ?? (sig?.melee ? "LUNGE" : "BOLT");
     const rawPiece = choreo?.contact?.piece ?? "";
     const isExplicitShot = /(彈|球|珠|火球|妖火|鬼火|神火|飛彈|導彈|投射|砲|炮|光束|射線|吐息|雷射)$/.test(name);
     // Priority 1: Support, Shield Walls, Buffs (absorbs former Tactical Arts cleanly into native 666 moves!)

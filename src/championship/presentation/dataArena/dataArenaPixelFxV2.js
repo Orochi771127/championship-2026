@@ -342,7 +342,11 @@ function drawBoltRibbon(gfx, x0, y0, x1, y1, width, mainHex, coreHex, alpha, tim
   }
 }
 
-export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high", reducedMotion = false }) {
+export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high", reducedMotion = false, ownsBurst = null }) {
+  // ORIGINAL_MOVES_ARENA_20261126: when a move's own original cells draw its burst
+  // (a mushroom's spores, a bomb's blast), this layer adds only the crisp flash,
+  // spark needles and ground mark -- no cloud puffs piled over the original cells.
+  const cellsOwnBurst = (moveId) => Boolean(moveId && typeof ownsBurst === "function" && ownsBurst(moveId));
   if (!PIXI || !front) return null;
 
   const MAX_PARTICLES = quality === "low" ? 210 : 420;
@@ -448,17 +452,17 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
   }
 
   // PB Ranked 10-elemental volumetric hit-burst preset (ZERO empty wireframe rings!)
-  function emitElementBurst({ x, y, palKey = "fire", scale = 1, angle = 0, heavy = false }) {
+  function emitElementBurst({ x, y, palKey = "fire", scale = 1, angle = 0, heavy = false, crisp = false }) {
     const pk = normalizePalKey(palKey);
     const stops = paletteStops(pk);
-    const count = heavy ? (quality === "low" ? 12 : 22) : (quality === "low" ? 7 : 13);
+    const count = Math.round((heavy ? (quality === "low" ? 12 : 22) : (quality === "low" ? 7 : 13)) * (crisp ? 0.55 : 1));
 
     // Hot white starburst + saturated volumetric flash core
     spawnP({ shape: "glow", x, y, size: 14 * scale, size1: 34 * scale, life: 0.18, pal: pk, add: true, alphaMul: 0.9 });
     spawnP({ shape: "star", x, y, size: (heavy ? 22 : 14) * scale, size1: 3 * scale, rot: rand() * TAU, life: 0.20, pal: "white", add: true });
 
     // Volumetric 3-pass shaded cloud punch at center (replaces wireframe ring!)
-    if (pk === "fire" || pk === "blueFire" || pk === "water" || pk === "earth" || pk === "moon" || pk === "poison" || pk === "dragon") {
+    if (!crisp && (pk === "fire" || pk === "blueFire" || pk === "water" || pk === "earth" || pk === "moon" || pk === "poison" || pk === "dragon")) {
       const puffs = heavy ? 5 : 3;
       for (let i = 0; i < puffs; i++) {
         const a = angle + (i / puffs) * TAU + rand() * 0.5;
@@ -518,6 +522,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
         shape = i % 2 === 0 ? "streak" : "crescent";
         size = (8 + rand() * 6) * scale;
       }
+      if (crisp && (shape === "pxpuff" || shape === "rose")) { shape = "streak"; add = true; size = (3.5 + rand() * 3) * scale; }
       spawnP({
         shape, x, y,
         vx: Math.cos(a) * spd, vy: Math.sin(a) * spd * 0.82,
@@ -1346,8 +1351,9 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       const pk = normalizePalKey(spec.paletteKey);
       const isStream = Boolean(pb?.hitFeel?.stream);
       const isHeavy = heavy || Boolean(pb?.hitFeel?.impact) || (pb?.hitFeel?.hitstop ?? 0) >= 12;
-      emitElementBurst({ x, y, palKey: fxKey || pk, scale: isStream ? 0.85 : isHeavy ? 1.42 : 1.05, angle, heavy: isHeavy && !isStream });
-      if ((spec.melee || pb?.vfx?.shapes?.includes("crescent")) && !isStream) {
+      const crisp = cellsOwnBurst(moveId);
+      emitElementBurst({ x, y, palKey: fxKey || pk, scale: isStream ? 0.85 : isHeavy ? 1.42 : 1.05, angle, heavy: isHeavy && !isStream, crisp });
+      if ((spec.melee || pb?.vfx?.shapes?.includes("crescent")) && !isStream && !crisp) {
         emitCrescentSlash({ x, y, angle, palKey: pk, scale: isHeavy ? 1.32 : 1.0, count: 1, style: isHeavy ? "heavy" : "cleave" });
       }
       if (isHeavy && !reducedMotion && (!pb || pb.vfx.layers.includes("ground-decals"))) {
@@ -1361,8 +1367,9 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       const spec = resolveMoveSpecV2(moveId);
       const pk = normalizePalKey(spec.paletteKey);
       const sc = clamp(radius / 95, 0.95, 1.6);
-      spawnHeroShockwave({ x, y: y + 6, radius, palKey: pk, spiresCount: pk === "earth" || pk === "ice" || pk === "metal" ? 6 : 4 });
-      emitElementBurst({ x, y, palKey: pk, scale: sc, angle: 0, heavy: true });
+      const crisp = cellsOwnBurst(moveId);
+      if (!crisp) spawnHeroShockwave({ x, y: y + 6, radius, palKey: pk, spiresCount: pk === "earth" || pk === "ice" || pk === "metal" ? 6 : 4 });
+      emitElementBurst({ x, y, palKey: pk, scale: sc, angle: 0, heavy: true, crisp });
       addDecal({ x, y: y + 8, kind: pk === "earth" ? "crack" : pk === "ice" ? "frost" : "scorch", radius: Math.min(60, radius * 0.48), pal: pk });
       stats.hits++;
       return true;

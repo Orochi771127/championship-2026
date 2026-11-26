@@ -69,10 +69,11 @@ const extraMoves = Object.freeze({
 });
 // Wave 8-B: Every RELAY partner exclusively equips the new 324 PB-Rank moves across 10 Canonical Elements.
 const RELAY_SPECIES_KITS = Object.freeze(Object.fromEntries(RELAY_ROSTER.map(p => [p.id, relaySpeciesKit(p.speciesIndex, p.element)])));
+// The three tournament pilots carry their own original moves too (species 34, 64, 61).
 const PILOT_PB324_KITS = Object.freeze({
-  'ember-lizard': pb324PartnerKit(1, 'FIRE'),
-  'corona-cub': pb324PartnerKit(2, 'SUN'),
-  'frost-drake': pb324PartnerKit(3, 'ICE')
+  'ember-lizard': relaySpeciesKit(34, 'fire'),
+  'corona-cub': relaySpeciesKit(64, 'light'),
+  'frost-drake': relaySpeciesKit(61, 'frost')
 });
 export const RELAY_LOADOUTS = Object.freeze({
   ...Object.fromEntries(RELAY_ROSTER.map(p => [p.id, RELAY_SPECIES_KITS[p.id].pool])),
@@ -124,7 +125,8 @@ const STYLE_LOOKS = Object.freeze({
   fireball:{texture:'relayFlame',impact:'ember'}, flame:{texture:'relayFlame',impact:'ember'}, water:{texture:'relayDrop',impact:'drop'},
   ice:{texture:'relayCrystal',impact:'shard'}, thunder:{texture:'relayBolt',impact:'spark',tether:true}, quake:{texture:'relayRock',impact:'rock'},
   wind:{texture:'relayWind',impact:'puff'}, holy:{texture:'relayLance',impact:'star',tether:true}, dark:{texture:'relayOrb',impact:'puff'},
-  sound:{texture:'relayRing',impact:'ring'}, beam:{texture:'relayLance',impact:'star',tether:true}
+  sound:{texture:'relayRing',impact:'ring'}, beam:{texture:'relayLance',impact:'star',tether:true},
+  throw:{texture:'relayMissile',impact:'blast'}, lob:{texture:'relayMissile',impact:'blast'}
 });
 const POOL_STYLE = Object.freeze({
   emberBolt:'fireball', fangRush:'pierce', flameRing:'flame', cinderGuard:'shell', clawSweep:'claw', coreNova:'flame',
@@ -215,8 +217,16 @@ export function relayMove(id, ultimate = false) {
   if (pb) return pb;
   // Legacy fallback for basics and non-RELAY modes.
   const standIn = relayOwnUltimateStandIn(id);
-  const base = standIn ? { ...(extraMoves[standIn] ?? DATA_ARENA_MOVES[standIn]), mechanic: `own ultimate (${standIn} numbers)`, ownRecord: relayOwnMoveInfo(id).record }
-    : basics[id] ?? extraMoves[id] ?? DATA_ARENA_MOVES[id] ?? relayOwnMove(id);
+  // ORIGINAL_MOVES_ARENA_20261126: an own ultimate keeps its own shape (a lion head still
+  // flies, a bomb is still lobbed); the pool ultimate lends only its damage, split over
+  // a volley and widened for an area, so the slot's power stays where the pool set it.
+  const lent = standIn ? (pb324ToRelayMove(standIn, true) ?? extraMoves[standIn] ?? DATA_ARENA_MOVES[standIn]) : null;
+  const shape = lent ? relayOwnMove(id) : null;
+  const ownUltimate = shape ? { ...shape, mechanic: `own ultimate (${standIn} damage)`,
+    damage: shape.type === 'BARRIER' ? undefined : Math.round(['SPREAD', 'LANCE'].includes(shape.type) ? Math.min(lent.damage, lent.damage * 1.5 / Math.max(1, shape.count ?? 1)) : lent.damage),
+    ...(['ZONE', 'NOVA'].includes(shape.type) ? { radius: Math.round(Math.max(shape.radius ?? 0, lent.radius ?? 0, (shape.radius ?? 100) * 1.3)) } : {}),
+    knockback: Math.max(shape.knockback ?? 0, lent.knockback ?? 0) || undefined } : null;
+  const base = ownUltimate ?? basics[id] ?? extraMoves[id] ?? DATA_ARENA_MOVES[id] ?? relayOwnMove(id);
   if (!base) return null;
   return { ...base, ...(id==='iceCage'?{freezeWater:true}:{}), windup: Math.max(base.windup ?? 0, 0.14),
     recovery: base.recovery ?? (base.type === 'LUNGE' ? 0.32 : base.type === 'NOVA' ? 0.48 : 0.28),

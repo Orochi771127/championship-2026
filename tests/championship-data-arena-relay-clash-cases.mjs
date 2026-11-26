@@ -49,7 +49,10 @@ test('a skill hit is scaled by the dual-ring matchup and announced', () => {
 });
 
 test('hitstun pauses the staggered fighter\'s windup and walking, then lets it finish', () => {
-  const sim = fight('corona-cub'), state = sim.getState();
+  // Slot 0 is its own ranged fireball (its own melee palm would walk in first).
+  const sim = createDataArenaSimulation({ mode: 'RELAY', partnerId: 'corona-cub', relayArenaId: 'field_bm01_01', seed: 7, relayLoadouts: { 'corona-cub': ['own-133'] } });
+  run(sim, 2.1); sim.drainEvents();
+  const state = sim.getState();
   sim.step({ cast: 0, autoAim: true });
   const cast = state.player.cast;
   assert.ok(cast, 'a windup is in progress');

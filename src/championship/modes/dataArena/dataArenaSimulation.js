@@ -35,6 +35,7 @@ import { relayPartner, RELAY_ROSTER } from './dataArenaRelayRoster.js';
 import { relayBattleMap } from './dataArenaRelayMaps.js';
 import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, relayMove, relayFacing8, relayKit, relayMoveElement, partnerAbilityFor } from './dataArenaRelay.js';
 import { pb324PartnerKit } from './dataArenaPb324Catalog.js';
+import { relaySpeciesKit } from './dataArenaRelayKits.js';
 import { createRelayArenaEvents } from './dataArenaRelayArena.js';
 import {
   CONTROL_MODES, normalizeControlMode, AI_DIFFICULTIES, normalizeAiDifficulty, DEFAULT_AI_SETTINGS, normalizeAiSettings, GUARD_RULES, suddenDeathMultiplier,
@@ -3454,9 +3455,11 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     // Wave 8.1: In RELAY mode, rivals ALSO fight exclusively with PB-324 10-element kits (zero legacy vortex/inferno/shardStorm!).
     const rivalSpeciesIdx = Number(String(definition.speciesId ?? "").split("-").at(-1)) || (tier + 1);
     const rivalEl10 = definition.kit === "tide" ? "WATER" : definition.kit === "flame" ? "FIRE" : definition.kit === "storm" ? "THUNDER" : (rosterElement.get(definition.speciesId) ?? "FIRE");
-    const rivalPbKit = relayMode ? pb324PartnerKit(rivalSpeciesIdx, rivalEl10) : null;
+    // ORIGINAL_MOVES_ARENA_20261126: a rival fights with its own original moves first, as the player's partners do.
+    const rivalPbKit = relayMode ? relaySpeciesKit(rivalSpeciesIdx, rivalEl10) : null;
+    // The harbour tide rival keeps its fixed pool kit, ultimate included.
     const rivalKitObj = relayMode && definition.kit === "tide"
-      ? { moves: ["pb-311", "pb-285", "pb-316"], ultimate: rivalPbKit.ultimate }
+      ? { moves: ["pb-311", "pb-285", "pb-316"], ultimate: pb324PartnerKit(rivalSpeciesIdx, rivalEl10).ultimate }
       : rivalPbKit ? { moves: rivalPbKit.moves.slice(0, 3), ultimate: rivalPbKit.ultimate } : DATA_ARENA_KITS[definition.kit];
     return { id: nextId++, rival: true, canSwim:definition.canSwim===true, definitionId: definition.id, speciesId: definition.speciesId, team: "rival", kit: rivalKitObj,
       x: spawn.x, y: spawn.y, vx: 0, vy: 0, kbx: 0, kby: 0, radius: definition.radius, hp: Math.round(definition.hp * rivalBoost), maxHp: Math.round(definition.hp * rivalBoost),

@@ -1734,25 +1734,30 @@ test("phase 18 / Combat Wave 8: All 324 PB-Rank moves across 10 Canonical Elemen
   }
   assert.equal(sumEl, 324, "10 elements partition all 324 moves with zero leaks");
 
-  // 2) Every partner in RELAY_ROSTER + 3 pilots exclusively equips PB-324 moves (ZERO legacy own-* 666 moves!)
+  // 2) Every partner in RELAY_ROSTER + 3 pilots: its own original moves first (Owner 2026-11-26,
+  //    ORIGINAL_MOVES_ARENA_20261126), every other choice from its own element's PB-324 pool.
+  const { relayOwnMoveInfo, relayOwnMoves } = await import("../src/championship/modes/dataArena/dataArenaRelayKits.js");
+  const PILOT_SPECIES = { "ember-lizard": 34, "corona-cub": 64, "frost-drake": 61 };
   const allPartnerIds = [...RELAY_ROSTER.map((p) => p.id), "ember-lizard", "corona-cub", "frost-drake"];
   const coveredMoveIds = new Set();
   for (const pid of allPartnerIds) {
     const pool = RELAY_LOADOUTS[pid];
-    assert.ok(Array.isArray(pool) && pool.length >= 12, `${pid} has selectable PB-324 element pool (${pool?.length})`);
-    for (const mid of pool) {
-      assert.ok(isPb324MoveId(mid), `${pid} pool move ${mid} is a PB-324 ID (zero legacy own-* moves)`);
+    const own = relayOwnMoves(PILOT_SPECIES[pid] ?? RELAY_ROSTER.find((p) => p.id === pid).speciesIndex);
+    assert.ok(Array.isArray(pool) && pool.length >= 12, `${pid} has a selectable skill pool (${pool?.length})`);
+    assert.deepEqual(pool.slice(0, own.skills.length), [...own.skills], `${pid} lists its own original moves first`);
+    for (const mid of pool.slice(own.skills.length)) {
+      assert.ok(isPb324MoveId(mid), `${pid} pool move ${mid} past its own moves is a PB-324 ID`);
       coveredMoveIds.add(mid);
     }
     const kit = relayKit(pid);
     assert.equal(kit.moves.length, 3, `${pid} default kit has 3 skills`);
-    for (const mid of kit.moves) assert.ok(isPb324MoveId(mid), `${pid} default move ${mid} is PB-324`);
-    assert.ok(isPb324MoveId(kit.ultimate), `${pid} ultimate ${kit.ultimate} is PB-324`);
-    coveredMoveIds.add(kit.ultimate);
-    // Legacy save resilience: passing stale own-31 / emberBolt falls back cleanly to PB-324 kit
+    for (const mid of kit.moves) assert.ok(isPb324MoveId(mid) || relayOwnMoveInfo(mid), `${pid} default move ${mid} is its own or PB-324`);
+    assert.ok(isPb324MoveId(kit.ultimate) || relayOwnMoveInfo(kit.ultimate)?.ultimate, `${pid} ultimate ${kit.ultimate} is its own or PB-324`);
+    if (isPb324MoveId(kit.ultimate)) coveredMoveIds.add(kit.ultimate);
+    // Stale save resilience: another partner's own-31 / emberBolt are dropped, the kit refills itself
     const migrated = relayKit(pid, ["own-31", "emberBolt"]);
     assert.equal(migrated.moves.length, 3);
-    assert.ok(migrated.moves.every(isPb324MoveId), `${pid} old save loadout migrates cleanly to PB-324`);
+    assert.ok(migrated.moves.every((mid) => isPb324MoveId(mid) || own.skills.includes(mid)), `${pid} old save loadout migrates cleanly`);
   }
   // Every single non-ultimate skill across all 10 elements is selectable in RELAY_LOADOUTS!
   const allSkillCount = PB324_MOVES.filter((m) => !m.ultimate).length;
@@ -1888,4 +1893,106 @@ test("phase 20 / Combat Wave 9: Hero Volumetric PB-Rank VFX overhaul (zero ring-
   assert.ok(sceneSrc.includes("target: ultTarget, angle: ultAng"), "ULT_CAST passes live opponent target focus to Hero ultimate VFX");
   assert.ok(sceneSrc.includes("const hopH = (pose === \"slam\" || spec?.v2Archetype === \"LEAP_SLAM\") ? 54"), "LEAP_SLAM Z-soar amplified for clear phone readability");
   assert.ok(screenSrc.includes("const drawPuff2d =") && screenSrc.includes('else if (arch === "METEOR_RAIN")') && screenSrc.includes('else if (arch === "VORTEX_PULL")'), "Lobby preview draws Hero volumetric VFX silhouettes");
+});
+
+// ORIGINAL_MOVES_ARENA_20261126 (Owner 2026-11-26: 「原作對應每一隻的招式加回去」 -- the lion-head
+// fist, missiles, a mushroom, bombs): every partner and rival opens with its own original moves,
+// each keeps the shape its original effect had, and the arena draws them with their own cells.
+test("phase 21 / original moves return: own moves first, original shapes, own effect cells fly, lob and land", async () => {
+  const { relayKit, relayMove } = await import("../src/championship/modes/dataArena/dataArenaRelay.js");
+  const { relaySpeciesKit, relayOwnMoveInfo, ORIGINAL_FORM_STYLE } = await import("../src/championship/modes/dataArena/dataArenaRelayKits.js");
+  const { resolveMoveSpecV2 } = await import("../src/championship/modes/dataArena/dataArenaMoveCatalogV2.js");
+  const { sanitizeDataArenaRecords } = await import("../src/championship/modes/dataArena/dataArenaSave.js");
+  const { createDataArenaOriginalMoveFx, dataArenaOriginalMoveLook } = await import("../src/championship/presentation/dataArena/dataArenaOriginalMoveFx.js");
+  const { readFileSync } = await import("node:fs");
+
+  // 1) Kits: the lion pilot opens with its own palm, fireball and blow; a rival carries its own ultimate.
+  const lion = relayKit("corona-cub");
+  assert.deepEqual(lion.moves.slice(0, 2), ["own-132", "own-133"], "fire-mane lion opens with its own moves");
+  assert.equal(lion.ultimate, "own-134", "fire-mane lion keeps its own ultimate");
+  assert.equal(relaySpeciesKit(113, "FIRE").ultimate, "own-255", "a rival species fights with its own ultimate");
+  const simSrc = readFileSync(new URL("../src/championship/modes/dataArena/dataArenaSimulation.js", import.meta.url), "utf8");
+  assert.ok(simSrc.includes("const rivalPbKit = relayMode ? relaySpeciesKit(rivalSpeciesIdx, rivalEl10) : null;"), "rivals build their kit own-moves-first");
+
+  // 2) Shapes follow the original effect: bombs are lobbed, a flame fist / spear flies, an own
+  //    ultimate keeps its own shape and borrows only the pool ultimate's damage.
+  for (const record of [382, 385, 404, 99]) assert.equal(relayMove(`own-${record}`).type, "ZONE", `own-${record} bomb is lobbed onto a zone`);
+  for (const record of [172, 376, 518]) assert.equal(relayMove(`own-${record}`).type, "BOLT", `own-${record} thrown weapon flies`);
+  assert.equal(Object.keys(ORIGINAL_FORM_STYLE).length, 13);
+  const lionUlt = relayMove("own-274", true);
+  assert.equal(lionUlt.type, "BOLT", "the lion-head ultimate still flies");
+  assert.ok(lionUlt.damage >= 68 && lionUlt.energy === DATA_ARENA_RELAY.ultimateTp, "own ultimate carries ultimate damage and cost");
+  assert.equal(relayMove("own-385", true).type, "ZONE", "a bomb ultimate is still lobbed");
+  // A thrown original never turns into a ring, spike line or lift because of its name.
+  for (const record of [274, 516, 461, 270, 172, 161, 376]) {
+    assert.equal(resolveMoveSpecV2(`own-${record}`, relayMove(`own-${record}`)).v2Archetype, "HOMING_ORB", `own-${record} flies as a shot`);
+    assert.equal(resolveMoveSpecV2(`own-${record}`).v2Archetype, "HOMING_ORB", `own-${record} look agrees with the rule`);
+  }
+  assert.equal(resolveMoveSpecV2("own-94").v2Archetype, "VORTEX_PULL", "an original whirlwind stays a whirlwind");
+
+  // 3) Saved pool-only loadouts (rev 1) are dropped once so own moves show; rev 2 picks are kept.
+  const stale = sanitizeDataArenaRecords({ schemaVersion: 1, kind: "DATA_ARENA_RECORDS", relayLoadouts: { "relay-species-121": ["pb-067"] } });
+  assert.deepEqual(stale.relayLoadouts, {}, "stale loadouts reset");
+  assert.equal(stale.relayLoadoutsRev, 2);
+  const kept = sanitizeDataArenaRecords({ schemaVersion: 1, kind: "DATA_ARENA_RECORDS", relayLoadoutsRev: 2, relayLoadouts: { "relay-species-121": ["pb-067"] } });
+  assert.equal(kept.relayLoadouts["relay-species-121"][0], "pb-067", "a rev 2 pick is kept");
+
+  // 4) Looks come from the record's own banks.
+  assert.equal(dataArenaOriginalMoveLook("own-274").body.family, "leomonhed00", "the lion head flies");
+  assert.equal(dataArenaOriginalMoveLook("own-126").body.family, "kinoko00");
+  assert.equal(dataArenaOriginalMoveLook("own-126").lob, true, "the mushroom is lobbed");
+  assert.equal(dataArenaOriginalMoveLook("own-382").lob, true, "the bomb is lobbed");
+  assert.equal(dataArenaOriginalMoveLook("own-422").body.family, "missile01");
+  assert.equal(dataArenaOriginalMoveLook("own-132").body, null, "a palm strike flies nothing");
+  assert.equal(dataArenaOriginalMoveLook("own-132").hit.family, "H_Knuckle", "a palm strike lands its own knuckle flash");
+  assert.equal(dataArenaOriginalMoveLook("pb-001"), null, "pool moves keep the PixelFX look");
+  assert.ok(relayOwnMoveInfo("own-274"));
+
+  // 5) Headless layer: cells fly on a live shot, a bomb arcs and waits, the burst clears it, all release.
+  const noop = () => {};
+  class Node {
+    constructor() { this.children = []; this.anchor = { set: noop }; this.scale = { set: noop }; this.position = { set: noop }; this.visible = true; }
+    addChild(c) { c.parent?.removeChild(c); c.parent = this; this.children.push(c); return c; }
+    addChildAt(c, i) { c.parent?.removeChild(c); c.parent = this; this.children.splice(i, 0, c); return c; }
+    removeChild(c) { const i = this.children.indexOf(c); if (i >= 0) this.children.splice(i, 1); c.parent = null; }
+    destroy() { this.destroyed = true; }
+  }
+  const MockPIXI = { Texture: { WHITE: {}, from: () => ({ width: 32, height: 32, source: {}, destroy: noop }) }, Sprite: class extends Node { constructor(t) { super(); this.texture = t; } } };
+  const art = { has: () => true, getCell: () => ({ texture: { width: 120, height: 64 }, frame: [0, 0, 120, 64], origin: [30, 32], pixelsPerNativePixel: 4 }) };
+  const layer = new Node();
+  const fx = createDataArenaOriginalMoveFx({ PIXI: MockPIXI, layer, art, doc: null });
+  assert.ok(fx, "the layer mounts on a Pixi stage");
+  assert.equal(fx.hasShot("own-274"), true);
+  assert.equal(fx.hasShot("own-473"), false, "beam bodies keep the PixelFX conduit");
+  assert.equal(fx.hasLob("own-126"), true);
+  assert.equal(fx.isArea("own-126"), true);
+  let alive = true, x = 100;
+  assert.equal(fx.projectile({ follow: () => (alive ? { x: (x += 12), y: 200, angle: 0 } : null), moveId: "own-274" }), true);
+  assert.equal(fx.projectile({ follow: () => null, moveId: "own-274" }), false, "a shot already gone draws nothing");
+  for (let i = 0; i < 8; i++) fx.update(16);
+  assert.ok(fx.getDiagnostics().active >= 2, "the lion head flies with an afterimage trail");
+  alive = false;
+  assert.equal(fx.lob({ from: { x: 100, y: 300 }, to: { x: 360, y: 300 }, moveId: "own-382", seconds: 0.75 }), true);
+  for (let i = 0; i < 40; i++) fx.update(16);
+  assert.ok(fx.getDiagnostics().active >= 1, "the bomb waits on its zone");
+  assert.equal(fx.hit({ x: 360, y: 290, moveId: "own-382" }), true, "the burst plays the bomb's own hit cells");
+  assert.equal(fx.release({ x: 100, y: 200, angle: 0, moveId: "own-422" }), true, "missile launch cells");
+  assert.equal(fx.hit({ x: 300, y: 200, angle: Math.PI, moveId: "own-132" }), true, "knuckle flash on a palm strike");
+  for (let i = 0; i < 80; i++) fx.update(30);
+  const diag = fx.getDiagnostics();
+  assert.equal(diag.active, 0, "every one-shot sequence and the waiting bomb are released");
+  assert.ok(diag.shots === 1 && diag.lobs === 1 && diag.hits === 2 && diag.launches === 1 && diag.atlasCells > 0, JSON.stringify(diag));
+  fx.dispose();
+  assert.equal(layer.children.length, 0, "dispose empties the layer");
+
+  // 6) Wiring: the scene routes own shots, lobs and landings here; PixelFX adds only crisp sparks over own cells.
+  const sceneSrc = readFileSync(new URL("../src/championship/presentation/dataArena/dataArenaPixiScene.js", import.meta.url), "utf8");
+  const v2Src = readFileSync(new URL("../src/championship/presentation/dataArena/dataArenaPixelFxV2.js", import.meta.url), "utf8");
+  const screenSrc = readFileSync(new URL("../src/championship/app/dataArenaScreen.js", import.meta.url), "utf8");
+  assert.ok(sceneSrc.includes("createDataArenaOriginalMoveFx({ PIXI, layer: particles, art: effectArt, quality, reducedMotion })"));
+  assert.ok(sceneSrc.includes("originalFx.projectile({ follow: followShot, moveId: projectile.moveId"));
+  assert.ok(sceneSrc.includes("originalLobbed = originalFx.lob(") && sceneSrc.includes("if (!originalLobbed) elementFx.meteorDrop?.("));
+  assert.ok(sceneSrc.includes("originalFx?.update(dt * 1000);"));
+  assert.ok(v2Src.includes("ownsBurst") && v2Src.includes('if (!crisp && (pk === "fire"'), "PixelFX drops its cloud puffs over original cells");
+  assert.ok(screenSrc.includes("const el10Tag = (id) =>"), "lobby cards tag own moves with their element");
 });

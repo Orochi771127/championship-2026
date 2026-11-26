@@ -36,6 +36,8 @@ import { RELAY_MAP_IDS } from '../modes/dataArena/dataArenaRelayMaps.js';
 import { DATA_ARENA_RELAY, RELAY_ACTION_PROFILES, relayTeamIds, RELAY_LOADOUTS, relayKit, relayMove, relayEffectStyle, relayMoveElement, partnerAbilityFor } from '../modes/dataArena/dataArenaRelay.js';
 import { relayOwnMoveInfo, relayBasicRecord, relayOwnUltimateStandIn } from '../modes/dataArena/dataArenaRelayKits.js';
 import { battleMoveName } from '../text/battleMoveNames.js';
+import { dataArenaMoveElement } from '../presentation/dataArena/dataArenaElementFx.js';
+import { drawOriginalMovePreview, loadOriginalMovePreview } from '../presentation/dataArena/dataArenaOriginalMovePreview.js';
 import { speciesTaxonomyForId, elementMatchup, elementMultiplierPercent, factionResonance } from '../contracts/speciesTaxonomy.js';
 import { burstBasesFor, burstFormsFor, isBurstForm } from '../contracts/productBurstEvolution.js';
 import { speciesName } from '../text/zhHant.js';
@@ -102,6 +104,14 @@ const pb324Text = (id) => {
 const ownMoveText = (id) => { const own = relayOwnMoveInfo(id); if (!own) return null; const lent = relayOwnUltimateStandIn(id);
   return `${battleMoveName(own.record) ?? id}｜${lent ? (t(`move.${lent}`).split(/\s*[｜|]\s*/)[1] ?? '') : `${t(`relay.style.${own.style}`)}${t(`relay.palette.${own.palette}`)}`}`; };
 const moveText = (id) => pb324Text(id) ?? ownMoveText(id) ?? t(`move.${id}`);
+// Ten-element tag of a skill card: a pool move's own element, an own original move's effect element (2026-11-26).
+const moveEl10 = (id) => {
+  const pb = typeof pb324Move === 'function' ? pb324Move(id) : null;
+  if (pb) return pb.element;
+  const element = relayOwnMoveInfo(id) && typeof dataArenaMoveElement === 'function' ? dataArenaMoveElement(id) : null;
+  return PB324_ELEMENT_META[element] ? element : null;
+};
+const el10Tag = (id) => { const el10 = moveEl10(id); return el10 ? [el("span", "da-skill__el10", PB324_ELEMENT_META[el10].zh)] : []; };
 const moveName = (id) => moveText(id).split(/\s*[｜|]\s*/)[0];
 // UNIFIED_MOVES_20261118: the move's icon (shared with the auto battle and the Dex), none for a basic attack.
 const arenaMoveIcon = (id) => { const icon = id && typeof moveIcon === 'function' && !/^relay/.test(String(id)) ? moveIcon(id, 'cm-move-icon da-move-icon') : null; return icon ? [icon] : []; };
@@ -1931,6 +1941,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         const isMelee = moveKind === "LUNGE" || moveKind === "FLURRY" || moveKind === "BACKSTAB";
         const isSelf = moveKind === "BUFF" || moveKind === "HEAL" || moveKind === "COUNTER" || moveKind === "BARRIER" || moveKind === "HAZARD";
         let frames = null;
+        // A partner's own original move previews with its own cells, as it plays in the match (2026-11-26).
+        let originalPreview = null;
+        if (!tacArt && typeof loadOriginalMovePreview === "function") loadOriginalMovePreview(moveId, { doc: document, href }).then((p) => { originalPreview = p; }).catch(() => {});
         loadMoveVfxPieceSprites().then(() => {
           const painted = paintBakedPieceFrames(pieceName, pal, { doc: document });
           frames = painted?.frames ?? null;
@@ -2048,7 +2061,9 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
             ctx.fillStyle = coreCol;
             ctx.beginPath(); ctx.arc(px - rad * 0.24, py - rad * 0.26, rad * 0.46, 0, Math.PI * 2); ctx.fill();
           };
-          if (moveKind === "BUFF" || moveKind === "HEAL") {
+          if (originalPreview && drawOriginalMovePreview(ctx, originalPreview, { phase, from: { x: fx + 14, y: fy - 10 }, to: { x: dtx, y: ty - 8 }, melee: isMelee })) {
+            // The move's own original cells drew this instant (lion head, missile, lobbed bomb).
+          } else if (moveKind === "BUFF" || moveKind === "HEAL") {
             const k = Math.min(1, phase / 0.78);
             const col = moveKind === "HEAL" ? "#5aff9c" : mainCol;
             ctx.save();
@@ -2280,19 +2295,19 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
         const pb = typeof pb324Move === "function" ? pb324Move(moveId) : null;
         const chip = button("da-skill", "", () => { openChips = openChips === `${id}:${slot}` ? null : `${id}:${slot}`; refresh(); }, signal);
         chip.dataset.element = relayMoveElement(moveId, partnerElement(id));
-        if (pb) chip.dataset.el10 = pb.element;
+        if (moveEl10(moveId)) chip.dataset.el10 = moveEl10(moveId);
         chip.dataset.slot = String(slot);
         chip.setAttribute("aria-expanded", String(openChips === `${id}:${slot}`));
         chip.setAttribute("aria-label", `${partnerName(id)} ${kitKey(true, slot)} ${moveName(moveId)}`);
-        const elTag = pb && PB324_ELEMENT_META[pb.element] ? [el("span", "da-skill__el10", PB324_ELEMENT_META[pb.element].zh)] : [];
+        const elTag = el10Tag(moveId);
         const archBadge = moveSystemPref === "v2" ? [el("span", "da-skill__arch", t(`v2.arch.${resolveMoveSpecV2(moveId, move).v2Archetype}`))] : [];
         chip.append(el("span", "da-skill__key", kitKey(touchActive, slot)), ...elTag, ...arenaMoveIcon(moveId), el("strong", "da-skill__name", moveName(moveId)), ...archBadge, cost(move));
         slots.appendChild(chip);
       });
       const ultPb = typeof pb324Move === "function" ? pb324Move(selected.ultimate) : null;
       const ult = el("div", "da-skill da-skill--ult");
-      if (ultPb) ult.dataset.el10 = ultPb.element;
-      const ultElTag = ultPb && PB324_ELEMENT_META[ultPb.element] ? [el("span", "da-skill__el10", PB324_ELEMENT_META[ultPb.element].zh)] : [];
+      if (moveEl10(selected.ultimate)) ult.dataset.el10 = moveEl10(selected.ultimate);
+      const ultElTag = el10Tag(selected.ultimate);
       ult.append(el("span", "da-skill__key", kitKey(touchActive, "ult")), ...ultElTag, ...arenaMoveIcon(selected.ultimate), el("strong", "da-skill__name", moveName(selected.ultimate)), cost({ energy: DATA_ARENA_RELAY.ultimateTp }));
       slots.appendChild(ult);
       wrap.appendChild(slots);
@@ -2319,7 +2334,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
           choice.setAttribute("tabindex", "0");
           choice.setAttribute("aria-selected", String(at === slot));
           choice.dataset.element = relayMoveElement(moveId, partnerElement(id));
-          if (pb) choice.dataset.el10 = pb.element;
+          if (moveEl10(moveId)) choice.dataset.el10 = moveEl10(moveId);
           choice.dataset.move = moveId;
           choice.addEventListener("click", (ev) => {
             if (ev.target?.closest?.(".da-skill__preview")) return;
@@ -2331,7 +2346,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
             }
           }, { signal });
           const headLine = el("div", "da-skill__head");
-          const elTag = pb && PB324_ELEMENT_META[pb.element] ? [el("span", "da-skill__el10", PB324_ELEMENT_META[pb.element].zh)] : [];
+          const elTag = el10Tag(moveId);
           const choiceArch = moveSystemPref === "v2" ? [el("span", "da-skill__arch", t(`v2.arch.${resolveMoveSpecV2(moveId, move).v2Archetype}`))] : [];
           headLine.append(...elTag, ...arenaMoveIcon(moveId), el("strong", "da-skill__name", moveName(moveId)), ...choiceArch);
           const footLine = el("div", "da-skill__foot");

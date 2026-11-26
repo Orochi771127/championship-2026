@@ -58,13 +58,15 @@ export function applyPbRankMatch(prev = {}, { won = false, fainted = 0 } = {}) {
 const QUALITY = new Set(["auto", "high", "low"]);
 const TOUCH_LAYOUTS = new Set(DATA_ARENA_TOUCH_LAYOUTS);
 const MODES = ["TOURNAMENT", "HARBOR", "RELAY", "SURVIVAL"];
+/** Kit-pool revision of saved relay loadouts: 2 = own original moves first (2026-11-26). */
+const RELAY_LOADOUTS_REV = 2;
 const PARTNER_IDS = new Set(RELAY_ROSTER.map((partner) => partner.id));
 const count = (value) => (Number.isSafeInteger(value) && value >= 0 ? Math.min(value, 1e9) : 0);
 
 export function defaultDataArenaRecords() {
   return {
     schemaVersion: 1, kind: "DATA_ARENA_RECORDS", runs: 0, wins: 0, bestScore: 0, bestVictorySeconds: null,
-    lastPartnerId: DATA_ARENA_PARTNERS[0].id, lastMode: "RELAY", relayLoadouts: {}, relayReserveId: null, relayThirdId: null, relayArenaId: RELAY_MAP_IDS[0], partners: {}, modes: {},
+    lastPartnerId: DATA_ARENA_PARTNERS[0].id, lastMode: "RELAY", relayLoadouts: {}, relayLoadoutsRev: RELAY_LOADOUTS_REV, relayReserveId: null, relayThirdId: null, relayArenaId: RELAY_MAP_IDS[0], partners: {}, modes: {},
     rank: { rp: 0, peakRp: 0, streak: 0, bestStreak: 0 },
     settings: { shake: true, quality: "auto", touchLayout: "standard" }, briefingSeen: false
   };
@@ -85,7 +87,9 @@ export function sanitizeDataArenaRecords(raw) {
     if (entry && typeof entry === "object") modes[id] = { runs: count(entry.runs), wins: Math.min(count(entry.wins), count(entry.runs)), bestScore: count(entry.bestScore), bestRound: Math.min(count(entry.bestRound), 9) };
   }
   const relayLoadouts = {};
-  for(const id of PARTNER_IDS)if(Array.isArray(raw.relayLoadouts?.[id]))relayLoadouts[id]=relayKit(id,raw.relayLoadouts[id]).moves;
+  // Loadouts picked before the partners' own original moves came back (rev 1, pool-only)
+  // are dropped once, so every partner opens with its own moves (2026-11-26).
+  if (raw.relayLoadoutsRev === RELAY_LOADOUTS_REV) for(const id of PARTNER_IDS)if(Array.isArray(raw.relayLoadouts?.[id]))relayLoadouts[id]=relayKit(id,raw.relayLoadouts[id]).moves;
   const best = raw.bestVictorySeconds;
   const rawRank = raw.rank && typeof raw.rank === "object" ? raw.rank : {};
   const rp = count(rawRank.rp);

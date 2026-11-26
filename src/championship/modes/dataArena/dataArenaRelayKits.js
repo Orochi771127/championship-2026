@@ -64,7 +64,21 @@ export const RELAY_STYLE_RULES = Object.freeze({
   holy: { type: 'BOLT', energy: 22, cooldown: 1.6, windup: 0.28, range: 760, speed: 1100, radius: 12, damage: 30, pierce: 2 }, // sunSpear
   dark: { type: 'BOLT', energy: 18, cooldown: 1.2, windup: 0.22, range: 640, speed: 690, radius: 12, damage: 23 }, // shadeBolt
   sound: { type: 'NOVA', energy: 22, cooldown: 4.5, windup: 0.26, radius: 150, damage: 24, effect: 'SLOW', slow: 0.4, slowSeconds: 1.2 },
-  beam: { type: 'BOLT', energy: 24, cooldown: 2, windup: 0.3, range: 800, speed: 1200, radius: 12, damage: 30, pierce: 2 }
+  beam: { type: 'BOLT', energy: 24, cooldown: 2, windup: 0.3, range: 800, speed: 1200, radius: 12, damage: 30, pierce: 2 },
+  // ORIGINAL_MOVES_ARENA_20261126: a thrown weapon (fist, spear, knife, drill) flies at the foe;
+  // a bomb is lobbed onto the aim point and goes off there (missile / flame numbers).
+  throw: { type: 'BOLT', energy: 20, cooldown: 1.6, windup: 0.24, range: 560, speed: 760, radius: 13, damage: 26, knockback: 170 },
+  lob: { type: 'ZONE', energy: 26, cooldown: 5, windup: 0.24, range: 520, radius: 110, delay: 0.75, damage: 32, effect: 'NONE' }
+});
+
+// Owner 2026-11-26 (「原作對應每一隻的招式加回去」): where a move's original effect
+// throws something the style rule above did not -- a flame fist, a spear, a
+// bomb read as a shield -- the arena throws it as the original did. Records are
+// the partner's own move records; the reason is the record's body effect bank.
+export const ORIGINAL_FORM_STYLE = Object.freeze({
+  79: 'throw', 114: 'throw', 161: 'throw', 172: 'throw', 355: 'throw', 376: 'throw', 518: 'throw', // pointer, syringe, drill, flame fist, trident, spear, sword
+  99: 'lob', 382: 'lob', 385: 'lob', 404: 'lob', // toy bomb, smiley bombs
+  473: 'beam', 549: 'beam' // beam bodies filed under the shell style
 });
 
 // Element side effects come from the move's own colour, not its style: a fire
@@ -83,7 +97,8 @@ function withPalette(rule, palette) {
 }
 
 const ownBySpecies = new Map(kitData.species.map(([speciesIndex, basicRecord, own]) => [speciesIndex,
-  Object.freeze({ basicRecord, own: Object.freeze(own.map(([record, style, palette, tier, ultimate]) => Object.freeze({ id: `own-${record}`, record, style, palette, tier, ultimate: ultimate === 1 }))) })]));
+  Object.freeze({ basicRecord, own: Object.freeze(own.map(([record, style, palette, tier, ultimate]) => Object.freeze({ id: `own-${record}`, record,
+    style: ORIGINAL_FORM_STYLE[record] ?? style, palette, tier, ultimate: ultimate === 1 }))) })]));
 const ownById = new Map([...ownBySpecies.values()].flatMap(entry => entry.own.map(move => [move.id, move])));
 
 export function relayOwnMoveInfo(id) { return ownById.get(id) ?? null; }
@@ -105,18 +120,33 @@ export function relayOwnMove(id) {
   return { ...withPalette(RELAY_STYLE_RULES[info.style], info.palette), mechanic: `own ${info.style} move`, ownRecord: info.record };
 }
 
+/** A partner's own move records as kit ids: {skills, ultimate}. */
+export function relayOwnMoves(speciesIndex) {
+  const own = ownBySpecies.get(speciesIndex)?.own ?? [];
+  const ultimate = own.find(move => move.ultimate) ?? null;
+  return Object.freeze({ skills: Object.freeze(own.filter(move => move !== ultimate).map(move => move.id)), ultimate: ultimate?.id ?? null });
+}
+
 /**
- * Wave 8-B (2026-11-25): Data Arena RELAY kits exclusively draw from the new
- * 324 PB-Rank-modeled original moves across the 10 Canonical Elements
- * (金木水火土日月雷冰風), replacing the legacy 666-move bloated pool.
+ * A roster partner's kit (ORIGINAL_MOVES_ARENA_20261126, Owner 2026-11-26:
+ * 「原作對應每一隻的招式加回去」): its own original moves first -- the moves the
+ * partner owns in the auto battle, same name, icon and look -- then moves of
+ * its element from the 324-move pool (Wave 8-B, 2026-11-25) fill the slots
+ * left. The ultimate is the partner's own, fighting with its pool ultimate's
+ * numbers so balance stays where the pool set it.
  */
 export function relaySpeciesKit(speciesIndex, element) {
   const kit = pb324PartnerKit(speciesIndex, element);
+  const own = relayOwnMoves(speciesIndex);
+  if (own.ultimate && !ownUltimateStandIn.has(own.ultimate)) ownUltimateStandIn.set(own.ultimate, kit.ultimate);
+  const moves = [...own.skills.slice(0, 3)];
+  for (const id of kit.moves) if (moves.length < 3 && !moves.includes(id)) moves.push(id);
   return Object.freeze({
     element: kit.element,
-    moves: kit.moves,
-    ultimate: kit.ultimate,
-    pool: kit.pool
+    moves: Object.freeze(moves),
+    ultimate: own.ultimate ?? kit.ultimate,
+    pool: Object.freeze([...own.skills, ...kit.pool.filter(id => !own.skills.includes(id))]),
+    own: own.skills.length + (own.ultimate ? 1 : 0)
   });
 }
 
