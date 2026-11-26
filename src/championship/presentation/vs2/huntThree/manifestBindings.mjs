@@ -2,7 +2,7 @@ import {isOriginalRuntimeLocation} from '../../originalRuntimeLocation.js';
 
 // Exact existing assets reviewed visually on 2026-10-23. Functional QA remains
 // with the Owner; source manifest qaApproved values remain unchanged.
-// HM08 remains 2048 square and is not an enlarged-map completion.
+// HM08 grew to 2880 on 2026-11-26 (r2: original east/south canyon on the authoring masters, re-baked day and night).
 // HM10/11/13/14 grew to 2880 on 2026-11-25 (c2: untrimmed candidate geometry; HM14 rebuilt with core-style extension cliffs).
 // HM10/13 c3 (2026-11-26): the extension areas carry the maps' own props, which block their tiles.
 export const MAPS=Object.freeze({
@@ -21,17 +21,17 @@ export const MAPS=Object.freeze({
     "appearanceApproved": true
   },
   "hm08": {
-    "directory": "assets/production/hunt/hm08-three-r1-20261022/",
+    "directory": "assets/production/hunt/hm08-three-r2-20261126/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "662dade02517b516e3a690af86e5b4b4c93d43261838f3dac4efdf844c39ee8d",
-      "bytes": 2872
+      "sha256": "9b4772908ecff5f7d2ffd46bc6ba12a59dc1cf396d1067e6bc18dc4df6dcd0de",
+      "bytes": 2873
     },
     "fields": [
       "field_hm08_01",
       "field_hm08_02"
     ],
-    "worldSize": 2048,
+    "worldSize": 2880,
     "appearanceApproved": true
   },
   "hm02": {

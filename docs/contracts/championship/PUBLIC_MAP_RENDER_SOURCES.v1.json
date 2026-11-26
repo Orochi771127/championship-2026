@@ -26,6 +26,8 @@
         "field_hm05_02",
         "field_hm06_01",
         "field_hm06_02",
+        "field_hm08_01",
+        "field_hm08_02",
         "field_hm09_01",
         "field_hm10_01",
         "field_hm11_01",
@@ -56,7 +58,7 @@
     {
       "role": "hunt-three-fallback",
       "path": "assets/production/hunt/three-fallback-20261023/manifest.json",
-      "sha256": "77092f078f9a22d46988d8828f1c621fd5fc75236eb454b7231ac41d690676a4"
+      "sha256": "7c021de3f2700a79f3d6371771b78d6cd7bb215fdce26df14336ce669d410e3a"
     }
   ],
   "mediaPins": [
@@ -831,6 +833,14 @@
     {
       "path": "assets/production/hunt/three-fallback-20261023/hm14-night.webp",
       "sha256": "d0385d93714b47d28491c0f6f561d19eadc99efbe323e08c2335a36970f4ac5b"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm08-day.webp",
+      "sha256": "e72df612186dc64472beafacb12af06b5f4e025bd8e7ead0d1f3975fee0dbb25"
+    },
+    {
+      "path": "assets/production/hunt/three-fallback-20261023/hm08-night.webp",
+      "sha256": "566674bc9933d86e0e26b002495ee2eb46524732a2982a90b371945cea81c387"
     }
   ]
 }

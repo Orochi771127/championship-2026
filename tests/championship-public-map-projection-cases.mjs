@@ -17,7 +17,7 @@ const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 
 test('map exports preserve every frame, clock, footprint, native pixel scale and occlusion reference',()=>{
  assert.equal(maps.descriptors.length,5);assert.deepEqual(maps.descriptors.map(row=>row.role).sort(),['cage-ui','hunt-accepted','hunt-hm01x2','hunt-night','hunt-three-fallback']);
- assert.equal(maps.descriptors.find(row=>row.role==='hunt-three-fallback').value.fields.length,25); // 2026-11-25: + hm10, hm11, hm13 x2, hm14 x2
+ assert.equal(maps.descriptors.find(row=>row.role==='hunt-three-fallback').value.fields.length,27); // 2026-11-25: + hm10, hm11, hm13 x2, hm14 x2; 2026-11-26: + hm08 x2
  for(const descriptor of maps.descriptors){
   const row=recipe.sources.find(row=>row.role===descriptor.role),source=read(row.path);
   // The rebuilt HM01 replaces the two earlier HM01 fields in the accepted hunt set (2026-10-21).

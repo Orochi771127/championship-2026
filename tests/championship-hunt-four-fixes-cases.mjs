@@ -209,5 +209,5 @@ test('expanded hunt maps steer on every tile, so an escaping partner never freez
       steerNativeHuntDirectionCell([0,4096,0],cell);
     }
   }
-  assert.equal(maps,27); // 2026-11-25: + hm10, hm11, hm13 x2, hm14 x2
+  assert.equal(maps,29); // 2026-11-25: + hm10, hm11, hm13 x2, hm14 x2; 2026-11-26: + hm08 x2
 });

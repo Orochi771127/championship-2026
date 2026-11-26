@@ -12,7 +12,7 @@ const inputPath='docs/contracts/championship/WEB_BUILD_INPUTS.v1.json',allowPath
 const input=read(inputPath),allow=read(allowPath),recipe=read(MAP_RECIPE);
 const rows=new Map(allow.files.map(row=>[row.path,row]));
 for(const file of rows.keys())if(file.startsWith('node_modules/three/examples/jsm/libs/draco/gltf/'))rows.delete(file);
-const fields=new Set(Object.entries(MAPS).filter(([key])=>!['hm01','hm08'].includes(key)).flatMap(([,m])=>m.fields));
+const fields=new Set(Object.entries(MAPS).filter(([key])=>key!=='hm01').flatMap(([,m])=>m.fields));
 const fallback='assets/production/hunt/three-fallback-20261023/manifest.json';
 // Read the previous pinned projections before selecting changed authoring inputs.
 const oldMaps={files:new Map()};

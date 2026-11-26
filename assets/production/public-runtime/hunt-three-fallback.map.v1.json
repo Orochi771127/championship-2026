@@ -3,7 +3,7 @@
   "kind": "MAP_ART_RENDER_V1",
   "assetId": "art:hunt:three-fallback:20261023",
   "family": "HUNT",
-  "fieldCount": 25,
+  "fieldCount": 27,
   "memoryPolicy": "ONE_ACTIVE_FIELD_LOAD_ON_ENTRY_UNLOAD_ON_EXIT",
   "fields": [
     {
@@ -365,6 +365,34 @@
         {
           "src": "assets/production/hunt/three-fallback-20261023/hm18-night.webp",
           "sha256": "d42ef418be0167edeb54c78deb31c5290ef933e4016095ac48a0af1d2f028a80"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm08_01",
+      "worldWidthPx": 2880,
+      "worldHeightPx": 2880,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/three-fallback-20261023/hm08-day.webp",
+          "sha256": "e72df612186dc64472beafacb12af06b5f4e025bd8e7ead0d1f3975fee0dbb25"
+        }
+      ]
+    },
+    {
+      "fieldId": "field_hm08_02",
+      "worldWidthPx": 2880,
+      "worldHeightPx": 2880,
+      "gameplayBinding": "EXTERNAL_EXISTING_RUNTIME",
+      "gateMapping": "UNBOUND_EXPLICIT_FIELD_ID_REQUIRED",
+      "collisionBinding": "EXTERNAL_NOT_IN_ART_BUNDLE",
+      "frames": [
+        {
+          "src": "assets/production/hunt/three-fallback-20261023/hm08-night.webp",
+          "sha256": "566674bc9933d86e0e26b002495ee2eb46524732a2982a90b371945cea81c387"
         }
       ]
     }
