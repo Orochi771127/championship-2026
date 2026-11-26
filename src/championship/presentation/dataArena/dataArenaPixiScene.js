@@ -624,8 +624,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           const ang = body.cast?.angle ?? body.lunge?.angle ?? (facing > 0 ? 0 : Math.PI);
           const cosA = Math.cos(ang), sinA = Math.sin(ang);
           const dirSign = cosA >= 0 ? 1 : -1;
-          const hasTilt = cues.includes("tilt") || Boolean(pb);
-          const hasSquash = cues.includes("squash-stretch") || Boolean(pb);
+          // Every move sells its cast with the body (2026-11-26 blind review: "the caster never makes a firing pose").
+          const hasTilt = true;
+          const hasSquash = true;
           const hasJump = cues.includes("jump/aerial") || pose === "hop" || pose === "slam";
           const hasDash = cues.includes("dash/lunge") || spec?.melee || Boolean(body.lunge);
           const hasRecoil = cues.includes("self-recoil/impulse");
@@ -637,7 +638,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             if (a.releasedAt === null) {
               const p = clamp((state.time - a.startedAt) / Math.max(0.01, a.windup), 0, 1);
               // Windup anticipation: pull back opposite aim vector + crouch squash + lean back!
-              const pull = hasDash ? -7 * p : -3 * p;
+              const pull = hasDash ? -9 * p : -7 * p;
               sprite.x += cosA * pull;
               sprite.y += sinA * pull * 0.55 - baseLift * p;
               if (hasSquash) {
@@ -664,9 +665,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
                 sprite.x += cosA * tremor;
                 sprite.y += sinA * tremor * 0.55;
               } else {
-                const nudge = -6 * arc;
-                sprite.x += cosA * nudge;
-                sprite.y += sinA * nudge * 0.5;
+                // Throw / fire: a sharp forward snap on the release frame, then recoil and settle.
+                const tRel = state.time - a.releasedAt;
+                const thrust = 14 * Math.exp(-tRel * 22) - 9 * arc;
+                sprite.x += cosA * thrust;
+                sprite.y += sinA * thrust * 0.5;
               }
               if (hasJump) {
                 const hopH = (pose === "slam" || spec?.v2Archetype === "LEAP_SLAM") ? 54 : (pose === "hop" ? 36 : 22);

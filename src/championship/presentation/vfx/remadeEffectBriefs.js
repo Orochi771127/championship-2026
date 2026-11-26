@@ -133,7 +133,8 @@ export const REMADE_EFFECT_BRIEFS = Object.freeze({
   lekismonarrow00: {sequences: [null, 'arrow palette light']},
   pinochimonarrow00: {sequences: [null, 'arrow palette WOOD']},
   icerock00: {sequences: ['rock palette ice', 'rock palette ice', 'shard grow 0.8 1.2 fade 0.2 palette ice']},
-  flamefist00: {sequences: ['comet palette fire', 'flare light palette fire']},
+  // 2026-11-26 blind review: the flying body must read as a fist, not a comet.
+  flamefist00: {sequences: ['- drawn rocketfist palette fire', 'flare light palette fire']},
   magmaball02: {sequences: [null, 'comet palette fire']},
   purple00: {sequences: ['rose palette PURPLEFLAME', 'petal palette PURPLEFLAME', 'flare light palette dark']},
   sword00: {sequences: ['slash palette STEEL', 'shard palette STEEL']},

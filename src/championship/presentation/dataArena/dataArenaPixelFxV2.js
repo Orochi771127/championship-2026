@@ -1280,14 +1280,13 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
         if (pk === "fire" || pk === "water" || pk === "ice" || pk === "dragon" || pk === "wind" || pbShapes.includes("pxpuff")) {
           emitFluidStream({ x, y, angle, palKey: pk, range: 290, puffs: 14 });
         }
-      } else if (arch === "FLURRY_COMBO") {
-        emitCrescentSlash({ x, y, angle, palKey: pk, scale: 1.25, count: 3, style: "flurry" });
-      } else if (arch === "SHADOW_BACKSTAB") {
-        emitCrescentSlash({ x, y, angle, palKey: pk, scale: 1.28, count: 3, style: "backstab" });
-      } else if (arch === "GUARD_BREAK_SLAM") {
-        emitCrescentSlash({ x, y, angle, palKey: pk, scale: 1.52, count: 2, style: "heavy" });
-      } else if (melee || arch === "MULTI_DASH" || arch === "UTURN_STRIKE") {
-        emitCrescentSlash({ x, y, angle, palKey: pk, scale: 1.22, count: 1, style: "dash" });
+      } else if (melee || arch === "FLURRY_COMBO" || arch === "SHADOW_BACKSTAB" || arch === "GUARD_BREAK_SLAM" || arch === "MULTI_DASH" || arch === "UTURN_STRIKE") {
+        // 2026-11-26 blind review: a melee blow's slash belongs on the contact (hit() draws it there);
+        // the release only kicks a few speed streaks and dust off the caster's feet.
+        for (let i = 0; i < 5; i++) {
+          const a = angle + Math.PI + (rand() - 0.5) * 0.8;
+          spawnP({ shape: i % 2 ? "streak" : "px", x, y: y + 10, vx: Math.cos(a) * (120 + rand() * 80), vy: Math.sin(a) * (60 + rand() * 40), size: 4.5, size1: 1, rot: a, pal: i % 2 ? pk : "dust", add: i % 2 === 1, life: 0.2 });
+        }
       } else if (arch === "SELF_BUFF") {
         this.buff({ x, y, paletteKey: pk });
       } else if (arch === "PROTECT_COUNTER") {
