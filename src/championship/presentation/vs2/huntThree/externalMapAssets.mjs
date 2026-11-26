@@ -123,6 +123,15 @@ export async function loadExternalMapAssets({THREE,GLTFLoader,DRACOLoader,dracoD
     // separate coverage mask. The old single RGBA frame kept the ground's colour
     // under alpha 0; WebKit premultiplies on decode whatever premultiplyAlpha
     // says, so the whole ground turned black on Safari.
+    // 2026-11-26: the coverage mask is one channel, so it goes to the GPU as R8 (8.3 MB at
+    // 2880 x 2880) instead of RGBA8 (33.2 MB). Three's alpha map reads the green channel, which
+    // R8 does not have, so the foreground material reads red instead; red is also right for an
+    // RGBA upload of the same grey picture, which is what useRgbaMasks() falls back to when a
+    // driver refuses the compact upload. Unknown Three shader text keeps the old RGBA path.
+    const ALPHAMAP_INCLUDE='#include <alphamap_fragment>';
+    const compactMasks=THREE.RedFormat!==undefined&&THREE.RGBAFormat!==undefined&&
+      typeof THREE.ShaderLib?.basic?.fragmentShader==='string'&&THREE.ShaderLib.basic.fragmentShader.includes(ALPHAMAP_INCLUDE);
+    stats.maskFormat=compactMasks?'R8':'RGBA8';stats.gpuTextureBytes=0;
     const decode=async(asset,colour)=>{
       const bytes=await read(asset);
       const bitmap=await abortable(createImageBitmap(new Blob([bytes],{type:'image/webp'}),{premultiplyAlpha:'none',colorSpaceConversion:'none'}),signal,b=>b.close?.());
@@ -132,7 +141,9 @@ export async function loadExternalMapAssets({THREE,GLTFLoader,DRACOLoader,dracoD
       textures.push(texture);decoded.set(texture,bitmap);texture.flipY=false;texture.premultiplyAlpha=false;texture.unpackAlignment=4;
       texture.colorSpace=colour?THREE.SRGBColorSpace:THREE.NoColorSpace;texture.generateMipmaps=false;
       texture.minFilter=THREE.LinearFilter;texture.magFilter=THREE.LinearFilter;texture.needsUpdate=true;
+      if(!colour&&compactMasks)texture.format=THREE.RedFormat;
       stats.decodedTextureBytes+=bitmap.width*bitmap.height*4;
+      stats.gpuTextureBytes+=bitmap.width*bitmap.height*(!colour&&compactMasks?1:4);
       return texture;
     };
     const colours=[],masks=[],maskByFile=new Map();
@@ -144,6 +155,21 @@ export async function loadExternalMapAssets({THREE,GLTFLoader,DRACOLoader,dracoD
     const ground=new THREE.MeshBasicMaterial({map:colours[0]});
     // Scenery coverage mask is NOT the native-actor alpha policy.
     const foreground=new THREE.MeshBasicMaterial({map:colours[0],alphaMap:masks[0],alphaTest:.5,side:THREE.DoubleSide});
+    if(compactMasks){
+      foreground.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace(ALPHAMAP_INCLUDE,
+        '#ifdef USE_ALPHAMAP\n\tdiffuseColor.a *= texture2D( alphaMap, vAlphaMapUv ).r;\n#endif');};
+      foreground.customProgramCacheKey=()=>'hunt-coverage-mask-red';
+    }
+    const maskTextures=[...new Set(masks)];
+    /** A driver refused the R8 upload: give the masks back to RGBA8. The caller re-uploads them. */
+    const useRgbaMasks=()=>{
+      if(stats.maskFormat!=='R8')return [];
+      for(const texture of maskTextures){
+        texture.dispose?.();texture.format=THREE.RGBAFormat;texture.needsUpdate=true;
+        stats.gpuTextureBytes+=texture.image.width*texture.image.height*3;
+      }
+      stats.maskFormat='RGBA8';return maskTextures;
+    };
     const materialOwners=[ground,foreground];
     try{
       let count=0;
@@ -169,7 +195,7 @@ export async function loadExternalMapAssets({THREE,GLTFLoader,DRACOLoader,dracoD
       }
       return decoded.size;
     };
-    return {gltf,textures,materialOwners,field,stats,resolveSupport,releaseDecodedFrames,
+    return {gltf,textures,materialOwners,field,stats,resolveSupport,releaseDecodedFrames,maskTextures,useRgbaMasks,
       selectPhase(index){if(!Number.isInteger(index)||!colours[index])throw new Error('HUNT_THREE_NATIVE_PHASE_OUT_OF_RANGE');ground.map=colours[index];foreground.map=colours[index];foreground.alphaMap=masks[index];}};
   }catch(error){disposer.gltf(gltf);for(const t of textures)disposer.texture(t);throw error;}
   finally{draco?.dispose();}
