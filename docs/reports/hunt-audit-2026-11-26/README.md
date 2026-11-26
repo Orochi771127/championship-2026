@@ -83,6 +83,7 @@ every class equipped. Evidence: `browser-tools-5-maps.json`, `tools-in-new-strip
 
 Notes:
 - The game allows one lure lamp and one capture trap at a time, and a wire must be longer than about 50 screen px and is cut by walls. My first test runs broke these rules, which looked like failures until the test was corrected.
+- Each tools run ended with a rope capture: 11 of 13 caught. The two that did not (one timeout, one miss) started with only seconds left of the 60 s hunt.
 - Not exercised: meat, decoy, bomb and mine items, and the tools' effect over time (a partner walking into a trap or wire).
 
 ## 5. Left for the Owner
