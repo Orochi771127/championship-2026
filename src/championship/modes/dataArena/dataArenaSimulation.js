@@ -3622,6 +3622,9 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     rival.invulnerable = Math.max(0, rival.invulnerable - DT);
     rival.dashCooldown = Math.max(0, rival.dashCooldown - DT);
     if (!rival.active || rival.hp <= 0) return;
+    // Review stage (loopback move filming only): a held rival is a training dummy that
+    // stands still and still takes knockback. Never set in play.
+    if (state.reviewHoldRivals === true) { rival.vx = rival.vy = 0; stepKnock(rival); return; }
     const diff = AI_DIFFICULTIES[state.aiDifficulty] ?? AI_DIFFICULTIES.normal;
     tickKit(rival, rival.tier.energyRegen);
     rival.ult = Math.min(DATA_ARENA_ENERGY.ultMax, rival.ult + DT * 3.2);
@@ -4683,6 +4686,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       return state.aiDifficulty;
     },
     getAiDifficulty: () => state.aiDifficulty,
+    /** Review stage only (loopback move filming): hold every rival still as a training dummy. */
+    reviewHoldRivals(on) { state.reviewHoldRivals = Boolean(on); return state.reviewHoldRivals; },
     setAiSettings(partial) {
       state.aiSettings = normalizeAiSettings({ ...state.aiSettings, ...(partial ?? {}) });
       emit({ type: "AI_SETTINGS", aiSettings: { ...state.aiSettings } });

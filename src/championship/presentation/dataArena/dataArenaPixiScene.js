@@ -1257,7 +1257,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       }
     }
   }
-  let hitStop = 0, statusTick = 0, koSlowMo = 0, koSlowMoScale = 1;
+  let hitStop = 0, statusTick = 0, koSlowMo = 0, koSlowMoScale = 1, impactSilhouette = false;
   let impactFlashTimer = 0, impactFlashMax = 0.068, impactFocus = null, lastImpactAt = -10, tetherTimer = 0;
   let tamerCalloutLeft = 0, tamerCalloutRight = 0, wallFlashLeft = 0, wallFlashRight = 0;
   const triggerImpactFrame = (wx, wy, sec = 0.085) => {
@@ -1285,7 +1285,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       });
     }
   };
-  const heavyHit = (amount, wx = null, wy = null, { angle = 0, guarded = false, side = null, critical = false, moveId = null } = {}) => {
+  const heavyHit = (amount, wx = null, wy = null, { angle = 0, guarded = false, side = null, critical = false, moveId = null, ultimate = false } = {}) => {
     if (reducedMotion || !(amount >= 1)) return;
     // PB-Rank 8-System Hit-Feel Director: read exact per-move PB-324 hitFeel when available!
     const pbFeel = moveId ? elementFx?.look?.(moveId)?.pb324?.hitFeel ?? null : null;
@@ -1294,8 +1294,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const pbStop = pbFeel ? Math.min(0.37, pbFeel.hitstop / 60) : 0;
     const pbShake = pbFeel ? Math.min(0.65, pbFeel.shake * 0.36) : 0;
     const pbPunch = pbFeel ? (1 + Math.min(0.08, pbFeel.punch * 0.22)) : 1;
-    // Hit-stop tiers (whole field frozen): light 60 ms / medium 120 / heavy 200 / ultimate-size or critical 300.
-    const finisher = amount >= 60 && !guarded;
+    // Hit-stop tiers (whole field frozen), PB medians: light 100 ms / medium 150 / heavy 220 / ultimate or critical 300.
+    // The ink impact frame belongs to ultimates, criticals and moves marked impact only (PB: 10 of 324).
+    const finisher = Boolean(ultimate) && !guarded;
     const heavy = (amount >= 28 || Boolean(pbFeel?.impact)) && !guarded;
     const medium = amount >= 16 && !guarded;
     const light = amount >= 6 && !guarded;
@@ -1306,18 +1307,18 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       if (relayMode && wx !== null && wy !== null) triggerImpactFrame(wx, wy, 0.1);
       fightingHitSparks(wx, wy, angle, 8, true);
     } else if (heavy) {
-      hitStop = Math.max(hitStop, Math.max(0.2, pbStop));
+      hitStop = Math.max(hitStop, Math.max(0.22, pbStop));
       camera.addTrauma(Math.max(0.42, pbShake));
       camera.focusBoost(Math.max(1.045, pbPunch), 0.16);
-      if (relayMode && wx !== null && wy !== null) triggerImpactFrame(wx, wy, pbFeel?.impact ? 0.075 : 0.055);
+      if (relayMode && wx !== null && wy !== null && pbFeel?.impact) triggerImpactFrame(wx, wy, 0.075);
       fightingHitSparks(wx, wy, angle, 7, true);
     } else if (medium) {
-      hitStop = Math.max(hitStop, Math.max(0.12, pbStop));
+      hitStop = Math.max(hitStop, Math.max(0.15, pbStop));
       camera.addTrauma(Math.max(0.26, pbShake));
       camera.focusBoost(Math.max(1.024, pbPunch), 0.12);
       fightingHitSparks(wx, wy, angle, 5, false);
     } else if (light) {
-      hitStop = Math.max(hitStop, Math.max(0.06, Math.min(pbStop, 0.1)));
+      hitStop = Math.max(hitStop, Math.max(0.1, Math.min(pbStop, 0.15)));
       camera.addTrauma(Math.max(0.14, pbShake * 0.6));
       fightingHitSparks(wx, wy, angle, 3, false);
     }
@@ -1403,7 +1404,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           } else if (!purePixelFx && relayMode && event.moveType === 'SPREAD') {
             elementFx.coneStorm?.({ x: at.x, y: at.y + 12, angle: event.angle ?? 0, spread: 0.62, range: 280, moveId: event.moveId, speciesId: casterSpecies(event) });
           }
-          lastRelease[event.team === 'player' ? 'player' : 'rival'] = { moveId: event.moveId, speciesId: casterSpecies(event), angle: event.angle ?? 0 };
+          lastRelease[event.team === 'player' ? 'player' : 'rival'] = { moveId: event.moveId, speciesId: casterSpecies(event), angle: event.angle ?? 0, ultimate: Boolean(event.ultimate) };
         } else if (event.type === 'ZONE_PLACED') {
           if (event.vortexLift) {
             if (event.moveId === 'iceCage' || event.moveId === 'vineSnare') {
@@ -1452,7 +1453,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           camera.addTrauma(event.guarded ? 0.14 : 0.34);
           if (!purePixelFx && !atlasContact) burst(event.x, event.y - 30, { count: event.guarded ? 4 : 8, speed: 200, tint: event.guarded ? 0xffd166 : 0xff4a4a });
           damageNumber(event.x, event.y - 56, event.amount, event.guarded ? 0xffe08a : 0xffb0a8);
-          heavyHit(event.amount, event.x, event.y - 30, { angle: hitAng, guarded: event.guarded, side: "rival", moveId: lastRelease.rival?.moveId ?? null });
+          heavyHit(event.amount, event.x, event.y - 30, { angle: hitAng, guarded: event.guarded, side: "rival", moveId: lastRelease.rival?.moveId ?? null, ultimate: lastRelease.rival?.ultimate });
           break;
         }
         case "GUARD_START": if (purePixelFx) elementFx.parry?.({ x: event.x, y: event.y - 20 }); else ring(event.x, event.y - 18, 48, 0xffbe3b, 0.28); break;
@@ -1956,7 +1957,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           const hitAng = Math.atan2(event.y - state.player.y, event.x - state.player.x);
           if (!purePixelFx && !atlasContact && event.cause !== "LASER" && !(kitShots && relayMode)) { burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); contact(event.x, event.y - 30, 0xffb070); }
           damageNumber(event.x, event.y - 56, event.amount, event.guarded ? 0xffe08a : 0xffffff);
-          heavyHit(event.amount, event.x, event.y - 30, { angle: hitAng, guarded: event.guarded, side: "player", moveId: lastRelease.player?.moveId ?? null });
+          heavyHit(event.amount, event.x, event.y - 30, { angle: hitAng, guarded: event.guarded, side: "player", moveId: lastRelease.player?.moveId ?? null, ultimate: lastRelease.player?.ultimate });
           break;
         }
         case "RIVAL_DODGE": puff(event.x, event.y, 0xa89580, 3, 0.9); break;
@@ -2343,8 +2344,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     }
     for (const [id, view] of rivalViews) if (!state.rivals.some((rival) => String(rival.id) === String(id).split(':')[0])) { view.container.destroy({ children: true }); rivalViews.delete(id); burstShell.retire(`rival:${String(id).split(':')[0]}`); }
     if (!(state.mate.state === "ABSENT")) mateView.container.visible = true; else mateView.container.visible = false;
+    // The impact frame's silhouette must not outlive the frame (the player's tint builds on its last value).
+    if (impactSilhouette && !(impactFlashTimer > 0)) { playerView.sprite.tint = 0xffffff; impactSilhouette = false; }
     playerView.sprite.tint = statusTint(state.player, playerView.sprite.tint);
     if (impactFlashTimer > 0 && !reducedMotion && rich) {
+      impactSilhouette = true;
       playerView.sprite.tint = 0x000000;
       for (const view of rivalViews.values()) if (view.container.visible) view.sprite.tint = 0x000000;
     }

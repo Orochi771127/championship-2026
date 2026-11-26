@@ -278,6 +278,7 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   let bundleScope = null;
   let tickerCallback = null;
   let accumulator = 0;
+  let reviewFrozen = false, reviewCast = null;
   let paused = false;
   let qualityReloading = false;
   let matchId = 0;
@@ -1514,6 +1515,8 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
   }
   function frameBody(ticker) {
     if (!sim || !scene) return;
+    // Review stage (loopback QA): the clock only moves through __dataArenaQA.review.step().
+    if (reviewFrozen) return;
     const started = performance.now();
     const dtMs = Math.min(ticker.deltaMS, 250);
     if (root.dataset.state === "PLAY" && !paused && !document.hidden) {
@@ -2937,7 +2940,41 @@ export async function openDataArena({ ensureStage, audioBus = null, music = null
       // Loopback review only (Journey zones, 2026-11-10): end the current relay wave so the
       // between-wave buff pick and the stage result can be checked. Public hosts never get it.
       ...(["localhost", "127.0.0.1", "[::1]", "::1"].includes(globalThis.location?.hostname) ? { endRelayWave: () => {
-        const state = sim?.getState(); if (!state?.relay || !state.rivals[0]) return false; state.rivals[0].hp = 0; return true; } } : {}),
+        const state = sim?.getState(); if (!state?.relay || !state.rivals[0]) return false; state.rivals[0].hp = 0; return true; },
+        // Move filming (combat-skill polish workflow): stage caster and dummy, freeze the clock,
+        // cast one move, then step the world a fixed slice at a time and shoot each frame.
+        review: Object.freeze({
+          stage({ moveId = null, ultimate = false, px = null, py = null, rx = null, ry = null } = {}) {
+            const st = sim?.getState(); if (!st || !st.player || !st.rivals?.[0]) return false;
+            sim.reviewHoldRivals?.(true);
+            const rival = st.rivals.find((r) => r.active && r.hp > 0) ?? st.rivals[0];
+            if (Number.isFinite(px)) { st.player.x = px; st.player.y = py; }
+            if (Number.isFinite(rx)) { rival.x = rx; rival.y = ry; }
+            st.player.vx = st.player.vy = st.player.kbx = st.player.kby = 0; rival.vx = rival.vy = rival.kbx = rival.kby = 0;
+            rival.hp = rival.maxHp = 99999; st.player.cast = null; st.player.recovery = 0;
+            if (moveId) st.player.kit = ultimate ? { ...st.player.kit, ultimate: moveId } : { ...st.player.kit, moves: [moveId, ...st.player.kit.moves.slice(1)] };
+            st.player.energy = 100; st.player.cooldowns = {};
+            return { player: { x: st.player.x, y: st.player.y }, rival: { x: rival.x, y: rival.y }, kit: st.player.kit };
+          },
+          freeze(on) { reviewFrozen = Boolean(on); accumulator = 0; return reviewFrozen; },
+          cast(slot = 0) { reviewCast = slot; return true; },
+          /** Advance the world `seconds` in fixed steps (the cast, if queued, goes in on the first). */
+          step(seconds = 0.05) {
+            if (!sim || !scene) return null;
+            const n = Math.max(1, Math.round((seconds * 1000) / STEP_MS));
+            for (let i = 0; i < n; i++) {
+              const st = sim.getState(), rival = st.rivals.find((r) => r.active && r.hp > 0) ?? st.rivals[0];
+              const inp = { aimX: rival?.x ?? null, aimY: rival?.y ?? null, autoAim: true };
+              if (reviewCast !== null) { if (reviewCast === "ult") inp.ult = true; else inp.cast = reviewCast; reviewCast = null; }
+              // The scene's hit-stop holds the field: step the simulation only when it lets time pass.
+              if ((scene.getTimeScale?.() ?? 1) > 0) sim.step(inp);
+              const events = sim.drainEvents(); if (events.length) handleEvents(events);
+              scene.render(STEP_MS, false);
+            }
+            const st = sim.getState();
+            return { time: st.time, cast: st.player.cast?.moveId ?? null, hitStop: scene.getDiagnostics?.()?.hitStop ?? 0 };
+          }
+        }) } : {}),
       entities: () => {
         if (!sim) return null;
         const state = sim.getState();

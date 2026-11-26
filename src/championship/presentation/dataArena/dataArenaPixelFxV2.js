@@ -452,6 +452,17 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
   }
 
   // PB Ranked 10-elemental volumetric hit-burst preset (ZERO empty wireframe rings!)
+  let fxClock = 0, pendingUlt = null;
+  function playPendingUlt(moveId, x, y) {
+    if (!pendingUlt || pendingUlt.moveId !== moveId || fxClock - pendingUlt.at > 4) return;
+    const { arch, pk, angle } = pendingUlt; pendingUlt = null;
+    if (arch === "METEOR_RAIN") spawnHeroMeteor({ x, y, radius: 145, palKey: pk, count: pk === "water" ? 1 : 4 });
+    else if (arch === "VORTEX_PULL") spawnHeroVortex({ x, y, radius: 135, palKey: pk, durationSec: 1.05 });
+    else if (arch === "FLURRY_COMBO" || arch === "MULTI_DASH" || arch === "GUARD_BREAK_SLAM" || arch === "SHADOW_BACKSTAB") {
+      emitCrescentSlash({ x, y, angle, palKey: pk, scale: 1.2, count: 3, style: "flurry" });
+      spawnHeroShockwave({ x, y: y + 8, radius: 120, palKey: pk, spiresCount: 5 });
+    } else if (arch !== "STREAM_BEAM") spawnHeroShockwave({ x, y: y + 8, radius: 130, palKey: pk, spiresCount: 6 });
+  }
   function emitElementBurst({ x, y, palKey = "fire", scale = 1, angle = 0, heavy = false, crisp = false }) {
     const pk = normalizePalKey(palKey);
     const stops = paletteStops(pk);
@@ -671,7 +682,8 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
 
     if (h.kind === "HERO_SLASH") {
       const fade = t < 0.25 ? t / 0.25 : clamp(1 - (t - 0.25) / 0.75, 0, 1);
-      const rBase = (42 + t * 22) * h.scale;
+      // ~1.2 body (PB keeps a slash tight on the caster and target, 2026-11-26).
+      const rBase = (26 + t * 12) * Math.min(1.25, h.scale);
       const gMain = topGfx ?? topAddGfx;
       const gAdd = topAddGfx ?? topGfx;
       if (!gMain) return;
@@ -1354,6 +1366,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       const isStream = Boolean(pb?.hitFeel?.stream);
       const isHeavy = heavy || Boolean(pb?.hitFeel?.impact) || (pb?.hitFeel?.hitstop ?? 0) >= 12;
       const crisp = cellsOwnBurst(moveId);
+      playPendingUlt(moveId, x, groundY);
       emitElementBurst({ x, y, palKey: fxKey || pk, scale: isStream ? 0.85 : isHeavy ? 1.42 : 1.05, angle, heavy: isHeavy && !isStream, crisp });
       if ((spec.melee || pb?.vfx?.shapes?.includes("crescent")) && !isStream && !crisp) {
         emitCrescentSlash({ x, y, angle, palKey: pk, scale: isHeavy ? 1.32 : 1.0, count: 1, style: isHeavy ? "heavy" : "cleave" });
@@ -1370,6 +1383,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       const pk = normalizePalKey(spec.paletteKey);
       const sc = clamp(radius / 95, 0.95, 1.6);
       const crisp = cellsOwnBurst(moveId);
+      playPendingUlt(moveId, x, y);
       if (!crisp) spawnHeroShockwave({ x, y: y + 6, radius, palKey: pk, spiresCount: pk === "earth" || pk === "ice" || pk === "metal" ? 6 : 4 });
       emitElementBurst({ x, y, palKey: pk, scale: sc, angle: 0, heavy: true, crisp });
       addDecal({ x, y: y + 8, kind: pk === "earth" ? "crack" : pk === "ice" ? "frost" : "scorch", radius: Math.min(60, radius * 0.48), pal: pk });
@@ -1382,20 +1396,13 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       const spec = resolveMoveSpecV2(moveId);
       const pk = normalizePalKey(spec.paletteKey);
       const arch = spec.v2Archetype;
-      const focus = target ?? center;
-      // Dramatic Hero Ultimate spectacle tailored to each move's archetype & 10-element palette!
-      if (arch === "METEOR_RAIN") {
-        spawnHeroMeteor({ x: focus.x, y: focus.y, radius: 145, palKey: pk, count: pk === "water" ? 1 : 4 });
-      } else if (arch === "VORTEX_PULL") {
-        spawnHeroVortex({ x: focus.x, y: focus.y, radius: 135, palKey: pk, durationSec: 1.05 });
-      } else if (arch === "FLURRY_COMBO" || arch === "MULTI_DASH" || arch === "GUARD_BREAK_SLAM" || arch === "SHADOW_BACKSTAB") {
-        emitCrescentSlash({ x: focus.x, y: focus.y, angle, palKey: pk, scale: 1.65, count: 3, style: "flurry" });
-        spawnHeroShockwave({ x: focus.x, y: focus.y + 8, radius: 130, palKey: pk, spiresCount: 5 });
-      } else if (arch === "STREAM_BEAM") {
+      // 2026-11-26 cause and effect: the target-side spectacle waits for the move's first contact
+      // (hit / area for this move id); only the caster's power-up plays at the cast.
+      pendingUlt = { moveId, arch, pk, angle, at: fxClock };
+      if (arch === "STREAM_BEAM") {
         emitFluidStream({ x: center.x, y: center.y, angle, palKey: pk, range: 360, puffs: 18 });
         spawnHeroPillarAura({ x: center.x, y: center.y + 10, radius: 68, palKey: pk, mode: "ult" });
       } else {
-        spawnHeroShockwave({ x: focus.x, y: focus.y + 8, radius: 140, palKey: pk, spiresCount: 6 });
         spawnHeroPillarAura({ x: center.x, y: center.y + 10, radius: 68, palKey: pk, mode: "ult" });
       }
       // Caster ultimate power surge flash + inward energy streaks (ZERO concentric wireframe rings!)
@@ -1407,6 +1414,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       holdMs = Math.max(holdMs, 65);
       stats.ults++;
     },
+    /** Internal: the deferred target-side spectacle of an ultimate, at its contact point. */
 
     buff({ x, y, paletteKey = "sun" }) {
       const pk = normalizePalKey(paletteKey);
@@ -1646,6 +1654,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
 
     update(dtMs) {
       const dt = Math.min(0.1, (dtMs || 0) / 1000);
+      fxClock += dt;
       if (holdMs > 0) holdMs = Math.max(0, holdMs - (dtMs || 0));
       const stepDt = holdMs > 0 ? 0 : dt;
 
