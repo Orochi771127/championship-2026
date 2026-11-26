@@ -606,7 +606,9 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       life: 0.44
     });
     emitElementBurst({ x, y: y - 12, palKey: pk, scale: 1.2, angle: 0, heavy: true, crisp: true });
-    const spCount = quality === "low" ? Math.ceil(spiresCount * 0.6) : spiresCount;
+    // Rock and ice spires belong to earth, ice and metal blasts; fire and the rest leave none (2026-11-26).
+    const solid = pk === "earth" || pk === "ice" || pk === "metal";
+    const spCount = !solid ? 0 : quality === "low" ? Math.ceil(spiresCount * 0.6) : spiresCount;
     for (let i = 0; i < spCount; i++) {
       const a = (i / Math.max(1, spCount)) * TAU + rand() * 0.4;
       const dist = r * (0.28 + rand() * 0.32);
