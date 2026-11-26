@@ -85,3 +85,25 @@ test("wide drag reaches the edge without blank and drags back at once", () => {
   const focus = rt.getCameraFocus(), portrait = rt.getCamera(470, 900);
   near(focus.x, (portrait.left + portrait.right) / 2, "native focus is a legal portrait camera centre");
 });
+
+test("every wide hunt window, phone landscape included, docks tools at the bottom (Owner 2026-11-26)", async () => {
+  const fs = await import("node:fs");
+  const { isHuntDesktopDock } = await import("../src/championship/app/portraitFrame.js");
+  for (const [width, height] of [[844, 390], [932, 430], [667, 375], [720, 320], [1366, 768], [1920, 1080]])
+    assert.equal(isHuntDesktopDock({ width, height }), true, `${width}x${height}`);
+  assert.equal(isHuntDesktopDock({ width: NaN, height: 390 }), false);
+  const frame = fs.readFileSync("src/championship/app/portraitFrame.js", "utf8");
+  assert.match(frame, /const huntDesktop=hunt&&isHuntDesktopDock\(\{width,height:effectiveHeight\}\);\s*body\.toggleAttribute\('data-hunt-wide',hunt&&!huntDesktop\);\s*body\.toggleAttribute\('data-hunt-desktop',huntDesktop\);/);
+  // On a notched phone held sideways the title, the return button and the dock stay in the safe area.
+  const css = fs.readFileSync("src/championship/app/ui/screenLayout.css", "utf8");
+  const scope = 'body[data-hunt-desktop]:not([data-hunt-wide]) .cm-vs2-root[data-screen="HUNT_FIELD"]';
+  for (const rule of [
+    `${scope} .cm-vs2-hud {
+  padding-left: max(12px, env(safe-area-inset-left));
+  padding-right: max(12px, env(safe-area-inset-right));`,
+    `${scope} .cm-hunt-info {
+  left: max(12px, env(safe-area-inset-left));
+  right: max(12px, env(safe-area-inset-right));`,
+    "max-width: min(720px, calc(100% - 20px - env(safe-area-inset-left) - env(safe-area-inset-right)));"
+  ]) assert.ok(css.includes(rule), rule);
+});

@@ -25,8 +25,10 @@ export function isDesktopMenuLayout({width,height,activeScreen,hidden=false}) {
 // native-size landscape menus instead of the portrait frame scaled to about 54%.
 export const COMPACT_LANDSCAPE_MIN_WIDTH = 640;
 
-// Wide hunt windows at least this large dock the tools at the bottom, as on a phone.
-export const HUNT_DESKTOP_DOCK_MIN = Object.freeze({width:1024,height:600});
+// Every wide hunt window docks the tools at the bottom over a full-width map, as on a phone.
+// Owner 2026-11-25 asked for it on desktop (then from 1024x600); Owner 2026-11-26 extended it to
+// phone landscape, where the side panel took 30% of the width and was mostly empty.
+export const HUNT_DESKTOP_DOCK_MIN = Object.freeze({width:0,height:0});
 export function isHuntDesktopDock({width,height}) {
   return Number.isFinite(width)&&Number.isFinite(height)&&width>=HUNT_DESKTOP_DOCK_MIN.width&&height>=HUNT_DESKTOP_DOCK_MIN.height;
 }
@@ -281,8 +283,8 @@ export function mountPortraitFrame({window:win=globalThis.window,document:doc=gl
     const cage=responsiveMenus&&isCageLandscapeLayout({width,height:effectiveHeight,activeScreen:root?.dataset.activeScreen,hidden:root?.hidden});
     const browse=browseWide();
     const hunt=root?.dataset.activeScreen==='HUNT_FIELD'&&!root?.hidden&&isHuntWide()===true;
-    // Owner 2026-11-25: a desktop keeps the phone's bottom tool dock over a
-    // full-width map; only a short landscape window (phone) docks tools at the side.
+    // Owner 2026-11-25/26: every wide hunt window keeps the phone's bottom tool dock over a
+    // full-width map (data-hunt-desktop). The side-panel layout (data-hunt-wide) is no longer set.
     const huntDesktop=hunt&&isHuntDesktopDock({width,height:effectiveHeight});
     body.toggleAttribute('data-hunt-wide',hunt&&!huntDesktop);
     body.toggleAttribute('data-hunt-desktop',huntDesktop);

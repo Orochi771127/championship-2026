@@ -3526,7 +3526,17 @@ body[data-hunt-wide] .cm-vs2-field__viewport[data-tool="ROPE"]::after { inset: 8
   right: 0;
   margin-inline: auto;
   width: fit-content;
-  max-width: min(720px, calc(100% - 20px));
+  max-width: min(720px, calc(100% - 20px - env(safe-area-inset-left) - env(safe-area-inset-right)));
+}
+/* Owner 2026-11-26: phone landscape uses the same bottom dock. The map runs edge to edge under
+ * the notch; the title, the return button and the info rows stay inside the safe area. */
+body[data-hunt-desktop]:not([data-hunt-wide]) .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-vs2-hud {
+  padding-left: max(12px, env(safe-area-inset-left));
+  padding-right: max(12px, env(safe-area-inset-right));
+}
+body[data-hunt-desktop]:not([data-hunt-wide]) .cm-vs2-root[data-screen="HUNT_FIELD"] .cm-hunt-info {
+  left: max(12px, env(safe-area-inset-left));
+  right: max(12px, env(safe-area-inset-right));
 }
 
 /* Wide layouts: the dock is the side panel's lower card, two slots a row,
