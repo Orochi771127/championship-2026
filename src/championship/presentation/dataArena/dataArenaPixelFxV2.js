@@ -22,7 +22,8 @@ const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
 // Multi-stop RGBA palettes [t, [r,g,b], alpha] across all 10 Canonical Elements + utility looks
 export const PB_PARTICLE_PALETTES = Object.freeze({
-  fire:     [[0, [255, 255, 232], 1], [0.22, [255, 224, 92], 0.98], [0.55, [255, 112, 28], 0.9], [0.84, [196, 40, 16], 0.58], [1, [92, 22, 16], 0]],
+  // white-hot -> warm -> grey smoke (Slynyrd explosion ramp; no muddy red-brown tail, 2026-11-26)
+  fire:     [[0, [255, 255, 232], 1], [0.22, [255, 224, 92], 0.98], [0.5, [255, 112, 28], 0.88], [0.74, [176, 96, 74], 0.42], [1, [120, 116, 120], 0]],
   blueFire: [[0, [245, 255, 255], 1], [0.26, [130, 236, 255], 0.96], [0.60, [48, 138, 255], 0.86], [1, [24, 48, 148], 0]],
   water:    [[0, [242, 253, 255], 1], [0.28, [118, 226, 255], 0.94], [0.66, [34, 132, 238], 0.78], [1, [16, 62, 158], 0]],
   ice:      [[0, [255, 255, 255], 1], [0.28, [202, 248, 255], 0.96], [0.66, [98, 206, 250], 0.82], [1, [44, 124, 198], 0]],
@@ -1376,7 +1377,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       const crisp = cellsOwnBurst(moveId) || Boolean(spec.melee);
       playPendingUlt(moveId, x, groundY);
       emitElementBurst({ x, y, palKey: fxKey || pk, scale: isStream ? 0.85 : isHeavy ? 1.42 : 1.05, angle, heavy: isHeavy && !isStream, crisp });
-      if ((spec.melee || pb?.vfx?.shapes?.includes("crescent")) && !isStream && !crisp) {
+      if ((spec.melee || pb?.vfx?.shapes?.includes("crescent")) && !isStream && !cellsOwnBurst(moveId)) {
         emitCrescentSlash({ x, y, angle, palKey: pk, scale: isHeavy ? 1.32 : 1.0, count: 1, style: isHeavy ? "heavy" : "cleave" });
       }
       if (isHeavy && !reducedMotion && (!pb || pb.vfx.layers.includes("ground-decals"))) {
