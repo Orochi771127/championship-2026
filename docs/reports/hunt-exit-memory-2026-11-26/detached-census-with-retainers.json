@@ -1,0 +1,211 @@
+{
+ "gate": "canyon",
+ "hunts": 2,
+ "errors": [],
+ "baseline": {
+  "nodes": 1882,
+  "listeners": 228,
+  "heapMb": 40.5
+ },
+ "afterHunts": [
+  {
+   "nodes": 2245,
+   "listeners": 272,
+   "heapMb": 55
+  },
+  {
+   "nodes": 2502,
+   "listeners": 297,
+   "heapMb": 54.3
+  }
+ ],
+ "census": {
+  "total": 582,
+  "detachedNodes": 341,
+  "detachedRoots": 53,
+  "top": [
+   {
+    "sig": "section.cm-vs2-shell",
+    "roots": 2,
+    "nodes": 254,
+    "biggest": 137,
+    "text": "狩獵選擇狩獵場轉動地球，選擇要前往的場地。16南橋峽谷代碼：028XT5BO入場費450 位元幣持有金額9,999,99"
+   },
+   {
+    "sig": "section.cm-vs2-field",
+    "roots": 1,
+    "nodes": 25,
+    "biggest": 25,
+    "text": "南橋峽谷剩餘 00:58時鐘 +120 秒（0）返回牧場拖曳地面移動視野 · 目標倒地後輕觸抓取捕獲移動收取繩索主武×1"
+   },
+   {
+    "sig": "img.",
+    "roots": 21,
+    "nodes": 21,
+    "biggest": 1,
+    "text": ""
+   },
+   {
+    "sig": "canvas.",
+    "roots": 13,
+    "nodes": 13,
+    "biggest": 1,
+    "text": ""
+   },
+   {
+    "sig": "div.cm-vs2-field__loading",
+    "roots": 1,
+    "nodes": 10,
+    "biggest": 10,
+    "text": "南橋峽谷限時 01:00正在下載狩獵場 90%364 KB / 364 KB"
+   },
+   {
+    "sig": "class",
+    "roots": 3,
+    "nodes": 3,
+    "biggest": 1,
+    "text": "cm-vs2-shell"
+   },
+   {
+    "sig": "aria-label",
+    "roots": 3,
+    "nodes": 3,
+    "biggest": 1,
+    "text": "選擇狩獵場"
+   },
+   {
+    "sig": "div.cm-hunt-gate",
+    "roots": 1,
+    "nodes": 2,
+    "biggest": 2,
+    "text": "狩獵結算0捕獲 0 隻這次沒有夥伴返回牧場"
+   },
+   {
+    "sig": "div.cm-ambience",
+    "roots": 1,
+    "nodes": 2,
+    "biggest": 2,
+    "text": ""
+   },
+   {
+    "sig": "span.cm-load-walker",
+    "roots": 1,
+    "nodes": 2,
+    "biggest": 2,
+    "text": ""
+   },
+   {
+    "sig": "div.",
+    "roots": 1,
+    "nodes": 1,
+    "biggest": 1,
+    "text": ""
+   },
+   {
+    "sig": "div.cm-hunt-dock__belt",
+    "roots": 1,
+    "nodes": 1,
+    "biggest": 1,
+    "text": ""
+   },
+   {
+    "sig": "data-ui-authority",
+    "roots": 1,
+    "nodes": 1,
+    "biggest": 1,
+    "text": "CHAMPIONSHIP_MODERN_UI_SYSTEM_P1R"
+   },
+   {
+    "sig": "data-original-scene",
+    "roots": 1,
+    "nodes": 1,
+    "biggest": 1,
+    "text": "ui/info_bar.nxr"
+   }
+  ],
+  "marks": [
+   [
+    "MemMarkRoot0",
+    "section.cm-vs2-shell"
+   ],
+   [
+    "MemMarkRoot1",
+    "section.cm-vs2-field"
+   ],
+   [
+    "MemMarkRoot2",
+    "img."
+   ],
+   [
+    "MemMarkRoot3",
+    "canvas."
+   ],
+   [
+    "MemMarkRoot4",
+    "div.cm-vs2-field__loading"
+   ],
+   [
+    "MemMarkRoot5",
+    "class"
+   ],
+   [
+    "MemMarkRoot6",
+    "aria-label"
+   ],
+   [
+    "MemMarkRoot7",
+    "div.cm-hunt-gate"
+   ]
+  ]
+ },
+ "retainers": [
+  {
+   "sig": "section.cm-vs2-shell",
+   "path": [
+    "no path"
+   ]
+  },
+  {
+   "sig": "section.cm-vs2-field",
+   "path": [
+    "synthetic:(GC roots) --[10]-->\n      synthetic:(Global handles) --10 / blink::ScriptStateProtectingContext::context_-->\n      system / NativeContext / https://orochi771127.github.io --global_object-->\n      Window [JSGlobalObject] / https://orochi771127.github.io --properties-->\n      array:(object properties) --1069-->\n      system / PropertyCell --value-->\n      Object --dispose-->\n      dispose --context-->\n      system / Context / scope @2365217 --previous-->\n      system / Context / scope @2711393 --onActorFrame-->\n       --context-->\n      system / Context / scope @2366563 --shell-->\n      <section class=\"cm-vs2-field\" aria-label=\"狩獵場地\"> --properties-->\n      system / PropertyArray --[0]-->\n      MemMarkRoot1"
+   ]
+  },
+  {
+   "sig": "img.",
+   "path": [
+    "synthetic:(GC roots) --[10]-->\n      synthetic:(Global handles) --10 / blink::ScriptStateProtectingContext::context_-->\n      system / NativeContext / https://orochi771127.github.io --global_object-->\n      Window [JSGlobalObject] / https://orochi771127.github.io --properties-->\n      array:(object properties) --1069-->\n      system / PropertyCell --value-->\n      Object --dispose-->\n      dispose --context-->\n      system / Context / scope @2365217 --previous-->\n      system / Context / scope @2711393 --onActorFrame-->\n       --context-->\n      system / Context / scope @2366563 --walker-->\n      Object --get ready-->\n      get ready --context-->\n      system / Context / scope @1972655 --art-->\n      Object --frames-->\n      Array --[0]-->\n      Object --image-->\n      <img decoding=\"async\" src=\"https://orochi771127.github.io/championship --properties-->\n      system / PropertyArray --[0]-->\n      MemMarkRoot2"
+   ]
+  },
+  {
+   "sig": "canvas.",
+   "path": [
+    "synthetic:(GC roots) --[10]-->\n      synthetic:(Global handles) --10 / blink::ScriptStateProtectingContext::context_-->\n      system / NativeContext / https://orochi771127.github.io --global_object-->\n      Window [JSGlobalObject] / https://orochi771127.github.io --properties-->\n      array:(object properties) --1628-->\n      system / PropertyCell --value-->\n      Object --getView-->\n      getView --context-->\n      system / Context / scope @3229191 --previous-->\n      system / Context / scope @2590733 --careArt-->\n      Map --table-->\n      array: --71-->\n      Object --texture-->\n      Texture --_source-->\n      ImageSource --resource-->\n      <canvas width=\"96\" height=\"96\"> --properties-->\n      system / PropertyArray --[0]-->\n      MemMarkRoot3"
+   ]
+  },
+  {
+   "sig": "div.cm-vs2-field__loading",
+   "path": [
+    "synthetic:(GC roots) --[10]-->\n      synthetic:(Global handles) --10 / blink::ScriptStateProtectingContext::context_-->\n      system / NativeContext / https://orochi771127.github.io --global_object-->\n      Window [JSGlobalObject] / https://orochi771127.github.io --properties-->\n      array:(object properties) --1069-->\n      system / PropertyCell --value-->\n      Object --dispose-->\n      dispose --context-->\n      system / Context / scope @2365217 --previous-->\n      system / Context / scope @2711393 --onActorFrame-->\n       --context-->\n      system / Context / scope @2366563 --loadingBytes-->\n      <p class=\"cm-vs2-field__loading-bytes\" aria-hidden=\"true\"> --[7]-->\n      <div class=\"cm-vs2-field__loading\" role=\"status\"> --properties-->\n      system / PropertyArray --[0]-->\n      MemMarkRoot4"
+   ]
+  },
+  {
+   "sig": "class",
+   "path": [
+    "no path"
+   ]
+  },
+  {
+   "sig": "aria-label",
+   "path": [
+    "no path"
+   ]
+  },
+  {
+   "sig": "div.cm-hunt-gate",
+   "path": [
+    "synthetic:(GC roots) --[10]-->\n      synthetic:(Global handles) --10 / blink::ScriptStateProtectingContext::context_-->\n      system / NativeContext / https://orochi771127.github.io --global_object-->\n      Window [JSGlobalObject] / https://orochi771127.github.io --__championshipTacticLog-->\n       --context-->\n      system / Context / scope @2010391 --pixiStage-->\n      Object --app-->\n      _Application --renderer-->\n      WebGLRenderer --events-->\n      _EventSystem --_rootPointerEvent-->\n      FederatedPointerEvent --nativeEvent-->\n      PointerEvent --[5]-->\n      <button class=\"cm-hunt-gate__continue cm-screen-primary\" type=\"button\" --[8]-->\n      <div class=\"cm-hunt-gate__result\"> --[4]-->\n      <div class=\"cm-hunt-gate__plate\"> --[4]-->\n      <div class=\"cm-hunt-gate\" data-phase=\"opening\" data-motion=\"full\" role --properties-->\n      system / PropertyArray --[0]-->\n      MemMarkRoot7"
+   ]
+  }
+ ]
+}
