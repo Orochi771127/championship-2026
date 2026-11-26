@@ -35,7 +35,7 @@ Measured on the 16 maps as shipped after #308-#316.
 4. **Flat ground as one textured surface** on hm14, hm15, hm18, hm13 and hm10: the vertex-colour ground becomes a small baked texture on a few large quads. Fewer triangles (35-45% per map), smaller downloads, and the texture can then carry surface detail (ripples, cracks, stains).
    **Re-planned 2026-11-26 after measuring (see `BATCH4.md`): welding and a baked ground texture gain little and risk the picture; the same maps carried unread UV sets, second colour sets and float colours instead. Done: hm14-hm18 are 8 MB lighter to download and hold 11-32 MB less in the hunt, same models.**
    **4b done 2026-11-26 on all 16 maps: the JS copy of map geometry goes once it is on the GPU, 1-32 MB per map (see `BATCH5.md`).**
-5. **hm14 extension cliffs as rounded rock**, built like hm08's new mesas, replacing the per-tile blocks.
+5. **hm14 extension cliffs as rounded rock**, built like hm08's new mesas, replacing the per-tile blocks. **Done 2026-11-26: the extension plateaus are rounded mesas built in Blender and carry 158 of the original area's own boulders; fallback pictures re-rendered in Blender (see `BATCH6.md`).**
 
 Each batch ships as its own PR with before/after pictures, the full tests, a browser check on phone
 portrait, phone landscape and desktop, and the enter/leave memory loop where memory is touched.
