@@ -150,7 +150,13 @@ export async function createHuntThreeMap({THREE,GLTFLoader,DRACOLoader,dracoDeco
       renderer.autoClear=true;renderer.setClearColor(external?.field.clearColor??0x0a222a,1);renderer.outputColorSpace=THREE.SRGBColorSpace;
       shaderGuard=shaderFailureGuard(renderer);
       if(external){
-        withSharedUnpackState(app.renderer.gl,()=>{for(const texture of external.textures)renderer.initTexture(texture);});
+        withSharedUnpackState(app.renderer.gl,()=>{
+          const gl=app.renderer.gl;
+          for(let i=0;i<8&&gl.getError()!==gl.NO_ERROR;i++);  // start from a clean error flag
+          for(const texture of external.textures)renderer.initTexture(texture);
+          // The compact one-channel mask upload must be clean; otherwise take the RGBA path again.
+          if(external.stats?.maskFormat==='R8'&&gl.getError()!==gl.NO_ERROR)for(const texture of external.useRgbaMasks())renderer.initTexture(texture);
+        });
         // Uploaded means Three holds a GL texture at this texture's current version.
         external.releaseDecodedFrames?.(texture=>{const held=renderer.properties.get(texture);return Boolean(held.__webglTexture)&&held.__version===texture.version;});
       }

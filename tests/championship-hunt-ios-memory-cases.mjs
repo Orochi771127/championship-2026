@@ -17,12 +17,12 @@ const manifest = JSON.parse(fs.readFileSync(new URL('manifest.json', directory),
 const source = file => fs.readFileSync(new URL('../' + file, import.meta.url), 'utf8');
 
 /** The loader's own collaborators, reduced to what it calls. Asset bytes are the real published files. */
-async function loadDayField() {
+async function loadDayField(extra = {}) {
   const closed = [], bitmaps = [];
   const THREE = {REVISION: '185', SRGBColorSpace: 'srgb', NoColorSpace: '', LinearFilter: 1006, DoubleSide: 2,
     LoadingManager: class { setURLModifier() {} },
     Texture: class { constructor(image) { this.image = image; this.version = 0; } set needsUpdate(value) { if (value) this.version++; } },
-    MeshBasicMaterial: class { constructor(options) { Object.assign(this, options); } }};
+    MeshBasicMaterial: class { constructor(options) { Object.assign(this, options); } }, ...extra};
   class DRACOLoader {
     constructor() { this.workerPool = []; this.workerSourceURL = ''; }
     setDecoderPath() { return this; } setWorkerLimit() { return this; } setDecoderConfig() {}
@@ -86,12 +86,60 @@ test('the day field of hm01 decodes three 2880 x 2880 images and frees each one 
   assert.throws(() => assets.selectPhase(2), /HUNT_THREE_NATIVE_PHASE_OUT_OF_RANGE/);
 });
 
+// 2026-11-26 refinement batch 2: the coverage mask has one channel, so it is uploaded as R8.
+test('the coverage mask goes to the GPU as one channel: 8.3 MB instead of 33.2 MB per mask', async () => {
+  const frame = 2880 * 2880;
+  const {assets, meshes} = await loadDayField({RedFormat: THREE.RedFormat, RGBAFormat: THREE.RGBAFormat, ShaderLib: THREE.ShaderLib});
+  const [colourA, mask, colourB] = assets.textures;
+  assert.equal(assets.stats.maskFormat, 'R8');
+  assert.equal(mask.format, THREE.RedFormat);
+  assert.equal(colourA.format, undefined, 'colour frames keep the default RGBA');
+  assert.equal(colourB.format, undefined);
+  assert.deepEqual(assets.maskTextures, [mask], 'day and second phase share one mask');
+  assert.equal(assets.stats.gpuTextureBytes, 2 * frame * 4 + frame, '74.6 MB, was 99.5 MB');
+  assert.equal(assets.stats.decodedTextureBytes, 3 * frame * 4, 'the decoded bitmaps are as before, and freed after upload');
+
+  // Three's alpha map reads green; R8 has none, so the foreground material reads red.
+  const foreground = meshes.find(mesh => mesh.userData.webCategory.startsWith('foreground')).material;
+  assert.equal(foreground.alphaMap, mask);
+  assert.equal(foreground.customProgramCacheKey(), 'hunt-coverage-mask-red');
+  const shader = {fragmentShader: THREE.ShaderLib.basic.fragmentShader};
+  foreground.onBeforeCompile(shader);
+  assert.ok(!shader.fragmentShader.includes('#include <alphamap_fragment>'));
+  assert.match(shader.fragmentShader, /diffuseColor\.a \*= texture2D\( alphaMap, vAlphaMapUv \)\.r;/);
+  assert.match(THREE.ShaderChunk.alphamap_fragment, /texture2D\( alphaMap, vAlphaMapUv \)\.g;/, 'the stock chunk this replaces');
+  const ground = meshes.find(mesh => mesh.userData.webCategory === 'standable_ground').material;
+  assert.equal(ground.onBeforeCompile, undefined, 'the ground material is untouched');
+
+  // A driver that refuses the compact upload gets the RGBA mask back; red still reads the grey picture.
+  let disposed = 0; mask.dispose = () => { disposed++; };
+  const before = mask.version;
+  assert.deepEqual(assets.useRgbaMasks(), [mask]);
+  assert.equal(mask.format, THREE.RGBAFormat);
+  assert.equal(disposed, 1);
+  assert.equal(mask.version, before + 1, 'marked for a fresh upload');
+  assert.equal(assets.stats.maskFormat, 'RGBA8');
+  assert.equal(assets.stats.gpuTextureBytes, 3 * frame * 4);
+  assert.deepEqual(assets.useRgbaMasks(), [], 'asking twice changes nothing');
+});
+
+test('a Three build without the expected shader text keeps the RGBA mask and the stock alpha map', async () => {
+  const {assets, meshes} = await loadDayField({RedFormat: THREE.RedFormat, RGBAFormat: THREE.RGBAFormat, ShaderLib: {basic: {fragmentShader: 'void main(){}'}}});
+  assert.equal(assets.stats.maskFormat, 'RGBA8');
+  assert.equal(assets.textures[1].format, undefined);
+  assert.equal(meshes.find(mesh => mesh.userData.webCategory.startsWith('foreground')).material.onBeforeCompile, undefined);
+  assert.equal(assets.stats.gpuTextureBytes, 3 * 2880 * 2880 * 4);
+  assert.deepEqual(assets.useRgbaMasks(), []);
+});
+
 test('the map releases decoded frames right after its one upload pass, proven per texture against the renderer', () => {
   const map = source('src/championship/presentation/vs2/huntThree/createHuntThreeMap.mjs');
   const upload = map.indexOf('for(const texture of external.textures)renderer.initTexture(texture);');
   const release = map.indexOf('external.releaseDecodedFrames?.(');
   assert.ok(upload > 0 && release > upload, 'release follows the upload pass');
-  assert.ok(release - upload < 400, 'and nothing else runs between them');
+  assert.ok(release - upload < 700, 'and only the mask fallback runs between them');
+  const between = map.slice(upload, release);
+  assert.match(between, /if\(external\.stats\?\.maskFormat==='R8'&&gl\.getError\(\)!==gl\.NO_ERROR\)for\(const texture of external\.useRgbaMasks\(\)\)renderer\.initTexture\(texture\);/);
   assert.match(map, /const held=renderer\.properties\.get\(texture\);return Boolean\(held\.__webglTexture\)&&held\.__version===texture\.version;/);
   // A lost context retires the map to 2D; it never re-uploads from a bitmap that is gone.
   assert.match(map, /offLost=stage\.onContextLost\(\(\)=>fail\(new Error\('HM02_CONTEXT_LOST_USE_2D'\)\)\);/);

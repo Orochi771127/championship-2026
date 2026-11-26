@@ -29,8 +29,8 @@ Measured on the 16 maps as shipped after #308-#316.
 
 ## Batches, in order
 
-1. **Dress the empty extensions of hm17 and hm18** with each map's own props (the method used for hm10 and hm13 in #312, adapted to the 52-degree maps). Tall props block their tiles.
-2. **Half-resolution coverage masks for hm01 and hm08**: about 25 MB less texture memory on entry for each, same picture. This is the main protection against the phone killing the web app on entry.
+1. **Dress the empty extensions of hm17 and hm18** with each map's own props (the method used for hm10 and hm13 in #312, adapted to the 52-degree maps). Tall props block their tiles. **Done 2026-11-26 (hm16 too): see `BATCH1.md`.**
+2. **Lighter coverage masks for hm01 and hm08**: about 24 MB less texture memory in the hunt for each, same picture. This is the main protection against the phone killing the web app on entry. **Done 2026-11-26: the mask is uploaded as one channel at full resolution instead of at half resolution, so no edge gets coarser; see `BATCH2.md`.**
 3. **Water that moves**: a light shader shimmer on the existing water surfaces; no new assets; off with reduced motion and in saver quality.
 4. **Flat ground as one textured surface** on hm14, hm15, hm18, hm13 and hm10: the vertex-colour ground becomes a small baked texture on a few large quads. Fewer triangles (35-45% per map), smaller downloads, and the texture can then carry surface detail (ripples, cracks, stains).
 5. **hm14 extension cliffs as rounded rock**, built like hm08's new mesas, replacing the per-tile blocks.
