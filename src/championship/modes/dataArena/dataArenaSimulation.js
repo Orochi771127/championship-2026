@@ -84,6 +84,7 @@ const NEUTRAL_INPUT = Object.freeze({ moveX: 0, moveY: 0, aimX: null, aimY: null
 // SURVIVAL (P4 prototype, 2026-11-16): the harbor match with a closing storm and eleven rival tamers.
 export const DATA_ARENA_MODES = Object.freeze(["TOURNAMENT", "HARBOR", "RELAY", "SURVIVAL"]);
 
+const SINGLE_DASH_MOVES = new Set(['pb-094', 'pb-098', 'pb-099']);
 export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PARTNERS[0].id, quality = "high", mode = "HARBOR", moveSystem = "legacy", controlMode = "MANUAL", aiDifficulty = null, aiSettings = null, tacticalArt = null, relayLoadouts = {}, relayReserveId = null, relayThirdId = null, relayCompanionSpecies = [], relayArenaId = null, portrait = false, partnerPower = {}, relayBurstPlans = {}, relayManualBurst = false, rivalBoostPercent = 0, relayRivals = null, relayBuffPicks = false } = {}) {
   const v2Mode = mode === "RELAY" && normalizeMoveSystem(moveSystem) === "v2";
   const pbRankAi = v2Mode || (mode === "RELAY" && aiDifficulty !== null);
@@ -1640,7 +1641,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const v2Homing = v2?.homing ? 3.2 : 0;
     const v2Pull = v2?.pullForce ?? 0;
     const v2Rebound = Boolean(v2?.rebound);
-    const v2SecondDash = Boolean(v2?.v2Archetype === "MULTI_DASH");
+    // PB_MOVE_BY_MOVE_20261127: moves staged from a single-dash reference strike once (no follow-up dash).
+    const v2SecondDash = Boolean(v2?.v2Archetype === "MULTI_DASH") && !SINGLE_DASH_MOVES.has(moveId);
     switch (move.type) {
       case "BOLT": case "WAVE": shootBolt(caster, move, angle, { actionId, moveId, arenaElement, attackElement, damageBonus, moveType: move.type, isBasic, guardBreak: v2GuardBreak, homing: move.type === "BOLT" ? v2Homing : 0, knockback: v2?.v2Archetype === "DRAG_WAVE" ? Math.max(move.knockback ?? 0, 340) : (move.knockback ?? 0) }); break;
       case "SPREAD": case "LANCE":

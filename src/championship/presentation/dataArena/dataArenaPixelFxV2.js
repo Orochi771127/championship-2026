@@ -16,6 +16,7 @@
 
 import { BATTLE_FX_PALETTES } from "../battleFx/battleFxPalettes.js";
 import { resolveMoveSpecV2 } from "../../modes/dataArena/dataArenaMoveCatalogV2.js";
+import { createPbMoveScripts, pbMoveBody } from "./dataArenaPbMoveScripts.js";
 
 const TAU = Math.PI * 2;
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
@@ -454,6 +455,9 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
 
   // PB Ranked 10-elemental volumetric hit-burst preset (ZERO empty wireframe rings!)
   let fxClock = 0, pendingUlt = null;
+  // Move-by-move scripts (PB_MOVE_BY_MOVE_20261127): a scripted move plays its own staging, not its archetype's.
+  const pbScripts = createPbMoveScripts({ spawnP, addHero, addDecal, rand, puff: drawPixelPuff });
+  const scriptFor = (moveId) => { const cue = moveId ? pbMoveBody(moveId) : null; return cue ? pbScripts[cue.key] ?? null : null; };
   function playPendingUlt(moveId, x, y) {
     if (!pendingUlt || pendingUlt.moveId !== moveId || fxClock - pendingUlt.at > 4) return;
     const { arch, pk, angle } = pendingUlt; pendingUlt = null;
@@ -700,6 +704,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
   // Draw one active Hero Showpiece frame across depthGfx / topGfx / topAddGfx
   function drawHeroEffect(h, dtStep) {
     const t = clamp(h.age / h.life, 0, 1);
+    if (h.kind === "PB_SCRIPT") { if (topGfx && topAddGfx) h.draw(h, t, dtStep, { top: topGfx, add: topAddGfx }); return; }
     const stops = h.stops ?? paletteStops(h.palKey);
     const hex = paletteHex(h.palKey);
 
@@ -1256,7 +1261,9 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       return true;
     },
 
-    cast({ x, y, moveId, windup = 0.2 }) {
+    cast({ x, y, moveId, windup = 0.2, follow = null, angle = 0 }) {
+      const script = scriptFor(moveId);
+      if (script?.cast) { script.cast({ x, y, follow, angle, windup }); stats.casts++; return; }
       const spec = resolveMoveSpecV2(moveId);
       const pk = normalizePalKey(spec.paletteKey);
       // The charge is visible for the whole windup: an orb grows in the hand until the release (2026-11-26 blind review).
@@ -1316,7 +1323,9 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       return true;
     },
 
-    release({ x, y, angle = 0, moveId, melee = false }) {
+    release({ x, y, angle = 0, moveId, melee = false, follow = null }) {
+      const script = scriptFor(moveId);
+      if (script?.release) { script.release({ x, y, follow, angle }); stats.releases++; return; }
       const spec = resolveMoveSpecV2(moveId);
       const pk = normalizePalKey(spec.paletteKey);
       const arch = spec.v2Archetype;
@@ -1407,6 +1416,8 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
     },
 
     hit({ x, y, groundY = y, moveId, heavy = false, angle = 0 }) {
+      const script = scriptFor(moveId);
+      if (script?.hit) { script.hit({ x, y, groundY, angle, heavy }); stats.hits++; return; }
       const spec = resolveMoveSpecV2(moveId);
       const pb = spec.pb324 ?? null;
       const fxKey = pb?.vfx?.fx ? normalizePalKey(pb.vfx.fx) : normalizePalKey(spec.paletteKey);
