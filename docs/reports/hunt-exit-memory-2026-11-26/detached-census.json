@@ -1,0 +1,133 @@
+{
+ "gate": "canyon",
+ "hunts": 2,
+ "errors": [],
+ "baseline": {
+  "nodes": 1864,
+  "listeners": 228,
+  "heapMb": 38.9
+ },
+ "afterHunts": [
+  {
+   "nodes": 2246,
+   "listeners": 274,
+   "heapMb": 55.3
+  },
+  {
+   "nodes": 2502,
+   "listeners": 297,
+   "heapMb": 55.4
+  }
+ ],
+ "census": {
+  "total": 464,
+  "detachedNodes": 235,
+  "detachedRoots": 43,
+  "top": [
+   {
+    "sig": "section.cm-vs2-shell",
+    "roots": 2,
+    "nodes": 158,
+    "biggest": 116,
+    "text": "狩獵選擇狩獵場轉動地球，選擇要前往的場地。16南橋峽谷代碼：028XT5BO入場費450 位元幣持有金額9,999,99"
+   },
+   {
+    "sig": "section.cm-vs2-field",
+    "roots": 1,
+    "nodes": 25,
+    "biggest": 25,
+    "text": "南橋峽谷剩餘 00:58時鐘 +120 秒（0）返回牧場拖曳地面移動視野 · 目標倒地後輕觸抓取捕獲移動收取繩索主武×1"
+   },
+   {
+    "sig": "img.",
+    "roots": 21,
+    "nodes": 21,
+    "biggest": 1,
+    "text": ""
+   },
+   {
+    "sig": "canvas.",
+    "roots": 13,
+    "nodes": 13,
+    "biggest": 1,
+    "text": ""
+   },
+   {
+    "sig": "div.cm-vs2-field__loading",
+    "roots": 1,
+    "nodes": 10,
+    "biggest": 10,
+    "text": "南橋峽谷限時 01:00正在下載狩獵場 90%364 KB / 364 KB"
+   },
+   {
+    "sig": "div.cm-hunt-gate",
+    "roots": 1,
+    "nodes": 2,
+    "biggest": 2,
+    "text": "狩獵結算0捕獲 0 隻這次沒有夥伴返回牧場"
+   },
+   {
+    "sig": "div.cm-ambience",
+    "roots": 1,
+    "nodes": 2,
+    "biggest": 2,
+    "text": ""
+   },
+   {
+    "sig": "span.cm-load-walker",
+    "roots": 1,
+    "nodes": 2,
+    "biggest": 2,
+    "text": ""
+   },
+   {
+    "sig": "div.",
+    "roots": 1,
+    "nodes": 1,
+    "biggest": 1,
+    "text": ""
+   },
+   {
+    "sig": "div.cm-hunt-dock__belt",
+    "roots": 1,
+    "nodes": 1,
+    "biggest": 1,
+    "text": ""
+   }
+  ],
+  "marks": [
+   [
+    "MemMarkRoot0",
+    "section.cm-vs2-shell"
+   ],
+   [
+    "MemMarkRoot1",
+    "section.cm-vs2-field"
+   ],
+   [
+    "MemMarkRoot2",
+    "img."
+   ],
+   [
+    "MemMarkRoot3",
+    "canvas."
+   ],
+   [
+    "MemMarkRoot4",
+    "div.cm-vs2-field__loading"
+   ],
+   [
+    "MemMarkRoot5",
+    "div.cm-hunt-gate"
+   ],
+   [
+    "MemMarkRoot6",
+    "div.cm-ambience"
+   ],
+   [
+    "MemMarkRoot7",
+    "span.cm-load-walker"
+   ]
+  ]
+ }
+}

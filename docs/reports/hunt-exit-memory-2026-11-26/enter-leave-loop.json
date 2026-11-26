@@ -1,0 +1,1062 @@
+{
+ "samples": [
+  {
+   "label": "ranch-baseline",
+   "heapMb": 40.3,
+   "nodes": 1864,
+   "listeners": 228,
+   "tex": {
+    "n": 26,
+    "mb": 68.2
+   },
+   "buf": {
+    "n": 89,
+    "mb": 2.6
+   },
+   "rb": {
+    "n": 0,
+    "mb": 0
+   },
+   "ctxLive": 3,
+   "ctxLostHeld": 0,
+   "canvasAlive": 13,
+   "canvasDetached": 10,
+   "canvasDetachedMb": 4.3,
+   "bitmapsOpen": 11,
+   "bitmapsMb": 39.2,
+   "intervals": 4,
+   "three": null,
+   "screen": null
+  },
+  {
+   "label": "r1 canyon in-hunt",
+   "round": 1,
+   "gate": "canyon",
+   "phase": "in",
+   "heapMb": 53.6,
+   "nodes": 2236,
+   "listeners": 259,
+   "tex": {
+    "n": 19,
+    "mb": 72.5
+   },
+   "buf": {
+    "n": 39,
+    "mb": 5.1
+   },
+   "rb": {
+    "n": 3,
+    "mb": 34.6
+   },
+   "ctxLive": 2,
+   "ctxLostHeld": 1,
+   "canvasAlive": 22,
+   "canvasDetached": 19,
+   "canvasDetachedMb": 9.6,
+   "bitmapsOpen": 0,
+   "bitmapsMb": 0,
+   "intervals": 4,
+   "three": {
+    "geometries": 13,
+    "textures": 13
+   },
+   "screen": "HUNT_FIELD"
+  },
+  {
+   "label": "r1 canyon left",
+   "round": 1,
+   "gate": "canyon",
+   "phase": "left",
+   "heapMb": 54,
+   "nodes": 2251,
+   "listeners": 272,
+   "tex": {
+    "n": 31,
+    "mb": 68.2
+   },
+   "buf": {
+    "n": 93,
+    "mb": 2.7
+   },
+   "rb": {
+    "n": 0,
+    "mb": 0
+   },
+   "ctxLive": 3,
+   "ctxLostHeld": 0,
+   "canvasAlive": 17,
+   "canvasDetached": 12,
+   "canvasDetachedMb": 8.5,
+   "bitmapsOpen": 11,
+   "bitmapsMb": 39.2,
+   "intervals": 4,
+   "three": {
+    "geometries": 0,
+    "textures": 0
+   },
+   "screen": null
+  },
+  {
+   "label": "r1 grass in-hunt",
+   "round": 1,
+   "gate": "grass",
+   "phase": "in",
+   "heapMb": 63.5,
+   "nodes": 2510,
+   "listeners": 281,
+   "tex": {
+    "n": 32,
+    "mb": 104.7
+   },
+   "buf": {
+    "n": 130,
+    "mb": 10.2
+   },
+   "rb": {
+    "n": 3,
+    "mb": 34.6
+   },
+   "ctxLive": 2,
+   "ctxLostHeld": 1,
+   "canvasAlive": 34,
+   "canvasDetached": 31,
+   "canvasDetachedMb": 10.2,
+   "bitmapsOpen": 0,
+   "bitmapsMb": 0,
+   "intervals": 4,
+   "three": {
+    "geometries": 46,
+    "textures": 26
+   },
+   "screen": "HUNT_FIELD"
+  },
+  {
+   "label": "r1 grass left",
+   "round": 1,
+   "gate": "grass",
+   "phase": "left",
+   "heapMb": 61.2,
+   "nodes": 2518,
+   "listeners": 297,
+   "tex": {
+    "n": 31,
+    "mb": 71.8
+   },
+   "buf": {
+    "n": 95,
+    "mb": 2.7
+   },
+   "rb": {
+    "n": 0,
+    "mb": 0
+   },
+   "ctxLive": 3,
+   "ctxLostHeld": 0,
+   "canvasAlive": 22,
+   "canvasDetached": 16,
+   "canvasDetachedMb": 8.6,
+   "bitmapsOpen": 11,
+   "bitmapsMb": 39.2,
+   "intervals": 4,
+   "three": {
+    "geometries": 0,
+    "textures": 0
+   },
+   "screen": null
+  },
+  {
+   "label": "r1 factory in-hunt",
+   "round": 1,
+   "gate": "factory",
+   "phase": "in",
+   "heapMb": 56.2,
+   "nodes": 2757,
+   "listeners": 309,
+   "tex": {
+    "n": 22,
+    "mb": 43.3
+   },
+   "buf": {
+    "n": 224,
+    "mb": 17.6
+   },
+   "rb": {
+    "n": 3,
+    "mb": 34.6
+   },
+   "ctxLive": 2,
+   "ctxLostHeld": 1,
+   "canvasAlive": 23,
+   "canvasDetached": 20,
+   "canvasDetachedMb": 10.4,
+   "bitmapsOpen": 1,
+   "bitmapsMb": 4,
+   "intervals": 4,
+   "three": {
+    "geometries": 48,
+    "textures": 16
+   },
+   "screen": "HUNT_FIELD"
+  },
+  {
+   "label": "r1 factory left",
+   "round": 1,
+   "gate": "factory",
+   "phase": "left",
+   "heapMb": 57,
+   "nodes": 2768,
+   "listeners": 322,
+   "tex": {
+    "n": 32,
+    "mb": 62.6
+   },
+   "buf": {
+    "n": 97,
+    "mb": 2.8
+   },
+   "rb": {
+    "n": 0,
+    "mb": 0
+   },
+   "ctxLive": 3,
+   "ctxLostHeld": 0,
+   "canvasAlive": 18,
+   "canvasDetached": 13,
+   "canvasDetachedMb": 8.6,
+   "bitmapsOpen": 11,
+   "bitmapsMb": 39.2,
+   "intervals": 4,
+   "three": {
+    "geometries": 0,
+    "textures": 1
+   },
+   "screen": null
+  },
+  {
+   "label": "r1 ice in-hunt",
+   "round": 1,
+   "gate": "ice",
+   "phase": "in",
+   "heapMb": 57.3,
+   "nodes": 3025,
+   "listeners": 335,
+   "tex": {
+    "n": 32,
+    "mb": 43.3
+   },
+   "buf": {
+    "n": 483,
+    "mb": 17.1
+   },
+   "rb": {
+    "n": 3,
+    "mb": 34.6
+   },
+   "ctxLive": 2,
+   "ctxLostHeld": 1,
+   "canvasAlive": 33,
+   "canvasDetached": 30,
+   "canvasDetachedMb": 10.4,
+   "bitmapsOpen": 1,
+   "bitmapsMb": 4,
+   "intervals": 4,
+   "three": {
+    "geometries": 104,
+    "textures": 26
+   },
+   "screen": "HUNT_FIELD"
+  },
+  {
+   "label": "r1 ice left",
+   "round": 1,
+   "gate": "ice",
+   "phase": "left",
+   "heapMb": 57.6,
+   "nodes": 3026,
+   "listeners": 347,
+   "tex": {
+    "n": 32,
+    "mb": 68
+   },
+   "buf": {
+    "n": 99,
+    "mb": 2.8
+   },
+   "rb": {
+    "n": 0,
+    "mb": 0
+   },
+   "ctxLive": 3,
+   "ctxLostHeld": 0,
+   "canvasAlive": 18,
+   "canvasDetached": 13,
+   "canvasDetachedMb": 8.6,
+   "bitmapsOpen": 11,
+   "bitmapsMb": 39.2,
+   "intervals": 4,
+   "three": {
+    "geometries": 0,
+    "textures": 1
+   },
+   "screen": null
+  },
+  {
+   "label": "r1 volcano in-hunt",
+   "round": 1,
+   "gate": "volcano",
+   "phase": "in",
+   "heapMb": 57,
+   "nodes": 3282,
+   "listeners": 358,
+   "tex": {
+    "n": 34,
+    "mb": 43.1
+   },
+   "buf": {
+    "n": 176,
+    "mb": 25.9
+   },
+   "rb": {
+    "n": 3,
+    "mb": 34.6
+   },
+   "ctxLive": 2,
+   "ctxLostHeld": 1,
+   "canvasAlive": 32,
+   "canvasDetached": 29,
+   "canvasDetachedMb": 10.4,
+   "bitmapsOpen": 4,
+   "bitmapsMb": 3.3,
+   "intervals": 4,
+   "three": {
+    "geometries": 37,
+    "textures": 28
+   },
+   "screen": "HUNT_FIELD"
+  },
+  {
+   "label": "r1 volcano left",
+   "round": 1,
+   "gate": "volcano",
+   "phase": "left",
+   "heapMb": 61.3,
+   "nodes": 3284,
+   "listeners": 372,
+   "tex": {
+    "n": 32,
+    "mb": 68.2
+   },
+   "buf": {
+    "n": 101,
+    "mb": 2.9
+   },
+   "rb": {
+    "n": 0,
+    "mb": 0
+   },
+   "ctxLive": 3,
+   "ctxLostHeld": 0,
+   "canvasAlive": 18,
+   "canvasDetached": 13,
+   "canvasDetachedMb": 8.8,
+   "bitmapsOpen": 11,
+   "bitmapsMb": 39.2,
+   "intervals": 4,
+   "three": {
+    "geometries": 0,
+    "textures": 1
+   },
+   "screen": null
+  },
+  {
+   "label": "r2 canyon in-hunt",
+   "round": 2,
+   "gate": "canyon",
+   "phase": "in",
+   "heapMb": 57.8,
+   "nodes": 3541,
+   "listeners": 382,
+   "tex": {
+    "n": 30,
+    "mb": 73.1
+   },
+   "buf": {
+    "n": 67,
+    "mb": 5.3
+   },
+   "rb": {
+    "n": 3,
+    "mb": 34.6
+   },
+   "ctxLive": 2,
+   "ctxLostHeld": 1,
+   "canvasAlive": 33,
+   "canvasDetached": 30,
+   "canvasDetachedMb": 10.4,
+   "bitmapsOpen": 0,
+   "bitmapsMb": 0,
+   "intervals": 4,
+   "three": {
+    "geometries": 21,
+    "textures": 24
+   },
+   "screen": "HUNT_FIELD"
+  },
+  {
+   "label": "r2 canyon left",
+   "round": 2,
+   "gate": "canyon",
+   "phase": "left",
+   "heapMb": 58.3,
+   "nodes": 3544,
+   "listeners": 397,
+   "tex": {
+    "n": 29,
+    "mb": 67.8
+   },
+   "buf": {
+    "n": 101,
+    "mb": 2.9
+   },
+   "rb": {
+    "n": 0,
+    "mb": 0
+   },
+   "ctxLive": 3,
+   "ctxLostHeld": 0,
+   "canvasAlive": 20,
+   "canvasDetached": 15,
+   "canvasDetachedMb": 8.7,
+   "bitmapsOpen": 11,
+   "bitmapsMb": 39.2,
+   "intervals": 4,
+   "three": {
+    "geometries": 0,
+    "textures": 0
+   },
+   "screen": null
+  },
+  {
+   "label": "r2 grass in-hunt",
+   "round": 2,
+   "gate": "grass",
+   "phase": "in",
+   "heapMb": 65,
+   "nodes": 3787,
+   "listeners": 406,
+   "tex": {
+    "n": 19,
+    "mb": 103.6
+   },
+   "buf": {
+    "n": 48,
+    "mb": 10.4
+   },
+   "rb": {
+    "n": 3,
+    "mb": 34.6
+   },
+   "ctxLive": 2,
+   "ctxLostHeld": 1,
+   "canvasAlive": 21,
+   "canvasDetached": 18,
+   "canvasDetachedMb": 9.5,
+   "bitmapsOpen": 0,
+   "bitmapsMb": 0,
+   "intervals": 4,
+   "three": {
+    "geometries": 12,
+    "textures": 13
+   },
+   "screen": "HUNT_FIELD"
+  },
+  {
+   "label": "r2 grass left",
+   "round": 2,
+   "gate": "grass",
+   "phase": "left",
+   "heapMb": 67.6,
+   "nodes": 3801,
+   "listeners": 422,
+   "tex": {
+    "n": 31,
+    "mb": 68.2
+   },
+   "buf": {
+    "n": 99,
+    "mb": 2.8
+   },
+   "rb": {
+    "n": 0,
+    "mb": 0
+   },
+   "ctxLive": 3,
+   "ctxLostHeld": 0,
+   "canvasAlive": 19,
+   "canvasDetached": 13,
+   "canvasDetachedMb": 8.9,
+   "bitmapsOpen": 11,
+   "bitmapsMb": 39.2,
+   "intervals": 4,
+   "three": {
+    "geometries": 0,
+    "textures": 0
+   },
+   "screen": null
+  },
+  {
+   "label": "r2 factory in-hunt",
+   "round": 2,
+   "gate": "factory",
+   "phase": "in",
+   "heapMb": 57.2,
+   "nodes": 4044,
+   "listeners": 432,
+   "tex": {
+    "n": 19,
+    "mb": 42.4
+   },
+   "buf": {
+    "n": 228,
+    "mb": 17.7
+   },
+   "rb": {
+    "n": 3,
+    "mb": 34.6
+   },
+   "ctxLive": 2,
+   "ctxLostHeld": 1,
+   "canvasAlive": 20,
+   "canvasDetached": 17,
+   "canvasDetachedMb": 10,
+   "bitmapsOpen": 1,
+   "bitmapsMb": 4,
+   "intervals": 4,
+   "three": {
+    "geometries": 48,
+    "textures": 13
+   },
+   "screen": "HUNT_FIELD"
+  },
+  {
+   "label": "r2 factory left",
+   "round": 2,
+   "gate": "factory",
+   "phase": "left",
+   "heapMb": 58.5,
+   "nodes": 4057,
+   "listeners": 447,
+   "tex": {
+    "n": 35,
+    "mb": 81.2
+   },
+   "buf": {
+    "n": 106,
+    "mb": 3.5
+   },
+   "rb": {
+    "n": 0,
+    "mb": 0
+   },
+   "ctxLive": 3,
+   "ctxLostHeld": 0,
+   "canvasAlive": 17,
+   "canvasDetached": 12,
+   "canvasDetachedMb": 9,
+   "bitmapsOpen": 11,
+   "bitmapsMb": 39.2,
+   "intervals": 4,
+   "three": {
+    "geometries": 0,
+    "textures": 1
+   },
+   "screen": null
+  },
+  {
+   "label": "r2 ice in-hunt",
+   "round": 2,
+   "gate": "ice",
+   "phase": "in",
+   "heapMb": 59.9,
+   "nodes": 4309,
+   "listeners": 460,
+   "tex": {
+    "n": 25,
+    "mb": 43.2
+   },
+   "buf": {
+    "n": 479,
+    "mb": 17.3
+   },
+   "rb": {
+    "n": 3,
+    "mb": 34.6
+   },
+   "ctxLive": 2,
+   "ctxLostHeld": 1,
+   "canvasAlive": 26,
+   "canvasDetached": 23,
+   "canvasDetachedMb": 10.3,
+   "bitmapsOpen": 1,
+   "bitmapsMb": 4,
+   "intervals": 4,
+   "three": {
+    "geometries": 101,
+    "textures": 19
+   },
+   "screen": "HUNT_FIELD"
+  },
+  {
+   "label": "r2 ice left",
+   "round": 2,
+   "gate": "ice",
+   "phase": "left",
+   "heapMb": 58.8,
+   "nodes": 4325,
+   "listeners": 472,
+   "tex": {
+    "n": 32,
+    "mb": 68.2
+   },
+   "buf": {
+    "n": 99,
+    "mb": 2.9
+   },
+   "rb": {
+    "n": 0,
+    "mb": 0
+   },
+   "ctxLive": 3,
+   "ctxLostHeld": 0,
+   "canvasAlive": 17,
+   "canvasDetached": 12,
+   "canvasDetachedMb": 8.5,
+   "bitmapsOpen": 11,
+   "bitmapsMb": 39.2,
+   "intervals": 4,
+   "three": {
+    "geometries": 0,
+    "textures": 1
+   },
+   "screen": null
+  },
+  {
+   "label": "r2 volcano in-hunt",
+   "round": 2,
+   "gate": "volcano",
+   "phase": "in",
+   "heapMb": 59.2,
+   "nodes": 4562,
+   "listeners": 483,
+   "tex": {
+    "n": 24,
+    "mb": 42.3
+   },
+   "buf": {
+    "n": 159,
+    "mb": 25.9
+   },
+   "rb": {
+    "n": 3,
+    "mb": 34.6
+   },
+   "ctxLive": 2,
+   "ctxLostHeld": 1,
+   "canvasAlive": 22,
+   "canvasDetached": 19,
+   "canvasDetachedMb": 9.4,
+   "bitmapsOpen": 4,
+   "bitmapsMb": 3.3,
+   "intervals": 4,
+   "three": {
+    "geometries": 30,
+    "textures": 18
+   },
+   "screen": "HUNT_FIELD"
+  },
+  {
+   "label": "r2 volcano left",
+   "round": 2,
+   "gate": "volcano",
+   "phase": "left",
+   "heapMb": 61.8,
+   "nodes": 4574,
+   "listeners": 497,
+   "tex": {
+    "n": 30,
+    "mb": 62.2
+   },
+   "buf": {
+    "n": 101,
+    "mb": 2.9
+   },
+   "rb": {
+    "n": 0,
+    "mb": 0
+   },
+   "ctxLive": 3,
+   "ctxLostHeld": 0,
+   "canvasAlive": 18,
+   "canvasDetached": 13,
+   "canvasDetachedMb": 8.5,
+   "bitmapsOpen": 11,
+   "bitmapsMb": 39.2,
+   "intervals": 4,
+   "three": {
+    "geometries": 0,
+    "textures": 1
+   },
+   "screen": null
+  },
+  {
+   "label": "r3 canyon in-hunt",
+   "round": 3,
+   "gate": "canyon",
+   "phase": "in",
+   "heapMb": 59.3,
+   "nodes": 4824,
+   "listeners": 508,
+   "tex": {
+    "n": 23,
+    "mb": 73.5
+   },
+   "buf": {
+    "n": 35,
+    "mb": 5.3
+   },
+   "rb": {
+    "n": 3,
+    "mb": 34.6
+   },
+   "ctxLive": 2,
+   "ctxLostHeld": 1,
+   "canvasAlive": 26,
+   "canvasDetached": 23,
+   "canvasDetachedMb": 10.6,
+   "bitmapsOpen": 0,
+   "bitmapsMb": 0,
+   "intervals": 4,
+   "three": {
+    "geometries": 9,
+    "textures": 17
+   },
+   "screen": "HUNT_FIELD"
+  },
+  {
+   "label": "r3 canyon left",
+   "round": 3,
+   "gate": "canyon",
+   "phase": "left",
+   "heapMb": 59.9,
+   "nodes": 4832,
+   "listeners": 522,
+   "tex": {
+    "n": 27,
+    "mb": 62
+   },
+   "buf": {
+    "n": 99,
+    "mb": 2.9
+   },
+   "rb": {
+    "n": 0,
+    "mb": 0
+   },
+   "ctxLive": 3,
+   "ctxLostHeld": 0,
+   "canvasAlive": 18,
+   "canvasDetached": 13,
+   "canvasDetachedMb": 8.6,
+   "bitmapsOpen": 11,
+   "bitmapsMb": 39.2,
+   "intervals": 4,
+   "three": {
+    "geometries": 0,
+    "textures": 0
+   },
+   "screen": null
+  },
+  {
+   "label": "r3 grass in-hunt",
+   "round": 3,
+   "gate": "grass",
+   "phase": "in",
+   "heapMb": 67.2,
+   "nodes": 5071,
+   "listeners": 530,
+   "tex": {
+    "n": 12,
+    "mb": 103.6
+   },
+   "buf": {
+    "n": 30,
+    "mb": 10.3
+   },
+   "rb": {
+    "n": 3,
+    "mb": 34.6
+   },
+   "ctxLive": 2,
+   "ctxLostHeld": 1,
+   "canvasAlive": 15,
+   "canvasDetached": 12,
+   "canvasDetachedMb": 9.1,
+   "bitmapsOpen": 0,
+   "bitmapsMb": 0,
+   "intervals": 4,
+   "three": {
+    "geometries": 6,
+    "textures": 6
+   },
+   "screen": "HUNT_FIELD"
+  },
+  {
+   "label": "r3 grass left",
+   "round": 3,
+   "gate": "grass",
+   "phase": "left",
+   "heapMb": 66.4,
+   "nodes": 5090,
+   "listeners": 547,
+   "tex": {
+    "n": 31,
+    "mb": 62.6
+   },
+   "buf": {
+    "n": 101,
+    "mb": 2.9
+   },
+   "rb": {
+    "n": 0,
+    "mb": 0
+   },
+   "ctxLive": 3,
+   "ctxLostHeld": 0,
+   "canvasAlive": 18,
+   "canvasDetached": 12,
+   "canvasDetachedMb": 8.6,
+   "bitmapsOpen": 11,
+   "bitmapsMb": 39.2,
+   "intervals": 4,
+   "three": {
+    "geometries": 0,
+    "textures": 0
+   },
+   "screen": null
+  },
+  {
+   "label": "r3 factory in-hunt",
+   "round": 3,
+   "gate": "factory",
+   "phase": "in",
+   "heapMb": 59,
+   "nodes": 5327,
+   "listeners": 559,
+   "tex": {
+    "n": 13,
+    "mb": 42
+   },
+   "buf": {
+    "n": 218,
+    "mb": 17.6
+   },
+   "rb": {
+    "n": 3,
+    "mb": 34.6
+   },
+   "ctxLive": 2,
+   "ctxLostHeld": 1,
+   "canvasAlive": 14,
+   "canvasDetached": 11,
+   "canvasDetachedMb": 9.1,
+   "bitmapsOpen": 1,
+   "bitmapsMb": 4,
+   "intervals": 4,
+   "three": {
+    "geometries": 44,
+    "textures": 7
+   },
+   "screen": "HUNT_FIELD"
+  },
+  {
+   "label": "r3 factory left",
+   "round": 3,
+   "gate": "factory",
+   "phase": "left",
+   "heapMb": 59.3,
+   "nodes": 5351,
+   "listeners": 572,
+   "tex": {
+    "n": 32,
+    "mb": 68.2
+   },
+   "buf": {
+    "n": 101,
+    "mb": 2.8
+   },
+   "rb": {
+    "n": 0,
+    "mb": 0
+   },
+   "ctxLive": 3,
+   "ctxLostHeld": 0,
+   "canvasAlive": 17,
+   "canvasDetached": 12,
+   "canvasDetachedMb": 8.5,
+   "bitmapsOpen": 11,
+   "bitmapsMb": 39.2,
+   "intervals": 4,
+   "three": {
+    "geometries": 0,
+    "textures": 1
+   },
+   "screen": null
+  },
+  {
+   "label": "r3 ice in-hunt",
+   "round": 3,
+   "gate": "ice",
+   "phase": "in",
+   "heapMb": 60.5,
+   "nodes": 5592,
+   "listeners": 586,
+   "tex": {
+    "n": 19,
+    "mb": 42.2
+   },
+   "buf": {
+    "n": 481,
+    "mb": 17.2
+   },
+   "rb": {
+    "n": 3,
+    "mb": 34.6
+   },
+   "ctxLive": 2,
+   "ctxLostHeld": 1,
+   "canvasAlive": 20,
+   "canvasDetached": 17,
+   "canvasDetachedMb": 9.3,
+   "bitmapsOpen": 1,
+   "bitmapsMb": 4,
+   "intervals": 4,
+   "three": {
+    "geometries": 101,
+    "textures": 13
+   },
+   "screen": "HUNT_FIELD"
+  },
+  {
+   "label": "r3 ice left",
+   "round": 3,
+   "gate": "ice",
+   "phase": "left",
+   "heapMb": 61.1,
+   "nodes": 5616,
+   "listeners": 597,
+   "tex": {
+    "n": 32,
+    "mb": 68
+   },
+   "buf": {
+    "n": 105,
+    "mb": 2.9
+   },
+   "rb": {
+    "n": 0,
+    "mb": 0
+   },
+   "ctxLive": 3,
+   "ctxLostHeld": 0,
+   "canvasAlive": 18,
+   "canvasDetached": 13,
+   "canvasDetachedMb": 8.5,
+   "bitmapsOpen": 11,
+   "bitmapsMb": 39.2,
+   "intervals": 4,
+   "three": {
+    "geometries": 0,
+    "textures": 1
+   },
+   "screen": null
+  },
+  {
+   "label": "r3 volcano in-hunt",
+   "round": 3,
+   "gate": "volcano",
+   "phase": "in",
+   "heapMb": 59.6,
+   "nodes": 5854,
+   "listeners": 609,
+   "tex": {
+    "n": 26,
+    "mb": 42.6
+   },
+   "buf": {
+    "n": 172,
+    "mb": 25.9
+   },
+   "rb": {
+    "n": 3,
+    "mb": 34.6
+   },
+   "ctxLive": 2,
+   "ctxLostHeld": 1,
+   "canvasAlive": 24,
+   "canvasDetached": 21,
+   "canvasDetachedMb": 9.8,
+   "bitmapsOpen": 4,
+   "bitmapsMb": 3.3,
+   "intervals": 4,
+   "three": {
+    "geometries": 34,
+    "textures": 20
+   },
+   "screen": "HUNT_FIELD"
+  },
+  {
+   "label": "r3 volcano left",
+   "round": 3,
+   "gate": "volcano",
+   "phase": "left",
+   "heapMb": 61.4,
+   "nodes": 5864,
+   "listeners": 622,
+   "tex": {
+    "n": 32,
+    "mb": 68.2
+   },
+   "buf": {
+    "n": 105,
+    "mb": 2.9
+   },
+   "rb": {
+    "n": 0,
+    "mb": 0
+   },
+   "ctxLive": 3,
+   "ctxLostHeld": 0,
+   "canvasAlive": 18,
+   "canvasDetached": 13,
+   "canvasDetachedMb": 8.7,
+   "bitmapsOpen": 11,
+   "bitmapsMb": 39.2,
+   "intervals": 4,
+   "three": {
+    "geometries": 0,
+    "textures": 1
+   },
+   "screen": null
+  }
+ ],
+ "errors": [],
+ "view": "portrait",
+ "gates": [
+  "canyon",
+  "grass",
+  "factory",
+  "ice",
+  "volcano"
+ ],
+ "rounds": 3
+}

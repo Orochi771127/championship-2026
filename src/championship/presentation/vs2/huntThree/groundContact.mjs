@@ -233,7 +233,13 @@ export function createHuntGroundContact({ THREE, scene, map, mapKey }) {
     },
     dispose() {
       for (const id of [...layers.keys()]) this.remove(id);
-      for (const o of owned) o.dispose?.();
+      for (const o of owned) {
+        // Leaving the hunt: free the small source canvases at once (iOS keeps a canvas's
+        // backing store until GC, and counts it against the page's canvas memory).
+        const canvas = o.isTexture ? o.image : null;
+        o.dispose?.();
+        if (canvas && typeof canvas.getContext === 'function') { canvas.width = 0; canvas.height = 0; }
+      }
       owned.clear();
     },
     diagnostics() {

@@ -1,0 +1,418 @@
+{
+ "cases": [
+  {
+   "gate": "grass",
+   "view": "notch",
+   "errors": [],
+   "console": [],
+   "safe": {
+    "top": 0,
+    "topMax": 0,
+    "bottom": 21,
+    "bottomMax": 21,
+    "left": 47,
+    "leftMax": 47,
+    "right": 47,
+    "rightMax": 47
+   },
+   "loadout": [
+    "ROPE:頂級捕捉繩 γ數量 15"
+   ],
+   "loadMs": 3858,
+   "entry": {
+    "three": "active",
+    "field": "field_hm01_02",
+    "layout": {
+     "wide": false,
+     "desktop": true
+    },
+    "view": {
+     "left": 478.3953147877013,
+     "top": 776,
+     "right": 1585.6046852122986,
+     "bottom": 1288,
+     "scale": 0.7622767857142857,
+     "world": 2880
+    },
+    "canvas": [
+     0,
+     0,
+     844,
+     390
+    ],
+    "tools": [
+     {
+      "label": "捕獲移動收取",
+      "tool": "HAND",
+      "box": [
+       436,
+       302,
+       496,
+       360
+      ],
+      "disabled": false
+     },
+     {
+      "label": "繩索主武×15",
+      "tool": "ROPE",
+      "box": [
+       349,
+       304,
+       429,
+       362
+      ],
+      "disabled": false
+     },
+     {
+      "label": "🔴 究極繩 γ ⇄",
+      "tool": null,
+      "box": [
+       399,
+       287,
+       445,
+       311
+      ],
+      "disabled": false
+     }
+    ],
+    "dock": [
+     341,
+     297,
+     504,
+     369
+    ],
+    "hudCopy": [
+     47,
+     10,
+     151,
+     67
+    ],
+    "hint": [
+     292,
+     249,
+     552,
+     281
+    ],
+    "info": null,
+    "panel": "contents",
+    "hud": [
+     {
+      "text": "返回牧場",
+      "box": [
+       699,
+       10,
+       797,
+       54
+      ]
+     }
+    ],
+    "wilds": 11,
+    "runtimeTools": [
+     "HAND",
+     "ROPE"
+    ],
+    "world": [
+     16
+    ]
+   },
+   "bottomRight": {
+    "left": 478.3953147877013,
+    "top": 776,
+    "right": 1585.6046852122986,
+    "bottom": 1288,
+    "scale": 0.7622767857142857,
+    "world": 2880
+   },
+   "topLeft": {
+    "left": 478.3953147877013,
+    "top": 776,
+    "right": 1585.6046852122986,
+    "bottom": 1288,
+    "scale": 0.7622767857142857,
+    "world": 2880
+   },
+   "capture": {
+    "result": "CAUGHT",
+    "ms": 5226,
+    "detail": "\"championship:2026:gate:grass:native-wild:7\""
+   },
+   "totalMs": 18098
+  },
+  {
+   "gate": "ice",
+   "view": "notch",
+   "errors": [],
+   "console": [],
+   "safe": {
+    "top": 0,
+    "topMax": 0,
+    "bottom": 21,
+    "bottomMax": 21,
+    "left": 47,
+    "leftMax": 47,
+    "right": 47,
+    "rightMax": 47
+   },
+   "loadout": [
+    "ROPE:頂級捕捉繩 γ數量 15"
+   ],
+   "loadMs": 3869,
+   "entry": {
+    "three": "active",
+    "field": "field_hm13_01",
+    "layout": {
+     "wide": false,
+     "desktop": true
+    },
+    "view": {
+     "left": 478.3953147877013,
+     "top": 776,
+     "right": 1585.6046852122986,
+     "bottom": 1288,
+     "scale": 0.7622767857142857,
+     "world": 2880
+    },
+    "canvas": [
+     0,
+     0,
+     844,
+     390
+    ],
+    "tools": [
+     {
+      "label": "捕獲移動收取",
+      "tool": "HAND",
+      "box": [
+       436,
+       302,
+       496,
+       360
+      ],
+      "disabled": false
+     },
+     {
+      "label": "繩索主武×15",
+      "tool": "ROPE",
+      "box": [
+       349,
+       304,
+       429,
+       362
+      ],
+      "disabled": false
+     },
+     {
+      "label": "🔴 究極繩 γ ⇄",
+      "tool": null,
+      "box": [
+       399,
+       287,
+       445,
+       311
+      ],
+      "disabled": false
+     }
+    ],
+    "dock": [
+     341,
+     297,
+     504,
+     369
+    ],
+    "hudCopy": [
+     47,
+     10,
+     151,
+     67
+    ],
+    "hint": [
+     292,
+     249,
+     552,
+     281
+    ],
+    "info": null,
+    "panel": "contents",
+    "hud": [
+     {
+      "text": "返回牧場",
+      "box": [
+       699,
+       10,
+       797,
+       54
+      ]
+     }
+    ],
+    "wilds": 20,
+    "runtimeTools": [
+     "HAND",
+     "ROPE"
+    ],
+    "world": [
+     16
+    ]
+   },
+   "bottomRight": {
+    "left": 478.3953147877013,
+    "top": 776,
+    "right": 1585.6046852122986,
+    "bottom": 1288,
+    "scale": 0.7622767857142857,
+    "world": 2880
+   },
+   "topLeft": {
+    "left": 478.3953147877013,
+    "top": 776,
+    "right": 1585.6046852122986,
+    "bottom": 1288,
+    "scale": 0.7622767857142857,
+    "world": 2880
+   },
+   "capture": {
+    "result": "CAUGHT",
+    "ms": 11495,
+    "detail": "\"championship:2026:gate:ice:native-wild:11\""
+   },
+   "totalMs": 24062
+  },
+  {
+   "gate": "factory",
+   "view": "notch",
+   "errors": [],
+   "console": [],
+   "safe": {
+    "top": 0,
+    "topMax": 0,
+    "bottom": 21,
+    "bottomMax": 21,
+    "left": 47,
+    "leftMax": 47,
+    "right": 47,
+    "rightMax": 47
+   },
+   "loadout": [
+    "ROPE:頂級捕捉繩 γ數量 15"
+   ],
+   "loadMs": 3556,
+   "entry": {
+    "three": "active",
+    "field": "field_hm10_01",
+    "layout": {
+     "wide": false,
+     "desktop": true
+    },
+    "view": {
+     "left": 478.3953147877013,
+     "top": 776,
+     "right": 1585.6046852122986,
+     "bottom": 1288,
+     "scale": 0.7622767857142857,
+     "world": 2880
+    },
+    "canvas": [
+     0,
+     0,
+     844,
+     390
+    ],
+    "tools": [
+     {
+      "label": "捕獲移動收取",
+      "tool": "HAND",
+      "box": [
+       436,
+       302,
+       496,
+       360
+      ],
+      "disabled": false
+     },
+     {
+      "label": "繩索主武×15",
+      "tool": "ROPE",
+      "box": [
+       349,
+       304,
+       429,
+       362
+      ],
+      "disabled": false
+     },
+     {
+      "label": "🔴 究極繩 γ ⇄",
+      "tool": null,
+      "box": [
+       399,
+       287,
+       445,
+       311
+      ],
+      "disabled": false
+     }
+    ],
+    "dock": [
+     341,
+     297,
+     504,
+     369
+    ],
+    "hudCopy": [
+     47,
+     10,
+     151,
+     67
+    ],
+    "hint": [
+     292,
+     249,
+     552,
+     281
+    ],
+    "info": null,
+    "panel": "contents",
+    "hud": [
+     {
+      "text": "返回牧場",
+      "box": [
+       699,
+       10,
+       797,
+       54
+      ]
+     }
+    ],
+    "wilds": 11,
+    "runtimeTools": [
+     "HAND",
+     "ROPE"
+    ],
+    "world": [
+     16
+    ]
+   },
+   "bottomRight": {
+    "left": 478.3953147877013,
+    "top": 776,
+    "right": 1585.6046852122986,
+    "bottom": 1288,
+    "scale": 0.7622767857142857,
+    "world": 2880
+   },
+   "topLeft": {
+    "left": 478.3953147877013,
+    "top": 776,
+    "right": 1585.6046852122986,
+    "bottom": 1288,
+    "scale": 0.7622767857142857,
+    "world": 2880
+   },
+   "capture": {
+    "result": "CAUGHT",
+    "ms": 51165,
+    "detail": "\"championship:2026:gate:factory:native-wild:7\""
+   },
+   "totalMs": 62381
+  }
+ ]
+}
