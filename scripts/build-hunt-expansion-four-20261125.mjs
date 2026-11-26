@@ -29,6 +29,7 @@ const src = read('src/data/championship/catalogs/hunt-scene.r1.json');
 const catalog = read(CATALOG);
 const key = c => JSON.stringify(c);
 const PROP_BLOCKS = read('scripts/data/hunt-extension-prop-blocks-20261126.json').fields;
+const LANDMARK_BLOCKS = read('scripts/data/hunt-extension-landmark-blocks-20261126.json').fields;
 const NEUTRAL = key({ targetQ12: [0, -4096, 0], blendQ12: 0, escapeAnchor: false, escapeBoundary: false });
 const CONVERTED = Object.freeze({ targetQ12: [0, -4096, 0], blendQ12: 205, escapeAnchor: false, escapeBoundary: false });
 const CANDIDATES = {
@@ -116,6 +117,23 @@ function blockProps(g, fieldId) {
 }
 
 /**
+ * hm16/hm17/hm18 (2026-11-26): tiles under the landmarks copied into the extension become
+ * terrain 1. These maps keep their delivered steering cells, so only the terrain changes; the
+ * step is idempotent (the catalog is its own source) and never touches the core or water.
+ */
+function blockLandmarks(g, fieldId) {
+  const tiles = LANDMARK_BLOCKS[fieldId.replace('_02', '_01')]?.blocked ?? [];
+  for (const [x, y] of tiles) {
+    if (x < 128 && y < 128) throw Error(`LANDMARK_BLOCK_IN_CORE ${fieldId} ${x},${y}`);
+    if (x < 3 || y < 3 || x > 176 || y > 176) throw Error(`LANDMARK_BLOCK_ON_EDGE ${fieldId} ${x},${y}`);
+    const i = at(g, x, y), c = g.cells[i];
+    if (g.terrain[i] === 2 || c?.escapeBoundary || c?.escapeAnchor) throw Error(`LANDMARK_BLOCK_NOT_GROUND ${fieldId} ${x},${y}`);
+    g.terrain[i] = 1;
+  }
+  return tiles.length;
+}
+
+/**
  * hm08 南橋峽谷 (2026-11-26): no delivered candidate exists, so the appended tiles come from the
  * original design in scripts/data/hunt-hm08-extension-grid-20261126.txt ('0' open sand, '1' mesa,
  * '2' ground obstacle -> blocked); the core keeps its own terrain and steering cells.
@@ -175,9 +193,10 @@ for (const [fieldId, rel] of Object.entries(CANDIDATES)) {
 for (const fieldId of ['field_hm15_01', 'field_hm15_02', 'field_hm16_01', 'field_hm16_02', 'field_hm17_01', 'field_hm17_02', 'field_hm18_01', 'field_hm18_02']) {
   const data = catalog.environments[fieldId], g = decode(data);
   const converted = convertOldEdge(g);
+  const landmarkBlocks = blockLandmarks(g, fieldId);
   const { width, height, wrap, base, terrainRuns, directionRuns, directionPalette, adaptation, ...extra } = data;
   next[fieldId] = encode(g, extra);
-  report[fieldId] = { repair: 'old-edge escape cells', converted };
+  report[fieldId] = { repair: 'old-edge escape cells', converted, landmarkBlocks };
 }
 // Every environment must still load through the runtime constructor.
 for (const [fieldId, data] of Object.entries(next)) createNativeHuntEnvironment(data);

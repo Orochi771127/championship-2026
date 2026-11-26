@@ -5,6 +5,7 @@ import {isOriginalRuntimeLocation} from '../../originalRuntimeLocation.js';
 // HM08 grew to 2880 on 2026-11-26 (r2: original east/south canyon on the authoring masters, re-baked day and night).
 // HM10/11/13/14 grew to 2880 on 2026-11-25 (c2: untrimmed candidate geometry; HM14 rebuilt with core-style extension cliffs).
 // HM10/13 c3 (2026-11-26): the extension areas carry the maps' own props, which block their tiles.
+// HM16/17/18 (2026-11-26): the extension areas carry copies of each map's own landmarks, which block their tiles.
 // HM02-HM06 (2026-11-26): same geometry, Draco-compressed at file level (folders v*d); 14.8 MB -> 5.2 MB of GLB.
 export const MAPS=Object.freeze({
   "hm01": {
@@ -119,11 +120,11 @@ export const MAPS=Object.freeze({
     "appearanceApproved": true
   },
   "hm16": {
-    "directory": "assets/production/hunt/hm16-three-v6-20261023/",
+    "directory": "assets/production/hunt/hm16-three-v7-20261126/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "15d7ac6ad41dd1c7b53c1adee5aa504a0cc51ff1cd0daa1b4f762ddb1759008b",
-      "bytes": 768
+      "sha256": "c1de34d02cd5de490e6ffc55768a9878c9b11eb06b87a1ee726a026d90d4811e",
+      "bytes": 776
     },
     "fields": [
       "field_hm16_01",
@@ -133,11 +134,11 @@ export const MAPS=Object.freeze({
     "appearanceApproved": true
   },
   "hm18": {
-    "directory": "assets/production/hunt/hm18-three-v3-20261023/",
+    "directory": "assets/production/hunt/hm18-three-v4-20261126/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "ced49aec4f59220cb21eb199f512a0aa1d66cf6c49f1afddfa14d6a334b59a52",
-      "bytes": 763
+      "sha256": "f7da45882d2c29d96620e9b95def24caaeb974e06bac89ae904669d82be34625",
+      "bytes": 771
     },
     "fields": [
       "field_hm18_01",
@@ -161,11 +162,11 @@ export const MAPS=Object.freeze({
     "appearanceApproved": true
   },
   "hm17": {
-    "directory": "assets/production/hunt/hm17-three-v4-20261023/",
+    "directory": "assets/production/hunt/hm17-three-v5-20261126/",
     "manifest": {
       "file": "manifest.json",
-      "sha256": "40f96a417b8233ee78abaf66570dceec664203adf06781d06db215b26126e2ea",
-      "bytes": 768
+      "sha256": "79b47ee6ec53d7234578ffbea4be6ac86292a61cb699fc7da1cd0063dcbd2e69",
+      "bytes": 776
     },
     "fields": [
       "field_hm17_01",
