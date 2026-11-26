@@ -101,7 +101,8 @@ export function createSkillCutInLayer({ host, doc = host?.ownerDocument ?? globa
     let image = null, body = null;
     if (species && !silhouette) {
       // The caster's own body, mid-attack, filling the face box from the chest up; it faces the words.
-      body = createActionPortrait({ doc, species, sequence: ACTION_PORTRAIT_SEQUENCES.attack, crop: 1.9, lazy: false,
+      // Owner 2026-11-26: the cut-in keeps the high-detail set (detail), not the chibi-pixel action set.
+      body = createActionPortrait({ doc, species, sequence: ACTION_PORTRAIT_SEQUENCES.attack, crop: 1.9, lazy: false, detail: true,
         facing: team === "enemy" ? -1 : 1, className: "cm-cutin__face-body", reducedMotion: env.motion === "reduced" });
       face.dataset.framing = "body";
       face.append(body.element);

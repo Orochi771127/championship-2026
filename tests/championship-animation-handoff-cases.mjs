@@ -4,6 +4,9 @@
 // ?animHandoff=1, off by default, never on public hosts and never shipped; so do the
 // accepted UL11/UL12 N Walk, partial Arena sets of roles with no reviewed selection. The painted
 // art is stored at up to 2x density and drawn with mipmapped linear sampling.
+// 2026-11-26: GR01-41 play the chibi-pixel set. The high-detail sets these scopes were built on (GR16 web-v4,
+// GR18 web-v3) are kept as each row's `detail`; the GR02/06/08 alternatives are retired from the registry
+// (registry.retired20261126, files kept).
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
@@ -17,6 +20,7 @@ const sha=file=>crypto.createHash('sha256').update(fs.readFileSync(path.join(roo
 const selection=readJson('src/data/championship/reviewed-animation-selection.v1.json');
 const registry=readJson(ANIMATION_HANDOFF_REGISTRY);
 const LOOP='http://127.0.0.1:8773/championship.html';
+const detailRow=code=>{const c=selection.characters.find(x=>x.displayCode===code);return {...c,...c.detail};};
 const fileFetch=async url=>{const bytes=fs.readFileSync(path.join(root,new URL(url).pathname));
  return {ok:true,json:async()=>JSON.parse(bytes.toString()),text:async()=>bytes.toString(),arrayBuffer:async()=>bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength)};};
 
@@ -34,7 +38,12 @@ test('the registry is QA-only, never a build input, and each alternative is buil
  const inputs=fs.readFileSync(path.join(root,'docs/contracts/championship/WEB_BUILD_INPUTS.v1.json'),'utf8');
  const allow=fs.readFileSync(path.join(root,'docs/contracts/championship/PUBLIC_RUNTIME_ALLOWLIST.v1.json'),'utf8');
  assert.ok(!inputs.includes(ANIMATION_HANDOFF_REGISTRY)&&!allow.includes(ANIMATION_HANDOFF_REGISTRY));
- assert.deepEqual(registry.entries.map(e=>e.displayCode),['GR02','GR06','GR08']);
+ assert.deepEqual(registry.entries.map(e=>e.displayCode),[]);
+ assert.deepEqual(registry.retired20261126.map(e=>e.displayCode),['GR02','GR06','GR08']);
+ for(const e of registry.retired20261126){   // built on the high-detail set, now kept as that row's detail
+  assert.equal(e.basePath,detailRow(e.displayCode).path,e.displayCode);assert.equal(sha(e.path),e.sha256,e.displayCode);
+  assert.ok(!inputs.includes(e.path)&&!allow.includes(e.path),e.displayCode+' handoff manifest never ships');
+ }
  for(const e of registry.entries){
   const current=selection.characters.find(c=>c.speciesId===e.speciesId);
   if(e.partialArena){   // a QA-only partial set of a role drawn natively everywhere else
@@ -49,8 +58,8 @@ test('the registry is QA-only, never a build input, and each alternative is buil
 });
 
 // Every handoff scope, as stored: the QA alternatives and the default selection's authoring web-v3.
-const scopes=[...registry.entries.map(e=>({code:e.displayCode,path:e.path,meta:'handoff'})),
- ...['GR16','GR18'].map(code=>({code,path:selection.characters.find(c=>c.displayCode===code).authoringPath,meta:'handoff20261101'}))];
+const scopes=[...registry.retired20261126.map(e=>({code:e.displayCode,path:e.path,meta:'handoff'})),
+ ...['GR16','GR18'].map(code=>({code,path:detailRow(code).authoringPath,meta:'handoff20261101'}))];
 test('handoff clips keep native ticks and leave hit frames, launch points and engine timing unbound',()=>{
  for(const e of scopes){
   const d={...readJson(e.path)};d.handoff=d[e.meta];const clips=d.clips.filter(c=>String(c.source?.handoff)==='20261101');e.displayCode=e.code;
@@ -91,15 +100,19 @@ test('handoff clips keep native ticks and leave hit frames, launch points and en
 });
 
 test('reviewedDocumentRef swaps only when switched on and the base manifest still matches',async()=>{
- const gr02=selection.characters.find(c=>c.displayCode==='GR02'),alt=registry.entries.find(e=>e.displayCode==='GR02');
+ // The registry is empty since 2026-11-26: exercise the switch with GR02's retired alternative on its detail set.
+ const gr02=detailRow('GR02'),alt=registry.retired20261126.find(e=>e.displayCode==='GR02');
+ const withAlt=async url=>url.endsWith(ANIMATION_HANDOFF_REGISTRY)?{ok:true,json:async()=>({...registry,entries:[alt]})}:fileFetch(url);
  resetAnimationHandoffRegistry();
- assert.deepEqual(await reviewedDocumentRef(gr02,LOOP+'?animHandoff=0',fileFetch),{path:gr02.path,sha256:gr02.sha256,handoff:false});
- const on=await reviewedDocumentRef(gr02,LOOP+'?animHandoff=1',fileFetch);
+ assert.deepEqual(await reviewedDocumentRef(gr02,LOOP+'?animHandoff=0',withAlt),{path:gr02.path,sha256:gr02.sha256,handoff:false});
+ const on=await reviewedDocumentRef(gr02,LOOP+'?animHandoff=1',withAlt);
  assert.deepEqual([on.path,on.sha256,on.handoff],[alt.path,alt.sha256,true]);
  const gr05=selection.characters.find(c=>c.displayCode==='GR05');
- assert.equal((await reviewedDocumentRef(gr05,LOOP+'?animHandoff=1',fileFetch)).handoff,false,'roles without a handoff keep the current art');
+ assert.equal((await reviewedDocumentRef(gr05,LOOP+'?animHandoff=1',withAlt)).handoff,false,'roles without a handoff keep the current art');
  resetAnimationHandoffRegistry();
- const stale=async url=>url.endsWith(ANIMATION_HANDOFF_REGISTRY)?{ok:true,json:async()=>({...registry,entries:registry.entries.map(e=>({...e,baseSha256:'0'.repeat(64)}))})}:fileFetch(url);
+ assert.equal((await reviewedDocumentRef(selection.characters.find(c=>c.displayCode==='GR02'),LOOP+'?animHandoff=1',withAlt)).handoff,false,'the chibi-pixel row is not the base it was built on');
+ resetAnimationHandoffRegistry();
+ const stale=async url=>url.endsWith(ANIMATION_HANDOFF_REGISTRY)?{ok:true,json:async()=>({...registry,entries:[{...alt,baseSha256:'0'.repeat(64)}]})}:fileFetch(url);
  assert.equal((await reviewedDocumentRef(gr02,LOOP+'?animHandoff=1',stale)).handoff,false,'an alternative built on an older manifest is ignored');
  resetAnimationHandoffRegistry();
  const missing=async()=>({ok:false});
@@ -107,9 +120,9 @@ test('reviewedDocumentRef swaps only when switched on and the base manifest stil
  resetAnimationHandoffRegistry();
 });
 
-test('default selection: GR16 seated sleep and GR18 Bound8 ship in the public manifest without source metadata',()=>{
+test('detail sets: GR16 seated sleep and GR18 Bound8 stay in the kept high-detail public manifest without source metadata',()=>{
  for(const code of ['GR16','GR18']){
-  const entry=selection.characters.find(c=>c.displayCode===code);
+  const entry=detailRow(code);
   assert.equal(sha(entry.path),entry.sha256);assert.equal(sha(entry.authoringPath),entry.authoringSha256);
   assert.ok(entry.authoringPath.endsWith(`animation.web-v${code==='GR16'?4:3}-20261101.json`));
   const pub=readJson(entry.path),aut=readJson(entry.authoringPath),frames=Object.fromEntries(pub.frames.map(f=>[f.id,f]));
@@ -133,22 +146,21 @@ test('default selection: GR16 seated sleep and GR18 Bound8 ship in the public ma
  }
 });
 
-test('GR16 seated sleep plays as ranch main 13 whatever the switch, never mirrored, with mipmapped linear sampling',async()=>{
+test('GR16 seated sleep plays as ranch main 13 in the chibi-pixel set whatever the switch, never mirrored, with nearest sampling',async()=>{
  const gr16=selection.characters.find(c=>c.displayCode==='GR16');
+ assert.equal(gr16.artStyle,'chibi-pixel-v1');
  const sources=[];
  const PIXI={Rectangle:class{constructor(x,y,width,height){Object.assign(this,{x,y,width,height});}},Texture:class{constructor(o){Object.assign(this,o);}destroy(){}},
-  Assets:{async load(url){const source={pixelWidth:2048,pixelHeight:2048,resolution:1,url};sources.push(source);return {source};},async unload(){}}};
+  Assets:{async load(url){const source={pixelWidth:1024,pixelHeight:1024,resolution:1,url};sources.push(source);return {source};},async unload(){}}};
  const baseline={runtime:{sides:{main:{animations:[{id:0,frames:[{ticks:60}]},{id:13,frames:[{ticks:30},{ticks:35}]}]},sub:{animations:[]}}},getDiagnostics:()=>({}),async dispose(){},
   createActor(){return {sprite:{texture:{},anchor:{set(x,y){this.x=x;this.y=y;}}},controller:{setAnimation(){},getSnapshot:()=>null},nativeFramePresenter:{apply:()=>({fallback:true})}};}};
  for(const flag of [0,1]){
   resetAnimationHandoffRegistry();sources.length=0;
   const bundle=await attachReviewedCharacterAnimation({bundle:baseline,PIXI,speciesId:gr16.speciesId,usage:'general',baseUrl:`${LOOP}?animHandoff=${flag}`,fetchImpl:fileFetch});
   const s=bundle.createActor({animation:0}).nativeFramePresenter.apply({sequenceId:13,frameIndex:0,elapsedQ12:0,active:true});await bundle.dispose();
-  assert.equal(s.clipId,'main:13');assert.match(s.assetId,/^handoff20261101_GR16_D_00_/);assert.equal(s.facingLocked,true);
-  const page=frame=>sources.find(x=>x.url.endsWith(frame.image));
-  const pub=readJson(gr16.path),art=pub.frames.find(f=>f.id===s.assetId),pixel=pub.frames.find(f=>!f.sampling);
-  assert.equal(page(art).scaleMode,'linear');assert.equal(page(art).autoGenerateMipmaps,true);
-  assert.equal(page(pixel).scaleMode,'nearest','pixel art keeps hard texels');
+  assert.equal(s.clipId,'main:13');assert.match(s.assetId,/^gr16-cp-main_13-/);assert.equal(s.mirrorX,false);
+  const pub=readJson(gr16.path),art=pub.frames.find(f=>f.id===s.assetId);
+  assert.equal(art.sampling,undefined);assert.equal(sources.find(x=>x.url.endsWith(art.image)).scaleMode,'nearest','pixel art keeps hard texels');
  }
  resetAnimationHandoffRegistry();
 });

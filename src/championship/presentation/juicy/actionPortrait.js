@@ -69,7 +69,7 @@ export function actionPortraitFit(motion, { width, height, floor = 0.06, crop = 
  * @param {string} [options.className] extra class for the host's own layout
  */
 export function createActionPortrait({ doc = globalThis.document, species, width = null, height = null, sequence = ACTION_PORTRAIT_SEQUENCES.idle,
-  still = false, crop = 1, floor = 0.06, facing = -1, reducedMotion = false, baseUrl = globalThis.location?.href, className = "", lazy = true } = {}) {
+  still = false, crop = 1, floor = 0.06, facing = -1, reducedMotion = false, baseUrl = globalThis.location?.href, className = "", lazy = true, detail = false } = {}) {
   sweepDisconnectedActionPortraits();
   const element = doc.createElement("div");
   element.className = `cm-action-portrait${className ? ` ${className}` : ""}`;
@@ -96,7 +96,7 @@ export function createActionPortrait({ doc = globalThis.document, species, width
     started = true;
     element.dataset.state = "loading";
     try {
-      const motion = await loadShowcaseMotionShared(speciesId, { baseUrl });
+      const motion = await loadShowcaseMotionShared(speciesId, { baseUrl, detail });
       if (disposed || (record.wasConnected && element.isConnected === false)) {
         if (!disposed) record.dispose();
         return;

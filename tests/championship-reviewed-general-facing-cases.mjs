@@ -8,10 +8,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {reviewedNumericClip} from '../src/championship/presentation/reviewedCharacterAnimation.js';
 import {attachReviewedCharacterAnimation} from '../src/championship/presentation/reviewedCharacterLoader.js';
-import {loadReviewedDomFrames} from '../src/championship/presentation/reviewedSelection.js';
+import {loadReviewedDomFrames,reviewedSelectionSource} from '../src/championship/presentation/reviewedSelection.js';
 const root=path.resolve(import.meta.dirname,'..');
 const selection=JSON.parse(fs.readFileSync(path.join(root,'src/data/championship/reviewed-animation-selection.v1.json'),'utf8'));
 const read=code=>JSON.parse(fs.readFileSync(path.join(root,(e=>e.authoringPath??e.path)(selection.characters.find(c=>c.displayCode===code))),'utf8'));
+// GR01-41 play the chibi-pixel set since 2026-11-26; the high-detail set they replaced (with its mirror policy) is kept
+// under `detail` for the cut-in, story stage and brag card, which read it through the DOM path only.
+const detailOf=code=>reviewedSelectionSource(selection.characters.find(c=>c.displayCode===code),true);
+const readDetail=code=>JSON.parse(fs.readFileSync(path.join(root,(e=>e.detail.authoringPath??e.detail.path)(selection.characters.find(c=>c.displayCode===code))),'utf8'));
 function dimensions(bytes){
  if(bytes.subarray(1,4).toString()==='PNG')return [bytes.readUInt32BE(16),bytes.readUInt32BE(20)];
  let offset=12;
@@ -39,12 +43,13 @@ test('generalMirrorFrames: single frames drawn facing opposite to their set are 
  // Clip-by-clip re-check the same day: GR38 blink/exhale (MA_02/03) added; BD_06/07 and MB_10 already
  // faced like their clips; MA50/MA63 sleep cells were right as stored; MA53 pleased cells 12-13 added.
  assert.deepEqual(Object.fromEntries(selection.characters.filter(c=>c.generalMirrorFrames).map(c=>[c.displayCode,c.generalMirrorFrames.length])),
-  {GR05:2,GR38:8,MA03:1,MA20:2,MA43:1,MA53:2,MA54:1,MA64:4});
+  {MA03:1,MA20:2,MA43:1,MA53:2,MA54:1,MA64:4});
+ assert.deepEqual(['GR05','GR38'].map(code=>detailOf(code).generalMirrorFrames.length),[2,8]);
  for(const entry of selection.characters.filter(c=>c.generalMirrorFrames)){const d=read(entry.displayCode);
   const frames=Array.isArray(d.frames)?Object.fromEntries(d.frames.map(f=>[f.id,f])):d.frames;
   for(const id of entry.generalMirrorFrames)assert.ok(frames[id],entry.displayCode+' '+id);}
  // [code, Main sequence whose first frame is listed, Main sequence whose first frame is not]
- for(const [code,listed,plain] of [['GR05',7,2],['MA64',3,2],['MA20',15,2],['GR38',0,2]]){
+ for(const [code,listed,plain] of [['MA64',3,2],['MA20',15,2]]){
   const entry=selection.characters.find(c=>c.displayCode===code),d=read(code);
   const mock=mockPixi(),bundle=await attachReviewedCharacterAnimation({bundle:baseline(),PIXI:mock.PIXI,speciesId:entry.speciesId,usage:'general',
    baseUrl:'http://127.0.0.1:8768/championship.html',fetchImpl:fileFetch});
@@ -61,10 +66,10 @@ test('generalMirrorFrames: single frames drawn facing opposite to their set are 
    baseUrl:'http://127.0.0.1:8768/championship.html',fetchImpl:fileFetch});
   assert.equal(arena.createActor({animation:0}).sprite.texture.rotate,undefined,code+' arena');await arena.dispose();
  }
- const gr05=selection.characters.find(c=>c.displayCode==='GR05'),pub=JSON.parse(fs.readFileSync(path.join(root,gr05.path),'utf8'));
- const dom=await loadReviewedDomFrames(gr05.speciesId,{href:'http://127.0.0.1:8768/championship.html',fetchImpl:fileFetch,sequences:[7,2]});
+ const gr05=detailOf('GR05'),pub=JSON.parse(fs.readFileSync(path.join(root,gr05.path),'utf8'));
+ const dom=await loadReviewedDomFrames(gr05.speciesId,{href:'http://127.0.0.1:8768/championship.html',fetchImpl:fileFetch,sequences:[7,2],detail:true});
  for(const [seq,frames] of dom.sequences)for(const [i,frame] of frames.entries()){
-  const step=reviewedNumericClip(read('GR05'),'main',seq).clip.frames[i],f=pub.frames.find(x=>x.id===step.assetId),t=f.trim??[0,0,...f.sourceSize];
+  const step=reviewedNumericClip(readDetail('GR05'),'main',seq).clip.frames[i],f=pub.frames.find(x=>x.id===step.assetId),t=f.trim??[0,0,...f.sourceSize];
   const mirror=gr05.generalMirrorFrames.includes(step.assetId);assert.equal(frame.mirror,mirror,step.assetId);
   assert.equal(frame.place[0],(mirror?f.origin[0]-t[0]-f.frame[2]:t[0]-f.origin[0])+(step.offset??[0,0])[0],step.assetId);
  }
@@ -74,7 +79,10 @@ test('generalMirrorFrames: single frames drawn facing opposite to their set are 
 test('every General set walks forward: sets drawn facing right carry generalMirror (2026-11-12 moonwalk fix)',()=>{
  // Their walk drawings face right (face on the right of the head, hair/flower/pompom on the left), so without
  // generalMirror the ranch drew them backwards: moving right while the face pointed left.
- for(const code of ['GR26','GR28','GR29','MA57','MA64','AW16','AW18','AW43'])assert.equal(selection.characters.find(c=>c.displayCode===code)?.generalMirror,true,code);
+ for(const code of ['MA57','MA64','AW16','AW18','AW43'])assert.equal(selection.characters.find(c=>c.displayCode===code)?.generalMirror,true,code);
+ // GR26/28/29's high-detail sets (kept as `detail`) still carry it; the chibi-pixel GR sets are all drawn facing left.
+ for(const code of ['GR26','GR28','GR29'])assert.equal(detailOf(code).generalMirror,true,code+' detail');
+ for(const entry of selection.characters.filter(c=>c.artStyle==='chibi-pixel-v1'))assert.equal(entry.generalMirror,false,entry.displayCode);
  // AW19's walk is drawn facing left, so it must not be mirrored.
  assert.equal(selection.characters.find(c=>c.displayCode==='AW19')?.generalMirror,false,'AW19');
 });

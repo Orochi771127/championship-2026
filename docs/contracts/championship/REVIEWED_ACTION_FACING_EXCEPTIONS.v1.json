@@ -4,126 +4,6 @@
  "reviewedOn": "2026-10-29",
  "entries": [
   {
-   "displayCode": "GR06",
-   "usage": "general",
-   "clip": "main:bound_recover",
-   "frame": "GR06_MAIN_BOUND_14",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "Knocked-down and bound keys lying on the back or seen front-on; facing is not readable."
-  },
-  {
-   "displayCode": "GR06",
-   "usage": "general",
-   "clip": "main:bound_recover",
-   "frame": "GR06_MAIN_BOUND_15",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "Knocked-down and bound keys lying on the back or seen front-on; facing is not readable."
-  },
-  {
-   "displayCode": "GR06",
-   "usage": "general",
-   "clip": "main:down",
-   "frame": "GR06_MAIN_COMBAT_12",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "Knocked-down and bound keys lying on the back or seen front-on; facing is not readable."
-  },
-  {
-   "displayCode": "GR06",
-   "usage": "general",
-   "clip": "main:down",
-   "frame": "GR06_MAIN_COMBAT_13",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "Knocked-down and bound keys lying on the back or seen front-on; facing is not readable."
-  },
-  {
-   "displayCode": "GR06",
-   "usage": "general",
-   "clip": "main:knockback",
-   "frame": "GR06_MAIN_COMBAT_12",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "Knocked-down and bound keys lying on the back or seen front-on; facing is not readable."
-  },
-  {
-   "displayCode": "GR06",
-   "usage": "general",
-   "clip": "main:knockback",
-   "frame": "GR06_MAIN_COMBAT_13",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "Knocked-down and bound keys lying on the back or seen front-on; facing is not readable."
-  },
-  {
-   "displayCode": "GR21",
-   "usage": "general",
-   "clip": "Main/bound_down",
-   "frame": "MAIN_BOUND_16/12",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "Front-facing eat, carried sway and bound keys; the sway mirrors on purpose."
-  },
-  {
-   "displayCode": "GR21",
-   "usage": "general",
-   "clip": "Main/bound_down",
-   "frame": "MAIN_BOUND_16/13",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "Front-facing eat, carried sway and bound keys; the sway mirrors on purpose."
-  },
-  {
-   "displayCode": "GR21",
-   "usage": "general",
-   "clip": "Main/carried",
-   "frame": "MAIN_B_16/10",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "Front-facing eat, carried sway and bound keys; the sway mirrors on purpose."
-  },
-  {
-   "displayCode": "GR21",
-   "usage": "general",
-   "clip": "Main/carried",
-   "frame": "MAIN_B_16/11",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "Front-facing eat, carried sway and bound keys; the sway mirrors on purpose."
-  },
-  {
-   "displayCode": "GR21",
-   "usage": "general",
-   "clip": "Main/eat",
-   "frame": "MAIN_A_16/11",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "Front-facing eat, carried sway and bound keys; the sway mirrors on purpose."
-  },
-  {
-   "displayCode": "GR22",
-   "usage": "general",
-   "clip": "gr22.main.release_fall_land",
-   "frame": "MAIN_B_16__10",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "Release-fall-land moves from a tilted fall to a front-on landing."
-  },
-  {
-   "displayCode": "GR28",
-   "usage": "arena",
-   "clip": "Arena/R/melee",
-   "frame": "A02_04",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "Front-on vine attack: the windup and the whip reach to opposite sides."
-  },
-  {
-   "displayCode": "GR28",
-   "usage": "arena",
-   "clip": "Arena/R/melee",
-   "frame": "A02_05",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "Front-on vine attack: the windup and the whip reach to opposite sides."
-  },
-  {
-   "displayCode": "GR36",
-   "usage": "arena",
-   "clip": "gr36.arena.DL.attack",
-   "frame": "arena-attack-west__13",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "Front three-quarter lunge; the body turns, the face stays to camera."
-  },
-  {
    "displayCode": "MA06",
    "usage": "arena",
    "clip": "arena/ARENA_R_UR16/R/ranged",
@@ -2212,34 +2092,132 @@
    "note": "Reviewed 2026-11-16: AW51 asymmetric patchwork bear: every L frame shows the face on the left, every R frame on the right, matching its walk."
   },
   {
-   "displayCode": "GR28",
+   "displayCode": "GR01",
    "usage": "arena",
-   "clip": "gr28-af:arena:DL:faint",
-   "frame": "gr28-af-faint-L-00",
-   "action": "faint",
-   "direction": "DL",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "2026-11-18 Growth Data Arena fill: first faint frame is the standing start of a fall to the left; next to the lying frames the mask reads as turned, but the drawing faces left like its clip (checked by eye)."
+   "clip": "gr01-cp:arena:L:faint",
+   "frame": "gr01-cp-faint-L-00",
+   "note": "Chibi-pixel faint: f0 rears up or stands front-on before falling; the silhouette test cannot read facing (GR review 2026-11-26).",
+   "verdict": "NOT_A_FACING_ERROR"
+  },
+  {
+   "displayCode": "GR01",
+   "usage": "arena",
+   "clip": "gr01-cp:arena:R:faint",
+   "frame": "gr01-cp-faint-R-00",
+   "note": "Chibi-pixel faint: f0 rears up or stands front-on before falling; the silhouette test cannot read facing (GR review 2026-11-26).",
+   "verdict": "NOT_A_FACING_ERROR"
+  },
+  {
+   "displayCode": "GR01",
+   "usage": "arena",
+   "clip": "gr01-cp:arena:DL:faint",
+   "frame": "gr01-cp-faint-L-00",
+   "note": "Chibi-pixel faint: f0 rears up or stands front-on before falling; the silhouette test cannot read facing (GR review 2026-11-26).",
+   "verdict": "NOT_A_FACING_ERROR"
+  },
+  {
+   "displayCode": "GR01",
+   "usage": "arena",
+   "clip": "gr01-cp:arena:UL:faint",
+   "frame": "gr01-cp-faint-L-00",
+   "note": "Chibi-pixel faint: f0 rears up or stands front-on before falling; the silhouette test cannot read facing (GR review 2026-11-26).",
+   "verdict": "NOT_A_FACING_ERROR"
+  },
+  {
+   "displayCode": "GR01",
+   "usage": "arena",
+   "clip": "gr01-cp:arena:DR:faint",
+   "frame": "gr01-cp-faint-R-00",
+   "note": "Chibi-pixel faint: f0 rears up or stands front-on before falling; the silhouette test cannot read facing (GR review 2026-11-26).",
+   "verdict": "NOT_A_FACING_ERROR"
+  },
+  {
+   "displayCode": "GR01",
+   "usage": "arena",
+   "clip": "gr01-cp:arena:UR:faint",
+   "frame": "gr01-cp-faint-R-00",
+   "note": "Chibi-pixel faint: f0 rears up or stands front-on before falling; the silhouette test cannot read facing (GR review 2026-11-26).",
+   "verdict": "NOT_A_FACING_ERROR"
+  },
+  {
+   "displayCode": "GR11",
+   "usage": "arena",
+   "clip": "gr11-cp:arena:L:faint",
+   "frame": "gr11-cp-faint-L-00",
+   "note": "Chibi-pixel faint: f0 rears up or stands front-on before falling; the silhouette test cannot read facing (GR review 2026-11-26).",
+   "verdict": "NOT_A_FACING_ERROR"
+  },
+  {
+   "displayCode": "GR11",
+   "usage": "arena",
+   "clip": "gr11-cp:arena:R:faint",
+   "frame": "gr11-cp-faint-R-00",
+   "note": "Chibi-pixel faint: f0 rears up or stands front-on before falling; the silhouette test cannot read facing (GR review 2026-11-26).",
+   "verdict": "NOT_A_FACING_ERROR"
+  },
+  {
+   "displayCode": "GR11",
+   "usage": "arena",
+   "clip": "gr11-cp:arena:DL:faint",
+   "frame": "gr11-cp-faint-L-00",
+   "note": "Chibi-pixel faint: f0 rears up or stands front-on before falling; the silhouette test cannot read facing (GR review 2026-11-26).",
+   "verdict": "NOT_A_FACING_ERROR"
+  },
+  {
+   "displayCode": "GR11",
+   "usage": "arena",
+   "clip": "gr11-cp:arena:UL:faint",
+   "frame": "gr11-cp-faint-L-00",
+   "note": "Chibi-pixel faint: f0 rears up or stands front-on before falling; the silhouette test cannot read facing (GR review 2026-11-26).",
+   "verdict": "NOT_A_FACING_ERROR"
+  },
+  {
+   "displayCode": "GR11",
+   "usage": "arena",
+   "clip": "gr11-cp:arena:DR:faint",
+   "frame": "gr11-cp-faint-R-00",
+   "note": "Chibi-pixel faint: f0 rears up or stands front-on before falling; the silhouette test cannot read facing (GR review 2026-11-26).",
+   "verdict": "NOT_A_FACING_ERROR"
+  },
+  {
+   "displayCode": "GR11",
+   "usage": "arena",
+   "clip": "gr11-cp:arena:UR:faint",
+   "frame": "gr11-cp-faint-R-00",
+   "note": "Chibi-pixel faint: f0 rears up or stands front-on before falling; the silhouette test cannot read facing (GR review 2026-11-26).",
+   "verdict": "NOT_A_FACING_ERROR"
+  },
+  {
+   "displayCode": "GR05",
+   "usage": "general",
+   "clip": "main:12",
+   "frame": "gr05-cp-main_1-m00",
+   "note": "Chibi-pixel General pose seen nearly front-on or lying with a large tail behind; faces left as drawn (GR review 2026-11-26).",
+   "verdict": "NOT_A_FACING_ERROR"
+  },
+  {
+   "displayCode": "GR05",
+   "usage": "general",
+   "clip": "main:12",
+   "frame": "gr05-cp-main_12-m00",
+   "note": "Chibi-pixel General pose seen nearly front-on or lying with a large tail behind; faces left as drawn (GR review 2026-11-26).",
+   "verdict": "NOT_A_FACING_ERROR"
   },
   {
    "displayCode": "GR28",
-   "usage": "arena",
-   "clip": "gr28-af:arena:L:faint",
-   "frame": "gr28-af-faint-L-00",
-   "action": "faint",
-   "direction": "L",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "2026-11-18 Growth Data Arena fill: first faint frame is the standing start of a fall to the left; next to the lying frames the mask reads as turned, but the drawing faces left like its clip (checked by eye)."
+   "usage": "general",
+   "clip": "main:24",
+   "frame": "gr28-cp-main_24-m00",
+   "note": "Chibi-pixel General pose seen nearly front-on or lying with a large tail behind; faces left as drawn (GR review 2026-11-26).",
+   "verdict": "NOT_A_FACING_ERROR"
   },
   {
    "displayCode": "GR28",
-   "usage": "arena",
-   "clip": "gr28-af:arena:UL:faint",
-   "frame": "gr28-af-faint-L-00",
-   "action": "faint",
-   "direction": "UL",
-   "verdict": "NOT_A_FACING_ERROR",
-   "note": "2026-11-18 Growth Data Arena fill: first faint frame is the standing start of a fall to the left; next to the lying frames the mask reads as turned, but the drawing faces left like its clip (checked by eye)."
+   "usage": "general",
+   "clip": "main:24",
+   "frame": "gr28-cp-main_24-m01",
+   "note": "Chibi-pixel General pose seen nearly front-on or lying with a large tail behind; faces left as drawn (GR review 2026-11-26).",
+   "verdict": "NOT_A_FACING_ERROR"
   }
  ]
 }

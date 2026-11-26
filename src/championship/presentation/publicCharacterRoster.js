@@ -33,7 +33,7 @@ export async function loadPublicCharacterRoster({PIXI,speciesIds,sides=['main'],
  const records=catalog.characters.map(c=>({entityId:c.entityId,runtime:'../../../'+c.runtimePath}));
  const fromUrl=new Map(records.map(record=>[new URL(record.runtime,manifestUrl).href,configs.get(record.entityId)]));
  const manifest={assetId:catalog.assetId,records,speciesBindings:catalog.speciesBindings};
- const loaded=new Set(),loadedRuntimeHashes=new Map();
+ const loaded=new Set(),loadedRuntimeHashes=new Map(),replacedArt=new Set();
  const roster=await loadCharacterRosterCore({PIXI,speciesIds,sides,signal,initialSequences,manifest,manifestUrl,manifestPath:PUBLIC_CHARACTER_CATALOG,
   validateRecordRuntime:(record,entityId)=>record?.entityId===entityId&&record.runtime==='../../../'+configs.get(entityId)?.runtimePath,
   nativeSizingResolver:record=>configs.get(record.entityId)?.nativeSizing??null,
@@ -52,6 +52,7 @@ export async function loadPublicCharacterRoster({PIXI,speciesIds,sides=['main'],
     pixels:!reviewedReplacesOriginal(reviewedSpecies,baseUrl)});
    const bundle=await attachReviewedCharacterAnimation({bundle:baseline,PIXI,speciesId:reviewedSpecies,baseUrl,signal,usage:'general',fetchImpl});
    loaded.add(config.entityId);loadedRuntimeHashes.set(config.entityId,expected);
+   if(reviewedReplacesOriginal(reviewedSpecies,baseUrl))replacedArt.add(config.entityId);else replacedArt.delete(config.entityId);
    // Stage body size (stageBodySize.js): reviewed art carries it in its display scale; drawn
    // original art takes it through its cell geometry.
    const geometry=reviewedReplacesOriginal(reviewedSpecies,baseUrl)?runtime.geometry:scaleNativeGeometry(runtime.geometry,stageBodyScale(config.speciesId));
@@ -65,6 +66,9 @@ export async function loadPublicCharacterRoster({PIXI,speciesIds,sides=['main'],
    if(!actor||options?.presentation!=='raising'||!loaded.has(actor.entityId))return actor;
    const config=configs.get(actor.entityId);
    if(loadedRuntimeHashes.get(actor.entityId)!==config?.runtimeSha256)return actor;
+   // A contact profile is measured on the native cells; a body drawn with replacing reviewed art (e.g. GR04's
+   // chibi-pixel set, 2026-11-26) stands on the default shadow like every other reviewed partner.
+   if(replacedArt.has(actor.entityId))return actor;
    const contactShadowArt=getPublicReviewedRaisingContactArt(config,options?.side??'main');
    return contactShadowArt?Object.freeze({...actor,contactShadowArt}):actor;
   },

@@ -45,12 +45,17 @@ source=`const {catalog,PUBLIC_CHARACTER_CATALOG,loadCharacterRosterCore,loadPixi
 const canonical=v=>Array.isArray(v)?v.map(canonical):v&&typeof v==='object'?Object.fromEntries(Object.keys(v).sort().map(k=>[k,canonical(v[k])])):v;
 for(const config of approved){
  const raw=read(config.runtimePath),runtime=JSON.parse(raw);let activeBundle;
- globalThis.__publicContactTest={catalog,PUBLIC_CHARACTER_CATALOG:'src/data/championship/public-character-catalog.v1.json',PUBLIC_CHARACTER_RENDER_KIND:runtime.kind,canonicalRenderValue:canonical,getPublicReviewedRaisingContactArt:contact.getPublicReviewedRaisingContactArt,attachReviewedCharacterAnimation,reviewedSpeciesForEntity,reviewedReplacesOriginal,isOriginalLoopbackLocation,stageBodyScale,scaleNativeGeometry,characterAssetUrl,
+ globalThis.__publicContactTest={catalog,PUBLIC_CHARACTER_CATALOG:'src/data/championship/public-character-catalog.v1.json',PUBLIC_CHARACTER_RENDER_KIND:runtime.kind,canonicalRenderValue:canonical,getPublicReviewedRaisingContactArt:contact.getPublicReviewedRaisingContactArt,
+  // The reviewed art itself is out of scope here (its manifests are covered elsewhere): the baseline passes through.
+  attachReviewedCharacterAnimation:async({bundle})=>bundle,reviewedSpeciesForEntity,reviewedReplacesOriginal,isOriginalLoopbackLocation,stageBodyScale,scaleNativeGeometry,characterAssetUrl,
   loadPixiCharacterRuntimeBundle:async args=>({runtime:args.runtimeDocument,createActor:()=>({entityId:config.entityId,sprite:{unchanged:true}})}),
   loadCharacterRosterCore:async options=>{const record=options.manifest.records.find(r=>r.entityId===config.entityId);activeBundle=await options.loadBundle({runtimeUrl:new URL(record.runtime,options.manifestUrl).href});return {createActor:o=>activeBundle.createActor(o),getDiagnostics:()=>({})};}};
  const mod=await import('data:text/javascript;base64,'+Buffer.from(source+'\n//'+config.entityId).toString('base64'));
  const roster=await mod.loadPublicCharacterRoster({PIXI:{},speciesIds:[config.speciesId],fetchImpl:async()=>({ok:true,text:async()=>raw})},'https://example.test/');
- const actor=roster.createActor({presentation:'raising',nativeFramePresentation:true});assert.ok(actor.contactShadowArt);assert.equal(actor.sprite.unchanged,true);assertions+=2;
+ // m203_elecmon (GR04) is drawn with its chibi-pixel set since 2026-11-26: its native-cell profile no longer applies.
+ const replaced=reviewedReplacesOriginal(reviewedSpeciesForEntity(config,catalog.speciesBindings,'https://example.test/'),'https://example.test/');
+ assert.equal(replaced,config.entityId==='m203_elecmon',config.entityId);
+ const actor=roster.createActor({presentation:'raising',nativeFramePresentation:true});assert.equal(Boolean(actor.contactShadowArt),!replaced);assert.equal(actor.sprite.unchanged,true);assertions+=3;
  assert.equal(roster.createActor({presentation:'hunt'}).contactShadowArt,undefined);assert.equal(roster.createActor({presentation:'raising',side:'sub'}).contactShadowArt,undefined);assertions+=2;
  // Future alternate packed runtime with valid JSON/geometry but different
  // actual hash must not inherit the normal delivery's reviewed identity.

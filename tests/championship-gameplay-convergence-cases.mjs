@@ -772,10 +772,17 @@ test("split local manifest + external webp character assets resolve to the exact
   const resolveRel = (rel, docPath) => resolve(new URL(rel, new URL(docPath, pageUrl)).href, pageUrl);
 
   let checkedSplitCases = 0;
-  for (const sel of reviewedCharacterSelections(pageUrl)) {
+  // 2026-11-26: a chibi-pixel row keeps the high-detail set it replaced as `detail` (cut-in, story stage, brag card).
+  // Those read only General (main/sub) clips through the DOM path, so only their pages must resolve; arena-only
+  // pages of a replaced set are withdrawn from the deploy.
+  const sources = reviewedCharacterSelections(pageUrl).flatMap((sel) => [{ path: sel.path, clips: null },
+    ...(sel.detail ? [{ path: sel.detail.path, clips: (c) => c.mode === "main" || c.mode === "sub" }] : [])]);
+  for (const sel of sources) {
     if (!localSet.has(sel.path) && !hostedSet.has(sel.path)) continue;
     const doc = readJson(sel.path);
-    const frames = Array.isArray(doc.frames) ? doc.frames : Object.values(doc.frames);
+    const all = Array.isArray(doc.frames) ? doc.frames : Object.entries(doc.frames).map(([id, f]) => ({ id, ...f }));
+    const used = sel.clips ? new Set(doc.clips.filter(sel.clips).flatMap((c) => c.frames.map((s) => s.assetId))) : null;
+    const frames = used ? all.filter((f) => used.has(f.id)) : all;
     const dir = sel.path.slice(0, sel.path.lastIndexOf("/") + 1);
     for (const img of new Set(frames.map((f) => f.image))) {
       const relImg = dir + img;
@@ -789,7 +796,8 @@ test("split local manifest + external webp character assets resolve to the exact
       }
     }
   }
-  assert.ok(checkedSplitCases >= 100, `expected split local-json/external-webp cases to be guarded, saw ${checkedSplitCases}`);
+  // 79 after GR moved to the chibi-pixel set (2026-11-26): the kept detail sets still split; their arena-only pages are withdrawn.
+  assert.ok(checkedSplitCases >= 60, `expected split local-json/external-webp cases to be guarded, saw ${checkedSplitCases}`);
   // Guard loaders so relative frame images are never resolved directly against the local-only document URL again.
   const loaderSrc = readFileSync(new URL("../src/championship/presentation/reviewedCharacterLoader.js", import.meta.url), "utf8");
   const selSrc = readFileSync(new URL("../src/championship/presentation/reviewedSelection.js", import.meta.url), "utf8");

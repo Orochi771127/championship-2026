@@ -42,26 +42,26 @@ test('every reviewed General and Arena clip keeps its frames facing together, ap
 });
 
 test('the gate catches a single General frame left facing the wrong way (the GR38 blink of #123)', () => {
+  // GR38 is drawn in the chibi-pixel set since 2026-11-26 (its #123 blink frames live in the kept detail set).
+  // One walk frame flipped by a stray generalMirrorFrames entry must turn against its clip.
   const gr38 = selection.find((e) => e.displayCode === 'GR38');
-  assert.ok(gr38.generalMirrorFrames.includes('GR38_MA_02'));
-  const broken = { ...gr38, generalMirrorFrames: gr38.generalMirrorFrames.filter((id) => id !== 'GR38_MA_02') };
-  const blink = outliers(broken).filter((f) => f.action === 'blink').map((f) => f.frame).sort();
-  assert.deepEqual(blink, ['GR38_MA_00', 'GR38_MA_02']);
   assert.deepEqual(outliers(gr38), []);
+  const broken = { ...gr38, generalMirrorFrames: ['gr38-cp-main_2-m00'] };
+  const walk = outliers(broken).filter((f) => f.clip === 'main:2').map((f) => f.frame);
+  assert.ok(walk.includes('gr38-cp-main_2-m00'), JSON.stringify(walk));
 });
 
 test('the gate reads Arena frames with their delivered mirrorX', () => {
-  // GR18's DL/UL walk is the renderer flip of DR/UR (mirrorX). Read with that flip it is clean; one frame read
-  // without its delivered mirrorX turns against its clip. (GR21's reflected SW cell served here until the 11-18
-  // Growth Data Arena fill re-scaled its masks.)
+  // GR18's chibi-pixel DR/R/UR clips are the renderer flip of DL/L/UL (mirrorX, 2026-11-26). Its DR idle read with
+  // that flip is clean; one frame read without its delivered mirrorX turns against its clip.
   const gr18 = selection.find((e) => e.displayCode === 'GR18');
   const manifest = read(gr18.path);
-  const dl = manifest.clips.find((c) => c.mode === 'arena' && c.action === 'move' && c.direction === 'UL');
+  const dl = manifest.clips.find((c) => c.mode === 'arena' && c.action === 'idle' && c.direction === 'DR');
   const id = dl.frames[0].assetId;
   assert.equal(manifest.frames.find((f) => f.id === id).mirrorX, true);
   const clean = facingOutliers({ entry: gr18, manifest, roleMasks: masks.GR18, grid: maskDoc.grid, headings: maskDoc.arenaHeadings });
   assert.deepEqual(clean.filter((f) => f.usage === 'arena' && f.clip === dl.id), []);
   delete manifest.frames.find((f) => f.id === id).mirrorX;
   const broken = facingOutliers({ entry: gr18, manifest, roleMasks: masks.GR18, grid: maskDoc.grid, headings: maskDoc.arenaHeadings });
-  assert.deepEqual(broken.filter((f) => f.usage === 'arena').map((f) => f.frame), [id]);
+  assert.deepEqual(broken.filter((f) => f.usage === 'arena' && f.clip === dl.id).map((f) => f.frame), [id]);
 });
