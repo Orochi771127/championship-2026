@@ -830,6 +830,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         const blinkBright = hurtLeft > 0 && Math.floor(hurtLeft / 0.055) % 2 === 0;
         sprite.tint = (flash > 0.10 || blinkBright) ? 0xffffff : flash > 0 ? 0xff8a8a : scriptTint ?? 0xffffff;
         syncFlash((flash > 0.10 || blinkBright) && !reducedMotion, clamp(Math.max(flash - 0.09, blinkBright ? 0.065 : 0) * 10, 0.45, 0.92));
+        if (impactFlashTimer > 0 && impactStyle && rich && !reducedMotion) { if (impactStyle === 'black') syncFlash(true, 1); else sprite.tint = 0x000000; }
         const totalLift = lift + actionHop + knockHop;
         shadow.alpha = (0.75 - sink * 0.6) * (totalLift > 0 ? Math.max(0.35, 1 - totalLift / 48) : 1);
       },
@@ -1558,7 +1559,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           const at = releaseAt(event);
           if (!atlasLunge) {
             const look = elementFx.look?.(event.moveId);
-            if (look?.surfRider || (event.moveType === 'LUNGE' && look?.v2Archetype === 'DRAG_WAVE')) {
+            if (!pbMoveBody(event.moveId) && (look?.surfRider || (event.moveType === 'LUNGE' && look?.v2Archetype === 'DRAG_WAVE'))) {
               const rider = casterBody(event);
               elementFx.surfWave?.({ follow: bodyFoot(rider), angle: event.angle ?? 0, moveId: event.moveId, durationSec: 0.65 });
             } else {

@@ -245,7 +245,7 @@ export const PB_MOVE_TUNING = Object.freeze({
   // Sky Uppercut: low run in, the uppercut carries the target up (drawn), nobody is pushed along the ground.
   'pb-257': Object.freeze({ windup: 0.1, speed: 820, distance: 260, lungeKnock: 0 }),
   // Thunderous Kick: run in, a stomp that pins, then the same leg shoves the target a body away.
-  'pb-301': Object.freeze({ singleDash: true, windup: 0.1, speed: 900, comboHits: Object.freeze([{ share: 0.7 }, { dt: 0.3, share: 0.3, knock: 400 }]) }),
+  'pb-301': Object.freeze({ singleDash: true, windup: 0.1, speed: 900, strikeDelay: 0.1, comboHits: Object.freeze([{ share: 0.7 }, { dt: 0.22, share: 0.3, knock: 300 }]) }),
   // Dynamic Punch: walks in with the fist charging, one punch, the blast shoves the target a body away.
   'pb-076': Object.freeze({ singleDash: true, windup: 0.12, speed: 380, lungeKnock: 400 }),
   // Focus Punch: 0.7 s of focus, then across the gap in an instant; the target is pinned.
