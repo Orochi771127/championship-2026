@@ -269,7 +269,19 @@ export const PB_MOVE_TUNING = Object.freeze({
   // Rock Smash: stationary fist-smash onto a boulder in front, lobbing shadowed rock chunks across the gap.
   'pb-233': Object.freeze({ type: 'BOLT', speed: 560, windup: 0.3, knockback: 180, noHoming: true, pierce: 0, radius: 24 }),
   // Sacred Sword: stationary caster raises a colossal golden sword overhead and cleaves straight down onto a distant foe.
-  'pb-239': Object.freeze({ type: 'BOLT', speed: 2200, windup: 0.64, knockback: 45, noHoming: true, radius: 34 })
+  'pb-239': Object.freeze({ type: 'BOLT', speed: 2200, windup: 0.64, knockback: 45, noHoming: true, radius: 34 }),
+  // ---- Batch 3B: Final 5 Fighting moves (ring ropes, grab-spin-slam, crystal cluster, counter riposte, aerial revenge)
+  // Flying Press: hops onto ring corner ropes, crouches, springs into a front flip and dives steeply onto target.
+  'pb-106': Object.freeze({ singleDash: true, windup: 0.45, speed: 580, distance: 340, lungeKnock: 0, standOff: 0.75 }),
+  // Seismic Toss: short grab dash, climbs and spins 2 turns carrying the target, plunges straight down into rubble crater.
+  'pb-243': Object.freeze({ singleDash: true, windup: 0.08, speed: 920, distance: 260, damage: 32, standOff: 0.85, reboundSpeed: 170,
+    comboHits: Object.freeze([{ share: 0.05, knock: 0 }, { dt: 1.15, share: 0.95, knock: 0 }]) }),
+  // Superpower: 0.6 s dimmed crouch with orange aura & blue rocks, flame-jet high arc slam into 6 tall crystal pillars.
+  'pb-283': Object.freeze({ singleDash: true, windup: 0.6, speed: 900, distance: 380, lungeKnock: 0, standOff: 0.75 }),
+  // Counter: 0.44 s dimmed crimson crystal-aura counter stance, then white-bg impact frame + crimson spiky burst + 3 red claw gashes.
+  'pb-040': Object.freeze({ type: 'LUNGE', singleDash: true, windup: 0.44, speed: 1200, distance: 260, width: 76, damage: 34, lungeKnock: 180, standOff: 1.5, counterGuard: 0.44 }),
+  // Revenge: leaps up and slightly back, turns horizontal fist-forward and dives steeply onto the target.
+  'pb-230': Object.freeze({ singleDash: true, windup: 0.32, speed: 1450, distance: 260, lungeKnock: 40, standOff: 1.5 })
 });
 
 export function pb324MoveName(id, locale = "zh-Hant") {

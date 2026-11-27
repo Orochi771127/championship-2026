@@ -785,12 +785,24 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
                 if (rc.hop) { const h = Math.sin(Math.PI * pr) * rc.hop; sprite.y -= h; actionHop += h; }
                 if (rc.tint) scriptTint = rc.tint;
               }
-              // On the target, striking on a beat: the body jabs forward with every strike.
+              // On the target, striking on a beat: the body jabs forward with every strike (or climbs, spins and plunges for a grab-slam).
               const combo = body.lunge.combo, cc = cue.combo;
               if (combo && cc) {
                 const beat = body.lunge.comboHits?.[combo.i]?.dt ?? 0.15, ph = clamp(1 - combo.timer / Math.max(0.01, beat), 0, 1);
-                const jab = Math.sin(Math.PI * Math.min(1, ph * 1.6)) * (cc.jab ?? 10) * (combo.i % 2 ? 1 : 0.7);
-                sprite.x += sCos * jab; if (cc.lean) actionTilt = sDir * cc.lean * (0.5 + 0.5 * Math.sin(Math.PI * ph)); if (cc.low) low(cc.low);
+                if (cc.lift) {
+                  const L = cc.lift, tt = ph * beat;
+                  const h = tt < L.up ? L.height * (1 - Math.pow(1 - tt / Math.max(0.01, L.up), 2))
+                    : tt < L.up + L.hang ? L.height
+                    : L.height * (1 - Math.pow((tt - L.up - L.hang) / Math.max(0.01, L.down), 2));
+                  stage.lift = Math.max(0, h); sprite.y -= stage.lift; actionHop += stage.lift;
+                  if (L.turns && tt >= (L.spinDelay ?? 0) && tt < L.up + L.hang) {
+                    const st = (tt - (L.spinDelay ?? 0)) / Math.max(0.05, L.up + L.hang - (L.spinDelay ?? 0));
+                    sprite.scale.x *= Math.cos(st * Math.PI * 2 * L.turns) >= 0 ? 1 : -1;
+                  }
+                } else {
+                  const jab = Math.sin(Math.PI * Math.min(1, ph * 1.6)) * (cc.jab ?? 10) * (combo.i % 2 ? 1 : 0.7);
+                  sprite.x += sCos * jab; if (cc.lean) actionTilt = sDir * cc.lean * (0.5 + 0.5 * Math.sin(Math.PI * ph)); if (cc.low) low(cc.low);
+                }
               }
             } else if (stage.endAt === null && (stage.startLeft || !live || sa.releasedAt !== null)) {
               // The dash is over (or was too quick to see): hold the strike where the body now stands.

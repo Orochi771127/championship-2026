@@ -79,6 +79,16 @@ export const PB_MOVE_BODY = Object.freeze({
   'pb-233': { key: 'rockSmash', windup: { lean: -0.35, hop: 16 }, strike: { lean: 0.55, squash: 0.34, hold: 0.4 }, hideShotShadow: true },
   // Sacred Sword: stands back, dims scene and lifts camera for the colossal golden sword, then cleaves down.
   'pb-239': { key: 'sacredSword', windup: { camLift: 130 }, strike: { lean: 0.22, hold: 0.44 }, dim: 0.45, impactFrame: true, impactStyle: 'white', hideShotShadow: true },
+  // Flying Press: hops onto ring ropes, springs into a front-flip arc, dives vertically and squashes onto target.
+  'pb-106': { key: 'flyingPress', windup: { hop: 54, crouch: 0.2, camLift: 60 }, dash: { arc: 185, flip: 1 }, strike: { squash: 0.36, lean: 0.3, hold: 0.32 }, impactFrame: true, impactStyle: ['white', 'black'] },
+  // Seismic Toss: short grab dash, carries target straight up spinning 2 turns, plunges straight down into rubble.
+  'pb-243': { key: 'seismicToss', dash: { low: 0.2 }, combo: { lift: { height: 205, up: 0.34, hang: 0.66, down: 0.15, turns: 2, spinDelay: 0.16 } }, strike: { hold: 0.12 }, after: { hop: 112, time: 0.55 }, target: { lift: { height: 192, up: 0.34, hang: 0.66, down: 0.15, orbit: { radius: 28, turns: 2, delay: 0.16 } } }, impactFrame: 'final', impactStyle: ['white', 'black'] },
+  // Superpower: dimmed crouch with battle aura, flame-jet high leap slam into blue-purple crystal pillars.
+  'pb-283': { key: 'superpower', windup: { crouch: 0.34, shake: 1.6 }, dash: { arc: 155, lean: 0.45 }, strike: { low: 0.25, hold: 0.45 }, dim: 0.9, impactFrame: true, impactStyle: 'white' },
+  // Counter: dimmed crimson silhouette stance, then white-bg impact frame + crimson starburst + 3 red slash marks.
+  'pb-040': { key: 'counter', windup: { tint: 0xd82038, crouch: 0.18, shake: 1.4 }, dash: { tint: 0xd82038, lean: 0.32 }, strike: { lean: 0.35, hold: 0.28 }, dim: 0.72, impactFrame: true, impactStyle: 'white' },
+  // Revenge: leaps up and back, dives steeply fist-first onto the target with a crisp red-white burst.
+  'pb-230': { key: 'revenge', windup: { hop: 88, lean: 0.32, camLift: 75 }, dash: { lean: 0.85 }, strike: { lean: 0.4, low: 0.14, hold: 0.25 } },
   // ---- flying
   // Aerial Ace: a dark-blue silhouette that cuts straight through the target and lands flat on its far side.
   'pb-003': { key: 'aerialAce', windup: { crouch: 0.2, tint: 0x2a3a8c }, dash: { tint: 0x2a3a8c, lean: 0.4 }, strike: { lean: 1.15, low: 0.2, hold: 0.28 }, after: { hop: 22, time: 0.16 }, impactFrame: true, impactStyle: 'black' }
@@ -1175,6 +1185,355 @@ export function createPbMoveScripts(api) {
           }
         });
         addDecal({ x, y: groundY + 8, kind: 'crack', radius: 22, pal: 'earth', life: 4.5 });
+        dizzy(x, y, 0.45);
+      }
+    },
+
+    // ------------------------------------------------------------------ Flying Press
+    flyingPress: {
+      // Wrestling ring corner turnbuckles + 3 horizontal ropes (red top, white middle, green bottom), sagging when pressed.
+      drawRopes(g, x, footY, sag, alpha) {
+        if (!g || alpha <= 0.02) return;
+        const lx = x - 34, rx = x + 34, botY = footY + 4, h = 54;
+        // Ground shadow under the ring posts.
+        g.top.ellipse(x, botY + 2, 40, 10).fill({ color: 0x1a1816, alpha: 0.3 * alpha });
+        // Twin dark turnbuckle posts with metallic caps.
+        for (const px of [lx, rx]) {
+          g.top.rect(px - 5, botY - h - 4, 10, h + 4).fill({ color: 0x262832, alpha });
+          g.top.rect(px - 3, botY - h - 2, 6, h).fill({ color: 0x586074, alpha });
+          g.top.rect(px - 6, botY - h - 6, 12, 6).fill({ color: 0xd83232, alpha });
+        }
+        // Three horizontal ropes (red / white / green) with parabolic sag at center.
+        const ropes = [
+          { y: botY - h + 4, col: 0xe63636, bend: sag },
+          { y: botY - h * 0.62, col: 0xf4f4f8, bend: sag * 0.55 },
+          { y: botY - h * 0.28, col: 0x36b85a, bend: sag * 0.25 }
+        ];
+        for (const rp of ropes) {
+          const pts = [];
+          for (let i = 0; i <= 8; i++) {
+            const f = i / 8;
+            const px = lx + (rx - lx) * f;
+            const py = rp.y + Math.sin(f * Math.PI) * rp.bend;
+            pts.push(px, py);
+          }
+          g.top.poly(pts).stroke({ color: 0x1a1820, width: 6, alpha });
+          g.top.poly(pts).stroke({ color: rp.col, width: 3.5, alpha });
+        }
+      },
+      cast({ follow, windup = 0.45 }) {
+        const at0 = follow?.();
+        if (!at0) return;
+        const rx = at0.x, rFoot = at0.footY;
+        // Brief white entry flash, then the ring corner ropes stand at takeoff through the leap (~1.05 s) and vanish.
+        live(1.05, (h, t, dt, g) => {
+          if (h.age < 0.12) {
+            const fk = 1 - h.age / 0.12;
+            g.add.circle(rx, rFoot - 28, 18 + 14 * (1 - fk)).fill({ color: 0xffffff, alpha: 0.85 * fk });
+          }
+          if (h.age >= 0.08) {
+            const sag = h.age < windup ? Math.max(0, (h.age - windup * 0.45) / (windup * 0.55)) * 16 : Math.max(0, 16 * (1 - (h.age - windup) / 0.16));
+            const fade = h.age < 0.92 ? 1 : 1 - (h.age - 0.92) / 0.13;
+            this.drawRopes(g, rx, rFoot, sag, 0.96 * fade);
+          }
+        });
+      },
+      release({ follow, angle = 0 }) {
+        const c = Math.cos(angle) >= 0 ? 1 : -1;
+        // Front-flip beige crescent arc in mid-flight, then 4 crisp white vertical dive speed lines on descent.
+        live(0.68, (h, t, dt, g) => {
+          const at = follow?.(); if (!at) { h.age = h.life; return; }
+          if (h.age > 0.12 && h.age < 0.36) {
+            const fk = Math.sin(((h.age - 0.12) / 0.24) * Math.PI);
+            crescent(g.top, at.x + c * 6, at.y, 68, c, 0xf2dec0, 0.88 * fk, 11);
+            crescent(g.add, at.x + c * 4, at.y, 56, c, 0xffffff, 0.72 * fk, 5);
+          }
+          if (h.age >= 0.32) {
+            for (let i = 0; i < 4; i++) {
+              const ox = (i - 1.5) * 14, len = 46 + (i % 2) * 20;
+              g.add.rect(at.x + ox - 1.5, at.y - 16 - len, 3, len).fill({ color: 0xffffff, alpha: 0.84 });
+            }
+          }
+        });
+      },
+      hit({ x, y, groundY }) {
+        // Post-HS: white squash flash + orange spiky starburst + white->orange expanding ground ring + white dust + crack.
+        live(0.48, (h, t, dt, g) => {
+          const post = Math.max(0, h.age - 0.12);
+          const k = Math.min(1, post / 0.34);
+          const fade = k < 0.65 ? 1 : 1 - (k - 0.65) / 0.35;
+          if (post < 0.14) {
+            const fk = 1 - post / 0.14;
+            g.add.ellipse(x, groundY, 46, 20).fill({ color: 0xffffff, alpha: 0.94 * fk });
+          }
+          spiky(g.top, x, y - 2, 48 * (0.7 + 0.3 * (1 - k)), 10, 0xff7818, 0.92 * fade, h.seed);
+          spiky(g.add, x, y - 2, 26 * (1 - k * 0.4), 10, 0xfff4c8, 0.95 * fade, h.seed);
+          groundRing(g.top, x, groundY + 4, 24 + 62 * k, k < 0.4 ? 0xffffff : 0xff8a24, 0.9 * fade, 4.5 - 2 * k);
+          groundRing(g.top, x, groundY + 4, 14 + 44 * k, 0xffd288, 0.65 * fade, 2.5);
+        });
+        dust(x, groundY + 2, 7, [232, 228, 220], 95);
+        pebbles(x, groundY + 8, 12, 95, [96, 92, 88], 4.5, 6);
+        addDecal({ x, y: groundY + 8, kind: 'crack', radius: 46, pal: 'earth', life: 4.5 });
+        dizzy(x, y, 0.5);
+      }
+    },
+
+    // ------------------------------------------------------------------ Seismic Toss
+    seismicToss: {
+      release({ follow }) {
+        // Dust puffs behind the short grab dash.
+        live(0.28, (h, t, dt) => {
+          const at = follow?.(); if (!at) { h.age = h.life; return; }
+          h.acc = (h.acc ?? 0) + dt;
+          while (h.acc >= 0.05) { h.acc -= 0.05; dust(at.x, at.footY + 2, 2, [178, 154, 126], 60); }
+        });
+      },
+      hit({ x, y, groundY, hitIndex = null, final = null }) {
+        // Hit 0 = Grab: curved orange & white spin arcs follow the 2-turn ascent, then a tall vertical orange plunge pillar!
+        if (hitIndex === 0 && final === false) {
+          whiteBloom(x, y - 6, 16, 36, 0.1);
+          live(1.38, (h, t, dt, g) => {
+            const age = h.age;
+            if (age < 1.0) {
+              // Climbing + spinning 2 turns: height mirrors target lift (up 0.34s, hang 0.66s).
+              const lift = age < 0.34 ? 195 * (1 - Math.pow(1 - age / 0.34, 2)) : 195;
+              const cy = y - lift;
+              for (let i = 0; i < 3; i++) {
+                const a0 = age * 14 + i * 2.1;
+                const pts = [];
+                for (let k = 0; k <= 8; k++) {
+                  const a = a0 + k * 0.24;
+                  pts.push(x + Math.cos(a) * (40 + i * 8), cy + Math.sin(a) * (16 + i * 4));
+                }
+                g.top.poly(pts).stroke({ color: i % 2 === 0 ? 0xff9a38 : 0xffffff, width: 4 - i * 0.6, alpha: 0.78 });
+              }
+            } else {
+              // Vertical plunge (1.00s -> 1.15s) + lingering vertical orange light pillar (~0.3s after slam).
+              const pk = Math.min(1, (age - 1.0) / 0.15);
+              const fade = age < 1.16 ? 0.85 : Math.max(0, 0.85 * (1 - (age - 1.16) / 0.24));
+              const topY = groundY - 210 * (1 - Math.max(0, (age - 1.16) / 0.24) * 0.3);
+              const botY = groundY - 210 * (1 - pk);
+              g.top.rect(x - 22, topY, 44, Math.max(12, botY - topY)).fill({ color: 0xff8c28, alpha: fade * 0.65 });
+              g.add.rect(x - 10, topY, 20, Math.max(12, botY - topY)).fill({ color: 0xffe49c, alpha: fade * 0.72 });
+            }
+          });
+          return;
+        }
+        // Final Hit = Slam: ring of 9 grey boulder chunks + brown dust cloud + persistent black radial crack & rock ring.
+        const rocks = Array.from({ length: 9 }, (_, i) => {
+          const a = (i / 9) * TAU + 0.18;
+          return { a, dist: 38 + (i % 3) * 14, r: 9 + (i % 3) * 3 };
+        });
+        live(4.5, (h, t, dt, g) => {
+          const fade = t < 0.82 ? 1 : 1 - (t - 0.82) / 0.18;
+          const spread = Math.min(1, h.age / 0.18);
+          if (h.age < 0.45) {
+            const rf = 1 - h.age / 0.45;
+            groundRing(g.top, x, groundY + 4, 28 + 74 * (h.age / 0.45), 0xd8a868, 0.85 * rf, 4);
+          }
+          for (const rk of rocks) {
+            const rx = x + Math.cos(rk.a) * rk.dist * spread;
+            const ry = groundY + 4 + Math.sin(rk.a) * rk.dist * 0.46 * spread;
+            const r = rk.r;
+            g.top.poly([rx - r, ry + r * 0.3, rx - r * 0.7, ry - r * 0.7, rx + r * 0.2, ry - r * 0.85, rx + r, ry + r * 0.1, rx + r * 0.4, ry + r * 0.6, rx - r * 0.5, ry + r * 0.6])
+              .fill({ color: 0x423e3a, alpha: 0.95 * fade });
+            g.top.poly([rx - r * 0.75, ry + r * 0.2, rx - r * 0.5, ry - r * 0.52, rx + r * 0.15, ry - r * 0.65, rx + r * 0.75, ry, rx + r * 0.3, ry + r * 0.42, rx - r * 0.4, ry + r * 0.42])
+              .fill({ color: 0x98948e, alpha: 0.95 * fade });
+          }
+        });
+        dust(x, groundY + 2, 12, [166, 144, 118], 130);
+        pebbles(x, groundY + 6, 16, 120, [110, 102, 94], 4.5, 6);
+        addDecal({ x, y: groundY + 8, kind: 'crack', radius: 58, pal: 'earth', life: 4.5 });
+        dizzy(x, y, 0.6);
+      }
+    },
+
+    // ------------------------------------------------------------------ Superpower
+    superpower: {
+      // Faceted blue-purple crystal/rock pillar tilted at angle `tilt` from base (bx, by).
+      crystalPillar(g, bx, by, tilt, len, hw, alpha) {
+        if (!g || alpha <= 0.02 || len < 6) return;
+        const ux = Math.sin(tilt), uy = -Math.cos(tilt), vx = Math.cos(tilt), vy = Math.sin(tilt);
+        const pt = (al, si) => [bx + ux * al + vx * si, by + uy * al + vy * si];
+        const poly = (list, col, a = alpha) => {
+          const flat = [];
+          for (const [al, si] of list) { const p = pt(al, si); flat.push(p[0], p[1]); }
+          g.top.poly(flat).fill({ color: col, alpha: a });
+        };
+        poly([[0, -hw - 2.5], [len * 0.84, -hw * 0.88 - 2.5], [len + 4, 0], [len * 0.84, hw * 0.88 + 2.5], [0, hw + 2.5]], 0x222a5a);
+        poly([[0, -hw], [len * 0.84, -hw * 0.86], [len, 0], [len * 0.84, hw * 0.86], [0, hw]], 0x627ae0);
+        poly([[2, -hw * 0.9], [len * 0.82, -hw * 0.78], [len * 0.95, 0], [len * 0.8, -hw * 0.06], [2, -hw * 0.08]], 0xaec2ff);
+        poly([[2, hw * 0.15], [len * 0.82, hw * 0.12], [len * 0.82, hw * 0.78], [2, hw * 0.86]], 0x4256b0);
+      },
+      cast({ follow, windup = 0.6 }) {
+        const at0 = follow?.();
+        if (!at0) return;
+        const sx = at0.x, sFoot = at0.footY;
+        // Orange spiky battle aura behind crouching caster during 0.6 s charge.
+        live(Math.max(0.25, windup), (h, t, dt, g) => {
+          const at = follow?.(); if (!at) return;
+          const flick = Math.sin(h.age * 46) * 4;
+          for (let i = -2; i <= 2; i++) {
+            flameSpike(g.top, at.x + i * 12, at.footY + 2, (36 + 24 * t - Math.abs(i) * 7) + flick * (i % 2 ? 1 : -1), 10, 0xe85a14, 0.9, i * 4);
+            flameSpike(g.add, at.x + i * 10, at.footY + 2, (22 + 16 * t - Math.abs(i) * 4), 5, 0xffd868, 0.85, i * 2);
+          }
+          groundRing(g.top, at.x, at.footY + 3, 28 + 24 * t, 0xff8c28, 0.75 * (1 - t * 0.3), 3.5);
+        });
+        // 7 blue-purple rock chunks erupting around the takeoff feet and staying on ground for 4.5 s (greying later).
+        const chips = Array.from({ length: 7 }, (_, i) => {
+          const a = (i / 7) * TAU + 0.3;
+          return { x: sx + Math.cos(a) * (32 + (i % 2) * 14), y: sFoot + 4 + Math.sin(a) * 16, r: 7 + (i % 3) * 2.5, delay: i * 0.065 };
+        });
+        live(4.5, (h, t, dt, g) => {
+          const fade = t < 0.82 ? 1 : 1 - (t - 0.82) / 0.18;
+          const grey = h.age > 2.0;
+          for (const ch of chips) {
+            if (h.age < ch.delay) continue;
+            const pop = Math.min(1, (h.age - ch.delay) / 0.1);
+            const r = ch.r * pop;
+            g.top.poly([ch.x - r, ch.y + r * 0.3, ch.x - r * 0.6, ch.y - r * 0.8, ch.x + r * 0.4, ch.y - r * 0.7, ch.x + r, ch.y + r * 0.2, ch.x, ch.y + r * 0.6])
+              .fill({ color: grey ? 0x4c4a48 : 0x2a3264, alpha: 0.92 * fade });
+            g.top.poly([ch.x - r * 0.7, ch.y + r * 0.2, ch.x - r * 0.4, ch.y - r * 0.6, ch.x + r * 0.3, ch.y - r * 0.5, ch.x + r * 0.7, ryFix(ch.y, r)])
+              .fill({ color: grey ? 0x8e8c88 : 0x7a92f0, alpha: 0.94 * fade });
+          }
+        });
+        function ryFix(cy, r) { return cy + r * 0.15; }
+      },
+      release({ follow }) {
+        const smokeStops = [[0, [242, 186, 172], 0.72], [1, [200, 152, 144], 0]];
+        // Fiery orange rocket-jet flame under feet throughout the high parabolic leap + pale pink-orange smoke puffs.
+        live(0.55, (h, t, dt, g) => {
+          const at = follow?.(); if (!at) { h.age = h.life; return; }
+          const flick = Math.sin(h.age * 55) * 4;
+          flameSpike(g.top, at.x, at.y + 44, -42 - flick, 18, 0xe84c10, 0.94, flick);
+          flameSpike(g.add, at.x, at.y + 38, -28 - flick * 0.5, 10, 0xffe068, 0.92, -flick * 0.5);
+          h.acc = (h.acc ?? 0) + dt;
+          while (h.acc >= 0.08) {
+            h.acc -= 0.08;
+            spawnP({ shape: 'pxpuff', x: at.x, y: at.y + 24, vx: (rand() - 0.5) * 30, vy: 16, size: 12, size1: 22, stops: smokeStops, add: false, drag: 0.9, life: 0.34 });
+          }
+        });
+      },
+      hit({ x, y, groundY }) {
+        // Thick orange-brown shockwave ring + fan of 6 tall blue-purple crystal pillars standing ~2.2 s + smoke & blue shards.
+        const pillars = [
+          { ox: -54, oy: 4, tilt: -0.62, len: 86, hw: 13 },
+          { ox: -34, oy: -4, tilt: -0.32, len: 108, hw: 14.5 },
+          { ox: -12, oy: -6, tilt: -0.08, len: 96, hw: 13.5 },
+          { ox: 14, oy: -6, tilt: 0.12, len: 102, hw: 14 },
+          { ox: 36, oy: -2, tilt: 0.34, len: 112, hw: 14.5 },
+          { ox: 56, oy: 4, tilt: 0.6, len: 84, hw: 13 }
+        ];
+        live(2.35, (h, t, dt, g) => {
+          const post = Math.max(0, h.age - 0.06);
+          const grow = Math.min(1, post / 0.16);
+          const fade = h.age < 2.0 ? 1 : 1 - (h.age - 2.0) / 0.35;
+          if (post < 0.48) {
+            const rk = post / 0.48;
+            groundRing(g.top, x, groundY + 6, 36 + 104 * rk, 0xd86e22, 0.92 * (1 - rk), 8 - 4 * rk);
+            groundRing(g.top, x, groundY + 6, 22 + 78 * rk, 0xffbe68, 0.72 * (1 - rk), 4 - 2 * rk);
+          }
+          for (const p of pillars) {
+            this.crystalPillar(g, x + p.ox, groundY + 8 + p.oy, p.tilt, p.len * grow, p.hw, 0.96 * fade);
+          }
+          // Billowing grey-white smoke at center of crystal fan during first 1.0 s.
+          if (post < 1.05) {
+            const sf = 1 - post / 1.05;
+            g.top.ellipse(x, groundY - 12, 34 + 14 * (1 - sf), 24).fill({ color: 0xe6e8ee, alpha: 0.46 * sf });
+          }
+        });
+        for (let i = 0; i < 14; i++) {
+          const a = -Math.PI / 2 + (rand() - 0.5) * 1.9;
+          const spd = 120 + rand() * 180;
+          spawnP({ shape: 'shard', x: x + (rand() - 0.5) * 44, y: groundY - 8, vx: Math.cos(a) * spd, vy: Math.sin(a) * spd * 0.7,
+            vz: 160 + rand() * 140, gravity: 440, size: 5 + rand() * 4, size1: 3, rot: a, vrot: (rand() - 0.5) * 12,
+            stops: [[0, [140, 168, 255], 0.95], [1, [76, 98, 210], 0]], add: false, life: 0.65 + rand() * 0.25 });
+        }
+        dust(x, groundY + 2, 10, [216, 218, 224], 115);
+        pebbles(x, groundY + 8, 14, 120, [104, 102, 100], 4.5, 6);
+        addDecal({ x, y: groundY + 8, kind: 'crack', radius: 56, pal: 'earth', life: 4.5 });
+        dizzy(x, y, 0.6);
+      }
+    },
+
+    // ------------------------------------------------------------------ Counter
+    counter: {
+      cast({ follow, windup = 0.44 }) {
+        // Spiky crimson crystal-cluster aura wrapping the caster + 2 concentric red ground rings during counter brace.
+        live(Math.max(0.2, windup), (h, t, dt, g) => {
+          const at = follow?.(); if (!at) return;
+          const pulse = 0.85 + 0.15 * Math.sin(h.age * 38);
+          groundRing(g.top, at.x, at.footY + 3, 28 + 22 * t, 0xd81c3a, 0.9, 3.5);
+          groundRing(g.top, at.x, at.footY + 3, 18 + 14 * t, 0xff5a7a, 0.78, 2.5);
+          for (let i = -2; i <= 2; i++) {
+            const ox = i * 11;
+            const len = (36 + 18 * t - Math.abs(i) * 6) * pulse;
+            flameSpike(g.top, at.x + ox, at.footY + 2, len, 9, 0x9c0e24, 0.92, i * 5);
+            flameSpike(g.add, at.x + ox, at.footY + 2, len * 0.68, 4.5, 0xff3864, 0.85, i * 3);
+          }
+        });
+      },
+      release({ follow }) {
+        // Crimson aura lingers briefly into the riposte strike.
+        live(0.24, (h, t, dt, g) => {
+          const at = follow?.(); if (!at) return;
+          const fade = 1 - t;
+          groundRing(g.top, at.x, at.footY + 3, 38 + 16 * t, 0xd81c3a, 0.85 * fade, 3.5);
+          spiky(g.top, at.x, at.y, 32 * fade, 9, 0xc81434, 0.72 * fade, h.seed);
+        });
+      },
+      hit({ x, y, groundY, angle = 0 }) {
+        const c = Math.cos(angle) >= 0 ? 1 : -1;
+        // Post-HS: magenta-red spiky starburst with bright white core (0.26s) -> 3 parallel diagonal crimson slash gashes (0.34s).
+        live(0.62, (h, t, dt, g) => {
+          const post = Math.max(0, h.age - 0.06);
+          if (post < 0.28) {
+            const bk = post / 0.28;
+            const bf = bk < 0.6 ? 1 : 1 - (bk - 0.6) / 0.4;
+            const r = 46 + 22 * Math.min(1, bk * 1.6);
+            spiky(g.top, x - c * 8, y - 4, r + 4, 11, 0x6a0a1c, 0.94 * bf, h.seed);
+            spiky(g.top, x - c * 8, y - 4, r, 11, 0xd81842, 0.95 * bf, h.seed);
+            spiky(g.add, x - c * 8, y - 4, r * 0.56, 11, 0xff82a4, 0.92 * bf, h.seed);
+            g.add.circle(x - c * 8, y - 4, 15 * bf).fill({ color: 0xffffff, alpha: 0.98 * bf });
+            groundRing(g.top, x, groundY + 4, 34 + 38 * bk, 0xd81c3a, 0.85 * bf, 3.5);
+          }
+          if (post >= 0.16) {
+            const sk = Math.min(1, (post - 0.16) / 0.38);
+            const sf = sk < 0.65 ? 1 : 1 - (sk - 0.65) / 0.35;
+            const draw = Math.min(1, sk / 0.22);
+            // 3 parallel diagonal crimson claw gashes sweeping top-right to bottom-left across target.
+            for (let i = -1; i <= 1; i++) {
+              const ox = i * 16, oy = i * 8;
+              const x0 = x + 36 + ox, y0 = y - 48 + oy;
+              const x1 = x0 - 76 * draw, y1 = y0 + 96 * draw;
+              g.top.poly([x0 - 4, y0 - 3, x0 + 5, y0 + 3, x1 + 4, y1 + 2, x1 - 4, y1 - 2]).fill({ color: 0x5c0818, alpha: 0.94 * sf });
+              g.top.poly([x0 - 2, y0 - 1.5, x0 + 3, y0 + 1.5, x1 + 2, y1 + 1, x1 - 2, y1 - 1]).fill({ color: 0xe6223c, alpha: 0.96 * sf });
+              g.add.poly([x0, y0, x0 + 1.5, y0 + 1, x1 + 1, y1 + 0.5, x1 - 0.5, y1 - 0.5]).fill({ color: 0xffa6bc, alpha: 0.78 * sf });
+            }
+          }
+        });
+        pebbles(x - c * 16, groundY + 8, 12, 95, [96, 86, 82], 4.5, 6);
+        addDecal({ x: x - c * 16, y: groundY + 8, kind: 'crack', radius: 44, pal: 'earth', life: 4.5 });
+        dizzy(x, y, 0.55);
+      }
+    },
+
+    // ------------------------------------------------------------------ Revenge
+    revenge: {
+      cast({ follow }) {
+        const at = follow?.();
+        if (at) dust(at.x, at.footY + 2, 4, [186, 174, 156], 65);
+      },
+      hit({ x, y, groundY }) {
+        // Crisp red-and-white spiky starburst right at fist contact + beige dust puff rising at target's feet.
+        live(0.3, (h, t, dt, g) => {
+          const fade = t < 0.55 ? 1 : 1 - (t - 0.55) / 0.45;
+          const r = 34 + 18 * Math.min(1, t * 2);
+          spiky(g.top, x, y - 6, r + 3, 10, 0x981618, 0.92 * fade, h.seed);
+          spiky(g.top, x, y - 6, r, 10, 0xe82e28, 0.96 * fade, h.seed);
+          spiky(g.add, x, y - 6, r * 0.55, 10, 0xffffff, 0.98 * fade, h.seed);
+        });
+        dust(x, groundY + 2, 7, [196, 176, 146], 90);
         dizzy(x, y, 0.45);
       }
     },

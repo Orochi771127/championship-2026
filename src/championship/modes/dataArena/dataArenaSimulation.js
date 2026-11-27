@@ -1402,6 +1402,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       caster.cooldowns[moveId] = (move.cooldown ?? 0) * scale + barrierPenalty;
     }
     caster.cast = { actionId: nextActionId++, moveId, move, t: 0, windup: move.windup ?? 0, angle, aimX: targetX, aimY: targetY, ultimate };
+    if (relayMode && move.counterGuard) caster.counterTimer = Math.max(caster.counterTimer ?? 0, move.counterGuard);
     caster.facing = Math.cos(angle) >= 0 ? 1 : -1;
     if (relayMode) {
       caster.facing8 = relayFacing8(angle);
