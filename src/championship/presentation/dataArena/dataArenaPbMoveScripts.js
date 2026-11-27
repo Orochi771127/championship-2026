@@ -71,12 +71,12 @@ export const PB_MOVE_BODY = Object.freeze({
   'pb-013': { key: 'auraSphere', windup: { lean: -0.14 }, strike: { lean: -0.22, hold: 0.26 }, impactFrame: true, impactStyle: 'black', hideShotShadow: true },
   // Focus Blast: stands in place gathering an orange spiked sphere, recoils on launch, topples target on blast.
   'pb-107': { key: 'focusBlast', windup: { lean: -0.18, shake: 1.2 }, strike: { lean: -0.22, hold: 0.28 }, target: { topple: 0.45 }, impactFrame: true, impactStyle: 'black', hideShotShadow: true },
-  // Bulk Up: stands in place, swells twice, tenses dark orange while flexing arm pillars rise.
-  'pb-031': { key: 'bulkUp', windup: { pump: { count: 2, amount: 0.22 } }, strike: { tint: 0xc87a4e, hold: 0.58 } },
+  // Bulk Up: stands in place, swells twice with foot dust and body sparks, then twin roaring orange pillars erupt.
+  'pb-031': { key: 'bulkUp', windup: { pump: { count: 2, amount: 0.34 } }, strike: { tint: 0xffc88a, hold: 0.58 } },
   // Body Press: flattens wide before leaping in a high belly-flop arc and squashing onto the target.
   'pb-023': { key: 'bodyPress', windup: { squash: 0.46 }, dash: { arc: 148, bellyFlop: true, lean: 1.35 }, strike: { squash: 0.46, lean: 0.28, hold: 0.36 }, impactFrame: true, impactStyle: 'black' },
-  // Rock Smash: stands in place, raises glowing fist and smashes a boulder whose chunks fly to the target.
-  'pb-233': { key: 'rockSmash', windup: { lean: -0.25 }, strike: { lean: 0.35, low: 0.22, hold: 0.35 }, hideShotShadow: true },
+  // Rock Smash: stands in place, rears up with glowing fist, slams a big boulder whose chunks soar high to the target.
+  'pb-233': { key: 'rockSmash', windup: { lean: -0.35, hop: 16 }, strike: { lean: 0.55, squash: 0.34, hold: 0.4 }, hideShotShadow: true },
   // Sacred Sword: stands back, dims scene and lifts camera for the colossal golden sword, then cleaves down.
   'pb-239': { key: 'sacredSword', windup: { camLift: 130 }, strike: { lean: 0.22, hold: 0.44 }, dim: 0.45, impactFrame: true, impactStyle: 'white', hideShotShadow: true },
   // ---- flying
@@ -791,74 +791,118 @@ export function createPbMoveScripts(api) {
 
     // ------------------------------------------------------------------ Bulk Up
     bulkUp: {
-      // One flexing orange muscular arm rising from (bx, by) on side `side` (-1 left, +1 right), flexing then extending.
-      flexArm(g, bx, by, side, flex, scale, alpha) {
+      // Organic roaring flame arm-pillar rising from (bx, by) on side `side` (-1 left, +1 right), flexing then shooting up & tapering off.
+      flexArm(g, bx, by, side, flex, liftOff, scale, alpha, age) {
         if (!g || alpha <= 0.02 || scale <= 0.05) return;
-        const h = (58 + 56 * (1 - flex)) * scale;
-        const w = 13 * scale;
+        const flick = Math.sin(age * 42 + side * 2) * 3;
+        const baseY = by - liftOff * 28;
+        const h = (56 + 68 * (1 - flex)) * scale * (1 - liftOff * 0.25);
+        const w = (15 - liftOff * 5) * scale;
         const bend = side * (16 * flex) * scale;
         const pts = [
-          bx - w * 0.85, by,
-          bx - w * 0.65 + bend * 0.5, by - h * 0.48,
-          bx - w * 0.9 + bend, by - h * 0.82,
-          bx - w * 0.45 + bend, by - h,
-          bx + w * 0.55 + bend, by - h,
-          bx + w * 0.85 + bend * 0.6, by - h * 0.78,
-          bx + w * 0.65 + bend * 0.2, by - h * 0.45,
-          bx + w * 0.85, by
+          bx - w * 1.15, baseY,
+          bx - w * 0.72 + bend * 0.4 + flick * 0.4, baseY - h * 0.42,
+          bx - w * 0.95 + bend - flick * 0.5, baseY - h * 0.76,
+          bx - w * 0.55 + bend, baseY - h * 0.96,
+          bx + bend * 0.9 + flick * 0.3, baseY - h * 1.06,
+          bx + w * 0.55 + bend, baseY - h * 0.94,
+          bx + w * 0.92 + bend * 0.5 + flick * 0.5, baseY - h * 0.72,
+          bx + w * 0.72 + bend * 0.2 - flick * 0.4, baseY - h * 0.42,
+          bx + w * 1.15, baseY
         ];
         g.top.poly(pts).fill({ color: 0x9c2808, alpha });
         const inner = [
-          bx - w * 0.52, by - 2,
-          bx - w * 0.35 + bend * 0.5, by - h * 0.48,
-          bx - w * 0.52 + bend, by - h * 0.82,
-          bx - w * 0.18 + bend, by - h * 0.95,
-          bx + w * 0.28 + bend, by - h * 0.95,
-          bx + w * 0.45 + bend * 0.5, by - h * 0.76,
-          bx + w * 0.35 + bend * 0.2, by - h * 0.45,
-          bx + w * 0.52, by - 2
+          bx - w * 0.78, baseY - 2,
+          bx - w * 0.45 + bend * 0.4, baseY - h * 0.42,
+          bx - w * 0.58 + bend, baseY - h * 0.78,
+          bx + bend * 0.9, baseY - h * 0.98,
+          bx + w * 0.55 + bend * 0.6, baseY - h * 0.74,
+          bx + w * 0.45 + bend * 0.2, baseY - h * 0.42,
+          bx + w * 0.78, baseY - 2
         ];
         g.top.poly(inner).fill({ color: 0xff7a18, alpha });
-        g.add.poly([bx - w * 0.18 + bend * 0.5, by - h * 0.15, bx + bend, by - h * 0.9, bx + w * 0.2 + bend * 0.5, by - h * 0.15]).fill({ color: 0xffe48a, alpha: alpha * 0.85 });
-        // Base flame flare at the bottom of the arm pillar.
-        flameSpike(g.top, bx, by + 2, 24 * scale, 16 * scale, 0xe84a0c, alpha * 0.92, side * 4);
-        flameSpike(g.add, bx, by + 2, 15 * scale, 9 * scale, 0xffd260, alpha * 0.85, side * 2);
+        g.add.poly([bx - w * 0.26 + bend * 0.4, baseY - h * 0.14, bx + bend * 0.9, baseY - h * 0.92, bx + w * 0.26 + bend * 0.4, baseY - h * 0.14]).fill({ color: 0xfff0a0, alpha: alpha * 0.9 });
+        // Wide flared fiery base crown at the foot of the pillar (dissolves cleanly as pillar lifts off).
+        if (liftOff < 0.7) {
+          const bf = (1 - liftOff / 0.7) * alpha;
+          flameSpike(g.top, bx, by + 3, 30 * scale, 22 * scale, 0xd83c08, bf * 0.95, side * 5 + flick * 0.5);
+          flameSpike(g.top, bx - side * 8, by + 4, 22 * scale, 14 * scale, 0xff7a18, bf * 0.9, -side * 3);
+          flameSpike(g.add, bx, by + 3, 18 * scale, 11 * scale, 0xffe478, bf * 0.88, side * 2);
+        }
       },
       cast({ follow, windup = 0.42 }) {
-        live(Math.max(0.2, windup), (h, t, dt, g) => {
+        const dustStops = [[0, [218, 210, 198], 0.85], [0.6, [170, 162, 152], 0.55], [1, [140, 134, 126], 0]];
+        live(Math.max(0.25, windup), (h, t, dt, g) => {
           const at = follow?.(); if (!at) return;
-          // Two rhythmic expanding ground dust rings as the body pumps up twice.
+          // Two rhythmic pumps: billowing grey-white dust-puff rings around feet + warm orange foot glow + pre-release shockwave.
           const pulse = (t * 2) % 1;
           const isSecond = t >= 0.5;
-          groundRing(g.top, at.x, at.footY + 3, 22 + 34 * pulse, isSecond ? 0xdc7a2c : 0x9c9288, 0.82 * (1 - pulse * 0.65), 5 - 2 * pulse);
-          if (!isSecond) groundRing(g.top, at.x, at.footY + 3, 14 + 24 * pulse, 0xc2b8ae, 0.55 * (1 - pulse), 3);
-          // Small orange starburst sparks popping on chest & arms.
-          const beat = Math.floor(h.age / 0.1);
-          for (let i = 0; i < 2; i++) {
-            const a = beat * 2.3 + i * 3.1;
-            const sx = at.x + Math.cos(a) * 14, sy = at.y - 6 + Math.sin(a) * 12;
-            spiky(g.add, sx, sy, 13 * (1 - (h.age % 0.1) / 0.1), 8, 0xff8a24, 0.92, a);
-            g.add.circle(sx, sy, 4).fill({ color: 0xfff4c4, alpha: 0.9 });
+          const ringR = 24 + 44 * pulse;
+          g.top.ellipse(at.x, at.footY + 3, 24, 10).fill({ color: 0xff8a24, alpha: 0.32 + 0.25 * t });
+          groundRing(g.top, at.x, at.footY + 3, ringR, isSecond ? 0xff9a38 : 0xe4dcd0, 0.92 * (1 - pulse * 0.55), 5.5 - 2 * pulse);
+          groundRing(g.top, at.x, at.footY + 3, 14 + 34 * pulse, 0xb8aea2, 0.72 * (1 - pulse * 0.6), 3.5);
+          // Billowing grey dust puffs emitted along the expanding foot ring on each pump.
+          h.acc = (h.acc ?? 0) + dt;
+          while (h.acc >= 0.045) {
+            h.acc -= 0.045;
+            for (let k = 0; k < 3; k++) {
+              const a = rand() * TAU;
+              spawnP({ shape: 'pxpuff', x: at.x + Math.cos(a) * (18 + 18 * pulse), y: at.footY + 2 + Math.sin(a) * 8,
+                vx: Math.cos(a) * 55, vy: Math.sin(a) * 20 - 12, size: 9 + rand() * 5, size1: 15 + rand() * 5,
+                stops: dustStops, add: false, drag: 0.88, life: 0.26 });
+            }
+          }
+          // Prominent repeated bright orange starburst sparkles popping across the flexing body.
+          const beat = Math.floor(h.age / 0.09);
+          const frac = (h.age % 0.09) / 0.09;
+          for (let i = 0; i < 3; i++) {
+            const a = beat * 2.1 + i * 2.1;
+            const sx = at.x + Math.cos(a) * 18, sy = at.y - 6 + Math.sin(a) * 16;
+            const sr = (18 + 6 * t) * (1 - frac * 0.55);
+            spiky(g.top, sx, sy, sr + 2, 8, 0xb83808, 0.88, a);
+            spiky(g.add, sx, sy, sr, 8, 0xff9828, 0.96, a);
+            g.add.circle(sx, sy, sr * 0.34).fill({ color: 0xffffff, alpha: 0.95 });
           }
         });
       },
       release({ follow }) {
-        live(0.66, (h, t, dt, g) => {
+        live(0.72, (h, t, dt, g) => {
           const at = follow?.(); if (!at) return;
-          const grow = Math.min(1, t / 0.16);
+          const grow = Math.min(1, t / 0.14);
+          const liftOff = t < 0.72 ? 0 : (t - 0.72) / 0.28;
           const fade = t < 0.78 ? 1 : 1 - (t - 0.78) / 0.22;
-          const flex = t < 0.22 ? 1 - t / 0.22 : 0;
-          // Wide orange ground aura ring under feet.
-          groundRing(g.top, at.x, at.footY + 3, 42 + 22 * Math.min(1, t * 1.6), 0xff8a24, 0.85 * fade, 4);
-          groundRing(g.add, at.x, at.footY + 3, 28 + 16 * Math.min(1, t * 1.6), 0xffe48a, 0.55 * fade, 2);
-          // Twin rising flexing orange arms flanking left and right of caster.
-          this.flexArm(g, at.x - 36, at.footY + 2, -1, flex, grow * (0.85 + 0.15 * fade), 0.95 * fade);
-          this.flexArm(g, at.x + 36, at.footY + 2, 1, flex, grow * (0.85 + 0.15 * fade), 0.95 * fade);
-          // Chest energy star flashes during early flex.
-          if (t < 0.45) {
-            const sk = 1 - t / 0.45;
-            spiky(g.add, at.x, at.y - 4, 24 * sk, 8, 0xff9a2c, 0.9 * sk, h.age * 14);
-            star4(g.add, at.x, at.y - 4, 15 * sk, 0xffffff, 0.95 * sk);
+          const flex = t < 0.2 ? 1 - t / 0.2 : 0;
+          // Wide outer pale shockwave ring + jagged fiery orange ground crown under the caster.
+          if (t < 0.55) {
+            const sk = t / 0.55;
+            groundRing(g.top, at.x, at.footY + 4, 48 + 56 * sk, 0xe8dfd0, 0.82 * (1 - sk), 4.5 - 2 * sk);
+          }
+          groundRing(g.top, at.x, at.footY + 3, 44 + 14 * Math.min(1, t * 2), 0xff7a18, 0.88 * fade, 4);
+          // Jagged fiery crown teeth ring at ground level during eruption.
+          if (t < 0.65) {
+            const cf = 1 - t / 0.65;
+            for (let i = 0; i < 8; i++) {
+              const a = (i / 8) * TAU + 0.2;
+              flameSpike(g.top, at.x + Math.cos(a) * 34, at.footY + 4 + Math.sin(a) * 14, 16 * cf, 7, 0xff6e14, 0.85 * cf, Math.cos(a) * 4);
+            }
+          }
+          // Twin roaring orange flame arm-pillars flanking left and right, tapering upward on exit.
+          this.flexArm(g, at.x - 36, at.footY + 2, -1, flex, liftOff, grow, 0.96 * fade, h.age);
+          this.flexArm(g, at.x + 36, at.footY + 2, 1, flex, liftOff, grow, 0.96 * fade, h.age);
+          // Multiple large starburst flashes across the body during early eruption.
+          if (t < 0.5) {
+            const sk = 1 - t / 0.5;
+            const pulse = 0.75 + 0.25 * Math.sin(h.age * 48);
+            spiky(g.add, at.x, at.y - 4, 28 * sk * pulse, 9, 0xff8a1c, 0.92 * sk, h.age * 14);
+            spiky(g.add, at.x + 12, at.y - 16, 18 * sk * pulse, 8, 0xffb840, 0.88 * sk, h.age * 19 + 1);
+            spiky(g.add, at.x - 10, at.y + 4, 16 * sk * pulse, 8, 0xff9828, 0.85 * sk, h.age * 17 + 2);
+            star4(g.add, at.x, at.y - 4, 17 * sk, 0xffffff, 0.96 * sk);
+          }
+          // Brief pair of small dark dust flecks left at the two pillar bases as the flames vanish.
+          if (t > 0.75) {
+            const df = (1 - t) / 0.25;
+            g.top.ellipse(at.x - 36, at.footY + 3, 7, 3.5).fill({ color: 0x5c544a, alpha: 0.65 * df });
+            g.top.ellipse(at.x + 36, at.footY + 3, 7, 3.5).fill({ color: 0x5c544a, alpha: 0.65 * df });
           }
         });
       },
@@ -922,75 +966,100 @@ export function createPbMoveScripts(api) {
     rockSmash: {
       rockPoly(g, x, y, r, alpha = 1) {
         if (!g || alpha <= 0.02) return;
-        const pts = [x - r, y + r * 0.35, x - r * 0.82, y - r * 0.55, x - r * 0.15, y - r * 0.92, x + r * 0.68, y - r * 0.62, x + r, y + r * 0.25, x + r * 0.52, y + r * 0.68, x - r * 0.48, y + r * 0.68];
-        g.poly(pts).fill({ color: 0x3b352e, alpha });
-        const inner = [x - r * 0.86, y + r * 0.28, x - r * 0.7, y - r * 0.46, x - r * 0.12, y - r * 0.78, x + r * 0.58, y - r * 0.5, x + r * 0.86, y + r * 0.2, x + r * 0.44, y + r * 0.54, x - r * 0.4, y + r * 0.54];
-        g.poly(inner).fill({ color: 0x8e806e, alpha });
-        g.poly([x - r * 0.64, y - r * 0.42, x - r * 0.1, y - r * 0.72, x + r * 0.48, y - r * 0.46, x, y - r * 0.12]).fill({ color: 0xb8aa96, alpha });
+        const pts = [x - r, y + r * 0.35, x - r * 0.84, y - r * 0.58, x - r * 0.14, y - r * 0.96, x + r * 0.72, y - r * 0.64, x + r, y + r * 0.26, x + r * 0.54, y + r * 0.72, x - r * 0.5, y + r * 0.72];
+        g.poly(pts).fill({ color: 0x352e26, alpha });
+        const inner = [x - r * 0.84, y + r * 0.26, x - r * 0.7, y - r * 0.46, x - r * 0.12, y - r * 0.8, x + r * 0.6, y - r * 0.52, x + r * 0.84, y + r * 0.2, x + r * 0.44, y + r * 0.56, x - r * 0.42, y + r * 0.56];
+        g.poly(inner).fill({ color: 0x8d7e6a, alpha });
+        g.poly([x - r * 0.64, y - r * 0.42, x - r * 0.1, y - r * 0.74, x + r * 0.5, y - r * 0.46, x, y - r * 0.1]).fill({ color: 0xc2b39c, alpha });
+        g.poly([x - r * 0.4, y + r * 0.15, x + r * 0.38, y + r * 0.15, x + r * 0.42, y + r * 0.52, x - r * 0.38, y + r * 0.52]).fill({ color: 0x5c5042, alpha });
       },
       cast({ follow, angle = 0, windup = 0.3 }) {
         const c = Math.cos(angle) >= 0 ? 1 : -1;
-        // Growing spiky orange starburst held above the raised fist.
-        live(Math.max(0.16, windup), (h, t, dt, g) => {
+        // Growing spiky orange starburst held high above the raised fist.
+        live(Math.max(0.18, windup), (h, t, dt, g) => {
           const at = follow?.(); if (!at) return;
-          const sx = at.x + c * 4, sy = at.y - 42;
-          const r = 10 + 18 * t;
-          spiky(g.top, sx, sy, r + 3, 8, 0x8a2808, 0.9, h.seed);
-          spiky(g.top, sx, sy, r, 8, 0xff841c, 0.95, h.seed);
-          g.add.circle(sx, sy, r * 0.42).fill({ color: 0xfff2b8, alpha: 0.95 });
+          const sx = at.x + c * 6, sy = at.y - 46;
+          const r = 12 + 20 * t;
+          spiky(g.top, sx, sy, r + 4, 8, 0x7a2206, 0.94, h.seed);
+          spiky(g.top, sx, sy, r, 8, 0xff841c, 0.96, h.seed);
+          g.add.circle(sx, sy, r * 0.44).fill({ color: 0xfff4c0, alpha: 0.96 });
         });
       },
       release({ follow, angle = 0 }) {
         const at0 = follow?.(); if (!at0) return;
         const c = Math.cos(angle), s = Math.sin(angle);
-        const bx = at0.x + c * 38, by = at0.footY - 6 + s * 16;
-        // Big boulder appears in front of caster, cracks under the smash with orange flash, then shatters.
-        live(0.32, (h, t, dt, g) => {
-          const shrink = t < 0.45 ? 1 : 1 - (t - 0.45) / 0.55;
-          this.rockPoly(g.top, bx, by - 12, 26 * shrink, 0.96 * Math.min(1, shrink * 1.4));
-          if (t < 0.55) {
-            const fk = 1 - t / 0.55;
-            spiky(g.add, bx, by + 2, 24 * fk, 8, 0xff881c, 0.9 * fk, h.seed);
+        const bx = at0.x + c * 40, by = at0.footY - 4 + s * 16;
+        // Large faceted boulder erupts in front of caster, takes a fiery orange slam flash beneath it, and shatters.
+        live(0.38, (h, t, dt, g) => {
+          const shrink = t < 0.5 ? 1 : 1 - (t - 0.5) / 0.5;
+          this.rockPoly(g.top, bx, by - 16, 35 * shrink, 0.98 * Math.min(1, shrink * 1.45));
+          if (t < 0.65) {
+            const fk = 1 - t / 0.65;
+            spiky(g.top, bx, by + 3, 38 * fk, 9, 0xd84610, 0.92 * fk, h.seed);
+            spiky(g.add, bx, by + 3, 26 * fk, 9, 0xffb838, 0.95 * fk, h.seed);
+            groundRing(g.top, bx, by + 5, 22 + 34 * (1 - fk), 0xff8c24, 0.78 * fk, 3.5);
           }
         });
-        dust(bx, by + 4, 7, [154, 138, 118], 90);
-        pebbles(bx, by + 6, 12, 76, [104, 92, 78], 4.5, 5);
-        addDecal({ x: bx, y: by + 6, kind: 'crack', radius: 34, pal: 'earth', life: 4.5 });
+        dust(bx, by + 4, 11, [164, 146, 124], 115);
+        pebbles(bx, by + 6, 16, 108, [96, 84, 70], 4.5, 7);
+        addDecal({ x: bx, y: by + 6, kind: 'crack', radius: 54, pal: 'earth', life: 4.5 });
       },
       projectile({ follow, angle = 0, life = 1.2 }) {
         const chunks = [
-          { dx: 0, dy: 0, peak: 58, r: 12 },
-          { dx: -22, dy: -8, peak: 44, r: 9.5 },
-          { dx: 18, dy: 6, peak: 34, r: 8.5 },
-          { dx: -10, dy: 10, peak: 26, r: 7.5 }
+          { dx: 4, dy: -4, peak: 98, r: 17 },
+          { dx: -24, dy: -10, peak: 76, r: 14.5 },
+          { dx: 20, dy: 8, peak: 62, r: 13 },
+          { dx: -12, dy: 12, peak: 46, r: 11.5 }
         ];
+        const trailStops = [[0, [176, 162, 142], 0.65], [1, [150, 138, 122], 0]];
         live(life, (h, t, dt, g) => {
           const at = follow?.(); if (!at) { h.age = h.life; return; }
           const a = at.angle ?? angle, c = Math.cos(a), s = Math.sin(a), nx = -s, ny = c;
-          const arcPhase = Math.sin(Math.min(1, h.age / 0.42) * Math.PI);
+          const arcPhase = Math.sin(Math.min(1, h.age / 0.48) * Math.PI);
           for (const ch of chunks) {
             const gx = at.x + c * ch.dx + nx * ch.dy;
             const gy = (at.footY ?? (at.y + 12)) + s * ch.dx + ny * ch.dy;
-            const lift = Math.max(4, ch.peak * arcPhase);
-            // Crisp ground shadow directly under each airborne rock chunk.
-            g.top.ellipse(gx, gy + 3, ch.r * 0.95, ch.r * 0.4).fill({ color: 0x1e1a16, alpha: 0.42 });
-            this.rockPoly(g.top, gx, gy - lift, ch.r, 0.96);
+            const lift = Math.max(6, ch.peak * arcPhase);
+            // Crisp ground shadow directly under each high-arcing angular boulder.
+            g.top.ellipse(gx, gy + 4, ch.r * 1.05, ch.r * 0.42).fill({ color: 0x1e1a16, alpha: 0.45 });
+            this.rockPoly(g.top, gx, gy - lift, ch.r, 0.98);
+          }
+          h.acc = (h.acc ?? 0) + dt;
+          while (h.acc >= 0.04) {
+            h.acc -= 0.04;
+            spawnP({ shape: 'pxpuff', x: at.x - c * 12, y: (at.footY ?? at.y) - 68 * arcPhase, vx: -c * 30, vy: 12,
+              size: 8, size1: 14, stops: trailStops, add: false, drag: 0.9, life: 0.22 });
           }
         });
       },
       hit({ x, y, groundY }) {
-        whiteBloom(x, y - 4, 18, 42, 0.14);
-        sparks(x, y - 6, -Math.PI / 2, 10, 'fire', 240, 3.0);
-        dust(x, groundY + 2, 8, [162, 146, 124], 110);
-        for (let i = 0; i < 8; i++) {
+        // Bright warm yellow-orange impact starburst + bouncing rock chunks + persistent rubble piles & wide fissure.
+        live(0.36, (h, t, dt, g) => {
+          const fade = 1 - t;
+          const r = 34 + 26 * Math.min(1, t * 2.2);
+          spiky(g.top, x, y - 4, r + 4, 10, 0xc84e10, 0.9 * fade, h.seed);
+          spiky(g.add, x, y - 4, r, 10, 0xffd24a, 0.95 * fade, h.seed);
+          g.add.circle(x, y - 4, 16 * fade).fill({ color: 0xffffff, alpha: 0.96 * fade });
+          groundRing(g.top, x, groundY + 4, 24 + 44 * t, 0xd8a868, 0.8 * fade, 3.5);
+        });
+        dust(x, groundY + 2, 11, [168, 150, 128], 130);
+        for (let i = 0; i < 12; i++) {
           const a = rand() * TAU;
-          spawnP({ shape: 'shard', x, y, vx: Math.cos(a) * (90 + rand() * 110), vy: Math.sin(a) * 55 - 45,
-            vz: 100 + rand() * 90, gravity: 440, size: 6 + rand() * 4, size1: 3, rot: a, vrot: (rand() - 0.5) * 12,
-            stops: [[0, [142, 128, 110], 0.95], [1, [96, 84, 70], 0]], add: false, life: 0.45 + rand() * 0.15 });
+          spawnP({ shape: 'shard', x, y, vx: Math.cos(a) * (100 + rand() * 140), vy: Math.sin(a) * 65 - 55,
+            vz: 140 + rand() * 120, gravity: 460, size: 8 + rand() * 6, size1: 4, rot: a, vrot: (rand() - 0.5) * 14,
+            stops: [[0, [142, 128, 110], 0.98], [0.7, [104, 92, 76], 0.92], [1, [80, 70, 58], 0]], add: false, life: 0.55 + rand() * 0.18 });
         }
-        pebbles(x, groundY + 6, 12, 96, [106, 94, 80], 4.5, 5);
-        addDecal({ x, y: groundY + 8, kind: 'crack', radius: 36, pal: 'earth', life: 4.5 });
-        dizzy(x, y, 0.5);
+        // Persistent dark rubble piles around the target lasting 4.5 s.
+        live(4.5, (h, t, dt, g) => {
+          const fade = t < 0.82 ? 1 : 1 - (t - 0.82) / 0.18;
+          this.rockPoly(g.top, x - 34, groundY + 4, 11, 0.88 * fade);
+          this.rockPoly(g.top, x + 36, groundY + 6, 10, 0.88 * fade);
+          this.rockPoly(g.top, x - 18, groundY + 13, 8.5, 0.85 * fade);
+          this.rockPoly(g.top, x + 22, groundY - 4, 8, 0.82 * fade);
+        });
+        pebbles(x, groundY + 6, 18, 130, [96, 84, 70], 4.5, 7);
+        addDecal({ x, y: groundY + 8, kind: 'crack', radius: 52, pal: 'earth', life: 4.5 });
+        dizzy(x, y, 0.55);
       }
     },
 

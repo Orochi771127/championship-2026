@@ -261,13 +261,13 @@ export const PB_MOVE_TUNING = Object.freeze({
   // Aura Sphere: 0.6 s blue orb charge at place, straight tapered-tail orb, 12-point blue starburst + wide ground ring.
   'pb-013': Object.freeze({ type: 'BOLT', speed: 660, windup: 0.6, knockback: 340, noHoming: true, radius: 18 }),
   // Focus Blast: chest orange orb charge, sonic-boom rings, fiery spiky blast + scattered pebbles.
-  'pb-107': Object.freeze({ type: 'BOLT', speed: 620, windup: 0.36, knockback: 280, noHoming: true, radius: 22 }),
+  'pb-107': Object.freeze({ type: 'BOLT', speed: 620, windup: 0.36, knockback: 280, noHoming: true, pierce: 0, radius: 22 }),
   // Bulk Up: stationary self-buff, two rhythmic swells, twin rising flexing orange arms, no attack.
   'pb-031': Object.freeze({ type: 'NOVA', windup: 0.42, selfBuff: Object.freeze({ atk: 1, spd: 0 }) }),
   // Body Press: dramatic squash-flatten coil, high belly-flop arc with target shadow, flattened landing + concentric rings.
   'pb-023': Object.freeze({ singleDash: true, windup: 0.22, speed: 560, distance: 340, lungeKnock: 0, standOff: 0.7 }),
   // Rock Smash: stationary fist-smash onto a boulder in front, lobbing shadowed rock chunks across the gap.
-  'pb-233': Object.freeze({ type: 'BOLT', speed: 600, windup: 0.3, knockback: 90, noHoming: true, radius: 22 }),
+  'pb-233': Object.freeze({ type: 'BOLT', speed: 560, windup: 0.3, knockback: 180, noHoming: true, pierce: 0, radius: 24 }),
   // Sacred Sword: stationary caster raises a colossal golden sword overhead and cleaves straight down onto a distant foe.
   'pb-239': Object.freeze({ type: 'BOLT', speed: 2200, windup: 0.64, knockback: 45, noHoming: true, radius: 34 })
 });
