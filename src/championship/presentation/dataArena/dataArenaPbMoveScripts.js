@@ -469,10 +469,16 @@ export function createPbMoveScripts(api) {
           crescent(g.top, x + c * 6, y, 96, c, 0x5a98ff, 0.9 * fade, 14);
           crescent(g.add, x + c * 4, y, 78, c, 0xdcecff, 0.8 * fade * (0.6 + 0.4 * Math.sin(h.age * 44)), 6);
         });
-        // Paralysis: jagged yellow sparks jump on the struck body.
+        // Paralysis: the struck body flickers yellow-white as it slides off, with jagged bolts jumping over it.
+        const bolt = [-15, -3, -3, -8, -1, -2, 15, -7, 4, 5, 1, -1, -10, 7];
         live(0.9, (h, t, dt, g) => {
-          if (Math.floor(h.age / 0.06) % 2) return;
-          for (let i = 0; i < 3; i++) { const a = h.seed + i * 2.1 + Math.floor(h.age / 0.12), sx = x + Math.cos(a) * 22, sy = y + Math.sin(a) * 24; g.add.poly([sx - 9, sy - 2, sx - 2, sy - 6, sx, sy - 1, sx + 9, sy - 5, sx + 3, sy + 3, sx, sy - 1, sx - 4, sy + 5]).fill({ color: 0xffe14a, alpha: 0.95 * (1 - t * 0.5) }); }
+          const cx = x + c * 70 * (1 - Math.exp(-5.5 * h.age)), fade = 1 - t * 0.4;
+          if (Math.floor(h.age / 0.07) % 2 === 0) g.top.ellipse(cx, y, 27, 31).fill({ color: 0xfff2a0, alpha: 0.4 * fade });
+          for (let i = 0; i < 3; i++) {
+            const a = h.seed + i * 2.1 + Math.floor(h.age / 0.1) * 1.7, bx = cx + Math.cos(a) * 24, by = y + Math.sin(a) * 26, ca = Math.cos(a * 3), sa = Math.sin(a * 3), pts = [];
+            for (let j = 0; j < bolt.length; j += 2) pts.push(bx + bolt[j] * ca - bolt[j + 1] * sa, by + bolt[j] * sa + bolt[j + 1] * ca);
+            g.top.poly(pts).fill({ color: 0xffd81e, alpha: fade });
+          }
         });
         dust(x + c * 14, groundY + 2, 4, [176, 150, 118], 80);
         addDecal({ x: x - c * 26, y: groundY + 8, kind: 'crack', radius: 12, pal: 'earth', life: 1.6 });
