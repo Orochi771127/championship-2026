@@ -464,6 +464,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     let actionRequest = null, actionElapsed = 0, motion = null;
     // A hard knockback lifts the body in a short arc (2026-11-27 blind review: "a short knockback arc").
     let knockPeak = 0, knockStart = -1;
+    // The staged move this body is acting out (PB_MOVE_BY_MOVE_20261127).
+    let stage = { id: null };
     shadow.scale.set((ROLE_HEIGHT[role] / 64) * 0.9, (ROLE_HEIGHT[role] / 64) * 0.75);
     // Pure arcade fighting-game white hit-flash overlay (PixiJS tint=0xffffff is normal color, NOT white!)
     const flashSprite = new PIXI.Sprite(sprite.texture);
@@ -628,7 +630,9 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         let scriptTint = null;
         // 2026-11-27 blind review: an authored source pose still moves its body (pull back, hurl,
         // chop); only its squash and lean are halved so the drawn pose keeps its shape.
-        if (motion && !reducedMotion) {
+        // A move staged one at a time (PB_MOVE_BY_MOVE_20261127) acts with its own body cues below instead.
+        const staged = body.action?.moveId ? pbMoveBody(body.action.moveId) : null;
+        if (motion && !reducedMotion && !staged) {
           const authoredPose = Boolean(motion.preserveAuthoredPose);
           const poseGain = authoredPose ? 0.5 : 1;
           const a = body.action;
@@ -652,15 +656,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           // A guard-breaking blow is an overhead chop: raise on the windup, drop on the contact.
           const chop = spec?.v2Archetype === "GUARD_BREAK_SLAM";
           const big = Boolean(a?.ultimate);
-          // Move-by-move body cues (PB_MOVE_BY_MOVE_20261127): this move's own staging of the drawn body.
-          const cue = a?.moveId ? pbMoveBody(a.moveId) : null;
           if (a) {
             if (a.releasedAt === null) {
               const p = clamp((state.time - a.startedAt) / Math.max(0.01, a.windup), 0, 1);
               const ease = p * p * (3 - 2 * p);
-              if (cue?.windupTint) scriptTint = cue.windupTint;
-              if (cue?.windupShake) sprite.x += Math.sin(elapsed * 95) * cue.windupShake * (0.4 + 0.6 * ease);
-              if (cue?.windupCrouch) { sprite.scale.y *= 1 - cue.windupCrouch * ease; sprite.scale.x *= 1 + cue.windupCrouch * 0.45 * ease; }
               // Windup anticipation: pull back opposite the aim, rise, lean back (an ultimate winds up deeper).
               const pull = (hasDash ? -10 : big ? -16 : -11) * ease;
               sprite.x += cosA * pull;
@@ -669,20 +668,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
                 sprite.scale.x *= 1 + (big ? 0.16 : 0.13) * ease * poseGain;
                 sprite.scale.y *= 1 - (big ? 0.14 : 0.12) * ease * poseGain;
               }
-              if (hasTilt) actionTilt = -dirSign * (cue?.windupLean ?? (chop ? 0.34 : big ? 0.24 : 0.17)) * ease * (cue?.windupLean ? 1 : poseGain);
+              if (hasTilt) actionTilt = -dirSign * (chop ? 0.34 : big ? 0.24 : 0.17) * ease * poseGain;
               if (hasVanish && p > 0.45) actionAlphaMult = 0.35;
             } else {
               const p = clamp((state.time - a.releasedAt) / Math.max(0.01, a.recovery), 0, 1);
               const arc = Math.sin(Math.PI * p);
               const snap = Math.max(0, 1 - (state.time - a.releasedAt) / 0.14);
-              if (cue && body.lunge) {
-                if (cue.dashTint) scriptTint = cue.dashTint;
-                if (cue.dashHide) actionAlphaMult = 0;
-                if (cue.dashLow) { sprite.scale.y *= 1 - cue.dashLow; sprite.scale.x *= 1 + cue.dashLow * 0.6; sprite.y += 5; }
-              } else if (cue?.afterHop && scriptHops.has(body.id)) {
-                // Still the fireball while it bounces up off the struck body; the drawn body returns on landing.
-                actionAlphaMult = 0;
-              }
               // Release follow-through along true 360° / 8-direction vector!
               if (hasDash) {
                 // The body already stands at arm's reach (simulation): the follow-through is a short lean in.
@@ -726,11 +717,53 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
                 actionTilt = poseGain * (chop ? dirSign * 0.5 * Math.max(snap, arc * 0.5)
                   : hasRecoil && !big ? (-dirSign * 0.28 * arc) : (dirSign * (pose === "spin" ? 0.44 : big ? 0.4 : 0.34) * arc));
               }
-              if (hasAfterimage && !cue?.dashHide && p < 0.78 && frameCount % 2 === 0) {
+              if (hasAfterimage && p < 0.78 && frameCount % 2 === 0) {
                 const fxTint = relayLook(a.moveId, body.team)?.tint ?? 0x6ff7ff;
                 afterimage(container.position.x + sprite.x, container.position.y + sprite.y, facing, sprite, fxTint);
               }
             }
+          }
+        }
+        // Move-by-move body staging: windup pose, how the body crosses the gap (low, hidden, in an arc),
+        // the held strike pose at the contact point, then the hop back. Drawn offsets only; the
+        // simulation owns the real position (the body is drawn at its contact point until it lets go).
+        if (staged && !reducedMotion && state.gameMode === 'RELAY') {
+          const sa = body.action;
+          if (stage.id !== sa.id) stage = { id: sa.id, dashTotal: 0, endAt: null, ax: body.x, ay: body.y, lift: 0, liftEnd: 0 };
+          const sAng = sa.angle ?? (facing > 0 ? 0 : Math.PI), sCos = Math.cos(sAng), sDir = sCos >= 0 ? 1 : -1;
+          const low = (amount) => { sprite.scale.y *= 1 - amount; sprite.scale.x *= 1 + amount * 0.5; };
+          if (sa.releasedAt === null) {
+            const p = clamp((state.time - sa.startedAt) / Math.max(0.01, sa.windup), 0, 1), e = p * p * (3 - 2 * p), w = staged.windup ?? {};
+            if (w.tint) scriptTint = w.tint;
+            if (w.shake) sprite.x += Math.sin(elapsed * 95) * w.shake * (0.4 + 0.6 * e);
+            if (w.crouch) low(w.crouch * e);
+            if (w.lean) actionTilt = -sDir * w.lean * e;
+            if (w.hop) { stage.lift = w.hop * e; sprite.y -= stage.lift; actionHop += stage.lift; }
+          } else if (body.lunge && body.lunge.actionId === sa.id) {
+            const d = staged.dash ?? {};
+            if (!stage.dashTotal) { stage.dashTotal = Math.max(1, body.lunge.left); stage.liftStart = stage.lift; }
+            const q = clamp(1 - body.lunge.left / stage.dashTotal, 0, 1);
+            if (d.tint) scriptTint = d.tint;
+            if (d.hide) actionAlphaMult = 0;
+            if (d.low) low(d.low);
+            if (d.lean) actionTilt = sDir * d.lean;
+            // Height through the dash: the windup hop carried down, a leap arc, or a dive from a height.
+            stage.lift = (stage.liftStart ?? 0) * (1 - q) + (d.arc ? Math.sin(Math.PI * q) * d.arc : 0) + (d.dive ? d.dive * (1 - q) : 0);
+            sprite.y -= stage.lift; actionHop += stage.lift;
+            if (d.afterimage !== undefined && !d.hide && frameCount % 2 === 0) afterimage(container.position.x + sprite.x, container.position.y + sprite.y, facing, sprite, d.afterimage);
+            stage.ax = body.x; stage.ay = body.y;
+          } else if (stage.dashTotal || sa.releasedAt !== null) {
+            if (stage.endAt === null) { stage.endAt = state.time; stage.liftEnd = stage.lift; if (!stage.dashTotal) { stage.ax = body.x; stage.ay = body.y; } }
+            const t = state.time - stage.endAt, st = staged.strike ?? {}, af = staged.after ?? {};
+            const hold = st.hold ?? 0, hopTime = af.time ?? 0;
+            if (t < hold + hopTime) {
+              const k = t < hold ? 0 : clamp((t - hold) / Math.max(0.01, hopTime), 0, 1), ke = k * k * (3 - 2 * k);
+              sprite.x += (stage.ax - body.x) * (1 - ke); sprite.y += (stage.ay - body.y) * (1 - ke);
+              if (t < hold) { if (st.lean) actionTilt = sDir * st.lean; if (st.low) low(st.low); if (st.tint) scriptTint = st.tint; }
+              else if (af.hop) { const h = Math.sin(Math.PI * k) * af.hop; sprite.y -= h; actionHop += h; }
+            }
+            const settle = stage.liftEnd * Math.max(0, 1 - t / 0.07);
+            if (settle > 0) { sprite.y -= settle; actionHop += settle; }
           }
         }
         if (flash > 0.02 && !reducedMotion) {
@@ -1456,7 +1489,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               elementFx.surfWave?.({ follow: bodyFoot(rider), angle: event.angle ?? 0, moveId: event.moveId, durationSec: 0.65 });
             } else {
               const dasher = casterBody(event); let dashGrace = 3;
-              const hopCue = pbMoveBody(event.moveId)?.afterHop ?? 0, hopAngle = event.angle ?? 0;
+              const hopCue = pbMoveBody(event.moveId)?.fireballHop ?? 0, hopAngle = event.angle ?? 0;
               elementFx.release({ x: at.x, y: at.y, angle: event.angle ?? 0, moveId: event.moveId, speciesId: casterSpecies(event), melee: event.moveType === 'LUNGE',
                 follow: () => {
                   if (!dasher || dasher.hp <= 0) { scriptHops.delete(dasher?.id); return null; }

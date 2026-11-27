@@ -84,7 +84,6 @@ const NEUTRAL_INPUT = Object.freeze({ moveX: 0, moveY: 0, aimX: null, aimY: null
 // SURVIVAL (P4 prototype, 2026-11-16): the harbor match with a closing storm and eleven rival tamers.
 export const DATA_ARENA_MODES = Object.freeze(["TOURNAMENT", "HARBOR", "RELAY", "SURVIVAL"]);
 
-const SINGLE_DASH_MOVES = new Set(['pb-094', 'pb-098', 'pb-099']);
 export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PARTNERS[0].id, quality = "high", mode = "HARBOR", moveSystem = "legacy", controlMode = "MANUAL", aiDifficulty = null, aiSettings = null, tacticalArt = null, relayLoadouts = {}, relayReserveId = null, relayThirdId = null, relayCompanionSpecies = [], relayArenaId = null, portrait = false, partnerPower = {}, relayBurstPlans = {}, relayManualBurst = false, rivalBoostPercent = 0, relayRivals = null, relayBuffPicks = false } = {}) {
   const v2Mode = mode === "RELAY" && normalizeMoveSystem(moveSystem) === "v2";
   const pbRankAi = v2Mode || (mode === "RELAY" && aiDifficulty !== null);
@@ -1642,14 +1641,15 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const v2Pull = v2?.pullForce ?? 0;
     const v2Rebound = Boolean(v2?.rebound);
     // PB_MOVE_BY_MOVE_20261127: moves staged from a single-dash reference strike once (no follow-up dash).
-    const v2SecondDash = Boolean(v2?.v2Archetype === "MULTI_DASH") && !SINGLE_DASH_MOVES.has(moveId);
+    const v2SecondDash = Boolean(v2?.v2Archetype === "MULTI_DASH") && !move.singleDash;
     switch (move.type) {
       case "BOLT": case "WAVE": shootBolt(caster, move, angle, { actionId, moveId, arenaElement, attackElement, damageBonus, moveType: move.type, isBasic, guardBreak: v2GuardBreak, homing: move.type === "BOLT" ? v2Homing : 0, knockback: v2?.v2Archetype === "DRAG_WAVE" ? Math.max(move.knockback ?? 0, 340) : (move.knockback ?? 0) }); break;
       case "SPREAD": case "LANCE":
         for (let i = 0; i < move.count; i++) shootBolt(caster, move, angle - move.spread / 2 + (move.spread * i) / (move.count - 1), { actionId, moveId, arenaElement, attackElement, damageBonus, moveType: move.type, isBasic, guardBreak: v2GuardBreak });
         break;
       case "LUNGE":
-        caster.lunge = { actionId, moveId, arenaElement, attackElement, isBasic, guardBreak: v2GuardBreak, rebound: v2Rebound, secondDash: v2SecondDash, dirX: Math.cos(angle), dirY: Math.sin(angle), left: move.distance, speed: move.speed, width: move.width,
+        caster.lunge = { actionId, moveId, arenaElement, attackElement, isBasic, guardBreak: v2GuardBreak, rebound: v2Rebound, secondDash: v2SecondDash,
+          knock: move.lungeKnock, reboundSpeed: move.reboundSpeed, passThrough: Boolean(move.passThrough), dirX: Math.cos(angle), dirY: Math.sin(angle), left: move.distance, speed: move.speed, width: move.width,
           damage: move.damage * damageScale, hits: new Set() };
         if (caster === player && move.invulnerable) { player.invulnerable = Math.max(player.invulnerable, move.distance / move.speed + 0.08); player.dashGrace = player.invulnerable; player.perfectThisDash = false; }
         if (isRival(caster)) caster.invulnerable = Math.max(caster.invulnerable ?? 0, 0.1);
@@ -2189,14 +2189,20 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         const hit=strike(target, lunge.damage, "LUNGE", { slow: 0.3, slowSeconds: 0.6 }, target.x, target.y, lunge.arenaElement, lunge.attackElement, lunge.isBasic, { guardBreak: Boolean(lunge.guardBreak), moveId: lunge.moveId });
         if (hit) confirmMoveContact(beforeContact, oldHp, target, lunge, caster.id, target.x, target.y, Math.atan2(lunge.dirY, lunge.dirX));
         if(relayMode&&!hit)continue;
-        launch(target, lunge.dirX, lunge.dirY, DATA_ARENA_ENERGY.launch.LUNGE);
+        launch(target, lunge.dirX, lunge.dirY, lunge.knock ?? DATA_ARENA_ENERGY.launch.LUNGE);
         // RELAY: a dash that connects stops at arm's reach instead of running into the body
         // (2026-11-26 blind review: "the caster ends clipped inside the target").
-        if (relayMode && !lunge.rebound && !target.lunge) {
+        if (relayMode && lunge.passThrough && !target.lunge) {
+          // The dash carries on through the struck body and ends a body-width beyond it.
+          const beyond = ((target.radius ?? 20) + (caster.radius ?? 18)) * 1.9;
+          lunge.left = Math.max(0, (target.x - caster.x) * lunge.dirX + (target.y - caster.y) * lunge.dirY) + beyond;
+        } else if (relayMode && !lunge.rebound && !target.lunge) {
           // Drawn bodies are wider than their hit circles: stand a body-width off (2026-11-27 review: sprites overlapped).
           const reach = ((target.radius ?? 20) + (caster.radius ?? 18)) * 1.8, gap = distance(target.x, target.y, caster.x, caster.y);
           if (gap < reach && gap > 0.01) { caster.x = target.x - (target.x - caster.x) / gap * reach; caster.y = target.y - (target.y - caster.y) / gap * reach; }
           lunge.left = 0;
+          // A staged move hops back off the target after the blow.
+          if (lunge.reboundSpeed) launch(caster, -lunge.dirX, -lunge.dirY, lunge.reboundSpeed);
         }
         if (lunge.rebound) {
           // UTURN_STRIKE: strike then spring back cleanly to safe spacing!

@@ -207,9 +207,30 @@ export function pb324ToRelayMove(id, ultimate = false) {
     ...(onTerrain ? { onTerrain } : {}),
     ...(freezeWater ? { freezeWater } : {}),
     ...(onHit ? { onHit } : {}),
-    pb324: m
+    pb324: m,
+    ...(PB_MOVE_TUNING[id] ?? {})
   };
 }
+
+// PB_MOVE_BY_MOVE_20261127: per-move rule tuning taken from watching each reference move (beat sheets
+// are kept outside the repo). A move listed here was staged one at a time:
+//   singleDash   strikes once (no follow-up dash of the multi-dash archetype);
+//   speed        dash speed in px/s (a "blink" punch crosses the gap in under 0.1 s);
+//   windup       seconds the caster stands before moving;
+//   lungeKnock   how hard the struck body is pushed (default 340; 0 = pinned in place);
+//   reboundSpeed the caster is pushed back off the target after the blow (about speed / 5.5 px);
+//   passThrough  the dash carries on through the target and ends on its far side.
+export const PB_MOVE_TUNING = Object.freeze({
+  'pb-094': Object.freeze({ singleDash: true }),
+  'pb-098': Object.freeze({ singleDash: true }),
+  'pb-099': Object.freeze({ singleDash: true }),
+  'pb-170': Object.freeze({ singleDash: true, speed: 2600, windup: 0.2, lungeKnock: 80, reboundSpeed: 400 }),
+  'pb-154': Object.freeze({ singleDash: true, windup: 0.12, lungeKnock: 40, reboundSpeed: 210 }),
+  'pb-042': Object.freeze({ singleDash: true, windup: 0.16, speed: 1000, lungeKnock: 70 }),
+  'pb-029': Object.freeze({ singleDash: true, windup: 0.25, lungeKnock: 400 }),
+  'pb-167': Object.freeze({ singleDash: true, windup: 0.15, speed: 2600, lungeKnock: 20 }),
+  'pb-003': Object.freeze({ singleDash: true, windup: 0.12, speed: 1500, lungeKnock: 200, passThrough: true })
+});
 
 export function pb324MoveName(id, locale = "zh-Hant") {
   const m = PB324_BY_ID[id];
