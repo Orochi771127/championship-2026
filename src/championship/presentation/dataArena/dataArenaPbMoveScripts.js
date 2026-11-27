@@ -435,29 +435,46 @@ export function createPbMoveScripts(api) {
     // ------------------------------------------------------------------ Force Palm
     forcePalm: {
       cast({ follow, angle = 0 }) { this.orb(follow, angle, 0.17); },
-      release({ follow, angle = 0 }) { this.orb(follow, angle, 0.6, true); comet(follow, 0x5a98ff, 0xdcecff, { life: 0.3, long: 130, wide: 22 }); },
+      release({ follow, angle = 0 }) {
+        this.orb(follow, angle, 0.6, true);
+        const s = Math.sin(angle), c = Math.cos(angle), nx = -s, ny = c;
+        // The slide is over in a blink, so its trail is laid from where it stood to where it is and lingers:
+        // a pale blue streak with three blue ghosts of the body spaced along it.
+        live(0.7, (h, t, dt, g) => {
+          const at = follow?.();
+          if (at) { h.last = at; h.start ??= at; } else if (h.endedAt === undefined) h.endedAt = h.age;
+          if (!h.start || !h.last) return;
+          const fade = h.endedAt === undefined ? 1 : 1 - (h.age - h.endedAt) / 0.3;
+          if (fade <= 0) { h.age = h.life; return; }
+          g.top.poly([h.start.x + nx * 13, h.start.y + ny * 13, h.last.x + nx * 13, h.last.y + ny * 13, h.last.x - nx * 13, h.last.y - ny * 13, h.start.x - nx * 13, h.start.y - ny * 13]).fill({ color: 0x5a98ff, alpha: 0.45 * fade });
+          g.add.poly([h.start.x + nx * 4, h.start.y + ny * 4, h.last.x + nx * 4, h.last.y + ny * 4, h.last.x - nx * 4, h.last.y - ny * 4, h.start.x - nx * 4, h.start.y - ny * 4]).fill({ color: 0xdcecff, alpha: 0.8 * fade });
+          for (const f of [0.2, 0.5, 0.8]) g.top.ellipse(h.start.x + (h.last.x - h.start.x) * f, h.start.y + (h.last.y - h.start.y) * f, 20, 30).fill({ color: 0x7ab0ff, alpha: 0.5 * fade });
+        });
+      },
       orb(follow, angle, life, untilEnd = false) {
         const c = Math.cos(angle) >= 0 ? 1 : -1;
         live(life, (h, t, dt, g) => { const at = follow?.(); if (!at) { if (untilEnd) h.age = h.life; return; } g.top.circle(at.x + c * 22, at.y - 2, 12).fill({ color: 0x6aa8ff, alpha: 0.9 }); g.add.circle(at.x + c * 22, at.y - 2, 6).fill({ color: 0xffffff, alpha: 0.95 }); });
       },
       hit({ x, y, groundY, angle = 0 }) {
         const c = Math.cos(angle) >= 0 ? 1 : -1;
-        whiteBloom(x - c * 6, y, 18, 40, 0.12);
-        live(0.28, (h, t, dt, g) => {
-          // A blue arc of force on the far side of the target's feet; the palm light swells on the body.
-          const fade = 1 - t, pts = [], inner = [];
-          for (let i = 0; i <= 10; i++) { const a = (i / 10 - 0.5) * 2.6; pts.push(x + c * (10 + Math.cos(a) * (40 + 22 * t)), groundY + Math.sin(a) * 20); inner.unshift(x + c * (10 + Math.cos(a) * (30 + 22 * t)), groundY + Math.sin(a) * 16); }
-          g.top.poly([...pts, ...inner]).fill({ color: 0x6aa8ff, alpha: 0.9 * fade });
-          g.add.circle(x - c * 8, y, 18).fill({ color: 0xbcd8ff, alpha: 0.6 * fade });
+        whiteBloom(x - c * 6, y, 18, 40, 0.14);
+        // The palm's blue light stays pressed on the target; a blue crescent crackles round it over a blue ring on
+        // the ground. All of it outlasts the freeze of the hit, so it is still there when the fight moves again.
+        live(0.6, (h, t, dt, g) => {
+          const fade = t < 0.75 ? 1 : 1 - (t - 0.75) / 0.25, pulse = 1 + 0.12 * Math.sin(h.age * 30);
+          g.top.circle(x - c * 14, y, 20 * pulse).fill({ color: 0x5a98ff, alpha: 0.85 * fade });
+          g.add.circle(x - c * 14, y, 11 * pulse).fill({ color: 0xffffff, alpha: 0.95 * fade });
+          groundRing(g.top, x, groundY + 4, 34 + 20 * Math.min(1, t * 2), 0x5a98ff, 0.95 * fade, 5);
+          groundRing(g.top, x, groundY + 4, 22 + 16 * Math.min(1, t * 2), 0xbcd8ff, 0.7 * fade, 2);
+          crescent(g.top, x + c * 6, y, 96, c, 0x5a98ff, 0.9 * fade, 14);
+          crescent(g.add, x + c * 4, y, 78, c, 0xdcecff, 0.8 * fade * (0.6 + 0.4 * Math.sin(h.age * 44)), 6);
         });
-        // A blue swirl crackles round the target over a blue ring on the ground.
-        live(0.26, (h, t, dt, g) => {
-          const fade = 1 - t;
-          groundRing(g.top, x, groundY + 4, 30 + 14 * t, 0x5a98ff, 0.95 * fade, 4);
-          for (let i = 0; i < 3; i++) { const a0 = h.age * 20 + i * 2.094; const pts = []; for (let j = 0; j <= 5; j++) { const a = a0 + j * 0.22; pts.push(x + Math.cos(a) * (30 + j), y + Math.sin(a) * (24 + j)); } for (let j = 5; j >= 0; j--) { const a = a0 + j * 0.22; pts.push(x + Math.cos(a) * (24 + j), y + Math.sin(a) * (19 + j)); } g.add.poly(pts).fill({ color: 0x9cc8ff, alpha: 0.9 * fade }); }
+        // Paralysis: jagged yellow sparks jump on the struck body.
+        live(0.9, (h, t, dt, g) => {
+          if (Math.floor(h.age / 0.06) % 2) return;
+          for (let i = 0; i < 3; i++) { const a = h.seed + i * 2.1 + Math.floor(h.age / 0.12), sx = x + Math.cos(a) * 22, sy = y + Math.sin(a) * 24; g.add.poly([sx - 9, sy - 2, sx - 2, sy - 6, sx, sy - 1, sx + 9, sy - 5, sx + 3, sy + 3, sx, sy - 1, sx - 4, sy + 5]).fill({ color: 0xffe14a, alpha: 0.95 * (1 - t * 0.5) }); }
         });
-        // Paralysis: the struck body flickers with yellow sparks for a moment.
-        live(0.7, (h, t, dt, g) => { if (Math.floor(h.age / 0.07) % 2) for (let i = 0; i < 3; i++) { const a = h.age * 11 + i * 2.1; star4(g.add, x + Math.cos(a) * 20, y + Math.sin(a * 1.3) * 22, 5, 0xffe14a, 0.9 * (1 - t)); } });
+        dust(x + c * 14, groundY + 2, 4, [176, 150, 118], 80);
         addDecal({ x: x - c * 26, y: groundY + 8, kind: 'crack', radius: 12, pal: 'earth', life: 1.6 });
         dizzy(x, y, 0.5);
       }
