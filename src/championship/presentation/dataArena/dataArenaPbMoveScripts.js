@@ -87,8 +87,8 @@ export const PB_MOVE_BODY = Object.freeze({
   'pb-283': { key: 'superpower', windup: { crouch: 0.34, shake: 1.6 }, dash: { arc: 155, lean: 0.45 }, strike: { low: 0.25, hold: 0.45 }, dim: 0.9, impactFrame: true, impactStyle: 'white' },
   // Counter: dimmed crimson silhouette stance, then white-bg impact frame + crimson starburst + 3 red slash marks.
   'pb-040': { key: 'counter', windup: { tint: 0xd82038, crouch: 0.18, shake: 1.4 }, dash: { tint: 0xd82038, lean: 0.32 }, strike: { lean: 0.35, hold: 0.28 }, dim: 0.72, impactFrame: true, impactStyle: 'white' },
-  // Revenge: leaps up and back, dives steeply fist-first onto the target with a crisp red-white burst.
-  'pb-230': { key: 'revenge', windup: { hop: 88, lean: 0.32, camLift: 75 }, dash: { lean: 0.85 }, strike: { lean: 0.4, low: 0.14, hold: 0.25 } },
+  // Revenge: quick backward-and-up recoil hop coil, snappy diagonal dive-punch, extended forward punch hold.
+  'pb-230': { key: 'revenge', windup: { hop: 66, back: 48, lean: -0.35, camLift: 55 }, dash: { lean: 0.95 }, strike: { lean: 0.52, hold: 0.28 } },
   // ---- flying
   // Aerial Ace: a dark-blue silhouette that cuts straight through the target and lands flat on its far side.
   'pb-003': { key: 'aerialAce', windup: { crouch: 0.2, tint: 0x2a3a8c }, dash: { tint: 0x2a3a8c, lean: 0.4 }, strike: { lean: 1.15, low: 0.2, hold: 0.28 }, after: { hop: 22, time: 0.16 }, impactFrame: true, impactStyle: 'black' }
@@ -1520,18 +1520,25 @@ export function createPbMoveScripts(api) {
 
     // ------------------------------------------------------------------ Revenge
     revenge: {
-      cast({ follow }) {
-        const at = follow?.();
-        if (at) dust(at.x, at.footY + 2, 4, [186, 174, 156], 65);
+      cast({ follow, angle = 0, windup = 0.3 }) {
+        const c = Math.cos(angle) >= 0 ? 1 : -1;
+        // Brief glint at the apex of the backward recoil hop right before snapping into the dive-punch.
+        live(Math.max(0.16, windup), (h, t, dt, g) => {
+          const at = follow?.(); if (!at) return;
+          if (t > 0.65) {
+            const gk = Math.sin(((t - 0.65) / 0.35) * Math.PI);
+            star4(g.add, at.x - c * 42, at.y - 60, 14 * gk, 0xfff4d0, 0.92 * gk);
+          }
+        });
       },
       hit({ x, y, groundY }) {
-        // Crisp red-and-white spiky starburst right at fist contact + beige dust puff rising at target's feet.
-        live(0.3, (h, t, dt, g) => {
-          const fade = t < 0.55 ? 1 : 1 - (t - 0.55) / 0.45;
-          const r = 34 + 18 * Math.min(1, t * 2);
-          spiky(g.top, x, y - 6, r + 3, 10, 0x981618, 0.92 * fade, h.seed);
-          spiky(g.top, x, y - 6, r, 10, 0xe82e28, 0.96 * fade, h.seed);
-          spiky(g.add, x, y - 6, r * 0.55, 10, 0xffffff, 0.98 * fade, h.seed);
+        // Tight warm orange-red spiky starburst right at fist contact + beige dust puff rising at target's feet.
+        live(0.26, (h, t, dt, g) => {
+          const fade = t < 0.5 ? 1 : 1 - (t - 0.5) / 0.5;
+          const r = 24 + 14 * Math.min(1, t * 2.2);
+          spiky(g.top, x, y - 6, r + 3, 9, 0xa8240c, 0.92 * fade, h.seed);
+          spiky(g.top, x, y - 6, r, 9, 0xff521c, 0.96 * fade, h.seed);
+          spiky(g.add, x, y - 6, r * 0.54, 9, 0xfff8e2, 0.98 * fade, h.seed);
         });
         dust(x, groundY + 2, 7, [196, 176, 146], 90);
         dizzy(x, y, 0.45);

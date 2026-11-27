@@ -750,6 +750,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
                 sprite.scale.x *= 1 + swell; sprite.scale.y *= 1 + swell * 0.85;
               }
               if (w.lean) actionTilt = -sDir * w.lean * e;
+              if (w.back) sprite.x -= sCos * w.back * e;
               if (w.hop) { stage.lift = w.hop * e; sprite.y -= stage.lift; actionHop += stage.lift; }
               if (w.camLift) stage.camLift = w.camLift * e;
             } else if (live && body.lunge && body.lunge.actionId === stage.id) {

@@ -280,8 +280,8 @@ export const PB_MOVE_TUNING = Object.freeze({
   'pb-283': Object.freeze({ singleDash: true, windup: 0.6, speed: 900, distance: 380, lungeKnock: 0, standOff: 0.75 }),
   // Counter: 0.44 s dimmed crimson crystal-aura counter stance, then white-bg impact frame + crimson spiky burst + 3 red claw gashes.
   'pb-040': Object.freeze({ type: 'LUNGE', singleDash: true, windup: 0.44, speed: 1200, distance: 260, width: 76, damage: 34, lungeKnock: 180, standOff: 1.5, counterGuard: 0.44 }),
-  // Revenge: leaps up and slightly back, turns horizontal fist-forward and dives steeply onto the target.
-  'pb-230': Object.freeze({ singleDash: true, windup: 0.32, speed: 1450, distance: 260, lungeKnock: 40, standOff: 1.5 })
+  // Revenge: quick hop-back coil away from target, snappy diagonal dive-punch into a tight warm orange-red burst.
+  'pb-230': Object.freeze({ singleDash: true, windup: 0.3, speed: 1850, distance: 260, lungeKnock: 40, standOff: 1.5 })
 });
 
 export function pb324MoveName(id, locale = "zh-Hant") {
