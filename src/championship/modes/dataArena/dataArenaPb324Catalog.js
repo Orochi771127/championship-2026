@@ -317,7 +317,20 @@ export const PB_MOVE_TUNING = Object.freeze({
   // Sky Attack: dimmed golden charge from range, vertical takeoff with white light pillar, shallow diagonal golden comet dive into starburst crater.
   'pb-256': Object.freeze({ singleDash: true, windup: 0.62, speed: 3200, distance: 580, standOff: 0.85, strikeDelay: 0.86, lungeKnock: 25 }),
   // Tailwind: stationary rapid wing-flaps sending 4 tall thin mint-cyan wind arcs drifting mid-field, self speed buff.
-  'pb-290': Object.freeze({ type: 'NOVA', windup: 0.14, selfBuff: Object.freeze({ atk: 0, spd: 2 }) })
+  'pb-290': Object.freeze({ type: 'NOVA', windup: 0.14, selfBuff: Object.freeze({ atk: 0, spd: 2 }) }),
+  // ---- Batch 5A: Rock (6 moves: Accelerock, Ancient Power, Head Smash, Power Gem, Rock Tomb, Rock Wrecker)
+  // Accelerock: 0.3s lean with white starting ring, rapid ground-level rocky sprint from range leaving tan trail & floor scrape, white-bg impact frame.
+  'pb-001': Object.freeze({ singleDash: true, windup: 0.3, speed: 1350, distance: 560, standOff: 1.55, lungeKnock: 40 }),
+  // Ancient Power: stationary caster raises 6 mossy boulders orbiting like a ring, then fires all 6 sequentially.
+  'pb-009': Object.freeze({ type: 'BOLT', speed: 820, windup: 0.72, knockback: 20, noHoming: true, pierce: 0, radius: 18, burstShots: Object.freeze({ count: 6, dt: 0.19 }) }),
+  // Head Smash: 0.48s head-down rock-tan charge with dust spray, fast ram into yellow starburst, huge dust cloud & recoil bounce.
+  'pb-127': Object.freeze({ singleDash: true, windup: 0.48, speed: 1450, distance: 300, standOff: 1.45, lungeKnock: 160, reboundSpeed: 290 }),
+  // Power Gem: stationary red gem chest charge, thin tri-color pink-orange-violet beam streaming multicolored jewel orbs.
+  'pb-210': Object.freeze({ type: 'BOLT', speed: 920, windup: 0.32, knockback: 15, noHoming: true, pierce: 0, radius: 18, burstShots: Object.freeze({ count: 4, dt: 0.11 }) }),
+  // Rock Tomb: stationary high vertical jump & stomp triggers dual W/B impact frame + massive conical stone tomb shattering into 28 rocks.
+  'pb-234': Object.freeze({ type: 'BOLT', speed: 2400, windup: 0.72, knockback: 10, noHoming: true, pierce: 0, radius: 34 }),
+  // Rock Wrecker: stationary rock shards converge into a giant faceted purple-grey boulder hurled straight into target + 3 concentric rings.
+  'pb-235': Object.freeze({ type: 'BOLT', speed: 780, windup: 0.72, knockback: 260, noHoming: true, pierce: 0, radius: 36 })
 });
 
 export function pb324MoveName(id, locale = "zh-Hant") {

@@ -762,6 +762,21 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               } else {
                 if (w.crouch) low(w.crouch * e);
                 if (w.squash) flatten(w.squash * e);
+                if (w.jump) {
+                  const J = w.jump, cf = J.crouch ?? 0.25, hf = J.hang ?? 0.22;
+                  if (p < cf) {
+                    low(0.28 * (p / Math.max(0.01, cf)));
+                  } else {
+                    const jp = (p - cf) / Math.max(0.01, 1 - cf);
+                    const upEnd = (1 - hf) * 0.55, downStart = upEnd + hf;
+                    const k = jp < upEnd ? 1 - Math.pow(1 - jp / Math.max(0.01, upEnd), 2)
+                      : jp < downStart ? 1
+                      : 1 - Math.pow((jp - downStart) / Math.max(0.01, 1 - downStart), 2);
+                    stage.lift = (J.height ?? 180) * Math.max(0, k);
+                    sprite.y -= stage.lift; actionHop += stage.lift;
+                    if (J.camLift) stage.camLift = J.camLift * Math.max(0, k);
+                  }
+                }
                 if (w.pump) {
                   const wave = Math.sin(p * Math.PI * (w.pump.count ?? 2) * 2);
                   const swell = Math.max(0, wave) * (w.pump.amount ?? 0.2);

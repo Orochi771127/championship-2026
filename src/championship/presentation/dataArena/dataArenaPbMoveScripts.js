@@ -122,7 +122,20 @@ export const PB_MOVE_BODY = Object.freeze({
   // Sky Attack: dimmed golden charge, vertical takeoff, shallow diagonal golden comet dive + black impact frame.
   'pb-256': { key: 'skyAttack', windup: { tint: 0xffd258 }, skyDrop: { crouchFrac: 0.46, maxLift: 440, stretch: 0.32, fallAt: 0.62, diveBack: 280, diveLift: 205, diveTilt: 0.36, tint: 0xffd258 }, strike: { lift: 24, tint: 0xffd258, hold: 0.34 }, dim: 1.6, impactFrame: true, impactStyle: 'black' },
   // Tailwind: stationary rapid wing-flaps pushing 4 tall thin mint-cyan wind arcs mid-field.
-  'pb-290': { key: 'tailwind', windup: { hop: 16, pump: { count: 2, amount: 0.18 } }, strike: { hold: 0.72 } }
+  'pb-290': { key: 'tailwind', windup: { hop: 16, pump: { count: 2, amount: 0.18 } }, strike: { hold: 0.72 } },
+  // ---- rock
+  // Accelerock: lean windup, fast ground sprint leaving tan afterimages & floor scrape, white-bg impact frame.
+  'pb-001': { key: 'accelerock', windup: { lean: -0.22 }, dash: { lean: 0.45, afterimage: 0xd8a862 }, strike: { lean: 0.2, hold: 0.14 }, impactFrame: true, impactStyle: 'white' },
+  // Ancient Power: stationary caster raises and orbits 6 mossy boulders, launching them one by one.
+  'pb-009': { key: 'ancientPower', windup: { hop: 8 }, strike: { hold: 0.16 }, hideShotShadow: true },
+  // Head Smash: head-down tan-rock charge, high-speed ram into starburst & huge dust cloud, recoil hop back.
+  'pb-127': { key: 'headSmash', windup: { tint: 0xd4a25e, crouch: 0.18, lean: -0.25, shake: 1.4 }, dash: { tint: 0xd4a25e, lean: 0.65, afterimage: 0xd4a25e }, strike: { tint: 0xd4a25e, lean: 0.45, hold: 0.36 }, after: { hop: 34, time: 0.24 }, impactFrame: true, impactStyle: 'black' },
+  // Power Gem: stationary red chest gem charge, forward crouch beam streaming multicolored jewel beads.
+  'pb-210': { key: 'powerGem', windup: { lean: -0.1 }, strike: { lean: 0.36, low: 0.14, hold: 0.52 }, hideShotShadow: true },
+  // Rock Tomb: stationary high vertical jump & stomp triggers dual W/B impact frame + massive conical stone tomb.
+  'pb-234': { key: 'rockTomb', windup: { jump: { crouch: 0.26, height: 185, hang: 0.24, camLift: 120 } }, strike: { low: 0.28, hold: 0.24 }, impactFrame: true, impactStyle: ['white', 'black'], hideShotShadow: true },
+  // Rock Wrecker: stationary rock shards converge into a giant faceted purple-grey boulder hurled with recoil.
+  'pb-235': { key: 'rockWrecker', windup: { lean: -0.14 }, strike: { lean: -0.28, hold: 0.45 }, impactFrame: true, impactStyle: 'white', hideShotShadow: true }
 });
 
 export const pbMoveBody = moveId => PB_MOVE_BODY[moveId] ?? null;
@@ -2601,6 +2614,443 @@ export function createPbMoveScripts(api) {
         });
       },
       hit() {}
+    },
+
+    // ------------------------------------------------------------------ Accelerock
+    accelerock: {
+      cast({ follow, angle = 0, windup = 0.3 }) {
+        const at0 = follow?.();
+        if (!at0) return;
+        const sx = at0.x, fy = at0.footY + 3, dir = Math.cos(angle) >= 0 ? 1 : -1;
+        // Hollow white expanding starting ring behind feet with 3 short horizontal launch dashes.
+        live(Math.max(0.36, windup + 0.18), (h, t, dt, g) => {
+          const fade = t < 0.6 ? 1 : 1 - (t - 0.6) / 0.4;
+          const r = 16 + 34 * Math.min(1, t * 1.4);
+          groundRing(g.add, sx - dir * 10, fy, r, 0xffffff, 0.92 * fade, 3.5);
+          for (let i = -1; i <= 1; i++) {
+            g.add.moveTo(sx - dir * 24, fy + i * 5).lineTo(sx - dir * 4, fy + i * 5)
+              .stroke({ color: 0xffffff, width: 2.2, alpha: 0.85 * fade });
+          }
+        });
+      },
+      release({ follow, angle = 0 }) {
+        const at0 = follow?.();
+        if (!at0) return;
+        const sx = at0.x, sy = at0.y, sfy = at0.footY + 4, dir = Math.cos(angle) >= 0 ? 1 : -1;
+        // Continuous sand-tan afterimage band connecting takeoff to striker + persistent dark-grey floor scrape track!
+        let endX = sx, endY = sy, endFy = sfy;
+        live(0.56, (h, t, dt, g) => {
+          const at = follow?.();
+          if (at) { endX = at.x; endY = at.y; endFy = at.footY + 4; }
+          else if (h.endedAt === undefined) h.endedAt = h.age;
+          const fade = h.endedAt === undefined ? 1 : Math.max(0, 1 - (h.age - h.endedAt) / 0.28);
+          if (fade <= 0.02) { h.age = h.life; return; }
+          const tailStart = h.endedAt === undefined ? 0 : Math.min(0.85, (h.age - h.endedAt) / 0.28);
+          const x0 = sx + (endX - sx) * tailStart, y0 = sy + (endY - sy) * tailStart;
+          g.top.poly([x0, y0 - 24, endX, endY - 24, endX, endY + 18, x0, y0 + 18]).fill({ color: 0xd6a662, alpha: 0.42 * fade });
+          g.add.poly([x0, y0 - 12, endX, endY - 12, endX, endY + 8, x0, y0 + 8]).fill({ color: 0xffe4a8, alpha: 0.34 * fade });
+        });
+        // Persistent thin dark-grey ground scrape line + 3 launch notch marks staying 5.5 s.
+        live(5.5, (h, t, dt, g) => {
+          const at = follow?.();
+          if (at && h.age < 0.45) { endX = at.x; endFy = at.footY + 4; }
+          const fade = t < 0.85 ? 1 : 1 - (t - 0.85) / 0.15;
+          g.top.moveTo(sx - dir * 6, sfy).lineTo(endX, endFy).stroke({ color: 0x3c3a38, width: 3.2, alpha: 0.78 * fade });
+          for (let i = -1; i <= 1; i++) {
+            g.top.moveTo(sx - dir * 16, sfy + i * 5).lineTo(sx - dir * 4, sfy + i * 5)
+              .stroke({ color: 0x3c3a38, width: 2, alpha: 0.72 * fade });
+          }
+        });
+      },
+      hit({ x, y }) {
+        // Post-white-HS: bright white flash bloom + crisp flying white rock chips.
+        whiteBloom(x, y - 4, 34, 72, 0.16);
+        for (let i = 0; i < 8; i++) {
+          const a = rand() * TAU;
+          spawnP({ shape: 'shard', x, y: y - 4, vx: Math.cos(a) * (110 + rand() * 140), vy: Math.sin(a) * 90 - 40,
+            vz: 80 + rand() * 80, gravity: 380, size: 5 + rand() * 3, size1: 2, rot: a, vrot: (rand() - 0.5) * 12,
+            stops: [[0, [255, 255, 255], 0.98], [1, [220, 214, 200], 0]], add: true, life: 0.35 });
+        }
+        dizzy(x, y, 0.4);
+      }
+    },
+
+    // ------------------------------------------------------------------ Ancient Power
+    ancientPower: {
+      // Grey-brown rounded stone topped with a bright green moss tuft.
+      mossyStone(g, x, y, r, alpha = 1) {
+        if (!g || alpha <= 0.02 || r < 2) return;
+        g.top.poly([x - r, y + r * 0.25, x - r * 0.8, y - r * 0.65, x - r * 0.1, y - r * 0.95, x + r * 0.75, y - r * 0.6, x + r, y + r * 0.2, x + r * 0.55, y + r * 0.82, x - r * 0.55, y + r * 0.82])
+          .fill({ color: 0x3a342c, alpha });
+        g.top.poly([x - r * 0.8, y + r * 0.2, x - r * 0.62, y - r * 0.5, x - r * 0.05, y - r * 0.76, x + r * 0.6, y - r * 0.46, x + r * 0.8, y + r * 0.15, x + r * 0.44, y + r * 0.65, x - r * 0.44, y + r * 0.65])
+          .fill({ color: 0x8d8272, alpha });
+        g.top.poly([x - r * 0.45, y - r * 0.35, x + r * 0.1, y - r * 0.85, x + r * 0.55, y - r * 0.45, x + r * 0.15, y - r * 0.2])
+          .fill({ color: 0x5da444, alpha });
+        g.add.circle(x + r * 0.28, y - r * 0.32, r * 0.2).fill({ color: 0xd8e8c8, alpha: 0.55 * alpha });
+      },
+      cast({ follow, windup = 0.72 }) {
+        const at0 = follow?.();
+        if (!at0) return;
+        const cx = at0.x, cy = at0.y, fy = at0.footY + 3;
+        // 6 erupting pits around caster -> 6 mossy boulders orbit like a planetary ring, decreasing 1 by 1 as each fires!
+        const pits = Array.from({ length: 6 }, (_, i) => {
+          const a = (i / 6) * TAU + 0.25;
+          return { x: cx + Math.cos(a) * 54, y: fy + Math.sin(a) * 24 };
+        });
+        for (const pt of pits) pebbles(pt.x, pt.y, 4, 24, [82, 78, 72], 5.5, 4);
+        live(windup + 1.15, (h, t, dt, g) => {
+          const at = follow?.() ?? { x: cx, y: cy, footY: fy - 3 };
+          // Double grey eruption rings at pits during rise (0..0.28s).
+          if (h.age < 0.28) {
+            const rk = h.age / 0.28, rf = 1 - rk;
+            for (const pt of pits) {
+              groundRing(g.top, pt.x, pt.y, 12 + 16 * rk, 0x726e68, 0.82 * rf, 2.5);
+              groundRing(g.top, pt.x, pt.y, 6 + 10 * rk, 0xb8b2a8, 0.65 * rf, 1.5);
+            }
+          }
+          // Number of boulders still orbiting drops by 1 every 0.19s after windup.
+          const launched = h.age < windup ? 0 : Math.min(6, 1 + Math.floor((h.age - windup) / 0.19));
+          const remain = 6 - launched;
+          if (remain <= 0) return;
+          const rise = Math.min(1, h.age / 0.2);
+          for (let i = 0; i < remain; i++) {
+            const a = h.age * 5.6 + (i / 6) * TAU;
+            const ox = at.x + Math.cos(a) * 54;
+            const oy = (at.footY - 26 * rise) + Math.sin(a) * 22;
+            this.mossyStone(g, ox, oy, 13, 0.98);
+          }
+        });
+        // Persistent dark-grey pit cracks around caster lasting 5.5 s.
+        live(5.5, (h, t, dt, g) => {
+          const fade = t < 0.85 ? 1 : 1 - (t - 0.85) / 0.15;
+          for (const pt of pits) {
+            g.top.ellipse(pt.x, pt.y, 11, 5).fill({ color: 0x3a3834, alpha: 0.72 * fade });
+          }
+        });
+      },
+      projectile({ follow, life = 0.9 }) {
+        const pts = [];
+        live(life, (h, t, dt, g) => {
+          const at = follow?.(); if (!at) { h.age = h.life; return; }
+          const arcY = -Math.sin(Math.min(1, h.age / 0.34) * Math.PI) * 22;
+          const bx = at.x, by = at.y - 6 + arcY;
+          pts.push({ x: bx, y: by, born: h.age });
+          while (pts.length > 0 && h.age - pts[0].born > 0.14) pts.shift();
+          if (pts.length >= 2) {
+            for (let i = 1; i < pts.length; i++) {
+              const a = Math.max(0, 1 - (h.age - pts[i].born) / 0.14);
+              g.top.moveTo(pts[i - 1].x, pts[i - 1].y).lineTo(pts[i].x, pts[i].y)
+                .stroke({ color: 0xd8c488, width: 4 * a, alpha: 0.78 * a });
+            }
+          }
+          this.mossyStone(g, bx, by, 14, 0.98);
+        });
+      },
+      hit({ x, y, groundY }) {
+        whiteBloom(x, y - 4, 12, 26, 0.1);
+        live(0.24, (h, t, dt, g) => {
+          const fade = 1 - t;
+          groundRing(g.top, x, groundY + 4, 18 + 34 * t, 0x8a847c, 0.88 * fade, 3.5);
+        });
+        pebbles(x, groundY + 5, 5, 76, [84, 80, 74], 5.5, 4);
+      }
+    },
+
+    // ------------------------------------------------------------------ Head Smash
+    headSmash: {
+      cast({ follow, angle = 0, windup = 0.48 }) {
+        const dir = Math.cos(angle) >= 0 ? 1 : -1;
+        // Continuous backward brown dirt dust spray behind feet + warm sand-tan rocky sheen on head during charge.
+        live(Math.max(0.2, windup), (h, t, dt, g) => {
+          const at = follow?.(); if (!at) return;
+          g.add.circle(at.x + dir * 10, at.y - 10, 14 + 8 * t).fill({ color: 0xffe098, alpha: 0.38 });
+          h.acc = (h.acc ?? 0) + dt;
+          while (h.acc >= 0.055) {
+            h.acc -= 0.055;
+            spawnP({ shape: 'pxpuff', x: at.x - dir * 16, y: at.footY, vx: -dir * (110 + rand() * 70), vy: -18 - rand() * 24,
+              size: 8, size1: 15, stops: [[0, [168, 138, 102], 0.85], [1, [140, 114, 86], 0]], add: false, life: 0.32, drag: 0.9 });
+          }
+        });
+      },
+      release({ follow, angle = 0 }) {
+        const at0 = follow?.();
+        const sx = at0?.x ?? 0, sfy = (at0?.footY ?? 0) + 4;
+        const c = Math.cos(angle), s = Math.sin(angle), dir = c >= 0 ? 1 : -1;
+        let endX = sx, endFy = sfy;
+        // 4 crisp white horizontal speed lines ahead of head + sand-tan rush dust along dash path.
+        live(0.45, (h, t, dt, g) => {
+          const at = follow?.(); if (!at) { h.age = h.life; return; }
+          endX = at.x; endFy = at.footY + 4;
+          for (let i = -1.5; i <= 1.5; i += 1) {
+            const lx = at.x + dir * 24, ly = at.y - 4 + i * 11;
+            g.add.moveTo(lx, ly).lineTo(lx + dir * 48, ly).stroke({ color: 0xffffff, width: 2.6, alpha: 0.9 });
+          }
+          h.acc = (h.acc ?? 0) + dt;
+          while (h.acc >= 0.025) {
+            h.acc -= 0.025;
+            spawnP({ shape: 'pxpuff', x: at.x - c * 18, y: at.footY, vx: -c * 55, vy: -12, size: 9, size1: 16,
+              stops: [[0, [186, 154, 112], 0.78], [1, [154, 128, 96], 0]], add: false, life: 0.42, drag: 0.9 });
+          }
+        });
+        live(5.5, (h, t, dt, g) => {
+          const fade = t < 0.85 ? 1 : 1 - (t - 0.85) / 0.15;
+          g.top.moveTo(sx, sfy).lineTo(endX, endFy).stroke({ color: 0x423a32, width: 3.5, alpha: 0.72 * fade });
+        });
+      },
+      hit({ x, y, groundY }) {
+        // Post-black-HS: 0.36s bright 10-point yellow-white starburst -> HUGE billowing grey-brown dust cloud + wide ground ring + persistent black spiderweb crack!
+        const puffs = Array.from({ length: 11 }, (_, i) => {
+          const a = (i / 11) * TAU + 0.3;
+          return { ox: Math.cos(a) * (32 + (i % 3) * 18), oy: Math.sin(a) * (16 + (i % 2) * 14) - 18, r: 22 + (i % 3) * 8 };
+        });
+        live(0.95, (h, t, dt, g) => {
+          const post = Math.max(0, h.age - 0.06);
+          if (post < 0.38) {
+            const sk = post / 0.38;
+            const sf = sk < 0.72 ? 1 : 1 - (sk - 0.72) / 0.28;
+            const beat = 0.88 + 0.12 * Math.sin(h.age * 48);
+            spiky(g.top, x, y - 4, 62 * beat, 10, 0xd88820, 0.94 * sf, h.seed);
+            spiky(g.top, x, y - 4, 52 * beat, 10, 0xffd258, 0.96 * sf, h.seed + 0.2);
+            spiky(g.add, x, y - 4, 34 * beat, 10, 0xffffff, 0.98 * sf, h.seed + 0.4);
+          }
+          if (post >= 0.3) {
+            const ck = Math.min(1, (post - 0.3) / 0.56);
+            const cf = ck < 0.25 ? ck / 0.25 : ck < 0.65 ? 1 : 1 - (ck - 0.65) / 0.35;
+            groundRing(g.top, x, groundY + 4, 48 + 96 * ck, 0x8e7c66, 0.9 * cf, 6 - 3.5 * ck);
+            for (const pf of puffs) {
+              const ex = 0.6 + 0.65 * ck;
+              g.top.circle(x + pf.ox * ex, groundY + pf.oy * ex, pf.r * (0.75 + 0.35 * ck)).fill({ color: 0x7c7062, alpha: 0.86 * cf });
+              g.top.circle(x + pf.ox * ex, groundY + pf.oy * ex - 4, pf.r * 0.68 * (0.75 + 0.35 * ck)).fill({ color: 0xb6a896, alpha: 0.72 * cf });
+            }
+          }
+        });
+        for (let i = 0; i < 14; i++) {
+          const a = rand() * TAU;
+          spawnP({ shape: 'shard', x, y: groundY - 4, vx: Math.cos(a) * (130 + rand() * 170), vy: Math.sin(a) * 90 - 60,
+            vz: 140 + rand() * 120, gravity: 430, size: 5 + rand() * 3, size1: 3, rot: a, vrot: (rand() - 0.5) * 12,
+            stops: [[0, [94, 88, 82], 0.96], [1, [68, 64, 60], 0]], add: false, life: 0.62 });
+        }
+        pebbles(x, groundY + 6, 16, 128, [82, 78, 74], 5.5, 5);
+        addDecal({ x, y: groundY + 8, kind: 'crack', radius: 64, pal: 'earth', life: 5.5 });
+        dizzy(x, y, 0.55);
+      }
+    },
+
+    // ------------------------------------------------------------------ Power Gem
+    powerGem: {
+      cast({ follow, angle = 0, windup = 0.32 }) {
+        const dir = Math.cos(angle) >= 0 ? 1 : -1;
+        // Glowing red chest gem + soft pink halo + 5 flashing pink light rays radiating outward.
+        live(Math.max(0.22, windup), (h, t, dt, g) => {
+          const at = follow?.(); if (!at) return;
+          const gx = at.x + dir * 16, gy = at.y - 6;
+          g.add.circle(gx, gy, 20 + 12 * t).fill({ color: 0xff62b8, alpha: 0.36 * (0.5 + 0.5 * t) });
+          for (let i = 0; i < 5; i++) {
+            const a = (i / 5) * TAU + h.age * 5;
+            g.add.moveTo(gx + Math.cos(a) * 10, gy + Math.sin(a) * 10)
+              .lineTo(gx + Math.cos(a) * (24 + 14 * t), gy + Math.sin(a) * (24 + 14 * t))
+              .stroke({ color: 0xff9ad8, width: 2.5, alpha: 0.85 });
+          }
+          g.top.circle(gx, gy, 9 + 2 * t).fill({ color: 0x7c1230, alpha: 0.95 });
+          g.top.circle(gx, gy, 7 + 1.5 * t).fill({ color: 0xff2854, alpha: 0.98 });
+          g.add.circle(gx + 2, gy - 2, 3.2).fill({ color: 0xffffff, alpha: 0.96 });
+        });
+      },
+      projectile({ follow, life = 0.85 }) {
+        const at0 = follow?.();
+        const ox = at0?.x ?? 0, oy = (at0?.y ?? 0) - 4;
+        const colors = [0xff2a5a, 0xffd22a, 0xa84cff];
+        const col = colors[Math.floor(rand() * 3)];
+        // Thin tri-color pink/orange/violet straight beam linking caster to orb + bright highlighted jewel bead!
+        live(life, (h, t, dt, g) => {
+          const at = follow?.(); if (!at) { h.age = h.life; return; }
+          const bx = at.x, by = at.y - 4;
+          g.top.moveTo(ox, oy).lineTo(bx, by).stroke({ color: 0xff4898, width: 9, alpha: 0.58 });
+          g.add.moveTo(ox, oy).lineTo(bx, by).stroke({ color: 0xff9c38, width: 5, alpha: 0.72 });
+          g.add.moveTo(ox, oy).lineTo(bx, by).stroke({ color: 0xf4dcff, width: 2.2, alpha: 0.92 });
+          g.top.circle(bx, by, 12).fill({ color: 0x3a1230, alpha: 0.94 });
+          g.top.circle(bx, by, 9.5).fill({ color: col, alpha: 0.98 });
+          g.add.circle(bx + 3, by - 3, 4).fill({ color: 0xffffff, alpha: 0.98 });
+        });
+      },
+      hit({ x, y }) {
+        // Pink-white star sparkle on every gem impact.
+        live(0.22, (h, t, dt, g) => {
+          const fade = 1 - t;
+          spiky(g.top, x, y - 4, 34 * (0.75 + 0.35 * t), 8, 0xff58b4, 0.92 * fade, h.seed);
+          star4(g.add, x, y - 4, 28 * fade, 0xffffff, 0.98 * fade);
+        });
+      }
+    },
+
+    // ------------------------------------------------------------------ Rock Tomb
+    rockTomb: {
+      cast({ follow, windup = 0.72 }) {
+        const at0 = follow?.();
+        if (!at0) return;
+        const sx = at0.x, sFoot = at0.footY + 3;
+        // Jagged brown takeoff dust ring at p=0.26, then landing dust ring + persistent caster crack at p=0.96!
+        live(windup + 0.34, (h, t, dt, g) => {
+          const takeAt = windup * 0.26, landAt = windup * 0.94;
+          if (h.age >= takeAt && h.age < takeAt + 0.34) {
+            const rk = (h.age - takeAt) / 0.34, rf = 1 - rk;
+            groundRing(g.top, sx, sFoot, 24 + 86 * rk, 0x866848, 0.9 * rf, 6 - 3 * rk);
+            groundRing(g.top, sx, sFoot, 16 + 58 * rk, 0xb8966e, 0.75 * rf, 3);
+          }
+          if (h.age >= landAt) {
+            if (!h.landed) {
+              h.landed = true;
+              dust(sx, sFoot, 8, [160, 134, 104], 100);
+              pebbles(sx, sFoot + 2, 10, 76, [98, 86, 74], 5.5, 5);
+              addDecal({ x: sx, y: sFoot + 3, kind: 'crack', radius: 42, pal: 'earth', life: 5.5 });
+            }
+            const lk = Math.min(1, (h.age - landAt) / 0.32), lf = 1 - lk;
+            g.top.ellipse(sx, sFoot, 34 + 62 * lk, 15 + 26 * lk).fill({ color: 0x9e886e, alpha: 0.35 * lf });
+            groundRing(g.top, sx, sFoot, 24 + 78 * lk, 0x7e6042, 0.92 * lf, 6 - 3.5 * lk);
+          }
+        });
+      },
+      hit({ x, y, groundY }) {
+        // Post-dual-HS: MASSIVE brown 7-slab conical stone tomb (2.5x wide, 3x tall) erupts around target, stands 0.68s, then crumbles top-down into ~28 flying rock chunks!
+        const slabs = [
+          { bx0: -76, bx1: -44, tipX: -12, tipH: 176, col: 0x6a543c },
+          { bx0: -50, bx1: -18, tipX: -6, tipH: 196, col: 0x8e7252 },
+          { bx0: -22, bx1: 14, tipX: 0, tipH: 204, col: 0xa68864 },
+          { bx0: 10, bx1: 46, tipX: 8, tipH: 194, col: 0x886c4e },
+          { bx0: 40, bx1: 76, tipX: 14, tipH: 174, col: 0x644e38 }
+        ];
+        const fy = groundY + 8;
+        live(1.12, (h, t, dt, g) => {
+          const post = Math.max(0, h.age - 0.14);
+          if (post <= 0) return;
+          if (!h.erupted) {
+            h.erupted = true;
+            for (let i = 0; i < 12; i++) {
+              const a = -Math.PI / 2 + (rand() - 0.5) * 2.2;
+              spawnP({ shape: 'shard', x: x + (rand() - 0.5) * 90, y: fy - 6, vx: Math.cos(a) * (120 + rand() * 140), vy: Math.sin(a) * 110,
+                vz: 140 + rand() * 120, gravity: 430, size: 7 + rand() * 4, size1: 5, rot: a, vrot: (rand() - 0.5) * 10,
+                stops: [[0, [118, 96, 72], 0.96], [1, [82, 68, 52], 0]], add: false, life: 0.65 });
+            }
+          }
+          if (post < 0.88) {
+            const grow = Math.min(1, post / 0.11);
+            const crumble = post < 0.72 ? 0 : (post - 0.72) / 0.16;
+            const scaleH = grow * (1 - crumble * 0.85);
+            const alpha = 1 - crumble * 0.75;
+            if (crumble > 0.05 && !h.shattered) {
+              h.shattered = true;
+              for (let i = 0; i < 28; i++) {
+                const a = -Math.PI / 2 + (rand() - 0.5) * 2.6;
+                const spd = 120 + rand() * 210;
+                spawnP({ shape: 'shard', x: x + (rand() - 0.5) * 100, y: fy - 30 - rand() * 140, vx: Math.cos(a) * spd, vy: Math.sin(a) * spd * 0.7,
+                  vz: 160 + rand() * 160, gravity: 380, size: 8 + rand() * 5, size1: 6, rot: a, vrot: (rand() - 0.5) * 12,
+                  stops: [[0, [126, 102, 76], 0.98], [0.75, [96, 78, 58], 0.9], [1, [74, 60, 46], 0]], add: false, life: 1.2 + rand() * 0.35 });
+              }
+              dust(x, fy - 12, 10, [160, 138, 112], 125);
+            }
+            for (const sl of slabs) {
+              const th = sl.tipH * scaleH;
+              g.top.poly([x + sl.bx0 - 2, fy + 2, x + sl.tipX, fy - th - 4, x + sl.bx1 + 2, fy + 2]).fill({ color: 0x34281c, alpha });
+              g.top.poly([x + sl.bx0, fy, x + sl.tipX, fy - th, x + sl.bx1, fy]).fill({ color: sl.col, alpha });
+            }
+          }
+        });
+        addDecal({ x, y: fy, kind: 'crack', radius: 56, pal: 'earth', life: 5.5 });
+        dizzy(x, y, 0.55);
+      }
+    },
+
+    // ------------------------------------------------------------------ Rock Wrecker
+    rockWrecker: {
+      // Massive faceted purple-grey polyhedron boulder with bright upper-right face and deep lower-left shadow.
+      facetedBoulder(g, x, y, r, alpha = 1) {
+        if (!g || alpha <= 0.02 || r < 3) return;
+        const pts = [
+          x - r * 0.92, y + r * 0.25, x - r * 0.78, y - r * 0.62, x - r * 0.12, y - r * 0.98,
+          x + r * 0.68, y - r * 0.76, x + r * 0.98, y - r * 0.08, x + r * 0.76, y + r * 0.72,
+          x + r * 0.06, y + r * 0.96, x - r * 0.64, y + r * 0.78
+        ];
+        g.top.poly(pts.map((v, i) => i % 2 === 0 ? x + (v - x) * 1.08 : y + (v - y) * 1.08)).fill({ color: 0x222030, alpha });
+        g.top.poly(pts).fill({ color: 0x5c5872, alpha });
+        // Bright upper-right lit facet.
+        g.top.poly([x - r * 0.12, y - r * 0.92, x + r * 0.64, y - r * 0.72, x + r * 0.92, y - r * 0.08, x + r * 0.14, y + r * 0.04, x - r * 0.22, y - r * 0.28])
+          .fill({ color: 0x9490ac, alpha });
+        // Deep lower-left shadow facet.
+        g.top.poly([x - r * 0.86, y + r * 0.22, x - r * 0.22, y - r * 0.12, x + r * 0.14, y + r * 0.08, x + r * 0.06, y + r * 0.9, x - r * 0.6, y + r * 0.74])
+          .fill({ color: 0x3b384e, alpha });
+      },
+      cast({ follow, angle = 0, windup = 0.85 }) {
+        const at0 = follow?.();
+        if (!at0) return;
+        const dir = Math.cos(angle) >= 0 ? 1 : -1;
+        pebbles(at0.x, at0.footY + 4, 12, 86, [114, 98, 86], 5.5, 5);
+        const shards = Array.from({ length: 6 }, (_, i) => ({
+          a: (i / 6) * TAU + 0.4,
+          dist: 64 + (i % 2) * 20
+        }));
+        // 6 purple-grey fragments fly inward (0..0.42s) -> form & swell into giant 1x body boulder (0.42..0.85s) lifted high right before throw!
+        live(Math.max(0.4, windup), (h, t, dt, g) => {
+          const at = follow?.(); if (!at) return;
+          const bx = at.x + dir * 32, by = at.y - 8 - (t > 0.82 ? ((t - 0.82) / 0.18) * 20 : 0);
+          if (t < 0.48) {
+            const k = t / 0.48;
+            for (const s of shards) {
+              const sx = bx + Math.cos(s.a) * s.dist * (1 - k);
+              const sy = by + Math.sin(s.a) * s.dist * 0.55 * (1 - k);
+              this.facetedBoulder(g, sx, sy, 8 + 4 * k, 0.95);
+            }
+            if (k > 0.45) this.facetedBoulder(g, bx, by, 18 * ((k - 0.45) / 0.55), 0.96);
+          } else {
+            const k = (t - 0.48) / 0.52;
+            const r = 18 + 18 * Math.min(1, k * 1.4);
+            this.facetedBoulder(g, bx, by, r, 0.98);
+          }
+        });
+      },
+      release({ follow, angle = 0 }) {
+        const at = follow?.();
+        if (!at) return;
+        const rx = at.x, ry = at.y - 6, dir = Math.cos(angle) >= 0 ? 1 : -1;
+        // Crisp tall white curved arm-throw sweep arc right at launch + dust puff behind.
+        dust(rx - dir * 18, at.footY + 2, 5, [152, 146, 142], 70);
+        live(0.18, (h, t, dt, g) => {
+          crescent(g.add, rx + dir * 24, ry, 84, dir, 0xffffff, 0.94 * (1 - t), 11);
+        });
+      },
+      projectile({ follow, life = 1.2 }) {
+        live(life, (h, t, dt, g) => {
+          const at = follow?.(); if (!at) { h.age = h.life; return; }
+          const fy = at.footY ?? (at.y + 20);
+          // Ground shadow directly beneath the massive straight-flying boulder.
+          g.top.ellipse(at.x, fy + 5, 34, 12).fill({ color: 0x262630, alpha: 0.45 });
+          this.facetedBoulder(g, at.x, at.y - 8, 35, 0.98);
+        });
+      },
+      hit({ x, y, groundY }) {
+        // Post-white-HS: bright white star burst + 3 expanding concentric purple-grey elliptical rings (1x -> 3.5x) + purple-grey smoke + 14 shards + persistent black crack!
+        live(0.46, (h, t, dt, g) => {
+          const post = Math.max(0, h.age - 0.06);
+          const k = Math.min(1, post / 0.38);
+          const fade = k < 0.55 ? 1 : 1 - (k - 0.55) / 0.45;
+          if (post < 0.24) {
+            const sf = 1 - post / 0.24;
+            spiky(g.add, x, y - 4, 48 * (0.8 + 0.3 * (post / 0.24)), 10, 0xffffff, 0.98 * sf, h.seed);
+          }
+          groundRing(g.top, x, groundY + 4, 34 + 102 * k, 0x56526c, 0.92 * fade, 5 - 2.5 * k);
+          groundRing(g.top, x, groundY + 4, 24 + 78 * k, 0x8a86a4, 0.84 * fade, 3.5 - 1.5 * k);
+          groundRing(g.top, x, groundY + 4, 14 + 52 * k, 0xb8b4cc, 0.72 * fade, 2);
+          g.top.circle(x, groundY - 12, 34 * (0.7 + 0.4 * k)).fill({ color: 0x6e6a82, alpha: 0.55 * fade });
+        });
+        for (let i = 0; i < 14; i++) {
+          const a = -Math.PI / 2 + (rand() - 0.5) * 2.4;
+          spawnP({ shape: 'shard', x, y: y - 4, vx: Math.cos(a) * (130 + rand() * 170), vy: Math.sin(a) * 110,
+            vz: 140 + rand() * 120, gravity: 430, size: 7 + rand() * 4, size1: 3, rot: a, vrot: (rand() - 0.5) * 12,
+            stops: [[0, [132, 128, 152], 0.96], [1, [74, 70, 92], 0]], add: false, life: 0.62 });
+        }
+        pebbles(x, groundY + 6, 14, 110, [94, 90, 108], 5.5, 5);
+        addDecal({ x, y: groundY + 8, kind: 'crack', radius: 54, pal: 'earth', life: 5.5 });
+        dizzy(x, y, 0.55);
+      }
     },
 
     // ------------------------------------------------------------------ Flame Charge
