@@ -51,7 +51,7 @@ export function selectNativeIdleActivity(actor,profile,{ground,actors,rng,reques
   if(choice===0)return beginNativeActivityReaction(actor,selectNativeCageReaction(actor.cageDefinitionIndex,data.species[productBaseSpeciesIndex(actor.speciesIndex)].field18,actor.poolSlot,rng),ground,request);
   if(choice===1)return beginNativeActivityReaction(actor,selectNativePersonalityReaction(profile.fields['018'],actor.poolSlot,rng),ground,request);
   const walk=()=>{actor.state=2;actor.mode=0;actor.destinationState=1;actor.destinationQ12=nativeRaisingWanderTarget(actor,rng);
-    beginRanchExplorationWalk(actor,ground);
+    beginRanchExplorationWalk(actor,ground,{actors});
     // The existing displeased idle has no condition penalty. In product
     // exploration a partner may decline an outing instead of entering disliked land.
     if(actor.explorationMood==='RESTING')return beginNativeActivityReaction(actor,22,ground,request);

@@ -20,6 +20,13 @@ export function isApprovedOriginalPublicLocation(value=globalThis.location){
   &&selection?.status==='OWNER_AUTHORIZED_PUBLIC_PLAYTEST'&&selection.selectionId===ACCEPTED_ORIGINAL_SELECTION_ID
   &&url.origin===policy.origin&&url.pathname.startsWith(policy.basePath));
 }
+export function isDesktopOfflineLocation(value=globalThis.location){
+ const url=locationUrl(value),protocol=url?.protocol??value?.protocol,hostname=url?.hostname??value?.hostname;
+ if(!protocol||url?.username||url?.password)return false;
+ if(protocol==='tauri:')return hostname==='localhost'||hostname==='';
+ if(['http:','https:'].includes(protocol)&&hostname==='tauri.localhost')return true;
+ return ['app:','championship:'].includes(protocol);
+}
 export function isOriginalRuntimeLocation(value=globalThis.location){
- return isOriginalLoopbackLocation(value)||isApprovedOriginalPublicLocation(value);
+ return isOriginalLoopbackLocation(value)||isDesktopOfflineLocation(value)||isApprovedOriginalPublicLocation(value);
 }

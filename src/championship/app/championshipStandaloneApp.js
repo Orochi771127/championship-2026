@@ -63,6 +63,7 @@ import {assertPlayableProductSaveData,PRODUCT_RAISING_LIFECYCLE_RULES,productPar
 import {selectNativeRaisingEvolutionChoice} from '../raising/nativeRaisingActor.js';
 import {getProductExtension,requirePlayableProductExtension} from '../contracts/productSpeciesExtensions.js';
 import {settleRanchDiscoveries,removeCollectedDiscoveries,RANCH_DISCOVERY_REWARDS} from '../raising/ranchDiscoveries.js';
+import {actorInConnectedRanchRegion} from '../raising/ranchExplorationWalk.js';
 import {PARTNER_LIFE_RULES,PARTNER_MOODS,PARTNER_MOOD_TIERS,STROLL_REWARDS,PARTNER_MOOD_MOMENT_MS,partnerMoodScore,partnerMoodForTier,moodBattleProfile,cappedMoodTier,moodArenaPower,partnerHabitatFit,partnerMood,partnerAffectionHearts,partnerTypeBits,partnerPeerRelation,
   strollFindChance,rollStrollFind,strollIntervalFrames,strollDayKey,appendStrollEntry,canStrollFind,canGreet,canTapAffection,recordTap,strollLogName,strollPairKey,renameStrollLogPartners,
   pendingStrollEntries,claimStrollEntries,greetingGapFrames} from '../raising/ranchPartnerLife.js';
@@ -943,10 +944,11 @@ export function createChampionshipStandaloneApp({
       grantStrollDiscoveryReward({partnerId:greeting.a,partnerB:greeting.b,relation:greeting.relation,reward:find.kind,quantity:find.quantity,
         cage:actor?.cageDefinitionIndex??null,calendar});
     }
-    // Owner 2026-11-03: partners only stroll -- and so only meet or find things -- once a passage links
-    // two cages; in one closed cage they rest and do not greet each other every minute.
+    // Owner 2026-11-03: partners only stroll -- and so only meet or find things -- when their OWN
+    // cage belongs to a connected region with an open passage; partners in isolated cages still
+    // wander around freely inside their room, without triggering strolling item discoveries.
     if(!(raisingGround?.navigation?.connections?.length>0))return;
-    const free=[...raisingActors].filter(([,actor])=>partnerCanMeet(actor));
+    const free=[...raisingActors].filter(([,actor])=>partnerCanMeet(actor)&&actorInConnectedRanchRegion(actor,raisingGround));
     partnerLifeState.quietFrames++;
     partnerLifeState.greetingGap??=greetingGapFrames(partnerLifeRandom());
     if(partnerLifeState.quietFrames>=partnerLifeState.greetingGap)meet:for(let i=0;i<free.length;i++)for(let j=i+1;j<free.length;j++){

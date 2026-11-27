@@ -10,6 +10,7 @@ import { queryNativeHuntActors } from "./nativeWildSpatial.js";
 import { getHuntCatalogItem } from "../loadout/huntEquipmentCatalog.js";
 import {separateGroundFootpoints,canTraverseGroundStep} from '../../field/groundFootpointSeparation.js';
 import { createLassoTracker, lassoContains, LASSO_RULES } from "./ropeLassoGesture.js";
+import { prepareHuntPathSteering, clearHuntPathSteering } from "./huntPathSteering.js";
 const Q12=4096;
 const FRAME_MS=1000*560190/33513982;
 // OWNER_APPROVED_ADAPTATION 2026-11-03 (hunt four fixes): no partner may freeze.
@@ -118,6 +119,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
       const free=nearestFreeCell(a.positionQ12);
       if(free)a.positionQ12=free;
       a.destinationQ12=[a.positionQ12[0],a.positionQ12[1],0];a.directionQ12=[0,0,0];a.followTarget=0;a.followTicks=0;
+      clearHuntPathSteering(a);
       enterNativeWildState(a,1,host);
     }
     // Roaming goals stay above the band the dock covers at the map's bottom edge.
@@ -206,6 +208,7 @@ export function createNativeHuntFieldControls({ records,wildIds,environment,rng,
     // Actor requests from the previous tool update precede the next tool tick.
     for(const a of actors){
       const stun=a.shotShakeTicks,at=slow&&!a.bound&&a.positionQ12?[...a.positionQ12]:null,before=[...a.positionQ12];
+      prepareHuntPathSteering(a,environment,{onlyWhenBlocked:true});
       stepNativeWildActor(a,host);
       if(stunRate>1&&a.shotShakeTicks>stun)a.shotShakeTicks=Math.min(900,stun+Math.round((a.shotShakeTicks-stun)*stunRate));
       if(at&&a.positionQ12&&!a.bound)for(const i of [0,1])a.positionQ12[i]=at[i]+Math.trunc((a.positionQ12[i]-at[i])*(1-slow));

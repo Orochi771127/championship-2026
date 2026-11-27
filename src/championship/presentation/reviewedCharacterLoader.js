@@ -1,4 +1,5 @@
 import {createPixiAssetScope} from './pixiCharacterRuntimeBundle.js';
+import {retryingFetch} from './assetRetry.js';
 import {reviewedNumericClip,sampleReviewedCharacterClip,createReviewedArenaPlayback,reviewedHuntMotionClip,HUNT_RUN_SEQUENCES,HUNT_RUN_RATE} from './reviewedCharacterAnimation.js';
 import {reviewedCharacterSelection,reviewedCharacterSelections,reviewedGeneralDisplayScale} from './reviewedSelection.js';
 import {reviewedDocumentRef,handoffOnlyArenaEntry} from './animationHandoff.js';
@@ -14,8 +15,20 @@ export function reviewedSpeciesForEntity(config,bindings,baseUrl){
   return ids[0]??config.speciesId;
 }
 const digest=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');
+const defaultFetch=(...args)=>retryingFetch(...args);
 
-export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,baseUrl,signal,usage='all',requiredNumeric=null,fetchImpl=globalThis.fetch}) {
+/** Constrained mobile / saver devices cap parallel atlas decodes to avoid WebGL OOM. */
+export function reviewedDecodeConcurrency(assetCount,{constrained=null}={}){
+  const isConstrained=constrained!==null?Boolean(constrained):(
+    globalThis.document?.documentElement?.dataset?.quality==='saver'
+    ||globalThis.navigator?.connection?.saveData===true
+    ||(Number(globalThis.navigator?.deviceMemory)>0&&Number(globalThis.navigator?.deviceMemory)<=4)
+    ||globalThis.matchMedia?.('(pointer: coarse)')?.matches===true
+  );
+  return Math.max(1,Math.min(isConstrained?2:4,assetCount));
+}
+
+export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,baseUrl,signal,usage='all',requiredNumeric=null,fetchImpl=defaultFetch}) {
   const entry=reviewedCharacterSelection(speciesId,baseUrl)??(usage==='arena'?await handoffOnlyArenaEntry(speciesId,baseUrl,fetchImpl):null);
   if(!entry)return bundle;
   // The QA handoff switch (animationHandoff.js) may pick the entry's alternative manifest.
@@ -34,7 +47,7 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
   }catch(error){await bundle.dispose();throw error;}
   if(requiredNumeric&&!reviewedNumericClip(document,requiredNumeric.side,requiredNumeric.id))return bundle;
   const scope=createPixiAssetScope(PIXI,baseUrl,{signal});
-  const images=new Map(),textures=new Map(),geometry=new Map();
+  const images=new Map(),imageLoadKeys=new Map(),blobUrls=new Set(),textures=new Map(),geometry=new Map();
   const needed=new Set(usage==='all'?Object.keys(document.frames):document.clips.filter(c=>usage==='arena'?c.mode==='arena':c.mode!=='arena')
     .flatMap(c=>[...c.frames.map(f=>f.assetId),...(c.neutralReturn?[c.neutralReturn.assetId]:[])]));
   // A partial delivery (only one of the two sets) keeps the native body for the mode it lacks.
@@ -48,21 +61,37 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
     disposed=true;
     for(const texture of textures.values())texture.destroy(false);
     textures.clear();
-    await Promise.allSettled([...images.keys()].map(key=>scope.Assets.unload(key)));
-    images.clear();await bundle.dispose();
+    await Promise.allSettled([...imageLoadKeys.values()].map(key=>scope.Assets.unload(key)));
+    for(const blobUrl of blobUrls){try{URL.revokeObjectURL(blobUrl);}catch{/* ignore */}}
+    blobUrls.clear();imageLoadKeys.clear();images.clear();await bundle.dispose();
   })();
   try {
     const assets=[...new Map(frameEntries.map(([,f])=>[f.image,f])).values()];
+    const useBlobDecode=typeof globalThis.document!=='undefined'&&typeof Blob==='function'&&typeof URL?.createObjectURL==='function';
     let next=0;
-    const results=await Promise.allSettled(Array.from({length:Math.min(4,assets.length)},async()=>{
+    const workers=reviewedDecodeConcurrency(assets.length);
+    const results=await Promise.allSettled(Array.from({length:workers},async()=>{
       while(next<assets.length){
         signal?.throwIfAborted();const frame=assets[next++];
         if(!/^(images|web-atlas-v1|web-atlas-v2)\/[a-f0-9]{64}\.(png|webp)$/.test(frame.image))throw Error('REVIEWED_IMAGE_PATH');
         const imageUrl=characterRelativeAssetUrl(frame.image,ref.path,baseUrl);
-        // Check immutable reviewed bytes before decoding. Pixi owns decoding/cache.
+        // Check immutable reviewed bytes once, then decode those verified bytes directly
+        // via an object URL in the browser so mobile never downloads every atlas page twice.
         const result=await fetchImpl(imageUrl,{signal});if(!result.ok)throw Error('REVIEWED_IMAGE_HTTP_'+result.status);
-        if(await digest(await result.arrayBuffer())!==frame.sha256)throw Error('REVIEWED_IMAGE_HASH');
-        images.set(imageUrl,await scope.Assets.load(imageUrl));signal?.throwIfAborted();
+        const bytes=await result.arrayBuffer();
+        if(await digest(bytes)!==frame.sha256)throw Error('REVIEWED_IMAGE_HASH');
+        signal?.throwIfAborted();
+        if(useBlobDecode){
+          const mime=frame.image.endsWith('.webp')?'image/webp':'image/png';
+          const blobUrl=URL.createObjectURL(new Blob([bytes],{type:mime}));
+          blobUrls.add(blobUrl);
+          imageLoadKeys.set(imageUrl,blobUrl);
+          images.set(imageUrl,await scope.Assets.load({src:blobUrl,parser:'texture'}));
+        }else{
+          imageLoadKeys.set(imageUrl,imageUrl);
+          images.set(imageUrl,await scope.Assets.load(imageUrl));
+        }
+        signal?.throwIfAborted();
       }
     }));
     const failed=results.find(result=>result.status==='rejected');if(failed)throw failed.reason;
@@ -80,6 +109,7 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
     // Stage body size on General screens: generalDisplayScale (selection) draws a set
     // larger or smaller in native units by changing its effective density only.
     const displayScale=usage==='general'?reviewedGeneralDisplayScale(entry):1;
+    const saverQuality=globalThis.document?.documentElement?.dataset?.quality==='saver';
     for(const [key,f] of frameEntries){
       const image=images.get(characterRelativeAssetUrl(f.image,ref.path,baseUrl)),size=f.sourceSize;
       if(!size?.every(v=>Number.isFinite(v)&&v>0)||!f.origin?.every(Number.isFinite)||!(f.density>0))throw Error('REVIEWED_FRAME_GEOMETRY');
@@ -91,7 +121,8 @@ export async function attachReviewedCharacterAnimation({bundle,PIXI,speciesId,ba
       if(crop[0]<0||crop[1]<0||crop[0]+crop[2]>source.pixelWidth||crop[1]+crop[3]>source.pixelHeight)throw Error('REVIEWED_FRAME_OUTSIDE_IMAGE');
       // Pixel art keeps hard texels. Painted handoff art (sampling 'smooth', 2026-11-01) is drawn smaller than
       // its texels on low-resolution renderers; nearest dropped texels there, so it is filtered through mipmaps.
-      if(f.sampling==='smooth'){source.scaleMode='linear';source.autoGenerateMipmaps=true;}
+      // Under saver quality, keep linear filtering without allocating extra mipmap chains (+33% GPU memory).
+      if(f.sampling==='smooth'){source.scaleMode='linear';if(!saverQuality)source.autoGenerateMipmaps=true;}
       else if(!source.autoGenerateMipmaps)source.scaleMode='nearest';
       const texture=new PIXI.Texture({source,frame:new PIXI.Rectangle(...crop),orig:new PIXI.Rectangle(0,0,...size),
         trim:f.trim||mirrorGeneral?new PIXI.Rectangle(...trim):undefined,...(mirrorGeneral?{rotate:12}:{})});// 12 = groupD8.MIRROR_HORIZONTAL

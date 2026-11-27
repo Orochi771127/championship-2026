@@ -21,7 +21,8 @@ export function canTraverseGroundStep(from,to,{canStand,wrapXQ12=0}){
 export function separateGroundFootpoints(entries,{canPlace,wrapXQ12=0,radiusQ12=8*Q12,maxCorrectionQ12=2*Q12,passes=2}={}){
   const points=entries.map(e=>[...e.positionQ12]),spent=entries.map(()=>0);
   const order=entries.map((_,i)=>i).sort((a,b)=>entries[a].poolSlot-entries[b].poolSlot);
-  const diameter=radiusQ12*2;
+  const radiusOf=entry=>Number.isFinite(entry.radiusQ12)&&entry.radiusQ12>0?entry.radiusQ12:radiusQ12;
+  const pairDiameter=(a,b)=>radiusOf(a)+radiusOf(b);
   function move(i,x,y,amount){
     const budget=Math.max(0,maxCorrectionQ12-spent[i]);amount=Math.min(Math.ceil(amount),budget);
     if(amount<=0||entries[i].movable===false)return;
@@ -42,6 +43,7 @@ export function separateGroundFootpoints(entries,{canPlace,wrapXQ12=0,radiusQ12=
   for(let pass=0;pass<Math.min(2,passes);pass++)for(let a=0;a<order.length;a++)for(let b=a+1;b<order.length;b++){
     const i=order[a],j=order[b],left=entries[i],right=entries[j];
     if(left.group!==right.group||left.movable===false&&right.movable===false)continue;
+    const diameter=pairDiameter(left,right);
     let x=dx(points[i][0],points[j][0],wrapXQ12),y=points[j][1]-points[i][1];
     const distance=Math.sqrt(x*x+y*y);if(distance>=diameter)continue;
     if(distance===0)[x,y]=zeroDirections[(left.poolSlot*3+right.poolSlot*5)&7];
@@ -51,6 +53,7 @@ export function separateGroundFootpoints(entries,{canPlace,wrapXQ12=0,radiusQ12=
   let unresolved=0;
   for(let a=0;a<order.length;a++)for(let b=a+1;b<order.length;b++){
     const i=order[a],j=order[b];if(entries[i].group!==entries[j].group)continue;
+    const diameter=pairDiameter(entries[i],entries[j]);
     const x=dx(points[i][0],points[j][0],wrapXQ12),y=points[j][1]-points[i][1];if(x*x+y*y<diameter*diameter)unresolved++;
   }
   return {points,correctionQ12:spent,changed:spent.some(Boolean),unresolved};

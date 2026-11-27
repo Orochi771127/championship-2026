@@ -147497,7 +147497,7 @@
     },
     {
       "path": "championship.html",
-      "sha256": "dafd676311b8c514e15cb9ee77cedd5bba35db18ab1f5d645e50c9cbc8ad4ee1"
+      "sha256": "157635f9636ca0ead9919bf2b3d2d6469b2b4a40e44da23d8f7664db4d91083f"
     },
     {
       "path": "docs/contracts/championship/battle-field-presentation.v1.json",
@@ -147921,7 +147921,7 @@
     },
     {
       "path": "src/championship/app/championshipStandaloneApp.js",
-      "sha256": "03fa2a1a99414f93c699d55f9397b76357f89efb4480a16babd36e9cbf00630a"
+      "sha256": "9bbf02eddad88992043619b67c4de27f86b118cc25715f01fcde90b6232c24aa"
     },
     {
       "path": "src/championship/app/championshipStandaloneMessages.js",
@@ -148705,7 +148705,7 @@
     },
     {
       "path": "src/championship/cage/ranchConnections.js",
-      "sha256": "1ec4cba70110cdf44f81dd0a9210a237714e59a41f2767e14b3703b5414089d0"
+      "sha256": "416fe8cfa5183ba11f887b0aa21819a88d81efd4783013a73b85bfa93e6ee1ee"
     },
     {
       "path": "src/championship/cage/ranchEcology.js",
@@ -148921,7 +148921,7 @@
     },
     {
       "path": "src/championship/field/groundFootpointSeparation.js",
-      "sha256": "942a1f9139d17deb90b8988bcf1bec2aa2e28feb1773f7e9b8ecfe9d590264e9"
+      "sha256": "862edc8cc2cceed8fa327b5ae6665233eb5dee9c6a5b27e1c750297d9145b5ab"
     },
     {
       "path": "src/championship/field/index.js",
@@ -148968,6 +148968,10 @@
       "sha256": "8e16d92195665a26d764e9558f3b64424f3243e090862d07878a025b26fc8123"
     },
     {
+      "path": "src/championship/hunt/capture/huntPathSteering.js",
+      "sha256": "03ef8160b8cf8044f720e5a606380ba88b77909d2662405857ea84adb456f8e9"
+    },
+    {
       "path": "src/championship/hunt/capture/huntRopeTactics.js",
       "sha256": "17cd285b678cfcc9b7c1db5187458ca1787c6dda6637fffeb774df195caa8b4d"
     },
@@ -149005,7 +149009,7 @@
     },
     {
       "path": "src/championship/hunt/capture/nativeHuntFieldControls.js",
-      "sha256": "3b6e289a6f5459467ff3abc3b306fa580970a34805067a90c1d59992373c8e1e"
+      "sha256": "dc1b260aea355f16479b4f06e1bf7eb92cc2fc652279773d792ac412d41863e2"
     },
     {
       "path": "src/championship/hunt/capture/nativeHuntGateVariant.js",
@@ -149681,7 +149685,7 @@
     },
     {
       "path": "src/championship/presentation/originalRuntimeLocation.js",
-      "sha256": "e86f708ac73809d715732c7ff176db940ee3187fbfe5975f1bb622926816deb3"
+      "sha256": "aff6b40556a98409cc92224651d618ac36c0b83e6acaf19cbefd7aeeb2d12a54"
     },
     {
       "path": "src/championship/presentation/originalSharedVfxReview.js",
@@ -149756,12 +149760,20 @@
       "sha256": "f424a1e716a4b2711d20fb6112e1dd60d1c366b3d8ae59cfc77757c204b72f8d"
     },
     {
+      "path": "src/championship/presentation/ranchActorLight.js",
+      "sha256": "a714082d5f4f2110142e6633c0e6b425be6565c4c48e27bd715f69e0d1da8f6e"
+    },
+    {
       "path": "src/championship/presentation/ranchAutoCareProps.js",
       "sha256": "14ee2232d839bbb2b6d9b021ee0a7b755ac849037ccac911128711381ef8cdeb"
     },
     {
       "path": "src/championship/presentation/ranchBorderMembership.js",
       "sha256": "cdcd2de46ce03398efd43b86f1a4c9f1d8ef43e2e9a05af52876a6f1cf569deb"
+    },
+    {
+      "path": "src/championship/presentation/ranchCastShadows.js",
+      "sha256": "4bec7f64e9b0fd9c6aadf4132695ae37625d9058c66d1fdc1fefc59810101b2b"
     },
     {
       "path": "src/championship/presentation/ranchContactHeight.js",
@@ -149801,7 +149813,7 @@
     },
     {
       "path": "src/championship/presentation/ranchThreeScene.js",
-      "sha256": "a995aa51c214675cefa1ce5b6f2fe89c712a7595e47f6393da3cbdae390bfcd0"
+      "sha256": "ef2fce59fc88cd47cb89fa51de7f58d6b0d46b9efa2bef05068885d4c1a74b77"
     },
     {
       "path": "src/championship/presentation/ranchWaterfalls.js",
@@ -149813,7 +149825,7 @@
     },
     {
       "path": "src/championship/presentation/reviewedCharacterLoader.js",
-      "sha256": "ecfe8c3a38c98b1121c033776b8f6c9c61b17a60b6fdcb59ef4cc32ed1197a6c"
+      "sha256": "93adc9dad2314167c8bbf1b9caf2f48cd972ddb6337690c6d46d02bc4a5ed071"
     },
     {
       "path": "src/championship/presentation/reviewedSelection.js",
@@ -150237,7 +150249,7 @@
     },
     {
       "path": "src/championship/raising/nativeGroundSpacing.js",
-      "sha256": "93bafdca667aa67fc26924f06e69d82058068ca4b1eeec2680b336b5fed114bd"
+      "sha256": "c724c69786f4ec64ea792ca421cecdf226f7a7af0e64e662c36370c9458bb226"
     },
     {
       "path": "src/championship/raising/nativeIndividualEvolution.js",
@@ -150249,7 +150261,7 @@
     },
     {
       "path": "src/championship/raising/nativeRaisingActivity.js",
-      "sha256": "0d271067913e97811450b400dfd0b982758b6208033331ffbfb0b6dd672e452d"
+      "sha256": "c6e20575932761d3cead012087b5e8938c6ec3ee2b5df852c8452692f2f7eb03"
     },
     {
       "path": "src/championship/raising/nativeRaisingActor.js",
@@ -150377,7 +150389,7 @@
     },
     {
       "path": "src/championship/raising/ranchExplorationWalk.js",
-      "sha256": "29c3c247331592b2fee31e188307c73ed46065dcbfb9833ce46e5875f1f26cb9"
+      "sha256": "cd3c07619cef12891b9fdd7a66bb744a58595eed3a2aa419a8bb1476b5a3c37f"
     },
     {
       "path": "src/championship/raising/ranchLayoutPositions.js",

@@ -13,6 +13,7 @@ import {ranchAllowsPassage, ranchMergesAppearance, ranchEcologyType} from './ran
 export const sameRanchTerrain=(a,b)=>ranchAllowsPassage(a,b);
 const HEX = [[0,24],[48,0],[96,24],[96,88],[48,112],[0,88]];
 const DIRS = [[1,0],[-1,0],[0,1],[0,-1]];
+const DIRS8 = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
 // Native px. The seam band reaches this far into each cage, and this much of
 // each end of the edge stays closed (the corner a third cell may touch).
 export const RANCH_SEAM_REACH = 28;
@@ -80,6 +81,59 @@ function search(start,goals,ground,allowed) {
     for(const j of neighbors(i,width,height))if(prev[j]===-1&&allowed(j)){prev[j]=i;queue[tail++]=j;}
   }
   return null;
+}
+function search8(start,goals,ground,allowed) {
+  const {width,height}=ground,size=width*height,prev=new Int32Array(size).fill(-1),queue=new Int32Array(size);
+  let head=0,tail=1;queue[0]=start;prev[start]=start;
+  while(head<tail){
+    const i=queue[head++];
+    if(goals.has(i)){
+      const route=[i];while(route.at(-1)!==start)route.push(prev[route.at(-1)]);
+      return route.reverse();
+    }
+    const x=i%width,y=Math.floor(i/width);
+    for(const [dx,dy] of DIRS8){
+      const nx=x+dx,ny=y+dy;
+      if(nx<0||ny<0||nx>=width||ny>=height)continue;
+      const j=ny*width+nx;
+      if(prev[j]!==-1||!allowed(j))continue;
+      // Never cut diagonally across a wall/obstacle corner.
+      if(dx&&dy&&(!allowed(y*width+nx)||!allowed(ny*width+x)))continue;
+      prev[j]=i;queue[tail++]=j;
+    }
+  }
+  return null;
+}
+function clearSightLine(a,b,width,height,allowed) {
+  const steps=Math.max(1,Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/2));
+  const ok=(px,py)=>{const tx=Math.floor(px/8),ty=Math.floor(py/8);return tx>=0&&ty>=0&&tx<width&&ty<height&&allowed(ty*width+tx);};
+  for(let s=1;s<=steps;s++){
+    const t=s/steps,x=a[0]+(b[0]-a[0])*t,y=a[1]+(b[1]-a[1])*t;
+    if(!ok(x,y))return false;
+    if(s<steps&&(!ok(x-2,y)||!ok(x+2,y)||!ok(x,y-2)||!ok(x,y+2)))return false;
+  }
+  return true;
+}
+function pullSightWaypoints(startPosition,cellPoints,width,height,allowed) {
+  if(cellPoints.length<=1)return cellPoints;
+  const route=[];
+  let anchor=startPosition;
+  for(let k=0;k<cellPoints.length;k++){
+    let far=k;
+    while(far+1<cellPoints.length&&clearSightLine(anchor,cellPoints[far+1],width,height,allowed))far++;
+    const target=cellPoints[far];
+    // Subdivide long pulled legs (~16 px spacing) so actors walk straight smooth lines
+    // without corner zig-zagging while keeping fine progress checkpoints across multi-cage trips.
+    const dist=Math.hypot(target[0]-anchor[0],target[1]-anchor[1]);
+    const segs=Math.max(1,Math.ceil(dist/16));
+    for(let s=1;s<=segs;s++){
+      const t=s/segs;
+      route.push([anchor[0]+(target[0]-anchor[0])*t,anchor[1]+(target[1]-anchor[1])*t]);
+    }
+    anchor=target;
+    k=far;
+  }
+  return route;
 }
 function flood(starts,ground,allowed) {
   const seen=new Set(starts),queue=[...starts];
@@ -167,9 +221,11 @@ export function connectRanchGround(ground) {
       const goals=components[component[start]].filter(i=>owners[i]===targetOwner&&clearance[i]>1);
       if(!goals.length)return null;
       const goal=goals[(Math.abs(ordinal)*31)%goals.length];
-      const path=search(start,new Set([goal]),ground,i=>terrain[i]!==1
-        &&permitted.has(owners[i]>=0?owners[i]:corridorOwner[i]));
-      return path?.slice(1).map(i=>point(i,width))??null;
+      const allowedCell=i=>terrain[i]!==1&&permitted.has(owners[i]>=0?owners[i]:corridorOwner[i]);
+      const path=search8(start,new Set([goal]),ground,allowedCell);
+      if(!path||path.length<=1)return null;
+      const rawPoints=path.slice(1).map(i=>point(i,width));
+      return pullSightWaypoints(startPosition,rawPoints,width,height,allowedCell);
     },
     ownerAt:p=>{const i=cellAt(p);return i<0?null:byOwner.get(owners[i]>=0?owners[i]:corridorOwner[i])??null;}
   });

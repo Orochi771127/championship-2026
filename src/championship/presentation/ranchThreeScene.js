@@ -1,5 +1,7 @@
 // Fixed-camera terrain, actors and contact shadows share one depth buffer.
 import {createRanchGroundShadows} from './ranchGroundShadows.js';
+import {createRanchCastShadows} from './ranchCastShadows.js';
+import {attachRanchActorLight,createRanchActorLightState,ranchRimDirection,updateRanchActorLightState} from './ranchActorLight.js';
 import {createRanchSelectionRing,createRanchBloodlineRings,ranchSelectionRingPlacement,RANCH_SELECTION_RING,RANCH_BLOODLINE_RING} from './ranchSelectionRing.js';
 import {createRanchDecalFloorGrid,ranchDecalFloorHeight} from './ranchDecalFloor.js';
 import {createCm07Ambient} from './cm07Ambient.js';
@@ -101,6 +103,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
   // Visible floor sheets per cage model, and where each placed copy sits (decals only).
   const decalFloorGrids=new Map(), decalFloors=[];
   const groundShadows=createRanchGroundShadows(scene);
+  const castShadows=createRanchCastShadows(scene);
+  const sharedActorRimDir={value:new THREE.Vector2(-0.7071,0.7071)};
   const selectionRing=createRanchSelectionRing(scene,{view});
   const bloodlineRings=createRanchBloodlineRings(scene,{view,getBloodline:typeof getBloodline==='function'?getBloodline:()=>null});
   const modelBitmaps=new Set();
@@ -875,13 +879,21 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       scene.add(upperMesh);
       // Test diagnostics must treat the pair as one logical sprite, never hide this companion.
       mesh.userData.ranchSpriteCompanionId=upperMesh.id;upperMesh.userData.ranchSpritePrimaryId=mesh.id;
-      item={mesh,upperMesh,sprite,partitionThreshold};
+      item={mesh,upperMesh,sprite,partitionThreshold,lightState:createRanchActorLightState(THREE)};
+      if(!softwareRenderer){
+        attachRanchActorLight(mesh.material,item.lightState,sharedActorRimDir);
+        attachRanchActorLight(upperMesh.material,item.lightState,sharedActorRimDir);
+      }
       sprites.set(key,item);
     }
     item.seen=true;item.mesh.visible=true;item.sprite=sprite;
     if(item.mesh.material.map!==material.map){
       item.mesh.material.dispose();item.mesh.material=partitionMaterial(material,false,item.partitionThreshold);
       item.upperMesh.material.dispose();item.upperMesh.material=partitionMaterial(material,true,item.partitionThreshold);
+    }
+    if(!softwareRenderer&&item.lightState){
+      attachRanchActorLight(item.mesh.material,item.lightState,sharedActorRimDir);
+      attachRanchActorLight(item.upperMesh.material,item.lightState,sharedActorRimDir);
     }
     const box=ranchSpriteScreenQuad(sprite);item.screenQuad={...box};
     const foot=root.threeGroundScreen??root;
@@ -914,13 +926,20 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     item.projectionError=Math.hypot((projected.x+1)*width/2-box.x-box.width/2,(1-projected.y)*height/2-box.y-box.height/2);
     const u=sprite.texture.uvs,flip=sprite.scale.x*root.scale.x<0;
     const values=ranchSpriteUvs(u,flip);
+    item.lastUvs=values;item.lastRawUvs=u;
+    if(!softwareRenderer&&item.lightState){
+      updateRanchActorLightState(item.lightState,{
+        definitionIndex:root.threeGroundAdmission?.definitionIndex??null,
+        uvs:u,flip,blend:0.14
+      });
+    }
     syncSpritePartition(item,values);
     sprite.renderable=false;
   }
 
   let wasHidden=false;
   function render({bounds,actors,food,waste,covered=false,deltaMS=0,autoCare=null}) {
-    if(disposed||lost){groundShadows.reset();selectionRing.reset();for(const item of sprites.values())if(!item.sprite.destroyed)item.sprite.renderable=true;canvas.style.visibility='hidden';return false;}
+    if(disposed||lost){groundShadows.reset();selectionRing.reset();castShadows.reset();for(const item of sprites.values())if(!item.sprite.destroyed)item.sprite.renderable=true;canvas.style.visibility='hidden';return false;}
     const storyCovering=frames>0&&Boolean(globalThis.document?.querySelector?.('.cm-vn:not([hidden]), .cm-story-map:not([hidden])'));
     if(document.hidden||storyCovering){wasHidden=true;return true;}
     const effectiveDeltaMS=wasHidden?0:deltaMS;
@@ -941,6 +960,8 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     camera.lookAt(center.x,center.y,center.z);camera.updateProjectionMatrix();camera.updateMatrixWorld();
     waterPixel.value=1/(16*pixelScale*renderer.getPixelRatio()*Math.max(.2,direction.y));
     sun.position.set(center.x-15,35,center.z+8);sun.target.position.set(center.x,0,center.z);
+    const [rimX,rimY]=ranchRimDirection(camera,sun.position,sun.target.position);
+    sharedActorRimDir.value.set(rimX,rimY);
     for(const {object,p,shift,mixer} of instances){
       const x=bounds.x+(p.x/field.nativePixelWorldScale+shift)*pixelScale,y=bounds.y+p.y/field.nativePixelWorldScale*pixelScale*groundY;
       object.visible=x+p.worldWidthPx*bounds.scale>-80&&x<width+80&&y+p.worldHeightPx*bounds.scale>-80&&y<height+180;
@@ -973,8 +994,9 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
         s.node.rotation.y=(sceneClock*0.35+s.offset)%(Math.PI*2);
       }
     }
-    groundShadows.reset();selectionRing.reset();bloodlineRings.reset();
+    groundShadows.reset();selectionRing.reset();bloodlineRings.reset();castShadows.reset();
     for(const item of sprites.values())item.seen=false;
+    const castEnabled=currentQualityTier()!=='saver'&&!softwareRenderer;
     for(const [id,entry] of actors){
       // Evolution is a screen-space presentation owned by the existing scene.
       if(covered||entry.evolutionActive){if(entry.sprite)entry.sprite.renderable=true;continue;}
@@ -983,6 +1005,9 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       groundShadows.sync(id,entry,bounds,pixelScale,sprites.get(id)?.seen===true,view);
       selectionRing.sync(id,entry,bounds,pixelScale,sprites.get(id)?.seen===true,view);
       bloodlineRings.sync(id,entry,bounds,pixelScale,sprites.get(id)?.seen===true,view);
+      const spriteItem=sprites.get(id);
+      castShadows.sync(id,{enabled:castEnabled,spriteItem,entry,map:spriteItem?.mesh?.material?.map,
+        uvArray:spriteItem?.lastUvs,rawUvs:spriteItem?.lastRawUvs,rightVec:right,sun});
     }
     for(const [id,root] of food??[])syncSprite('food:'+id,root.children?.[1],root,bounds,pixelScale);
     for(const [id,sprite] of waste??[])syncSprite('waste:'+id,sprite,sprite,bounds,pixelScale);
@@ -993,7 +1018,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       entry.texture.dispose();entry.material.dispose();textures.delete(source);
     }
     bloodlineRings.prune();bloodlineRings.animate(effectiveDeltaMS,{still:covered||prefersReducedMotion()});
-    selectionRing.prune();selectionRing.animate(effectiveDeltaMS,{still:covered||prefersReducedMotion()});groundShadows.prune();
+    selectionRing.prune();selectionRing.animate(effectiveDeltaMS,{still:covered||prefersReducedMotion()});castShadows.prune();groundShadows.prune();
     renderer.render(scene,camera);frames++;lastRenderMs=performance.now()-start;
     // Diagnostics ride on the canvas. Each write is a DOM mutation (style invalidation and a
     // MutationObserver record), so only a value that changed is written, and the visible
@@ -1012,7 +1037,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
     return true;
   }
   function dispose(){
-    if(disposed)return;qualityObserver?.disconnect();globalThis.removeEventListener?.('cm-ui-zoom',markPixelRatioStale);disposed=true;groundShadows.dispose();selectionRing.dispose();bloodlineRings.dispose();autoCareProps.dispose();plinth?.dispose();plinth=null;supportOwnerResolver?.dispose();supportOwnerResolver=null;
+    if(disposed)return;qualityObserver?.disconnect();globalThis.removeEventListener?.('cm-ui-zoom',markPixelRatioStale);disposed=true;groundShadows.dispose();selectionRing.dispose();bloodlineRings.dispose();castShadows.dispose();autoCareProps.dispose();plinth?.dispose();plinth=null;supportOwnerResolver?.dispose();supportOwnerResolver=null;
     cm07Ambient?.dispose();cm07Ambient=null;
     lavaMaterials.clear();dynamicShaders.clear();smokeNodes.length=0;
     for(const material of authoredDepthMaterials)material.dispose();authoredDepthMaterials.clear();
