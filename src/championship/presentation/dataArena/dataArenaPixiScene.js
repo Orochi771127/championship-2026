@@ -727,50 +727,73 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         // Move-by-move body staging: windup pose, how the body crosses the gap (low, hidden, in an arc),
         // the held strike pose at the contact point, then the hop back. Drawn offsets only; the
         // simulation owns the real position (the body is drawn at its contact point until it lets go).
-        if (staged && !reducedMotion && state.gameMode === 'RELAY') {
-          const sa = body.action;
-          if (stage.id !== sa.id) stage = { id: sa.id, dashTotal: 0, endAt: null, ax: body.x, ay: body.y, lift: 0, liftEnd: 0 };
-          const sAng = sa.angle ?? (facing > 0 ? 0 : Math.PI), sCos = Math.cos(sAng), sDir = sCos >= 0 ? 1 : -1;
-          const low = (amount) => { sprite.scale.y *= 1 - amount; sprite.scale.x *= 1 + amount * 0.5; };
-          if (sa.releasedAt === null) {
-            const p = clamp((state.time - sa.startedAt) / Math.max(0.01, sa.windup), 0, 1), e = p * p * (3 - 2 * p), w = staged.windup ?? {};
-            if (w.tint) scriptTint = w.tint;
-            if (w.shake) sprite.x += Math.sin(elapsed * 95) * w.shake * (0.4 + 0.6 * e);
-            if (w.crouch) low(w.crouch * e);
-            if (w.lean) actionTilt = -sDir * w.lean * e;
-            if (w.hop) { stage.lift = w.hop * e; sprite.y -= stage.lift; actionHop += stage.lift; }
-          } else if (body.lunge && body.lunge.actionId === sa.id) {
-            const d = staged.dash ?? {};
-            if (!stage.dashTotal) { stage.dashTotal = Math.max(1, body.lunge.left); stage.liftStart = stage.lift; }
-            const q = clamp(1 - body.lunge.left / stage.dashTotal, 0, 1);
-            if (d.tint) scriptTint = d.tint;
-            if (d.hide) actionAlphaMult = 0;
-            if (d.low) low(d.low);
-            if (d.lean) actionTilt = sDir * d.lean;
-            // Height through the dash: the windup hop carried down, a leap arc, or a dive from a height.
-            stage.lift = (stage.liftStart ?? 0) * (1 - q) + (d.arc ? Math.sin(Math.PI * q) * d.arc : 0) + (d.dive ? d.dive * (1 - q) : 0);
-            sprite.y -= stage.lift; actionHop += stage.lift;
-            if (d.afterimage !== undefined && !d.hide && frameCount % 2 === 0) afterimage(container.position.x + sprite.x, container.position.y + sprite.y, facing, sprite, d.afterimage);
-            stage.ax = body.x; stage.ay = body.y;
-            // On the target, striking on a beat: the body jabs forward with every strike.
-            const combo = body.lunge.combo, cc = staged.combo;
-            if (combo && cc) {
-              const beat = body.lunge.comboHits?.[combo.i]?.dt ?? 0.15, ph = clamp(1 - combo.timer / Math.max(0.01, beat), 0, 1);
-              const jab = Math.sin(Math.PI * Math.min(1, ph * 1.6)) * (cc.jab ?? 10) * (combo.i % 2 ? 1 : 0.7);
-              sprite.x += sCos * jab; if (cc.lean) actionTilt = sDir * cc.lean * (0.5 + 0.5 * Math.sin(Math.PI * ph)); if (cc.low) low(cc.low);
+        // The stage outlives the action record, so a held pose and a hop back play to their end.
+        {
+          const sa = body.action, cueNow = sa?.moveId ? pbMoveBody(sa.moveId) : null;
+          if (cueNow && stage.id !== sa.id) stage = { id: sa.id, cue: cueNow, angle: sa.angle ?? (facing > 0 ? 0 : Math.PI), startLeft: 0, dashTotal: 1, endAt: null, ax: body.x, ay: body.y, lift: 0, liftStart: 0, liftEnd: 0 };
+          const cue = stage.cue;
+          if (cue && !reducedMotion && state.gameMode === 'RELAY') {
+            const live = Boolean(sa) && sa.id === stage.id;
+            const sCos = Math.cos(stage.angle), sDir = sCos >= 0 ? 1 : -1;
+            const low = (amount) => { sprite.scale.y *= 1 - amount; sprite.scale.x *= 1 + amount * 0.5; };
+            if (live && sa.releasedAt === null) {
+              const p = clamp((state.time - sa.startedAt) / Math.max(0.01, sa.windup), 0, 1), e = p * p * (3 - 2 * p), w = cue.windup ?? {};
+              if (w.tint) scriptTint = w.tint;
+              if (w.shake) sprite.x += Math.sin(elapsed * 95) * w.shake * (0.4 + 0.6 * e);
+              if (w.crouch) low(w.crouch * e);
+              if (w.lean) actionTilt = -sDir * w.lean * e;
+              if (w.hop) { stage.lift = w.hop * e; sprite.y -= stage.lift; actionHop += stage.lift; }
+            } else if (live && body.lunge && body.lunge.actionId === stage.id) {
+              const d = cue.dash ?? {};
+              if (!stage.startLeft) {
+                stage.startLeft = Math.max(1, body.lunge.left); stage.liftStart = stage.lift;
+                // Height is spent over the distance to the body it will strike, so the blow lands as the body does.
+                const foe = body === state.player ? (state.rivals ?? []).find((r) => r.active && r.hp > 0) : state.player;
+                const gap = foe ? Math.hypot(foe.x - body.x, foe.y - body.y) - 56 : stage.startLeft;
+                stage.dashTotal = clamp(gap, 30, stage.startLeft);
+              }
+              const q = clamp((stage.startLeft - body.lunge.left) / stage.dashTotal, 0, 1);
+              if (d.tint) scriptTint = d.tint;
+              if (d.hide) actionAlphaMult = 0;
+              if (d.low) low(d.low);
+              if (d.lean) actionTilt = sDir * d.lean;
+              // Height through the dash: the windup hop carried down, a leap arc, or a dive from a height.
+              stage.lift = stage.liftStart * (1 - q) + (d.arc ? Math.sin(Math.PI * q) * d.arc : 0) + (d.dive ? d.dive * (1 - q) : 0);
+              sprite.y -= stage.lift; actionHop += stage.lift;
+              if (d.afterimage !== undefined && !d.hide && frameCount % 2 === 0) afterimage(container.position.x + sprite.x, container.position.y + sprite.y, facing, sprite, d.afterimage);
+              // On the target, striking on a beat: the body jabs forward with every strike.
+              const combo = body.lunge.combo, cc = cue.combo;
+              if (combo && cc) {
+                const beat = body.lunge.comboHits?.[combo.i]?.dt ?? 0.15, ph = clamp(1 - combo.timer / Math.max(0.01, beat), 0, 1);
+                const jab = Math.sin(Math.PI * Math.min(1, ph * 1.6)) * (cc.jab ?? 10) * (combo.i % 2 ? 1 : 0.7);
+                sprite.x += sCos * jab; if (cc.lean) actionTilt = sDir * cc.lean * (0.5 + 0.5 * Math.sin(Math.PI * ph)); if (cc.low) low(cc.low);
+              }
+            } else if (stage.endAt === null && (stage.startLeft || !live || sa.releasedAt !== null)) {
+              // The dash is over (or was too quick to see): hold the strike where the body now stands.
+              stage.endAt = state.time; stage.liftEnd = stage.lift; stage.ax = body.x; stage.ay = body.y;
             }
-          } else if (stage.dashTotal || sa.releasedAt !== null) {
-            if (stage.endAt === null) { stage.endAt = state.time; stage.liftEnd = stage.lift; if (!stage.dashTotal) { stage.ax = body.x; stage.ay = body.y; } }
-            const t = state.time - stage.endAt, st = staged.strike ?? {}, af = staged.after ?? {};
-            const hold = st.hold ?? 0, hopTime = af.time ?? 0;
-            if (t < hold + hopTime) {
-              const k = t < hold ? 0 : clamp((t - hold) / Math.max(0.01, hopTime), 0, 1), ke = k * k * (3 - 2 * k);
-              sprite.x += (stage.ax - body.x) * (1 - ke); sprite.y += (stage.ay - body.y) * (1 - ke);
-              if (t < hold) { if (st.lean) actionTilt = sDir * st.lean; if (st.low) low(st.low); if (st.tint) scriptTint = st.tint; }
-              else if (af.hop) { const h = Math.sin(Math.PI * k) * af.hop; sprite.y -= h; actionHop += h; }
+            if (stage.endAt !== null) {
+              const t = state.time - stage.endAt, st = cue.strike ?? {}, af = cue.after ?? {};
+              const hold = st.hold ?? 0, hopTime = af.time ?? 0;
+              if (t < hold + hopTime) {
+                const k = t < hold ? 0 : clamp((t - hold) / Math.max(0.01, hopTime), 0, 1), ke = k * k * (3 - 2 * k);
+                sprite.x += (stage.ax - body.x) * (1 - ke); sprite.y += (stage.ay - body.y) * (1 - ke);
+                if (t < hold) { if (st.lean) actionTilt = sDir * st.lean; if (st.low) low(st.low); if (st.tint) scriptTint = st.tint; }
+                else if (af.hop) { const h = Math.sin(Math.PI * k) * af.hop; sprite.y -= h; actionHop += h; }
+              }
+              const settle = stage.liftEnd * Math.max(0, 1 - t / 0.07);
+              if (settle > 0) { sprite.y -= settle; actionHop += settle; }
             }
-            const settle = stage.liftEnd * Math.max(0, 1 - t / 0.07);
-            if (settle > 0) { sprite.y -= settle; actionHop += settle; }
+          }
+        }
+        // A struck body acting out a staged reaction (tripped onto its side).
+        let poseTilt = 0;
+        const reaction = targetPoses.get(body.id);
+        if (reaction && !reducedMotion) {
+          if (state.time >= reaction.until) targetPoses.delete(body.id);
+          else {
+            const k = clamp((state.time - reaction.from) / 0.09, 0, 1) * clamp((reaction.until - state.time) / 0.12, 0, 1);
+            poseTilt = reaction.dir * 1.35 * k; sprite.y -= 6 * k;
           }
         }
         if (flash > 0.02 && !reducedMotion) {
@@ -783,6 +806,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         } else if (!((body.vortexHeld ?? 0) > 0)) {
           sprite.rotation = actionTilt;
         }
+        if (poseTilt) sprite.rotation = poseTilt;
         if (scriptHops.has(body.id)) actionAlphaMult = 0;
         sprite.alpha = alpha * actionAlphaMult;
         const blinkBright = hurtLeft > 0 && Math.floor(hurtLeft / 0.055) % 2 === 0;
@@ -808,6 +832,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const releaseOrigins = new Map();
   // Bodies drawn by their move script while they rebound (PB_MOVE_BY_MOVE_20261127): body id -> start time.
   const scriptHops = new Map();
+  // Struck bodies acting out a staged reaction: body id -> {from, until, dir}.
+  const targetPoses = new Map();
   function releaseAt(event) {
     const point = casterView(event.casterId)?.releasePoint(event.angle,event);
     return point ? { ...point, reviewed: true }
@@ -1356,9 +1382,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   let hitStop = 0, statusTick = 0, koSlowMo = 0, koSlowMoScale = 1, impactSilhouette = false;
   let impactFlashTimer = 0, impactFlashMax = 0.068, impactFocus = null, lastImpactAt = -10, tetherTimer = 0;
   let tamerCalloutLeft = 0, tamerCalloutRight = 0, wallFlashLeft = 0, wallFlashRight = 0;
-  const triggerImpactFrame = (wx, wy, sec = 0.085) => {
+  // `style` ('white' | 'black') is a staged move's full-screen ink frame: one solid frame, no strobe, no cooldown.
+  let impactStyle = null;
+  const triggerImpactFrame = (wx, wy, sec = 0.085, style = null) => {
     if (reducedMotion || !rich) return;
-    if (elapsed - lastImpactAt < 1.0) return; // PB-Rank 60f (1.0s) impact-frame cooldown prevents strobe spam
+    if (!style && elapsed - lastImpactAt < 1.0) return; // PB-Rank 60f (1.0s) impact-frame cooldown prevents strobe spam
+    impactStyle = style;
     lastImpactAt = elapsed;
     impactFlashTimer = Math.max(impactFlashTimer, sec);
     impactFlashMax = Math.max(sec, 0.068);
@@ -1397,7 +1426,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     // only on the first / last strike of a multi-hit blow).
     const frameCue = moveId ? pbMoveBody(moveId)?.impactFrame : null;
     const frameNow = frameCue === true ? hitIndex == null || final !== false : frameCue === 'final' ? final === true : frameCue === 'first' ? hitIndex === 0 : false;
-    if (relayMode && !guarded && wx !== null && wy !== null && frameNow) triggerImpactFrame(wx, wy, 0.08);
+    if (relayMode && !guarded && wx !== null && wy !== null && frameNow) triggerImpactFrame(wx, wy, 0.085, pbMoveBody(moveId)?.impactStyle ?? 'white');
     // The quick strikes of a multi-hit blow keep the fight moving: a small shake, no freeze.
     if (hitIndex != null && final === false && !(frameCue === 'first' && hitIndex === 0)) { camera.addTrauma(0.1); return; }
     const heavy = (amount >= 28 || Boolean(pbFeel?.impact)) && !guarded;
@@ -1557,6 +1586,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           } else if (confirmed && !atlasContact && event.cause !== 'SKILL') {
             elementFx.hit({ x: confirmed.x, y: confirmed.y - BEAM_ELEVATION, groundY: confirmed.y, moveId: confirmed.moveId, speciesId: casterSpecies(confirmed), angle: confirmed.angle,
               hitIndex: confirmed.hitIndex ?? null, final: confirmed.final ?? null });
+            const topple = pbMoveBody(confirmed.moveId)?.target?.topple;
+            if (topple) targetPoses.set(confirmed.targetId, { from: state.time, until: state.time + topple, dir: Math.cos(confirmed.angle ?? 0) >= 0 ? 1 : -1 });
           }
         }
       }
@@ -2241,10 +2272,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const t = clamp(impactFlashTimer / Math.max(0.01, impactFlashMax), 0, 1);
     const fx = impactFocus ? worldToScreen(impactFocus.x, impactFocus.y) : { x: viewport.width * 0.5, y: viewport.height * 0.5 };
     // PB-Rank 46-Wedge High-Contrast Anime Impact Frame: alternating ink (#0d0c12) & off-white (#f6f1e6) strobe!
-    const darkPhase = Math.floor(impactFlashTimer * 45) % 2 === 0;
+    const darkPhase = impactStyle ? impactStyle === 'black' : Math.floor(impactFlashTimer * 45) % 2 === 0;
     const bgCol = darkPhase ? 0x0d0c12 : 0xf6f1e6;
     const wedgeCol = darkPhase ? 0xf6f1e6 : 0x0d0c12;
-    impactGfx.rect(0, 0, viewport.width, viewport.height).fill({ color: bgCol, alpha: 0.88 * t });
+    const solid = impactStyle ? 1 / Math.max(0.01, t) : 1;
+    impactGfx.rect(0, 0, viewport.width, viewport.height).fill({ color: bgCol, alpha: Math.min(1, 0.88 * t * solid + (impactStyle ? 0.12 : 0)) });
     const diag = Math.max(1600, Math.hypot(viewport.width, viewport.height));
     const wedges = 46;
     for (let i = 0; i < wedges; i++) {
@@ -2255,7 +2287,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       const p1x = fx.x + Math.cos(a - halfAng) * diag, p1y = fx.y + Math.sin(a - halfAng) * diag;
       const p2x = fx.x + Math.cos(a + halfAng) * diag, p2y = fx.y + Math.sin(a + halfAng) * diag;
       if (typeof impactGfx.poly === "function") {
-        impactGfx.poly([p0x, p0y, p1x, p1y, p2x, p2y]).fill({ color: wedgeCol, alpha: 0.86 * t });
+        impactGfx.poly([p0x, p0y, p1x, p1y, p2x, p2y]).fill({ color: wedgeCol, alpha: impactStyle ? 0.95 : 0.86 * t });
       } else {
         impactGfx.moveTo(p0x, p0y).lineTo(p1x, p1y).stroke({ color: wedgeCol, width: 2.5, alpha: 0.86 * t });
       }

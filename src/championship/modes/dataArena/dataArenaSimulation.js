@@ -1651,7 +1651,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         break;
       case "LUNGE":
         caster.lunge = { actionId, moveId, arenaElement, attackElement, isBasic, guardBreak: v2GuardBreak, rebound: v2Rebound, secondDash: v2SecondDash,
-          knock: move.lungeKnock, reboundSpeed: move.reboundSpeed, passThrough: Boolean(move.passThrough), comboHits: move.comboHits ?? null, dirX: Math.cos(angle), dirY: Math.sin(angle), left: move.distance, speed: move.speed, width: move.width,
+          knock: move.lungeKnock, reboundSpeed: move.reboundSpeed, passThrough: Boolean(move.passThrough), comboHits: move.comboHits ?? null, standOff: move.standOff, dirX: Math.cos(angle), dirY: Math.sin(angle), left: move.distance, speed: move.speed, width: move.width,
           damage: move.damage * damageScale, hits: new Set() };
         if (caster === player && move.invulnerable) { player.invulnerable = Math.max(player.invulnerable, move.distance / move.speed + 0.08); player.dashGrace = player.invulnerable; player.perfectThisDash = false; }
         if (isRival(caster)) caster.invulnerable = Math.max(caster.invulnerable ?? 0, 0.1);
@@ -2224,7 +2224,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
           lunge.left = Math.max(0, (target.x - caster.x) * lunge.dirX + (target.y - caster.y) * lunge.dirY) + beyond;
         } else if (relayMode && !lunge.rebound && !target.lunge) {
           // Drawn bodies are wider than their hit circles: stand a body-width off (2026-11-27 review: sprites overlapped).
-          const reach = ((target.radius ?? 20) + (caster.radius ?? 18)) * 1.8, gap = distance(target.x, target.y, caster.x, caster.y);
+          const reach = ((target.radius ?? 20) + (caster.radius ?? 18)) * (lunge.standOff ?? 1.8), gap = distance(target.x, target.y, caster.x, caster.y);
           if (gap < reach && gap > 0.01) { caster.x = target.x - (target.x - caster.x) / gap * reach; caster.y = target.y - (target.y - caster.y) / gap * reach; }
           lunge.left = 0;
           // A staged move hops back off the target after the blow.

@@ -220,6 +220,7 @@ export function pb324ToRelayMove(id, ultimate = false) {
 //   lungeKnock   how hard the struck body is pushed (default 340; 0 = pinned in place);
 //   reboundSpeed the caster is pushed back off the target after the blow (about speed / 5.5 px);
 //   passThrough  the dash carries on through the target and ends on its far side;
+//   standOff     how far off the struck body the caster stops, in summed radii (default 1.8);
 //   comboHits    a blow made of several strikes: [{share, knock?}, {dt, share, knock?}, ...] -- the first
 //                lands on contact, each next one `dt` seconds after the one before; shares add up to 1.
 export const PB_MOVE_TUNING = Object.freeze({
@@ -227,16 +228,16 @@ export const PB_MOVE_TUNING = Object.freeze({
   'pb-098': Object.freeze({ singleDash: true }),
   'pb-099': Object.freeze({ singleDash: true }),
   'pb-170': Object.freeze({ singleDash: true, speed: 2600, windup: 0.2, lungeKnock: 80, reboundSpeed: 400 }),
-  'pb-154': Object.freeze({ singleDash: true, windup: 0.12, lungeKnock: 40, reboundSpeed: 210 }),
+  'pb-154': Object.freeze({ singleDash: true, windup: 0.12, lungeKnock: 200, reboundSpeed: 210 }),
   'pb-042': Object.freeze({ singleDash: true, windup: 0.16, speed: 1000, lungeKnock: 70 }),
   'pb-029': Object.freeze({ singleDash: true, windup: 0.25, lungeKnock: 400 }),
   'pb-167': Object.freeze({ singleDash: true, windup: 0.15, speed: 2600, lungeKnock: 20 }),
   'pb-003': Object.freeze({ singleDash: true, windup: 0.12, speed: 1500, lungeKnock: 200, passThrough: true }),
   // Close Combat: steps in, seven jabs 0.15 s apart with the target pinned, gathers 0.3 s, one heavy blow.
-  'pb-037': Object.freeze({ windup: 0.15, speed: 1200, comboHits: Object.freeze([{ share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 },
+  'pb-037': Object.freeze({ windup: 0.15, speed: 1200, standOff: 2.5, comboHits: Object.freeze([{ share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 },
     { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.45, share: 0.37, knock: 210 }]) }),
   // Double Kick: jumps straight up, dives foot first, a second kick from the ground 0.27 s later shoves the target.
-  'pb-057': Object.freeze({ windup: 0.35, speed: 900, comboHits: Object.freeze([{ share: 0.5 }, { dt: 0.27, share: 0.5, knock: 200 }]) })
+  'pb-057': Object.freeze({ windup: 0.35, speed: 900, comboHits: Object.freeze([{ share: 0.5 }, { dt: 0.27, share: 0.5, knock: 400 }]) })
 });
 
 export function pb324MoveName(id, locale = "zh-Hant") {

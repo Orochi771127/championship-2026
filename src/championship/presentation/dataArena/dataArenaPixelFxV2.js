@@ -1263,7 +1263,8 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
 
     cast({ x, y, moveId, windup = 0.2, follow = null, angle = 0 }) {
       const script = scriptFor(moveId);
-      if (script?.cast) { script.cast({ x, y, follow, angle, windup }); stats.casts++; return; }
+      // A staged move shows only its own windup: no generic charge when its script has none.
+      if (script) { script.cast?.({ x, y, follow, angle, windup }); stats.casts++; return; }
       const spec = resolveMoveSpecV2(moveId);
       const pk = normalizePalKey(spec.paletteKey);
       // The charge is visible for the whole windup: an orb grows in the hand until the release (2026-11-26 blind review).
@@ -1325,7 +1326,7 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
 
     release({ x, y, angle = 0, moveId, melee = false, follow = null }) {
       const script = scriptFor(moveId);
-      if (script?.release) { script.release({ x, y, follow, angle }); stats.releases++; return; }
+      if (script) { script.release?.({ x, y, follow, angle }); stats.releases++; return; }
       const spec = resolveMoveSpecV2(moveId);
       const pk = normalizePalKey(spec.paletteKey);
       const arch = spec.v2Archetype;
