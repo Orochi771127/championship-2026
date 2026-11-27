@@ -220,7 +220,9 @@ export function pb324ToRelayMove(id, ultimate = false) {
 //   lungeKnock   how hard the struck body is pushed (default 340; 0 = pinned in place);
 //   reboundSpeed the caster is pushed back off the target after the blow (about speed / 5.5 px);
 //   passThrough  the dash carries on through the target and ends on its far side;
-//   standOff     how far off the struck body the caster stops, in summed radii (default 1.8);
+//   standOff     how far off the struck body the caster stops, in summed radii (staged default 2.3);
+//   type / distance / width  the move's shape, where the game's shape differs from the reference
+//                (a punch filed as a zone or a wave becomes the dash it is);
 //   comboHits    a blow made of several strikes: [{share, knock?}, {dt, share, knock?}, ...] -- the first
 //                lands on contact, each next one `dt` seconds after the one before; shares add up to 1.
 export const PB_MOVE_TUNING = Object.freeze({
@@ -236,6 +238,21 @@ export const PB_MOVE_TUNING = Object.freeze({
   // Close Combat: steps in, seven jabs 0.15 s apart with the target pinned, gathers 0.3 s, one heavy blow.
   'pb-037': Object.freeze({ windup: 0.15, speed: 1200, standOff: 2.5, comboHits: Object.freeze([{ share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 },
     { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.45, share: 0.37, knock: 210 }]) }),
+  // High Jump Kick: crouch, straight up three bodies, knee dive, pinned a moment, bounced back two bodies.
+  'pb-135': Object.freeze({ singleDash: true, windup: 0.5, speed: 1700, distance: 300, lungeKnock: 0, reboundSpeed: 790 }),
+  // Sky Uppercut: low run in, the uppercut carries the target up (drawn), nobody is pushed along the ground.
+  'pb-257': Object.freeze({ windup: 0.1, speed: 820, distance: 260, lungeKnock: 0 }),
+  // Thunderous Kick: run in, a stomp that pins, then the same leg shoves the target a body away.
+  'pb-301': Object.freeze({ singleDash: true, windup: 0.1, speed: 900, comboHits: Object.freeze([{ share: 0.7 }, { dt: 0.3, share: 0.3, knock: 400 }]) }),
+  // Dynamic Punch: walks in with the fist charging, one punch, the blast shoves the target a body away.
+  'pb-076': Object.freeze({ singleDash: true, windup: 0.12, speed: 380, lungeKnock: 400 }),
+  // Focus Punch: 0.7 s of focus, then across the gap in an instant; the target is pinned.
+  'pb-109': Object.freeze({ singleDash: true, windup: 0.7, speed: 1700, lungeKnock: 30 }),
+  // Drain Punch and Force Palm are dashes in the reference (filed here as a zone and a wave).
+  'pb-069': Object.freeze({ type: 'LUNGE', distance: 260, speed: 1100, width: 72, windup: 0.1, lungeKnock: 400 }),
+  'pb-111': Object.freeze({ type: 'LUNGE', distance: 290, speed: 2500, width: 72, windup: 0.15, lungeKnock: 400 }),
+  // Hammer Arm: grows the arm, walks it in, leans it back and brings it down.
+  'pb-126': Object.freeze({ singleDash: true, windup: 0.3, speed: 480, distance: 300, lungeKnock: 200 }),
   // Double Kick: jumps straight up, dives foot first, a second kick from the ground 0.27 s later shoves the target.
   'pb-057': Object.freeze({ windup: 0.35, speed: 900, comboHits: Object.freeze([{ share: 0.5 }, { dt: 0.27, share: 0.5, knock: 400 }]) })
 });

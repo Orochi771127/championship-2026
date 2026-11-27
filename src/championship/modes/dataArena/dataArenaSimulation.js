@@ -1651,7 +1651,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         break;
       case "LUNGE":
         caster.lunge = { actionId, moveId, arenaElement, attackElement, isBasic, guardBreak: v2GuardBreak, rebound: v2Rebound, secondDash: v2SecondDash,
-          knock: move.lungeKnock, reboundSpeed: move.reboundSpeed, passThrough: Boolean(move.passThrough), comboHits: move.comboHits ?? null, standOff: move.standOff, dirX: Math.cos(angle), dirY: Math.sin(angle), left: move.distance, speed: move.speed, width: move.width,
+          knock: move.lungeKnock ?? (move.stagedTuning ? 400 : undefined), reboundSpeed: move.reboundSpeed, passThrough: Boolean(move.passThrough), comboHits: move.comboHits ?? null,
+          standOff: move.standOff ?? (move.stagedTuning ? 2.3 : undefined), dirX: Math.cos(angle), dirY: Math.sin(angle), left: move.distance, speed: move.speed, width: move.width,
           damage: move.damage * damageScale, hits: new Set() };
         if (caster === player && move.invulnerable) { player.invulnerable = Math.max(player.invulnerable, move.distance / move.speed + 0.08); player.dashGrace = player.invulnerable; player.perfectThisDash = false; }
         if (isRival(caster)) caster.invulnerable = Math.max(caster.invulnerable ?? 0, 0.1);

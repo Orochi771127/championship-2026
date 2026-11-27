@@ -22,11 +22,12 @@ const SCORCH_STOPS = Object.freeze([[0, [58, 40, 34], 0.78], [0.7, [58, 40, 34],
  *   windup {tint, shake, crouch, lean (+ back / - forward), hop (rises and stays up)}
  *   dash   {tint, hide, low, lean, arc (leap height), dive (start height), afterimage (tint)}
  *   combo  {jab (px forward on each strike), lean, low}  -- while a multi-hit blow keeps striking
- *   strike {lean, low, tint, hold (seconds held at the contact point)}
- *   after  {hop (height), time}  -- lets go of the contact point and hops back to where the rules put it
- *   target {topple (seconds the struck body lies tripped on its side)}
+ *   strike {lean, low, tint, lift (held in the air on the target), hold (seconds held at the contact point)}
+ *   after  {hop (height), time, spin (turns)}  -- lets go of the contact point and hops back to where the rules put it
+ *   target {topple (seconds tripped on its side)} or {lift: {height, up, hang, down}} (carried up and dropped)
+ *   dim: seconds the scene stays dimmed after the windup;
  *   impactFrame: the ink impact frame on its hit (true, or 'first' / 'final' strike of a multi-hit blow);
- *   impactStyle: 'white' (white field, black lines; default) or 'black';
+ *   impactStyle: 'white' (white field, black lines; default), 'black', or two in a row ['white', 'black'];
  *   fireballHop: the fireball keeps the body through its rebound.
  */
 export const PB_MOVE_BODY = Object.freeze({
@@ -49,6 +50,22 @@ export const PB_MOVE_BODY = Object.freeze({
   'pb-037': { key: 'closeCombat', windup: { crouch: 0.06 }, combo: { jab: 13, lean: 0.16 }, strike: { lean: -0.12, hold: 0.16 }, impactFrame: 'final' },
   // Double Kick: springs straight up, dives foot first onto the target, crouches and kicks again from the ground.
   'pb-057': { key: 'doubleKick', windup: { crouch: 0.1, hop: 110 }, dash: { lean: 0.5 }, combo: { jab: 16, low: 0.2 }, strike: { low: 0.22, hold: 0.2 }, impactFrame: 'first' },
+  // High Jump Kick: crouch, straight up three bodies, dives knee first, stays pressed in the air, bounces back.
+  'pb-135': { key: 'highJumpKick', windup: { crouch: 0.15, hop: 210 }, dash: { lean: 0.6 }, strike: { lift: 34, lean: 0.5, hold: 0.3 }, after: { hop: 72, time: 0.3 } },
+  // Sky Uppercut: low run, crouch, then spins straight up three bodies with the target carried on the fist.
+  'pb-257': { key: 'skyUppercut', windup: { crouch: 0.3 }, dash: { low: 0.3 }, after: { hop: 200, time: 0.75, spin: 2 }, target: { lift: { height: 160, up: 0.4, hang: 0.1, down: 0.25 } }, impactFrame: true, impactStyle: 'black' },
+  // Thunderous Kick: runs in, hops with the leg drawn back, stomps and pins, then shoves with the same leg.
+  'pb-301': { key: 'thunderousKick', windup: { lean: 0.25, hop: 20 }, combo: { jab: 22, lean: 0.3 }, strike: { hold: 0.12 }, impactFrame: 'first' },
+  // Dynamic Punch: walks in with the fist burning, one punch, stands in the blast.
+  'pb-076': { key: 'dynamicPunch', strike: { lean: 0.3, hold: 0.5 }, impactFrame: true, dim: 0.9 },
+  // Focus Punch: bent low and still for 0.7 s, then a flat-out lunge with the body level.
+  'pb-109': { key: 'focusPunch', windup: { crouch: 0.25, lean: -0.3, shake: 1 }, dash: { lean: 0.9, low: 0.2 }, strike: { lean: 0.9, low: 0.2, hold: 0.3 }, impactFrame: true, impactStyle: ['white', 'black'] },
+  // Drain Punch: straight dash and a pressed punch, then stands and takes the energy back.
+  'pb-069': { key: 'drainPunch', dash: { lean: 0.4 }, strike: { lean: 0.35, low: 0.1, hold: 0.3 }, impactFrame: true, impactStyle: 'black' },
+  // Force Palm: slides in along the ground and holds the flat palm on the target.
+  'pb-111': { key: 'forcePalm', windup: { crouch: 0.12 }, dash: { low: 0.15 }, strike: { lean: 0.3, hold: 0.3 }, impactFrame: true, impactStyle: 'black' },
+  // Hammer Arm: the body only walks in and crouches; the giant arm does the hitting.
+  'pb-126': { key: 'hammerArm', strike: { low: 0.25, hold: 0.35 }, impactFrame: true, impactStyle: 'black' },
   // ---- flying
   // Aerial Ace: a dark-blue silhouette that cuts straight through the target and lands flat on its far side.
   'pb-003': { key: 'aerialAce', windup: { crouch: 0.2, tint: 0x2a3a8c }, dash: { tint: 0x2a3a8c, lean: 0.4 }, strike: { lean: 1.15, low: 0.2, hold: 0.28 }, after: { hop: 22, time: 0.16 }, impactFrame: true, impactStyle: 'black' }
@@ -89,7 +106,7 @@ export function createPbMoveScripts(api) {
     const stops = [[0, rgb, 0.95], [0.8, rgb, 0.85], [1, rgb, 0]];
     for (let i = 0; i < count; i++) { const sz = 3 + rand() * big; spawnP({ shape: 'px', x: x + (rand() - 0.5) * spread, y: y + (rand() - 0.5) * spread * 0.4, size: sz, size1: sz, stops, add: false, life: life * (0.7 + rand() * 0.5), drag: 1 }); }
   };
-  const whiteBloom = (x, y, from, to, life = 0.18) => spawnP({ shape: 'glow', x, y, size: from, size1: to, stops: [[0, [255, 255, 255], 1], [1, [255, 250, 235], 0]], add: true, life });
+  const whiteBloom = (x, y, from, to, life = 0.18) => spawnP({ shape: 'glow', x, y, size: from * 0.8, size1: to * 0.8, stops: [[0, [255, 255, 255], 0.95], [0.6, [255, 255, 255], 0.7], [1, [255, 255, 255], 0]], add: false, life });
   const sparks = (x, y, angle, count, pal, speed = 260, spread = 2.2) => {
     for (let i = 0; i < count; i++) { const a = angle + (rand() - 0.5) * spread; spawnP({ shape: 'streak', x, y, vx: Math.cos(a) * (speed * (0.6 + rand() * 0.7)), vy: Math.sin(a) * speed * 0.6 - 30, size: 5, size1: 1, rot: a, pal, add: true, life: 0.2 + rand() * 0.1 }); }
   };
@@ -222,6 +239,249 @@ export function createPbMoveScripts(api) {
           star4(g.add, x + ox, y + oy, 36 * (1 - k * 0.5), n % 2 ? 0xff9a2c : 0xfff0d0, 1 - k * 0.7); star4(g.add, x + ox, y + oy, 15, 0xffffff, 1 - k);
         });
         addDecal({ x: x - c * 34, y: groundY + 8, kind: 'crack', radius: 26, pal: 'earth', life: 3 }); pebbles(x - c * 34, groundY + 8, 6, 50, [112, 90, 70], 2.4); dust(x - c * 30, groundY + 2, 4); dizzy(x, y, 0.6);
+      }
+    },
+
+    // ------------------------------------------------------------------ High Jump Kick
+    highJumpKick: {
+      cast({ follow, windup = 0.5 }) {
+        // An orange rim on the crouched body; a burst of grey-brown dust where it leaves the ground.
+        live(Math.max(0.2, windup), (h, t, dt, g) => {
+          const at = follow?.(); if (!at) return;
+          if (t < 0.4) g.add.ellipse(at.x, at.y + 4, 26, 34).stroke({ color: 0xff9a2c, width: 3, alpha: 0.7 * (t / 0.4) });
+          else if (!h.dusted) { h.dusted = true; dust(at.x, at.footY, 9, [150, 132, 110], 120); addDecal({ x: at.x, y: at.footY + 6, kind: 'crack', radius: 16, pal: 'earth', life: 6 }); }
+        });
+      },
+      release({ follow, angle = 0 }) {
+        // A thick orange flame tail down the dive.
+        trail(follow, angle, [255, 170, 60], { life: 0.5, every: 0.008, spread: 26, size: 15 });
+        trail(follow, angle, [255, 232, 150], { life: 0.5, every: 0.016, spread: 12, size: 9 });
+      },
+      hit({ x, y, groundY, angle = 0 }) {
+        // The whole side of the screen blooms white; an orange star on the knee, a second one as it bounces off.
+        whiteBloom(x, y, 110, 420, 0.22);
+        live(0.5, (h, t, dt, g) => {
+          if (t < 0.4) star4(g.add, x, y, 40 * (1 - t), 0xfff0d0, 1 - t / 0.4);
+          if (t > 0.6) { const k = (t - 0.6) / 0.4; spiky(g.add, x, y, 56 * (0.6 + 0.4 * k), 8, 0xff9a2c, 1 - k, h.seed); if (!h.puff) { h.puff = true; dust(x, groundY, 6, [150, 150, 150], 90); } }
+        });
+        addDecal({ x, y: groundY + 8, kind: 'crack', radius: 54, pal: 'earth', life: 6 });
+        pebbles(x, groundY + 8, 8, 90, [120, 104, 88], 4);
+        dizzy(x, y, 0.6);
+      }
+    },
+
+    // ------------------------------------------------------------------ Sky Uppercut
+    skyUppercut: {
+      cast({ follow }) { live(0.12, (h, t, dt, g) => { const at = follow?.(); if (at) { g.add.circle(at.x + 10, at.y + 14, 9).fill({ color: 0xff9a2c, alpha: 0.8 }); g.add.circle(at.x + 10, at.y + 14, 4.5).fill({ color: 0xffffff, alpha: 0.95 }); } }); },
+      release({ follow, angle = 0 }) {
+        live(0.5, (h, t, dt) => { const at = follow?.(); if (!at) { h.age = h.life; return; } h.acc = (h.acc ?? 0) + dt; while (h.acc >= 0.05) { h.acc -= 0.05; dust(at.x - Math.cos(angle) * 14, at.footY, 1, [226, 150, 90], 40); } });
+      },
+      hit({ x, y, groundY, angle = 0 }) {
+        const c = Math.cos(angle) >= 0 ? 1 : -1, px0 = x - c * 44;
+        whiteBloom(x, y, 24, 54, 0.12);
+        // A coiling pillar of orange flame climbs under the rising body, then lets go from the bottom up.
+        live(0.75, (h, t, dt, g) => {
+          const top = 216 * Math.min(1, t / 0.55), base = t > 0.6 ? 216 * (t - 0.6) / 0.4 : 0, fade = t < 0.7 ? 1 : 1 - (t - 0.7) / 0.3;
+          for (let yy = base; yy < top; yy += 12) {
+            const wob = Math.sin(yy * 0.09 + h.age * 22) * 20;
+            g.top.poly([px0 + wob - 15, groundY - yy, px0 + wob + 15, groundY - yy - 4, px0 - wob * 0.4 + 13, groundY - yy - 14, px0 - wob * 0.4 - 13, groundY - yy - 10]).fill({ color: yy % 24 ? 0xff9a2c : 0xffc44a, alpha: 0.88 * fade });
+          }
+          if (t > 0.72 && !h.smoke) { h.smoke = true; dust(px0, groundY - 216, 4, [176, 150, 130], 30); }
+        });
+        // Where the target comes back down: a pale purple ring for a moment.
+        live(1.05, (h, t, dt, g) => { if (t > 0.72) { const k = (t - 0.72) / 0.28; groundRing(g.top, x, groundY + 4, 26 + 18 * k, 0xc8b4f0, 0.8 * (1 - k), 3); } });
+        dizzy(x, y - 80, 0.7);
+      }
+    },
+
+    // ------------------------------------------------------------------ Thunderous Kick
+    thunderousKick: {
+      release({ follow, angle = 0 }) { trail(follow, angle, [255, 176, 70], { life: 0.5, every: 0.012, spread: 30, size: 11 }); },
+      hit({ x, y, groundY, angle = 0, hitIndex = 0 }) {
+        const c = Math.cos(angle) >= 0 ? 1 : -1;
+        if (hitIndex === 1) {
+          // The shove: the ring widens and the leg is one long bar of orange light.
+          live(0.2, (h, t, dt, g) => {
+            const fade = 1 - t;
+            g.top.poly([x - c * 100, y + 4, x + c * 44, y - 6, x + c * 52, y + 6, x + c * 44, y + 18, x - c * 100, y + 16]).fill({ color: 0xff9a2c, alpha: 0.9 * fade });
+            g.add.poly([x - c * 90, y + 8, x + c * 44, y + 6, x - c * 90, y + 12]).fill({ color: 0xfff0d0, alpha: 0.9 * fade });
+            groundRing(g.top, x, groundY + 4, 50 + 40 * t, 0xf2e8d0, 0.8 * fade, 3);
+          });
+          dust(x, groundY + 2, 3);
+          return;
+        }
+        whiteBloom(x, y, 22, 52, 0.12);
+        live(0.3, (h, t, dt, g) => { spiky(g.add, x, y, 38 * (1 - t * 0.4), 8, 0xffc060, 1 - t, h.seed); star4(g.add, x, y, 16, 0xffffff, 1 - t); groundRing(g.top, x, groundY + 4, 26 + 24 * t, 0xf2e8d0, 0.9 * (1 - t * 0.5), 3); });
+        dizzy(x, y, 0.5);
+      }
+    },
+
+    // ------------------------------------------------------------------ Dynamic Punch
+    dynamicPunch: {
+      cast({ follow, angle = 0 }) { this.aura(follow, angle, 0.2); },
+      release({ follow, angle = 0 }) { this.aura(follow, angle, 1.2, true); },
+      // A spiky blaze of orange spirit shakes on the raised fist all the way in.
+      aura(follow, angle, life, untilEnd = false) {
+        const c = Math.cos(angle) >= 0 ? 1 : -1;
+        live(life, (h, t, dt, g) => {
+          const at = follow?.(); if (!at) { if (untilEnd) h.age = h.life; return; }
+          const fx = at.x + c * 18 + Math.sin(h.age * 70) * 2, fy = at.y - 6 + Math.cos(h.age * 62) * 2;
+          spiky(g.top, fx, fy, 26, 7, 0xff8a1c, 0.92, h.age * 9); spiky(g.add, fx, fy, 15, 7, 0xffe9a0, 0.9, h.age * 11 + 1);
+        });
+      },
+      hit({ x, y, groundY, angle = 0 }) {
+        const c = Math.cos(angle) >= 0 ? 1 : -1, bx = x - c * 20;
+        // A round fireball stands on the punch for most of half a second, a ring runs out, smoke caps it.
+        live(0.62, (h, t, dt, g) => {
+          const grow = Math.min(1, t / 0.12), fade = t < 0.7 ? 1 : 1 - (t - 0.7) / 0.3, r = 62 * grow * (1 + 0.04 * Math.sin(h.age * 40));
+          g.top.circle(bx, y, r).fill({ color: 0xa82410, alpha: 0.92 * fade });
+          g.top.circle(bx, y, r * 0.78).fill({ color: 0xff7a1c, alpha: 0.95 * fade });
+          g.add.circle(bx, y, r * 0.45).fill({ color: 0xffd070, alpha: 0.9 * fade });
+          groundRing(g.top, bx, groundY + 4, 30 + 80 * Math.min(1, t / 0.6), 0xff8a1c, 0.85 * (1 - Math.min(1, t / 0.6)), 4);
+          if (t > 0.74 && !h.smoke) { h.smoke = true; dust(bx, y - 50, 6, [70, 66, 66], 40); for (let i = 0; i < 6; i++) { const a = rand() * TAU; spawnP({ shape: 'px', x: bx, y, vx: Math.cos(a) * 220, vy: Math.sin(a) * 160 - 60, vz: 80, gravity: 380, size: 5, size1: 4, stops: [[0, [130, 124, 118], 1], [1, [130, 124, 118], 0]], add: false, life: 0.5 }); } }
+        });
+        // Confusion: yellow and purple marks circle the struck head.
+        live(0.9, (h, t, dt, g) => { for (let i = 0; i < 4; i++) { const a = h.age * 7 + i * 1.571; star4(g.top, x + Math.cos(a) * 18, y - 52 + Math.sin(a) * 6, 5, i % 2 ? 0xffe14a : 0xb478ff, 0.95 * (1 - t * 0.3)); } });
+        addDecal({ x: bx, y: groundY + 8, kind: 'scorch', radius: 46, pal: 'fire', life: 6 });
+        addDecal({ x: bx, y: groundY + 8, kind: 'crack', radius: 54, pal: 'earth', life: 6 });
+        pebbles(bx, groundY + 8, 8, 80, [112, 96, 84], 4);
+      }
+    },
+
+    // ------------------------------------------------------------------ Focus Punch
+    focusPunch: {
+      cast({ follow, windup = 0.7 }) {
+        // Short orange sparks crowd round the still body, more of them as it focuses; the ground lights white at the end.
+        live(Math.max(0.2, windup), (h, t, dt, g) => {
+          const at = follow?.(); if (!at) return;
+          h.acc = (h.acc ?? 0) + dt; const every = 0.09 - 0.07 * t;
+          while (h.acc >= every) { h.acc -= every; const a = rand() * TAU; spawnP({ shape: 'streak', x: at.x + Math.cos(a) * 34, y: at.y + Math.sin(a) * 30, vx: -Math.cos(a) * 60, vy: -Math.sin(a) * 60 - 20, size: 6, size1: 1, rot: a, pal: 'fire', add: true, life: 0.2 }); }
+          if (t > 0.8) g.add.ellipse(at.x, at.footY + 2, 30, 11).fill({ color: 0xffffff, alpha: 0.7 * (t - 0.8) / 0.2 });
+          if (!h.mark) { h.mark = true; h.sx = at.x; h.sy = at.footY; }
+          if (t > 0.9 && !h.cracked) { h.cracked = true; addDecal({ x: h.sx, y: h.sy + 6, kind: 'crack', radius: 16, pal: 'earth', life: 3.2 }); }
+        });
+      },
+      release({ follow, angle = 0 }) {
+        const at = follow?.(); if (at) live(0.2, (h, t, dt, g) => g.top.ellipse(at.x, at.y, 22, 30).fill({ color: 0xfff0a0, alpha: 0.5 * (1 - t) }));
+        trail(follow, angle, [255, 236, 150], { life: 0.4, every: 0.01, spread: 30, size: 11 });
+      },
+      hit({ x, y, groundY, angle = 0 }) {
+        whiteBloom(x, y, 90, 300, 0.2);
+        live(0.4, (h, t, dt, g) => {
+          spiky(g.add, x, y, 60 * (0.6 + 0.4 * Math.min(1, t / 0.2)), 9, 0xffc060, 1 - t, h.seed);
+          groundRing(g.top, x, groundY + 4, 30 + 80 * t, 0xd8c8a8, 0.85 * (1 - t), 3);
+          const pulse = Math.min(2, Math.floor(h.age / 0.07));
+          if (pulse !== h.pulse) { h.pulse = pulse; const bx = x + Math.cos(angle) * 22, by = y + Math.sin(angle) * 14; for (let i = 0; i < 9; i++) { const a = angle + (rand() - 0.5) * 0.45; spawnP({ shape: 'streak', x: bx, y: by, vx: Math.cos(a) * (460 + rand() * 360), vy: Math.sin(a) * (460 + rand() * 360), size: 8, size1: 1, stretch: 2.8, rot: a, pal: 'fire', add: true, life: 0.22 + rand() * 0.08 }); } }
+        });
+        pebbles(x, groundY + 8, 5, 60, [120, 110, 100], 1.2);
+        dizzy(x, y, 0.5);
+      }
+    },
+
+    // ------------------------------------------------------------------ Drain Punch
+    drainPunch: {
+      cast({ follow, angle = 0 }) { this.orb(follow, angle, 0.14); },
+      release({ follow, angle = 0 }) { this.orb(follow, angle, 0.6, true); trail(follow, angle, [200, 255, 200], { life: 0.4, every: 0.01, spread: 8, size: 12 }); },
+      orb(follow, angle, life, untilEnd = false) {
+        const c = Math.cos(angle) >= 0 ? 1 : -1;
+        live(life, (h, t, dt, g) => { const at = follow?.(); if (!at) { if (untilEnd) h.age = h.life; return; } g.top.circle(at.x + c * 20, at.y, 12).fill({ color: 0x4cd86a, alpha: 0.9 }); g.add.circle(at.x + c * 20, at.y, 6).fill({ color: 0xe8ffe8, alpha: 0.95 }); });
+      },
+      hit({ x, y, groundY, caster = null }) {
+        // A green-white spiky burst, then a ring of thin green needles; a pale ring on the ground.
+        live(0.32, (h, t, dt, g) => {
+          if (t < 0.65) spiky(g.top, x, y, 40, 9, 0x4cd86a, 0.95, h.seed), spiky(g.add, x, y, 22, 9, 0xe8ffe8, 0.9, h.seed + 0.5);
+          else { const k = (t - 0.65) / 0.35; for (let i = 0; i < 14; i++) { const a = (i / 14) * TAU + h.seed; g.add.poly([x + Math.cos(a) * 30, y + Math.sin(a) * 26, x + Math.cos(a + 0.03) * 108, y + Math.sin(a + 0.03) * 94, x + Math.cos(a - 0.03) * 108, y + Math.sin(a - 0.03) * 94]).fill({ color: 0x6ee88a, alpha: 0.9 * (1 - k) }); } }
+          groundRing(g.top, x, groundY + 4, 30 + 80 * t, 0xd8c8a8, 0.8 * (1 - t), 3);
+        });
+        dust(x, groundY + 2, 3, [150, 120, 90]);
+        // Green plus signs file back from the target into the striker, which then flashes green and white.
+        live(1.4, (h, t, dt, g) => {
+          const to = caster?.(); if (!to) return;
+          const s0 = 0.35, s1 = 0.75;
+          for (let i = 0; i < 7; i++) {
+            const k = (t - s0) / (s1 - s0) * 1.6 - i * 0.09; if (k <= 0 || k >= 1) continue;
+            const px0 = x + (to.x - x) * k, py0 = y - 18 + (to.y - 26 - (y - 18)) * k - Math.sin(Math.PI * k) * 16;
+            g.top.rect(px0 - 5, py0 - 1.5, 10, 3).fill({ color: 0x4cd86a, alpha: 0.95 }); g.top.rect(px0 - 1.5, py0 - 5, 3, 10).fill({ color: 0x4cd86a, alpha: 0.95 });
+          }
+          if (t > 0.78) { const k = (t - 0.78) / 0.22; groundRing(g.top, to.x, to.y + 30 - 50 * k, 24, 0x4cd86a, 0.9 * (1 - k), 3); groundRing(g.top, to.x, to.y + 44 - 50 * k, 20, 0xe8ffe8, 0.8 * (1 - k), 2); g.add.ellipse(to.x, to.y, 22, 32).fill({ color: 0xc8ffd0, alpha: 0.5 * (1 - k) }); }
+        });
+        dizzy(x, y, 0.5);
+      }
+    },
+
+    // ------------------------------------------------------------------ Force Palm
+    forcePalm: {
+      cast({ follow, angle = 0 }) { this.orb(follow, angle, 0.17); },
+      release({ follow, angle = 0 }) { this.orb(follow, angle, 0.6, true); trail(follow, angle, [130, 180, 255], { life: 0.3, every: 0.006, spread: 44, size: 14 }); },
+      orb(follow, angle, life, untilEnd = false) {
+        const c = Math.cos(angle) >= 0 ? 1 : -1;
+        live(life, (h, t, dt, g) => { const at = follow?.(); if (!at) { if (untilEnd) h.age = h.life; return; } g.top.circle(at.x + c * 22, at.y - 2, 12).fill({ color: 0x6aa8ff, alpha: 0.9 }); g.add.circle(at.x + c * 22, at.y - 2, 6).fill({ color: 0xffffff, alpha: 0.95 }); });
+      },
+      hit({ x, y, groundY, angle = 0 }) {
+        const c = Math.cos(angle) >= 0 ? 1 : -1;
+        whiteBloom(x - c * 6, y, 18, 40, 0.12);
+        live(0.28, (h, t, dt, g) => {
+          // A blue arc of force on the far side of the target's feet; the palm light swells on the body.
+          const fade = 1 - t, pts = [], inner = [];
+          for (let i = 0; i <= 10; i++) { const a = (i / 10 - 0.5) * 2.6; pts.push(x + c * (10 + Math.cos(a) * (40 + 22 * t)), groundY + Math.sin(a) * 20); inner.unshift(x + c * (10 + Math.cos(a) * (30 + 22 * t)), groundY + Math.sin(a) * 16); }
+          g.top.poly([...pts, ...inner]).fill({ color: 0x6aa8ff, alpha: 0.9 * fade });
+          g.add.circle(x - c * 8, y, 18).fill({ color: 0xbcd8ff, alpha: 0.6 * fade });
+        });
+        // Paralysis: the struck body flickers with yellow sparks for a moment.
+        live(0.7, (h, t, dt, g) => { if (Math.floor(h.age / 0.07) % 2) for (let i = 0; i < 3; i++) { const a = h.age * 11 + i * 2.1; star4(g.add, x + Math.cos(a) * 20, y + Math.sin(a * 1.3) * 22, 5, 0xffe14a, 0.9 * (1 - t)); } });
+        addDecal({ x: x - c * 26, y: groundY + 8, kind: 'crack', radius: 12, pal: 'earth', life: 1.6 });
+        dizzy(x, y, 0.5);
+      }
+    },
+
+    // ------------------------------------------------------------------ Hammer Arm
+    hammerArm: {
+      // The giant fist and forearm: a red-orange arm with a yellow cuff, drawn from its elbow at `tilt` (0 = upright).
+      arm(g, ex, ey, tilt, scale, alpha = 1) {
+        if (!g || alpha <= 0.02 || scale <= 0.05) return;
+        const ux = Math.sin(tilt), uy = -Math.cos(tilt), vx = Math.cos(tilt), vy = Math.sin(tilt), w = 30 * scale, len = 124 * scale;
+        const quad = (a0, a1, half, color) => g.poly([ex + ux * a0 - vx * half, ey + uy * a0 - vy * half, ex + ux * a1 - vx * half, ey + uy * a1 - vy * half, ex + ux * a1 + vx * half, ey + uy * a1 + vy * half, ex + ux * a0 + vx * half, ey + uy * a0 + vy * half]).fill({ color, alpha });
+        quad(-3, len + 3, w + 3, 0x4a1410);              // dark outline
+        quad(0, len * 0.62, w * 0.74, 0xe0461c);         // forearm
+        quad(len * 0.2, len * 0.3, w * 0.86, 0xffd24a);  // cuff
+        quad(len * 0.62, len, w, 0xf0602a);              // fist
+        quad(len * 0.66, len * 0.96, w * 0.3, 0xffa060); // highlight
+        for (const k of [0.72, 0.82, 0.92]) quad(len * k - 1.5, len * k + 1.5, w, 0x8a2414); // finger lines
+      },
+      cast({ follow, angle = 0, windup = 0.3 }) {
+        // A red line shoots up from the raised hand, then the arm grows out of it.
+        live(Math.max(0.2, windup), (h, t, dt, g) => {
+          const at = follow?.(); if (!at) return;
+          if (t < 0.3) g.top.rect(at.x - 1.5, at.y - 50 - 140 * (t / 0.3), 3, 140 * (t / 0.3)).fill({ color: 0xe0461c, alpha: 0.9 });
+          else this.arm(g.top, at.x, at.y - 44, 0, (t - 0.3) / 0.7);
+          g.top.ellipse(at.x, at.footY + 4, 26, 9).fill({ color: 0x000000, alpha: 0.18 });
+        });
+      },
+      release({ follow, angle = 0 }) {
+        const c = Math.cos(angle) >= 0 ? 1 : -1;
+        // Carried upright on the walk in, leaning back as it nears the target.
+        live(1.4, (h, t, dt, g) => {
+          const at = follow?.(); if (!at) { h.age = h.life; return; }
+          const tilt = -c * 0.78 * Math.min(1, Math.max(0, (h.age - 0.3) / 0.3));
+          this.arm(g.top, at.x, at.y - 44, tilt, 1);
+          g.top.ellipse(at.x + Math.sin(tilt) * 60, at.footY + 4, 30, 10).fill({ color: 0x000000, alpha: 0.18 });
+        });
+      },
+      hit({ x, y, groundY, angle = 0 }) {
+        const c = Math.cos(angle) >= 0 ? 1 : -1, ex = x - c * 96, ey = groundY - 44;
+        whiteBloom(x, y, 26, 60, 0.12);
+        // The arm swings down in an arc and lies flat on the target; a dotted orange arc shows where it passed.
+        live(0.5, (h, t, dt, g) => {
+          const k = Math.min(1, t / 0.2), tilt = c * (-0.78 + (Math.PI / 2 + 0.78) * k * k), fade = t < 0.8 ? 1 : 1 - (t - 0.8) / 0.2;
+          this.arm(g.top, ex, ey + 30 * k, tilt, 1, fade);
+          if (t < 0.6) for (let i = 0; i < 9; i++) { const a = -0.78 + (Math.PI / 2 + 0.78) * (i / 8); g.add.circle(ex + c * Math.sin(a) * 130, ey - Math.cos(a) * 130, 4).fill({ color: 0xff9a2c, alpha: 0.9 * (1 - t / 0.6) }); }
+          spiky(g.add, x, y, 40 * (1 - t), 8, 0xff9a2c, Math.max(0, 1 - t * 2.5), h.seed);
+          groundRing(g.top, x, groundY + 4, 30 + 46 * Math.min(1, t / 0.5), 0xff8a1c, 0.85 * (1 - Math.min(1, t / 0.5)), 4);
+        });
+        dust(x, groundY, 8, [150, 150, 150], 110);
+        pebbles(x, groundY + 8, 16, 130, [120, 104, 88], 5, 6);
+        addDecal({ x, y: groundY + 8, kind: 'crack', radius: 62, pal: 'earth', life: 6 });
+        dizzy(x, y, 0.5);
       }
     },
 

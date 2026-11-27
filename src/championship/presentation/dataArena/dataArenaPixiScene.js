@@ -778,8 +778,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               if (t < hold + hopTime) {
                 const k = t < hold ? 0 : clamp((t - hold) / Math.max(0.01, hopTime), 0, 1), ke = k * k * (3 - 2 * k);
                 sprite.x += (stage.ax - body.x) * (1 - ke); sprite.y += (stage.ay - body.y) * (1 - ke);
+                const held = (st.lift ?? 0) * (1 - ke);
+                if (held) { sprite.y -= held; actionHop += held; }
                 if (t < hold) { if (st.lean) actionTilt = sDir * st.lean; if (st.low) low(st.low); if (st.tint) scriptTint = st.tint; }
-                else if (af.hop) { const h = Math.sin(Math.PI * k) * af.hop; sprite.y -= h; actionHop += h; }
+                else {
+                  if (af.hop) { const h = Math.sin(Math.PI * k) * af.hop; sprite.y -= h; actionHop += h; }
+                  if (af.spin) actionTilt = sDir * Math.PI * 2 * af.spin * k;
+                }
               }
               const settle = stage.liftEnd * Math.max(0, 1 - t / 0.07);
               if (settle > 0) { sprite.y -= settle; actionHop += settle; }
@@ -791,7 +796,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         const reaction = targetPoses.get(body.id);
         if (reaction && !reducedMotion) {
           if (state.time >= reaction.until) targetPoses.delete(body.id);
-          else {
+          else if (reaction.lift) {
+            const t = state.time - reaction.from, L = reaction.lift;
+            const h = t < L.up ? L.height * (1 - Math.pow(1 - t / L.up, 2)) : t < L.up + L.hang ? L.height : L.height * (1 - Math.pow((t - L.up - L.hang) / Math.max(0.01, L.down), 2));
+            sprite.y -= Math.max(0, h); actionHop += Math.max(0, h);
+          } else {
             const k = clamp((state.time - reaction.from) / 0.09, 0, 1) * clamp((reaction.until - state.time) / 0.12, 0, 1);
             poseTilt = reaction.dir * 1.35 * k; sprite.y -= 6 * k;
           }
@@ -835,6 +844,15 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const scriptHops = new Map();
   // Struck bodies acting out a staged reaction: body id -> {from, until, dir}.
   const targetPoses = new Map();
+  function stageTargetReaction(moveId, bodyId, angle, contact) {
+    const cue = pbMoveBody(moveId)?.target;
+    if (!cue || bodyId == null || (contact?.hitIndex ?? 0) !== 0) return;
+    const dir = Math.cos(angle ?? 0) >= 0 ? 1 : -1;
+    if (cue.lift) targetPoses.set(bodyId, { from: state.time, until: state.time + cue.lift.up + cue.lift.hang + cue.lift.down, dir, lift: cue.lift });
+    else if (cue.topple) targetPoses.set(bodyId, { from: state.time, until: state.time + cue.topple, dir });
+  }
+  // A staged move can dim the whole scene through its charge (elapsed time it lasts until).
+  let sceneDimUntil = 0, impactQueued = null;
   function releaseAt(event) {
     const point = casterView(event.casterId)?.releasePoint(event.angle,event);
     return point ? { ...point, reviewed: true }
@@ -1427,7 +1445,11 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     // only on the first / last strike of a multi-hit blow).
     const frameCue = moveId ? pbMoveBody(moveId)?.impactFrame : null;
     const frameNow = frameCue === true ? hitIndex == null || final !== false : frameCue === 'final' ? final === true : frameCue === 'first' ? hitIndex === 0 : false;
-    if (relayMode && !guarded && wx !== null && wy !== null && frameNow) triggerImpactFrame(wx, wy, 0.085, pbMoveBody(moveId)?.impactStyle ?? 'white');
+    if (relayMode && !guarded && wx !== null && wy !== null && frameNow) {
+      const style = pbMoveBody(moveId)?.impactStyle ?? 'white';
+      triggerImpactFrame(wx, wy, 0.085, Array.isArray(style) ? style[0] : style);
+      if (Array.isArray(style) && style[1]) impactQueued = { style: style[1], at: elapsed + 0.085, wx, wy };
+    }
     // The quick strikes of a multi-hit blow keep the fight moving: a small shake, no freeze.
     if (hitIndex != null && final === false && !(frameCue === 'first' && hitIndex === 0)) { camera.addTrauma(0.1); return; }
     const heavy = (amount >= 28 || Boolean(pbFeel?.impact)) && !guarded;
@@ -1508,7 +1530,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         originalFx.hit({ x: confirmed.x, y: confirmed.y - BEAM_ELEVATION, angle: confirmed.angle ?? 0, moveId: confirmed.moveId });
       }
       if (elementFx) {
-        if (event.type === 'CAST' && pbMoveBody(event.moveId)) {
+        if ((event.type === 'CAST' || event.type === 'ULT_CAST') && pbMoveBody(event.moveId)?.dim) sceneDimUntil = elapsed + (event.windup ?? 0) + pbMoveBody(event.moveId).dim;
+        if ((event.type === 'CAST' || event.type === 'ULT_CAST') && pbMoveBody(event.moveId)) {
           const b = casterBody(event);
           elementFx.cast({ x: event.x, y: event.y - 30, moveId: event.moveId, windup: event.windup, angle: event.angle ?? 0,
             follow: () => (b && b.hp > 0 && b.cast ? { x: b.x, y: b.y - 30, footY: b.y } : null) });
@@ -1578,23 +1601,20 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             if (event.type === 'RIVAL_HIT' && event.cause !== 'LASER' && lastRelease.player) {
               const rival = (state.rivals ?? []).find(r => Math.hypot(r.x - event.x, r.y - event.y) < 2);
               const hitAng = Math.atan2(event.y - state.player.y, event.x - state.player.x);
-              elementFx.hit({ x: event.x, y: event.y - 30, groundY: event.y, ...lastRelease.player, angle: hitAng, heavy: event.amount >= 22, follow: bodyCenter(rival),
+              elementFx.hit({ x: event.x, y: event.y - 30, groundY: event.y, ...lastRelease.player, angle: hitAng, heavy: event.amount >= 22, follow: bodyCenter(rival), caster: bodyCenter(state.player),
                 hitIndex: event.contact?.hitIndex ?? null, final: event.contact?.final ?? null });
-              const topple = pbMoveBody(lastRelease.player.moveId)?.target?.topple;
-              if (topple && rival) targetPoses.set(rival.id, { from: state.time, until: state.time + topple, dir: Math.cos(hitAng) >= 0 ? 1 : -1 });
+              stageTargetReaction(lastRelease.player.moveId, rival?.id, hitAng, event.contact);
             } else if (event.type === 'PLAYER_HIT' && lastRelease.rival) {
               const foe = (state.rivals ?? []).find(r => r.active && r.hp > 0) ?? state.rivals?.[0];
               const hitAng = foe ? Math.atan2(event.y - foe.y, event.x - foe.x) : (lastRelease.rival.angle ?? 0);
-              elementFx.hit({ x: event.x, y: event.y - 30, groundY: event.y, ...lastRelease.rival, angle: hitAng, heavy: event.amount >= 22, follow: bodyCenter(state.player),
+              elementFx.hit({ x: event.x, y: event.y - 30, groundY: event.y, ...lastRelease.rival, angle: hitAng, heavy: event.amount >= 22, follow: bodyCenter(state.player), caster: bodyCenter(foe),
                 hitIndex: event.contact?.hitIndex ?? null, final: event.contact?.final ?? null });
-              const topple = pbMoveBody(lastRelease.rival.moveId)?.target?.topple;
-              if (topple) targetPoses.set(state.player.id, { from: state.time, until: state.time + topple, dir: Math.cos(hitAng) >= 0 ? 1 : -1 });
+              stageTargetReaction(lastRelease.rival.moveId, state.player.id, hitAng, event.contact);
             }
           } else if (confirmed && !atlasContact && event.cause !== 'SKILL') {
             elementFx.hit({ x: confirmed.x, y: confirmed.y - BEAM_ELEVATION, groundY: confirmed.y, moveId: confirmed.moveId, speciesId: casterSpecies(confirmed), angle: confirmed.angle,
               hitIndex: confirmed.hitIndex ?? null, final: confirmed.final ?? null });
-            const topple = pbMoveBody(confirmed.moveId)?.target?.topple;
-            if (topple) targetPoses.set(confirmed.targetId, { from: state.time, until: state.time + topple, dir: Math.cos(confirmed.angle ?? 0) >= 0 ? 1 : -1 });
+            stageTargetReaction(confirmed.moveId, confirmed.targetId, confirmed.angle, confirmed);
           }
         }
       }
@@ -2270,6 +2290,14 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     }
   }
   function drawImpactFrame(viewport) {
+    if (impactQueued && elapsed >= impactQueued.at) { const q = impactQueued; impactQueued = null; triggerImpactFrame(q.wx, q.wy, 0.085, q.style); }
+    if ((impactFlashTimer <= 0 && elapsed < sceneDimUntil) && !reducedMotion && rich) {
+      // The scene dims behind the fighters while a staged move charges.
+      impactGfx.visible = true; impactGfx.clear();
+      const z = view?.zoom || 1; impactGfx.scale.set(1 / z); impactGfx.position.set(-(view?.x ?? 0) / z, -(view?.y ?? 0) / z);
+      impactGfx.rect(0, 0, viewport.width, viewport.height).fill({ color: 0x07080f, alpha: 0.46 * clamp((sceneDimUntil - elapsed) / 0.15, 0, 1) });
+      return;
+    }
     if (impactFlashTimer <= 0 || reducedMotion || !rich) { impactGfx.visible = false; return; }
     impactGfx.visible = true;
     impactGfx.clear();
