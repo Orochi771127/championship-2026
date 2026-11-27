@@ -127,3 +127,25 @@ test('a partner casts each of its own moves in a real relay match', () => {
     }
   }
 });
+
+// PB_MOVE_BY_MOVE_20261127: moves staged one at a time keep their own rules and have a script for every body cue.
+test('staged moves keep their tuned rules through calibration and every body cue has its script', async () => {
+  const { PB_MOVE_TUNING, pb324ToRelayMove } = await import('../src/championship/modes/dataArena/dataArenaPb324Catalog.js');
+  const { calibrateV2Move } = await import('../src/championship/modes/dataArena/dataArenaMoveCatalogV2.js');
+  const { PB_MOVE_BODY, createPbMoveScripts } = await import('../src/championship/presentation/dataArena/dataArenaPbMoveScripts.js');
+  const scripts = createPbMoveScripts({ spawnP() {}, addHero() {}, addDecal() {}, rand: () => 0.5 });
+  for (const [id, cue] of Object.entries(PB_MOVE_BODY)) {
+    assert.ok(scripts[cue.key], `${id} has a script for ${cue.key}`);
+    assert.ok(PB_MOVE_TUNING[id], `${id} has rule tuning`);
+  }
+  for (const [id, tune] of Object.entries(PB_MOVE_TUNING)) {
+    const base = pb324ToRelayMove(id, false);
+    assert.equal(base.stagedTuning, tune);
+    const calibrated = calibrateV2Move(id, base);
+    for (const key of ['windup', 'speed']) if (tune[key] !== undefined) assert.equal(calibrated[key], tune[key], `${id} keeps its ${key}`);
+    if (tune.comboHits) {
+      assert.ok(Math.abs(tune.comboHits.reduce((sum, hit) => sum + hit.share, 0) - 1) < 1e-9, `${id} strikes share the whole blow`);
+      assert.ok(tune.comboHits.slice(1).every((hit) => hit.dt > 0), `${id} later strikes come on a beat`);
+    }
+  }
+});
