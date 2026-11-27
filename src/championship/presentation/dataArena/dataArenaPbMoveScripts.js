@@ -21,6 +21,7 @@ const SCORCH_STOPS = Object.freeze([[0, [58, 40, 34], 0.78], [0.7, [58, 40, 34],
  * Body cues per move id (the scene reads these; all optional). Sizes are world px; a body is ~72 px tall.
  *   windup {tint, shake, crouch, lean (+ back / - forward), hop (rises and stays up)}
  *   dash   {tint, hide, low, lean, arc (leap height), dive (start height), afterimage (tint)}
+ *   ready  {lean, low, hop, tint}  -- standing at the target while the blow winds up (strikeDelay)
  *   combo  {jab (px forward on each strike), lean, low}  -- while a multi-hit blow keeps striking
  *   strike {lean, low, tint, lift (held in the air on the target), hold (seconds held at the contact point)}
  *   after  {hop (height), time, spin (turns)}  -- lets go of the contact point and hops back to where the rules put it
@@ -51,7 +52,7 @@ export const PB_MOVE_BODY = Object.freeze({
   // Double Kick: springs straight up, dives foot first onto the target, crouches and kicks again from the ground.
   'pb-057': { key: 'doubleKick', windup: { crouch: 0.1, hop: 110 }, dash: { lean: 0.5 }, combo: { jab: 16, low: 0.2 }, strike: { low: 0.22, hold: 0.2 }, impactFrame: 'first' },
   // High Jump Kick: crouch, straight up three bodies, dives knee first, stays pressed in the air, bounces back.
-  'pb-135': { key: 'highJumpKick', windup: { crouch: 0.15, hop: 210 }, dash: { lean: 0.6 }, strike: { lift: 34, lean: 0.5, hold: 0.3 }, after: { hop: 72, time: 0.3 } },
+  'pb-135': { key: 'highJumpKick', windup: { crouch: 0.15, hop: 210, tint: 0xffb050 }, dash: { lean: 0.6, tint: 0xffa040 }, strike: { lift: 34, lean: 0.5, tint: 0xffa040, hold: 0.35 }, after: { hop: 40, time: 0.25 } },
   // Sky Uppercut: low run, crouch, then spins straight up three bodies with the target carried on the fist.
   'pb-257': { key: 'skyUppercut', windup: { crouch: 0.3 }, dash: { low: 0.3 }, after: { hop: 200, time: 0.75, spin: 2 }, target: { lift: { height: 160, up: 0.4, hang: 0.1, down: 0.25 } }, impactFrame: true, impactStyle: 'black' },
   // Thunderous Kick: runs in, hops with the leg drawn back, stomps and pins, then shoves with the same leg.
@@ -65,7 +66,7 @@ export const PB_MOVE_BODY = Object.freeze({
   // Force Palm: slides in along the ground and holds the flat palm on the target.
   'pb-111': { key: 'forcePalm', windup: { crouch: 0.12 }, dash: { low: 0.15 }, strike: { lean: 0.3, hold: 0.3 }, impactFrame: true, impactStyle: 'black' },
   // Hammer Arm: the body only walks in and crouches; the giant arm does the hitting.
-  'pb-126': { key: 'hammerArm', strike: { low: 0.25, hold: 0.35 }, impactFrame: true, impactStyle: 'black' },
+  'pb-126': { key: 'hammerArm', ready: { low: 0.12 }, strike: { low: 0.25, hold: 0.35 }, impactFrame: true, impactStyle: 'black' },
   // ---- flying
   // Aerial Ace: a dark-blue silhouette that cuts straight through the target and lands flat on its far side.
   'pb-003': { key: 'aerialAce', windup: { crouch: 0.2, tint: 0x2a3a8c }, dash: { tint: 0x2a3a8c, lean: 0.4 }, strike: { lean: 1.15, low: 0.2, hold: 0.28 }, after: { hop: 22, time: 0.16 }, impactFrame: true, impactStyle: 'black' }
@@ -117,9 +118,19 @@ export function createPbMoveScripts(api) {
     live(life, (h, t, dt) => {
       const at = follow?.(); if (!at) { h.age = h.life; return; }
       h.acc = (h.acc ?? 0) + dt;
-      while (h.acc >= every) { h.acc -= every; const off = (rand() - 0.5) * spread; spawnP({ shape: 'streak', x: at.x - s * off - c * 8, y: at.y + c * off * 0.6 + (rand() - 0.5) * 12, vx: -c * 110, vy: -s * 110, size, size1: 1, stretch: 2.8, rot: angle + Math.PI, stops, add: false, life: 0.12 + rand() * 0.07 }); }
+      while (h.acc >= every) { h.acc -= every; const off = (rand() - 0.5) * spread; spawnP({ shape: 'streak', x: at.x - s * off - c * 8, y: at.y + c * off * 0.6 + (rand() - 0.5) * 12, vx: -c * 110, vy: -s * 110, size, size1: 1, stretch: 2.8, rot: angle + Math.PI, stops, add: true, life: 0.14 + rand() * 0.08 }); }
     });
   };
+  // A comet tail: a tapering wedge of flame drawn behind a body along the way it is really moving.
+  const comet = (follow, outer, inner, { life = 0.6, long = 150, wide = 26 } = {}) => live(life, (h, t, dt, g) => {
+    const at = follow?.(); if (!at) { h.age = h.life; return; }
+    if (h.px !== undefined) { const dx = at.x - h.px, dy = at.y - h.py, d = Math.hypot(dx, dy); if (d > 0.5) { h.ux = dx / d; h.uy = dy / d; } }
+    h.px = at.x; h.py = at.y;
+    if (h.ux === undefined) return;
+    const nx = -h.uy, ny = h.ux, flick = 0.9 + 0.1 * Math.sin(h.age * 50), tx = at.x - h.ux * long * flick, ty = at.y - h.uy * long * flick;
+    g.top.poly([at.x + nx * wide, at.y + ny * wide, at.x + h.ux * wide * 0.8, at.y + h.uy * wide * 0.8, at.x - nx * wide, at.y - ny * wide, tx, ty]).fill({ color: outer, alpha: 0.88 });
+    g.add.poly([at.x + nx * wide * 0.5, at.y + ny * wide * 0.5, at.x - nx * wide * 0.5, at.y - ny * wide * 0.5, at.x - h.ux * long * 0.6, at.y - h.uy * long * 0.6]).fill({ color: inner, alpha: 0.85 });
+  });
   // Puffs of dust or dirt kicked off the ground.
   const dust = (x, y, count, rgb = [176, 150, 118], speed = 70) => {
     const stops = [[0, rgb, 0.85], [0.6, rgb, 0.6], [1, rgb, 0]];
@@ -252,18 +263,12 @@ export function createPbMoveScripts(api) {
           else if (!h.dusted) { h.dusted = true; dust(at.x, at.footY, 9, [150, 132, 110], 120); addDecal({ x: at.x, y: at.footY + 6, kind: 'crack', radius: 16, pal: 'earth', life: 6 }); }
         });
       },
-      release({ follow, angle = 0 }) {
-        // A thick orange flame tail down the dive.
-        trail(follow, angle, [255, 170, 60], { life: 0.5, every: 0.008, spread: 26, size: 15 });
-        trail(follow, angle, [255, 232, 150], { life: 0.5, every: 0.016, spread: 12, size: 9 });
-      },
-      hit({ x, y, groundY, angle = 0 }) {
-        // The whole side of the screen blooms white; an orange star on the knee, a second one as it bounces off.
-        whiteBloom(x, y, 110, 420, 0.22);
-        live(0.5, (h, t, dt, g) => {
-          if (t < 0.4) star4(g.add, x, y, 40 * (1 - t), 0xfff0d0, 1 - t / 0.4);
-          if (t > 0.6) { const k = (t - 0.6) / 0.4; spiky(g.add, x, y, 56 * (0.6 + 0.4 * k), 8, 0xff9a2c, 1 - k, h.seed); if (!h.puff) { h.puff = true; dust(x, groundY, 6, [150, 150, 150], 90); } }
-        });
+      release({ follow }) { comet(follow, 0xff8a1c, 0xffe9a0, { life: 0.6, long: 150, wide: 24 }); },
+      hit({ x, y, groundY }) {
+        // The screen round the target blows out white and holds; an orange starburst on the knee; dust on the target.
+        live(0.34, (h, t, dt, g) => { const fade = t < 0.7 ? 1 : 1 - (t - 0.7) / 0.3; g.add.circle(x, y, 150).fill({ color: 0xffffff, alpha: 0.5 * fade }); g.add.circle(x, y, 96).fill({ color: 0xffffff, alpha: 0.7 * fade }); });
+        live(0.5, (h, t, dt, g) => { spiky(g.top, x, y, 44 * (0.7 + 0.3 * Math.min(1, t / 0.15)), 9, 0xff8a1c, 1 - t * 0.6, h.seed); spiky(g.add, x, y, 24, 9, 0xffe9a0, 1 - t, h.seed + 0.5); });
+        dust(x, groundY, 7, [150, 124, 100], 90);
         addDecal({ x, y: groundY + 8, kind: 'crack', radius: 54, pal: 'earth', life: 6 });
         pebbles(x, groundY + 8, 8, 90, [120, 104, 88], 4);
         dizzy(x, y, 0.6);
@@ -282,9 +287,9 @@ export function createPbMoveScripts(api) {
         // A coiling pillar of orange flame climbs under the rising body, then lets go from the bottom up.
         live(0.75, (h, t, dt, g) => {
           const top = 216 * Math.min(1, t / 0.55), base = t > 0.6 ? 216 * (t - 0.6) / 0.4 : 0, fade = t < 0.7 ? 1 : 1 - (t - 0.7) / 0.3;
-          for (let yy = base; yy < top; yy += 12) {
-            const wob = Math.sin(yy * 0.09 + h.age * 22) * 20;
-            g.top.poly([px0 + wob - 15, groundY - yy, px0 + wob + 15, groundY - yy - 4, px0 - wob * 0.4 + 13, groundY - yy - 14, px0 - wob * 0.4 - 13, groundY - yy - 10]).fill({ color: yy % 24 ? 0xff9a2c : 0xffc44a, alpha: 0.88 * fade });
+          for (let yy = base; yy < top; yy += 9) {
+            const wob = Math.sin(yy * 0.085 + h.age * 22) * 24;
+            g.top.poly([px0 + wob - 24, groundY - yy, px0 + wob + 24, groundY - yy - 5, px0 - wob * 0.4 + 20, groundY - yy - 15, px0 - wob * 0.4 - 20, groundY - yy - 10]).fill({ color: (yy / 9) % 2 ? 0xff8a1c : 0xffc44a, alpha: 0.92 * fade });
           }
           if (t > 0.72 && !h.smoke) { h.smoke = true; dust(px0, groundY - 216, 4, [176, 150, 130], 30); }
         });
@@ -387,23 +392,25 @@ export function createPbMoveScripts(api) {
         live(life, (h, t, dt, g) => { const at = follow?.(); if (!at) { if (untilEnd) h.age = h.life; return; } g.top.circle(at.x + c * 20, at.y, 12).fill({ color: 0x4cd86a, alpha: 0.9 }); g.add.circle(at.x + c * 20, at.y, 6).fill({ color: 0xe8ffe8, alpha: 0.95 }); });
       },
       hit({ x, y, groundY, caster = null }) {
-        // A green-white spiky burst, then a ring of thin green needles; a pale ring on the ground.
-        live(0.32, (h, t, dt, g) => {
-          if (t < 0.65) spiky(g.top, x, y, 40, 9, 0x4cd86a, 0.95, h.seed), spiky(g.add, x, y, 22, 9, 0xe8ffe8, 0.9, h.seed + 0.5);
-          else { const k = (t - 0.65) / 0.35; for (let i = 0; i < 14; i++) { const a = (i / 14) * TAU + h.seed; g.add.poly([x + Math.cos(a) * 30, y + Math.sin(a) * 26, x + Math.cos(a + 0.03) * 108, y + Math.sin(a + 0.03) * 94, x + Math.cos(a - 0.03) * 108, y + Math.sin(a - 0.03) * 94]).fill({ color: 0x6ee88a, alpha: 0.9 * (1 - k) }); } }
-          groundRing(g.top, x, groundY + 4, 30 + 80 * t, 0xd8c8a8, 0.8 * (1 - t), 3);
+        // A green spiky burst, then a ring of thin green needles; a pale ring on the ground.
+        live(0.36, (h, t, dt, g) => {
+          spiky(g.top, x, y, 52 * (0.7 + 0.3 * Math.min(1, t / 0.2)), 10, 0x38c85a, 0.95 * (1 - t * 0.5), h.seed); spiky(g.top, x, y, 28, 10, 0xc8ffd0, 0.95 * (1 - t), h.seed + 0.5);
+          if (t > 0.6) { const k = (t - 0.6) / 0.4; for (let i = 0; i < 14; i++) { const a = (i / 14) * TAU + h.seed; g.top.poly([x + Math.cos(a) * 34, y + Math.sin(a) * 30, x + Math.cos(a + 0.035) * 108, y + Math.sin(a + 0.035) * 94, x + Math.cos(a - 0.035) * 108, y + Math.sin(a - 0.035) * 94]).fill({ color: 0x4cd86a, alpha: 0.9 * (1 - k) }); } }
+          groundRing(g.top, x, groundY + 4, 30 + 60 * t, 0xd8c8a8, 0.85 * (1 - t), 3);
         });
         dust(x, groundY + 2, 3, [150, 120, 90]);
-        // Green plus signs file back from the target into the striker, which then flashes green and white.
-        live(1.4, (h, t, dt, g) => {
+        // Thick green tendrils run from the target into the striker for half a second; then green rings spiral up it.
+        live(1.5, (h, t, dt, g) => {
           const to = caster?.(); if (!to) return;
-          const s0 = 0.35, s1 = 0.75;
-          for (let i = 0; i < 7; i++) {
-            const k = (t - s0) / (s1 - s0) * 1.6 - i * 0.09; if (k <= 0 || k >= 1) continue;
-            const px0 = x + (to.x - x) * k, py0 = y - 18 + (to.y - 26 - (y - 18)) * k - Math.sin(Math.PI * k) * 16;
-            g.top.rect(px0 - 5, py0 - 1.5, 10, 3).fill({ color: 0x4cd86a, alpha: 0.95 }); g.top.rect(px0 - 1.5, py0 - 5, 3, 10).fill({ color: 0x4cd86a, alpha: 0.95 });
+          if (t > 0.25 && t < 0.62) {
+            const k = (t - 0.25) / 0.37;
+            for (let j = 0; j < 3; j++) {
+              const pts = [], back = [], off = (j - 1) * 12;
+              for (let i = 0; i <= 8; i++) { const f = i / 8, px0 = x + (to.x - x) * f, py0 = y + off * (1 - f) + (to.y - y) * f + Math.sin(f * 6 + h.age * 16 + j * 2) * 7; pts.push(px0, py0 - 4); back.unshift(px0, py0 + 4); }
+              g.top.poly([...pts, ...back]).fill({ color: j === 1 ? 0x8af0a0 : 0x38c85a, alpha: 0.9 * Math.sin(Math.PI * k) });
+            }
           }
-          if (t > 0.78) { const k = (t - 0.78) / 0.22; groundRing(g.top, to.x, to.y + 30 - 50 * k, 24, 0x4cd86a, 0.9 * (1 - k), 3); groundRing(g.top, to.x, to.y + 44 - 50 * k, 20, 0xe8ffe8, 0.8 * (1 - k), 2); g.add.ellipse(to.x, to.y, 22, 32).fill({ color: 0xc8ffd0, alpha: 0.5 * (1 - k) }); }
+          if (t > 0.66) { const k = (t - 0.66) / 0.34; for (let i = 0; i < 3; i++) { const yy = to.y + 34 - 70 * Math.min(1, k * 1.5) - i * 14; groundRing(g.top, to.x, yy, 26, i % 2 ? 0xc8ffd0 : 0x38c85a, 0.95 * (1 - k), 4); } g.add.ellipse(to.x, to.y, 24, 34).fill({ color: 0xc8ffd0, alpha: 0.5 * (1 - k) }); }
         });
         dizzy(x, y, 0.5);
       }
@@ -412,7 +419,7 @@ export function createPbMoveScripts(api) {
     // ------------------------------------------------------------------ Force Palm
     forcePalm: {
       cast({ follow, angle = 0 }) { this.orb(follow, angle, 0.17); },
-      release({ follow, angle = 0 }) { this.orb(follow, angle, 0.6, true); trail(follow, angle, [130, 180, 255], { life: 0.3, every: 0.006, spread: 44, size: 14 }); },
+      release({ follow, angle = 0 }) { this.orb(follow, angle, 0.6, true); comet(follow, 0x5a98ff, 0xdcecff, { life: 0.3, long: 130, wide: 22 }); },
       orb(follow, angle, life, untilEnd = false) {
         const c = Math.cos(angle) >= 0 ? 1 : -1;
         live(life, (h, t, dt, g) => { const at = follow?.(); if (!at) { if (untilEnd) h.age = h.life; return; } g.top.circle(at.x + c * 22, at.y - 2, 12).fill({ color: 0x6aa8ff, alpha: 0.9 }); g.add.circle(at.x + c * 22, at.y - 2, 6).fill({ color: 0xffffff, alpha: 0.95 }); });
@@ -427,6 +434,12 @@ export function createPbMoveScripts(api) {
           g.top.poly([...pts, ...inner]).fill({ color: 0x6aa8ff, alpha: 0.9 * fade });
           g.add.circle(x - c * 8, y, 18).fill({ color: 0xbcd8ff, alpha: 0.6 * fade });
         });
+        // A blue swirl crackles round the target over a blue ring on the ground.
+        live(0.26, (h, t, dt, g) => {
+          const fade = 1 - t;
+          groundRing(g.top, x, groundY + 4, 30 + 14 * t, 0x5a98ff, 0.95 * fade, 4);
+          for (let i = 0; i < 3; i++) { const a0 = h.age * 20 + i * 2.094; const pts = []; for (let j = 0; j <= 5; j++) { const a = a0 + j * 0.22; pts.push(x + Math.cos(a) * (30 + j), y + Math.sin(a) * (24 + j)); } for (let j = 5; j >= 0; j--) { const a = a0 + j * 0.22; pts.push(x + Math.cos(a) * (24 + j), y + Math.sin(a) * (19 + j)); } g.add.poly(pts).fill({ color: 0x9cc8ff, alpha: 0.9 * fade }); }
+        });
         // Paralysis: the struck body flickers with yellow sparks for a moment.
         live(0.7, (h, t, dt, g) => { if (Math.floor(h.age / 0.07) % 2) for (let i = 0; i < 3; i++) { const a = h.age * 11 + i * 2.1; star4(g.add, x + Math.cos(a) * 20, y + Math.sin(a * 1.3) * 22, 5, 0xffe14a, 0.9 * (1 - t)); } });
         addDecal({ x: x - c * 26, y: groundY + 8, kind: 'crack', radius: 12, pal: 'earth', life: 1.6 });
@@ -436,50 +449,60 @@ export function createPbMoveScripts(api) {
 
     // ------------------------------------------------------------------ Hammer Arm
     hammerArm: {
-      // The giant fist and forearm: a red-orange arm with a yellow cuff, drawn from its elbow at `tilt` (0 = upright).
+      // The giant fist and forearm, drawn from its elbow at `tilt` (0 = upright): a narrow forearm with a
+      // yellow cuff under a wide fist with four knuckles and a thumb.
       arm(g, ex, ey, tilt, scale, alpha = 1) {
         if (!g || alpha <= 0.02 || scale <= 0.05) return;
-        const ux = Math.sin(tilt), uy = -Math.cos(tilt), vx = Math.cos(tilt), vy = Math.sin(tilt), w = 30 * scale, len = 124 * scale;
-        const quad = (a0, a1, half, color) => g.poly([ex + ux * a0 - vx * half, ey + uy * a0 - vy * half, ex + ux * a1 - vx * half, ey + uy * a1 - vy * half, ex + ux * a1 + vx * half, ey + uy * a1 + vy * half, ex + ux * a0 + vx * half, ey + uy * a0 + vy * half]).fill({ color, alpha });
-        quad(-3, len + 3, w + 3, 0x4a1410);              // dark outline
-        quad(0, len * 0.62, w * 0.74, 0xe0461c);         // forearm
-        quad(len * 0.2, len * 0.3, w * 0.86, 0xffd24a);  // cuff
-        quad(len * 0.62, len, w, 0xf0602a);              // fist
-        quad(len * 0.66, len * 0.96, w * 0.3, 0xffa060); // highlight
-        for (const k of [0.72, 0.82, 0.92]) quad(len * k - 1.5, len * k + 1.5, w, 0x8a2414); // finger lines
+        const ux = Math.sin(tilt), uy = -Math.cos(tilt), vx = Math.cos(tilt), vy = Math.sin(tilt), w = 26 * scale, len = 130 * scale;
+        const quad = (a0, a1, h0, h1, color) => g.poly([ex + ux * a0 + vx * h0, ey + uy * a0 + vy * h0, ex + ux * a1 + vx * h0, ey + uy * a1 + vy * h0, ex + ux * a1 + vx * h1, ey + uy * a1 + vy * h1, ex + ux * a0 + vx * h1, ey + uy * a0 + vy * h1]).fill({ color, alpha });
+        quad(-3, len * 0.6, -w * 0.62 - 3, w * 0.62 + 3, 0x4a1410);                 // forearm outline
+        quad(len * 0.52, len + 4, -w * 1.2 - 3, w * 1.2 + 3, 0x4a1410);             // fist outline
+        quad(0, len * 0.56, -w * 0.62, w * 0.62, 0xd83c18);                         // forearm
+        quad(0, len * 0.56, -w * 0.62, -w * 0.2, 0xf06a34);                         // forearm light
+        quad(len * 0.4, len * 0.52, -w * 0.78, w * 0.78, 0xffd24a);                 // cuff
+        quad(len * 0.55, len * 0.92, -w * 1.2, w * 1.2, 0xf05a26);                  // fist
+        quad(len * 0.6, len * 0.88, -w * 1.1, -w * 0.5, 0xffa066);                  // fist light
+        for (let i = 0; i < 4; i++) quad(len * 0.9, len, -w * 1.2 + i * w * 0.6 + 1.5, -w * 1.2 + (i + 1) * w * 0.6 - 1.5, 0xf05a26); // knuckles
+        quad(len * 0.58, len * 0.76, w * 0.7, w * 1.5, 0xd83c18);                   // thumb
       },
-      cast({ follow, angle = 0, windup = 0.3 }) {
+      shadow(g, x, y, wide = 34) { g.top.ellipse(x, y, wide, wide * 0.32).fill({ color: 0x1a1210, alpha: 0.34 }); },
+      cast({ follow, windup = 0.3 }) {
         // A red line shoots up from the raised hand, then the arm grows out of it.
         live(Math.max(0.2, windup), (h, t, dt, g) => {
           const at = follow?.(); if (!at) return;
+          this.shadow(g, at.x, at.footY + 4, 20 + 14 * t);
           if (t < 0.3) g.top.rect(at.x - 1.5, at.y - 50 - 140 * (t / 0.3), 3, 140 * (t / 0.3)).fill({ color: 0xe0461c, alpha: 0.9 });
           else this.arm(g.top, at.x, at.y - 44, 0, (t - 0.3) / 0.7);
-          g.top.ellipse(at.x, at.footY + 4, 26, 9).fill({ color: 0x000000, alpha: 0.18 });
         });
       },
       release({ follow, angle = 0 }) {
         const c = Math.cos(angle) >= 0 ? 1 : -1;
-        // Carried upright on the walk in, leaning back as it nears the target.
-        live(1.4, (h, t, dt, g) => {
+        // Carried upright on the walk in; once it stands at the target it leans back, then swings down in an arc.
+        live(2, (h, t, dt, g) => {
           const at = follow?.(); if (!at) { h.age = h.life; return; }
-          const tilt = -c * 0.78 * Math.min(1, Math.max(0, (h.age - 0.3) / 0.3));
+          if (h.lx !== undefined && Math.abs(at.x - h.lx) + Math.abs(at.y - h.ly) < 0.4) h.still = (h.still ?? 0) + dt; else if (h.arrived === undefined) h.still = 0;
+          h.lx = at.x; h.ly = at.y;
+          if (h.arrived === undefined && (h.still ?? 0) > 0.04) h.arrived = h.age;
+          const since = h.arrived === undefined ? -1 : h.age - h.arrived;
+          const tilt = since < 0 ? 0 : since < 0.28 ? -c * 0.8 * (since / 0.28) : c * (-0.8 + 2.3 * Math.min(1, Math.pow((since - 0.28) / 0.3, 2)));
+          this.shadow(g, at.x + Math.sin(tilt) * 70, at.footY + 4, 36);
           this.arm(g.top, at.x, at.y - 44, tilt, 1);
-          g.top.ellipse(at.x + Math.sin(tilt) * 60, at.footY + 4, 30, 10).fill({ color: 0x000000, alpha: 0.18 });
+          if (since > 0.28) for (let i = 0; i < 7; i++) { const a = c * (-0.8 + 2.3 * Math.min(1, Math.pow((since - 0.28) / 0.3, 2)) * (i / 6)); g.add.circle(at.x + Math.sin(a) * 136, at.y - 44 - Math.cos(a) * 136, 4).fill({ color: 0xff9a2c, alpha: 0.85 }); }
         });
       },
       hit({ x, y, groundY, angle = 0 }) {
-        const c = Math.cos(angle) >= 0 ? 1 : -1, ex = x - c * 96, ey = groundY - 44;
+        const c = Math.cos(angle) >= 0 ? 1 : -1, ex = x - c * 100, ey = groundY - 20;
         whiteBloom(x, y, 26, 60, 0.12);
-        // The arm swings down in an arc and lies flat on the target; a dotted orange arc shows where it passed.
-        live(0.5, (h, t, dt, g) => {
-          const k = Math.min(1, t / 0.2), tilt = c * (-0.78 + (Math.PI / 2 + 0.78) * k * k), fade = t < 0.8 ? 1 : 1 - (t - 0.8) / 0.2;
-          this.arm(g.top, ex, ey + 30 * k, tilt, 1, fade);
-          if (t < 0.6) for (let i = 0; i < 9; i++) { const a = -0.78 + (Math.PI / 2 + 0.78) * (i / 8); g.add.circle(ex + c * Math.sin(a) * 130, ey - Math.cos(a) * 130, 4).fill({ color: 0xff9a2c, alpha: 0.9 * (1 - t / 0.6) }); }
+        // The arm lies flat on the target for a third of a second; an orange ring and dust under it.
+        live(0.42, (h, t, dt, g) => {
+          const fade = t < 0.8 ? 1 : 1 - (t - 0.8) / 0.2;
+          this.shadow(g, x - c * 30, groundY + 6, 60);
+          this.arm(g.top, ex, ey, c * Math.PI / 2, 1, fade);
           spiky(g.add, x, y, 40 * (1 - t), 8, 0xff9a2c, Math.max(0, 1 - t * 2.5), h.seed);
-          groundRing(g.top, x, groundY + 4, 30 + 46 * Math.min(1, t / 0.5), 0xff8a1c, 0.85 * (1 - Math.min(1, t / 0.5)), 4);
+          groundRing(g.top, x, groundY + 4, 30 + 46 * Math.min(1, t / 0.6), 0xff8a1c, 0.9 * (1 - Math.min(1, t / 0.6)), 4);
         });
-        dust(x, groundY, 8, [150, 150, 150], 110);
-        pebbles(x, groundY + 8, 16, 130, [120, 104, 88], 5, 6);
+        dust(x, groundY, 9, [150, 150, 150], 110);
+        pebbles(x, groundY + 8, 14, 130, [120, 104, 88], 5, 6);
         addDecal({ x, y: groundY + 8, kind: 'crack', radius: 62, pal: 'earth', life: 6 });
         dizzy(x, y, 0.5);
       }

@@ -761,6 +761,15 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               stage.lift = stage.liftStart * (1 - q) + (d.arc ? Math.sin(Math.PI * q) * d.arc : 0) + (d.dive ? d.dive * (1 - q) : 0);
               sprite.y -= stage.lift; actionHop += stage.lift;
               if (d.afterimage !== undefined && !d.hide && frameCount % 2 === 0) afterimage(container.position.x + sprite.x, container.position.y + sprite.y, facing, sprite, d.afterimage);
+              // Standing at the target, winding the blow up.
+              const pending = body.lunge.pending, rc = cue.ready;
+              if (pending && rc) {
+                const pr = clamp(1 - pending.timer / Math.max(0.01, pending.total), 0, 1);
+                if (rc.lean) actionTilt = -sDir * rc.lean * Math.sin(Math.PI * Math.min(1, pr * 1.2));
+                if (rc.low) low(rc.low * pr);
+                if (rc.hop) { const h = Math.sin(Math.PI * pr) * rc.hop; sprite.y -= h; actionHop += h; }
+                if (rc.tint) scriptTint = rc.tint;
+              }
               // On the target, striking on a beat: the body jabs forward with every strike.
               const combo = body.lunge.combo, cc = cue.combo;
               if (combo && cc) {

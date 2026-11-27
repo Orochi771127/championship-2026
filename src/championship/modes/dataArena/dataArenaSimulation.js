@@ -1652,7 +1652,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       case "LUNGE":
         caster.lunge = { actionId, moveId, arenaElement, attackElement, isBasic, guardBreak: v2GuardBreak, rebound: v2Rebound, secondDash: v2SecondDash,
           knock: move.lungeKnock ?? (move.stagedTuning ? 400 : undefined), reboundSpeed: move.reboundSpeed, passThrough: Boolean(move.passThrough), comboHits: move.comboHits ?? null,
-          standOff: move.standOff ?? (move.stagedTuning ? 2.3 : undefined), dirX: Math.cos(angle), dirY: Math.sin(angle), left: move.distance, speed: move.speed, width: move.width,
+          standOff: move.standOff ?? (move.stagedTuning ? 2.05 : undefined), strikeDelay: move.strikeDelay ?? 0, dirX: Math.cos(angle), dirY: Math.sin(angle), left: move.distance, speed: move.speed, width: move.width,
           damage: move.damage * damageScale, hits: new Set() };
         if (caster === player && move.invulnerable) { player.invulnerable = Math.max(player.invulnerable, move.distance / move.speed + 0.08); player.dashGrace = player.invulnerable; player.perfectThisDash = false; }
         if (isRival(caster)) caster.invulnerable = Math.max(caster.invulnerable ?? 0, 0.1);
@@ -2183,6 +2183,13 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const lunge = caster.lunge;
     if (!lunge) return;
     if (lunge.combo) { tickLungeCombo(caster, lunge); return; }
+    // A blow that winds up at the target (PB_MOVE_BY_MOVE_20261127): it stands there for strikeDelay, then lands.
+    if (lunge.pending) {
+      lunge.pending.timer -= DT;
+      if (caster.hp <= 0 || (caster.hitstun ?? 0) > 0) { caster.lunge = null; return; }
+      if (lunge.pending.timer > 0) return;
+      lunge.forceHit = lunge.pending.target; lunge.pending = null; lunge.delayDone = true; lunge.left = Math.max(lunge.left, 0.5);
+    }
     const step = Math.min(lunge.left, lunge.speed * DT);
     const kind = movementKind(caster);
     const nx = caster.x + lunge.dirX * step, ny = caster.y + lunge.dirY * step;
@@ -2206,7 +2213,14 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     }
     for (const target of targetsFor(caster.team)) {
       if (lunge.hits.has(target.id)) continue;
-      if (distance(target.x, target.y, caster.x, caster.y) <= lunge.width / 2 + (target.radius ?? 20)) {
+      if (distance(target.x, target.y, caster.x, caster.y) <= lunge.width / 2 + (target.radius ?? 20) || lunge.forceHit === target) {
+        if (relayMode && lunge.strikeDelay && !lunge.delayDone && !target.lunge) {
+          const reach = ((target.radius ?? 20) + (caster.radius ?? 18)) * (lunge.standOff ?? 1.8), gap = distance(target.x, target.y, caster.x, caster.y);
+          if (gap < reach && gap > 0.01) { caster.x = target.x - (target.x - caster.x) / gap * reach; caster.y = target.y - (target.y - caster.y) / gap * reach; }
+          lunge.pending = { target, timer: lunge.strikeDelay, total: lunge.strikeDelay }; lunge.left = 0;
+          return;
+        }
+        lunge.forceHit = null;
         lunge.hits.add(target.id);
         if (target === player && player.dashGrace > 0) { perfectDodge(caster.x, caster.y); continue; }
         if(relayMode&&!hasSight(caster.x,caster.y,target.x,target.y))continue;
@@ -2240,7 +2254,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       }
     }
     if (lunge.left <= 0) {
-      if (lunge.combo) return;
+      if (lunge.combo || lunge.pending) return;
       if (lunge.secondDash) {
         const foe = caster === player ? state.rivals[0] : player;
         if (foe && foe.hp > 0 && distance(caster.x, caster.y, foe.x, foe.y) < 320) {
