@@ -91,7 +91,21 @@ export const PB_MOVE_BODY = Object.freeze({
   'pb-230': { key: 'revenge', windup: { hop: 66, back: 48, lean: -0.35, camLift: 55 }, dash: { lean: 0.95 }, strike: { lean: 0.52, hold: 0.28 } },
   // ---- flying
   // Aerial Ace: a dark-blue silhouette that cuts straight through the target and lands flat on its far side.
-  'pb-003': { key: 'aerialAce', windup: { crouch: 0.2, tint: 0x2a3a8c }, dash: { tint: 0x2a3a8c, lean: 0.4 }, strike: { lean: 1.15, low: 0.2, hold: 0.28 }, after: { hop: 22, time: 0.16 }, impactFrame: true, impactStyle: 'black' }
+  'pb-003': { key: 'aerialAce', windup: { crouch: 0.2, tint: 0x2a3a8c }, dash: { tint: 0x2a3a8c, lean: 0.4 }, strike: { lean: 1.15, low: 0.2, hold: 0.28 }, after: { hop: 22, time: 0.16 }, impactFrame: true, impactStyle: 'black' },
+  // Air Cutter: stationary swirl windup, flings a spinning purple-white shuriken blade, dual W/B impact frame.
+  'pb-006': { key: 'airCutter', windup: { hop: 16 }, strike: { lean: 0.22, hold: 0.16 }, impactFrame: true, impactStyle: ['white', 'black'], hideShotShadow: true },
+  // Air Slash: stationary rhythmic wing-sweeps launching 3 sequential cyan-white crescent wind blades.
+  'pb-007': { key: 'airSlash', windup: { lean: -0.18, hop: 12 }, strike: { lean: 0.3, hold: 0.16 }, hideShotShadow: true },
+  // Drill Peck: elevated hop & diagonal dive, spiral cone drill jabs 5 times rapidly, hops straight back on explosive finale.
+  'pb-072': { key: 'drillPeck', windup: { hop: 54, lean: -0.28 }, dash: { lean: 0.65 }, combo: { jab: 10, lean: 0.5 }, strike: { lean: 0.3, hold: 0 }, after: { hop: 58, time: 0.28 } },
+  // Dual Wingbeat: hover rise, low horizontal dash, two curved wing slashes with white-bg impact frame on 2nd hit.
+  'pb-075': { key: 'dualWingbeat', windup: { hop: 34, lean: -0.2 }, dash: { lean: 0.35 }, combo: { jab: 18, lean: 0.32 }, strike: { hold: 0.2 }, after: { hop: 42, time: 0.26 }, impactFrame: 'final', impactStyle: 'white' },
+  // Wing Attack: hovering double wing-flap, sweeping dive, two wing slashes with circular 2nd hit + black-bg impact.
+  'pb-319': { key: 'wingAttack', windup: { hop: 44, pump: { count: 2, amount: 0.18 } }, dash: { lean: 0.5 }, combo: { jab: 16, lean: 0.35 }, strike: { hold: 0.24 }, impactFrame: 'final', impactStyle: 'black' },
+  // Defog: stationary rhythmic flapping emitting a wide spiky white wind ring and field-wide wind streaks.
+  'pb-052': { key: 'defog', windup: { hop: 14 }, strike: { hold: 0.85 } },
+  // Roost: stationary crouch-sit on glowing white disc, brief white flash, rising golden-tan feathers.
+  'pb-237': { key: 'roost', windup: { crouch: 0.26 }, strike: { low: 0.28, hold: 0.72 } }
 });
 
 export const pbMoveBody = moveId => PB_MOVE_BODY[moveId] ?? null;
@@ -1685,6 +1699,398 @@ export function createPbMoveScripts(api) {
         });
         sparks(x, y, 0, 6, 'wind', 200, 6.2);
       }
+    },
+
+    // ------------------------------------------------------------------ Air Cutter
+    airCutter: {
+      // Spinning 5-blade purple-white wind shuriken centered at (x, y).
+      shuriken(g, x, y, r, rot, alpha = 1) {
+        if (!g || alpha <= 0.02) return;
+        for (let i = 0; i < 5; i++) {
+          const a = rot + (i / 5) * TAU;
+          const b1 = a + 0.35, b2 = a + 0.92;
+          g.top.poly([
+            x + Math.cos(a) * r * 0.25, y + Math.sin(a) * r * 0.25,
+            x + Math.cos(b1) * r * 0.72, y + Math.sin(b1) * r * 0.72,
+            x + Math.cos(b2) * r, y + Math.sin(b2) * r,
+            x + Math.cos(b1 + 0.22) * r * 0.44, y + Math.sin(b1 + 0.22) * r * 0.44
+          ]).fill({ color: 0x7c4ad8, alpha: 0.92 * alpha });
+          g.add.poly([
+            x + Math.cos(a) * r * 0.22, y + Math.sin(a) * r * 0.22,
+            x + Math.cos(b1) * r * 0.62, y + Math.sin(b1) * r * 0.62,
+            x + Math.cos(b2 - 0.08) * r * 0.82, y + Math.sin(b2 - 0.08) * r * 0.82
+          ]).fill({ color: 0xeee4ff, alpha: 0.92 * alpha });
+        }
+        g.add.circle(x, y, r * 0.28).fill({ color: 0xffffff, alpha: 0.96 * alpha });
+      },
+      cast({ follow, windup = 0.2 }) {
+        // 4 purple-white swirling wind lines wrapping the stationary caster.
+        live(Math.max(0.14, windup), (h, t, dt, g) => {
+          const at = follow?.(); if (!at) return;
+          for (let i = 0; i < 4; i++) {
+            const a0 = h.age * 18 + i * 1.57;
+            const pts = [];
+            for (let k = 0; k <= 7; k++) {
+              const a = a0 + k * 0.28;
+              pts.push(at.x + Math.cos(a) * (24 + (i % 2) * 8), at.y + Math.sin(a) * 20 - (i - 1.5) * 6);
+            }
+            g.top.poly(pts).stroke({ color: i % 2 ? 0x9b68f0 : 0xf0e8ff, width: 3, alpha: 0.85 });
+          }
+        });
+      },
+      projectile({ follow, life = 1.2 }) {
+        const dashStops = [[0, [130, 126, 138], 0.5], [1, [130, 126, 138], 0]];
+        live(life, (h, t, dt, g) => {
+          const at = follow?.(); if (!at) { h.age = h.life; return; }
+          const fy = at.footY ?? (at.y + 18);
+          // Pale purple ground shadow directly beneath the spinning blade + dashed grey ground line behind it.
+          g.top.ellipse(at.x, fy + 4, 24, 9).fill({ color: 0x5c3c88, alpha: 0.34 });
+          this.shuriken(g, at.x, at.y - 4, 30, h.age * 20, 0.96);
+          h.acc = (h.acc ?? 0) + dt;
+          while (h.acc >= 0.035) {
+            h.acc -= 0.035;
+            spawnP({ shape: 'px', x: at.x, y: fy + 4, size: 5, size1: 5, stops: dashStops, add: false, life: 1.5, drag: 1 });
+          }
+        });
+      },
+      hit({ x, y }) {
+        // Post-dual-HS: the spinning purple-white wind shuriken stays grinding on the target ~0.4 s then scatters shards.
+        live(0.46, (h, t, dt, g) => {
+          const post = Math.max(0, h.age - 0.12);
+          const fade = post < 0.24 ? 1 : Math.max(0, 1 - (post - 0.24) / 0.14);
+          this.shuriken(g, x, y - 4, 32 * (0.95 + 0.15 * Math.sin(h.age * 40)), h.age * 24, fade);
+          if (post > 0.26 && !h.burst) {
+            h.burst = true;
+            for (let i = 0; i < 10; i++) {
+              const a = rand() * TAU;
+              spawnP({ shape: 'shard', x, y, vx: Math.cos(a) * (120 + rand() * 110), vy: Math.sin(a) * 90 - 20,
+                size: 6 + rand() * 3, size1: 1.5, rot: a, vrot: (rand() - 0.5) * 14,
+                stops: [[0, [240, 232, 255], 1], [0.5, [150, 96, 235], 0.9], [1, [110, 60, 195], 0]], add: true, life: 0.26 });
+            }
+          }
+        });
+        dizzy(x, y, 0.45);
+      }
+    },
+
+    // ------------------------------------------------------------------ Air Slash
+    airSlash: {
+      // Wide, sweeping hollow C-shaped crescent arc bulging toward `dir`, tapering to razor points.
+      wideCrescent(g, cx, cy, rx, ry, thick, dir, color, alpha) {
+        if (!g || alpha <= 0.02) return;
+        const pts = [], inner = [];
+        for (let i = 0; i <= 12; i++) {
+          const u = i / 12;
+          const a = (u - 0.5) * 2.55;
+          const ox = cx + dir * (Math.cos(a) * rx - rx * 0.32);
+          const oy = cy + Math.sin(a) * ry;
+          pts.push(ox, oy);
+          const taper = Math.pow(Math.max(0, Math.cos((u - 0.5) * Math.PI)), 0.85);
+          inner.unshift(ox - dir * thick * taper, oy);
+        }
+        g.poly([...pts, ...inner]).fill({ color, alpha });
+      },
+      release({ follow, angle = 0 }) {
+        // Crisp expanding white ground ring + brief forming crescent flash on every one of the 3 wing-sweeps.
+        const at = follow?.();
+        if (!at) return;
+        const rx = at.x, ry = at.footY + 3, dir = Math.cos(angle) >= 0 ? 1 : -1;
+        live(0.28, (h, t, dt, g) => {
+          const fade = t < 0.45 ? 1 : 1 - (t - 0.45) / 0.55;
+          groundRing(g.top, rx, ry, 20 + 36 * t, 0x70d8ff, 0.72 * fade, 4.5 - 2 * t);
+          groundRing(g.add, rx, ry, 18 + 34 * t, 0xffffff, 0.94 * fade, 3.5 - 1.5 * t);
+          if (h.age < 0.12) {
+            const fk = 1 - h.age / 0.12;
+            this.wideCrescent(g.add, rx + dir * 14, at.y - 6, 36, 44, 14, dir, 0xffffff, 0.85 * fk);
+          }
+        });
+      },
+      projectile({ follow, angle = 0, life = 1.0 }) {
+        const dotStops = [[0, [164, 144, 120], 0.65], [1, [164, 144, 120], 0]];
+        live(life, (h, t, dt, g) => {
+          const at = follow?.(); if (!at) { h.age = h.life; return; }
+          const a = at.angle ?? angle, dir = Math.cos(a) >= 0 ? 1 : -1;
+          const fy = at.footY ?? (at.y + 18);
+          // Large (~1.2x body height) sweeping hollow C-crescent wave with feathered cyan bloom + razor white core.
+          this.wideCrescent(g.top, at.x - dir * 4, at.y - 6, 48, 54, 24, dir, 0x2cb6f8, 0.76);
+          this.wideCrescent(g.top, at.x, at.y - 6, 44, 50, 17, dir, 0x86e6ff, 0.94);
+          this.wideCrescent(g.add, at.x + dir * 2, at.y - 6, 41, 46, 11, dir, 0xffffff, 0.98);
+          h.acc = (h.acc ?? 0) + dt;
+          while (h.acc >= 0.03) {
+            h.acc -= 0.03;
+            spawnP({ shape: 'pxpuff', x: at.x - dir * 6, y: fy + 4, vx: -dir * 35, vy: -8, size: 6, size1: 10, stops: dotStops, add: false, life: 0.42, drag: 0.9 });
+          }
+        });
+      },
+      hit({ x, y, groundY, angle = 0 }) {
+        const dir = Math.cos(angle) >= 0 ? 1 : -1;
+        // Bold engulfing white-cyan starburst flash + scuff dust on every crescent hit.
+        live(0.32, (h, t, dt, g) => {
+          const fade = t < 0.5 ? 1 : 1 - (t - 0.5) / 0.5;
+          const grow = Math.min(1, t / 0.16);
+          spiky(g.top, x, y - 6, 62 * (0.72 + 0.38 * grow), 10, 0x2cb8ff, 0.92 * fade, h.seed);
+          spiky(g.top, x, y - 6, 48 * (0.78 + 0.28 * grow), 10, 0xbef2ff, 0.96 * fade, h.seed + 0.3);
+          spiky(g.add, x, y - 6, 36 * fade, 8, 0xffffff, 0.98 * fade, h.seed + 0.6);
+          star4(g.add, x, y - 6, 42 * fade, 0xffffff, 0.98 * fade);
+          this.wideCrescent(g.add, x + dir * 4, y - 6, 38, 44, 12, dir, 0xffffff, 0.85 * fade);
+          groundRing(g.top, x, groundY + 4, 24 + 34 * t, 0x7ae2ff, 0.75 * fade, 3);
+        });
+        dust(x, groundY + 2, 5, [178, 156, 128], 85);
+      }
+    },
+
+    // ------------------------------------------------------------------ Drill Peck
+    drillPeck: {
+      // Spiral tan-gold cone drill projecting forward from (bx, by) along `angle`.
+      drawDrill(g, bx, by, angle, len, baseHalf, age, alpha = 1) {
+        if (!g || alpha <= 0.02) return;
+        const c = Math.cos(angle), s = Math.sin(angle), nx = -s, ny = c;
+        const tipX = bx + c * len, tipY = by + s * len;
+        g.top.poly([bx + nx * (baseHalf + 2.5), by + ny * (baseHalf + 2.5), tipX + c * 4, tipY + s * 4, bx - nx * (baseHalf + 2.5), by - ny * (baseHalf + 2.5)])
+          .fill({ color: 0x46341a, alpha });
+        g.top.poly([bx + nx * baseHalf, by + ny * baseHalf, tipX, tipY, bx - nx * baseHalf, by - ny * baseHalf])
+          .fill({ color: 0xdcb46c, alpha });
+        g.add.poly([bx + nx * baseHalf * 0.45, by + ny * baseHalf * 0.45, tipX, tipY, bx, by])
+          .fill({ color: 0xfff0c4, alpha: alpha * 0.72 });
+        // Animated spiral grooves racing along the cone.
+        const phase = (age * 16) % 1;
+        for (let i = 0; i < 4; i++) {
+          const f = (i + phase) / 4;
+          const r = baseHalf * (1 - f);
+          const mx = bx + c * (len * f), my = by + s * (len * f);
+          g.top.moveTo(mx + nx * r, my + ny * r).lineTo(mx - nx * r + c * 7, my - ny * r + s * 7)
+            .stroke({ color: 0x6a4e26, width: 2.5, alpha: 0.9 * alpha });
+        }
+      },
+      cast({ follow, windup = 0.22 }) {
+        const at0 = follow?.();
+        if (at0) dust(at0.x, at0.footY + 2, 6, [176, 152, 122], 78);
+        // Brief airborne spin-tuck wind swirl as the caster rises before diving diagonally.
+        live(Math.max(0.14, windup), (h, t, dt, g) => {
+          const at = follow?.(); if (!at) return;
+          if (t > 0.35) {
+            const k = Math.sin(((t - 0.35) / 0.65) * Math.PI);
+            g.add.ellipse(at.x, at.y - 16, 26, 12).stroke({ color: 0xfff2d2, width: 2.5, alpha: 0.85 * k });
+          }
+        });
+      },
+      release({ follow, angle = 0 }) {
+        const c = Math.cos(angle), s = Math.sin(angle), dir = c >= 0 ? 1 : -1;
+        // Giant spiral cone drill tilts diagonally downward during the elevated dive, then grinds flat through all 5 rapid hits.
+        live(0.76, (h, t, dt, g) => {
+          const at = follow?.(); if (!at) { h.age = h.life; return; }
+          const air = Math.max(0, (at.footY - 30) - at.y);
+          const tiltAng = angle + dir * Math.min(0.32, air * 0.006);
+          const vib = Math.sin(h.age * 95) * 3;
+          this.drawDrill(g, at.x + Math.cos(tiltAng) * 8, at.y - 2 + vib, tiltAng, 82, 18, h.age, 0.98);
+          h.acc = (h.acc ?? 0) + dt;
+          while (h.acc >= 0.028) {
+            h.acc -= 0.028;
+            spawnP({ shape: 'streak', x: at.x - c * 18, y: at.y + (rand() - 0.5) * 26, vx: -c * 145, vy: -s * 145,
+              size: 6, size1: 1, stretch: 2.5, rot: tiltAng + Math.PI, stops: [[0, [255, 255, 255], 0.88], [1, [230, 224, 196], 0]], add: true, life: 0.13 });
+          }
+        });
+      },
+      hit({ x, y, groundY, angle = 0, final = null }) {
+        const dir = Math.cos(angle) >= 0 ? 1 : -1;
+        if (final === false) {
+          // Rapid bright white-gold drill sparks on each of the 5 rapid jabs.
+          live(0.12, (h, t, dt, g) => {
+            const k = 1 - t;
+            const ox = (rand() - 0.5) * 18, oy = (rand() - 0.5) * 14;
+            spiky(g.top, x + ox, y - 4 + oy, 22 * k, 6, 0xffd862, 0.88 * k, h.seed);
+            star4(g.add, x + ox, y - 4 + oy, 18 * k, 0xffffff, 0.98 * k);
+          });
+          return;
+        }
+        // Final pop-off burst: huge golden-white spiky starburst explosion + trailing brown skid dust cloud along knockback!
+        live(0.42, (h, t, dt, g) => {
+          const fade = t < 0.58 ? 1 : 1 - (t - 0.58) / 0.42;
+          const grow = Math.min(1, t / 0.16);
+          spiky(g.top, x, y - 4, 74 * (0.72 + 0.34 * grow), 12, 0xb86a14, 0.92 * fade, h.seed);
+          spiky(g.top, x, y - 4, 64 * (0.76 + 0.3 * grow), 12, 0xffc838, 0.96 * fade, h.seed + 0.25);
+          spiky(g.add, x, y - 4, 42 * fade, 10, 0xffffff, 0.98 * fade, h.seed + 0.5);
+          star4(g.add, x, y - 4, 52 * fade, 0xffffff, 0.98 * fade);
+          groundRing(g.top, x, groundY + 4, 28 + 64 * t, 0xffd268, 0.88 * fade, 4);
+        });
+        // Trailing brown skid dust cloud following the knocked-back target.
+        for (let i = 0; i < 4; i++) {
+          dust(x + dir * (14 + i * 24), groundY + 3, 4, [166, 138, 104], 92);
+        }
+        pebbles(x + dir * 32, groundY + 6, 10, 90, [132, 106, 78], 2.2, 5);
+        dizzy(x + dir * 48, y, 0.5);
+      }
+    },
+
+    // ------------------------------------------------------------------ Dual Wingbeat
+    dualWingbeat: {
+      release({ follow, angle = 0 }) {
+        // 5-6 cyan-white horizontal streak trails behind the low aerial rush.
+        trail(follow, angle, [196, 232, 255], { life: 0.35, every: 0.014, spread: 34, size: 8 });
+      },
+      hit({ x, y, groundY, angle = 0, final = null }) {
+        const c = Math.cos(angle) >= 0 ? 1 : -1;
+        // Curved cyan-white wing-blade arc on each of the 2 hits.
+        live(0.26, (h, t, dt, g) => {
+          const fade = 1 - t;
+          const dir = final ? -c : c;
+          crescent(g.top, x - dir * 8, y - 10, final ? 96 : 74, dir, 0x8ad8ff, 0.9 * fade, final ? 16 : 12);
+          crescent(g.add, x - dir * 6, y - 10, final ? 80 : 60, dir, 0xffffff, 0.95 * fade, final ? 8 : 6);
+          if (!final) g.add.circle(x, y - 6, 18 * fade).fill({ color: 0xffffff, alpha: 0.9 * fade });
+        });
+        if (!final) return;
+        // Second hit: shattered red-brown ground crater + slow-drifting grey pebbles lasting 4.5 s.
+        dust(x, groundY + 2, 8, [164, 128, 108], 105);
+        for (let i = 0; i < 8; i++) {
+          spawnP({ shape: 'shard', x: x + (rand() - 0.5) * 44, y: groundY + 2, vx: (rand() - 0.5) * 35, vy: -35 - rand() * 45,
+            size: 5 + rand() * 3, size1: 3, rot: rand() * TAU, vrot: (rand() - 0.5) * 6,
+            stops: [[0, [142, 136, 132], 0.9], [1, [120, 114, 110], 0]], add: false, life: 0.75 + rand() * 0.35 });
+        }
+        addDecal({ x, y: groundY + 8, kind: 'scorch', radius: 42, pal: 'earth', life: 4.5 });
+        addDecal({ x, y: groundY + 8, kind: 'crack', radius: 46, pal: 'earth', life: 4.5 });
+        dizzy(x, y, 0.5);
+      }
+    },
+
+    // ------------------------------------------------------------------ Wing Attack
+    wingAttack: {
+      cast({ follow }) {
+        const at = follow?.();
+        if (at) dust(at.x, at.footY + 2, 4, [176, 152, 122], 65);
+      },
+      release({ follow, angle = 0 }) {
+        const c = Math.cos(angle), s = Math.sin(angle);
+        const dotStops = [[0, [156, 132, 106], 0.65], [1, [156, 132, 106], 0]];
+        // Cyan-white leading wing blade + orange/blue dual streak trail + ground dust dots along dive.
+        live(0.42, (h, t, dt, g) => {
+          const at = follow?.(); if (!at) { h.age = h.life; return; }
+          const dir = c >= 0 ? 1 : -1;
+          crescent(g.top, at.x + dir * 18, at.y - 4, 68, dir, 0x8ee2ff, 0.88, 12);
+          crescent(g.add, at.x + dir * 20, at.y - 4, 58, dir, 0xffffff, 0.94, 6);
+          h.acc = (h.acc ?? 0) + dt;
+          while (h.acc >= 0.022) {
+            h.acc -= 0.022;
+            spawnP({ shape: 'streak', x: at.x - c * 14, y: at.y + (rand() - 0.5) * 18, vx: -c * 110, vy: -s * 110,
+              size: 7, size1: 1.5, stretch: 2.8, rot: angle + Math.PI, stops: [[0, [255, 162, 68], 0.85], [1, [156, 224, 255], 0]], add: true, life: 0.22 });
+            spawnP({ shape: 'px', x: at.x, y: at.footY + 4, size: 5, size1: 3, stops: dotStops, add: false, life: 0.8, drag: 1 });
+          }
+        });
+      },
+      hit({ x, y, groundY, final = null }) {
+        if (final === false) {
+          whiteBloom(x, y - 4, 18, 42, 0.14);
+          return;
+        }
+        // Hit 2: full circular cyan-white spinning wing-slash ring sweeping around target + brown scuff mark.
+        live(0.32, (h, t, dt, g) => {
+          const post = Math.max(0, h.age - 0.06);
+          const fade = Math.max(0, 1 - post / 0.24);
+          const rot = h.age * 16;
+          for (let i = 0; i < 2; i++) {
+            const a0 = rot + i * Math.PI;
+            const pts = [];
+            for (let k = 0; k <= 10; k++) {
+              const a = a0 + k * 0.22;
+              pts.push(x + Math.cos(a) * 48, y - 4 + Math.sin(a) * 26);
+            }
+            g.top.poly(pts).stroke({ color: 0x7ad8ff, width: 10, alpha: 0.88 * fade });
+            g.add.poly(pts).stroke({ color: 0xffffff, width: 4.5, alpha: 0.96 * fade });
+          }
+        });
+        pebbles(x, groundY + 6, 8, 65, [132, 108, 86], 1.8, 5);
+        addDecal({ x, y: groundY + 6, kind: 'scorch', radius: 24, pal: 'earth', life: 1.8 });
+        dizzy(x, y, 0.45);
+      }
+    },
+
+    // ------------------------------------------------------------------ Defog
+    defog: {
+      release({ follow }) {
+        const at0 = follow?.();
+        if (!at0) return;
+        const cx = at0.x, fy = at0.footY + 3;
+        const wisps = Array.from({ length: 28 }, (_, i) => ({
+          a: (i / 28) * TAU + (i % 3) * 0.08,
+          r0: 36 + (i % 4) * 14,
+          spd: 220 + (i % 5) * 48,
+          len: 18 + (i % 3) * 10
+        }));
+        // Expanding white ground wind ring -> spiky glass-shard wind ring -> dozens of horizontal wind wisps sweeping the arena!
+        live(0.95, (h, t, dt, g) => {
+          if (h.age < 0.52) {
+            const rk = h.age / 0.52;
+            const r = 24 + 240 * rk;
+            const fade = rk < 0.65 ? 0.92 : 0.92 * (1 - (rk - 0.65) / 0.35);
+            groundRing(g.add, cx, fy, r, 0xffffff, fade, 4 - 2 * rk);
+            groundRing(g.top, cx, fy, r * 0.72, 0xdcf4ff, fade * 0.65, 2);
+            // Spiky white radial wind teeth protruding outward around the expanding ring.
+            for (let i = 0; i < 18; i++) {
+              const a = (i / 18) * TAU + h.age * 1.4;
+              const rx0 = cx + Math.cos(a) * r, ry0 = fy + Math.sin(a) * r * 0.42;
+              const len = 14 + 14 * (1 - rk);
+              g.add.moveTo(rx0, ry0).lineTo(rx0 + Math.cos(a) * len, ry0 + Math.sin(a) * len * 0.42)
+                .stroke({ color: 0xffffff, width: 2.5, alpha: fade * 0.9 });
+            }
+          }
+          // Field-wide drifting horizontal white wind wisps.
+          if (h.age > 0.22) {
+            const wk = (h.age - 0.22) / 0.73;
+            const wf = wk < 0.6 ? 0.82 : 0.82 * (1 - (wk - 0.6) / 0.4);
+            for (const w of wisps) {
+              const dist = w.r0 + w.spd * (h.age - 0.22);
+              const wx = cx + Math.cos(w.a) * dist;
+              const wy = fy + Math.sin(w.a) * dist * 0.42;
+              g.add.moveTo(wx - w.len * 0.5, wy).lineTo(wx + w.len * 0.5, wy)
+                .stroke({ color: 0xffffff, width: 2.2, alpha: wf });
+            }
+          }
+        });
+      },
+      hit() {}
+    },
+
+    // ------------------------------------------------------------------ Roost
+    roost: {
+      release({ follow }) {
+        const at0 = follow?.();
+        if (!at0) return;
+        const cx = at0.x, fy = at0.footY + 2;
+        const feathers = Array.from({ length: 8 }, (_, i) => ({
+          ox: (i - 3.5) * 14,
+          oy: -10 - (i % 3) * 10,
+          vx: (i - 3.5) * 12,
+          vy: -42 - (i % 3) * 14,
+          phase: i * 1.1
+        }));
+        // Soft glowing white elliptical disc under crouching body + mid-rest white flash + 8 floating golden-tan feathers.
+        live(0.92, (h, t, dt, g) => {
+          const at = follow?.() ?? { x: cx, y: fy - 24, footY: fy };
+          if (h.age < 0.55) {
+            const df = h.age < 0.35 ? 0.85 : 0.85 * (1 - (h.age - 0.35) / 0.2);
+            g.top.ellipse(at.x, at.footY + 3, 44, 18).fill({ color: 0xffffff, alpha: df * 0.75 });
+            g.add.ellipse(at.x, at.footY + 3, 30, 12).fill({ color: 0xffffff, alpha: df * 0.92 });
+          }
+          if (h.age >= 0.24 && h.age < 0.36) {
+            const fk = Math.sin(((h.age - 0.24) / 0.12) * Math.PI);
+            g.add.circle(at.x, at.y, 28).fill({ color: 0xffffff, alpha: 0.85 * fk });
+          }
+          if (h.age >= 0.26) {
+            const ft = (h.age - 0.26) / 0.66;
+            const ff = ft < 0.65 ? 1 : 1 - (ft - 0.65) / 0.35;
+            for (const f of feathers) {
+              const fx = at.x + f.ox + f.vx * ft + Math.sin(h.age * 10 + f.phase) * 7;
+              const fyPos = at.y + f.oy + f.vy * ft;
+              const tilt = Math.sin(h.age * 7 + f.phase) * 0.6;
+              const ca = Math.cos(tilt), sa = Math.sin(tilt);
+              g.top.poly([fx - ca * 7, fyPos - sa * 7, fx - sa * 3, fyPos + ca * 3, fx + ca * 7, fyPos + sa * 7, fx + sa * 3, fyPos - ca * 3])
+                .fill({ color: 0x5c4628, alpha: 0.9 * ff });
+              g.top.poly([fx - ca * 5.5, fyPos - sa * 5.5, fx - sa * 2, fyPos + ca * 2, fx + ca * 5.5, fyPos + sa * 5.5, fx + sa * 2, fyPos - ca * 2])
+                .fill({ color: 0xe6c87c, alpha: 0.96 * ff });
+            }
+          }
+        });
+      },
+      hit() {}
     },
 
     // ------------------------------------------------------------------ Flame Charge

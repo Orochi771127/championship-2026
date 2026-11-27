@@ -1434,6 +1434,23 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
   }
 
   function updateCast(caster) {
+    if (caster.burstShots) {
+      const bs = caster.burstShots;
+      if (caster.hp <= 0 || (caster.hitstun ?? 0) > 0) { caster.burstShots = null; }
+      else {
+        bs.timer -= DT;
+        if (bs.timer <= 0) {
+          shootBolt(caster, bs.move, bs.angle, bs.extra);
+          caster.burstPulse = { at: state.time, dur: 0.22 };
+          if (relayMode) caster.recovery = Math.max(caster.recovery ?? 0, 0.22);
+          emit({ type: "CAST_RELEASE", actionId: bs.extra.actionId, casterId: caster.id, team: caster.team, moveId: bs.extra.moveId, moveType: bs.move.type, x: caster.x, y: caster.y, angle: bs.angle, burstIndex: bs.sent });
+          bs.sent++;
+          bs.left--;
+          if (bs.left <= 0) caster.burstShots = null;
+          else bs.timer = bs.dt;
+        }
+      }
+    }
     if (!caster.cast) return;
     if (caster.hitstun > 0) return; // RELAY: a staggered windup waits (hitstun is only set in RELAY)
     caster.cast.t += DT;
@@ -1643,7 +1660,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     const v2Homing = move.noHoming ? 0 : (v2?.homing ? 3.2 : 0);
     const v2Pull = v2?.pullForce ?? 0;
     const v2Rebound = Boolean(v2?.rebound);
-    // PB_MOVE_BY_MOVE_20261127: staged self-buff moves (e.g. Bulk Up) raise stats without attacking.
+    // PB_MOVE_BY_MOVE_20261127: staged self-buff, self-heal, or hazard-clear moves execute cleanly without generic damage.
     if (move.selfBuff) {
       const side = caster === player ? "player" : "rival";
       if ((caster.buffsUsed ?? 0) < TACTICAL_CAPS.buffsPerStay) {
@@ -1651,6 +1668,31 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         applyStatDelta(caster, typeof move.selfBuff === "object" ? move.selfBuff : { atk: 1, spd: 0 });
       }
       emit({ type: "STAT_BUFF", side, artId: moveId, moveId, atkStage: caster.atkStage, spdStage: caster.spdStage, buffsUsed: caster.buffsUsed, x: caster.x, y: caster.y });
+      return;
+    }
+    if (move.selfHeal) {
+      const side = caster === player ? "player" : "rival";
+      let amt = 0;
+      if ((caster.healsUsed ?? 0) < TACTICAL_CAPS.healsPerBattle) {
+        caster.healsUsed = (caster.healsUsed ?? 0) + 1;
+        amt = Math.round(caster.maxHp * TACTICAL_CAPS.healShare);
+        caster.hp = Math.min(caster.maxHp, caster.hp + amt);
+      }
+      emit({ type: "TACTICAL_HEAL", side, artId: moveId, moveId, amount: amt, healsUsed: caster.healsUsed, x: caster.x, y: caster.y });
+      return;
+    }
+    if (move.clearHazards) {
+      const side = caster === player ? "player" : "rival";
+      if (state.hazards) { state.hazards.player = 0; state.hazards.rival = 0; }
+      emit({ type: "HAZARD_CLEARED", side, moveId, x: caster.x, y: caster.y });
+      return;
+    }
+    if (move.burstShots && move.type === "BOLT") {
+      const count = Math.max(2, move.burstShots.count ?? 3);
+      const dt = Math.max(0.08, move.burstShots.dt ?? 0.35);
+      const extra = { actionId, moveId, arenaElement, attackElement, damageBonus: damageBonus / count, moveType: move.type, isBasic, guardBreak: v2GuardBreak, homing: 0, knockback: move.knockback ?? 0 };
+      shootBolt(caster, move, angle, extra);
+      caster.burstShots = { left: count - 1, timer: dt, dt, move, angle, extra, sent: 1 };
       return;
     }
     // PB_MOVE_BY_MOVE_20261127: moves staged from a single-dash reference strike once (no follow-up dash).
@@ -2186,7 +2228,11 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       }
     }
     combo.i++;
-    if (combo.i >= hits.length) { caster.lunge = null; return; }
+    if (combo.i >= hits.length) {
+      if (lunge.reboundSpeed) launch(caster, -lunge.dirX, -lunge.dirY, lunge.reboundSpeed);
+      caster.lunge = null;
+      return;
+    }
     combo.timer = hits[combo.i].dt;
   }
 
@@ -2253,8 +2299,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
           const reach = ((target.radius ?? 20) + (caster.radius ?? 18)) * (lunge.standOff ?? 1.8), gap = distance(target.x, target.y, caster.x, caster.y);
           if (gap < reach && gap > 0.01) { caster.x = target.x - (target.x - caster.x) / gap * reach; caster.y = target.y - (target.y - caster.y) / gap * reach; }
           lunge.left = 0;
-          // A staged move hops back off the target after the blow.
-          if (lunge.reboundSpeed) launch(caster, -lunge.dirX, -lunge.dirY, lunge.reboundSpeed);
+          // A staged move hops back off the target after the blow (wait for final combo hit when multi-hit).
+          if (lunge.reboundSpeed && !lunge.combo) launch(caster, -lunge.dirX, -lunge.dirY, lunge.reboundSpeed);
         }
         if (lunge.rebound) {
           // UTURN_STRIKE: strike then spring back cleanly to safe spacing!
@@ -2499,7 +2545,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       if (!canCast(player, id)) emit({ type: "CAST_REFUSED", reason: (player.cooldowns[id] ?? 0) > 0 ? "COOLDOWN" : "ENERGY", slot: request.cast });
       else {
         const foe = relayMode ? state.rivals[0] : null;
-        const closeMelee = relayMode && (move.type === "LUNGE" || move.type === "NOVA") && request.autoAim && foe && foe.active && foe.hp > 0;
+        const closeMelee = relayMode && (move.type === "LUNGE" || (move.type === "NOVA" && !move.selfBuff && !move.selfHeal && !move.clearHazards)) && request.autoAim && foe && foe.active && foe.hp > 0;
         const reach = move.type === "LUNGE" ? (move.distance ?? 200) + 18 : (move.radius ?? 110) + 10;
         if (closeMelee && distance(player.x, player.y, foe.x, foe.y) > reach && distance(player.x, player.y, foe.x, foe.y) < reach + 230) {
           player.approach = { kind: "CAST", moveId: id, ultimate: false, target: foe, reach, ttl: TACTICAL_CAPS.autoApproachMaxSeconds };

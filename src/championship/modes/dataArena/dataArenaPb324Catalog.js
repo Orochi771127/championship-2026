@@ -281,7 +281,25 @@ export const PB_MOVE_TUNING = Object.freeze({
   // Counter: 0.44 s dimmed crimson crystal-aura counter stance, then white-bg impact frame + crimson spiky burst + 3 red claw gashes.
   'pb-040': Object.freeze({ type: 'LUNGE', singleDash: true, windup: 0.44, speed: 1200, distance: 260, width: 76, damage: 34, lungeKnock: 180, standOff: 1.5, counterGuard: 0.44 }),
   // Revenge: quick hop-back coil away from target, snappy diagonal dive-punch into a tight warm orange-red burst.
-  'pb-230': Object.freeze({ singleDash: true, windup: 0.3, speed: 1850, distance: 260, lungeKnock: 40, standOff: 1.5 })
+  'pb-230': Object.freeze({ singleDash: true, windup: 0.3, speed: 1850, distance: 260, lungeKnock: 40, standOff: 1.5 }),
+  // ---- Batch 4A: Flying (7 moves: Air Cutter, Air Slash, Drill Peck, Dual Wingbeat, Wing Attack, Defog, Roost)
+  // Air Cutter: stationary purple wind-swirl windup, spinning 5-blade purple-white shuriken, dual W/B impact frame.
+  'pb-006': Object.freeze({ type: 'BOLT', speed: 720, windup: 0.2, knockback: 35, noHoming: true, pierce: 0, radius: 22 }),
+  // Air Slash: stationary 3-beat sequential burst of large curved cyan-white crescent air blades.
+  'pb-007': Object.freeze({ type: 'BOLT', speed: 680, windup: 0.14, knockback: 85, noHoming: true, pierce: 0, radius: 28, burstShots: Object.freeze({ count: 3, dt: 0.28 }) }),
+  // Drill Peck: elevated diagonal dive, spiral cone drill jabs 5 times rapidly, hops back immediately on explosive final burst.
+  'pb-072': Object.freeze({ singleDash: true, windup: 0.22, speed: 780, distance: 320, standOff: 1.65, reboundSpeed: 320,
+    comboHits: Object.freeze([{ share: 0.12 }, { dt: 0.08, share: 0.12 }, { dt: 0.08, share: 0.12 }, { dt: 0.08, share: 0.12 }, { dt: 0.08, share: 0.12 }, { dt: 0.10, share: 0.40, knock: 480 }]) }),
+  // Dual Wingbeat: hover windup, low aerial dash with blue-white trails, 2 wing-blade strikes (white-bg impact frame on 2nd).
+  'pb-075': Object.freeze({ singleDash: true, windup: 0.24, speed: 1120, distance: 300, standOff: 1.5, reboundSpeed: 220,
+    comboHits: Object.freeze([{ share: 0.45, knock: 0 }, { dt: 0.44, share: 0.55, knock: 50 }]) }),
+  // Wing Attack: hovering double wing-flap, sweeping dive glide, 2 wing-slash strikes (spinning blade + black-bg impact on 2nd).
+  'pb-319': Object.freeze({ singleDash: true, windup: 0.42, speed: 980, distance: 300, standOff: 1.5,
+    comboHits: Object.freeze([{ share: 0.45, knock: 50 }, { dt: 0.3, share: 0.55, knock: 90 }]) }),
+  // Defog: stationary wing-flap releasing an expanding spiky white wind ring that scatters wind streaks across the field.
+  'pb-052': Object.freeze({ type: 'NOVA', windup: 0.1, clearHazards: true }),
+  // Roost: stationary crouch-sit on glowing white floor disc with mid-rest flash and 8 gently rising tan feathers.
+  'pb-237': Object.freeze({ type: 'NOVA', windup: 0.12, selfHeal: true })
 });
 
 export function pb324MoveName(id, locale = "zh-Hant") {

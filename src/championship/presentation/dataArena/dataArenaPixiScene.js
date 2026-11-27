@@ -830,6 +830,14 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               const settle = stage.liftEnd * Math.max(0, 1 - t / 0.07);
               if (settle > 0) { sprite.y -= settle; actionHop += settle; }
             }
+            const bp = body.burstPulse;
+            if (bp && state.time - bp.at < bp.dur) {
+              const sw = Math.sin(Math.PI * clamp((state.time - bp.at) / Math.max(0.01, bp.dur), 0, 1));
+              sprite.x += sCos * 12 * sw;
+              sprite.y -= 10 * sw;
+              actionHop += 10 * sw;
+              actionTilt = sDir * (cue.strike?.lean ?? 0.28) * sw;
+            }
           }
         }
         // A struck body acting out a staged reaction (tripped onto its side).
@@ -1726,8 +1734,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           if (event.side === "player") tamerCalloutLeft = 1.1; else tamerCalloutRight = 1.1;
           break;
         case "TACTICAL_HEAL":
-          if (purePixelFx) elementFx.heal?.({ x: event.x, y: event.y - 14 });
-          else { ring(event.x, event.y, 84, 0x5aff9c, 0.48); burst(event.x, event.y - 18, { count: 16, speed: 180, tint: 0x8dffb0, gravity: -180, life: 0.55 }); }
+          if (!pbMoveBody(event.moveId)) {
+            if (purePixelFx) elementFx.heal?.({ x: event.x, y: event.y - 14 });
+            else { ring(event.x, event.y, 84, 0x5aff9c, 0.48); burst(event.x, event.y - 18, { count: 16, speed: 180, tint: 0x8dffb0, gravity: -180, life: 0.55 }); }
+          }
           floatText(event.x, event.y - 72, `+${event.amount}`, "dodge");
           break;
         case "FLURRY_START":
@@ -1890,7 +1900,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           damageNumber(event.x, event.y - 60, event.amount, 0xff9a7a);
           break;
         case "HAZARD_CLEARED":
-          ring(event.x, event.y, 82, 0x7fe9ff, 0.4);
+          if (!pbMoveBody(event.moveId)) ring(event.x, event.y, 82, 0x7fe9ff, 0.4);
           floatText(event.x, event.y - 70, t("fct.hazardClear"), "dodge");
           break;
         case "DECOY_SPAWN":
