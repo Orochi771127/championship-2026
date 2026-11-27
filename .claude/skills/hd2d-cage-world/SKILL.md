@@ -30,6 +30,7 @@ logo, main menu and opening stay exactly as live main shipped them.
 | Shop cage cards | `src/championship/app/vs4Screens.js` (`decorateShopCageCard`, `cageSeriesLabel`), `ui/screenLayout.css` |
 | Shop, editor and location pictures (renders of the 3D cages) | `assets/production/public-runtime/cage-ui-three.v1.json` → `src/championship/presentation/cageUiArt.js` |
 | Gachapon royal maps (Owner 2026-11-03): 全自動皇家牧場 (36), 全自動星際動物園 (37) | `scripts/build-royal-cage-maps.py` and its siblings; definitions in `src/championship/cage/productCageCatalog.js`; rules in `docs/art/production/ART_PRODUCTION_ROYAL_CAGE_MAPS_ZH_TW.md` |
+| CC0 prop upgrades (Owner 2026-11-27; CM20 desert first): free same-style props appended as one Draco mesh, base GLB bytes kept | `docs/art/production/ART_PRODUCTION_CAGE_CC0_PROPS_ZH_TW.md` (placement rules, sources, which pins to restate) |
 
 ## Enhancer rules
 
