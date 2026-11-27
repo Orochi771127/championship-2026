@@ -1508,6 +1508,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     // V2 Re-Architected 18-Archetype Execution (for skills & ultimates when moveSystem === 'v2')
     if (v2 && !isBasic) {
       const foe = caster === player ? state.rivals[0] : player;
+      // A move staged one at a time (PB_MOVE_BY_MOVE_20261127) keeps its own shape: no archetype behaviour replaces it.
+      const archetype = move.stagedTuning ? null : v2.v2Archetype;
       const side = caster === player ? "player" : "rival";
       // Native skill absorption (replaces bolted-on Tactical Art button):
       // hazard moves lay switch-in spikes, illusion moves spawn a decoy, weather moves shift arena weather!
@@ -1532,27 +1534,27 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
           emit({ type: "WEATHER_START", side, kind: wKind, duration: WEATHER_RULES.duration, x: caster.x, y: caster.y });
         }
       }
-      if (v2.v2Archetype === "FLURRY_COMBO" && foe && foe.hp > 0 && distance(caster.x, caster.y, foe.x, foe.y) <= (move.distance ?? 220) + 80) {
+      if (archetype === "FLURRY_COMBO" && foe && foe.hp > 0 && distance(caster.x, caster.y, foe.x, foe.y) <= (move.distance ?? 220) + 80) {
         const hits = v2.flurryHits || 3;
         const dmgPerHit = Math.max(8, ((move.damage ?? 24) * 1.15) / hits);
         caster.flurry = { artId: moveId, moveId, hitsLeft: hits, timer: 0, interval: 0.11, damagePerHit: dmgPerHit, dirX: Math.cos(angle), dirY: Math.sin(angle), target: foe, arenaElement, attackElement };
         emit({ type: "FLURRY_START", side, artId: moveId, moveId, x: caster.x, y: caster.y, angle });
         return;
       }
-      if (v2.v2Archetype === "SHADOW_BACKSTAB" && foe && foe.hp > 0 && distance(caster.x, caster.y, foe.x, foe.y) <= 360) {
+      if (archetype === "SHADOW_BACKSTAB" && foe && foe.hp > 0 && distance(caster.x, caster.y, foe.x, foe.y) <= 360) {
         caster.invulnerable = Math.max(caster.invulnerable ?? 0, 0.26);
         caster.backstab = { artId: moveId, moveId, timer: 0.2, damage: Math.max(26, (move.damage ?? 28) * 1.05), target: foe, arenaElement, attackElement };
         emit({ type: "BACKSTAB_VANISH", side, artId: moveId, moveId, x: caster.x, y: caster.y });
         return;
       }
-      if (v2.v2Archetype === "SELF_BUFF" && (caster.buffsUsed ?? 0) < TACTICAL_CAPS.buffsPerStay) {
+      if (archetype === "SELF_BUFF" && (caster.buffsUsed ?? 0) < TACTICAL_CAPS.buffsPerStay) {
         caster.buffsUsed = (caster.buffsUsed ?? 0) + 1;
         applyStatDelta(caster, { atk: 1, spd: 1 });
         emit({ type: "STAT_BUFF", side, artId: moveId, moveId, atkStage: caster.atkStage, spdStage: caster.spdStage, buffsUsed: caster.buffsUsed, x: caster.x, y: caster.y });
         if (move.type === "NOVA") nova(caster, move, damageScale * 0.65, moveId, false);
         return;
       }
-      if (v2.v2Archetype === "RECOVERY_SUPPORT" && (caster.healsUsed ?? 0) < TACTICAL_CAPS.healsPerBattle) {
+      if (archetype === "RECOVERY_SUPPORT" && (caster.healsUsed ?? 0) < TACTICAL_CAPS.healsPerBattle) {
         caster.healsUsed = (caster.healsUsed ?? 0) + 1;
         const amt = Math.round(caster.maxHp * TACTICAL_CAPS.healShare);
         caster.hp = Math.min(caster.maxHp, caster.hp + amt);
@@ -1561,7 +1563,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         emit({ type: "TACTICAL_HEAL", side, artId: moveId, moveId, amount: amt, healsUsed: caster.healsUsed, x: caster.x, y: caster.y });
         return;
       }
-      if (v2.v2Archetype === "LEAP_SLAM") {
+      if (archetype === "LEAP_SLAM") {
         const leapDist = Math.min(240, foe && foe.hp > 0 ? distance(caster.x, caster.y, foe.x, foe.y) : 180);
         const destX = clamp(caster.x + Math.cos(angle) * leapDist, 48, worldWidth - 48);
         const destY = clamp(caster.y + Math.sin(angle) * leapDist, 48, worldHeight - 48);
@@ -1569,22 +1571,22 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         emit({ type: "LEAP_START", side, moveId, x: caster.x, y: caster.y, destX, destY });
         return;
       }
-      if (v2.v2Archetype === "SHOCKWAVE_RING") {
+      if (archetype === "SHOCKWAVE_RING") {
         const maxR = Math.max(185, (move.radius ?? 140) * 1.4);
         spawnShockwave({ team: caster.team, x: caster.x, y: caster.y, moveId, maxRadius: maxR, duration: 0.46, damage: Math.max(22, (move.damage ?? 26) * damageScale), arenaElement, attackElement, guardBreak: false });
         emit({ type: "SHOCKWAVE_START", side, moveId, x: caster.x, y: caster.y, maxRadius: maxR });
         return;
       }
-      if (v2.v2Archetype === "GRAB_SLAM" && foe && foe.hp > 0 && distance(caster.x, caster.y, foe.x, foe.y) <= Math.max(280, move.distance ?? 280)) {
+      if (archetype === "GRAB_SLAM" && foe && foe.hp > 0 && distance(caster.x, caster.y, foe.x, foe.y) <= Math.max(280, move.distance ?? 280)) {
         caster.grabSlam = { moveId, phase: "RUSH", t: 0, damage: Math.max(30, (move.damage ?? 30) * 1.15), target: foe, arenaElement, attackElement };
         return;
       }
-      if (v2.v2Archetype === "TELEKINESIS_SLAM" && foe && foe.hp > 0 && distance(caster.x, caster.y, foe.x, foe.y) <= 390) {
+      if (archetype === "TELEKINESIS_SLAM" && foe && foe.hp > 0 && distance(caster.x, caster.y, foe.x, foe.y) <= 390) {
         caster.tkSlam = { moveId, phase: "LIFT", t: 0, damage: Math.max(28, (move.damage ?? 28) * 1.12), target: foe, arenaElement, attackElement };
         emit({ type: "TK_LIFT", side, moveId, x: foe.x, y: foe.y, fromX: caster.x, fromY: caster.y });
         return;
       }
-      if (v2.v2Archetype === "BURROW_AMBUSH") {
+      if (archetype === "BURROW_AMBUSH") {
         const dist = Math.min(280, foe && foe.hp > 0 ? distance(caster.x, caster.y, foe.x, foe.y) : 210);
         const destX = clamp(caster.x + Math.cos(angle) * dist, 56, worldWidth - 56);
         const destY = clamp(caster.y + Math.sin(angle) * dist, 56, worldHeight - 56);
@@ -1594,7 +1596,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         emit({ type: "BURROW_START", side, casterId: caster.id, moveId, x: caster.x, y: caster.y, angle, duration: 0.56 });
         return;
       }
-      if (v2.v2Archetype === "GROUND_SPIKES") {
+      if (archetype === "GROUND_SPIKES") {
         state.groundSpikes.push({
           id: nextId++, team: caster.team, moveId,
           startX: caster.x + Math.cos(angle) * 56, startY: caster.y + Math.sin(angle) * 56,
@@ -1605,7 +1607,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         emit({ type: "GROUND_SPIKES_START", side, moveId, x: caster.x, y: caster.y, angle });
         return;
       }
-      if (v2.v2Archetype === "VORTEX_PULL") {
+      if (archetype === "VORTEX_PULL") {
         // Spawn a true lifting 3D storm/tornado vortex centered on target/aim (or around caster for NOVA)
         const vx = move.type === "NOVA" && foe && foe.hp > 0 && distance(caster.x, caster.y, foe.x, foe.y) <= 290
           ? foe.x : (move.type === "NOVA" ? caster.x : aimX);
@@ -1626,7 +1628,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         emit({ type: "ZONE_PLACED", moveId, team: caster.team, x: vx, y: vy, radius, delay, angle, vortexLift: true });
         return;
       }
-      if (v2.v2Archetype === "PROTECT_COUNTER") {
+      if (archetype === "PROTECT_COUNTER") {
         caster.barrier = move.duration ?? 1.2;
         caster.barrierAngle = angle; caster.barrierArc = move.arc ?? 2.2; caster.barrierRadius = move.radius ?? 64;
         caster.counterTimer = Math.max(caster.counterTimer ?? 0, 0.85);

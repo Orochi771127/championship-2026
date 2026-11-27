@@ -208,7 +208,7 @@ export function pb324ToRelayMove(id, ultimate = false) {
     ...(freezeWater ? { freezeWater } : {}),
     ...(onHit ? { onHit } : {}),
     pb324: m,
-    ...(PB_MOVE_TUNING[id] ?? {})
+    ...(PB_MOVE_TUNING[id] ? { ...PB_MOVE_TUNING[id], stagedTuning: PB_MOVE_TUNING[id] } : {})
   };
 }
 

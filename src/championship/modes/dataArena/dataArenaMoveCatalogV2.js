@@ -494,6 +494,8 @@ export function calibrateV2Move(moveId, baseMove, { ultimate = false } = {}) {
     next.radius = Math.max(baseMove.radius ?? 0, spec.combatRadius);
   }
   next.telegraphShape = spec.telegraphShape;
+  // A move staged one at a time keeps the numbers taken from its reference (windup, speed, ...).
+  if (baseMove.stagedTuning) Object.assign(next, baseMove.stagedTuning);
   const frozen = Object.freeze(next);
   byKey.set(cacheKey, frozen);
   return frozen;
