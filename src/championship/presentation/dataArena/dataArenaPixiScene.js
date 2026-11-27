@@ -730,29 +730,48 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         // The stage outlives the action record, so a held pose and a hop back play to their end.
         {
           const sa = body.action, cueNow = sa?.moveId ? pbMoveBody(sa.moveId) : null;
-          if (cueNow && stage.id !== sa.id) stage = { id: sa.id, cue: cueNow, angle: sa.angle ?? (facing > 0 ? 0 : Math.PI), startLeft: 0, dashTotal: 1, endAt: null, ax: body.x, ay: body.y, lift: 0, liftStart: 0, liftEnd: 0 };
+          if (cueNow && stage.id !== sa.id) stage = { id: sa.id, cue: cueNow, angle: sa.angle ?? (facing > 0 ? 0 : Math.PI), startLeft: 0, dashTotal: 1, endAt: null, ax: body.x, ay: body.y, lift: 0, liftStart: 0, liftEnd: 0, offX: 0, alpha: 1 };
           const cue = stage.cue;
           if (cue && !reducedMotion && state.gameMode === 'RELAY') {
             const live = Boolean(sa) && sa.id === stage.id;
             const sCos = Math.cos(stage.angle), sDir = sCos >= 0 ? 1 : -1;
             const low = (amount) => { sprite.scale.y *= 1 - amount; sprite.scale.x *= 1 + amount * 0.5; };
             const flatten = (amount) => { sprite.scale.y *= 1 - amount; sprite.scale.x *= 1 + amount * 0.95; };
-            stage.camLift = 0;
+            stage.camLift = 0; stage.offX = 0; stage.alpha = 1;
+            const sd = cue.skyDrop ?? null;
             if (live && sa.releasedAt === null) {
               const p = clamp((state.time - sa.startedAt) / Math.max(0.01, sa.windup), 0, 1), e = p * p * (3 - 2 * p), w = cue.windup ?? {};
               if (w.tint) scriptTint = w.tint;
               if (w.shake) sprite.x += Math.sin(elapsed * 95) * w.shake * (0.4 + 0.6 * e);
-              if (w.crouch) low(w.crouch * e);
-              if (w.squash) flatten(w.squash * e);
-              if (w.pump) {
-                const wave = Math.sin(p * Math.PI * (w.pump.count ?? 2) * 2);
-                const swell = Math.max(0, wave) * (w.pump.amount ?? 0.2);
-                sprite.scale.x *= 1 + swell; sprite.scale.y *= 1 + swell * 0.85;
+              if (sd) {
+                const cf = sd.crouchFrac ?? 0.3;
+                if (p < cf) {
+                  const cp = p / Math.max(0.01, cf);
+                  if (w.squash) flatten(w.squash * cp);
+                  if (w.crouch) low(w.crouch * cp);
+                } else {
+                  const up = (p - cf) / Math.max(0.01, 1 - cf);
+                  const upE = up * up;
+                  stage.lift = (sd.maxLift ?? 460) * upE;
+                  sprite.y -= stage.lift; actionHop += stage.lift;
+                  sprite.scale.y *= 1 + (sd.stretch ?? 0.35) * up;
+                  sprite.scale.x *= 1 - (sd.stretch ?? 0.35) * 0.5 * up;
+                  if (sd.tint) scriptTint = sd.tint;
+                  if (stage.lift > 350) { actionAlphaMult = 0; stage.alpha = 0; }
+                }
+              } else {
+                if (w.crouch) low(w.crouch * e);
+                if (w.squash) flatten(w.squash * e);
+                if (w.pump) {
+                  const wave = Math.sin(p * Math.PI * (w.pump.count ?? 2) * 2);
+                  const swell = Math.max(0, wave) * (w.pump.amount ?? 0.2);
+                  sprite.scale.x *= 1 + swell; sprite.scale.y *= 1 + swell * 0.85;
+                }
+                if (w.lean) actionTilt = -sDir * w.lean * e;
+                if (w.back) sprite.x -= sCos * w.back * e;
+                if (w.hop) { stage.lift = w.hop * e; sprite.y -= stage.lift; actionHop += stage.lift; }
+                if (w.camLift) stage.camLift = w.camLift * e;
               }
-              if (w.lean) actionTilt = -sDir * w.lean * e;
-              if (w.back) sprite.x -= sCos * w.back * e;
-              if (w.hop) { stage.lift = w.hop * e; sprite.y -= stage.lift; actionHop += stage.lift; }
-              if (w.camLift) stage.camLift = w.camLift * e;
             } else if (live && body.lunge && body.lunge.actionId === stage.id) {
               const d = cue.dash ?? {};
               if (!stage.startLeft) {
@@ -762,31 +781,57 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
                 const gap = foe ? Math.hypot(foe.x - body.x, foe.y - body.y) - 56 : stage.startLeft;
                 stage.dashTotal = clamp(gap, 30, stage.startLeft);
               }
-              const q = clamp((stage.startLeft - body.lunge.left) / stage.dashTotal, 0, 1);
-              if (d.tint) scriptTint = d.tint;
-              if (d.hide) actionAlphaMult = 0;
-              if (d.low) low(d.low);
-              if (d.squash) flatten(d.squash);
-              if (d.bellyFlop) {
-                const belly = clamp((q - 0.38) / 0.42, 0, 1);
-                actionTilt = sDir * (d.lean ?? 1.25) * belly;
-                if (belly > 0.2) flatten(0.22 * belly);
-              } else if (d.lean) actionTilt = sDir * d.lean;
-              if (d.flip) actionTilt = sDir * Math.PI * 2 * d.flip * q;
-              // Height through the dash: the windup hop carried down, a leap arc, or a dive from a height.
-              stage.lift = stage.liftStart * (1 - q) + (d.arc ? Math.sin(Math.PI * q) * d.arc : 0) + (d.dive ? d.dive * (1 - q) : 0);
-              sprite.y -= stage.lift; actionHop += stage.lift;
-              if (d.afterimage !== undefined && !d.hide && frameCount % 2 === 0) afterimage(container.position.x + sprite.x, container.position.y + sprite.y, facing, sprite, d.afterimage);
-              // Standing at the target, winding the blow up.
               const pending = body.lunge.pending, rc = cue.ready;
-              if (pending && rc) {
-                const pr = clamp(1 - pending.timer / Math.max(0.01, pending.total), 0, 1);
-                if (rc.lean) actionTilt = -sDir * rc.lean * Math.sin(Math.PI * Math.min(1, pr * 1.2));
-                if (rc.low) low(rc.low * pr);
-                if (rc.hop) { const h = Math.sin(Math.PI * pr) * rc.hop; sprite.y -= h; actionHop += h; }
-                if (rc.tint) scriptTint = rc.tint;
+              if (sd) {
+                if (!pending) {
+                  actionAlphaMult = 0; stage.alpha = 0; stage.lift = sd.maxLift ?? 460;
+                } else {
+                  const pr = clamp(1 - pending.timer / Math.max(0.01, pending.total), 0, 1);
+                  const fallAt = sd.fallAt ?? 0.82;
+                  if (pr < fallAt) {
+                    actionAlphaMult = 0; stage.alpha = 0; stage.lift = sd.maxLift ?? 460;
+                  } else {
+                    const fk = (pr - fallAt) / Math.max(0.01, 1 - fallAt);
+                    if (sd.tint) scriptTint = sd.tint;
+                    if (sd.diveBack) {
+                      stage.offX = -sCos * sd.diveBack * (1 - fk);
+                      stage.lift = (sd.diveLift ?? 200) * (1 - fk);
+                      sprite.x += stage.offX; sprite.y -= stage.lift; actionHop += stage.lift;
+                      actionTilt = sDir * (sd.diveTilt ?? 0.38);
+                    } else {
+                      stage.lift = (sd.dropHeight ?? 340) * (1 - fk);
+                      sprite.y -= stage.lift; actionHop += stage.lift;
+                      sprite.scale.y *= 1 + 0.28 * (1 - fk);
+                      sprite.scale.x *= 1 - 0.14 * (1 - fk);
+                    }
+                  }
+                }
+              } else {
+                const q = clamp((stage.startLeft - body.lunge.left) / stage.dashTotal, 0, 1);
+                if (d.tint) scriptTint = d.tint;
+                if (d.hide) actionAlphaMult = 0;
+                if (d.low) low(d.low);
+                if (d.squash) flatten(d.squash);
+                if (d.bellyFlop) {
+                  const belly = clamp((q - 0.38) / 0.42, 0, 1);
+                  actionTilt = sDir * (d.lean ?? 1.25) * belly;
+                  if (belly > 0.2) flatten(0.22 * belly);
+                } else if (d.lean) actionTilt = sDir * d.lean;
+                if (d.flip) actionTilt = sDir * Math.PI * 2 * d.flip * q;
+                // Height through the dash: the windup hop carried down, a leap arc, a downward swoop, or a dive from a height.
+                stage.lift = stage.liftStart * (1 - q) + (d.arc ? Math.sin(Math.PI * q) * d.arc : 0) - (d.swoop ? Math.sin(Math.PI * q) * d.swoop : 0) + (d.dive ? d.dive * (1 - q) : 0);
+                sprite.y -= stage.lift; actionHop += Math.max(0, stage.lift);
+                if (d.afterimage !== undefined && !d.hide && frameCount % 2 === 0) afterimage(container.position.x + sprite.x, container.position.y + sprite.y, facing, sprite, d.afterimage);
+                // Standing at the target, winding the blow up.
+                if (pending && rc) {
+                  const pr = clamp(1 - pending.timer / Math.max(0.01, pending.total), 0, 1);
+                  if (rc.lean) actionTilt = -sDir * rc.lean * Math.sin(Math.PI * Math.min(1, pr * 1.2));
+                  if (rc.low) low(rc.low * pr);
+                  if (rc.hop) { const h = Math.sin(Math.PI * pr) * rc.hop; sprite.y -= h; actionHop += h; }
+                  if (rc.tint) scriptTint = rc.tint;
+                }
               }
-              // On the target, striking on a beat: the body jabs forward with every strike (or climbs, spins and plunges for a grab-slam).
+              // On the target, striking on a beat: the body jabs forward with every strike (or climbs/spins/crosses over).
               const combo = body.lunge.combo, cc = cue.combo;
               if (combo && cc) {
                 const beat = body.lunge.comboHits?.[combo.i]?.dt ?? 0.15, ph = clamp(1 - combo.timer / Math.max(0.01, beat), 0, 1);
@@ -800,6 +845,28 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
                     const st = (tt - (L.spinDelay ?? 0)) / Math.max(0.05, L.up + L.hang - (L.spinDelay ?? 0));
                     sprite.scale.x *= Math.cos(st * Math.PI * 2 * L.turns) >= 0 ? 1 : -1;
                   }
+                } else if (cc.cross) {
+                  const over = cc.cross.over ?? 155, rise = cc.cross.rise ?? 76;
+                  // 0..0.38: pop up-right over target; 0.38..0.68: land/bank on far right facing back; 0.68..1.0: slash right-to-left across target!
+                  let fx, fy;
+                  if (ph < 0.38) {
+                    const u = ph / 0.38;
+                    fx = over * 0.55 * u;
+                    fy = rise * Math.sin(u * Math.PI * 0.5);
+                  } else if (ph < 0.68) {
+                    const u = (ph - 0.38) / 0.3;
+                    fx = over * (0.55 + 0.45 * u);
+                    fy = rise * Math.cos(u * Math.PI * 0.5);
+                  } else {
+                    const u = (ph - 0.68) / 0.32;
+                    fx = over * (1 - u * 0.72);
+                    fy = 18 * Math.sin(u * Math.PI);
+                  }
+                  stage.offX = sCos * fx;
+                  stage.lift = fy;
+                  sprite.x += stage.offX; sprite.y -= stage.lift; actionHop += stage.lift;
+                  if (ph >= 0.48 && ph < 0.98) sprite.scale.x *= -1;
+                  actionTilt = (ph < 0.52 ? 1 : -1) * sDir * 0.45;
                 } else {
                   const jab = Math.sin(Math.PI * Math.min(1, ph * 1.6)) * (cc.jab ?? 10) * (combo.i % 2 ? 1 : 0.7);
                   sprite.x += sCos * jab; if (cc.lean) actionTilt = sDir * cc.lean * (0.5 + 0.5 * Math.sin(Math.PI * ph)); if (cc.low) low(cc.low);
@@ -816,7 +883,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
                 const k = t < hold ? 0 : clamp((t - hold) / Math.max(0.01, hopTime), 0, 1), ke = k * k * (3 - 2 * k);
                 sprite.x += (stage.ax - body.x) * (1 - ke); sprite.y += (stage.ay - body.y) * (1 - ke);
                 const held = (st.lift ?? 0) * (1 - ke);
-                if (held) { sprite.y -= held; actionHop += held; }
+                if (held) { stage.lift = held; sprite.y -= held; actionHop += held; }
+                if (st.offX) { stage.offX = sCos * st.offX * (1 - ke); sprite.x += stage.offX; }
                 if (t < hold) {
                   if (st.lean) actionTilt = sDir * st.lean;
                   if (st.low) low(st.low);
@@ -879,10 +947,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         syncFlash((flash > 0.10 || blinkBright) && !reducedMotion, clamp(Math.max(flash - 0.09, blinkBright ? 0.065 : 0) * 10, 0.45, 0.92));
         if (impactFlashTimer > 0 && impactStyle && rich && !reducedMotion) { if (impactStyle === 'black') syncFlash(true, 1); else sprite.tint = 0x000000; }
         const totalLift = lift + actionHop + knockHop;
-        shadow.alpha = (0.75 - sink * 0.6) * (totalLift > 0 ? Math.max(0.35, 1 - totalLift / 48) : 1);
+        shadow.alpha = actionAlphaMult <= 0.01 ? 0 : (0.75 - sink * 0.6) * (totalLift > 0 ? Math.max(0.35, 1 - totalLift / 48) : 1);
       },
       stageLift: () => stage.lift ?? 0,
-      camLift: () => Math.max(stage.lift ?? 0, stage.camLift ?? 0),
+      stageOffX: () => stage.offX ?? 0,
+      stageAlpha: () => stage.alpha ?? 1,
+      camLift: () => (stage.cue?.skyDrop ? 0 : Math.max(stage.lift ?? 0, stage.camLift ?? 0)),
       diagnostics: () => ({ sequenceId: sequence, frameIndex: controller?.getSnapshot().sourceFrameIndex ?? null,
         speciesId: member?.speciesId, facing8: body.facing8 ?? null, slotPreserved: Boolean(currentPlacement), anchor: currentPlacement?.anchor ?? null, actionId: motion?.actionId??motion?.id ?? null, phase: motion?.phase ?? null, moveId: motion?.moveId ?? null,
         reviewed:reviewedArena?{clipId:reviewedSample?.clipId??motion?.clipId,direction:reviewedSample?.direction??motion?.direction,assetId:reviewedSample?.assetId??motion?.assetId,terminal:(reviewedSample??motion)?.terminal??false,missing:reviewedSample?.missing??null,partial,native:partial&&!onReviewed}:null })
@@ -1619,7 +1689,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               elementFx.release({ x: at.x, y: at.y, angle: event.angle ?? 0, moveId: event.moveId, speciesId: casterSpecies(event), melee: event.moveType === 'LUNGE',
                 follow: () => {
                   if (!dasher || dasher.hp <= 0) { scriptHops.delete(dasher?.id); return null; }
-                  if (dasher.lunge || dashGrace-- > 0 || event.moveType !== 'LUNGE') return { x: dasher.x, y: dasher.y - 30 - (casterView(dasher.id)?.stageLift?.() ?? 0), footY: dasher.y };
+                  const cv = casterView(dasher.id);
+                  if (dasher.lunge || dashGrace-- > 0 || event.moveType !== 'LUNGE') return { x: dasher.x + (cv?.stageOffX?.() ?? 0), y: dasher.y - 30 - (cv?.stageLift?.() ?? 0), footY: dasher.y, alpha: cv?.stageAlpha?.() ?? 1 };
                   if (!hopCue) return null;
                   // The rebound: an arc up and a little back from where the dash ended.
                   if (!scriptHops.has(dasher.id)) scriptHops.set(dasher.id, state.time);

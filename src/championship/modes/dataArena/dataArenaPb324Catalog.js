@@ -299,7 +299,25 @@ export const PB_MOVE_TUNING = Object.freeze({
   // Defog: stationary wing-flap releasing an expanding spiky white wind ring that scatters wind streaks across the field.
   'pb-052': Object.freeze({ type: 'NOVA', windup: 0.1, clearHazards: true }),
   // Roost: stationary crouch-sit on glowing white floor disc with mid-rest flash and 8 gently rising tan feathers.
-  'pb-237': Object.freeze({ type: 'NOVA', windup: 0.12, selfHeal: true })
+  'pb-237': Object.freeze({ type: 'NOVA', windup: 0.12, selfHeal: true }),
+  // ---- Batch 4B: Remaining 8 recorded Flying moves (Acrobatics, Bounce, Brave Bird, Fly, Hurricane, Mirror Move, Sky Attack, Tailwind)
+  // Acrobatics: aerial hover, wide curved downward swoop hit 1, arcs over to far-right flank and slashes back right-to-left for hit 2, ends hovering high above target.
+  'pb-002': Object.freeze({ singleDash: true, windup: 0.24, speed: 820, distance: 350, standOff: 1.4,
+    comboHits: Object.freeze([{ share: 0.48, knock: 25 }, { dt: 0.52, share: 0.52, knock: 40 }]) }),
+  // Bounce: deep squash crouch, straight vertical off-screen spring launch from range, empty sky dwell, straight vertical drop slam.
+  'pb-027': Object.freeze({ singleDash: true, windup: 0.34, speed: 3200, distance: 560, standOff: 0.75, strikeDelay: 0.78, lungeKnock: 60 }),
+  // Brave Bird: rising hop into cobalt-blue aura shell, diagonal diving tackle with spark trail, blinding white impact + recoil hop.
+  'pb-028': Object.freeze({ singleDash: true, windup: 0.48, speed: 1020, distance: 380, standOff: 1.2, lungeKnock: 260, reboundSpeed: 210 }),
+  // Fly: immediate vertical off-screen takeoff from range with twin brown dust rings, dark bird shadow tracks target, vertical plunge into crater.
+  'pb-105': Object.freeze({ singleDash: true, windup: 0.28, speed: 3200, distance: 580, standOff: 0.9, strikeDelay: 0.92, lungeKnock: 110 }),
+  // Hurricane: stationary dimmed wing-flap summons a towering dark-capped tornado that glides across the arena and lifts target inside it.
+  'pb-137': Object.freeze({ type: 'BOLT', speed: 320, windup: 0.32, knockback: 55, noHoming: true, pierce: 0, radius: 44 }),
+  // Mirror Move: stationary caster raises a pale blue-white rectangular mirror that flashes white, then fires a counter prism wave.
+  'pb-181': Object.freeze({ type: 'BOLT', speed: 840, windup: 0.48, knockback: 90, noHoming: true, pierce: 0, radius: 24 }),
+  // Sky Attack: dimmed golden charge from range, vertical takeoff with white light pillar, shallow diagonal golden comet dive into starburst crater.
+  'pb-256': Object.freeze({ singleDash: true, windup: 0.62, speed: 3200, distance: 580, standOff: 0.85, strikeDelay: 0.86, lungeKnock: 25 }),
+  // Tailwind: stationary rapid wing-flaps sending 4 tall thin mint-cyan wind arcs drifting mid-field, self speed buff.
+  'pb-290': Object.freeze({ type: 'NOVA', windup: 0.14, selfBuff: Object.freeze({ atk: 0, spd: 2 }) })
 });
 
 export function pb324MoveName(id, locale = "zh-Hant") {
