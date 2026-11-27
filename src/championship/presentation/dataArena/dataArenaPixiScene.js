@@ -482,7 +482,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const ringGfx = role === "PLAYER" ? new PIXI.Graphics() : null;
     if (ringGfx) container.addChildAt(ringGfx, 1);
     return {
-      role, container, sprite, shadow, ringGfx, scale, controller, hasArt: Boolean(bundle),
+      role, container, sprite, flashSprite, shadow, ringGfx, healthGfx, scale, controller, hasArt: Boolean(bundle),
       resetAction(){action.clear();reviewedArena?.reset();actionRequest=null;},
       setHealth(share) {
         if (!healthGfx) return;
@@ -2178,6 +2178,34 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   const impactGfx = new PIXI.Graphics();
   impactGfx.label = "arena anime impact frame";
   impactGfx.visible = false;
+  const whiteSilFilter = typeof PIXI.ColorMatrixFilter === "function" ? (() => {
+    const f = new PIXI.ColorMatrixFilter();
+    f.matrix = [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0];
+    return f;
+  })() : null;
+  function applyInkSilhouette(view, mode) {
+    if (!view) return;
+    if (mode === 'white') {
+      view.sprite.tint = 0xffffff;
+      if (whiteSilFilter) { view.sprite.filters = [whiteSilFilter]; if (view.flashSprite) view.flashSprite.visible = false; }
+      else if (view.flashSprite) { view.flashSprite.visible = true; view.flashSprite.alpha = 1; }
+      if (view.shadow) view.shadow.visible = false;
+      if (view.ringGfx) view.ringGfx.visible = false;
+      if (view.healthGfx) view.healthGfx.visible = false;
+    } else if (mode === 'black') {
+      if (view.sprite.filters) view.sprite.filters = null;
+      view.sprite.tint = 0x000000;
+      if (view.flashSprite) view.flashSprite.visible = false;
+      if (view.shadow) view.shadow.visible = false;
+      if (view.ringGfx) view.ringGfx.visible = false;
+      if (view.healthGfx) view.healthGfx.visible = false;
+    } else {
+      if (view.sprite.filters) view.sprite.filters = null;
+      if (view.shadow) view.shadow.visible = true;
+      if (view.ringGfx) view.ringGfx.visible = true;
+      if (view.healthGfx) view.healthGfx.visible = true;
+    }
+  }
   const weatherGfx = new PIXI.Graphics();
   weatherGfx.label = "arena weather overlay";
   weatherGfx.visible = false;
@@ -2544,12 +2572,20 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     for (const [id, view] of rivalViews) if (!state.rivals.some((rival) => String(rival.id) === String(id).split(':')[0])) { view.container.destroy({ children: true }); rivalViews.delete(id); burstShell.retire(`rival:${String(id).split(':')[0]}`); }
     if (!(state.mate.state === "ABSENT")) mateView.container.visible = true; else mateView.container.visible = false;
     // The impact frame's silhouette must not outlive the frame (the player's tint builds on its last value).
-    if (impactSilhouette && !(impactFlashTimer > 0)) { playerView.sprite.tint = 0xffffff; impactSilhouette = false; }
+    if (impactSilhouette && !(impactFlashTimer > 0)) {
+      playerView.sprite.tint = 0xffffff;
+      applyInkSilhouette(playerView, null);
+      for (const view of rivalViews.values()) applyInkSilhouette(view, null);
+      particles.visible = shots.visible = shotGlow.visible = beams.visible = marks.visible = zoneSigils.visible = cellFx.visible = true;
+      impactSilhouette = false;
+    }
     playerView.sprite.tint = statusTint(state.player, playerView.sprite.tint);
     if (impactFlashTimer > 0 && !reducedMotion && rich) {
       impactSilhouette = true;
-      playerView.sprite.tint = 0x000000;
-      for (const view of rivalViews.values()) if (view.container.visible) view.sprite.tint = 0x000000;
+      const inkMode = impactStyle === 'black' ? 'white' : 'black';
+      applyInkSilhouette(playerView, inkMode);
+      for (const view of rivalViews.values()) if (view.container.visible) applyInkSilhouette(view, inkMode);
+      if (impactStyle) particles.visible = shots.visible = shotGlow.visible = beams.visible = marks.visible = zoneSigils.visible = cellFx.visible = false;
     }
     if (state.gameMode === 'RELAY') drawArenaStatus('player', state.player, playerView, 'PLAYER', 0);
     statusFx?.retireExcept(statusShown); statusShown.clear();
@@ -2808,6 +2844,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     for (const t of state.telegraphs) {
       const p = clamp(t.t / t.duration, 0, 1);
       const mine = t.team === "player";
+      if (mine && relayMode && t.moveId && pbMoveBody(t.moveId)) continue;
       if (mine && relayMode && t.kind !== "LINE" && t.kind !== "CONE") continue; // relay: own direction chevrons only, no circles
       if ((t.kind === "LINE" || t.kind === "CONE") && mine) {
         // Own aim: short chevrons near the feet instead of a line across the field (Owner 2026-11-05).

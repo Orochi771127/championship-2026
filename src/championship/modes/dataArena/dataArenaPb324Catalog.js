@@ -252,7 +252,7 @@ export const PB_MOVE_TUNING = Object.freeze({
   'pb-109': Object.freeze({ singleDash: true, windup: 0.7, speed: 1700, lungeKnock: 30 }),
   // Drain Punch and Force Palm are dashes in the reference (filed here as a zone and a wave).
   'pb-069': Object.freeze({ type: 'LUNGE', distance: 260, speed: 1100, width: 72, windup: 0.1, lungeKnock: 120, standOff: 1.8 }),
-  'pb-111': Object.freeze({ type: 'LUNGE', distance: 290, speed: 2500, width: 72, windup: 0.15, lungeKnock: 160, standOff: 1.8 }),
+  'pb-111': Object.freeze({ type: 'LUNGE', distance: 290, speed: 1450, width: 72, windup: 0.15, lungeKnock: 360, standOff: 1.8 }),
   // Hammer Arm: grows the arm, walks it in, leans it back and brings it down.
   'pb-126': Object.freeze({ singleDash: true, windup: 0.3, speed: 480, distance: 300, lungeKnock: 200, strikeDelay: 0.6 }),
   // Double Kick: jumps straight up, dives foot first, a second kick from the ground 0.27 s later shoves the target.
