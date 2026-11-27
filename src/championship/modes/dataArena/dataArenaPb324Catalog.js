@@ -232,7 +232,7 @@ export const PB_MOVE_TUNING = Object.freeze({
   'pb-042': Object.freeze({ singleDash: true, windup: 0.16, speed: 1000, lungeKnock: 70 }),
   'pb-029': Object.freeze({ singleDash: true, windup: 0.25, lungeKnock: 400 }),
   'pb-167': Object.freeze({ singleDash: true, windup: 0.15, speed: 2600, lungeKnock: 20 }),
-  'pb-003': Object.freeze({ singleDash: true, windup: 0.12, speed: 1500, lungeKnock: 200, passThrough: true }),
+  'pb-003': Object.freeze({ singleDash: true, windup: 0.17, speed: 1300, lungeKnock: 30, passThrough: true }),
   // Close Combat: steps in, seven jabs 0.15 s apart with the target pinned, gathers 0.3 s, one heavy blow.
   'pb-037': Object.freeze({ windup: 0.15, speed: 1200, standOff: 2.5, comboHits: Object.freeze([{ share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 },
     { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.45, share: 0.37, knock: 210 }]) }),

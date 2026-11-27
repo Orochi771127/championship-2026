@@ -51,7 +51,7 @@ export const PB_MOVE_BODY = Object.freeze({
   'pb-057': { key: 'doubleKick', windup: { crouch: 0.1, hop: 110 }, dash: { lean: 0.5 }, combo: { jab: 16, low: 0.2 }, strike: { low: 0.22, hold: 0.2 }, impactFrame: 'first' },
   // ---- flying
   // Aerial Ace: a dark-blue silhouette that cuts straight through the target and lands flat on its far side.
-  'pb-003': { key: 'aerialAce', windup: { crouch: 0.2, tint: 0x2a3a8c }, dash: { tint: 0x2a3a8c, lean: 0.4 }, strike: { lean: 1.1, low: 0.2, tint: 0x2a3a8c, hold: 0.3 }, after: { hop: 22, time: 0.16 }, impactFrame: true, impactStyle: 'black' }
+  'pb-003': { key: 'aerialAce', windup: { crouch: 0.2, tint: 0x2a3a8c }, dash: { tint: 0x2a3a8c, lean: 0.4 }, strike: { lean: 1.15, low: 0.2, hold: 0.28 }, after: { hop: 22, time: 0.16 }, impactFrame: true, impactStyle: 'black' }
 });
 
 export const pbMoveBody = moveId => PB_MOVE_BODY[moveId] ?? null;
@@ -85,9 +85,9 @@ export function createPbMoveScripts(api) {
   const dizzy = (x, y, seconds = 0.45) => live(seconds, (h, t, dt, g) => {
     for (let i = 0; i < 3; i++) { const a = h.age * 9 + i * 2.094; star4(g.add, x + Math.cos(a) * 15, y - 48 + Math.sin(a) * 5, 4.5, 0xffffff, 0.95 * (1 - t * 0.4)); }
   });
-  const pebbles = (x, y, count, spread, rgb = [112, 90, 70], life = 3.2) => {
+  const pebbles = (x, y, count, spread, rgb = [112, 90, 70], life = 3.2, big = 5) => {
     const stops = [[0, rgb, 0.95], [0.8, rgb, 0.85], [1, rgb, 0]];
-    for (let i = 0; i < count; i++) spawnP({ shape: 'px', x: x + (rand() - 0.5) * spread, y: y + (rand() - 0.5) * spread * 0.4, size: 3 + rand() * 2, size1: 3, stops, add: false, life: life * (0.7 + rand() * 0.5), drag: 1 });
+    for (let i = 0; i < count; i++) { const sz = 3 + rand() * big; spawnP({ shape: 'px', x: x + (rand() - 0.5) * spread, y: y + (rand() - 0.5) * spread * 0.4, size: sz, size1: sz, stops, add: false, life: life * (0.7 + rand() * 0.5), drag: 1 }); }
   };
   const whiteBloom = (x, y, from, to, life = 0.18) => spawnP({ shape: 'glow', x, y, size: from, size1: to, stops: [[0, [255, 255, 255], 1], [1, [255, 250, 235], 0]], add: true, life });
   const sparks = (x, y, angle, count, pal, speed = 260, spread = 2.2) => {
@@ -242,19 +242,24 @@ export function createPbMoveScripts(api) {
       },
       hit({ x, y, groundY, angle = 0 }) {
         whiteBloom(x, y, 22, 50, 0.12);
-        sparks(x, y - 8, -Math.PI / 2, 10, 'fire', 260, 2.6);
-        // A tall pillar of light stands through the struck point with dirt churning round it; a wide ring spreads on the ground.
-        live(0.66, (h, t, dt, g) => {
-          const fade = t < 0.7 ? 1 : 1 - (t - 0.7) / 0.3, height = 112 * Math.min(1, t / 0.1 + 0.4), flick = 1 + 0.2 * Math.sin(h.age * 50);
-          g.top.rect(x - 9 * flick, groundY - height, 18 * flick, height).fill({ color: 0xff9a2c, alpha: 0.88 * fade });
-          g.add.rect(x - 3.5, groundY - height, 7, height).fill({ color: 0xffffff, alpha: 0.95 * fade });
-          const rt = Math.min(1, t / 0.5);
-          groundRing(g.top, x, groundY + 4, 30 + 46 * rt, 0xb07038, 0.9 * (1 - rt), 4);
+        sparks(x, y - 8, -Math.PI / 2, 12, 'fire', 280, 2.8);
+        // A wide blade of flame stands through the struck point with a hot burst at its base, gone in a third of a second.
+        live(0.36, (h, t, dt, g) => {
+          const fade = t < 0.6 ? 1 : 1 - (t - 0.6) / 0.4, height = 150 * Math.min(1, t / 0.12 + 0.45), flick = 1 + 0.18 * Math.sin(h.age * 50);
+          g.top.poly([x - 13 * flick, groundY, x - 8, groundY - height * 0.8, x, groundY - height, x + 8, groundY - height * 0.8, x + 13 * flick, groundY]).fill({ color: 0xff8a1c, alpha: 0.9 * fade });
+          g.add.poly([x - 5, groundY, x, groundY - height * 0.92, x + 5, groundY]).fill({ color: 0xfff2c8, alpha: 0.95 * fade });
+          spiky(g.add, x, groundY - 8, 34 * (1 - t * 0.4), 8, 0xff9a2c, 0.9 * fade, h.seed);
           h.acc = (h.acc ?? 0) + dt;
-          while (h.acc >= 0.05 && t < 0.6) { h.acc -= 0.05; const a = h.age * 14 + rand(); spawnP({ shape: 'pxpuff', x: x + Math.cos(a) * 24, y: groundY - 10 + Math.sin(a) * 9, vx: -Math.sin(a) * 70, vy: Math.cos(a) * 26 - 30, size: 7, size1: 12, stops: [[0, [150, 112, 78], 0.85], [1, [150, 112, 78], 0]], add: false, life: 0.3 }); }
+          while (h.acc >= 0.04) { h.acc -= 0.04; const a = h.age * 16 + rand(); spawnP({ shape: 'pxpuff', x: x + Math.cos(a) * 26, y: groundY - 10 + Math.sin(a) * 9, vx: -Math.sin(a) * 80, vy: Math.cos(a) * 28 - 30, size: 8, size1: 13, stops: [[0, [150, 112, 78], 0.85], [1, [150, 112, 78], 0]], add: false, life: 0.3 }); }
         });
-        pebbles(x, groundY + 6, 18, 150, [112, 90, 70], 2.6);
-        addDecal({ x: x - Math.cos(angle) * 20, y: groundY + 8, kind: 'crack', radius: 16, pal: 'earth', life: 4.5 });
+        // An orange ring turns brown as it spreads wide under the target; rocks stay on the ground.
+        live(0.55, (h, t, dt, g) => {
+          if (t < 0.25) return; const k = (t - 0.25) / 0.75;
+          groundRing(g.top, x, groundY + 4, 30 + 52 * k, k < 0.4 ? 0xff8a1c : 0x9a6a3c, 0.95 * (1 - k * 0.8), 5);
+          groundRing(g.top, x, groundY + 4, 18 + 40 * k, 0xc89058, 0.6 * (1 - k), 3);
+        });
+        pebbles(x - Math.cos(angle) * 10, groundY + 6, 24, 150, [112, 90, 70], 2.8, 7);
+        addDecal({ x: x - Math.cos(angle) * 20, y: groundY + 8, kind: 'crack', radius: 20, pal: 'earth', life: 4.5 });
         dizzy(x, y, 0.5);
       }
     },
@@ -274,11 +279,11 @@ export function createPbMoveScripts(api) {
         const c = Math.cos(angle) >= 0 ? 1 : -1, seed = rand() * 6;
         live(0.5, (h, t, dt, g) => {
           // A dark red crescent comes down in front of the target as the body lands...
-          if (t < 0.36) { const k = 1 - t / 0.36; crescent(g.top, x - c * 10, y - 4, 96, c, 0x8a1220, 0.95 * k, 18); crescent(g.add, x - c * 10, y - 4, 78, c, 0xff4050, 0.7 * k, 8); }
+          if (t < 0.4) { const k = t < 0.2 ? 1 : 1 - (t - 0.2) / 0.2; crescent(g.top, x - c * 22, y - 6, 124, c, 0x7a0e1a, 0.97 * k, 24); crescent(g.top, x - c * 24, y - 6, 100, c, 0xc81e2e, 0.9 * k, 9); }
           // ...then a red jagged splash sits on the body and flickers.
           const flick = 0.7 + 0.3 * Math.sin(h.age * 64), fade = t < 0.7 ? 1 : 1 - (t - 0.7) / 0.3, grow = Math.min(1, t / 0.16);
-          spiky(g.top, x, y, 50 * grow, 9, 0x8a1220, 0.95 * fade, seed);
-          spiky(g.add, x, y, 32 * grow, 9, 0xff3040, 0.9 * fade * flick, seed + 0.4);
+          spiky(g.top, x, y, 62 * grow, 11, 0x7a0e1a, 0.96 * fade, seed);
+          spiky(g.top, x, y, 40 * grow, 11, 0xc81e2e, 0.92 * fade * flick, seed + 0.4);
         });
         pebbles(x - c * 26, groundY + 6, 7, 50, [120, 118, 116], 1.8);
         addDecal({ x: x - c * 26, y: groundY + 8, kind: 'crack', radius: 12, pal: 'earth', life: 1.8 });
@@ -326,12 +331,14 @@ export function createPbMoveScripts(api) {
     // ------------------------------------------------------------------ Low Kick
     lowKick: {
       release({ follow, angle = 0 }) { trail(follow, angle, [190, 150, 255], { life: 0.3, every: 0.02, spread: 14, size: 7 }); },
-      hit({ x, y, groundY }) {
-        whiteBloom(x, groundY - 8, 14, 34, 0.12);
-        // A pale purple sweep mark lies under the target's feet, open side up.
+      hit({ x, y, groundY, angle = 0 }) {
+        const c = Math.cos(angle) >= 0 ? 1 : -1;
+        whiteBloom(x - c * 10, groundY - 8, 14, 34, 0.12);
+        dust(x, groundY + 2, 3);
+        // A pale purple sweep mark lies low between the two bodies, open side up.
         live(0.24, (h, t, dt, g) => {
           const fade = t < 0.6 ? 1 : 1 - (t - 0.6) / 0.4, pts = [], inner = [];
-          for (let i = 0; i <= 10; i++) { const a = Math.PI * (i / 10); pts.push(x + Math.cos(a) * 58, groundY + 2 + Math.sin(a) * 17); inner.unshift(x + Math.cos(a) * 58, groundY + 2 + Math.sin(a) * 7); }
+          for (let i = 0; i <= 10; i++) { const a = Math.PI * (i / 10); pts.push(x - c * 28 + Math.cos(a) * 62, groundY + 2 + Math.sin(a) * 18); inner.unshift(x - c * 28 + Math.cos(a) * 62, groundY + 2 + Math.sin(a) * 7); }
           g.top.poly([...pts, ...inner]).fill({ color: 0xc8a8ff, alpha: 0.92 * fade });
         });
         dizzy(x, y, 0.55);
@@ -350,17 +357,13 @@ export function createPbMoveScripts(api) {
       },
       release({ follow, angle = 0 }) { trail(follow, angle, [226, 238, 255], { life: 0.6, every: 0.012, spread: 50, size: 10 }); },
       hit({ x, y, groundY }) {
-        whiteBloom(x, y, 40, 86, 0.2);
-        // Thin white cuts stand through the target, top to bottom, while the body lies across it.
-        live(0.4, (h, t, dt, g) => {
-          const fade = t < 0.55 ? 1 : 1 - (t - 0.55) / 0.45;
-          for (const [dx, delay] of [[0, 0], [-12, 0.2], [10, 0.4]]) {
-            if (t < delay) continue;
-            g.add.rect(x + dx - 2, groundY - 106, 4, 126).fill({ color: 0xffffff, alpha: 0.95 * fade });
-            g.top.rect(x + dx - 4.5, groundY - 98, 9, 110).fill({ color: 0xd8e6ff, alpha: 0.35 * fade });
-          }
+        whiteBloom(x, y, 26, 58, 0.14);
+        // One thin white cut slants through the target while the body lies across it.
+        live(0.3, (h, t, dt, g) => {
+          const fade = t < 0.5 ? 1 : 1 - (t - 0.5) / 0.5, k = Math.min(1, t / 0.15);
+          g.add.poly([x - 34, groundY + 10, x - 30, groundY + 14, x - 30 + 66 * k, groundY + 14 - 112 * k, x - 34 + 66 * k, groundY + 10 - 112 * k]).fill({ color: 0xffffff, alpha: 0.96 * fade });
         });
-        sparks(x, y, 0, 8, 'wind', 220, 6.2);
+        sparks(x, y, 0, 6, 'wind', 200, 6.2);
       }
     },
 

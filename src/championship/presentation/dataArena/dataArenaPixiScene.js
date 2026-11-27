@@ -770,7 +770,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               }
             } else if (stage.endAt === null && (stage.startLeft || !live || sa.releasedAt !== null)) {
               // The dash is over (or was too quick to see): hold the strike where the body now stands.
-              stage.endAt = state.time; stage.liftEnd = stage.lift; stage.ax = body.x; stage.ay = body.y;
+              stage.endAt = state.time; stage.liftEnd = stage.lift; stage.lift = 0; stage.ax = body.x; stage.ay = body.y;
             }
             if (stage.endAt !== null) {
               const t = state.time - stage.endAt, st = cue.strike ?? {}, af = cue.after ?? {};
@@ -815,6 +815,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         const totalLift = lift + actionHop + knockHop;
         shadow.alpha = (0.75 - sink * 0.6) * (totalLift > 0 ? Math.max(0.35, 1 - totalLift / 48) : 1);
       },
+      stageLift: () => stage.lift ?? 0,
       diagnostics: () => ({ sequenceId: sequence, frameIndex: controller?.getSnapshot().sourceFrameIndex ?? null,
         speciesId: member?.speciesId, facing8: body.facing8 ?? null, slotPreserved: Boolean(currentPlacement), anchor: currentPlacement?.anchor ?? null, actionId: motion?.actionId??motion?.id ?? null, phase: motion?.phase ?? null, moveId: motion?.moveId ?? null,
         reviewed:reviewedArena?{clipId:reviewedSample?.clipId??motion?.clipId,direction:reviewedSample?.direction??motion?.direction,assetId:reviewedSample?.assetId??motion?.assetId,terminal:(reviewedSample??motion)?.terminal??false,missing:reviewedSample?.missing??null,partial,native:partial&&!onReviewed}:null })
@@ -1534,7 +1535,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               elementFx.release({ x: at.x, y: at.y, angle: event.angle ?? 0, moveId: event.moveId, speciesId: casterSpecies(event), melee: event.moveType === 'LUNGE',
                 follow: () => {
                   if (!dasher || dasher.hp <= 0) { scriptHops.delete(dasher?.id); return null; }
-                  if (dasher.lunge || dashGrace-- > 0) return { x: dasher.x, y: dasher.y - 30, footY: dasher.y };
+                  if (dasher.lunge || dashGrace-- > 0) return { x: dasher.x, y: dasher.y - 30 - (casterView(dasher.id)?.stageLift?.() ?? 0), footY: dasher.y };
                   if (!hopCue) return null;
                   // The rebound: an arc up and a little back from where the dash ended.
                   if (!scriptHops.has(dasher.id)) scriptHops.set(dasher.id, state.time);
@@ -1577,11 +1578,17 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             if (event.type === 'RIVAL_HIT' && event.cause !== 'LASER' && lastRelease.player) {
               const rival = (state.rivals ?? []).find(r => Math.hypot(r.x - event.x, r.y - event.y) < 2);
               const hitAng = Math.atan2(event.y - state.player.y, event.x - state.player.x);
-              elementFx.hit({ x: event.x, y: event.y - 30, groundY: event.y, ...lastRelease.player, angle: hitAng, heavy: event.amount >= 22, follow: bodyCenter(rival) });
+              elementFx.hit({ x: event.x, y: event.y - 30, groundY: event.y, ...lastRelease.player, angle: hitAng, heavy: event.amount >= 22, follow: bodyCenter(rival),
+                hitIndex: event.contact?.hitIndex ?? null, final: event.contact?.final ?? null });
+              const topple = pbMoveBody(lastRelease.player.moveId)?.target?.topple;
+              if (topple && rival) targetPoses.set(rival.id, { from: state.time, until: state.time + topple, dir: Math.cos(hitAng) >= 0 ? 1 : -1 });
             } else if (event.type === 'PLAYER_HIT' && lastRelease.rival) {
               const foe = (state.rivals ?? []).find(r => r.active && r.hp > 0) ?? state.rivals?.[0];
               const hitAng = foe ? Math.atan2(event.y - foe.y, event.x - foe.x) : (lastRelease.rival.angle ?? 0);
-              elementFx.hit({ x: event.x, y: event.y - 30, groundY: event.y, ...lastRelease.rival, angle: hitAng, heavy: event.amount >= 22, follow: bodyCenter(state.player) });
+              elementFx.hit({ x: event.x, y: event.y - 30, groundY: event.y, ...lastRelease.rival, angle: hitAng, heavy: event.amount >= 22, follow: bodyCenter(state.player),
+                hitIndex: event.contact?.hitIndex ?? null, final: event.contact?.final ?? null });
+              const topple = pbMoveBody(lastRelease.rival.moveId)?.target?.topple;
+              if (topple) targetPoses.set(state.player.id, { from: state.time, until: state.time + topple, dir: Math.cos(hitAng) >= 0 ? 1 : -1 });
             }
           } else if (confirmed && !atlasContact && event.cause !== 'SKILL') {
             elementFx.hit({ x: confirmed.x, y: confirmed.y - BEAM_ELEVATION, groundY: confirmed.y, moveId: confirmed.moveId, speciesId: casterSpecies(confirmed), angle: confirmed.angle,
