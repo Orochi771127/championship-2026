@@ -219,7 +219,9 @@ export function pb324ToRelayMove(id, ultimate = false) {
 //   windup       seconds the caster stands before moving;
 //   lungeKnock   how hard the struck body is pushed (default 340; 0 = pinned in place);
 //   reboundSpeed the caster is pushed back off the target after the blow (about speed / 5.5 px);
-//   passThrough  the dash carries on through the target and ends on its far side.
+//   passThrough  the dash carries on through the target and ends on its far side;
+//   comboHits    a blow made of several strikes: [{share, knock?}, {dt, share, knock?}, ...] -- the first
+//                lands on contact, each next one `dt` seconds after the one before; shares add up to 1.
 export const PB_MOVE_TUNING = Object.freeze({
   'pb-094': Object.freeze({ singleDash: true }),
   'pb-098': Object.freeze({ singleDash: true }),
@@ -229,7 +231,12 @@ export const PB_MOVE_TUNING = Object.freeze({
   'pb-042': Object.freeze({ singleDash: true, windup: 0.16, speed: 1000, lungeKnock: 70 }),
   'pb-029': Object.freeze({ singleDash: true, windup: 0.25, lungeKnock: 400 }),
   'pb-167': Object.freeze({ singleDash: true, windup: 0.15, speed: 2600, lungeKnock: 20 }),
-  'pb-003': Object.freeze({ singleDash: true, windup: 0.12, speed: 1500, lungeKnock: 200, passThrough: true })
+  'pb-003': Object.freeze({ singleDash: true, windup: 0.12, speed: 1500, lungeKnock: 200, passThrough: true }),
+  // Close Combat: steps in, seven jabs 0.15 s apart with the target pinned, gathers 0.3 s, one heavy blow.
+  'pb-037': Object.freeze({ windup: 0.15, speed: 1200, comboHits: Object.freeze([{ share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 },
+    { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.15, share: 0.09 }, { dt: 0.45, share: 0.37, knock: 210 }]) }),
+  // Double Kick: jumps straight up, dives foot first, a second kick from the ground 0.27 s later shoves the target.
+  'pb-057': Object.freeze({ windup: 0.35, speed: 900, comboHits: Object.freeze([{ share: 0.5 }, { dt: 0.27, share: 0.5, knock: 200 }]) })
 });
 
 export function pb324MoveName(id, locale = "zh-Hant") {

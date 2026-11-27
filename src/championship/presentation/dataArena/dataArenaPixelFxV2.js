@@ -1415,9 +1415,9 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       return true;
     },
 
-    hit({ x, y, groundY = y, moveId, heavy = false, angle = 0 }) {
+    hit({ x, y, groundY = y, moveId, heavy = false, angle = 0, hitIndex = null, final = null }) {
       const script = scriptFor(moveId);
-      if (script?.hit) { script.hit({ x, y, groundY, angle, heavy }); stats.hits++; return; }
+      if (script?.hit) { script.hit({ x, y, groundY, angle, heavy, hitIndex, final }); stats.hits++; return; }
       const spec = resolveMoveSpecV2(moveId);
       const pb = spec.pb324 ?? null;
       const fxKey = pb?.vfx?.fx ? normalizePalKey(pb.vfx.fx) : normalizePalKey(spec.paletteKey);

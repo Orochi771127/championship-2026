@@ -1649,7 +1649,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         break;
       case "LUNGE":
         caster.lunge = { actionId, moveId, arenaElement, attackElement, isBasic, guardBreak: v2GuardBreak, rebound: v2Rebound, secondDash: v2SecondDash,
-          knock: move.lungeKnock, reboundSpeed: move.reboundSpeed, passThrough: Boolean(move.passThrough), dirX: Math.cos(angle), dirY: Math.sin(angle), left: move.distance, speed: move.speed, width: move.width,
+          knock: move.lungeKnock, reboundSpeed: move.reboundSpeed, passThrough: Boolean(move.passThrough), comboHits: move.comboHits ?? null, dirX: Math.cos(angle), dirY: Math.sin(angle), left: move.distance, speed: move.speed, width: move.width,
           damage: move.damage * damageScale, hits: new Set() };
         if (caster === player && move.invulnerable) { player.invulnerable = Math.max(player.invulnerable, move.distance / move.speed + 0.08); player.dashGrace = player.invulnerable; player.perfectThisDash = false; }
         if (isRival(caster)) caster.invulnerable = Math.max(caster.invulnerable ?? 0, 0.1);
@@ -2145,19 +2145,41 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
 
   // Report only a recipient whose HP actually changed during this resolved contact.
   // The existing damage events retain their HUD/audio roles and share this contact identity.
-  function confirmMoveContact(start, oldHp, target, source, casterId, x, y, angle) {
+  function confirmMoveContact(start, oldHp, target, source, casterId, x, y, angle, extra = null) {
     if (!source.moveId || source.actionId == null || !(target.hp < oldHp)) return;
     const contact = { actionId: source.actionId, instanceId: source.id ?? source.actionId,
-      casterId, targetId: target.id, moveId: source.moveId, x, y, angle };
+      casterId, targetId: target.id, moveId: source.moveId, x, y, angle, ...(extra ?? {}) };
     for (let i = start; i < events.length; i++) {
       if (['RIVAL_HIT', 'PLAYER_HIT', 'SKILL_HIT'].includes(events[i].type)) events[i].contact = contact;
     }
     emit({ type: 'MOVE_CONTACT', contact });
   }
 
+  /** The later strikes of a multi-hit blow (PB_MOVE_BY_MOVE_20261127): the caster stays on the target and hits on a beat. */
+  function tickLungeCombo(caster, lunge) {
+    const combo = lunge.combo, hits = lunge.comboHits, target = combo.target;
+    if (caster.hp <= 0 || (caster.hitstun ?? 0) > 0 || !target || target.hp <= 0) { caster.lunge = null; return; }
+    combo.timer -= DT;
+    if (combo.timer > 0) return;
+    const h = hits[combo.i], last = combo.i === hits.length - 1;
+    const reach = ((target.radius ?? 20) + (caster.radius ?? 18)) * 2.6;
+    if (distance(target.x, target.y, caster.x, caster.y) <= reach) {
+      const before = events.length, oldHp = target.hp;
+      const landed = strike(target, lunge.damage * h.share, "LUNGE", null, target.x, target.y, lunge.arenaElement, lunge.attackElement, lunge.isBasic, { moveId: lunge.moveId });
+      if (landed) {
+        confirmMoveContact(before, oldHp, target, lunge, caster.id, target.x, target.y, Math.atan2(lunge.dirY, lunge.dirX), { hitIndex: combo.i, final: last });
+        if (h.knock) launch(target, lunge.dirX, lunge.dirY, h.knock);
+      }
+    }
+    combo.i++;
+    if (combo.i >= hits.length) { caster.lunge = null; return; }
+    combo.timer = hits[combo.i].dt;
+  }
+
   function updateLunge(caster) {
     const lunge = caster.lunge;
     if (!lunge) return;
+    if (lunge.combo) { tickLungeCombo(caster, lunge); return; }
     const step = Math.min(lunge.left, lunge.speed * DT);
     const kind = movementKind(caster);
     const nx = caster.x + lunge.dirX * step, ny = caster.y + lunge.dirY * step;
@@ -2186,10 +2208,12 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         if (target === player && player.dashGrace > 0) { perfectDodge(caster.x, caster.y); continue; }
         if(relayMode&&!hasSight(caster.x,caster.y,target.x,target.y))continue;
         const beforeContact = events.length, oldHp = target.hp;
-        const hit=strike(target, lunge.damage, "LUNGE", { slow: 0.3, slowSeconds: 0.6 }, target.x, target.y, lunge.arenaElement, lunge.attackElement, lunge.isBasic, { guardBreak: Boolean(lunge.guardBreak), moveId: lunge.moveId });
-        if (hit) confirmMoveContact(beforeContact, oldHp, target, lunge, caster.id, target.x, target.y, Math.atan2(lunge.dirY, lunge.dirX));
+        const comboHits = relayMode ? lunge.comboHits : null;
+        const hit=strike(target, lunge.damage * (comboHits ? comboHits[0].share : 1), "LUNGE", { slow: 0.3, slowSeconds: 0.6 }, target.x, target.y, lunge.arenaElement, lunge.attackElement, lunge.isBasic, { guardBreak: Boolean(lunge.guardBreak), moveId: lunge.moveId });
+        if (hit) confirmMoveContact(beforeContact, oldHp, target, lunge, caster.id, target.x, target.y, Math.atan2(lunge.dirY, lunge.dirX), comboHits ? { hitIndex: 0, final: false } : null);
         if(relayMode&&!hit)continue;
-        launch(target, lunge.dirX, lunge.dirY, lunge.knock ?? DATA_ARENA_ENERGY.launch.LUNGE);
+        launch(target, lunge.dirX, lunge.dirY, comboHits ? (comboHits[0].knock ?? 0) : (lunge.knock ?? DATA_ARENA_ENERGY.launch.LUNGE));
+        if (comboHits && hit && comboHits.length > 1 && !target.lunge) lunge.combo = { target, i: 1, timer: comboHits[1].dt };
         // RELAY: a dash that connects stops at arm's reach instead of running into the body
         // (2026-11-26 blind review: "the caster ends clipped inside the target").
         if (relayMode && lunge.passThrough && !target.lunge) {
@@ -2213,6 +2237,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       }
     }
     if (lunge.left <= 0) {
+      if (lunge.combo) return;
       if (lunge.secondDash) {
         const foe = caster === player ? state.rivals[0] : player;
         if (foe && foe.hp > 0 && distance(caster.x, caster.y, foe.x, foe.y) < 320) {

@@ -21,9 +21,11 @@ const SCORCH_STOPS = Object.freeze([[0, [58, 40, 34], 0.78], [0.7, [58, 40, 34],
  * Body cues per move id (the scene reads these; all optional). Sizes are world px; a body is ~72 px tall.
  *   windup {tint, shake, crouch, lean (+ back / - forward), hop (rises and stays up)}
  *   dash   {tint, hide, low, lean, arc (leap height), dive (start height), afterimage (tint)}
+ *   combo  {jab (px forward on each strike), lean, low}  -- while a multi-hit blow keeps striking
  *   strike {lean, low, tint, hold (seconds held at the contact point)}
  *   after  {hop (height), time}  -- lets go of the contact point and hops back to where the rules put it
- *   impactFrame: the ink impact frame on its hit;  fireballHop: the fireball keeps the body through its rebound.
+ *   impactFrame: the ink impact frame on its hit (true, or 'first' / 'final' strike of a multi-hit blow);
+ *   fireballHop: the fireball keeps the body through its rebound.
  */
 export const PB_MOVE_BODY = Object.freeze({
   // ---- fire
@@ -41,6 +43,10 @@ export const PB_MOVE_BODY = Object.freeze({
   'pb-029': { key: 'brickBreak', windup: { hop: 38 }, strike: { lean: 0.34, low: 0.12, hold: 0.4 }, impactFrame: true },
   // Low Kick: drops almost flat, slides in along the ground, sweeps and rises slowly.
   'pb-167': { key: 'lowKick', windup: { crouch: 0.38, lean: -0.5 }, dash: { low: 0.45, lean: 0.5, afterimage: 0xb08aff }, strike: { low: 0.36, lean: 0.3, hold: 0.2 } },
+  // Close Combat: one big step in, feet planted, arms jab in turn seven times, then one heavy blow.
+  'pb-037': { key: 'closeCombat', windup: { crouch: 0.06 }, dash: { afterimage: 0xffb0d0 }, combo: { jab: 13, lean: 0.16 }, strike: { lean: -0.12, hold: 0.16 }, impactFrame: 'final' },
+  // Double Kick: springs straight up, dives foot first onto the target, crouches and kicks again from the ground.
+  'pb-057': { key: 'doubleKick', windup: { crouch: 0.1, hop: 170 }, dash: { lean: 0.5, afterimage: 0x9ac0ff }, combo: { jab: 16, low: 0.2 }, strike: { low: 0.22, hold: 0.2 }, impactFrame: 'first' },
   // ---- flying
   // Aerial Ace: a dark-blue silhouette that cuts straight through the target and lands flat on its far side.
   'pb-003': { key: 'aerialAce', windup: { crouch: 0.2, tint: 0x2a3a8c }, dash: { tint: 0x2a3a8c, afterimage: 0x4a5acc }, strike: { low: 0.3, hold: 0.14 }, impactFrame: true }
@@ -111,6 +117,56 @@ export function createPbMoveScripts(api) {
         const bx = x + Math.cos(angle) * 22, by = y + Math.sin(angle) * 14;
         for (let i = 0; i < 12; i++) { const a = angle + (rand() - 0.5) * 0.5; spawnP({ shape: 'streak', x: bx, y: by, vx: Math.cos(a) * (300 + rand() * 260), vy: Math.sin(a) * (300 + rand() * 260), size: 6, size1: 1, stretch: 2.4, rot: a, pal: 'fire', add: true, life: 0.2 + rand() * 0.08 }); }
         dizzy(x, y, 0.35);
+      }
+    },
+
+    // ------------------------------------------------------------------ Close Combat
+    closeCombat: {
+      hit({ x, y, angle = 0, hitIndex = 0, final = false }) {
+        const c = Math.cos(angle) >= 0 ? 1 : -1;
+        if (!final) {
+          // Each jab: a small white flash on the body, a little higher or lower than the last.
+          whiteBloom(x - c * 8, y + ((hitIndex ?? 0) % 2 ? -10 : 8), 12, 34, 0.1);
+          // The last jab before the heavy blow: a pale teal glow gathers at the striker's feet.
+          if (hitIndex === 6) live(0.45, (h, t, dt, g) => { g.add.ellipse(x - c * 62, y + 34, 34 + 8 * t, 13).fill({ color: 0xb8fff0, alpha: 0.55 * Math.min(1, t * 3) }); });
+          return;
+        }
+        // The heavy blow: a band of teal-white force from striker to target, then a large pale orb on the target.
+        live(0.2, (h, t, dt, g) => {
+          const fade = 1 - t;
+          g.add.poly([x - c * 120, y - 9, x + c * 20, y - 16, x + c * 20, y + 16, x - c * 120, y + 9]).fill({ color: 0xc8fff2, alpha: 0.8 * fade });
+          g.add.poly([x - c * 110, y - 4, x + c * 16, y - 7, x + c * 16, y + 7, x - c * 110, y + 4]).fill({ color: 0xffffff, alpha: 0.95 * fade });
+        });
+        spawnP({ shape: 'glow', x, y, size: 40, size1: 150, stops: [[0, [255, 255, 255], 1], [0.4, [190, 255, 240], 0.85], [1, [150, 240, 225], 0]], add: true, life: 0.3 });
+        sparks(x, y, angle, 10, 'wind', 320, 1.6);
+      }
+    },
+
+    // ------------------------------------------------------------------ Double Kick
+    doubleKick: {
+      cast({ follow, windup = 0.35 }) {
+        // A small blue whirl at the feet, then a tall blue streak where it left the ground.
+        live(Math.max(0.2, windup) + 0.1, (h, t, dt, g) => {
+          const at = follow?.(); if (!at) return;
+          if (t < 0.4) groundRing(g.top, at.x, at.footY + 2, 12 + 10 * (t / 0.4), 0x8ab8ff, 0.8, 2);
+          else { const k = (t - 0.4) / 0.6, top = at.footY - 30 - 100 * Math.min(1, k * 1.4); g.top.rect(at.x - 5, top, 10, at.footY - 20 - top).fill({ color: 0x8ab8ff, alpha: 0.6 * (1 - k) }); }
+        });
+      },
+      release({ follow, angle = 0 }) {
+        const c = Math.cos(angle) >= 0 ? 1 : -1;
+        // Orange fire on the leading foot all the way down.
+        live(0.6, (h, t, dt, g) => {
+          const at = follow?.(); if (!at) { h.age = h.life; return; }
+          h.total ??= 1; const fx = at.x + c * 20, fy = at.y + 22;
+          g.top.circle(fx, fy, 11).fill({ color: 0xff8a1c, alpha: 0.9 }); g.add.circle(fx, fy, 6).fill({ color: 0xffe9a0, alpha: 0.95 });
+        });
+      },
+      hit({ x, y, groundY, angle = 0, hitIndex = 0 }) {
+        const second = hitIndex === 1, c = Math.cos(angle) >= 0 ? 1 : -1;
+        whiteBloom(x, y, second ? 16 : 26, second ? 44 : 60, 0.12);
+        live(0.2, (h, t, dt, g) => { star4(g.add, x, y, 36 * (1 - t * 0.4), second ? 0xff9a2c : 0xfff0d0, 1 - t); star4(g.add, x, y, 16 * (1 - t * 0.4), 0xffffff, 1 - t); });
+        if (!second) { addDecal({ x: x - c * 34, y: groundY + 8, kind: 'crack', radius: 26, pal: 'earth', life: 3 }); pebbles(x - c * 34, groundY + 8, 5, 50, [112, 90, 70], 2.4); dizzy(x, y, 0.6); }
+        else sparks(x, y, angle, 7, 'fire', 260, 1.4);
       }
     },
 

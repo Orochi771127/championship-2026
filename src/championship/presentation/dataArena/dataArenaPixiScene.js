@@ -752,6 +752,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             sprite.y -= stage.lift; actionHop += stage.lift;
             if (d.afterimage !== undefined && !d.hide && frameCount % 2 === 0) afterimage(container.position.x + sprite.x, container.position.y + sprite.y, facing, sprite, d.afterimage);
             stage.ax = body.x; stage.ay = body.y;
+            // On the target, striking on a beat: the body jabs forward with every strike.
+            const combo = body.lunge.combo, cc = staged.combo;
+            if (combo && cc) {
+              const beat = body.lunge.comboHits?.[combo.i]?.dt ?? 0.15, ph = clamp(1 - combo.timer / Math.max(0.01, beat), 0, 1);
+              const jab = Math.sin(Math.PI * Math.min(1, ph * 1.6)) * (cc.jab ?? 10) * (combo.i % 2 ? 1 : 0.7);
+              sprite.x += sCos * jab; if (cc.lean) actionTilt = sDir * cc.lean * (0.5 + 0.5 * Math.sin(Math.PI * ph)); if (cc.low) low(cc.low);
+            }
           } else if (stage.dashTotal || sa.releasedAt !== null) {
             if (stage.endAt === null) { stage.endAt = state.time; stage.liftEnd = stage.lift; if (!stage.dashTotal) { stage.ax = body.x; stage.ay = body.y; } }
             const t = state.time - stage.endAt, st = staged.strike ?? {}, af = staged.after ?? {};
@@ -1374,7 +1381,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       });
     }
   };
-  const heavyHit = (amount, wx = null, wy = null, { angle = 0, guarded = false, side = null, critical = false, moveId = null, ultimate = false } = {}) => {
+  const heavyHit = (amount, wx = null, wy = null, { angle = 0, guarded = false, side = null, critical = false, moveId = null, ultimate = false, hitIndex = null, final = null } = {}) => {
     if (reducedMotion || !(amount >= 1)) return;
     // PB-Rank 8-System Hit-Feel Director: read exact per-move PB-324 hitFeel when available!
     const pbFeel = moveId ? elementFx?.look?.(moveId)?.pb324?.hitFeel ?? null : null;
@@ -1386,8 +1393,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     // Hit-stop tiers (whole field frozen), PB medians: light 100 ms / medium 150 / heavy 220 / ultimate or critical 300.
     // The ink impact frame belongs to ultimates, criticals and moves marked impact only (PB: 10 of 324).
     const finisher = Boolean(ultimate) && !guarded;
-    // A scripted move that shows the ink impact frame in its reference shows it here too.
-    if (relayMode && !guarded && amount >= 6 && wx !== null && wy !== null && moveId && pbMoveBody(moveId)?.impactFrame) triggerImpactFrame(wx, wy, 0.08);
+    // A scripted move that shows the ink impact frame in its reference shows it here too (on every hit, or
+    // only on the first / last strike of a multi-hit blow).
+    const frameCue = moveId ? pbMoveBody(moveId)?.impactFrame : null;
+    const frameNow = frameCue === true ? hitIndex == null || final !== false : frameCue === 'final' ? final === true : frameCue === 'first' ? hitIndex === 0 : false;
+    if (relayMode && !guarded && wx !== null && wy !== null && frameNow) triggerImpactFrame(wx, wy, 0.08);
+    // The quick strikes of a multi-hit blow keep the fight moving: a small shake, no freeze.
+    if (hitIndex != null && final === false && !(frameCue === 'first' && hitIndex === 0)) { camera.addTrauma(0.1); return; }
     const heavy = (amount >= 28 || Boolean(pbFeel?.impact)) && !guarded;
     const medium = amount >= 16 && !guarded;
     const light = amount >= 6 && !guarded;
@@ -1543,7 +1555,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               elementFx.hit({ x: event.x, y: event.y - 30, groundY: event.y, ...lastRelease.rival, angle: hitAng, heavy: event.amount >= 22, follow: bodyCenter(state.player) });
             }
           } else if (confirmed && !atlasContact && event.cause !== 'SKILL') {
-            elementFx.hit({ x: confirmed.x, y: confirmed.y - BEAM_ELEVATION, groundY: confirmed.y, moveId: confirmed.moveId, speciesId: casterSpecies(confirmed), angle: confirmed.angle });
+            elementFx.hit({ x: confirmed.x, y: confirmed.y - BEAM_ELEVATION, groundY: confirmed.y, moveId: confirmed.moveId, speciesId: casterSpecies(confirmed), angle: confirmed.angle,
+              hitIndex: confirmed.hitIndex ?? null, final: confirmed.final ?? null });
           }
         }
       }
@@ -2065,7 +2078,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           const hitAng = Math.atan2(event.y - state.player.y, event.x - state.player.x);
           if (!purePixelFx && !atlasContact && event.cause !== "LASER" && !(kitShots && relayMode)) { burst(event.x, event.y - 30, { count: 5, speed: 220, tint: 0xffd0d0 }); contact(event.x, event.y - 30, 0xffb070); }
           damageNumber(event.x, event.y - 56, event.amount, event.guarded ? 0xffe08a : 0xffffff);
-          heavyHit(event.amount, event.x, event.y - 30, { angle: hitAng, guarded: event.guarded, side: "player", moveId: lastRelease.player?.moveId ?? null, ultimate: lastRelease.player?.ultimate });
+          heavyHit(event.amount, event.x, event.y - 30, { angle: hitAng, guarded: event.guarded, side: "player", moveId: lastRelease.player?.moveId ?? null, ultimate: lastRelease.player?.ultimate,
+            hitIndex: event.contact?.hitIndex ?? null, final: event.contact?.final ?? null });
           break;
         }
         case "RIVAL_DODGE": puff(event.x, event.y, 0xa89580, 3, 0.9); break;
