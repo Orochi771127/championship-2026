@@ -1404,6 +1404,12 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
     /** 10-Element Hero Silhouette Projectiles + massive DRAG_WAVE crashing wave walls! */
     projectile({ follow, moveId, angle = 0, lifeMs = 1200 }) {
       if (typeof follow !== "function") return false;
+      const script = scriptFor(moveId);
+      if (script?.projectile) {
+        script.projectile({ follow, angle, life: lifeMs / 1000 });
+        stats.projectiles++;
+        return true;
+      }
       const spec = resolveMoveSpecV2(moveId);
       const pk = normalizePalKey(spec.paletteKey);
       const arch = spec.v2Archetype;

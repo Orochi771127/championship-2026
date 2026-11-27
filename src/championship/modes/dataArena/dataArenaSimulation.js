@@ -1639,9 +1639,19 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       }
     }
     const v2GuardBreak = Boolean(traits?.guardBreak || v2?.guardBreak);
-    const v2Homing = v2?.homing ? 3.2 : 0;
+    const v2Homing = move.noHoming ? 0 : (v2?.homing ? 3.2 : 0);
     const v2Pull = v2?.pullForce ?? 0;
     const v2Rebound = Boolean(v2?.rebound);
+    // PB_MOVE_BY_MOVE_20261127: staged self-buff moves (e.g. Bulk Up) raise stats without attacking.
+    if (move.selfBuff) {
+      const side = caster === player ? "player" : "rival";
+      if ((caster.buffsUsed ?? 0) < TACTICAL_CAPS.buffsPerStay) {
+        caster.buffsUsed = (caster.buffsUsed ?? 0) + 1;
+        applyStatDelta(caster, typeof move.selfBuff === "object" ? move.selfBuff : { atk: 1, spd: 0 });
+      }
+      emit({ type: "STAT_BUFF", side, artId: moveId, moveId, atkStage: caster.atkStage, spdStage: caster.spdStage, buffsUsed: caster.buffsUsed, x: caster.x, y: caster.y });
+      return;
+    }
     // PB_MOVE_BY_MOVE_20261127: moves staged from a single-dash reference strike once (no follow-up dash).
     const v2SecondDash = Boolean(v2?.v2Archetype === "MULTI_DASH") && !move.singleDash;
     switch (move.type) {

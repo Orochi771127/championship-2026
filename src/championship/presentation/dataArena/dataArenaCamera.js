@@ -39,7 +39,7 @@ export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion =
       boostTimer = Math.max(boostTimer, boostDuration);
     },
     snap(targetX, targetY) { x = targetX; y = targetY; },
-    update({ dtMs, viewport, target, velocity = { x: 0, y: 0 }, aim = null, threat = 0, opponent = null, spectator = false }) {
+    update({ dtMs, viewport, target, velocity = { x: 0, y: 0 }, aim = null, threat = 0, opponent = null, spectator = false, lift = 0 }) {
       const dtSec = Math.max(0, dtMs) / 1000;
       time += Math.max(0, dtMs);
       if (boostTimer > 0) {
@@ -48,7 +48,7 @@ export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion =
       }
       const base = dataArenaBaseZoom(viewport.width, viewport.height);
       let wanted = base * (1 - 0.14 * clamp(threat, 0, 1)) * (spectator ? 0.88 : 1);
-      let focusX = target.x, focusY = target.y;
+      let focusX = target.x, focusY = target.y - clamp(lift, 0, 260) * 0.52;
       if (opponent) {
         // HUD chrome takes ~150 px at the top and ~90 px at the bottom; leave room for both bodies.
         const dx = Math.abs(opponent.x - target.x), dy = Math.abs(opponent.y - target.y);
@@ -59,7 +59,7 @@ export function createDataArenaCamera({ worldWidth, worldHeight, reducedMotion =
         const z = zoom ?? wanted;
         const bias = spectator ? 0.5 : 0.42;
         const yOff = spectator ? 30 : 55;
-        focusX = target.x + (opponent.x - target.x) * bias; focusY = target.y + (opponent.y - target.y) * bias - yOff / z; // tall sprites (the champion) clear the rival bar
+        focusX = target.x + (opponent.x - target.x) * bias; focusY = target.y + (opponent.y - target.y) * bias - yOff / z - clamp(lift, 0, 260) * 0.52; // tall sprites (the champion) clear the rival bar
       }
       if (boostTimer > 0 && boostScale > 1) {
         const env = Math.sin(clamp(boostTimer / boostDuration, 0, 1) * Math.PI * 0.5);

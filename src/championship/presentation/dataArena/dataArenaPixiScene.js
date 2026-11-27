@@ -736,13 +736,22 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             const live = Boolean(sa) && sa.id === stage.id;
             const sCos = Math.cos(stage.angle), sDir = sCos >= 0 ? 1 : -1;
             const low = (amount) => { sprite.scale.y *= 1 - amount; sprite.scale.x *= 1 + amount * 0.5; };
+            const flatten = (amount) => { sprite.scale.y *= 1 - amount; sprite.scale.x *= 1 + amount * 0.95; };
+            stage.camLift = 0;
             if (live && sa.releasedAt === null) {
               const p = clamp((state.time - sa.startedAt) / Math.max(0.01, sa.windup), 0, 1), e = p * p * (3 - 2 * p), w = cue.windup ?? {};
               if (w.tint) scriptTint = w.tint;
               if (w.shake) sprite.x += Math.sin(elapsed * 95) * w.shake * (0.4 + 0.6 * e);
               if (w.crouch) low(w.crouch * e);
+              if (w.squash) flatten(w.squash * e);
+              if (w.pump) {
+                const wave = Math.sin(p * Math.PI * (w.pump.count ?? 2) * 2);
+                const swell = Math.max(0, wave) * (w.pump.amount ?? 0.2);
+                sprite.scale.x *= 1 + swell; sprite.scale.y *= 1 + swell * 0.85;
+              }
               if (w.lean) actionTilt = -sDir * w.lean * e;
               if (w.hop) { stage.lift = w.hop * e; sprite.y -= stage.lift; actionHop += stage.lift; }
+              if (w.camLift) stage.camLift = w.camLift * e;
             } else if (live && body.lunge && body.lunge.actionId === stage.id) {
               const d = cue.dash ?? {};
               if (!stage.startLeft) {
@@ -756,7 +765,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               if (d.tint) scriptTint = d.tint;
               if (d.hide) actionAlphaMult = 0;
               if (d.low) low(d.low);
-              if (d.lean) actionTilt = sDir * d.lean;
+              if (d.squash) flatten(d.squash);
+              if (d.bellyFlop) {
+                const belly = clamp((q - 0.38) / 0.42, 0, 1);
+                actionTilt = sDir * (d.lean ?? 1.25) * belly;
+                if (belly > 0.2) flatten(0.22 * belly);
+              } else if (d.lean) actionTilt = sDir * d.lean;
+              if (d.flip) actionTilt = sDir * Math.PI * 2 * d.flip * q;
               // Height through the dash: the windup hop carried down, a leap arc, or a dive from a height.
               stage.lift = stage.liftStart * (1 - q) + (d.arc ? Math.sin(Math.PI * q) * d.arc : 0) + (d.dive ? d.dive * (1 - q) : 0);
               sprite.y -= stage.lift; actionHop += stage.lift;
@@ -789,8 +804,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
                 sprite.x += (stage.ax - body.x) * (1 - ke); sprite.y += (stage.ay - body.y) * (1 - ke);
                 const held = (st.lift ?? 0) * (1 - ke);
                 if (held) { sprite.y -= held; actionHop += held; }
-                if (t < hold) { if (st.lean) actionTilt = sDir * st.lean; if (st.low) low(st.low); if (st.tint) scriptTint = st.tint; }
-                else {
+                if (t < hold) {
+                  if (st.lean) actionTilt = sDir * st.lean;
+                  if (st.low) low(st.low);
+                  if (st.squash) flatten(st.squash);
+                  if (st.tint) scriptTint = st.tint;
+                } else {
                   if (af.hop) { const h = Math.sin(Math.PI * k) * af.hop; sprite.y -= h; actionHop += h; }
                   if (af.spin) actionTilt = sDir * Math.PI * 2 * af.spin * k;
                 }
@@ -809,6 +828,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
             const t = state.time - reaction.from, L = reaction.lift;
             const h = t < L.up ? L.height * (1 - Math.pow(1 - t / L.up, 2)) : t < L.up + L.hang ? L.height : L.height * (1 - Math.pow((t - L.up - L.hang) / Math.max(0.01, L.down), 2));
             sprite.y -= Math.max(0, h); actionHop += Math.max(0, h);
+            if (L.orbit && t >= (L.orbit.delay ?? 0) && t < L.up + L.hang) {
+              const ot = (t - (L.orbit.delay ?? 0)) / Math.max(0.05, L.up + L.hang - (L.orbit.delay ?? 0));
+              const ang = ot * Math.PI * 2 * (L.orbit.turns ?? 2);
+              sprite.x += Math.cos(ang) * (L.orbit.radius ?? 26);
+              sprite.y += Math.sin(ang) * (L.orbit.radius ?? 26) * 0.45;
+              poseTilt = Math.sin(ang) * 0.85;
+            }
           } else {
             const k = clamp((state.time - reaction.from) / 0.09, 0, 1) * clamp((reaction.until - state.time) / 0.12, 0, 1);
             poseTilt = reaction.dir * 1.35 * k; sprite.y -= 6 * k;
@@ -835,6 +861,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
         shadow.alpha = (0.75 - sink * 0.6) * (totalLift > 0 ? Math.max(0.35, 1 - totalLift / 48) : 1);
       },
       stageLift: () => stage.lift ?? 0,
+      camLift: () => Math.max(stage.lift ?? 0, stage.camLift ?? 0),
       diagnostics: () => ({ sequenceId: sequence, frameIndex: controller?.getSnapshot().sourceFrameIndex ?? null,
         speciesId: member?.speciesId, facing8: body.facing8 ?? null, slotPreserved: Boolean(currentPlacement), anchor: currentPlacement?.anchor ?? null, actionId: motion?.actionId??motion?.id ?? null, phase: motion?.phase ?? null, moveId: motion?.moveId ?? null,
         reviewed:reviewedArena?{clipId:reviewedSample?.clipId??motion?.clipId,direction:reviewedSample?.direction??motion?.direction,assetId:reviewedSample?.assetId??motion?.assetId,terminal:(reviewedSample??motion)?.terminal??false,missing:reviewedSample?.missing??null,partial,native:partial&&!onReviewed}:null })
@@ -975,17 +1002,20 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       const ownerSpecies = projectile.owner === 'player' ? state.player.speciesId
         : (state.rivals.find(r => r.active && r.hp > 0) ?? state.rivals[0])?.speciesId ?? null;
       entry.kitDrawn = elementFx.projectile({
-        follow: () => (!projectile.dead && state.projectiles.includes(projectile) ? { x: projectile.x, y: projectile.y - 12, angle: Math.atan2(projectile.vy, projectile.vx) } : null),
+        follow: () => (!projectile.dead && state.projectiles.includes(projectile) ? { x: projectile.x, y: projectile.y - 12, footY: projectile.y, angle: Math.atan2(projectile.vy, projectile.vx) } : null),
         moveId: projectile.moveId,
         speciesId: ownerSpecies,
         angle: Math.atan2(projectile.vy, projectile.vx),
         size: Math.max(20, projectile.radius * 2.2),
       }) === true;
       // The kit draws this shot's head and trail; the vector head and its glow stand down.
-      if (entry.kitDrawn) entry.sprite.visible = entry.glow.visible = false;
+      if (entry.kitDrawn) {
+        entry.sprite.visible = entry.glow.visible = false;
+        if (pbMoveBody(projectile.moveId)?.hideShotShadow) entry.shadow.visible = false;
+      }
       // Combat Wave 4: Delegate STREAM_BEAM mouth/hand energy conduit cleanly to the PixelFX V2 kit.
       const look = elementFx.look?.(projectile.moveId);
-      if (look?.v2Archetype === "STREAM_BEAM" && typeof elementFx.beamStream === "function") {
+      if (!pbMoveBody(projectile.moveId) && look?.v2Archetype === "STREAM_BEAM" && typeof elementFx.beamStream === "function") {
         elementFx.beamStream({
           moveId: projectile.moveId,
           width: Math.max(10, Math.min(26, projectile.radius * 0.95)),
@@ -1568,7 +1598,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               elementFx.release({ x: at.x, y: at.y, angle: event.angle ?? 0, moveId: event.moveId, speciesId: casterSpecies(event), melee: event.moveType === 'LUNGE',
                 follow: () => {
                   if (!dasher || dasher.hp <= 0) { scriptHops.delete(dasher?.id); return null; }
-                  if (dasher.lunge || dashGrace-- > 0) return { x: dasher.x, y: dasher.y - 30 - (casterView(dasher.id)?.stageLift?.() ?? 0), footY: dasher.y };
+                  if (dasher.lunge || dashGrace-- > 0 || event.moveType !== 'LUNGE') return { x: dasher.x, y: dasher.y - 30 - (casterView(dasher.id)?.stageLift?.() ?? 0), footY: dasher.y };
                   if (!hopCue) return null;
                   // The rebound: an arc up and a little back from where the dash ended.
                   if (!scriptHops.has(dasher.id)) scriptHops.set(dasher.id, state.time);
@@ -1673,8 +1703,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           break;
         case "GUARD_MISS": if (!purePixelFx) puff(event.x, event.y - 10, 0x9aa4b0, 2, 0.7); break;
         case "STAT_BUFF":
-          if (purePixelFx) elementFx.buff?.({ x: event.x, y: event.y - 16, paletteKey: "light", piece: "buff-atk" });
-          else { ring(event.x, event.y, 92, 0xffe066, 0.46); ring(event.x, event.y - 12, 62, 0xffffff, 0.32); burst(event.x, event.y - 18, { count: 16, speed: 200, tint: 0xffe066, gravity: -220, life: 0.55 }); }
+          if (!pbMoveBody(event.moveId)) {
+            if (purePixelFx) elementFx.buff?.({ x: event.x, y: event.y - 16, paletteKey: "light", piece: "buff-atk" });
+            else { ring(event.x, event.y, 92, 0xffe066, 0.46); ring(event.x, event.y - 12, 62, 0xffffff, 0.32); burst(event.x, event.y - 18, { count: 16, speed: 200, tint: 0xffe066, gravity: -220, life: 0.55 }); }
+          }
           floatText(event.x, event.y - 74, t("fct.statBuff"), "dodge");
           if (event.side === "player") tamerCalloutLeft = 1.1; else tamerCalloutRight = 1.1;
           break;
@@ -2427,9 +2459,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const focus = riding ? mate : player;
     const threat = Math.min(1, state.enemies.filter((enemy) => Math.hypot(enemy.x - focus.x, enemy.y - focus.y) < 520).length / 14)
       + (boss && boss.state !== "DOWN" ? 0.5 : 0);
+    const stageCamLift = Math.max(playerView.camLift?.() ?? 0, ...[...rivalViews.values()].filter((v) => v.container.visible).map((v) => v.camLift?.() ?? 0));
     view = camera.update({ dtMs: Math.min(100, dtMs), viewport, target: focus, velocity: { x: focus.vx, y: focus.vy },
       aim: state.laser.firing ? { x: state.laser.x1, y: state.laser.y1 } : null, threat,
-      opponent: state.rivals.find((rival) => rival.hp > 0) ?? null, spectator: spectatorCamera });
+      opponent: state.rivals.find((rival) => rival.hp > 0) ?? null, spectator: spectatorCamera, lift: stageCamLift });
     world.scale.set(view.zoom); world.position.set(view.x, view.y);
     const left = view.centerX - view.halfW - 80, right = view.centerX + view.halfW + 80;
     const top = view.centerY - view.halfH - 120, bottom = view.centerY + view.halfH + 80;
