@@ -208,7 +208,8 @@ export function pb324ToRelayMove(id, ultimate = false) {
     ...(freezeWater ? { freezeWater } : {}),
     ...(onHit ? { onHit } : {}),
     pb324: m,
-    ...(PB_MOVE_TUNING[id] ? { ...PB_MOVE_TUNING[id], stagedTuning: PB_MOVE_TUNING[id] } : {})
+    // A staged move has no dash invulnerability (the reference has none; it also drew the body as a ghost).
+    ...(PB_MOVE_TUNING[id] ? { invulnerable: false, ...PB_MOVE_TUNING[id], stagedTuning: PB_MOVE_TUNING[id] } : {})
   };
 }
 
