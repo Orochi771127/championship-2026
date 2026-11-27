@@ -42,3 +42,26 @@
 - **已知取捨**：
   - 最高的仙人掌在 52° 商店圖框裡頂端略微超出。
   - 右下六角幾乎全是可走格，只放得下外緣小物。
+
+## 替換舊物件（第二批起）
+
+舊物件和地板烤在同一個 Draco 網格裡，所以「替換」要先移除舊物件的三角面再重新壓縮：
+
+- **哪些三角面算舊物件**：三個頂點都落在現行母檔舊物件的頂點上（容差 0.004）。其他三角面保留。
+- **重新壓縮**：沿用原本的量化位數（位置 18、法線 12、UV 14、通用 10）。完成後解碼比對每個保留三角面，最大位移約 0.0015 單位（約 0.03 像素）。這是外框改變造成量化格點不同，不是資料遺失。
+- **地面圖貼圖要補回**：glTF 往返會丟掉只被材質 extras（`cageGroundMap.texture`）參照的貼圖，要把 texture 項目補回並重新指好索引。驗收時用 `cage-ui-render.html` 的 `groundMapsHooked` 確認等於 1。
+- **新物件位置**：放在舊物件原位，高度相近，佔地不超過舊物件，所以可走格不受影響。`ranch-three-ground.r1.json`（落地判定用的物件外框格）沿用舊值，沒有重算。
+- **搖曳**：樹冠加上 `_WIND_WEIGHT`（依高度 1.5 次方，樹幹 × 0.25），由同一個 rooted-wind shader 驅動，搖曳動作保留。
+- **不適用的籠舍**：有支撐面校驗的籠舍（`physical-ground-tops`：CM02、09、18、19、21、34、35、39）要求「只有一個網格、幾何雜湊完全相同」，加或移除物件都會失敗，要先重建支撐面資料，不能直接套這個流程。
+
+## 第二批（2026-11-28）：CM11 森林、CM12 叢林、CM26 牧場
+
+| 地圖 | 換掉的舊物件 | 新物件（CC0 1.0） | GLB sha256／bytes |
+|---|---|---|---|
+| CM11 森林 | 6 棵程序樹（樹幹、球形樹冠、根） | Quaternius Ultimate Nature：`CommonTree_1/2/3`、`PineTree_1` ×2、`BirchTree_1`，改用 `pa-leaf*`／`pa-bark` 色票，樹冠平滑著色 | `b68723ab…` ／ 840,776 |
+| CM12 叢林 | 6 棵程序椰子樹 | Quaternius Ultimate Nature：`PalmTree_1–4`，改用 `jg-frond*`／`jg-trunk` 色票 | `33b3b1e3…` ／ 1,148,692 |
+| CM26 牧場 | 方盒小屋、圓柱筒倉、後圍欄（Owner 2026-11-28 同意移除） | Quaternius Farm Buildings：`SmallBarn`、`Silo`，改用 `pa-roof`／`pa-wall`／`pa-timber` 色票 | `3d9a2dfc…` ／ 618,832 |
+
+- **保留的物件**：森林的 119 叢圓形灌木和蕨，叢林的懸崖、地面植物、大王花，牧場的水槽、乾草、前排圍欄和花。
+- **來源與腳本**：編輯母檔與腳本在 `R:\Projects\Championship2026\cc0-cage-batch2-20261128\`（`plans\`、`scripts\`、`out\<field>\`）。素材授權與 SHA256 在 `sources\quaternius\`。
+- **移除與重新壓縮的工具**：`R:\Projects\Championship2026\cc0-cage-tools\`（gltf-transform 4.5.1、draco3dgltf 1.5.9，只在本機使用）。
