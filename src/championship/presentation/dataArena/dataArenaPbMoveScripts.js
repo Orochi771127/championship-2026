@@ -472,7 +472,7 @@ export function createPbMoveScripts(api) {
         // Paralysis: the struck body flickers yellow-white as it slides off, with jagged bolts jumping over it.
         const bolt = [-15, -3, -3, -8, -1, -2, 15, -7, 4, 5, 1, -1, -10, 7];
         live(0.9, (h, t, dt, g) => {
-          const cx = x + c * 70 * (1 - Math.exp(-5.5 * h.age)), fade = 1 - t * 0.4;
+          const cx = x + c * 14 * (1 - Math.exp(-5.5 * h.age)), fade = 1 - t * 0.4;
           if (Math.floor(h.age / 0.07) % 2 === 0) g.top.ellipse(cx, y, 27, 31).fill({ color: 0xfff2a0, alpha: 0.4 * fade });
           for (let i = 0; i < 3; i++) {
             const a = h.seed + i * 2.1 + Math.floor(h.age / 0.1) * 1.7, bx = cx + Math.cos(a) * 24, by = y + Math.sin(a) * 26, ca = Math.cos(a * 3), sa = Math.sin(a * 3), pts = [];
