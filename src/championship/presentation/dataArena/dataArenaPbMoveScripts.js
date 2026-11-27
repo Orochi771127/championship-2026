@@ -13,6 +13,7 @@
 // Handlers draw with hard-edged shapes in the move's own colour steps only.
 //
 // Presentation only: no rule, timing, damage or collision reads anything here.
+import { createPixelBrushKit, pbTemplateBodyCue, PB_DECLARATIVE_MOVES } from "./dataArenaPbMoveTemplates.js";
 
 const FIRE = Object.freeze({ white: 0xfff6d8, hot: 0xffe05c, main: 0xff8a1c, deep: 0xd8360f, dark: 0x7a2412, ash: 0x4a3a34 });
 const SCORCH_STOPS = Object.freeze([[0, [58, 40, 34], 0.78], [0.7, [58, 40, 34], 0.6], [1, [58, 40, 34], 0]]);
@@ -138,15 +139,16 @@ export const PB_MOVE_BODY = Object.freeze({
   'pb-235': { key: 'rockWrecker', windup: { lean: -0.14 }, strike: { lean: -0.28, hold: 0.45 }, impactFrame: true, impactStyle: 'white', hideShotShadow: true }
 });
 
-export const pbMoveBody = moveId => PB_MOVE_BODY[moveId] ?? null;
+export const pbMoveBody = moveId => PB_MOVE_BODY[moveId] ?? pbTemplateBodyCue(PB_DECLARATIVE_MOVES[moveId]) ?? null;
 
 /**
  * Effect handlers per script key. `api` is the pixel layer's own toolbox:
- * {spawnP, addHero, addDecal, rand, puff(g, x, y, r, rgb, alpha)}.
+ * {spawnP, addHero, addDecal, rand, puff(g, x, y, r, rgb, alpha), px}.
  * A follow function returns {x, y, footY} while its phase lasts and null when it ends.
  */
 export function createPbMoveScripts(api) {
   const { spawnP, addHero, addDecal, rand } = api;
+  const px = api.px ?? createPixelBrushKit(api);
   const TAU = Math.PI * 2;
   const live = (life, draw, extra = {}) => addHero({ kind: 'PB_SCRIPT', life, draw, ...extra });
   const scorchDash = (x, y) => spawnP({ shape: 'px', x, y, size: 5, size1: 5, stops: SCORCH_STOPS, add: false, life: 0.9, drag: 1 });
@@ -2560,14 +2562,11 @@ export function createPbMoveScripts(api) {
             const sf = sk < 0.55 ? 1 : 1 - (sk - 0.55) / 0.45;
             spiky(g.top, x, y - 4, 68 * (0.75 + 0.35 * sk), 12, 0xff981c, 0.94 * sf, h.seed);
             spiky(g.add, x, y - 4, 44 * sf, 10, 0xfffce0, 0.98 * sf, h.seed + 0.3);
-            // Expanding orange octagonal ground shockwave ring.
+            // Expanding pixel-stepped orange ground shockwave ring + sunlit pixel dust clouds.
             const rr = 58 + 76 * sk;
-            const oct = [];
-            for (let i = 0; i <= 8; i++) {
-              const a = (i / 8) * TAU + Math.PI / 8;
-              oct.push(x + Math.cos(a) * rr, groundY + 4 + Math.sin(a) * rr * 0.44);
-            }
-            g.top.poly(oct).stroke({ color: 0xff8c1c, width: 5 - 2.5 * sk, alpha: 0.92 * sf });
+            px.ring(g.top, x, groundY + 4, rr, 0xff8c1c, 0xfff0a8, 0.94 * sf, 7 - 3 * sk);
+            px.puff(g.top, x - rr * 0.45, groundY - 4, 15 * (0.7 + 0.35 * sk), 0x8e7c66, 0.78 * sf);
+            px.puff(g.top, x + rr * 0.45, groundY - 4, 15 * (0.7 + 0.35 * sk), 0x8e7c66, 0.78 * sf);
           }
         });
         pebbles(x, groundY + 6, 12, 110, [86, 82, 78], 4.5, 6);
@@ -2816,11 +2815,10 @@ export function createPbMoveScripts(api) {
           if (post >= 0.3) {
             const ck = Math.min(1, (post - 0.3) / 0.56);
             const cf = ck < 0.25 ? ck / 0.25 : ck < 0.65 ? 1 : 1 - (ck - 0.65) / 0.35;
-            groundRing(g.top, x, groundY + 4, 48 + 96 * ck, 0x8e7c66, 0.9 * cf, 6 - 3.5 * ck);
+            px.ring(g.top, x, groundY + 4, 48 + 96 * ck, 0x8e7c66, 0xe8dac4, 0.92 * cf, 7 - 3.5 * ck);
             for (const pf of puffs) {
               const ex = 0.6 + 0.65 * ck;
-              g.top.circle(x + pf.ox * ex, groundY + pf.oy * ex, pf.r * (0.75 + 0.35 * ck)).fill({ color: 0x7c7062, alpha: 0.86 * cf });
-              g.top.circle(x + pf.ox * ex, groundY + pf.oy * ex - 4, pf.r * 0.68 * (0.75 + 0.35 * ck)).fill({ color: 0xb6a896, alpha: 0.72 * cf });
+              px.puff(g.top, x + pf.ox * ex, groundY + pf.oy * ex, pf.r * (0.72 + 0.32 * ck), 0x8a7d6d, 0.88 * cf);
             }
           }
         });

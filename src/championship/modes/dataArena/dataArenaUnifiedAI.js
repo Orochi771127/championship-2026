@@ -127,8 +127,24 @@ export function threatOfShot(shot, body, horizon = 0.45) {
   return miss <= (shot.radius ?? 12) + (body.radius ?? 20) + 12 ? { t, dirX: shot.vx, dirY: shot.vy, kind: "SHOT" } : null;
 }
 
-/** Scan hostile projectiles, soon-detonating zones, and imminent AoE/beam windup telegraphs for an immediate threat. */
-export function detectIncomingThreat({ body, hostileOwner, hostileTeam, projectiles, zones, telegraphs = [], threatSeen, horizon = 0.45 }) {
+/** Scan hostile projectiles, lunges, soon-detonating zones, and imminent AoE/beam windup telegraphs for an immediate threat. */
+export function detectIncomingThreat({ body, hostileOwner, hostileTeam, hostileBody = null, projectiles, zones, telegraphs = [], threatSeen, horizon = 0.45 }) {
+  if (hostileBody && hostileBody.lunge && hostileBody.hp > 0) {
+    const l = hostileBody.lunge;
+    const key = `lunge:${l.actionId ?? ""}`;
+    if (!threatSeen?.has(key)) {
+      const rx = body.x - hostileBody.x;
+      const ry = body.y - hostileBody.y;
+      const along = rx * (l.dirX ?? 0) + ry * (l.dirY ?? 0);
+      const perp = Math.abs(-rx * (l.dirY ?? 0) + ry * (l.dirX ?? 0));
+      const spd = Math.max(120, l.speed ?? 600);
+      const t = along / spd;
+      if (along > -12 && along < (l.left ?? 260) + 48 && t >= 0 && t <= horizon && perp < (l.width ?? 44) * 0.65 + (body.radius ?? 20) + 14) {
+        threatSeen?.add(key);
+        return { t: Math.max(0.05, t), dirX: l.dirX ?? 1, dirY: l.dirY ?? 0, kind: "LUNGE" };
+      }
+    }
+  }
   for (const shot of projectiles) {
     if (shot.dead || shot.isWallShard || shot.owner !== hostileOwner || threatSeen?.has(shot.id)) continue;
     const hit = threatOfShot(shot, body, horizon);
@@ -285,17 +301,19 @@ export function pbRankCornerWaypoint({ body, target, props = [], cell = 48, pad 
  * Keeps melee fighters close (~95 px), pulse fighters mid (~160 px), and ranged
  * fighters at comfortable firing spacing (~320-360 px) with organic lateral strafe.
  */
-export function pbRankSpacingVector({ body, target, idealDist = 280, strafeDir = 1, strafeWeight = 0.34, hasObjective = false }) {
+export function pbRankSpacingVector({ body, target, idealDist = 280, strafeDir = 1, strafeWeight = 0.34, hasObjective = false, retreating = false }) {
   const dx = target.x - body.x;
   const dy = target.y - body.y;
   const dist = Math.hypot(dx, dy) || 1;
   const ux = dx / dist;
   const uy = dy / dist;
-  let mx = hasObjective || dist > idealDist ? ux : dist < 0.65 * idealDist ? -ux : 0;
-  let my = hasObjective || dist > idealDist ? uy : dist < 0.65 * idealDist ? -uy : 0;
+  const minComfort = retreating ? Math.max(150, idealDist * 0.92) : Math.max(82, 0.65 * idealDist);
+  let mx = hasObjective || (!retreating && dist > idealDist) ? ux : dist < minComfort ? -ux : 0;
+  let my = hasObjective || (!retreating && dist > idealDist) ? uy : dist < minComfort ? -uy : 0;
   if (!hasObjective) {
-    mx += -uy * strafeDir * strafeWeight;
-    my += ux * strafeDir * strafeWeight;
+    const sw = retreating ? Math.max(strafeWeight, 0.48) : strafeWeight;
+    mx += -uy * strafeDir * sw;
+    my += ux * strafeDir * sw;
   }
   const len = Math.hypot(mx, my) || 1;
   return { x: mx / len, y: my / len, dist };

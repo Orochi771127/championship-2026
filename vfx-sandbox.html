@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>VFX 試車場｜Championship 2026 Harness Sandbox</title>
+  <style>
+    :root {
+      --sb-ink: #14141f;
+      --sb-bg: #101520;
+      --sb-panel: #182132;
+      --sb-surface: #202c42;
+      --sb-text: #eef4ff;
+      --sb-muted: #93a6c6;
+      --sb-accent: #ffd23f;
+      --sb-accent-sh: #b38600;
+      --sb-cyan: #38e8ff;
+      --sb-cyan-sh: #0e869c;
+      --sb-green: #45e08f;
+      --sb-green-sh: #17824a;
+      --sb-red: #ff5c6c;
+      --sb-red-sh: #9c1f2e;
+      --sb-white: #f8fbff;
+      --sb-white-sh: #8d9eb8;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: var(--sb-bg);
+      color: var(--sb-text);
+      font-family: "Cyber Partner Rounded", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .sb-shell {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      width: 100%;
+      height: 100dvh;
+      max-width: 100vw;
+      overflow: hidden;
+    }
+    /* Header: non-interactive telemetry + clean title (borderless, no table lines) */
+    .sb-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: max(8px, env(safe-area-inset-top)) 12px 8px;
+      background: linear-gradient(180deg, #1b2538 0%, #141c2b 100%);
+      min-width: 0;
+    }
+    .sb-title-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      min-width: 0;
+    }
+    .sb-title {
+      margin: 0;
+      font-size: clamp(14px, 3.8vw, 17px);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sb-badge {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--sb-cyan);
+      background: rgba(56, 232, 255, 0.14);
+      padding: 2px 7px;
+      border-radius: 6px;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+    .sb-readouts {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--sb-muted);
+      flex: 0 0 auto;
+    }
+    .sb-readouts strong { color: var(--sb-text); }
+    .sb-readouts .is-ok { color: var(--sb-green); }
+    .sb-readouts .is-warn { color: var(--sb-accent); }
+    .sb-readouts .is-bad { color: var(--sb-red); }
+
+    /* Stage */
+    .sb-stage-wrap {
+      position: relative;
+      min-height: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0b1018;
+    }
+    #stageHost {
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+    #stageHost canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+    }
+    /* Floating borderless HUD badges on canvas */
+    .sb-phase-pill {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: rgba(11, 16, 24, 0.78);
+      font-size: 12px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      pointer-events: none;
+    }
+    .sb-phase-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--sb-muted);
+    }
+    .sb-phase-dot[data-phase="ANTICIPATION"] { background: var(--sb-cyan); }
+    .sb-phase-dot[data-phase="RELEASE"] { background: var(--sb-accent); }
+    .sb-phase-dot[data-phase="HIT-STOP"] { background: #ffffff; box-shadow: 0 0 8px #fff; }
+    .sb-phase-dot[data-phase="IMPACT"] { background: var(--sb-red); }
+    .sb-phase-dot[data-phase="DISSIPATE"] { background: var(--sb-green); }
+
+    .sb-telemetry {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 4px 10px;
+      padding: 5px 10px;
+      border-radius: 8px;
+      background: rgba(11, 16, 24, 0.78);
+      color: #c7d6ef;
+      font: 600 11px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-variant-numeric: tabular-nums;
+      pointer-events: none;
+    }
+
+    /* Bottom thumb-zone command deck (Cyber Pop physical keys ONLY on clickable buttons) */
+    .sb-deck {
+      display: grid;
+      gap: 8px;
+      padding: 10px 12px max(10px, env(safe-area-inset-bottom));
+      background: #141c2b;
+      min-width: 0;
+    }
+    .sb-row {
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+    }
+    .sb-row--selects {
+      grid-template-columns: minmax(0, 1fr) 86px 82px;
+    }
+    .sb-row--toggles {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .sb-row--actions {
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 0.85fr);
+    }
+    select {
+      min-width: 0;
+      width: 100%;
+      min-height: 44px;
+      padding: 0 8px;
+      border: 2.5px solid var(--sb-ink);
+      border-radius: 10px;
+      background: var(--sb-white);
+      color: var(--sb-ink);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      box-shadow: 0 4px 0 var(--sb-white-sh);
+      cursor: pointer;
+    }
+    .sb-key {
+      position: relative;
+      min-width: 0;
+      min-height: 44px;
+      padding: 0 8px;
+      border: 2.5px solid var(--sb-ink);
+      border-radius: 10px;
+      background: var(--key-face, var(--sb-white));
+      color: var(--key-ink, var(--sb-ink));
+      font-family: inherit;
+      font-size: clamp(12px, 3.2vw, 13.5px);
+      font-weight: 800;
+      line-height: 1.15;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.45), 0 4px 0 var(--key-shade, var(--sb-white-sh));
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform 90ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 90ms ease-out, filter 90ms ease-out;
+    }
+    .sb-key:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 1px 0 var(--key-shade, var(--sb-white-sh));
+      transition-duration: 45ms;
+    }
+    .sb-key:disabled {
+      filter: grayscale(0.75) brightness(0.8);
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 var(--key-shade, var(--sb-white-sh));
+      cursor: not-allowed;
+    }
+    .sb-key--primary {
+      --key-face: var(--sb-accent);
+      --key-shade: var(--sb-accent-sh);
+      --key-ink: var(--sb-ink);
+      font-size: 15px;
+    }
+    .sb-key--cyan {
+      --key-face: var(--sb-cyan);
+      --key-shade: var(--sb-cyan-sh);
+      --key-ink: var(--sb-ink);
+    }
+    .sb-key--danger {
+      --key-face: var(--sb-red);
+      --key-shade: var(--sb-red-sh);
+      --key-ink: #ffffff;
+    }
+    .sb-key[aria-pressed="true"] {
+      --key-face: var(--sb-green);
+      --key-shade: var(--sb-green-sh);
+      --key-ink: var(--sb-ink);
+      transform: translateY(2px);
+      box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.4), 0 2px 0 var(--key-shade);
+    }
+    .sb-key--slow[aria-pressed="true"] {
+      --key-face: var(--sb-cyan);
+      --key-shade: var(--sb-cyan-sh);
+    }
+    @media (min-width: 720px) {
+      .sb-deck {
+        grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr);
+        align-items: center;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sb-key { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sb-shell">
+    <header class="sb-top">
+      <div class="sb-title-wrap">
+        <h1 class="sb-title">VFX 試車場 Sandbox</h1>
+        <span class="sb-badge" id="speedBadge">1.0x</span>
+      </div>
+      <div class="sb-readouts" aria-live="polite">
+        <span>FPS <strong id="fpsReadout">--</strong></span>
+        <span>活體 <strong id="liveReadout" class="is-ok">0</strong></span>
+        <span id="leakBadge" class="is-ok">零殘留</span>
+      </div>
+    </header>
+
+    <main class="sb-stage-wrap">
+      <div id="stageHost" aria-label="VFX 試車場舞台"></div>
+      <div class="sb-phase-pill">
+        <span class="sb-phase-dot" id="phaseDot" data-phase="IDLE"></span>
+        <span id="phaseLabel">IDLE · 待命</span>
+      </div>
+      <output class="sb-telemetry" id="telemetry" aria-live="polite">載入 VFX 烘焙資源中…</output>
+    </main>
+
+    <section class="sb-deck" aria-label="試車場控制列">
+      <div class="sb-row sb-row--selects">
+        <select id="moveSelect" aria-label="選擇招式"></select>
+        <select id="tierFilter" aria-label="階級篩選">
+          <option value="all">全部階級</option>
+          <option value="basic">普攻</option>
+          <option value="skill">技能</option>
+          <option value="ultimate">必殺</option>
+        </select>
+        <select id="paletteSelect" aria-label="屬性色覆寫"></select>
+      </div>
+
+      <div class="sb-row sb-row--toggles">
+        <button id="bgGrassBtn" class="sb-key" type="button" aria-pressed="true">實戰草地</button>
+        <button id="bgDarkBtn" class="sb-key" type="button" aria-pressed="false">暗色對比</button>
+        <button id="speed1xBtn" class="sb-key" type="button" aria-pressed="true">1.0x 原速</button>
+        <button id="speedSlowBtn" class="sb-key sb-key--slow" type="button" aria-pressed="false">0.25x 慢動作</button>
+      </div>
+
+      <div class="sb-row sb-row--actions">
+        <button id="fireBtn" class="sb-key sb-key--primary" type="button">⚡ 觸發招式</button>
+        <button id="stressBtn" class="sb-key sb-key--cyan" type="button">🧪 連發×10</button>
+        <button id="resetBtn" class="sb-key" type="button">重置</button>
+      </div>
+    </section>
+  </div>
+
+  <script type="module">
+    import * as PIXI from "./node_modules/pixi.js/dist/pixi.mjs";
+    import { createMoveVfxKit, moveVfxArchetypeIsMelee } from "./src/championship/presentation/vfx/moveVfxKit.js";
+    import { moveVfxSignature } from "./src/championship/presentation/vfx/moveVfxSignatures.js";
+    import { BATTLE_MOVE_NAMES } from "./src/championship/text/battleMoveNames.js";
+    import table from "./src/data/championship/move-vfx-signatures.r1.json" with { type: "json" };
+    import { moveVfxChoreography } from "./src/championship/presentation/vfx/moveVfxChoreography.js";
+    import { createMoveVfxSetPieces } from "./src/championship/presentation/vfx/moveVfxSetPieces.js";
+    import { BATTLE_FX_PALETTES } from "./src/championship/presentation/battleFx/battleFxPalettes.js";
+    import { createPixelHitBursts } from "./src/championship/presentation/vfx/pixelHitBursts.js";
+    import { createPixelMotes } from "./src/championship/presentation/vfx/pixelMotes.js";
+    import { createBattleHitFeel } from "./src/championship/presentation/battleFx/battleHitFeel.js";
+
+    const $ = id => document.getElementById(id);
+    const params = new URLSearchParams(location.search);
+
+    const TIER_LABEL = { basic: "普攻", skill: "技能", ultimate: "必殺" };
+    const PALETTES = ["fire", "water", "ice", "light", "dark", "thunder", "nature", "metal", "earth", "toxic", "psychic", "wind", "neutral"];
+    const ELEMENT_MAP = {
+      fire: "FIRE", water: "WATER", ice: "ICE", thunder: "THUNDER",
+      metal: "METAL", nature: "WOOD", earth: "EARTH", wind: "WIND",
+      light: "SUN", dark: "MOON", toxic: "WOOD", psychic: "MOON", neutral: "NEUTRAL"
+    };
+    const SHAKE_PX = { light: 3.5, medium: 6.5, heavy: 10.5 };
+    const ALL_MOVES = table.moves
+      .map(([key]) => moveVfxSignature(key))
+      .filter(s => s && s.tier !== "support");
+
+    const state = {
+      bg: params.get("bg") === "dark" ? "dark" : "grass",
+      timeScale: params.get("speed") === "0.25" ? 0.25 : 1.0,
+      phase: "IDLE",
+      peakLive: 0,
+      fires: 0,
+      lastMoveKey: null,
+      stressRemaining: 0,
+      stressGapMs: 0,
+      settledSinceMs: 0,
+      disposed: false
+    };
+
+    // Populate selectors
+    $("paletteSelect").append(new Option("原屬性", ""));
+    for (const p of PALETTES) $("paletteSelect").append(new Option(p, p));
+    if (params.get("palette")) $("paletteSelect").value = params.get("palette");
+
+    function populateMoves(filterTier = "all", keepValue = null) {
+      const select = $("moveSelect");
+      const prev = keepValue ?? select.value;
+      select.replaceChildren();
+      const filtered = filterTier === "all" ? ALL_MOVES : ALL_MOVES.filter(m => m.tier === filterTier);
+      for (const s of filtered) {
+        const name = BATTLE_MOVE_NAMES[s.key]?.[0] ?? `Move #${s.key}`;
+        select.append(new Option(`${name}｜${TIER_LABEL[s.tier] ?? s.tier}｜${s.archetype}`, String(s.key)));
+      }
+      if (prev && [...select.options].some(o => o.value === String(prev))) {
+        select.value = String(prev);
+      } else if ([...select.options].some(o => o.value === "195")) {
+        // Default showcase move: 裂顎貫角 (195) if present
+        select.value = "195";
+      }
+    }
+    populateMoves("all", params.get("move") ?? "195");
+
+    // Single PixiJS Application owned by this standalone sandbox
+    const app = new PIXI.Application();
+    const host = $("stageHost");
+    await app.init({
+      resizeTo: host,
+      backgroundColor: 0x0b1018,
+      antialias: true,
+      autoDensity: true,
+      resolution: Math.min(1.75, window.devicePixelRatio || 1),
+      sharedTicker: false,
+      powerPreference: "high-performance"
+    });
+    host.append(app.canvas);
+
+    // Layer order matches championship battle presentation:
+    // world: bgLayer -> fxBack -> actorLayer -> fxFront -> pieceLayer
+    // screen: screenFlashLayer
+    const world = new PIXI.Container({ label: "sandbox-world" });
+    const bgLayer = new PIXI.Graphics({ label: "sandbox-bg" });
+    const fxBack = new PIXI.Container({ label: "sandbox-fx-back" });
+    const actorLayer = new PIXI.Container({ label: "sandbox-actors" });
+    const fxFront = new PIXI.Container({ label: "sandbox-fx-front" });
+    const pieceLayer = new PIXI.Container({ label: "sandbox-pieces" });
+    const screenFlash = new PIXI.Graphics({ label: "sandbox-screen-flash" });
+
+    world.addChild(bgLayer, fxBack, actorLayer, fxFront, pieceLayer);
+    app.stage.addChild(world, screenFlash);
+
+    const kit = createMoveVfxKit({ PIXI, front: fxFront, ground: fxBack, quality: "balanced", pixel: true });
+    const pieces = createMoveVfxSetPieces({ PIXI, layer: pieceLayer });
+    const pixelHits = createPixelHitBursts({ PIXI, layer: pieceLayer, quality: "balanced" });
+    const motes = createPixelMotes({ PIXI, layer: pieceLayer, quality: "balanced" });
+    const hitFeel = createBattleHitFeel({
+      PIXI,
+      target: world,
+      screen: () => ({ width: app.screen.width, height: app.screen.height }),
+      quality: "balanced",
+      reducedMotion: false
+    });
+
+    // Attacker & Defender Stand-In Dummies (clear silhouettes + ground shadows + flash overlay)
+    function createDummy({ label, bodyColor, trimColor, facing }) {
+      const root = new PIXI.Container({ label });
+      const shadow = new PIXI.Graphics();
+      const body = new PIXI.Container();
+      const shape = new PIXI.Graphics();
+      const flashOverlay = new PIXI.Graphics();
+      flashOverlay.visible = false;
+      body.addChild(shape, flashOverlay);
+      root.addChild(shadow, body);
+      actorLayer.addChild(root);
+
+      const draw = (size) => {
+        shadow.clear()
+          .ellipse(0, 0, size * 0.62, size * 0.22)
+          .fill({ color: 0x000000, alpha: 0.36 });
+
+        const w = size * 0.88, h = size * 1.18;
+        shape.clear()
+          // Dark ink outline + body silhouette
+          .roundRect(-w / 2 - 2, -h - 2, w + 4, h + 4, size * 0.26).fill(0x14141f)
+          .roundRect(-w / 2, -h, w, h, size * 0.24).fill(bodyColor)
+          // Visor / facing cue
+          .roundRect(facing > 0 ? w * 0.04 : -w * 0.42, -h * 0.76, w * 0.38, h * 0.22, 6).fill(0x14141f)
+          .roundRect(facing > 0 ? w * 0.1 : -w * 0.36, -h * 0.72, w * 0.26, h * 0.13, 4).fill(trimColor)
+          // Core crest
+          .circle(0, -h * 0.34, size * 0.12).fill({ color: trimColor, alpha: 0.9 });
+
+        flashOverlay.clear()
+          .roundRect(-w / 2, -h, w, h, size * 0.24).fill({ color: 0xffffff, alpha: 0.92 });
+      };
+      return {
+        root, body, flashOverlay, draw,
+        baseX: 0, baseY: 0, facing,
+        windupMs: 0, windupTotalMs: 1,
+        lungeX: 0, knockX: 0, flashMs: 0, squash: 0
+      };
+    }
+
+    const attacker = createDummy({ label: "dummy-attacker", bodyColor: 0x2fb7e8, trimColor: 0x9cf7ff, facing: 1 });
+    const defender = createDummy({ label: "dummy-defender", bodyColor: 0xe6645a, trimColor: 0xffe29a, facing: -1 });
+
+    let BODY = 64;
+    let UNIT = 1;
+
+    function drawBackground() {
+      const w = app.screen.width, h = app.screen.height;
+      bgLayer.clear();
+      if (state.bg === "grass") {
+        // Real battle grass field style with soft horizon and turf patches
+        bgLayer.rect(0, 0, w, h).fill(0x3f7b29);
+        bgLayer.rect(0, 0, w, h * 0.26).fill({ color: 0x2b5c22, alpha: 0.55 });
+        for (let i = 0; i < 16; i++) {
+          const px = ((i * 193 + 47) % 100) / 100 * w;
+          const py = h * 0.24 + ((i * 137 + 23) % 72) / 100 * h;
+          const r = 34 + (i * 29) % 58;
+          bgLayer.ellipse(px, py, r * 1.4, r * 0.55).fill({
+            color: i % 2 ? 0x529332 : 0x356b22,
+            alpha: 0.42
+          });
+        }
+        // Arena floor ring guide
+        bgLayer.ellipse(w * 0.5, h * 0.58, w * 0.42, h * 0.24)
+          .stroke({ color: 0xd8c37a, alpha: 0.45, width: 3 });
+      } else {
+        // High-contrast dark calibration backdrop for inspecting additive cores & alpha edges
+        bgLayer.rect(0, 0, w, h).fill(0x0b1018);
+        const step = 24;
+        for (let x = 0; x <= w; x += step) {
+          bgLayer.moveTo(x, 0).lineTo(x, h);
+        }
+        for (let y = 0; y <= h; y += step) {
+          bgLayer.moveTo(0, y).lineTo(w, y);
+        }
+        bgLayer.stroke({ color: 0x1e2c45, alpha: 0.55, width: 1 });
+        // Ground horizon axis
+        bgLayer.moveTo(w * 0.08, h * 0.62).lineTo(w * 0.92, h * 0.62)
+          .stroke({ color: 0x38e8ff, alpha: 0.22, width: 1.5 });
+      }
+    }
+
+    function layoutStage() {
+      const w = Math.max(1, app.screen.width), h = Math.max(1, app.screen.height);
+      BODY = Math.round(Math.max(48, Math.min(82, Math.min(w, h) * 0.175)));
+      UNIT = BODY / 64;
+      attacker.baseX = Math.round(w * 0.24);
+      attacker.baseY = Math.round(h * 0.63);
+      defender.baseX = Math.round(w * 0.76);
+      defender.baseY = Math.round(h * 0.57);
+      attacker.draw(BODY);
+      defender.draw(BODY);
+      attacker.root.position.set(attacker.baseX, attacker.baseY);
+      defender.root.position.set(defender.baseX, defender.baseY);
+      drawBackground();
+    }
+    layoutStage();
+    app.renderer.on("resize", layoutStage);
+
+    // Strictly ticker-driven scheduler (ZERO setTimeout / setInterval)
+    const timelineTasks = [];
+    const activeShots = [];
+    const feel = {
+      hitStopMs: 0,
+      shakeMs: 0,
+      shakeTotalMs: 220,
+      shakePx: 0,
+      screenFlashAlpha: 0,
+      dissipateTimerMs: 0
+    };
+
+    function scheduleOnTicker(delayMs, fn) {
+      timelineTasks.push({ remainingMs: Math.max(0, delayMs), fn });
+    }
+
+    function setPhase(nextPhase, text) {
+      state.phase = nextPhase;
+      $("phaseDot").dataset.phase = nextPhase;
+      $("phaseLabel").textContent = text;
+    }
+
+    function currentSelection() {
+      const raw = $("moveSelect").value;
+      const key = /^\d+$/.test(raw) ? Number(raw) : raw;
+      const signature = moveVfxSignature(key) ?? ALL_MOVES[0];
+      const paletteKey = $("paletteSelect").value || signature.paletteKey;
+      const choreo = moveVfxChoreography(signature.key);
+      return { signature, paletteKey, choreo };
+    }
+
+    function triggerImpact({ signature, paletteKey, choreo, hit, angle }) {
+      const ultimate = signature.tier === "ultimate";
+      const heavy = ultimate || signature.tier === "skill";
+      const palette = BATTLE_FX_PALETTES[paletteKey] ?? BATTLE_FX_PALETTES.neutral;
+      const element = ELEMENT_MAP[paletteKey] ?? "NEUTRAL";
+
+      // 3. Impact Point: 40~70ms visual hit-stop (up to 95ms for ultimate choreography), white flash, micro shake & knockback
+      const hitStopMs = choreo?.hitStopMs ?? (ultimate ? 70 : heavy ? 55 : 42);
+      feel.hitStopMs = Math.max(feel.hitStopMs, hitStopMs);
+      feel.shakeMs = ultimate ? 260 : heavy ? 210 : 150;
+      feel.shakeTotalMs = feel.shakeMs;
+      feel.shakePx = SHAKE_PX[choreo?.shake ?? (ultimate ? "heavy" : heavy ? "medium" : "light")] ?? 4;
+      feel.screenFlashAlpha = ultimate ? 0.42 : heavy ? 0.24 : 0.14;
+      feel.dissipateTimerMs = 520;
+
+      defender.flashMs = Math.max(95, hitStopMs + 45);
+      defender.knockX = (choreo?.knockPx ?? (ultimate ? 28 : heavy ? 20 : 14));
+      defender.squash = ultimate ? 1.0 : 0.72;
+
+      setPhase("HIT-STOP", `HIT-STOP · 頓幀 ${hitStopMs}ms`);
+
+      // 4. Dual-layer impact particles: primary burst + set-piece + secondary element motes & ground shock
+      if (ultimate) {
+        kit.signature({ x: hit.x, y: hit.y, groundY: defender.baseY, angle, paletteKey, archetype: signature.archetype, size: BODY * 0.56, signature });
+      } else {
+        kit.impact({ x: hit.x, y: hit.y, groundY: defender.baseY, angle, paletteKey, archetype: signature.archetype, heavy, size: BODY * 0.46, signature });
+      }
+      kit.burst({ x: hit.x, y: hit.y, groundY: defender.baseY, angle, paletteKey, signature, size: BODY * (heavy ? 0.26 : 0.19), heavy: ultimate });
+      pixelHits?.spawn({ element, x: hit.x, y: hit.y, groundY: defender.baseY, size: BODY, unit: UNIT, heavy: ultimate, flip: Math.cos(angle) < 0 });
+      motes?.burst({ element, x: hit.x, y: hit.y, groundY: defender.baseY, unit: UNIT, weight: ultimate ? "ultimate" : heavy ? "medium" : "light", dir: 1 });
+
+      if (choreo?.contact) {
+        if (choreo.impactFrame || heavy) {
+          pieces.play("impact-frame", {
+            x: hit.x, y: hit.y, angle,
+            palette: { core: 0xffffff, main: 0xffffff, edge: 0xffffff, flat: true },
+            size: BODY, unit: UNIT, groundY: defender.baseY,
+            scale: (choreo.contact.scale ?? 1) * 0.72
+          });
+        }
+        pieces.play(choreo.contact.piece, {
+          x: hit.x, y: hit.y, angle, palette, size: BODY, unit: UNIT, groundY: defender.baseY,
+          scale: choreo.contact.scale ?? 1, fast: choreo.contact.fast, sprite: choreo.contact.sprite ?? null, at: "contact"
+        });
+      }
+      if (heavy) hitFeel?.shock(hit.x, hit.y, { reach: ultimate ? 150 : 105, amp: ultimate ? 11 : 7 });
+      if (ultimate) hitFeel?.split({ px: 4.5 });
+    }
+
+    function fireMove() {
+      if (state.disposed) return;
+      const { signature, paletteKey, choreo } = currentSelection();
+      const ultimate = signature.tier === "ultimate";
+      const melee = moveVfxArchetypeIsMelee(signature.archetype);
+      const palette = BATTLE_FX_PALETTES[paletteKey] ?? BATTLE_FX_PALETTES.neutral;
+
+      state.fires++;
+      state.lastMoveKey = signature.key;
+      state.settledSinceMs = 0;
+
+      const hand = { x: attacker.baseX + BODY * 0.36, y: attacker.baseY - BODY * 0.68 };
+      const hit = { x: defender.baseX - BODY * 0.12, y: defender.baseY - BODY * 0.58 };
+      const angle = Math.atan2(hit.y - hand.y, hit.x - hand.x);
+      const chargeMs = ultimate ? 380 : signature.tier === "skill" ? 240 : 160;
+
+      // 1. Anticipation (前搖蓄力)
+      attacker.windupMs = chargeMs;
+      attacker.windupTotalMs = chargeMs;
+      setPhase("ANTICIPATION", `1/5 前搖蓄力 · ${chargeMs}ms`);
+      kit.charge({ x: hand.x, y: hand.y, paletteKey, size: ultimate ? 40 : 30, ms: chargeMs, signature });
+      if (ultimate) hitFeel?.rush(hand.x, hand.y, { strength: 0.09 });
+
+      // 2. Release & Non-Linear Trail (釋放拖尾)
+      scheduleOnTicker(chargeMs, () => {
+        setPhase("RELEASE", `2/5 釋放拖尾 · ${signature.archetype}`);
+        attacker.lungeX = melee ? Math.min(BODY * 1.4, (defender.baseX - attacker.baseX) * 0.42) : BODY * 0.26;
+        if (choreo?.release) {
+          pieces.play(choreo.release.piece, {
+            x: hand.x, y: hand.y, angle, palette, size: BODY, unit: UNIT, groundY: attacker.baseY,
+            scale: choreo.release.scale ?? 1, sprite: choreo.release.sprite ?? null
+          });
+        }
+        if (melee) {
+          kit.melee({ x: hit.x - BODY * 0.55, y: hit.y, angle, paletteKey, archetype: signature.archetype, size: BODY * 0.48, signature });
+          const contactDelay = 95 + 75 * ((signature.combo ?? 1) - 1);
+          scheduleOnTicker(contactDelay, () => triggerImpact({ signature, paletteKey, choreo, hit, angle }));
+          return;
+        }
+        kit.launch({ x: hand.x, y: hand.y, angle, paletteKey, archetype: signature.archetype, size: BODY * 0.46, signature });
+        if (signature.archetype === "lance" && ultimate) {
+          kit.beam({ x0: hand.x, y0: hand.y, x1: hit.x, y1: hit.y, paletteKey, ms: 460, width: BODY * 0.42 });
+          scheduleOnTicker(220, () => triggerImpact({ signature, paletteKey, choreo, hit, angle }));
+          return;
+        }
+        // Non-linear eased flight (ease-in acceleration + arc/wave curve, strictly NO linear constant velocity)
+        const travelMs = ultimate ? 320 : 260;
+        const shot = {
+          x: hand.x, y: hand.y,
+          startX: hand.x, startY: hand.y,
+          endX: hit.x, endY: hit.y,
+          ageMs: 0, durationMs: travelMs,
+          path: signature.path ?? "arc",
+          alive: true, signature, paletteKey, choreo, hit, angle
+        };
+        shot.handle = kit.projectile({
+          follow: () => shot.alive ? { x: shot.x, y: shot.y } : null,
+          paletteKey,
+          archetype: signature.archetype,
+          size: ultimate ? BODY * 0.52 : BODY * 0.42,
+          signature
+        });
+        activeShots.push(shot);
+      });
+    }
+
+    function countLive() {
+      const kd = kit.getDiagnostics();
+      const pd = pieces.getDiagnostics();
+      const hd = pixelHits?.getDiagnostics() ?? { live: 0 };
+      const md = motes?.getDiagnostics() ?? { live: 0 };
+      const total = kd.live + pd.live + hd.live + md.live + activeShots.length + timelineTasks.length;
+      return { total, kit: kd.live, pieces: pd.live, pixelHits: hd.live, motes: md.live, shots: activeShots.length, tasks: timelineTasks.length, sheets: kd.sheets };
+    }
+
+    function resetSandbox() {
+      timelineTasks.length = 0;
+      for (const s of activeShots) s.alive = false;
+      activeShots.length = 0;
+      state.stressRemaining = 0;
+      feel.hitStopMs = 0;
+      feel.shakeMs = 0;
+      feel.screenFlashAlpha = 0;
+      feel.dissipateTimerMs = 0;
+      attacker.windupMs = 0; attacker.lungeX = 0;
+      defender.flashMs = 0; defender.knockX = 0; defender.squash = 0;
+      world.position.set(0, 0);
+      screenFlash.clear();
+      // Fast-forward active pools cleanly to drain
+      for (let i = 0; i < 60; i++) {
+        kit.update(100);
+        pieces.update(100);
+        pixelHits?.update(100);
+        motes?.update(100);
+        hitFeel?.update(100);
+      }
+      state.peakLive = 0;
+      setPhase("IDLE", "IDLE · 已重置");
+    }
+
+    // Main single-ticker update loop (respects 1.0x / 0.25x timeScale & visual hit-stop)
+    function onTick(ticker) {
+      if (state.disposed) return;
+      const rawDt = Math.min(50, Math.max(0, ticker.deltaMS || 16.67));
+      const scaledDt = rawDt * state.timeScale;
+
+      // Stress burst scheduler (scaled so slow-mo stays predictable)
+      if (state.stressRemaining > 0) {
+        state.stressGapMs -= scaledDt;
+        if (state.stressGapMs <= 0) {
+          state.stressRemaining--;
+          state.stressGapMs = 260;
+          fireMove();
+        }
+      }
+
+      // Hit-stop freezes visual VFX & projectile progression while screen shake & flash decay smoothly
+      const inHitStop = feel.hitStopMs > 0;
+      if (inHitStop) {
+        feel.hitStopMs = Math.max(0, feel.hitStopMs - scaledDt);
+        if (feel.hitStopMs === 0) setPhase("IMPACT", "4/5 雙層衝擊粒子");
+      }
+      const fxDt = inHitStop ? 0 : scaledDt;
+
+      // Advance ticker-scheduled phases
+      for (let i = timelineTasks.length - 1; i >= 0; i--) {
+        timelineTasks[i].remainingMs -= fxDt;
+        if (timelineTasks[i].remainingMs <= 0) {
+          const task = timelineTasks.splice(i, 1)[0];
+          task.fn();
+        }
+      }
+
+      // Advance non-linear projectiles (cubic ease-in/out + arc/wave/spiral displacement)
+      const perpFactor = BODY * 0.42;
+      for (let i = activeShots.length - 1; i >= 0; i--) {
+        const s = activeShots[i];
+        if (!s.alive) { activeShots.splice(i, 1); continue; }
+        s.ageMs += fxDt;
+        const u = Math.min(1, s.ageMs / s.durationMs);
+        // Accelerate cleanly into impact (power 1.65 ease-in-out punch, never linear)
+        const eased = u < 0.5 ? 2 * Math.pow(u, 1.9) : 1 - Math.pow(-2 * u + 2, 2.2) / 2;
+        const dx = s.endX - s.startX, dy = s.endY - s.startY;
+        const dist = Math.max(1, Math.hypot(dx, dy));
+        const nx = -dy / dist, ny = dx / dist;
+        let lateral = 0;
+        if (s.path === "arc") lateral = -Math.sin(u * Math.PI) * perpFactor;
+        else if (s.path === "wave") lateral = Math.sin(u * Math.PI * 3) * perpFactor * 0.45 * (1 - u * 0.4);
+        else if (s.path === "spiral") lateral = Math.sin(u * Math.PI * 4) * perpFactor * 0.55 * (1 - u);
+        else lateral = -Math.sin(u * Math.PI) * perpFactor * 0.22;
+        s.x = s.startX + dx * eased + nx * lateral;
+        s.y = s.startY + dy * eased + ny * lateral;
+        if (u >= 1) {
+          s.alive = false;
+          activeShots.splice(i, 1);
+          triggerImpact(s);
+        }
+      }
+
+      // Step VFX systems on fxDt
+      kit.update(fxDt);
+      pieces.update(fxDt);
+      pixelHits?.update(fxDt);
+      motes?.update(fxDt);
+      hitFeel?.update(scaledDt);
+
+      // Update stand-in dummies (squash-and-stretch anticipation, lunge, hit flash, knockback recoil)
+      if (attacker.windupMs > 0) {
+        attacker.windupMs = Math.max(0, attacker.windupMs - scaledDt);
+        const p = 1 - attacker.windupMs / Math.max(1, attacker.windupTotalMs);
+        const sq = Math.sin(p * Math.PI);
+        attacker.body.scale.set(1 + sq * 0.14, 1 - sq * 0.12);
+        attacker.root.x = attacker.baseX - sq * 8;
+      } else {
+        attacker.body.scale.set(1, 1);
+        attacker.lungeX *= Math.exp(-scaledDt / 95);
+        if (Math.abs(attacker.lungeX) < 0.2) attacker.lungeX = 0;
+        attacker.root.x = attacker.baseX + attacker.lungeX;
+      }
+
+      if (defender.flashMs > 0) {
+        defender.flashMs = Math.max(0, defender.flashMs - scaledDt);
+        defender.flashOverlay.visible = true;
+        defender.flashOverlay.alpha = Math.min(1, defender.flashMs / 95);
+      } else {
+        defender.flashOverlay.visible = false;
+      }
+      if (!inHitStop) {
+        defender.knockX *= Math.exp(-scaledDt / 110);
+        defender.squash *= Math.exp(-scaledDt / 110);
+        if (defender.knockX < 0.2) defender.knockX = 0;
+        if (defender.squash < 0.01) defender.squash = 0;
+      }
+      const tremble = defender.knockX > 1 ? Math.sin(performance.now() * 0.09) * 1.8 : 0;
+      defender.root.x = defender.baseX + defender.knockX + tremble;
+      defender.body.scale.set(1 - defender.squash * 0.12, 1 + defender.squash * 0.1);
+
+      // Screen micro-shake & flash
+      if (feel.shakeMs > 0) {
+        feel.shakeMs = Math.max(0, feel.shakeMs - scaledDt);
+        const mag = (feel.shakeMs / Math.max(1, feel.shakeTotalMs)) * feel.shakePx;
+        world.position.set(
+          Math.round((Math.random() * 2 - 1) * mag),
+          Math.round((Math.random() * 2 - 1) * mag)
+        );
+      } else {
+        world.position.set(0, 0);
+      }
+      hitFeel?.frame({ zoom: 1, x: world.x, y: world.y });
+
+      screenFlash.clear();
+      if (feel.screenFlashAlpha > 0.005) {
+        screenFlash.rect(0, 0, app.screen.width, app.screen.height)
+          .fill({ color: 0xffffff, alpha: feel.screenFlashAlpha });
+        feel.screenFlashAlpha *= Math.exp(-scaledDt / 65);
+      } else {
+        feel.screenFlashAlpha = 0;
+      }
+
+      // Live telemetry & leak watchdog
+      const c = countLive();
+      if (c.total > state.peakLive) state.peakLive = c.total;
+      if (feel.dissipateTimerMs > 0 && !inHitStop) {
+        feel.dissipateTimerMs = Math.max(0, feel.dissipateTimerMs - scaledDt);
+        if (feel.dissipateTimerMs === 0 && c.total > 0) setPhase("DISSIPATE", "5/5 殘影消散");
+      }
+      if (c.total === 0) {
+        state.settledSinceMs += rawDt;
+        if (state.phase !== "IDLE" && state.settledSinceMs > 180) {
+          setPhase("IDLE", "IDLE · 已歸零（零殘留）");
+        }
+      } else {
+        state.settledSinceMs = 0;
+      }
+
+      $("fpsReadout").textContent = String(Math.round(app.ticker.FPS || 0));
+      const liveEl = $("liveReadout");
+      liveEl.textContent = String(c.total);
+      liveEl.className = c.total === 0 ? "is-ok" : c.total > 80 ? "is-bad" : "is-warn";
+
+      const leakEl = $("leakBadge");
+      if (c.total === 0) {
+        leakEl.textContent = "零殘留";
+        leakEl.className = "is-ok";
+      } else {
+        leakEl.textContent = `演出中 (${c.total})`;
+        leakEl.className = "is-warn";
+      }
+
+      const heapMB = performance.memory?.usedJSHeapSize
+        ? `${(performance.memory.usedJSHeapSize / 1048576).toFixed(1)}MB`
+        : "N/A";
+      const sel = currentSelection();
+      $("telemetry").textContent =
+        `#${sel.signature.key} ${sel.signature.archetype}/${sel.paletteKey} · ` +
+        `kit:${c.kit} piece:${c.pieces} hit:${c.pixelHits} mote:${c.motes} · ` +
+        `peak:${state.peakLive} · fires:${state.fires} · heap:${heapMB}`;
+    }
+
+    app.ticker.add(onTick);
+
+    // UI Control Bindings
+    function syncToggleButtons() {
+      $("bgGrassBtn").setAttribute("aria-pressed", String(state.bg === "grass"));
+      $("bgDarkBtn").setAttribute("aria-pressed", String(state.bg === "dark"));
+      $("speed1xBtn").setAttribute("aria-pressed", String(state.timeScale === 1.0));
+      $("speedSlowBtn").setAttribute("aria-pressed", String(state.timeScale === 0.25));
+      $("speedBadge").textContent = `${state.timeScale.toFixed(state.timeScale < 1 ? 2 : 1)}x`;
+    }
+    syncToggleButtons();
+
+    const setBg = (mode) => {
+      state.bg = mode === "dark" ? "dark" : "grass";
+      drawBackground();
+      syncToggleButtons();
+    };
+    const setSpeed = (scale) => {
+      state.timeScale = Number(scale) === 0.25 ? 0.25 : 1.0;
+      syncToggleButtons();
+    };
+
+    const onKeyDown = (e) => {
+      if (e.code === "Space" && !["SELECT", "INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) {
+        e.preventDefault();
+        fireMove();
+      }
+    };
+
+    $("bgGrassBtn").addEventListener("click", () => setBg("grass"));
+    $("bgDarkBtn").addEventListener("click", () => setBg("dark"));
+    $("speed1xBtn").addEventListener("click", () => setSpeed(1.0));
+    $("speedSlowBtn").addEventListener("click", () => setSpeed(0.25));
+    $("fireBtn").addEventListener("click", () => fireMove());
+    $("stressBtn").addEventListener("click", () => {
+      state.stressRemaining = 10;
+      state.stressGapMs = 0;
+    });
+    $("resetBtn").addEventListener("click", () => resetSandbox());
+    $("tierFilter").addEventListener("change", (e) => populateMoves(e.target.value));
+    app.canvas.addEventListener("pointerdown", () => fireMove());
+    window.addEventListener("keydown", onKeyDown);
+
+    function disposeSandbox() {
+      if (state.disposed) return;
+      state.disposed = true;
+      window.removeEventListener("keydown", onKeyDown);
+      app.ticker.remove(onTick);
+      timelineTasks.length = 0;
+      activeShots.length = 0;
+      kit?.dispose();
+      pieces?.dispose();
+      pixelHits?.dispose();
+      motes?.dispose();
+      hitFeel?.dispose();
+      app.destroy({ removeView: true, releaseGlobalResources: true }, { children: true });
+    }
+    window.addEventListener("pagehide", disposeSandbox, { once: true });
+
+    // Ready signal & QA automation hook for /browser & Playwright
+    await pieces.ready();
+    setPhase("IDLE", "IDLE · 就緒（按空白鍵或點按鈕觸發）");
+
+    window.__vfxSandbox = Object.freeze({
+      fire: fireMove,
+      reset: resetSandbox,
+      setBg,
+      setSpeed,
+      selectMove: (key) => {
+        $("tierFilter").value = "all";
+        populateMoves("all", String(key));
+      },
+      runLeakStress: (count = 10) => {
+        state.stressRemaining = Math.max(1, Number(count) || 10);
+        state.stressGapMs = 0;
+      },
+      getTelemetry: () => {
+        const c = countLive();
+        return {
+          phase: state.phase,
+          bg: state.bg,
+          timeScale: state.timeScale,
+          fps: Math.round(app.ticker.FPS || 0),
+          fires: state.fires,
+          peakLive: state.peakLive,
+          live: c,
+          settled: c.total === 0,
+          heapBytes: performance.memory?.usedJSHeapSize ?? null,
+          viewport: { width: window.innerWidth, height: window.innerHeight, scrollWidth: document.documentElement.scrollWidth }
+        };
+      },
+      dispose: disposeSandbox
+    });
+  </script>
+</body>
+</html>

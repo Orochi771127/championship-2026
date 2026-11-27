@@ -758,7 +758,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     } else if (guarded) {
       amount *= GUARD_RULES.damageScale;
       player.guardBlocked = true;
-      emit({ type: "GUARD_BLOCK", side: "player", amount: Math.round(amount), x: player.x, y: player.y });
+      const gAng = Number.isFinite(x) && Number.isFinite(y) ? Math.atan2(player.y - y, player.x - x) : (player.facing > 0 ? Math.PI : 0);
+      emit({ type: "GUARD_BLOCK", side: "player", amount: Math.round(amount), angle: gAng, x: player.x, y: player.y });
     }
     // Burst evolution (relay): every hit on the fighter is scaled by both sides' burst and fills both gauges.
     amount = scaleArenaBurst(player, amount); chargeArenaBurst(player, amount);
@@ -2224,7 +2225,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
       const landed = strike(target, lunge.damage * h.share, "LUNGE", null, target.x, target.y, lunge.arenaElement, lunge.attackElement, lunge.isBasic, { moveId: lunge.moveId });
       if (landed) {
         confirmMoveContact(before, oldHp, target, lunge, caster.id, target.x, target.y, Math.atan2(lunge.dirY, lunge.dirX), { hitIndex: combo.i, final: last });
-        if (h.knock) launch(target, lunge.dirX, lunge.dirY, h.knock);
+        const finalKnock = last && relayMode && !lunge.pinTarget ? Math.max(h.knock ?? 0, 420) : (h.knock ?? 0);
+        if (finalKnock) launch(target, lunge.dirX, lunge.dirY, finalKnock);
       }
     }
     combo.i++;
@@ -2282,11 +2284,24 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         if (target === player && player.dashGrace > 0) { perfectDodge(caster.x, caster.y); continue; }
         if(relayMode&&!hasSight(caster.x,caster.y,target.x,target.y))continue;
         const beforeContact = events.length, oldHp = target.hp;
+        const wasGuarded = relayMode && (target.guardTimer ?? 0) > 0 && !lunge.guardBreak;
         const comboHits = relayMode ? lunge.comboHits : null;
         const hit=strike(target, lunge.damage * (comboHits ? comboHits[0].share : 1), "LUNGE", { slow: 0.3, slowSeconds: 0.6 }, target.x, target.y, lunge.arenaElement, lunge.attackElement, lunge.isBasic, { guardBreak: Boolean(lunge.guardBreak), moveId: lunge.moveId });
         if (hit) confirmMoveContact(beforeContact, oldHp, target, lunge, caster.id, target.x, target.y, Math.atan2(lunge.dirY, lunge.dirX), comboHits ? { hitIndex: 0, final: false } : null);
         if(relayMode&&!hit)continue;
-        launch(target, lunge.dirX, lunge.dirY, comboHits ? (comboHits[0].knock ?? 0) : (lunge.knock ?? DATA_ARENA_ENERGY.launch.LUNGE));
+        if (wasGuarded) {
+          // PB-Rank Guard Deflect: guarded melee bounces attacker back cleanly instead of sticking on top.
+          const reach = ((target.radius ?? 20) + (caster.radius ?? 18)) * Math.max(lunge.standOff ?? 1.8, 1.55), gap = distance(target.x, target.y, caster.x, caster.y);
+          if (gap < reach && gap > 0.01) { caster.x = target.x - (target.x - caster.x) / gap * reach; caster.y = target.y - (target.y - caster.y) / gap * reach; }
+          launch(caster, -lunge.dirX, -lunge.dirY, 270);
+          lunge.left = 0;
+          break;
+        }
+        const pbMinKnock = relayMode && !comboHits && !lunge.pinTarget
+          ? (lunge.damage >= 42 ? 560 : lunge.damage >= 24 ? 420 : 280)
+          : 0;
+        const appliedKnock = comboHits ? (comboHits[0].knock ?? 0) : Math.max(lunge.knock ?? DATA_ARENA_ENERGY.launch.LUNGE, pbMinKnock);
+        launch(target, lunge.dirX, lunge.dirY, appliedKnock);
         if (comboHits && hit && comboHits.length > 1 && !target.lunge) lunge.combo = { target, i: 1, timer: comboHits[1].dt };
         // RELAY: a dash that connects stops at arm's reach instead of running into the body
         // (2026-11-26 blind review: "the caster ends clipped inside the target").
@@ -2295,12 +2310,13 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
           const beyond = ((target.radius ?? 20) + (caster.radius ?? 18)) * 1.9;
           lunge.left = Math.max(0, (target.x - caster.x) * lunge.dirX + (target.y - caster.y) * lunge.dirY) + beyond;
         } else if (relayMode && !lunge.rebound && !target.lunge) {
-          // Drawn bodies are wider than their hit circles: stand a body-width off (2026-11-27 review: sprites overlapped).
-          const reach = ((target.radius ?? 20) + (caster.radius ?? 18)) * (lunge.standOff ?? 1.8), gap = distance(target.x, target.y, caster.x, caster.y);
+          // Drawn bodies are wider than their hit circles: stand a body-width off (PB-Rank separation floor >= 1.5x).
+          const reach = ((target.radius ?? 20) + (caster.radius ?? 18)) * Math.max(lunge.standOff ?? 1.8, 1.5), gap = distance(target.x, target.y, caster.x, caster.y);
           if (gap < reach && gap > 0.01) { caster.x = target.x - (target.x - caster.x) / gap * reach; caster.y = target.y - (target.y - caster.y) / gap * reach; }
           lunge.left = 0;
           // A staged move hops back off the target after the blow (wait for final combo hit when multi-hit).
-          if (lunge.reboundSpeed && !lunge.combo) launch(caster, -lunge.dirX, -lunge.dirY, lunge.reboundSpeed);
+          const recoilSpd = lunge.reboundSpeed ?? (lunge.damage >= 35 && !lunge.combo ? 185 : 0);
+          if (recoilSpd && !lunge.combo) launch(caster, -lunge.dirX, -lunge.dirY, recoilSpd);
         }
         if (lunge.rebound) {
           // UTURN_STRIKE: strike then spring back cleanly to safe spacing!
@@ -3641,7 +3657,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     } else if (guarded) {
       amount *= GUARD_RULES.damageScale;
       rival.guardBlocked = true;
-      emit({ type: "GUARD_BLOCK", side: "rival", amount: Math.round(amount), x: rival.x, y: rival.y });
+      const gAng = Math.atan2(rival.y - player.y, rival.x - player.x);
+      emit({ type: "GUARD_BLOCK", side: "rival", amount: Math.round(amount), angle: gAng, x: rival.x, y: rival.y });
     }
     if (relayMode) { amount = scaleArenaBurst(rival, amount); chargeArenaBurst(rival, amount); }
     const rivalAb = relayMode ? partnerAbilityFor(rival) : null;
@@ -3784,6 +3801,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         body: rival,
         hostileOwner: "player",
         hostileTeam: "player",
+        hostileBody: player,
         projectiles: state.projectiles,
         zones: state.zones,
         telegraphs: state.telegraphs,
@@ -3828,7 +3846,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         const idealDist = meleeCount >= 2 ? 115 : novaCount >= 2 ? 170 : 245;
         const sp = pbRankSpacingVector({
           body: rival, target: targetPt, idealDist,
-          strafeDir: rival.strafe, strafeWeight: diff.strafe, hasObjective: Boolean(objectiveGoal)
+          strafeDir: rival.strafe, strafeWeight: diff.strafe, hasObjective: Boolean(objectiveGoal),
+          retreating: Boolean((rival.recovery ?? 0) > 0)
         });
         ax = sp.x; ay = sp.y;
       }
@@ -4001,6 +4020,7 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         body: player,
         hostileOwner: "rival",
         hostileTeam: "rival",
+        hostileBody: rival,
         projectiles: state.projectiles,
         zones: state.zones,
         telegraphs: state.telegraphs,
@@ -4066,7 +4086,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
         } else {
           const sp = pbRankSpacingVector({
             body: player, target: targetPt, idealDist: prefRange,
-            strafeDir: ai.strafe, strafeWeight: 0.36, hasObjective: Boolean(objectiveGoal)
+            strafeDir: ai.strafe, strafeWeight: 0.36, hasObjective: Boolean(objectiveGoal),
+            retreating: Boolean((player.recovery ?? 0) > 0)
           });
           ax = sp.x; ay = sp.y;
         }
@@ -4651,8 +4672,8 @@ export function createDataArenaSimulation({ seed = 1, partnerId = DATA_ARENA_PAR
     updateEnemies();
     for (const rival of state.rivals) updateRival(rival);
     if (survivalMode) updateSurvival();
-    if(relayMode)for(const rival of state.rivals)if(rival.active&&rival.hp>0&&player.hp>0){
-      const minSep=Math.max(38,(rival.radius+player.radius)*.85);
+    if(relayMode)for(const rival of state.rivals)if(rival.active&&rival.hp>0&&player.hp>0&&!player.lunge&&!rival.lunge&&!player.leapSlam&&!rival.leapSlam&&!player.grabSlam&&!rival.grabSlam&&!(player.vortexHeld>0)&&!(rival.vortexHeld>0)){
+      const minSep=Math.max(56,(rival.radius+player.radius)*1.45);
       const dx=rival.x-player.x,dy=rival.y-player.y,d=Math.hypot(dx,dy),overlap=minSep-d;
       if(overlap>0){const nx=d>0?dx/d:1,ny=d>0?dy/d:0;moveBody(player,-nx*overlap*.5,-ny*overlap*.5,movementKind(player));moveBody(rival,nx*overlap*.5,ny*overlap*.5,movementKind(rival));}
     }

@@ -896,7 +896,10 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
               const hold = st.hold ?? 0, hopTime = af.time ?? 0;
               if (t < hold + hopTime) {
                 const k = t < hold ? 0 : clamp((t - hold) / Math.max(0.01, hopTime), 0, 1), ke = k * k * (3 - 2 * k);
-                sprite.x += (stage.ax - body.x) * (1 - ke); sprite.y += (stage.ay - body.y) * (1 - ke);
+                // Release sticky contact pin quickly if physics already rebounded/separated the caster!
+                const sepShift = Math.hypot(stage.ax - body.x, stage.ay - body.y);
+                const pinKeep = sepShift > 26 && !af.hop ? Math.max(0, 1 - t / Math.max(0.08, Math.min(0.16, hold || 0.12))) : (1 - ke);
+                sprite.x += (stage.ax - body.x) * pinKeep; sprite.y += (stage.ay - body.y) * pinKeep;
                 const held = (st.lift ?? 0) * (1 - ke);
                 if (held) { stage.lift = held; sprite.y -= held; actionHop += held; }
                 if (st.offX) { stage.offX = sCos * st.offX * (1 - ke); sprite.x += stage.offX; }
@@ -1548,11 +1551,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
   let impactFlashTimer = 0, impactFlashMax = 0.068, impactFocus = null, lastImpactAt = -10, tetherTimer = 0;
   let tamerCalloutLeft = 0, tamerCalloutRight = 0, wallFlashLeft = 0, wallFlashRight = 0;
   // `style` ('white' | 'black') is a staged move's full-screen ink frame: one solid frame, no strobe, no cooldown.
-  let impactStyle = null;
-  const triggerImpactFrame = (wx, wy, sec = 0.085, style = null) => {
+  let impactStyle = null, impactAngle = 0, impactSide = null;
+  const triggerImpactFrame = (wx, wy, sec = 0.085, style = null, meta = null) => {
     if (reducedMotion || !rich) return;
     if (!style && elapsed - lastImpactAt < 1.0) return; // PB-Rank 60f (1.0s) impact-frame cooldown prevents strobe spam
     impactStyle = style;
+    impactAngle = Number.isFinite(meta?.angle) ? meta.angle : 0;
+    impactSide = meta?.side ?? null;
     lastImpactAt = elapsed;
     impactFlashTimer = Math.max(impactFlashTimer, sec);
     impactFlashMax = Math.max(sec, 0.068);
@@ -1593,8 +1598,8 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     const frameNow = frameCue === true ? hitIndex == null || final !== false : frameCue === 'final' ? final === true : frameCue === 'first' ? hitIndex === 0 : false;
     if (relayMode && !guarded && wx !== null && wy !== null && frameNow) {
       const style = pbMoveBody(moveId)?.impactStyle ?? 'white';
-      triggerImpactFrame(wx, wy, 0.085, Array.isArray(style) ? style[0] : style);
-      if (Array.isArray(style) && style[1]) impactQueued = { style: style[1], at: elapsed + 0.085, wx, wy };
+      triggerImpactFrame(wx, wy, 0.085, Array.isArray(style) ? style[0] : style, { angle, side });
+      if (Array.isArray(style) && style[1]) impactQueued = { style: style[1], at: elapsed + 0.085, wx, wy, angle, side };
     }
     // The quick strikes of a multi-hit blow keep the fight moving: a small shake, no freeze.
     if (hitIndex != null && final === false && !(frameCue === 'first' && hitIndex === 0)) { camera.addTrauma(0.1); return; }
@@ -1605,13 +1610,13 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       hitStop = Math.max(hitStop, Math.max(0.3, pbStop));
       camera.addTrauma(Math.max(0.5, pbShake));
       camera.focusBoost(Math.max(1.055, pbPunch), 0.2);
-      if (relayMode && wx !== null && wy !== null) triggerImpactFrame(wx, wy, 0.1);
+      if (relayMode && wx !== null && wy !== null) triggerImpactFrame(wx, wy, 0.1, null, { angle, side });
       fightingHitSparks(wx, wy, angle, 8, true);
     } else if (heavy) {
       hitStop = Math.max(hitStop, Math.max(0.22, pbStop));
       camera.addTrauma(Math.max(0.42, pbShake));
       camera.focusBoost(Math.max(1.045, pbPunch), 0.16);
-      if (relayMode && wx !== null && wy !== null && pbFeel?.impact) triggerImpactFrame(wx, wy, 0.075);
+      if (relayMode && wx !== null && wy !== null && pbFeel?.impact) triggerImpactFrame(wx, wy, 0.075, null, { angle, side });
       fightingHitSparks(wx, wy, angle, 7, true);
     } else if (medium) {
       hitStop = Math.max(hitStop, Math.max(0.15, pbStop));
@@ -1784,17 +1789,17 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
           heavyHit(event.amount, event.x, event.y - 30, { angle: hitAng, guarded: event.guarded, side: "rival", moveId: lastRelease.rival?.moveId ?? null, ultimate: lastRelease.rival?.ultimate });
           break;
         }
-        case "GUARD_START": if (purePixelFx) elementFx.parry?.({ x: event.x, y: event.y - 20 }); else ring(event.x, event.y - 18, 48, 0xffbe3b, 0.28); break;
+        case "GUARD_START": if (purePixelFx) elementFx.guardBlock?.({ x: event.x, y: event.y - 20, angle: event.angle ?? 0, parry: false }); else ring(event.x, event.y - 18, 48, 0xffbe3b, 0.28); break;
         case "GUARD_BLOCK":
-          if (purePixelFx) elementFx.parry?.({ x: event.x, y: event.y - 20 });
+          if (purePixelFx) elementFx.guardBlock?.({ x: event.x, y: event.y - 20, angle: event.angle ?? 0, parry: false });
           else { ring(event.x, event.y - 20, 66, event.dome ? 0x7fe9ff : 0xffe066, 0.34); burst(event.x, event.y - 22, { count: 12, speed: 280, tint: event.dome ? 0x7fe9ff : 0xffd166, life: 0.32 }); }
           floatText(event.x, event.y - 68, t("fct.blocked"), "dodge");
           camera.addTrauma(0.16);
           break;
         case "GUARD_PARRY":
-          if (purePixelFx) elementFx.parry?.({ x: event.x, y: event.y - 20 });
+          if (purePixelFx) elementFx.guardBlock?.({ x: event.x, y: event.y - 20, angle: event.angle ?? 0, parry: true });
           else { ring(event.x, event.y - 20, 82, 0x7fe9ff, 0.38); ring(event.x, event.y - 20, 56, 0xffe066, 0.28); burst(event.x, event.y - 22, { count: 16, speed: 320, tint: 0x7fe9ff, life: 0.36 }); }
-          if (!reducedMotion) { hitStop = Math.max(hitStop, 0.105); triggerImpactFrame(event.x, event.y - 22, 0.068); }
+          if (!reducedMotion) { hitStop = Math.max(hitStop, 0.105); triggerImpactFrame(event.x, event.y - 22, 0.068, null, { angle: event.angle ?? 0 }); }
           floatText(event.x, event.y - 78, t("fct.parry"), "crit");
           break;
         case "GUARD_BROKEN":
@@ -2326,18 +2331,24 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     f.matrix = [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0];
     return f;
   })() : null;
+  const goldSilFilter = typeof PIXI.ColorMatrixFilter === "function" ? (() => {
+    const f = new PIXI.ColorMatrixFilter();
+    f.matrix = [0, 0, 0, 0, 1, 0, 0, 0, 0, 0.88, 0, 0, 0, 0, 0.52, 0, 0, 0, 1, 0];
+    return f;
+  })() : null;
   function applyInkSilhouette(view, mode) {
     if (!view) return;
-    if (mode === 'white') {
-      view.sprite.tint = 0xffffff;
-      if (whiteSilFilter) { view.sprite.filters = [whiteSilFilter]; if (view.flashSprite) view.flashSprite.visible = false; }
+    if (mode === 'white' || mode === 'attacker-white') {
+      view.sprite.tint = mode === 'attacker-white' ? 0xffe28a : 0xffffff;
+      const silF = mode === 'attacker-white' ? (goldSilFilter ?? whiteSilFilter) : whiteSilFilter;
+      if (silF) { view.sprite.filters = [silF]; if (view.flashSprite) view.flashSprite.visible = false; }
       else if (view.flashSprite) { view.flashSprite.visible = true; view.flashSprite.alpha = 1; }
       if (view.shadow) view.shadow.visible = false;
       if (view.ringGfx) view.ringGfx.visible = false;
       if (view.healthGfx) view.healthGfx.visible = false;
-    } else if (mode === 'black') {
+    } else if (mode === 'black' || mode === 'attacker-black') {
       if (view.sprite.filters) view.sprite.filters = null;
-      view.sprite.tint = 0x000000;
+      view.sprite.tint = mode === 'attacker-black' ? 0x3b4860 : 0x000000;
       if (view.flashSprite) view.flashSprite.visible = false;
       if (view.shadow) view.shadow.visible = false;
       if (view.ringGfx) view.ringGfx.visible = false;
@@ -2471,7 +2482,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     }
   }
   function drawImpactFrame(viewport) {
-    if (impactQueued && elapsed >= impactQueued.at) { const q = impactQueued; impactQueued = null; triggerImpactFrame(q.wx, q.wy, 0.085, q.style); }
+    if (impactQueued && elapsed >= impactQueued.at) { const q = impactQueued; impactQueued = null; triggerImpactFrame(q.wx, q.wy, 0.085, q.style, { angle: q.angle, side: q.side }); }
     if ((impactFlashTimer <= 0 && elapsed < sceneDimUntil) && !reducedMotion && rich) {
       // The scene dims behind the fighters while a staged move charges.
       impactGfx.visible = true; impactGfx.clear();
@@ -2507,6 +2518,12 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       } else {
         impactGfx.moveTo(p0x, p0y).lineTo(p1x, p1y).stroke({ color: wedgeCol, width: 2.5, alpha: 0.86 * t });
       }
+    }
+    if (impactStyle && impactFocus) {
+      const seamAng = impactAngle + Math.PI * 0.5;
+      const sc = Math.cos(seamAng), ss = Math.sin(seamAng);
+      const seamCol = darkPhase ? 0x0d0c12 : 0xf6f1e6;
+      impactGfx.moveTo(fx.x - sc * 46, fx.y - ss * 46).lineTo(fx.x + sc * 46, fx.y + ss * 46).stroke({ color: seamCol, width: 6, alpha: 0.95 });
     }
   }
   const arrows = [];
@@ -2710,7 +2727,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       actorView.update(dtMs, { x: rival.x, y: rival.y, facing: rival.facing, flash: rival.hitFlash, alpha: rival.invulnerable > 0 ? 0.55 : 1, lift: rival.airZ ?? 0, seq });
       actorView.sprite.rotation = (rival.vortexHeld ?? 0) > 0 ? Math.sin(elapsed * 22) * 0.45 : 0;
       actorView.sprite.tint = statusTint(rival, rival.hitFlash > 0 ? 0xff9a9a : 0xffffff);
-      if (state.gameMode === 'RELAY') drawArenaStatus(`rival:${rival.id}`, rival, actorView, actorView.role ?? 'RIVAL', state.rivals.indexOf(rival) + 1);
+      if (state.gameMode === 'RELAY' && !(impactFlashTimer > 0 && impactStyle)) drawArenaStatus(`rival:${rival.id}`, rival, actorView, actorView.role ?? 'RIVAL', state.rivals.indexOf(rival) + 1);
       actorView.setHealth(rival.active === false ? 0 : rival.hp / rival.maxHp);
     }
     for (const [id, view] of rivalViews) if (!state.rivals.some((rival) => String(rival.id) === String(id).split(':')[0])) { view.container.destroy({ children: true }); rivalViews.delete(id); burstShell.retire(`rival:${String(id).split(':')[0]}`); }
@@ -2720,18 +2737,31 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
       playerView.sprite.tint = 0xffffff;
       applyInkSilhouette(playerView, null);
       for (const view of rivalViews.values()) applyInkSilhouette(view, null);
-      particles.visible = shots.visible = shotGlow.visible = beams.visible = marks.visible = zoneSigils.visible = cellFx.visible = true;
+      particles.visible = shots.visible = shotGlow.visible = beams.visible = marks.visible = zoneSigils.visible = cellFx.visible = numberLayer.visible = true;
       impactSilhouette = false;
     }
     playerView.sprite.tint = statusTint(state.player, playerView.sprite.tint);
     if (impactFlashTimer > 0 && !reducedMotion && rich) {
       impactSilhouette = true;
-      const inkMode = impactStyle === 'black' ? 'white' : 'black';
-      applyInkSilhouette(playerView, inkMode);
-      for (const view of rivalViews.values()) if (view.container.visible) applyInkSilhouette(view, inkMode);
-      if (impactStyle) particles.visible = shots.visible = shotGlow.visible = beams.visible = marks.visible = zoneSigils.visible = cellFx.visible = false;
+      const baseInk = impactStyle === 'black' ? 'white' : 'black';
+      const atkInk = impactStyle === 'black' ? 'attacker-white' : 'attacker-black';
+      const playerIsAtk = impactSide === 'player';
+      applyInkSilhouette(playerView, playerIsAtk ? atkInk : baseInk);
+      for (const view of rivalViews.values()) if (view.container.visible) applyInkSilhouette(view, playerIsAtk ? baseInk : atkInk);
+      // Visual silhouette separation seam: prevent overlapping fighters from fusing into one blob!
+      const liveRival = (state.rivals ?? []).find((r) => r.active && r.hp > 0);
+      const rView = liveRival ? [...rivalViews.values()].find((v) => v.container.visible) : null;
+      if (liveRival && rView && Math.hypot(liveRival.x - state.player.x, liveRival.y - state.player.y) < 62) {
+        const sx = Math.cos(impactAngle), sy = Math.sin(impactAngle);
+        const shift = playerIsAtk ? 1 : -1;
+        playerView.sprite.x -= sx * 10 * shift;
+        playerView.sprite.y -= sy * 6 * shift;
+        rView.sprite.x += sx * 12 * shift;
+        rView.sprite.y += sy * 6 * shift;
+      }
+      if (impactStyle) particles.visible = shots.visible = shotGlow.visible = beams.visible = marks.visible = zoneSigils.visible = cellFx.visible = numberLayer.visible = false;
     }
-    if (state.gameMode === 'RELAY') drawArenaStatus('player', state.player, playerView, 'PLAYER', 0);
+    if (state.gameMode === 'RELAY' && !(impactFlashTimer > 0 && impactStyle)) drawArenaStatus('player', state.player, playerView, 'PLAYER', 0);
     statusFx?.retireExcept(statusShown); statusShown.clear();
 
     // Enemies.
@@ -2832,7 +2862,7 @@ export function mountDataArenaScene({ stage, sim, cast, bundles = new Map(), qua
     atlas.endFrame(dt * 1000);
     updateParticles(dt);
     updatePbRankEffects(dt);
-    updateNumbers(dt);
+    if (!(impactFlashTimer > 0 && impactStyle)) updateNumbers(dt);
     for (let i = ghosts.length - 1; i >= 0; i--) {
       const ghost = ghosts[i];
       ghost.age += dt; ghost.sprite.alpha = 0.5 * (1 - ghost.age / ghost.life);

@@ -17,6 +17,7 @@
 import { BATTLE_FX_PALETTES } from "../battleFx/battleFxPalettes.js";
 import { resolveMoveSpecV2 } from "../../modes/dataArena/dataArenaMoveCatalogV2.js";
 import { createPbMoveScripts, pbMoveBody } from "./dataArenaPbMoveScripts.js";
+import { createPixelBrushKit, createPbTemplateEngine, PB_DECLARATIVE_MOVES } from "./dataArenaPbMoveTemplates.js";
 
 const TAU = Math.PI * 2;
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
@@ -455,9 +456,16 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
 
   // PB Ranked 10-elemental volumetric hit-burst preset (ZERO empty wireframe rings!)
   let fxClock = 0, pendingUlt = null;
-  // Move-by-move scripts (PB_MOVE_BY_MOVE_20261127): a scripted move plays its own staging, not its archetype's.
-  const pbScripts = createPbMoveScripts({ spawnP, addHero, addDecal, rand, puff: drawPixelPuff });
-  const scriptFor = (moveId) => { const cue = moveId ? pbMoveBody(moveId) : null; return cue ? pbScripts[cue.key] ?? null : null; };
+  // Move-by-move scripts + pixel-snapped brush kit + 14 declarative PB templates (2026-11-27).
+  const px = createPixelBrushKit({ spawnP, addHero, addDecal, rand });
+  const pbScripts = createPbMoveScripts({ spawnP, addHero, addDecal, rand, puff: drawPixelPuff, px });
+  const pbTemplateEngine = createPbTemplateEngine({ spawnP, addHero, addDecal, rand }, px);
+  const pbTemplateScripts = pbTemplateEngine.compileAll(PB_DECLARATIVE_MOVES);
+  const scriptFor = (moveId) => {
+    const cue = moveId ? pbMoveBody(moveId) : null;
+    if (cue && pbScripts[cue.key]) return pbScripts[cue.key];
+    return moveId ? (pbTemplateScripts[cue?.key ?? moveId] ?? null) : null;
+  };
   function playPendingUlt(moveId, x, y) {
     if (!pendingUlt || pendingUlt.moveId !== moveId || fxClock - pendingUlt.at > 4) return;
     const { arch, pk, angle } = pendingUlt; pendingUlt = null;
@@ -1514,13 +1522,14 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
       }
     },
 
-    parry({ x, y }) {
-      shields.push({ x, y: y - 10, radius: 48, color: 0x7fe9ff, core: 0xffffff, age: 0, life: 0.44 });
-      spawnP({ shape: "star", x, y: y - 10, size: 28, size1: 4, pal: "white", add: true, life: 0.24 });
-      for (let i = 0; i < 8; i++) {
-        const a = (i / 8) * TAU;
-        spawnP({ shape: "streak", x, y: y - 10, vx: Math.cos(a) * 240, vy: Math.sin(a) * 200, size: 5, size1: 1, pal: "sun", add: true, life: 0.20 });
-      }
+    parry({ x, y, angle = 0 }) {
+      shields.push({ x, y: y - 10, radius: 48, color: 0x7fe9ff, core: 0xffffff, age: 0, life: 0.44, halfHex: true, angle, parry: true });
+      px.guardBlock({ x, y: y - 10, angle, parry: true });
+    },
+
+    guardBlock({ x, y, angle = 0, parry = false }) {
+      shields.push({ x, y: y - 10, radius: parry ? 48 : 44, color: parry ? 0x9ef4ff : 0xeef8ff, core: parry ? 0xffe46b : 0xffffff, age: 0, life: parry ? 0.44 : 0.36, halfHex: true, angle, parry });
+      px.guardBlock({ x, y: y - 10, angle, parry });
     },
 
     clash({ x, y }) {
@@ -1844,7 +1853,9 @@ export function createDataArenaPixelFxV2({ PIXI, ground, front, quality = "high"
           if (sh.age >= sh.life) { shields.splice(i, 1); continue; }
           const k = sh.age / sh.life;
           const a = (1 - k * 0.65) * 0.85;
-          if (typeof depthGfx.poly === "function") {
+          if (sh.halfHex) {
+            px.honeycombShield(depthGfx, sh.x, sh.y, sh.radius, (sh.angle ?? 0) + Math.PI, a, Boolean(sh.parry));
+          } else if (typeof depthGfx.poly === "function") {
             const outerHex = [], innerHex = [];
             for (let s = 0; s < 6; s++) {
               const ang = sh.age * 1.8 + (s / 6) * TAU;
