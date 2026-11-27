@@ -28,7 +28,9 @@ export const RANCH_CAGE_FALLS = Object.freeze({
   field_cm21_01: Object.freeze({ sha256: 'c79442b292edd0905d9fb11ea7a4c5bce2ba880e752f27f020c4ad95a1be07f4', kind: 'icewater', edges: Object.freeze([
     [14.113, 5.628, 13.338, 9.095], [13.338, 9.095, 9.871, 9.871], [9.871, 9.871, 8.532, 8.532],
     [17.017, .047, 18.356, 1.385], [18.356, 1.385, 17.581, 4.853], [17.581, 4.853, 14.113, 5.628]]) }),
-  field_cm20_01: Object.freeze({ sha256: '42075662dc2fd0e14d9d8c0e66715f7b398c22c4d89c0dc39928f9861039af11', kind: 'sand', edges: Object.freeze([
+  // 2026-11-27 CC0 desert props were appended as a separate mesh; the floor primitive, its
+  // texture and buffer bytes are identical to the measured 42075662… GLB, so the edges stand.
+  field_cm20_01: Object.freeze({ sha256: 'ba8cefdab1a50b4f354cc77a7a84fedde2e25c9bb49af5789beb7513ab4c9d27', kind: 'sand', edges: Object.freeze([
     [1.346, 1.346, 2.121, -2.121], [2.121, -2.121, 5.589, -2.897], [9.178, .693, 8.403, 4.16], [8.403, 4.16, 4.935, 4.935],
     [4.935, 4.935, 1.346, 1.346], [5.589, -2.897, 6.364, -6.364], [6.364, -6.364, 9.831, -7.139], [9.831, -7.139, 10.8, -6.171],
     [11.056, -5.914, 13.421, -3.55], [12.645, -.083, 9.178, .693], [13.421, -3.55, 16.888, -4.325], [16.888, -4.325, 20.477, -.736],
