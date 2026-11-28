@@ -65,3 +65,11 @@
 - **保留的物件**：森林的 119 叢圓形灌木和蕨，叢林的懸崖、地面植物、大王花，牧場的水槽、乾草、前排圍欄和花。
 - **來源與腳本**：編輯母檔與腳本在 `R:\Projects\Championship2026\cc0-cage-batch2-20261128\`（`plans\`、`scripts\`、`out\<field>\`）。素材授權與 SHA256 在 `sources\quaternius\`。
 - **移除與重新壓縮的工具**：`R:\Projects\Championship2026\cc0-cage-tools\`（gltf-transform 4.5.1、draco3dgltf 1.5.9，只在本機使用）。
+
+## 第三批（2026-11-28）：CM14 墓地
+
+- **評估後不換的 6 張**：CM15 工廠、CM16 小保健室、CM17 醫院、CM22 發電廠、CM23 毒氣室、CM31 保健室。這幾張的物件已經是多零件組裝，例如病床有毯子和枕頭、藥櫃裡有藥瓶、多關節機械臂、47 個零件組成的電塔。換成通用的 CC0 家具包或工廠包會退步，所以維持原樣。
+- **CM14 換掉的物件**：5 座三件式墓碑換成 Kenney Graveyard Kit 的 `gravestone-round`、`gravestone-cross`、`gravestone-decorative`、`gravestone-roof`、`gravestone-bevel`。原本的燈換成 `lightpost-single`。墓碑都正面朝鏡頭，佔地不超過舊墓碑的 1.15 倍。
+- **CM14 保留的物件**：枯樹、雕像、石牆、鐵門、小路、草。曾試過把枯樹換成 Kenney 的 `pine-crooked`，結果失去墓地氣氛，沒有採用。
+- **配色**：Kenney 套件用一張共用的 `colormap.png` 上色。依每個面 UV 中心的取色，把它分類換成墓地的 `sc-stone`／`sc-stone-light`／`sc-moss` 色票，所以不必另外帶貼圖。
+- **GLB**：`c77f64e0d3304d06c513251678a1d469b21460fdc556c9a2d8a829d945588f18`，583,404 bytes。移除 3,452 個三角面，保留部分的最大位移 0.0012，地面圖已補回。
