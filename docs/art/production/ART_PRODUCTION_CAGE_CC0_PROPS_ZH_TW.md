@@ -52,7 +52,7 @@
 - **地面圖貼圖要補回**：glTF 往返會丟掉只被材質 extras（`cageGroundMap.texture`）參照的貼圖，要把 texture 項目補回並重新指好索引。驗收時用 `cage-ui-render.html` 的 `groundMapsHooked` 確認等於 1。
 - **新物件位置**：放在舊物件原位，高度相近，佔地不超過舊物件，所以可走格不受影響。`ranch-three-ground.r1.json`（落地判定用的物件外框格）沿用舊值，沒有重算。
 - **搖曳**：樹冠加上 `_WIND_WEIGHT`（依高度 1.5 次方，樹幹 × 0.25），由同一個 rooted-wind shader 驅動，搖曳動作保留。
-- **不適用的籠舍**：有支撐面校驗的籠舍（`physical-ground-tops`：CM02、09、18、19、21、34、35、39）要求「只有一個網格、幾何雜湊完全相同」，加或移除物件都會失敗，要先重建支撐面資料，不能直接套這個流程。
+- **有支撐面校驗的籠舍**（`physical-ground-tops`：CM02、09、18、19、21、34、35、39）：校驗只看名稱不含 `-cc0-props` 的網格，而且必須剛好一個（`supportCandidateMeshes`，2026-11-28 起）。移除舊物件後，支撐面資料要重新對回新檔，做法見下方 CM09 一節。
 
 ## 第二批（2026-11-28）：CM11 森林、CM12 叢林、CM26 牧場
 
@@ -73,3 +73,12 @@
 - **CM14 保留的物件**：枯樹、雕像、石牆、鐵門、小路、草。曾試過把枯樹換成 Kenney 的 `pine-crooked`，結果失去墓地氣氛，沒有採用。
 - **配色**：Kenney 套件用一張共用的 `colormap.png` 上色。依每個面 UV 中心的取色，把它分類換成墓地的 `sc-stone`／`sc-stone-light`／`sc-moss` 色票，所以不必另外帶貼圖。
 - **GLB**：`c77f64e0d3304d06c513251678a1d469b21460fdc556c9a2d8a829d945588f18`，583,404 bytes。移除 3,452 個三角面，保留部分的最大位移 0.0012，地面圖已補回。
+
+## 第五批（2026-11-28）：CM09 海灘
+
+- **換掉的物件**：2 棵程序椰子樹（16 頂點樹幹、垂柳狀葉片），換成 Quaternius Ultimate Nature 的 `PalmTree_1`、`PalmTree_2`（CC0 1.0），改用海灘母檔的 `jg-frond*`／`jg-trunk`／`jg-coconut` 色票。樹冠有 `_WIND_WEIGHT`，保留搖曳。
+- **可走格檢查**：樹冠下的可走格舊 20 格、新 21 格；高物件背後 1.3 倍高度內的可走格新舊都是 19 格。
+- **重新壓縮**：沿用這張圖原本的量化位數（位置 22、法線 18、UV 20、通用屬性不量化），移除 2,072 個舊三角面，地面圖已補回（`groundMapsHooked` = 1）。
+- **支撐面資料**：16 個支撐三角形與 `wholeComponentEvidence` 的 16 個頂面索引，依三個角點（容差 0.001）對回新檔，實際位移 0。更新 `glbSha256`、頂點／三角形數、位置與索引雜湊，以及 `ranchPhysicalSupport.js` 的 `SUPPORT_METADATA_SHA`。工具：`R:\Projects\Championship2026\cc0-cage-tools\support_remap.mjs`，紀錄在 `cc0-cage-batch2-20261128\production\field_cm09_01.support_remap.json`。
+- **GLB**：`177d8359c28fc5c24809bfac0664e20160b628f4c602540e5e4c863fdca25876`，513,768 bytes。
+- **CM39 小海灘不換**：原本的低矮扇葉棕櫚比 CC0 椰子樹茂密；照原尺寸太小像玩具，放大 2.5 倍又細瘦，還會多遮住 2 格可走格。
