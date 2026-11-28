@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {webcrypto} from 'node:crypto';
-import {loadSupportMetadata,validateSupportGeometry,eligibleSupportOwner,encodeProjectedTriangle,projectedTriangleTouchesBox,sha256,SUPPORT_MAX_TRIANGLES} from '../src/championship/presentation/ranchPhysicalSupport.js';
+import {loadSupportMetadata,validateSupportGeometry,eligibleSupportOwner,encodeProjectedTriangle,projectedTriangleTouchesBox,sha256,SUPPORT_MAX_TRIANGLES,supportCandidateMeshes,isCosmeticPropsMesh} from '../src/championship/presentation/ranchPhysicalSupport.js';
 if(!globalThis.crypto)globalThis.crypto=webcrypto;
 let checks=0;function check(v){assert.ok(v);checks++;}
 const metadata=await loadSupportMetadata(fs.readFileSync(new URL('../assets/production/cage/three-20261021/physical-ground-tops.r2.json',import.meta.url),'utf8'));
@@ -25,4 +25,10 @@ assert.deepEqual([...a.slice(8,12)],[...b.slice(0,4)]);checks++;
 check(a[15]===-b[13]);check(projectedTriangleTouchesBox([[0,0],[1,0],[0,1]],{minX:.9,maxX:1.1,minY:.9,maxY:1.1}));
 check(!projectedTriangleTouchesBox([[0,0],[1,0],[0,1]],{minX:2,maxX:3,minY:2,maxY:3}));
 assert.throws(()=>encodeProjectedTriangle([[0,0],[1,1],[2,2]],0),/DEGENERATE/);checks++;
+// Appended CC0 prop meshes (node `<fieldId>-cc0-props`, one mesh or a group of primitives) never count as support.
+{const node=(name,isMesh,children=[])=>{const o={name,isMesh,children,parent:null};for(const c of children)c.parent=o;o.traverse=f=>{f(o);for(const c of o.children)c.traverse(f);};return o;};
+ const ground=node('field_cm09_01-authored-coast',true),propA=node('field_cm09_01-cc0-props_0',true),propB=node('field_cm09_01-cc0-props_1',true);
+ const root=node('Scene',false,[ground,node('field_cm09_01-cc0-props',false,[propA,propB])]);
+ check(supportCandidateMeshes(root).length===1&&supportCandidateMeshes(root)[0]===ground);check(isCosmeticPropsMesh(propB)&&!isCosmeticPropsMesh(ground));
+ check(supportCandidateMeshes(node('Scene',false,[ground,node('field_cm09_01-extra',true)])).length===2);}
 console.log(JSON.stringify({status:'PASS',checks,fields:8,physicalTops:156,maxPerField:72,scope:'pure validation and denial, not GPU visibility'}));

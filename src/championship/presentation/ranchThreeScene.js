@@ -5,7 +5,7 @@ import {attachRanchActorLight,createRanchActorLightState,ranchRimDirection,updat
 import {createRanchSelectionRing,createRanchBloodlineRings,ranchSelectionRingPlacement,RANCH_SELECTION_RING,RANCH_BLOODLINE_RING} from './ranchSelectionRing.js';
 import {createRanchDecalFloorGrid,ranchDecalFloorHeight} from './ranchDecalFloor.js';
 import {createCm07Ambient} from './cm07Ambient.js';
-import {loadSupportMetadata,validateSupportGeometry,eligibleSupportOwner,encodeProjectedTriangle,projectedTriangleTouchesBox,SUPPORT_MAX_TRIANGLES} from './ranchPhysicalSupport.js';
+import {loadSupportMetadata,validateSupportGeometry,supportCandidateMeshes,eligibleSupportOwner,encodeProjectedTriangle,projectedTriangleTouchesBox,SUPPORT_MAX_TRIANGLES} from './ranchPhysicalSupport.js';
 import {CONTACT_HEIGHT_FIELDS,transformContactTriangles,contactHeightAtPoint,loadLogicalBridges,logicalContactHeightAtPoint,projectedContactIntersections,canonicalContactNativeCoordinate} from './ranchContactHeight.js';
 import {createRanchSupportOwnerResolver} from './ranchSupportOwner.js';
 import {createRanchPlinth} from './ranchPlinth.js';
@@ -172,7 +172,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
       // Beach water from its ground map; lava, icy water and sand measured on this exact GLB.
       waterEdges.set(id,[...cageGroundWaterEdges(ownGroundMaps).map(edge=>({kind:'water',edge})),...ranchCageFalls(id,hash)]);
       if(supportFields.has(id)){
-        const meshes=[];gltf.scene.traverse(o=>{if(o.isMesh)meshes.push(o);});
+        const meshes=supportCandidateMeshes(gltf.scene);
         verifiedSupport.set(id,await validateSupportGeometry(supportFields.get(id),hash,meshes));
       }
       models.set(id,gltf);signal?.throwIfAborted();
@@ -677,7 +677,7 @@ export async function createRanchThreeScene({ stage, placements, field, signal,c
         const mixer=clips.length?new THREE.AnimationMixer(object):null;
         if(mixer)for(const clip of clips)mixer.clipAction(clip).play();
         let supportMesh=null;
-        if(verifiedSupport.has(p.fieldId)){const meshes=[];object.traverse(o=>{if(o.isMesh)meshes.push(o);});if(meshes.length!==1)throw Error('SUPPORT_INSTANCE_MESH_COUNT');supportMesh=meshes[0];}
+        if(verifiedSupport.has(p.fieldId)){const meshes=supportCandidateMeshes(object);if(meshes.length!==1)throw Error('SUPPORT_INSTANCE_MESH_COUNT');supportMesh=meshes[0];}
         instances.push({object,p,shift,mixer,supportMesh,supportTriangles:verifiedSupport.get(p.fieldId),contactSheets:supportFields.get(p.fieldId)?.supportSheets??null});
       }
     }

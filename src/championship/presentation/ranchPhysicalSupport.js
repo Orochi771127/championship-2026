@@ -1,6 +1,10 @@
 // Exact six low ground fields plus admitted CM18 treads / CM34 mat. Not navigation authority.
-export const SUPPORT_METADATA_SHA='5e6b4fe7d840dcbab57131f7fd8c90068b2f4e879a36c6072c893a9a8ac0b31c';
+export const SUPPORT_METADATA_SHA='30ef63f7b540df07293e38d32487d7c1f8a891e8441e92b24e65e5b45330f62d';
 export const SUPPORT_MAX_TRIANGLES=72;
+// CC0 prop meshes appended to a cage GLB (node `<fieldId>-cc0-props`) are scenery, never
+// ground: they are left out before the one-support-mesh check (CM09 since 2026-11-28).
+export function isCosmeticPropsMesh(o){for(let n=o;n;n=n.parent)if(typeof n.name==='string'&&n.name.includes('-cc0-props'))return true;return false;}
+export function supportCandidateMeshes(root){const meshes=[];root.traverse(o=>{if(o.isMesh&&!isCosmeticPropsMesh(o))meshes.push(o);});return meshes;}
 export async function sha256(bytes){return [...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(x=>x.toString(16).padStart(2,'0')).join('');}
 export async function loadSupportMetadata(text){
  if(typeof text!=='string'||await sha256(new TextEncoder().encode(text))!==SUPPORT_METADATA_SHA)throw Error('SUPPORT_METADATA_HASH_MISMATCH');
